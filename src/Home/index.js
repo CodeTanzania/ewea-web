@@ -6,7 +6,9 @@ import planIcon from '../assets/icons/emergencyplans-disabled.svg';
 import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures-disabled.svg';
 import incidentIcon from '../assets/icons/incidents-disabled.svg';
 import resourceIcon from '../assets/icons/resources-disabled.svg';
-import stakeholderIcon from '../assets/icons/stakeholders.svg';
+import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
+import contactsIcon from '../assets/icons/stakeholders/contacts.svg';
+import rolesIcon from '../assets/icons/stakeholders/roles.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
 
@@ -48,11 +50,24 @@ const routes = [
     disabled: true,
   },
   {
-    name: 'Stakeholders',
-    path: '/app/stakeholders',
-    icon: stakeholderIcon,
-    description: modules.stakeholders,
+    name: 'Focal People',
+    path: '/app/stakeholders/focalpeople',
+    icon: contactsIcon,
+    description: modules.stakeholdersFocalPeople,
   },
+  {
+    name: 'Agencies',
+    path: '/app/stakeholders/agencies',
+    icon: agenciesIcon,
+    description: modules.stakeholdersAgencies,
+  },
+  {
+    name: 'Roles',
+    path: '/app/stakeholders/roles',
+    icon: rolesIcon,
+    description: modules.stakeholdersRoles,
+  },
+
   {
     name: 'Dashboards',
     path: '/app/dashboards',
