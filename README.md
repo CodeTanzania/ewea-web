@@ -1,21 +1,21 @@
-# emis-web
+# ewea-web
 
 [![Build Status](https://travis-ci.org/CodeTanzania/emis-web.svg?branch=develop)](https://travis-ci.org/CodeTanzania/emis-web)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 
 <img src="docs/images/logo.svg" 
-alt="EMIS Logo" width="100" height="auto" />
+alt="EWEA Logo" width="100" height="auto" />
 
-## About EMIS
+## About EWEA
 
-A collaboration platform that facilitates communication, planning and actions for disaster management.
+EWEA web is an Early Warning, Early Action tool that facilitates the disseminationn of warnings, communication and actions associated with the warnings.
 
-It incorporates data that can be shared and analyzed in order generate insights for local authorities and communities to better manage disasters and increase resilience to disaster risk. The data is organized in core components.
+It that can be shared and analyzed in order generate insights for local authorities and communities to better manage disasters and increase resilience to disaster risk. The data is organized in core components.
 
-![EMIS Homepage](docs/images/home.png 'EMIS Homepage')
+![EWEA Homepage](docs/images/home.png 'EWEA Homepage')
 
-## EMIS Components
+## EWEA Components
 
 #### Stakeholders
 
@@ -23,39 +23,22 @@ EMIS Stakeholders contains an up to date database of all stakeholders responsibl
 
 See source code [repository](https://github.com/CodeTanzania/emis-stakeholder).
 
-#### Resources
-
-EMIS Resources depends heavily on EMIS Stakeholders as it acts as a resource management tool for resources owned by stakeholders.
-
-See source code [repository](https://github.com/CodeTanzania/emis-resource).
 
 #### Alerts
 
-This component consists of an up to date database of ingested emergency / disaster alerts from multiple sources in near real time and disseminating them to disaster management stakeholders.
+EWEA alerts consists of alerts created This component consists of an up to date database of ingested emergency / disaster alerts from multiple sources in near real time and disseminating them to disaster management stakeholders.
 
 See source code [repository](https://github.com/CodeTanzania/emis-alert).
 
 #### Emergency Plans
 
-EMIS Plans provides a way to create, store and disseminate emergency/disaster management plans with detailed activities and Standard Operating Procedures (SOPs) to be performed by each stakeholder in all phases of disaster management.
+EMIS Plans consists of Standard Operating Procedures (SOPs) that provide a guide for early actions that accompany the early warnings.
 
 See source code [repository](https://github.com/CodeTanzania/emis-plan).
 
-#### Incident Management
-
-Provides means to record and report the occurrence of a disaster incident and activating planned activities to respond and recover. It allows for storing of results of continuous assessments performed on affected areas, people and critical infrastructure.
-
-See source code [repository](https://github.com/CodeTanzania/emis-incident).
-
-#### Assessment Toolkit
-
-Provides a set of integrated tools that provides a way to determine what happened, where it happened, who was affected, what was the impact and what type of assistance is required for an immediate response for both affected population and infrastructures.
-
-See source code [repository](https://github.com/CodeTanzania/emis-assessment).
-
 #### Dashboards
 
-EMIS dashboards consists of visualization and analysis tools for all the data that is available on all EMIS components.
+EWEA dashboards consists of maps used for visualization and analysis of warnings and areas of interest.
 
 See source code [repository]().
 
@@ -67,9 +50,9 @@ See source code [repository](https://github.com/CodeTanzania/emis-feature).
 
 ## Contribute
 
-If you are interested in fixing issues and contributing directly to the code base, please read our [contributing guide](https://github.com/CodeTanzania/emis-web/blob/develop/CONTRIBUTING.md).
+If you are interested in fixing issues and contributing directly to the code base, please read our [contributing guide](https://github.com/CodeTanzania/ewea-web/blob/develop/CONTRIBUTING.md).
 
-Please also see [code of conduct](https://github.com/CodeTanzania/emis-web/blob/develop/CONTRIBUTING.md) to know what we expect of all project participants.
+Please also see [code of conduct](https://github.com/CodeTanzania/ewea-web/blob/develop/CONTRIBUTING.md) to know what we expect of all project participants.
 
 When you are done, go ahead and install the project.
 
@@ -78,7 +61,7 @@ When you are done, go ahead and install the project.
 Clone the project
 
 ```sh
-git clone https://github.com/CodeTanzania/emis-web.git
+git clone https://github.com/CodeTanzania/ewea-web.git
 ```
 
 Install all required dependencies
@@ -99,14 +82,14 @@ and view it on http://localhost:3000
 
 - [Project website]()
 - [A collection of references for EMIS]()
-- [Http client for EMIS API](https://github.com/CodeTanzania/emis-api-client)
-- [Redux state manager for EMIS](https://github.com/CodeTanzania/emis-api-states)
+- [Http client for EWEA API](https://github.com/CodeTanzania/emis-api-client)
+- [Redux state manager for EWEA](https://github.com/CodeTanzania/emis-api-states)
 
 ## License
 
 MIT License
 
-Copyright (c) 2018 - present Code Tanzania & Contributors
+Copyright (c) 2019 - present Code Tanzania & Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
