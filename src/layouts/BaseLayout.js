@@ -11,10 +11,6 @@ import AlertsFeeds from '../Alerts/layouts/Feeds';
 import AlertsServiceRequests from '../Alerts/layouts/ServiceRequests';
 import AlertsSources from '../Alerts/components/AlertSources';
 import Assessments from '../Assessments';
-import AssessmentsIndicators from '../Assessments/layouts/Indicators';
-import AssessmentsQuestionnaires from '../Assessments/layouts/Questionnaires';
-import AssessmentsQuestions from '../Assessments/layouts/Questions';
-import AssessmentsResponses from '../Assessments/layouts/Responses';
 import PageNotFound from '../components/UIState/PageNotFound';
 import GeographicalFeatures from '../GeographicalFeatures';
 import AdministrativeBoundaries from '../GeographicalFeatures/components/AdministrativeBoundaries';
@@ -27,13 +23,6 @@ import SubWards from '../GeographicalFeatures/layouts/SubWards';
 import Wards from '../GeographicalFeatures/components/Wards';
 import GeographicalFeaturesWarehouses from '../GeographicalFeatures/components/Warehouses';
 import Home from '../Home';
-import Incidents from '../Incidents';
-import IncidentsActions from '../Incidents/layouts/Actions';
-import IncidentsAssessments from '../Incidents/layouts/Assessments';
-import IncidentsCommandCenter from '../Incidents/layouts/CommandCenter';
-import IncidentsFeeds from '../Incidents/layouts/Feeds';
-import IncidentsIncidentTypes from '../Incidents/components/IncidentTypes';
-import IncidentsLossDatabase from '../Incidents/layouts/LossDatabase';
 import Stakeholders from '../Stakeholders';
 import StakeholdersAgencies from '../Stakeholders/components/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
@@ -69,24 +58,6 @@ const breadcrumbNameMap = {
   '/app/alerts/sources': {
     name: 'Alerts Sources',
     title: 'Data sources for alerts',
-  },
-  /* Assessments Routes */
-  '/app/assessments': { name: 'Assessments', title: 'Assessments module' },
-  '/app/assessments/indicators': {
-    name: 'Indicators',
-    title: 'Indicators for monitoring assessments',
-  },
-  '/app/assessments/questionnaires': {
-    name: 'Questionnaires',
-    title: 'List of questionnaires',
-  },
-  '/app/assessments/questions': {
-    name: 'Questions',
-    title: 'List of questions',
-  },
-  '/app/assessments/responses': {
-    name: 'Responses & Observations',
-    title: 'Responses and observations',
   },
   /* Geographical Features Routes */
   '/app/geographicalfeatures/administrativeboundaries': {
@@ -128,73 +99,6 @@ const breadcrumbNameMap = {
   '/app/geographicalfeatures/wards': {
     name: 'Wards',
     title: 'List of all wards',
-  },
-  /* Incidents Routes */
-  '/app/incidents/actions': {
-    name: 'Actions',
-    title: 'Incident actions performed',
-  },
-  '/app/incidents/assessments': {
-    name: 'Assessments',
-    title: 'Assessment of an incident',
-  },
-  '/app/incidents/commandcenter': {
-    name: 'Command Center',
-    title: 'Incidents command center',
-  },
-  '/app/incidents/feeds': { name: 'Feeds', title: 'Incident feeds' },
-  '/app/incidents': { name: 'Incidents', title: 'Incidents module' },
-  '/app/incidents/incidenttypes': {
-    name: 'Incidents Types',
-    title: 'List of Incidents Types',
-  },
-  '/app/incidents/lossdatabase': {
-    name: 'Loss Database',
-    title: 'List of previous incidents',
-  },
-  /* Plans Routes */
-  '/app/plans/activations': { name: 'Activations', title: 'Plans activation' },
-  '/app/plans/activities': { name: 'Activities', title: 'Plans Activities' },
-  '/app/plans/disseminations': {
-    name: 'Disseminations',
-    title: 'Dissemination of plans',
-  },
-  '/app/plans/drills': {
-    name: 'Drills & Exercises',
-    title: 'List of drills and exercises',
-  },
-  '/app/plans': { name: 'Emergency Plans', title: 'Emergency plans module' },
-  '/app/plans/planner': { name: 'Planner', title: 'Planner' },
-  '/app/plans/procedures': {
-    name: 'Standard Operating Procedures',
-    title: 'Standard Operating Procedures(SOP)',
-  },
-  /* Resources Routes */
-  '/app/resources': { name: 'Resources', title: 'Resource module' },
-  '/app/resources/adjustments': {
-    name: 'Adjustments',
-    title: 'List of adjusted resources',
-  },
-  '/app/resources/items': { name: 'Items', title: 'List of available items' },
-  '/app/resources/itemcategories': {
-    name: 'Item Categories',
-    title: 'List of available item categories',
-  },
-  '/app/resources/unitsofmeasure': {
-    name: 'Item Unit',
-    title: 'List of available units of measure for items',
-  },
-  '/app/resources/stocks': {
-    name: 'Stocks',
-    title: 'List of available stocks',
-  },
-  '/app/resources/utilization': {
-    name: 'Utilizations',
-    title: 'Resource utilizations',
-  },
-  '/app/resources/warehouses': {
-    name: 'Warehouses',
-    title: 'List of available warehouses',
   },
   /* Stakeholders Routes */
   '/app/stakeholders/focalpeople': {
@@ -327,22 +231,6 @@ const BaseLayout = props => {
             component={Assessments}
           />
           <SecureRoute
-            path={`${baseUrl}/assessments/indicators`}
-            component={AssessmentsIndicators}
-          />
-          <SecureRoute
-            path={`${baseUrl}/assessments/questionnaires`}
-            component={AssessmentsQuestionnaires}
-          />
-          <SecureRoute
-            path={`${baseUrl}/assessments/questions`}
-            component={AssessmentsQuestions}
-          />
-          <SecureRoute
-            path={`${baseUrl}/assessments/responses`}
-            component={AssessmentsResponses}
-          />
-          <SecureRoute
             exact
             path={`${baseUrl}/geographicalfeatures`}
             component={GeographicalFeatures}
@@ -382,36 +270,6 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/geographicalfeatures/wards`}
             component={Wards}
-          />
-          <SecureRoute
-            exact
-            path={`${baseUrl}/incidents`}
-            component={Incidents}
-          />
-
-          <SecureRoute
-            path={`${baseUrl}/incidents/commandcenter`}
-            component={IncidentsCommandCenter}
-          />
-          <SecureRoute
-            path={`${baseUrl}/incidents/assessments`}
-            component={IncidentsAssessments}
-          />
-          <SecureRoute
-            path={`${baseUrl}/incidents/actions`}
-            component={IncidentsActions}
-          />
-          <SecureRoute
-            path={`${baseUrl}/incidents/feeds`}
-            component={IncidentsFeeds}
-          />
-          <SecureRoute
-            path={`${baseUrl}/incidents/lossdatabase`}
-            component={IncidentsLossDatabase}
-          />
-          <SecureRoute
-            path={`${baseUrl}/incidents/incidenttypes`}
-            component={IncidentsIncidentTypes}
           />
           <SecureRoute
             exact
