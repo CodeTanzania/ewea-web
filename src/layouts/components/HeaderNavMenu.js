@@ -9,7 +9,9 @@ import planIcon from '../../assets/icons/emergencyplans-disabled.svg';
 import geographicalFeaturesIcon from '../../assets/icons/geographicalfeatures-disabled.svg';
 import incidentIcon from '../../assets/icons/incidents-disabled.svg';
 import resourceIcon from '../../assets/icons/resources-disabled.svg';
-import stakeholderIcon from '../../assets/icons/stakeholders.svg';
+import agenciesIcon from '../../assets/icons/stakeholders/agency.svg';
+import contactsIcon from '../../assets/icons/stakeholders/contacts.svg';
+import rolesIcon from '../../assets/icons/stakeholders/roles.svg';
 import './styles.css';
 
 /* constants */
@@ -30,7 +32,9 @@ const routes = [
   },
   { name: 'Incidents', path: '/incidents', icon: incidentIcon, disabled: true },
   { name: 'Resources', path: '/resources', icon: resourceIcon, disabled: true },
-  { name: 'Stakeholders', path: '/stakeholders', icon: stakeholderIcon },
+  { name: 'Focal People', path: '/focalpeople', icon: contactsIcon },
+  { name: 'Agencies', path: '/agencies', icon: agenciesIcon },
+  { name: 'Roles', path: '/roles', icon: rolesIcon },
   {
     name: 'Dashboards',
     path: '/dashboards',
@@ -65,8 +69,11 @@ const NavItem = ({ name, icon, path, disabled }) => (
         height={50}
         className="image"
       />
-      <span className={`text ${disabled ? 'text-disabled' : ''}`}>{name}</span>
-    </div>
+      <span className={`text ${disabled ? 'text-disabled' : ''}`}>
+        {' '}
+        {name}{' '}
+      </span>{' '}
+    </div>{' '}
   </Link>
 );
 
@@ -83,6 +90,7 @@ const NavItem = ({ name, icon, path, disabled }) => (
 const ModuleNavMenu = () => (
   <div className="ModuleNavMenu">
     <Row type="flex" align="middle">
+      {' '}
       {routes.map(route => (
         <Col key={route.path} span={12}>
           <NavItem
@@ -90,10 +98,10 @@ const ModuleNavMenu = () => (
             icon={route.icon}
             path={route.disabled ? '#' : route.path}
             disabled={route.disabled}
-          />
+          />{' '}
         </Col>
-      ))}
-    </Row>
+      ))}{' '}
+    </Row>{' '}
   </div>
 );
 
