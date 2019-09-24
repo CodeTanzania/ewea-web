@@ -1,5 +1,5 @@
 import { Button, Dropdown, Icon, Menu, Modal } from 'antd';
-import { signout } from '@codetanzania/emis-api-states';
+import { signout } from '@codetanzania/ewea-api-states';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';

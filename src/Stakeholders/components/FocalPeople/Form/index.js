@@ -1,5 +1,5 @@
-import { httpActions } from '@codetanzania/emis-api-client';
-import { postFocalPerson, putFocalPerson } from '@codetanzania/emis-api-states';
+import { httpActions } from '@codetanzania/ewea-api-client';
+import { postFocalPerson, putFocalPerson } from '@codetanzania/ewea-api-states';
 import { Button, Col, Form, Input, Row } from 'antd';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';

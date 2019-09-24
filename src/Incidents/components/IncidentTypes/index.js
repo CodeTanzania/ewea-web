@@ -5,7 +5,7 @@ import {
   openIncidentTypeForm,
   closeIncidentTypeForm,
   selectIncidentType,
-} from '@codetanzania/emis-api-states';
+} from '@codetanzania/ewea-api-states';
 import { Button, Col, Input, Row, Modal } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';

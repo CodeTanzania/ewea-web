@@ -1,7 +1,7 @@
 import {
   paginateIncidentTypes,
   refreshIncidentTypes,
-} from '@codetanzania/emis-api-states';
+} from '@codetanzania/ewea-api-states';
 import { Button, Checkbox, Col, Pagination, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';

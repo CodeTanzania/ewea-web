@@ -99,8 +99,8 @@ and view it on http://localhost:3000
 
 - [Project website]()
 - [A collection of references for EMIS]()
-- [Http client for EMIS API](https://github.com/CodeTanzania/emis-api-client)
-- [Redux state manager for EMIS](https://github.com/CodeTanzania/emis-api-states)
+- [Http client for EMIS API](https://github.com/CodeTanzania/ewea-api-client)
+- [Redux state manager for EMIS](https://github.com/CodeTanzania/ewea-api-states)
 
 ## License
 

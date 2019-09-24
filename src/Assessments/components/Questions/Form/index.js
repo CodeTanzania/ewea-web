@@ -1,9 +1,9 @@
-import { httpActions } from '@codetanzania/emis-api-client';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import {
   Connect,
   postQuestion,
   putQuestion,
-} from '@codetanzania/emis-api-states';
+} from '@codetanzania/ewea-api-states';
 import { Button, Form, Input, Select } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';

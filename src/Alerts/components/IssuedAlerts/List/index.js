@@ -2,8 +2,8 @@ import {
   deleteAlert,
   paginateAlerts,
   refreshAlerts,
-} from '@codetanzania/emis-api-states';
-import { httpActions } from '@codetanzania/emis-api-client';
+} from '@codetanzania/ewea-api-states';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import { List } from 'antd';
 // import moment from 'moment';
 import concat from 'lodash/concat';

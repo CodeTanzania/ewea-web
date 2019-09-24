@@ -4,7 +4,7 @@ import {
   openIndicatorForm,
   closeIndicatorForm,
   selectIndicator,
-} from '@codetanzania/emis-api-states';
+} from '@codetanzania/ewea-api-states';
 import { Input, Col, Row, Button, Modal } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';

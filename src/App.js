@@ -1,5 +1,5 @@
-import { StoreProvider, initializeApp } from '@codetanzania/emis-api-states';
-import { isTokenValid } from '@codetanzania/emis-api-client';
+import { StoreProvider, initializeApp } from '@codetanzania/ewea-api-states';
+import { isTokenValid } from '@codetanzania/ewea-api-client';
 import { Icon, Spin } from 'antd';
 import React from 'react';
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';

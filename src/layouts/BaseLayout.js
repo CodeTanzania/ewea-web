@@ -34,21 +34,6 @@ import IncidentsCommandCenter from '../Incidents/layouts/CommandCenter';
 import IncidentsFeeds from '../Incidents/layouts/Feeds';
 import IncidentsIncidentTypes from '../Incidents/components/IncidentTypes';
 import IncidentsLossDatabase from '../Incidents/layouts/LossDatabase';
-import EmergencyPlans from '../Plans';
-import EmergencyPlanActivations from '../Plans/layouts/Activations';
-import EmergencyPlanActivities from '../Plans/components/Activities';
-import EmergencyPlanDisseminations from '../Plans/layouts/Disseminations';
-import EmergencyPlanDrills from '../Plans/layouts/Drills';
-import EmergencyPlanPlanner from '../Plans/components/Planner';
-import EmergencyPlanProcedures from '../Plans/components/Procedures';
-import Resources from '../Resources';
-import ResourcesAdjustments from '../Resources/components/Adjustments';
-import ResourcesItemCategories from '../Resources/components/ItemCategories';
-import ResourcesItems from '../Resources/components/Items';
-import ResourcesItemUnits from '../Resources/components/ItemUnits';
-import ResourcesStock from '../Resources/components/Stock';
-import ResourcesUtilization from '../Resources/layouts/Utilization';
-import ResourcesWarehouses from '../Resources/components/Warehouses';
 import Stakeholders from '../Stakeholders';
 import StakeholdersAgencies from '../Stakeholders/components/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
@@ -427,82 +412,6 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/incidents/incidenttypes`}
             component={IncidentsIncidentTypes}
-          />
-          <SecureRoute
-            exact
-            path={`${baseUrl}/plans`}
-            component={EmergencyPlans}
-          />
-          <SecureRoute
-            path={`${baseUrl}/plans/planner`}
-            component={EmergencyPlanPlanner}
-          />
-          <SecureRoute
-            path={`${baseUrl}/plans/planner/:planId/:activityId`}
-            component={EmergencyPlanProcedures}
-          />
-          <SecureRoute
-            path={`${baseUrl}/plans/activations`}
-            component={EmergencyPlanActivations}
-          />
-          <SecureRoute
-            path={`${baseUrl}/plans/activities`}
-            component={EmergencyPlanActivities}
-          />
-          <SecureRoute
-            path={`${baseUrl}/plans/activities/:activityId`}
-            component={EmergencyPlanProcedures}
-          />
-          <SecureRoute
-            path={`${baseUrl}/plans/planner/:planId`}
-            component={EmergencyPlanActivities}
-          />
-          <SecureRoute
-            path={`${baseUrl}/plans/disseminations`}
-            component={EmergencyPlanDisseminations}
-          />
-          <SecureRoute
-            path={`${baseUrl}/plans/drills`}
-            component={EmergencyPlanDrills}
-          />
-          <SecureRoute
-            path={`${baseUrl}/plans/procedures`}
-            component={EmergencyPlanProcedures}
-          />
-          <SecureRoute
-            exact
-            path={`${baseUrl}/resources`}
-            component={Resources}
-          />
-          <SecureRoute
-            exact
-            path={`${baseUrl}/resources/items`}
-            component={ResourcesItems}
-          />
-          <SecureRoute
-            exact
-            path={`${baseUrl}/resources/itemcategories`}
-            component={ResourcesItemCategories}
-          />
-          <SecureRoute
-            path={`${baseUrl}/resources/unitsofmeasure`}
-            component={ResourcesItemUnits}
-          />
-          <SecureRoute
-            path={`${baseUrl}/resources/warehouses`}
-            component={ResourcesWarehouses}
-          />
-          <SecureRoute
-            path={`${baseUrl}/resources/stocks`}
-            component={ResourcesStock}
-          />
-          <SecureRoute
-            path={`${baseUrl}/resources/utilization`}
-            component={ResourcesUtilization}
-          />
-          <SecureRoute
-            path={`${baseUrl}/resources/adjustments`}
-            component={ResourcesAdjustments}
           />
           <SecureRoute
             exact
