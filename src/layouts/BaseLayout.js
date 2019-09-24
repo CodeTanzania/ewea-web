@@ -64,6 +64,7 @@ const breadcrumbNameMap = {
   '/app': { name: 'Home', title: 'EMIS' },
   /* Alerts Routes */
   '/app/alerts': { name: 'Alerts', title: 'Alerts module' },
+  '/app/alerttypes': { name: 'AlertTypes', title: 'Alert Types module' },
   '/app/alerts/actions': {
     name: 'Actions Taken',
     title: 'List of all performed actions',
@@ -312,6 +313,11 @@ const BaseLayout = props => {
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
           <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
+          <SecureRoute
+            exact
+            path={`${baseUrl}/alerttypes`}
+            component={Alerts}
+          />
           <SecureRoute
             path={`${baseUrl}/alerts/issuedalerts`}
             component={IssuedAlerts}

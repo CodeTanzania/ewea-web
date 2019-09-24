@@ -19,6 +19,12 @@ const routes = [
     description: modules.alerts,
   },
   {
+    name: 'Alert Types',
+    path: '/app/alerttypes',
+    icon: alertIcon,
+    description: modules.alerts,
+  },
+  {
     name: 'Assessment',
     path: '/app/assessments',
     icon: assessmentIcon,
