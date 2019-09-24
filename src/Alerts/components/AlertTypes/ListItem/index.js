@@ -8,36 +8,34 @@ import './styles.css';
 /* constants */
 const { confirm } = Modal;
 const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 3, xs: 3 };
-const nameSpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 10, xs: 10 };
-const phoneSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
-const emailSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const roleSpan = { xxl: 8, xl: 7, lg: 6, md: 0, sm: 0, xs: 0 };
-const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const nameSpan = { xxl: 4, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
+const categorySpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const scopeSpan = { xxl: 4, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
+const severitySpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
+const statusSpan = { xxl: 5, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
 const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 
 /**
  * @class
- * @name FocalPeopleListItem
+ * @name AlertTypesListItem
  * @description Single focal person list item component.
  * Render single focal person details
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class FocalPeopleListItem extends Component {
+class AlertTypesListItem extends Component {
   state = {
     isHovered: false,
   };
 
   static propTypes = {
     abbreviation: PropTypes.string.isRequired,
-    agency: PropTypes.string.isRequired,
-    agencyAbbreviation: PropTypes.string.isRequired,
-    location: PropTypes.string.isRequired,
+    scope: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    role: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    mobile: PropTypes.string.isRequired,
+    severity: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
     onArchive: PropTypes.func.isRequired,
     onEdit: PropTypes.func.isRequired,
     isSelected: PropTypes.bool.isRequired,
@@ -116,13 +114,11 @@ class FocalPeopleListItem extends Component {
   render() {
     const {
       abbreviation,
-      mobile,
-      email,
-      agency,
-      agencyAbbreviation,
+      category,
+      severity,
+      status,
+      scope,
       name,
-      role,
-      location,
       onEdit,
       onShare,
     } = this.props;
@@ -155,19 +151,20 @@ class FocalPeopleListItem extends Component {
 
     return (
       <div
-        className="FocalPeopleListItem"
+        className="AlertTypesListItem"
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
         <Row>
           <Col {...sideSpan}>{sideComponent}</Col>
           <Col {...nameSpan}>{name}</Col>
-          <Col {...roleSpan} title={agency}>
-            {role}, {agencyAbbreviation}
+          <Col {...categorySpan}>{category}</Col>
+          <Col {...scopeSpan} title={scope}>
+            {' '}
+            {scope}{' '}
           </Col>
-          <Col {...phoneSpan}>{mobile}</Col>
-          <Col {...emailSpan}>{email}</Col>
-          <Col {...areaSpan}>{location}</Col>
+          <Col {...severitySpan}>{severity}</Col>
+          <Col {...statusSpan}>{status}</Col>
           <Col {...isHoveredSpan}>
             {isHovered && (
               <ListItemActions
@@ -195,4 +192,4 @@ class FocalPeopleListItem extends Component {
   }
 }
 
-export default FocalPeopleListItem;
+export default AlertTypesListItem;

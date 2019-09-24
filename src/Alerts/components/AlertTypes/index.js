@@ -2,9 +2,9 @@ import { httpActions } from '@codetanzania/emis-api-client';
 import {
   //   closeFocalPersonForm,
   Connect,
-  getFocalPeople,
+  getAlerts,
   //   openFocalPersonForm,
-  searchFocalPeople,
+  searchAlerts,
   //   selectFocalPerson,
 } from '@codetanzania/emis-api-states';
 import { Modal } from 'antd';
@@ -14,7 +14,7 @@ import NotificationForm from '../../../components/NotificationForm';
 import Topbar from '../../../components/Topbar';
 // import FocalPersonFilters from './Filters';
 // import FocalPersonForm from './Form';
-import FocalPeopleList from './List';
+import AlertTypesList from './List';
 import './styles.css';
 
 /* constants */
@@ -44,21 +44,21 @@ class AlertTypes extends Component {
 
   static propTypes = {
     loading: PropTypes.bool.isRequired,
-    focalPeople: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+    alertTpyes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
       .isRequired,
-    focalPerson: PropTypes.shape({ name: PropTypes.string }),
+    alertType: PropTypes.shape({ name: PropTypes.string }),
     page: PropTypes.number.isRequired,
     searchQuery: PropTypes.string,
     total: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
-    focalPerson: null,
+    alertType: null,
     searchQuery: undefined,
   };
 
   componentDidMount() {
-    getFocalPeople();
+    getAlerts();
   }
 
   /**
@@ -91,16 +91,16 @@ class AlertTypes extends Component {
 
   /**
    * @function
-   * @name searchFocalPeople
-   * @description Search FocalPeople List based on supplied filter word
+   * @name searchAlerts
+   * @description Search Alert Types List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchFocalPeople = event => {
-    searchFocalPeople(event.target.value);
+  searchAlerts = event => {
+    searchAlerts(event.target.value);
   };
 
   /**
@@ -108,13 +108,13 @@ class AlertTypes extends Component {
 //    * @name handleEdit
 //    * @description Handle on Edit action for list item
 //    *
-//    * @param {object} focalPerson focalPerson to be edited
+//    * @param {object} alertType alertType to be edited
 //    *
 //    * @version 0.1.0
 //    * @since 0.1.0
 //    */
-  //   handleEdit = focalPerson => {
-  //     selectFocalPerson(focalPerson);
+  //   handleEdit = alertType => {
+  //     selectFocalPerson(alertType);
   //     this.setState({ isEditForm: true });
   //     openFocalPersonForm();
   //   };
@@ -122,18 +122,15 @@ class AlertTypes extends Component {
   /**
    * @function
    * @name handleShare
-   * @description Handle share single focalPerson action
+   * @description Handle share single alert type action
    *
-   * @param {object} focalPerson focalPerson to be shared
+   * @param {object} alertType alert type to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = focalPerson => {
-    const message = `${focalPerson.name}\nMobile: ${
-      // eslint-disable-line
-      focalPerson.mobile
-    }\nEmail: ${focalPerson.email}`;
+  handleShare = alertType => {
+    const message = `${alertType.type}`;
 
     this.setState({ notificationBody: message, showNotificationForm: true });
   };
@@ -141,21 +138,15 @@ class AlertTypes extends Component {
   /**
    * @function
    * @name handleBulkShare
-   * @description Handle share multiple focal People
+   * @description Handle share multiple alert types
    *
-   * @param {object[]} focalPeople focal People list to be shared
+   * @param {object[]} alertTpyes alert types list to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleBulkShare = focalPeople => {
-    const focalPersonList = focalPeople.map(
-      focalPerson =>
-        `${focalPerson.name}\nMobile: ${focalPerson.mobile}\nEmail: ${
-          // eslint-disable-line
-          focalPerson.email
-        }`
-    );
+  handleBulkShare = alertTpyes => {
+    const focalPersonList = alertTpyes.map(alertType => `${alertType.type}`);
 
     const message = focalPersonList.join('\n\n\n');
 
@@ -165,16 +156,16 @@ class AlertTypes extends Component {
   /**
    * @function
    * @name openNotificationForm
-   * @description Handle on notify focalPeople
+   * @description Handle on notify alertTpyes
    *
-   * @param {object[]} focalPeople List of focalPeople selected to be notified
+   * @param {object[]} alertTpyes List of alert tpyes selected to be notified
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openNotificationForm = focalPeople => {
+  openNotificationForm = alertTpyes => {
     this.setState({
-      selectedFocalPeople: focalPeople,
+      selectedFocalPeople: alertTpyes,
       showNotificationForm: true,
     });
   };
@@ -182,7 +173,7 @@ class AlertTypes extends Component {
   /**
    * @function
    * @name closeNotificationForm
-   * @description Handle on notify focalPeople
+   * @description Handle on notify alertTpyes
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -217,11 +208,11 @@ class AlertTypes extends Component {
 
   render() {
     const {
-      focalPeople,
+      alertTpyes,
       loading,
       page,
       //   posting,
-      //   focalPerson,
+      //   alertType,
       //   showForm,
       searchQuery,
       total,
@@ -240,8 +231,8 @@ class AlertTypes extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for focal people here ...',
-            onChange: this.searchFocalPeople,
+            placeholder: 'Search for Alert types here ...',
+            onChange: this.searchAlerts,
             value: searchQuery,
           }}
           actions={[
@@ -256,12 +247,12 @@ class AlertTypes extends Component {
         />
         {/* end Topbar */}
 
-        <div className="FocalPeopleList">
+        <div className="AlertTypesList">
           {/* list starts */}
-          <FocalPeopleList
+          <AlertTypesList
             total={total}
             page={page}
-            focalPeople={focalPeople}
+            alertTpyes={alertTpyes}
             loading={loading}
             onEdit={this.handleEdit}
             onFilter={this.openFiltersModal}
@@ -328,7 +319,7 @@ class AlertTypes extends Component {
             <FocalPersonForm
               posting={posting}
               isEditForm={isEditForm}
-              focalPerson={focalPerson}
+              alertType={alertType}
               onCancel={this.closeFocalPersonForm}
             />
           </Modal> */}
@@ -340,12 +331,12 @@ class AlertTypes extends Component {
 }
 
 export default Connect(AlertTypes, {
-  focalPeople: 'focalPeople.list',
-  focalPerson: 'focalPeople.selected',
-  loading: 'focalPeople.loading',
-  posting: 'focalPeople.posting',
-  page: 'focalPeople.page',
-  showForm: 'focalPeople.showForm',
-  total: 'focalPeople.total',
-  searchQuery: 'focalPeople.q',
+  alertTpyes: 'alerts.list',
+  alertType: 'alerts.selected',
+  loading: 'alerts.loading',
+  posting: 'alerts.posting',
+  page: 'alerts.page',
+  showForm: 'alerts.showForm',
+  total: 'alerts.total',
+  searchQuery: 'alerts.q',
 });
