@@ -2,8 +2,8 @@ import {
   clearAgencyFilters,
   Connect,
   filterAgencies,
-} from '@codetanzania/emis-api-states';
-import { httpActions } from '@codetanzania/emis-api-client';
+} from '@codetanzania/ewea-api-states';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import { Button, Form } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';

@@ -1,9 +1,9 @@
-import { httpActions } from '@codetanzania/emis-api-client';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import {
   deleteFocalPerson,
   paginateFocalPeople,
   refreshFocalPeople,
-} from '@codetanzania/emis-api-states';
+} from '@codetanzania/ewea-api-states';
 import { List } from 'antd';
 import compact from 'lodash/compact';
 import concat from 'lodash/concat';

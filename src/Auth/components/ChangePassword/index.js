@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Input, Button } from 'antd';
 import PropTypes from 'prop-types';
-import { Connect, putFocalPerson } from '@codetanzania/emis-api-states';
+import { Connect, putFocalPerson } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
 
 /**

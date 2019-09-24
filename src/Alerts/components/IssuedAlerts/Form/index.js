@@ -1,5 +1,5 @@
-import { httpActions } from '@codetanzania/emis-api-client';
-import { Connect, postAlert, putAlert } from '@codetanzania/emis-api-states';
+import { httpActions } from '@codetanzania/ewea-api-client';
+import { Connect, postAlert, putAlert } from '@codetanzania/ewea-api-states';
 import { Button, Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import map from 'lodash/map';
 import moment from 'moment';
