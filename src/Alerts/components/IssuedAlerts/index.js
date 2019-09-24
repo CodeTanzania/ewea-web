@@ -1,25 +1,25 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import {
-  closeFocalPersonForm,
+  closeAlertForm,
   Connect,
-  getFocalPeople,
-  openFocalPersonForm,
-  searchFocalPeople,
-  selectFocalPerson,
+  getAlerts,
+  openAlertForm,
+  searchAlerts,
+  selectAlert,
 } from '@codetanzania/ewea-api-states';
 import { Modal } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import NotificationForm from '../../../components/NotificationForm';
 import Topbar from '../../../components/Topbar';
-import FocalPersonFilters from './Filters';
-import FocalPersonForm from './Form';
-import FocalPeopleList from './List';
+import AlertFilters from './Filters';
+import AlertForm from './Form';
+import AlertsList from './List';
 import './styles.css';
 
 /* constants */
 const {
-  getFocalPeople: getFocalPeopleFromAPI,
+  getAlerts: getAlertsFromAPI,
   getJurisdictions,
   getPartyGroups,
   getRoles,
@@ -28,18 +28,18 @@ const {
 
 /**
  * @class
- * @name FocalPeople
- * @description Render focalPerson list which have search box, actions and focalPerson list
+ * @name Alerts
+ * @description Render alert list which have search box, actions and alert list
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class FocalPeople extends Component {
+class Alerts extends Component {
   state = {
     showFilters: false,
     isEditForm: false,
     showNotificationForm: false,
-    selectedFocalPeople: [],
+    selectedAlerts: [],
     notificationBody: undefined,
     cached: null,
   };
@@ -47,9 +47,9 @@ class FocalPeople extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     posting: PropTypes.bool.isRequired,
-    focalPeople: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+    alerts: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
       .isRequired,
-    focalPerson: PropTypes.shape({ name: PropTypes.string }),
+    alert: PropTypes.shape({ name: PropTypes.string }),
     page: PropTypes.number.isRequired,
     showForm: PropTypes.bool.isRequired,
     searchQuery: PropTypes.string,
@@ -57,12 +57,12 @@ class FocalPeople extends Component {
   };
 
   static defaultProps = {
-    focalPerson: null,
+    alert: null,
     searchQuery: undefined,
   };
 
   componentDidMount() {
-    getFocalPeople();
+    getAlerts();
   }
 
   /**
@@ -121,41 +121,41 @@ class FocalPeople extends Component {
 
   /**
    * @function
-   * @name openFocalPersonForm
-   * @description Open focalPerson form
+   * @name openAlertForm
+   * @description Open alert form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openFocalPersonForm = () => {
-    openFocalPersonForm();
+  openAlertForm = () => {
+    openAlertForm();
   };
 
   /**
    * @function
-   * @name openFocalPersonForm
-   * @description close focalPerson form
+   * @name openAlertForm
+   * @description close alert form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeFocalPersonForm = () => {
-    closeFocalPersonForm();
+  closeAlertForm = () => {
+    closeAlertForm();
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
-   * @name searchFocalPeople
-   * @description Search FocalPeople List based on supplied filter word
+   * @name searchAlerts
+   * @description Search Alerts List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchFocalPeople = event => {
-    searchFocalPeople(event.target.value);
+  searchAlerts = event => {
+    searchAlerts(event.target.value);
   };
 
   /**
@@ -163,32 +163,32 @@ class FocalPeople extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} focalPerson focalPerson to be edited
+   * @param {object} alert alert to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = focalPerson => {
-    selectFocalPerson(focalPerson);
+  handleEdit = alert => {
+    selectAlert(alert);
     this.setState({ isEditForm: true });
-    openFocalPersonForm();
+    openAlertForm();
   };
 
   /**
    * @function
    * @name handleShare
-   * @description Handle share single focalPerson action
+   * @description Handle share single alert action
    *
-   * @param {object} focalPerson focalPerson to be shared
+   * @param {object} alert alert to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = focalPerson => {
-    const message = `${focalPerson.name}\nMobile: ${
+  handleShare = alert => {
+    const message = `${alert.name}\nMobile: ${
       // eslint-disable-line
-      focalPerson.mobile
-    }\nEmail: ${focalPerson.email}`;
+      alert.mobile
+    }\nEmail: ${alert.email}`;
 
     this.setState({ notificationBody: message, showNotificationForm: true });
   };
@@ -198,21 +198,21 @@ class FocalPeople extends Component {
    * @name handleBulkShare
    * @description Handle share multiple focal People
    *
-   * @param {object[]} focalPeople focal People list to be shared
+   * @param {object[]} alerts focal People list to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleBulkShare = focalPeople => {
-    const focalPersonList = focalPeople.map(
-      focalPerson =>
-        `${focalPerson.name}\nMobile: ${focalPerson.mobile}\nEmail: ${
+  handleBulkShare = alerts => {
+    const alertList = alerts.map(
+      alert =>
+        `${alert.name}\nMobile: ${alert.mobile}\nEmail: ${
           // eslint-disable-line
-          focalPerson.email
+          alert.email
         }`
     );
 
-    const message = focalPersonList.join('\n\n\n');
+    const message = alertList.join('\n\n\n');
 
     this.setState({ notificationBody: message, showNotificationForm: true });
   };
@@ -220,16 +220,16 @@ class FocalPeople extends Component {
   /**
    * @function
    * @name openNotificationForm
-   * @description Handle on notify focalPeople
+   * @description Handle on notify alerts
    *
-   * @param {object[]} focalPeople List of focalPeople selected to be notified
+   * @param {object[]} alerts List of alerts selected to be notified
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openNotificationForm = focalPeople => {
+  openNotificationForm = alerts => {
     this.setState({
-      selectedFocalPeople: focalPeople,
+      selectedAlerts: alerts,
       showNotificationForm: true,
     });
   };
@@ -237,7 +237,7 @@ class FocalPeople extends Component {
   /**
    * @function
    * @name closeNotificationForm
-   * @description Handle on notify focalPeople
+   * @description Handle on notify alerts
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -272,8 +272,8 @@ class FocalPeople extends Component {
 
   render() {
     const {
-      focalPeople,
-      focalPerson,
+      alerts,
+      alert,
       loading,
       posting,
       page,
@@ -285,7 +285,7 @@ class FocalPeople extends Component {
       showFilters,
       isEditForm,
       showNotificationForm,
-      selectedFocalPeople,
+      selectedAlerts,
       notificationBody,
       cached,
     } = this.state;
@@ -295,28 +295,28 @@ class FocalPeople extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for focal people here ...',
-            onChange: this.searchFocalPeople,
+            placeholder: 'Search for alerts here ...',
+            onChange: this.searchAlerts,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Focal Person',
+              label: 'New Alert',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Focal Person',
-              onClick: this.openFocalPersonForm,
+              title: 'Add New Alert',
+              onClick: this.openAlertForm,
             },
           ]}
         />
         {/* end Topbar */}
 
-        <div className="FocalPeopleList">
+        <div className="AlertsList">
           {/* list starts */}
-          <FocalPeopleList
+          <AlertsList
             total={total}
             page={page}
-            focalPeople={focalPeople}
+            alerts={alerts}
             loading={loading}
             onEdit={this.handleEdit}
             onFilter={this.openFiltersModal}
@@ -328,7 +328,7 @@ class FocalPeople extends Component {
 
           {/* filter modal */}
           <Modal
-            title="Filter Focal People"
+            title="Filter Alerts"
             visible={showFilters}
             onCancel={this.closeFiltersModal}
             footer={null}
@@ -336,7 +336,7 @@ class FocalPeople extends Component {
             maskClosable={false}
             className="FormModal"
           >
-            <FocalPersonFilters
+            <AlertFilters
               onCancel={this.closeFiltersModal}
               cached={cached}
               onCache={this.handleOnCachedValues}
@@ -347,7 +347,7 @@ class FocalPeople extends Component {
 
           {/* Notification Modal modal */}
           <Modal
-            title="Notify Focal People"
+            title="Notify Alerts"
             visible={showNotificationForm}
             onCancel={this.closeNotificationForm}
             footer={null}
@@ -357,8 +357,8 @@ class FocalPeople extends Component {
             afterClose={this.handleAfterCloseNotificationForm}
           >
             <NotificationForm
-              recipients={selectedFocalPeople}
-              onSearchRecipients={getFocalPeopleFromAPI}
+              recipients={selectedAlerts}
+              onSearchRecipients={getAlertsFromAPI}
               onSearchJurisdictions={getJurisdictions}
               onSearchGroups={getPartyGroups}
               onSearchAgencies={getAgencies}
@@ -371,20 +371,20 @@ class FocalPeople extends Component {
 
           {/* create/edit form modal */}
           <Modal
-            title={isEditForm ? 'Edit Focal Person' : 'Add New Focal Person'}
+            title={isEditForm ? 'Edit Alert' : 'Add New Alert'}
             visible={showForm}
             className="FormModal"
             footer={null}
-            onCancel={this.closeFocalPersonForm}
+            onCancel={this.closeAlertForm}
             destroyOnClose
             maskClosable={false}
             afterClose={this.handleAfterCloseForm}
           >
-            <FocalPersonForm
+            <AlertForm
               posting={posting}
               isEditForm={isEditForm}
-              focalPerson={focalPerson}
-              onCancel={this.closeFocalPersonForm}
+              alert={alert}
+              onCancel={this.closeAlertForm}
             />
           </Modal>
           {/* end create/edit form modal */}
@@ -394,13 +394,13 @@ class FocalPeople extends Component {
   }
 }
 
-export default Connect(FocalPeople, {
-  focalPeople: 'focalPeople.list',
-  focalPerson: 'focalPeople.selected',
-  loading: 'focalPeople.loading',
-  posting: 'focalPeople.posting',
-  page: 'focalPeople.page',
-  showForm: 'focalPeople.showForm',
-  total: 'focalPeople.total',
-  searchQuery: 'focalPeople.q',
+export default Connect(Alerts, {
+  alerts: 'alerts.list',
+  alert: 'alerts.selected',
+  loading: 'alerts.loading',
+  posting: 'alerts.posting',
+  page: 'alerts.page',
+  showForm: 'alerts.showForm',
+  total: 'alerts.total',
+  searchQuery: 'alerts.q',
 });
