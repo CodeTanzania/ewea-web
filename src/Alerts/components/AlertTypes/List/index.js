@@ -1,11 +1,10 @@
 import { httpActions } from '@codetanzania/emis-api-client';
 import {
   deleteFocalPerson,
-  paginateFocalPeople,
-  refreshFocalPeople,
+  paginateAlerts,
+  refreshAlerts,
 } from '@codetanzania/emis-api-states';
 import { List } from 'antd';
-// import compact from 'lodash/compact';
 import concat from 'lodash/concat';
 import intersectionBy from 'lodash/intersectionBy';
 import map from 'lodash/map';
@@ -33,7 +32,7 @@ const headerLayout = [
   { ...severitySpan, header: 'Severity' },
   { ...statusSpan, header: 'Status' },
 ];
-const { getFocalPeopleExportUrl } = httpActions;
+const { getAlertsExportUrl } = httpActions;
 
 /**
  * @class
@@ -55,13 +54,10 @@ class AlertTypesList extends Component {
     total: PropTypes.number.isRequired,
     onEdit: PropTypes.func.isRequired,
     onFilter: PropTypes.func.isRequired,
-    onNotify: PropTypes.func.isRequired,
-    onShare: PropTypes.func.isRequired,
-    onBulkShare: PropTypes.func.isRequired,
   };
 
   state = {
-    selectedFocalPeople: [],
+    selectedAlertTypes: [],
     selectedPages: [],
   };
 
@@ -76,9 +72,9 @@ class AlertTypesList extends Component {
    * @since 0.1.0
    */
   handleOnSelectFocalPerson = alertType => {
-    const { selectedFocalPeople } = this.state;
+    const { selectedAlertTypes } = this.state;
     this.setState({
-      selectedFocalPeople: concat([], selectedFocalPeople, alertType),
+      selectedAlertTypes: concat([], selectedAlertTypes, alertType),
     });
   };
 
@@ -91,12 +87,12 @@ class AlertTypesList extends Component {
    * @since 0.1.0
    */
   handleSelectAll = () => {
-    const { selectedFocalPeople, selectedPages } = this.state;
+    const { selectedAlertTypes, selectedPages } = this.state;
     const { alertTpyes, page } = this.props;
-    const selectedList = uniqBy([...selectedFocalPeople, ...alertTpyes], '_id');
+    const selectedList = uniqBy([...selectedAlertTypes, ...alertTpyes], '_id');
     const pages = uniq([...selectedPages, page]);
     this.setState({
-      selectedFocalPeople: selectedList,
+      selectedAlertTypes: selectedList,
       selectedPages: pages,
     });
   };
@@ -113,8 +109,8 @@ class AlertTypesList extends Component {
    */
   handleDeselectAll = () => {
     const { alertTpyes, page } = this.props;
-    const { selectedFocalPeople, selectedPages } = this.state;
-    const selectedList = uniqBy([...selectedFocalPeople], '_id');
+    const { selectedAlertTypes, selectedPages } = this.state;
+    const selectedList = uniqBy([...selectedAlertTypes], '_id');
     const pages = uniq([...selectedPages]);
 
     remove(pages, item => item === page);
@@ -127,7 +123,7 @@ class AlertTypesList extends Component {
     });
 
     this.setState({
-      selectedFocalPeople: selectedList,
+      selectedAlertTypes: selectedList,
       selectedPages: pages,
     });
   };
@@ -162,32 +158,22 @@ class AlertTypesList extends Component {
    * @since 0.1.0
    */
   handleOnDeselectFocalPerson = alertType => {
-    const { selectedFocalPeople } = this.state;
-    const selectedList = [...selectedFocalPeople];
+    const { selectedAlertTypes } = this.state;
+    const selectedList = [...selectedAlertTypes];
 
     remove(
       selectedList,
       item => item._id === alertType._id // eslint-disable-line
     );
 
-    this.setState({ selectedFocalPeople: selectedList });
+    this.setState({ selectedAlertTypes: selectedList });
   };
 
   render() {
-    const {
-      alertTpyes,
-      loading,
-      page,
-      total,
-      onEdit,
-      onFilter,
-      onNotify,
-      onShare,
-      onBulkShare,
-    } = this.props;
-    const { selectedFocalPeople, selectedPages } = this.state;
-    const selectedFocalPeopleCount = intersectionBy(
-      selectedFocalPeople,
+    const { alertTpyes, loading, page, total, onEdit, onFilter } = this.props;
+    const { selectedAlertTypes, selectedPages } = this.state;
+    const selectedAlertTypesCount = intersectionBy(
+      selectedAlertTypes,
       alertTpyes,
       '_id'
     ).length;
@@ -196,31 +182,29 @@ class AlertTypesList extends Component {
       <Fragment>
         {/* toolbar */}
         <Toolbar
-          itemName="focal person"
+          itemName="Alert Types"
           page={page}
           total={total}
-          selectedItemsCount={selectedFocalPeopleCount}
-          exportUrl={getFocalPeopleExportUrl({
-            filter: { _id: map(selectedFocalPeople, '_id') },
+          selectedItemsCount={selectedAlertTypesCount}
+          exportUrl={getAlertsExportUrl({
+            filter: { _id: map(selectedAlertTypes, '_id') },
           })}
           onFilter={onFilter}
-          onNotify={() => onNotify(selectedFocalPeople)}
           onPaginate={nextPage => {
-            paginateFocalPeople(nextPage);
+            paginateAlerts(nextPage);
           }}
           onRefresh={() =>
-            refreshFocalPeople(
+            refreshAlerts(
               () => {
-                notifySuccess('Focal People refreshed successfully');
+                notifySuccess('Alert Types refreshed successfully');
               },
               () => {
                 notifyError(
-                  'An Error occurred while refreshing Focal People please contact system administrator'
+                  'An Error occurred while refreshing Alert Types please contact system administrator'
                 );
               }
             )
           }
-          onShare={() => onBulkShare(selectedFocalPeople)}
         />
         {/* end toolbar */}
 
@@ -248,7 +232,7 @@ class AlertTypesList extends Component {
               status={alertType.status}
               isSelected={
                 // eslint-disable-next-line
-                map(selectedFocalPeople, item => item._id).includes(
+                map(selectedAlertTypes, item => item._id).includes(
                   alertType._id // eslint-disable-line
                 )
               }
@@ -272,9 +256,6 @@ class AlertTypesList extends Component {
                   }
                 )
               }
-              onShare={() => {
-                onShare(alertType);
-              }}
             />
           )}
         />

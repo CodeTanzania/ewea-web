@@ -1,16 +1,13 @@
-import { httpActions } from '@codetanzania/emis-api-client';
 import {
   //   closeFocalPersonForm,
   Connect,
   getAlerts,
-  //   openFocalPersonForm,
+  openAlertForm,
   searchAlerts,
-  //   selectFocalPerson,
+  selectAlert,
 } from '@codetanzania/emis-api-states';
-import { Modal } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
-import NotificationForm from '../../../components/NotificationForm';
 import Topbar from '../../../components/Topbar';
 // import FocalPersonFilters from './Filters';
 // import FocalPersonForm from './Form';
@@ -18,13 +15,6 @@ import AlertTypesList from './List';
 import './styles.css';
 
 /* constants */
-const {
-  getFocalPeople: getFocalPeopleFromAPI,
-  getJurisdictions,
-  getPartyGroups,
-  getRoles,
-  getAgencies,
-} = httpActions;
 
 /**
  * @class
@@ -36,9 +26,7 @@ const {
  */
 class AlertTypes extends Component {
   state = {
-    showNotificationForm: false,
-    selectedFocalPeople: [],
-    notificationBody: undefined,
+    // isEditForm: false,
     cached: null,
   };
 
@@ -104,106 +92,19 @@ class AlertTypes extends Component {
   };
 
   /**
-//    * @function
-//    * @name handleEdit
-//    * @description Handle on Edit action for list item
-//    *
-//    * @param {object} alertType alertType to be edited
-//    *
-//    * @version 0.1.0
-//    * @since 0.1.0
-//    */
-  //   handleEdit = alertType => {
-  //     selectFocalPerson(alertType);
-  //     this.setState({ isEditForm: true });
-  //     openFocalPersonForm();
-  //   };
-
-  /**
    * @function
-   * @name handleShare
-   * @description Handle share single alert type action
+   * @name handleEdit
+   * @description Handle on Edit action for list item
    *
-   * @param {object} alertType alert type to be shared
+   * @param {object} alertType alertType to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = alertType => {
-    const message = `${alertType.type}`;
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name handleBulkShare
-   * @description Handle share multiple alert types
-   *
-   * @param {object[]} alertTpyes alert types list to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleBulkShare = alertTpyes => {
-    const focalPersonList = alertTpyes.map(alertType => `${alertType.type}`);
-
-    const message = focalPersonList.join('\n\n\n');
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name openNotificationForm
-   * @description Handle on notify alertTpyes
-   *
-   * @param {object[]} alertTpyes List of alert tpyes selected to be notified
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  openNotificationForm = alertTpyes => {
-    this.setState({
-      selectedFocalPeople: alertTpyes,
-      showNotificationForm: true,
-    });
-  };
-
-  /**
-   * @function
-   * @name closeNotificationForm
-   * @description Handle on notify alertTpyes
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closeNotificationForm = () => {
-    this.setState({ showNotificationForm: false });
-  };
-
-  //   /**
-  //    * @function
-  //    * @name handleAfterCloseForm
-  //    * @description Perform post close form cleanups
-  //    *
-  //    * @version 0.1.0
-  //    * @since 0.1.0
-  //    */
-  //   handleAfterCloseForm = () => {
-  //     this.setState({ isEditForm: false });
-  //   };
-
-  /**
-   * @function
-   * @name handleAfterCloseNotificationForm
-   * @description Perform post close notification form cleanups
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleAfterCloseNotificationForm = () => {
-    this.setState({ notificationBody: undefined });
+  handleEdit = alertType => {
+    selectAlert(alertType);
+    // this.setState({ isEditForm: true });
+    openAlertForm();
   };
 
   render() {
@@ -217,14 +118,11 @@ class AlertTypes extends Component {
       searchQuery,
       total,
     } = this.props;
-    const {
-      //   showFilters,
-      //   isEditForm,
-      //   cached,
-      showNotificationForm,
-      selectedFocalPeople,
-      notificationBody,
-    } = this.state;
+    // const {
+    //   //   showFilters,
+    //   //   isEditForm,
+    //   //   cached,
+    // } = this.state;
     return (
       <Fragment>
         {/* Topbar */}
@@ -237,11 +135,11 @@ class AlertTypes extends Component {
           }}
           actions={[
             {
-              label: 'New Focal Person',
+              label: 'New Alert Type',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Focal Person',
-              onClick: this.openFocalPersonForm,
+              title: 'Add New Alert Type',
+              onClick: this.openAlertForm,
             },
           ]}
         />
@@ -256,9 +154,6 @@ class AlertTypes extends Component {
             loading={loading}
             onEdit={this.handleEdit}
             onFilter={this.openFiltersModal}
-            onNotify={this.openNotificationForm}
-            onShare={this.handleShare}
-            onBulkShare={this.handleBulkShare}
           />
           {/* end list */}
 
@@ -280,30 +175,6 @@ class AlertTypes extends Component {
             />
           </Modal> */}
           {/* end filter modal */}
-
-          {/* Notification Modal modal */}
-          <Modal
-            title="Notify Focal People"
-            visible={showNotificationForm}
-            onCancel={this.closeNotificationForm}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-            afterClose={this.handleAfterCloseNotificationForm}
-          >
-            <NotificationForm
-              recipients={selectedFocalPeople}
-              onSearchRecipients={getFocalPeopleFromAPI}
-              onSearchJurisdictions={getJurisdictions}
-              onSearchGroups={getPartyGroups}
-              onSearchAgencies={getAgencies}
-              onSearchRoles={getRoles}
-              body={notificationBody}
-              onCancel={this.closeNotificationForm}
-            />
-          </Modal>
-          {/* end Notification modal */}
 
           {/* create/edit form modal */}
           {/* <Modal
