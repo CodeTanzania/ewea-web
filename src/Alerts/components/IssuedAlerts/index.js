@@ -1,42 +1,55 @@
+import { httpActions } from '@codetanzania/ewea-api-client';
 import {
-  closeAlertForm,
+  closeFocalPersonForm,
   Connect,
-  getAlerts,
-  openAlertForm,
-  searchAlerts,
-  selectAlert,
+  getFocalPeople,
+  openFocalPersonForm,
+  searchFocalPeople,
+  selectFocalPerson,
 } from '@codetanzania/ewea-api-states';
-import { Button, Col, Input, Modal, Row } from 'antd';
+import { Modal } from 'antd';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import AlertForm from './Form';
-import AlertFilters from './Filters';
-import AlertList from './List';
+import React, { Component, Fragment } from 'react';
+import NotificationForm from '../../../components/NotificationForm';
+import Topbar from '../../../components/Topbar';
+import FocalPersonFilters from './Filters';
+import FocalPersonForm from './Form';
+import FocalPeopleList from './List';
 import './styles.css';
 
 /* constants */
-const { Search } = Input;
+const {
+  getFocalPeople: getFocalPeopleFromAPI,
+  getJurisdictions,
+  getPartyGroups,
+  getRoles,
+  getAgencies,
+} = httpActions;
 
 /**
  * @class
- * @name Alerts
- * @description Render alert list which have search box, actions and alert list
+ * @name FocalPeople
+ * @description Render focalPerson list which have search box, actions and focalPerson list
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class Alerts extends Component {
+class FocalPeople extends Component {
   state = {
     showFilters: false,
     isEditForm: false,
+    showNotificationForm: false,
+    selectedFocalPeople: [],
+    notificationBody: undefined,
+    cached: null,
   };
 
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     posting: PropTypes.bool.isRequired,
-    alerts: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+    focalPeople: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
       .isRequired,
-    alert: PropTypes.shape({ name: PropTypes.string }),
+    focalPerson: PropTypes.shape({ name: PropTypes.string }),
     page: PropTypes.number.isRequired,
     showForm: PropTypes.bool.isRequired,
     searchQuery: PropTypes.string,
@@ -44,18 +57,47 @@ class Alerts extends Component {
   };
 
   static defaultProps = {
-    alert: null,
+    focalPerson: null,
     searchQuery: undefined,
   };
 
   componentDidMount() {
-    getAlerts();
+    getFocalPeople();
   }
 
   /**
    * @function
+   * @name handleOnCachedValues
+   * @description Cached selected values for filters
+   *
+   * @param {object} cached values to be cached from filter
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleOnCachedValues = cached => {
+    const { cached: previousCached } = this.state;
+    const values = { ...previousCached, ...cached };
+    this.setState({ cached: values });
+  };
+
+  /**
+   * @function
+   * @name handleClearCachedValues
+   * @description Clear cached values
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleClearCachedValues = () => {
+    this.setState({ cached: null });
+  };
+
+  /**
+   * @function
    * @name openFiltersModal
-   * @description open filters modal by setting it's visible property to false via state
+   * @description open filters modal by setting it's visible property
+   * to false via state
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -67,7 +109,8 @@ class Alerts extends Component {
   /**
    * @function
    * @name closeFiltersModal
-   * @description Close filters modal by setting it's visible property to false via state
+   * @description Close filters modal by setting it's visible property
+   * to false via state
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -78,41 +121,41 @@ class Alerts extends Component {
 
   /**
    * @function
-   * @name openAlertForm
-   * @description Open alert form
+   * @name openFocalPersonForm
+   * @description Open focalPerson form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openAlertForm = () => {
-    openAlertForm();
+  openFocalPersonForm = () => {
+    openFocalPersonForm();
   };
 
   /**
    * @function
-   * @name openAlertForm
-   * @description close alert form
+   * @name openFocalPersonForm
+   * @description close focalPerson form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeAlertForm = () => {
-    closeAlertForm();
+  closeFocalPersonForm = () => {
+    closeFocalPersonForm();
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
-   * @name searchAlerts
-   * @description Search Alerts List based on supplied filter word
+   * @name searchFocalPeople
+   * @description Search FocalPeople List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchAlerts = event => {
-    searchAlerts(event.target.value);
+  searchFocalPeople = event => {
+    searchFocalPeople(event.target.value);
   };
 
   /**
@@ -120,15 +163,87 @@ class Alerts extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} alert alert to be edited
+   * @param {object} focalPerson focalPerson to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = alert => {
-    selectAlert(alert);
+  handleEdit = focalPerson => {
+    selectFocalPerson(focalPerson);
     this.setState({ isEditForm: true });
-    openAlertForm();
+    openFocalPersonForm();
+  };
+
+  /**
+   * @function
+   * @name handleShare
+   * @description Handle share single focalPerson action
+   *
+   * @param {object} focalPerson focalPerson to be shared
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleShare = focalPerson => {
+    const message = `${focalPerson.name}\nMobile: ${
+      // eslint-disable-line
+      focalPerson.mobile
+    }\nEmail: ${focalPerson.email}`;
+
+    this.setState({ notificationBody: message, showNotificationForm: true });
+  };
+
+  /**
+   * @function
+   * @name handleBulkShare
+   * @description Handle share multiple focal People
+   *
+   * @param {object[]} focalPeople focal People list to be shared
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleBulkShare = focalPeople => {
+    const focalPersonList = focalPeople.map(
+      focalPerson =>
+        `${focalPerson.name}\nMobile: ${focalPerson.mobile}\nEmail: ${
+          // eslint-disable-line
+          focalPerson.email
+        }`
+    );
+
+    const message = focalPersonList.join('\n\n\n');
+
+    this.setState({ notificationBody: message, showNotificationForm: true });
+  };
+
+  /**
+   * @function
+   * @name openNotificationForm
+   * @description Handle on notify focalPeople
+   *
+   * @param {object[]} focalPeople List of focalPeople selected to be notified
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  openNotificationForm = focalPeople => {
+    this.setState({
+      selectedFocalPeople: focalPeople,
+      showNotificationForm: true,
+    });
+  };
+
+  /**
+   * @function
+   * @name closeNotificationForm
+   * @description Handle on notify focalPeople
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeNotificationForm = () => {
+    this.setState({ showNotificationForm: false });
   };
 
   /**
@@ -143,10 +258,22 @@ class Alerts extends Component {
     this.setState({ isEditForm: false });
   };
 
+  /**
+   * @function
+   * @name handleAfterCloseNotificationForm
+   * @description Perform post close notification form cleanups
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleAfterCloseNotificationForm = () => {
+    this.setState({ notificationBody: undefined });
+  };
+
   render() {
     const {
-      alerts,
-      alert,
+      focalPeople,
+      focalPerson,
       loading,
       posting,
       page,
@@ -154,101 +281,126 @@ class Alerts extends Component {
       searchQuery,
       total,
     } = this.props;
-    const { showFilters, isEditForm } = this.state;
+    const {
+      showFilters,
+      isEditForm,
+      showNotificationForm,
+      selectedFocalPeople,
+      notificationBody,
+      cached,
+    } = this.state;
     return (
-      <div className="Alerts">
-        <Row>
-          <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
-            {/* search input component */}
-            <Search
-              size="large"
-              placeholder="Search for alerts here ..."
-              onChange={this.searchAlerts}
-              allowClear
-              value={searchQuery}
-              className="searchBox"
-            />
-            {/* end search input component */}
-          </Col>
-
-          {/* primary actions */}
-          <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
-            <Row type="flex" justify="end">
-              <Col xxl={6} xl={6} lg={6} md={8} sm={24} xs={24}>
-                <Button
-                  type="primary"
-                  icon="plus"
-                  size="large"
-                  title="Add New Alert"
-                  onClick={this.openAlertForm}
-                  block
-                >
-                  New Alert
-                </Button>
-              </Col>
-            </Row>
-          </Col>
-          {/* end primary actions */}
-        </Row>
-
-        {/* list starts */}
-        <AlertList
-          total={total}
-          page={page}
-          alerts={alerts}
-          loading={loading}
-          onEdit={this.handleEdit}
-          onFilter={this.openFiltersModal}
-          onNotify={this.openNotificationForm}
-          onShare={this.handleShare}
-          onBulkShare={this.handleBulkShare}
+      <Fragment>
+        {/* Topbar */}
+        <Topbar
+          search={{
+            size: 'large',
+            placeholder: 'Search for focal people here ...',
+            onChange: this.searchFocalPeople,
+            value: searchQuery,
+          }}
+          actions={[
+            {
+              label: 'New Focal Person',
+              icon: 'plus',
+              size: 'large',
+              title: 'Add New Focal Person',
+              onClick: this.openFocalPersonForm,
+            },
+          ]}
         />
-        {/* end list */}
+        {/* end Topbar */}
 
-        {/* filter modal */}
-        <Modal
-          title="Filter Alerts"
-          visible={showFilters}
-          onCancel={this.closeFiltersModal}
-          width="50%"
-          footer={null}
-          destroyOnClose
-          maskClosable={false}
-        >
-          <AlertFilters onCancel={this.closeFiltersModal} />
-        </Modal>
-        {/* end filter modal */}
-        {/* create/edit form modal */}
-        <Modal
-          title={isEditForm ? 'Edit Alert' : 'Add New Alert'}
-          visible={showForm}
-          width="50%"
-          footer={null}
-          onCancel={this.closeAlertForm}
-          destroyOnClose
-          maskClosable={false}
-          afterClose={this.handleAfterCloseForm}
-        >
-          <AlertForm
-            posting={posting}
-            isEditForm={isEditForm}
-            alert={alert}
-            onCancel={this.closeAlertForm}
+        <div className="FocalPeopleList">
+          {/* list starts */}
+          <FocalPeopleList
+            total={total}
+            page={page}
+            focalPeople={focalPeople}
+            loading={loading}
+            onEdit={this.handleEdit}
+            onFilter={this.openFiltersModal}
+            onNotify={this.openNotificationForm}
+            onShare={this.handleShare}
+            onBulkShare={this.handleBulkShare}
           />
-        </Modal>
-        {/* end create/edit form modal */}
-      </div>
+          {/* end list */}
+
+          {/* filter modal */}
+          <Modal
+            title="Filter Focal People"
+            visible={showFilters}
+            onCancel={this.closeFiltersModal}
+            footer={null}
+            destroyOnClose
+            maskClosable={false}
+            className="FormModal"
+          >
+            <FocalPersonFilters
+              onCancel={this.closeFiltersModal}
+              cached={cached}
+              onCache={this.handleOnCachedValues}
+              onClearCache={this.handleClearCachedValues}
+            />
+          </Modal>
+          {/* end filter modal */}
+
+          {/* Notification Modal modal */}
+          <Modal
+            title="Notify Focal People"
+            visible={showNotificationForm}
+            onCancel={this.closeNotificationForm}
+            footer={null}
+            destroyOnClose
+            maskClosable={false}
+            className="FormModal"
+            afterClose={this.handleAfterCloseNotificationForm}
+          >
+            <NotificationForm
+              recipients={selectedFocalPeople}
+              onSearchRecipients={getFocalPeopleFromAPI}
+              onSearchJurisdictions={getJurisdictions}
+              onSearchGroups={getPartyGroups}
+              onSearchAgencies={getAgencies}
+              onSearchRoles={getRoles}
+              body={notificationBody}
+              onCancel={this.closeNotificationForm}
+            />
+          </Modal>
+          {/* end Notification modal */}
+
+          {/* create/edit form modal */}
+          <Modal
+            title={isEditForm ? 'Edit Focal Person' : 'Add New Focal Person'}
+            visible={showForm}
+            className="FormModal"
+            footer={null}
+            onCancel={this.closeFocalPersonForm}
+            destroyOnClose
+            maskClosable={false}
+            afterClose={this.handleAfterCloseForm}
+          >
+            <FocalPersonForm
+              posting={posting}
+              isEditForm={isEditForm}
+              focalPerson={focalPerson}
+              onCancel={this.closeFocalPersonForm}
+            />
+          </Modal>
+          {/* end create/edit form modal */}
+        </div>
+      </Fragment>
     );
   }
 }
 
-export default Connect(Alerts, {
-  alerts: 'alerts.list',
-  alert: 'alerts.selected',
-  loading: 'alerts.loading',
-  posting: 'alerts.posting',
-  page: 'alerts.page',
-  showForm: 'alerts.showForm',
-  total: 'alerts.total',
-  searchQuery: 'alerts.q',
+export default Connect(FocalPeople, {
+  focalPeople: 'focalPeople.list',
+  focalPerson: 'focalPeople.selected',
+  loading: 'focalPeople.loading',
+  posting: 'focalPeople.posting',
+  page: 'focalPeople.page',
+  showForm: 'focalPeople.showForm',
+  total: 'focalPeople.total',
+  searchQuery: 'focalPeople.q',
 });

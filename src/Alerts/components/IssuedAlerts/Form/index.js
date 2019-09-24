@@ -1,177 +1,98 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { Connect, postAlert, putAlert } from '@codetanzania/ewea-api-states';
-import { Button, Col, DatePicker, Form, Input, Row, Select } from 'antd';
-import map from 'lodash/map';
-import moment from 'moment';
+import { postFocalPerson, putFocalPerson } from '@codetanzania/ewea-api-states';
+import { Button, Col, Form, Input, Row } from 'antd';
+import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import SearchableSelectInput from '../../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../../util';
 
 /* constants */
-const { getAlertSources, getFeatures } = httpActions;
-const { Option } = Select;
+const { getAgencies, getFeatures, getRoles, getPartyGroups } = httpActions;
 const { TextArea } = Input;
-const eventTitle =
-  'The text denoting the type of the subject event of the alert message';
-const headlineTitle = `A brief human-readable headline.  it SHOULD be made as direct and actionable
-   as possible while remaining short. 160 characters MAY be a useful target limit for headline length.`;
-const areaTitle = 'A text description of the affected area(s).';
-const onSetTitle =
-  'The expected time of the beginning of the subject event of the alert message';
-const expiredAtTitle =
-  'The expiry time of the information of the alert message';
-const instructionsTitle =
-  'The text describing the recommended action to be taken by recipients of the alert message';
-const statusTitle =
-  'The code denoting the appropriate handling of the alert message';
-const categoryTitle =
-  'The code denoting the category of the subject event of the alert message';
-const urgencyTitle =
-  'The code denoting the urgency of the subject event of the alert message';
-const severityTitle =
-  'The code denoting the severity of the subject event of the alert message';
-const certaintyTitle =
-  'The code denoting the certainty of the subject event of the alert message';
-const typeTitle = 'The code denoting the nature of the alert message';
-const responseTypetitle =
-  'The code denoting the type of action recommended for the target audience';
-const alertSourceTitle =
-  'The human-readable name of the agency or authority issuing this alert.';
 
 /**
  * @class
- * @name AlertForm
- * @description  form for creating a new alert
+ * @name FocalPersonForm
+ * @description Render Focal Person form for creating and updating stakeholder
+ * focalPerson details
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class AlertForm extends Component {
+class FocalPersonForm extends Component {
   static propTypes = {
-    alertSchema: PropTypes.shape({
-      category: PropTypes.arrayOf(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      urgency: PropTypes.arrayOf(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      severity: PropTypes.arrayOf(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      certainty: PropTypes.arrayOf(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      type: PropTypes.arrayOf(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      response: PropTypes.arrayOf(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      status: PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) }),
-    }).isRequired,
-    alert: PropTypes.shape({
-      event: PropTypes.string,
-      category: PropTypes.string,
-      urgency: PropTypes.string,
-      area: PropTypes.string,
-      severity: PropTypes.string,
-      certainty: PropTypes.string,
-      instruction: PropTypes.string,
-      headline: PropTypes.string,
-      expiredAt: PropTypes.string,
-      expectedAt: PropTypes.string,
-      locations: PropTypes.arrayOf({ name: PropTypes.string }),
-      type: PropTypes.string,
-      response: PropTypes.string,
-      _id: PropTypes.string,
-    }),
-    posting: PropTypes.bool.isRequired,
-    onCancel: PropTypes.func.isRequired,
     isEditForm: PropTypes.bool.isRequired,
+    focalPerson: PropTypes.shape({
+      name: PropTypes.string,
+      title: PropTypes.string,
+      abbreviation: PropTypes.string,
+      mobile: PropTypes.string,
+      email: PropTypes.string,
+      party: PropTypes.shape({
+        name: PropTypes.string,
+        title: PropTypes.string,
+      }),
+      group: PropTypes.string,
+      location: PropTypes.string,
+      role: PropTypes.string,
+      landline: PropTypes.string,
+      fax: PropTypes.string,
+      physicalAddress: PropTypes.string,
+      postalAddress: PropTypes.string,
+    }).isRequired,
     form: PropTypes.shape({
       getFieldDecorator: PropTypes.func,
       validateFieldsAndScroll: PropTypes.func,
     }).isRequired,
+    groups: PropTypes.arrayOf(PropTypes.string).isRequired,
+    onCancel: PropTypes.func.isRequired,
+    posting: PropTypes.bool.isRequired,
   };
-
-  static defaultProps = {
-    alert: null,
-  };
-
-  componentDidMount() {
-    getFeatures();
-  }
 
   /**
    * @function
    * @name handleSubmit
-   * @description  handle alert form submission
+   * @description Handle submit form action
    *
-   * @param {object} e event object
+   * @param {object} event onSubmit event object
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = e => {
-    e.preventDefault();
+  handleSubmit = event => {
+    event.preventDefault();
 
     const {
       form: { validateFieldsAndScroll },
-      alert,
+      focalPerson,
       isEditForm,
     } = this.props;
 
     validateFieldsAndScroll((error, values) => {
       if (!error) {
-        const {
-          event,
-          area,
-          category,
-          urgency,
-          severity,
-          certainty,
-          instruction,
-          headline,
-          expectedAt,
-          expiredAt,
-        } = values;
-
-        const payload = {
-          category,
-          headline,
-          expectedAt: expectedAt.toISOString(),
-          expiredAt: expiredAt.toISOString(),
-          event,
-          area,
-          urgency,
-          severity,
-          certainty,
-          instruction,
-          source: 'testing',
-        };
         if (isEditForm) {
-          const updatedAlert = Object.assign({}, alert, payload);
-          putAlert(
-            updatedAlert,
+          const updatedFocalPerson = Object.assign({}, focalPerson, values);
+          putFocalPerson(
+            updatedFocalPerson,
             () => {
-              notifySuccess('Alert was updated successfully');
+              notifySuccess('Focal Person was updated successfully');
             },
             () => {
               notifyError(
-                'Something occurred while updating alert, please try again!'
+                'Something occurred while updating focal Person, please try again!'
               );
             }
           );
         } else {
-          postAlert(
-            payload,
+          postFocalPerson(
+            values,
             () => {
-              notifySuccess('Alert was created successfully');
+              notifySuccess('Focal Person was created successfully');
             },
             () => {
               notifyError(
-                'Something occurred while saving alert, please try again!'
+                'Something occurred while saving focal Person, please try again!'
               );
             }
           );
@@ -180,49 +101,12 @@ class AlertForm extends Component {
     });
   };
 
-  /**
-   * @function
-   * @name renderSelectOptions
-   * @description  display select options
-   * @param {Array} options select options
-   *
-   * @returns {object[]} Selected options components
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  renderSelectOptions = options =>
-    options.map(option => (
-      <Option key={option} value={option}>
-        {option}
-      </Option>
-    ));
-
-  /**
-   * @function
-   * @name renderAreaOptions
-   * @description  display area options
-   * @param {Array} options area options
-   *
-   * @returns {object[]}  Options components
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  renderAreaOptions = options =>
-    options.map(({ name, _id: id }) => (
-      <Option key={id} value={name}>
-        {name}
-      </Option>
-    ));
-
   render() {
     const {
+      isEditForm,
+      focalPerson,
       posting,
       onCancel,
-      alert,
-      isEditForm,
-      alertSchema,
       form: { getFieldDecorator },
     } = this.props;
 
@@ -247,270 +131,233 @@ class AlertForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        <Row justify="space-between" type="flex">
-          <Col span={11}>
-            {/* Alert event */}
-            <Form.Item
-              {...formItemLayout}
-              label={<span title={eventTitle}>Event</span>}
-            >
-              {getFieldDecorator('event', {
-                initialValue: isEditForm ? alert.event : undefined,
-                rules: [{ required: true, message: 'Alert event is required' }],
-              })(<Input placeholder="e.g Flood Tandale" />)}
-            </Form.Item>
-            {/* end Alert event */}
-
-            {/* Alert headline */}
-            <Form.Item
-              {...formItemLayout}
-              label={<span title={headlineTitle}>Headline</span>}
-            >
-              {getFieldDecorator('headline', {
-                initialValue: isEditForm ? alert.headline : undefined,
-                rules: [
-                  { required: true, message: 'Alert headline is required' },
-                ],
-              })(
-                <Input placeholder="e.g ORANGE WARNING. Strong winds and Large waves" />
-              )}
-            </Form.Item>
-            {/* end Alert headline */}
-
-            {/* alert status */}
-            <Form.Item
-              {...formItemLayout}
-              label={<span title={statusTitle}>Status</span>}
-            >
-              {getFieldDecorator('status', {
-                initialValue: isEditForm ? alert.category : undefined,
-                rules: [
-                  { required: true, message: 'Alert status is required' },
-                ],
-              })(
-                <Select showSearch>
-                  {this.renderSelectOptions(alertSchema.status.enum)}
-                </Select>
-              )}
-            </Form.Item>
-            {/* end alert status */}
-
-            {/* alert area */}
-            <Form.Item
-              {...formItemLayout}
-              label={<span title={areaTitle}>Area(s)</span>}
-            >
-              {getFieldDecorator('locations', {
-                rules: [
-                  { required: true, message: 'Affected area(s) is required' },
-                ],
-                initialValue:
-                  alert && alert.locations
-                    ? map(alert.locations, location => location._id) // eslint-disable-line
-                    : [],
-              })(
-                <SearchableSelectInput
-                  placeholder="Please select affected area"
-                  onSearch={getFeatures}
-                  optionLabel="name"
-                  optionValue="name"
-                  mode="multiple"
-                  initialValue={alert && alert.locations ? alert.locations : []}
-                />
-              )}
-            </Form.Item>
-            {/* end alert area */}
-
-            {/* alert onset date  */}
-            <Form.Item
-              {...formItemLayout}
-              label={<span title={onSetTitle}>OnSet</span>}
-            >
-              {getFieldDecorator('expectedAt', {
-                initialValue: isEditForm
-                  ? moment(alert.expectedAt).utc()
-                  : undefined,
-                rules: [
-                  { required: true, message: 'Alert  OnSet date is required' },
-                ],
-              })(
-                <DatePicker
-                  style={{ width: '100%' }}
-                  showTime
-                  format="YYYY-MM-DD HH:mm:ss"
-                />
-              )}
-            </Form.Item>
-            {/* end alert onset date */}
-
-            {/* alert expires date  */}
-            <Form.Item
-              {...formItemLayout}
-              label={<span title={expiredAtTitle}>Expires At</span>}
-            >
-              {getFieldDecorator('expiredAt', {
-                initialValue: isEditForm
-                  ? moment(alert.expiredAt).utc()
-                  : undefined,
-                rules: [
-                  { required: true, message: 'Alert Expire date is required' },
-                ],
-              })(
-                <DatePicker
-                  style={{ width: '100%' }}
-                  showTime
-                  format="YYYY-MM-DD HH:mm:ss"
-                />
-              )}
-            </Form.Item>
-            {/* end alert expire date */}
-
-            {/* alert instructions  */}
-            <Form.Item
-              {...formItemLayout}
-              label={<span title={instructionsTitle}>Instructions</span>}
-            >
-              {getFieldDecorator('instruction', {
-                initialValue: isEditForm ? alert.instruction : undefined,
-                rules: [
-                  { required: true, message: 'Alert  Instruction is required' },
-                ],
-              })(<TextArea autosize={{ minRows: 2, maxRows: 8 }} />)}
-            </Form.Item>
-            {/* end alert instructions */}
-          </Col>
-          <Col span={11}>
-            {/* alert category */}
-            <Form.Item
-              {...formItemLayout}
-              label={<span title={categoryTitle}>Category</span>}
-            >
-              {getFieldDecorator('category', {
-                initialValue: isEditForm ? alert.category : undefined,
-                rules: [
-                  { required: true, message: 'Alert category is required' },
-                ],
-              })(
-                <Select showSearch>
-                  {this.renderSelectOptions(alertSchema.category.enum)}
-                </Select>
-              )}
-            </Form.Item>
-            {/* end alert category */}
-
-            {/* alert urgency */}
-            <Form.Item
-              {...formItemLayout}
-              label={<span title={urgencyTitle}>Urgency</span>}
-            >
-              {getFieldDecorator('urgency', {
-                initialValue: isEditForm ? alert.urgency : undefined,
-                rules: [
-                  { required: true, message: 'Alert urgency is required' },
-                ],
-              })(
-                <Select showSearch>
-                  {this.renderSelectOptions(alertSchema.urgency.enum)}
-                </Select>
-              )}
-            </Form.Item>
-            {/* end alert urgency */}
-
-            {/* alert severity */}
-            <Form.Item
-              {...formItemLayout}
-              label={<span title={severityTitle}>Severity</span>}
-            >
-              {getFieldDecorator('severity', {
-                initialValue: isEditForm ? alert.severity : undefined,
-                rules: [
-                  { required: true, message: 'Alert severity is required' },
-                ],
-              })(
-                <Select showSearch>
-                  {this.renderSelectOptions(alertSchema.severity.enum)}
-                </Select>
-              )}
-            </Form.Item>
-            {/* end alert severity */}
-            {/* alert certainty */}
-            <Form.Item
-              {...formItemLayout}
-              label={<span title={certaintyTitle}>Certainty</span>}
-            >
-              {getFieldDecorator('certainty', {
-                initialValue: isEditForm ? alert.certainty : undefined,
-                rules: [
-                  { required: true, message: 'Alert certainty is required' },
-                ],
-              })(
-                <Select showSearch>
-                  {this.renderSelectOptions(alertSchema.certainty.enum)}
-                </Select>
-              )}
-            </Form.Item>
-            {/* end alert certainty */}
-
-            {/* alert type */}
-            <Form.Item
-              {...formItemLayout}
-              label={<span title={typeTitle}>Message Type</span>}
-            >
-              {getFieldDecorator('type', {
-                initialValue: isEditForm ? alert.type : undefined,
-                rules: [
-                  { required: true, message: 'Alert Message Type is required' },
-                ],
-              })(
-                <Select showSearch>
-                  {this.renderSelectOptions(alertSchema.type.enum)}
-                </Select>
-              )}
-            </Form.Item>
-            {/* end alert type */}
-
-            {/* alert response type */}
-            <Form.Item
-              {...formItemLayout}
-              label={<span title={responseTypetitle}>Response Type</span>}
-            >
-              {getFieldDecorator('response', {
-                initialValue: isEditForm ? alert.response : undefined,
+        {/* focalPerson name, phone number and email section */}
+        <Row type="flex" justify="space-between">
+          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
+            {/* focalPerson name */}
+            <Form.Item {...formItemLayout} label="Name">
+              {getFieldDecorator('name', {
+                initialValue: isEditForm ? focalPerson.name : undefined,
                 rules: [
                   {
                     required: true,
-                    message: 'Alert Response Type is required',
+                    message: 'Focal Person full name is required',
                   },
                 ],
-              })(
-                <Select showSearch>
-                  {this.renderSelectOptions(alertSchema.response.enum)}
-                </Select>
-              )}
+              })(<Input />)}
             </Form.Item>
-            {/* end alert response type */}
+            {/* end focalPerson name */}
+          </Col>
+          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
+            <Row type="flex" justify="space-between">
+              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
+                {/* focalPerson mobile number */}
+                <Form.Item {...formItemLayout} label="Phone Number">
+                  {getFieldDecorator('mobile', {
+                    initialValue: isEditForm ? focalPerson.mobile : undefined,
+                    rules: [
+                      { required: true, message: 'Phone number is required' },
+                    ],
+                  })(<Input />)}
+                </Form.Item>
+                {/* end focalPerson mobile number */}
+              </Col>
+              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24} span={12}>
+                {/* focalPerson email */}
+                <Form.Item {...formItemLayout} label="Email">
+                  {getFieldDecorator('email', {
+                    initialValue: isEditForm ? focalPerson.email : undefined,
+                    rules: [
+                      {
+                        type: 'email',
+                        message: 'The input is not valid E-mail!',
+                      },
+                      {
+                        required: true,
+                        message: 'E-mail address is required',
+                      },
+                    ],
+                  })(<Input />)}
+                </Form.Item>
+                {/* end focalPerson email */}
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+        {/* end focalPerson name, phone number and email section */}
 
-            {/* alert source */}
-            <Form.Item
-              {...formItemLayout}
-              label={<span title={alertSourceTitle}>Alert Source</span>}
-            >
-              {getFieldDecorator('agency', {
-                rules: [
-                  { required: true, message: 'Alert Source is required' },
-                ],
+        {/* focalPerson organization, group and area section */}
+        <Row type="flex" justify="space-between">
+          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
+            {/* focalPerson organization */}
+            <Form.Item {...formItemLayout} label="Organization/Agency">
+              {getFieldDecorator('party', {
+                initialValue:
+                  isEditForm && focalPerson.party
+                    ? focalPerson.party._id // eslint-disable-line
+                    : undefined,
               })(
                 <SearchableSelectInput
-                  placeholder="Please select alert source"
-                  onSearch={getAlertSources}
+                  onSearch={getAgencies}
                   optionLabel="name"
                   optionValue="_id"
+                  initialValue={
+                    isEditForm && focalPerson.party
+                      ? focalPerson.party
+                      : undefined
+                  }
                 />
               )}
             </Form.Item>
-            {/* end alert source */}
+            {/* end focalPerson organization */}
+          </Col>
+
+          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
+            <Row type="flex" justify="space-between">
+              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
+                {/* focalPerson group */}
+                <Form.Item {...formItemLayout} label="Group">
+                  {getFieldDecorator('group', {
+                    initialValue:
+                      isEditForm && focalPerson.group
+                        ? focalPerson.group._id // eslint-disable-line
+                        : undefined,
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Focal Person group is required',
+                      },
+                    ],
+                  })(
+                    <SearchableSelectInput
+                      onSearch={getPartyGroups}
+                      optionLabel="name"
+                      optionValue="_id"
+                      initialValue={
+                        isEditForm && focalPerson.group
+                          ? focalPerson.group
+                          : undefined
+                      }
+                    />
+                  )}
+                </Form.Item>
+                {/* end focalPerson group */}
+              </Col>
+              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
+                {/* focalPerson location */}
+                <Form.Item {...formItemLayout} label="Area">
+                  {getFieldDecorator('location', {
+                    initialValue:
+                      isEditForm && focalPerson.location
+                        ? focalPerson.location._id // eslint-disable-line
+                        : undefined,
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Focal Person area is required',
+                      },
+                    ],
+                  })(
+                    <SearchableSelectInput
+                      onSearch={getFeatures}
+                      optionLabel={feature =>
+                        `${feature.name} (${upperFirst(feature.type)})`
+                      }
+                      optionValue="_id"
+                      initialValue={
+                        isEditForm && focalPerson.location
+                          ? focalPerson.location
+                          : undefined
+                      }
+                    />
+                  )}
+                </Form.Item>
+                {/* end focalPerson location */}
+              </Col>
+            </Row>
           </Col>
         </Row>
+        {/* end focalPerson organization, group and area section */}
+
+        {/* focalPerson role, landline and fax section */}
+        <Row type="flex" justify="space-between">
+          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
+            {/* focalPerson role */}
+            <Form.Item {...formItemLayout} label="Role">
+              {getFieldDecorator('role', {
+                initialValue:
+                  isEditForm && focalPerson.role
+                    ? focalPerson.role._id // eslint-disable-line
+                    : undefined,
+                rules: [
+                  { required: true, message: 'Focal Person time is required' },
+                ],
+              })(
+                <SearchableSelectInput
+                  onSearch={getRoles}
+                  optionLabel="name"
+                  optionValue="_id"
+                  initialValue={
+                    isEditForm && focalPerson.role
+                      ? focalPerson.role
+                      : undefined
+                  }
+                />
+              )}
+            </Form.Item>
+            {/* end focalPerson role */}
+          </Col>
+          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
+            <Row type="flex" justify="space-between">
+              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
+                {/* focalPerson landline number */}
+                <Form.Item {...formItemLayout} label="Landline/Other Number">
+                  {getFieldDecorator('landline', {
+                    initialValue: isEditForm ? focalPerson.landline : undefined,
+                  })(<Input />)}
+                </Form.Item>
+                {/* end focalPerson landline number */}
+              </Col>
+              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
+                {/* focalPerson fax */}
+                <Form.Item {...formItemLayout} label="Fax">
+                  {getFieldDecorator('fax', {
+                    initialValue: isEditForm ? focalPerson.fax : undefined,
+                  })(<Input />)}
+                </Form.Item>
+                {/* end focalPerson fax */}
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+        {/* end focalPerson role, landline and fax section */}
+
+        {/* focalPerson Physical Address, Postal Address section */}
+        <Row type="flex" justify="space-between">
+          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
+            {/* focalPerson physical Address */}
+            <Form.Item {...formItemLayout} label="Physical Address">
+              {getFieldDecorator('physicalAddress', {
+                initialValue: isEditForm
+                  ? focalPerson.physicalAddress
+                  : undefined,
+              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
+            </Form.Item>
+            {/* end focalPerson physical Address */}
+          </Col>
+          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
+            {/* focalPerson postal address */}
+            <Form.Item {...formItemLayout} label="Postal Address">
+              {getFieldDecorator('postalAddress', {
+                initialValue: isEditForm
+                  ? focalPerson.postalAddress
+                  : undefined,
+              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
+            </Form.Item>
+            {/* end focalPerson postal address */}
+          </Col>
+        </Row>
+        {/* end focalPerson physical Address, Postal Address section */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -530,8 +377,4 @@ class AlertForm extends Component {
   }
 }
 
-export default Form.create()(
-  Connect(AlertForm, {
-    alertSchema: 'alerts.schema.properties',
-  })
-);
+export default Form.create()(FocalPersonForm);

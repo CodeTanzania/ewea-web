@@ -1,50 +1,49 @@
-import { Avatar, Checkbox, Col, Row, Modal } from 'antd';
+import { Avatar, Checkbox, Col, Modal, Row } from 'antd';
 import PropTypes from 'prop-types';
 import randomColor from 'randomcolor';
 import React, { Component } from 'react';
-// eslint-disable-next-line import/named
-import { formatTime, timeAgo } from '../../../../util';
 import ListItemActions from '../../../../components/ListItemActions';
 import './styles.css';
 
 /* constants */
 const { confirm } = Modal;
+const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 3, xs: 3 };
+const nameSpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 10, xs: 10 };
+const phoneSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
+const emailSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
+const roleSpan = { xxl: 8, xl: 7, lg: 6, md: 0, sm: 0, xs: 0 };
+const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 
 /**
  * @class
- * @name AlertListItem
- * @description Single alert list item component. Render single alert details
+ * @name FocalPeopleListItem
+ * @description Single focal person list item component.
+ * Render single focal person details
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class AlertListItem extends Component {
+class FocalPeopleListItem extends Component {
   state = {
     isHovered: false,
   };
 
   static propTypes = {
     abbreviation: PropTypes.string.isRequired,
-    headline: PropTypes.string,
-    description: PropTypes.string,
-    event: PropTypes.string.isRequired,
-    source: PropTypes.string.isRequired,
-    color: PropTypes.string.isRequired,
-    certainty: PropTypes.string.isRequired,
-    expiredAt: PropTypes.string.isRequired,
-    expectedAt: PropTypes.string.isRequired,
-    severity: PropTypes.func.isRequired,
-    urgency: PropTypes.func.isRequired,
+    agency: PropTypes.string.isRequired,
+    agencyAbbreviation: PropTypes.string.isRequired,
+    location: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    mobile: PropTypes.string.isRequired,
     onArchive: PropTypes.func.isRequired,
     onEdit: PropTypes.func.isRequired,
     isSelected: PropTypes.bool.isRequired,
     onSelectItem: PropTypes.func.isRequired,
     onDeselectItem: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    description: '',
-    headline: '',
+    onShare: PropTypes.func.isRequired,
   };
 
   /**
@@ -96,15 +95,15 @@ class AlertListItem extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a alert
+   * @description show confirm modal before archiving a focal person
    *
    * @version 0.1.0
    * @since 0.1.0
    */
   showArchiveConfirm = () => {
-    const { event, onArchive } = this.props;
+    const { name, onArchive } = this.props;
     confirm({
-      title: `Are you sure you want to archive ${event} ?`,
+      title: `Are you sure you want to archive ${name} ?`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
@@ -117,22 +116,19 @@ class AlertListItem extends Component {
   render() {
     const {
       abbreviation,
-      color,
-      source,
-      certainty,
-      event,
-      headline,
-      description,
-      expiredAt,
-      expectedAt,
-      urgency,
-      severity,
+      mobile,
+      email,
+      agency,
+      agencyAbbreviation,
+      name,
+      role,
+      location,
       onEdit,
+      onShare,
     } = this.props;
     const { isHovered } = this.state;
     const { isSelected } = this.props;
-    const eventTitle = description || headline;
-    const avatarBackground = color || randomColor();
+    const avatarBackground = randomColor();
     let sideComponent = null;
 
     if (isSelected) {
@@ -159,36 +155,35 @@ class AlertListItem extends Component {
 
     return (
       <div
-        className="AlertListItem"
+        className="FocalPeopleListItem"
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
         <Row>
-          <Col span={1}>{sideComponent}</Col>
-          <Col span={7} title={eventTitle}>
-            {event}
+          <Col {...sideSpan}>{sideComponent}</Col>
+          <Col {...nameSpan}>{name}</Col>
+          <Col {...roleSpan} title={agency}>
+            {role}, {agencyAbbreviation}
           </Col>
-          <Col span={2}>{severity}</Col>
-          <Col span={2}>{certainty}</Col>
-          <Col span={2}>{urgency}</Col>
-          <Col span={2} title={formatTime(expectedAt)}>
-            {timeAgo(expectedAt)}
-          </Col>
-          <Col span={2} title={formatTime(expectedAt)}>
-            {timeAgo(expiredAt)}
-          </Col>
-          <Col span={3}>{source}</Col>
-          <Col span={3}>
+          <Col {...phoneSpan}>{mobile}</Col>
+          <Col {...emailSpan}>{email}</Col>
+          <Col {...areaSpan}>{location}</Col>
+          <Col {...isHoveredSpan}>
             {isHovered && (
               <ListItemActions
                 edit={{
-                  name: 'Edit Alert',
-                  title: 'Update Alert details',
+                  name: 'Edit Focal Person',
+                  title: 'Update Focal Person Details',
                   onClick: onEdit,
                 }}
+                share={{
+                  name: 'Share Focal Person',
+                  title: 'Share Focal Person details with others',
+                  onClick: onShare,
+                }}
                 archive={{
-                  name: 'Archive Alert',
-                  title: 'Remove Alert from the list of Active Alerts',
+                  name: 'Archive Focal Person',
+                  title: 'Remove Focal Person from list of active focal People',
                   onClick: this.showArchiveConfirm,
                 }}
               />
@@ -200,4 +195,4 @@ class AlertListItem extends Component {
   }
 }
 
-export default AlertListItem;
+export default FocalPeopleListItem;

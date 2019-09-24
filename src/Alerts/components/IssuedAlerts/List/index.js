@@ -1,167 +1,103 @@
-import {
-  deleteAlert,
-  paginateAlerts,
-  refreshAlerts,
-} from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
+import {
+  deleteFocalPerson,
+  paginateFocalPeople,
+  refreshFocalPeople,
+} from '@codetanzania/ewea-api-states';
 import { List } from 'antd';
-// import moment from 'moment';
+import compact from 'lodash/compact';
 import concat from 'lodash/concat';
+import intersectionBy from 'lodash/intersectionBy';
 import map from 'lodash/map';
+import remove from 'lodash/remove';
 import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
-import remove from 'lodash/remove';
-import intersectionBy from 'lodash/intersectionBy';
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import ListHeader from '../../../../components/ListHeader';
-import { notifyError, notifySuccess } from '../../../../util';
 import Toolbar from '../../../../components/Toolbar';
-import AlertListItem from '../ListItem';
+import { notifyError, notifySuccess } from '../../../../util';
+import FocalPersonsListItem from '../ListItem';
+
+/* constants */
+const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
+const phoneSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
+const emailSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
+const roleSpan = { xxl: 8, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
+const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 
 const headerLayout = [
-  { span: 7, header: 'Event' },
-  { span: 2, header: 'Severity' },
-  { span: 2, header: 'Certainty' },
-  { span: 2, header: 'Urgency' },
-  { span: 2, header: 'Expected' },
-  { span: 2, header: 'Expires' },
-  { span: 3, header: 'Source' },
+  { ...nameSpan, header: 'Name' },
+  { ...roleSpan, header: 'Title & Organization' },
+  { ...phoneSpan, header: 'Phone Number' },
+  { ...emailSpan, header: 'Email' },
+  { ...areaSpan, header: 'Area' },
 ];
-const { getAlertsExportUrl } = httpActions;
-
-/**
- * @function
- * @name dateSortDesc
- * @description This is a comparison function that will result in dates being
- *  sorted in DESCENDING order
- *
- * @param {object} date1 first date object
- * @param {object} date2 second date object
- *
- * @returns {number} result
- *
- * @version 0.1.0
- * @since 0.1.0
- */
-// const dateSortDesc = (date1, date2) => {
-//   if (date1 > date2) return -1;
-//   if (date1 < date2) return 1;
-//   return 0;
-// };
-
-/**
- * @function
- * @name sortByExpiredAt
- * @description Sorts alerts  in ASCENDING ORDER by expiredAt field
- *
- * @param {Array} alerts alerts to be sorted
- *
- * @returns {Array} sorted Alerts
- *
- * @version 0.1.0
- * @since 0.1.0
- */
-// const sortByExpiredAt = alerts =>
-//   alerts.sort(({ expiredAt: ISOdate1 }, { expiredAt: ISOdate2 }) => {
-//     const date1 = moment(ISOdate1);
-//     const date2 = moment(ISOdate2);
-//     return dateSortDesc(date1, date2);
-//   });
-
-/**
- * @function
- * @name sortByUpdatedAt
- * @description Sorts alerts  in DESCENDING ORDER by updatedAt field
- *
- * @param {Array} alerts alerts to be filtered
- *
- * @returns {Array} sortedAlerts
- *
- * @version 0.1.0
- * @since 0.1.0
- */
-// const sortByUpdatedAt = alerts =>
-//   alerts.sort(({ updatedAt: ISOdate1 }, { updatedAt: ISOdate2 }) => {
-//     const date1 = moment(ISOdate1);
-//     const date2 = moment(ISOdate2);
-//     return dateSortDesc(date1, date2);
-//   });
+const { getFocalPeopleExportUrl } = httpActions;
 
 /**
  * @class
- * @name AlertList
- * @description Render AlertList component which have actionBar, alerts header and
- * alert list item components
+ * @name FocalPersonsList
+ * @description Render FocalPersonsList component which have actionBar, focal People
+ * header and focal People list components
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class AlertList extends Component {
+class FocalPersonsList extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
-    alerts: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+    focalPeople: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
       .isRequired,
     page: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
     onEdit: PropTypes.func.isRequired,
-    onShare: PropTypes.func.isRequired,
     onFilter: PropTypes.func.isRequired,
+    onNotify: PropTypes.func.isRequired,
+    onShare: PropTypes.func.isRequired,
+    onBulkShare: PropTypes.func.isRequired,
   };
 
   state = {
-    selectedAlerts: [],
+    selectedFocalPeople: [],
     selectedPages: [],
   };
 
   /**
    * @function
-   * @name handleOnSelectAlert
-   * @description Handle select a single alert action
+   * @name handleOnSelectFocalPerson
+   * @description Handle select a single focalPerson action
    *
-   * @param {object} alert selected alert object
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleOnSelectAlert = alert => {
-    const { selectedAlerts } = this.state;
-    this.setState({ selectedAlerts: concat([], selectedAlerts, alert) });
-  };
-
-  /**
-   * @function
-   * @name handleFilterByStatus
-   * @description Handle filter alerts by status action
+   * @param {object} focalPerson selected focalPerson object
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleFilterByStatus = () => {
-    // if (status === 'All') {
-    //   filterStakeholders({});
-    // } else if (status === 'Active') {
-    //   filterStakeholders({});
-    // } else if (status === 'Archived') {
-    //   filterStakeholders({});
-    // }
+  handleOnSelectFocalPerson = focalPerson => {
+    const { selectedFocalPeople } = this.state;
+    this.setState({
+      selectedFocalPeople: concat([], selectedFocalPeople, focalPerson),
+    });
   };
 
   /**
    * @function
    * @name handleSelectAll
-   * @description Handle select all alerts actions from current page
+   * @description Handle select all focalPeople actions from current page
    *
    * @version 0.1.0
    * @since 0.1.0
    */
   handleSelectAll = () => {
-    const { selectedAlerts, selectedPages } = this.state;
-    const { alerts, page } = this.props;
-    const selectedList = uniqBy([...selectedAlerts, ...alerts], '_id');
+    const { selectedFocalPeople, selectedPages } = this.state;
+    const { focalPeople, page } = this.props;
+    const selectedList = uniqBy(
+      [...selectedFocalPeople, ...focalPeople],
+      '_id'
+    );
     const pages = uniq([...selectedPages, page]);
     this.setState({
-      selectedAlerts: selectedList,
+      selectedFocalPeople: selectedList,
       selectedPages: pages,
     });
   };
@@ -169,167 +105,193 @@ class AlertList extends Component {
   /**
    * @function
    * @name handleDeselectAll
-   * @description Handle deselect all alerts in a current page
+   * @description Handle deselect all focalPeople in a current page
    *
-   * @returns {undefined}
+   * @returns {undefined} undefined
    *
    * @version 0.1.0
    * @since 0.1.0
    */
   handleDeselectAll = () => {
-    const { alerts, page } = this.props;
-    const { selectedAlerts, selectedPages } = this.state;
-    const selectedList = uniqBy([...selectedAlerts], '_id');
+    const { focalPeople, page } = this.props;
+    const { selectedFocalPeople, selectedPages } = this.state;
+    const selectedList = uniqBy([...selectedFocalPeople], '_id');
     const pages = uniq([...selectedPages]);
 
     remove(pages, item => item === page);
 
-    alerts.forEach(alert => {
+    focalPeople.forEach(focalPerson => {
       remove(
         selectedList,
-        item => item._id === alert._id // eslint-disable-line
+        item => item._id === focalPerson._id // eslint-disable-line
       );
     });
 
     this.setState({
-      selectedAlerts: selectedList,
+      selectedFocalPeople: selectedList,
       selectedPages: pages,
     });
   };
 
   /**
    * @function
-   * @name handleOnDeselectAlert
-   * @description Handle deselect a single alert action
-   *
-   * @param {object} alert alert to be removed from selected alerts
-   * @returns {undefined}
+   * @name handleFilterByStatus
+   * @description Handle filter focalPeople by status action
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnDeselectAlert = alert => {
-    const { selectedAlerts } = this.state;
-    const selectedList = [...selectedAlerts];
+  handleFilterByStatus = () => {
+    // if (status === 'All') {
+    //   filter({});
+    // } else if (status === 'Active') {
+    //   filter({});
+    // } else if (status === 'Archived') {
+    //   filter({});
+    // }
+  };
+
+  /**
+   * @function
+   * @name handleOnDeselectFocalPerson
+   * @description Handle deselect a single focalPerson action
+   *
+   * @param {object} focalPerson focalPerson to be removed from selected focalPeople
+   * @returns {undefined} undefined
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleOnDeselectFocalPerson = focalPerson => {
+    const { selectedFocalPeople } = this.state;
+    const selectedList = [...selectedFocalPeople];
 
     remove(
       selectedList,
-      item => item._id === alert._id // eslint-disable-line
+      item => item._id === focalPerson._id // eslint-disable-line
     );
 
-    this.setState({ selectedAlerts: selectedList });
+    this.setState({ selectedFocalPeople: selectedList });
   };
 
   render() {
     const {
-      alerts,
+      focalPeople,
       loading,
       page,
       total,
       onEdit,
       onFilter,
+      onNotify,
       onShare,
+      onBulkShare,
     } = this.props;
-    const { selectedAlerts, selectedPages } = this.state;
-    // const sortedAlerts = sortByUpdatedAt(sortByExpiredAt(alerts));
-    const selectedAlertsCount = intersectionBy(selectedAlerts, alerts, '_id')
-      .length;
+    const { selectedFocalPeople, selectedPages } = this.state;
+    const selectedFocalPeopleCount = intersectionBy(
+      selectedFocalPeople,
+      focalPeople,
+      '_id'
+    ).length;
 
     return (
       <Fragment>
         {/* toolbar */}
         <Toolbar
-          itemName="Alert"
+          itemName="focal person"
           page={page}
           total={total}
-          selectedItemsCount={selectedAlertsCount}
-          exportUrl={getAlertsExportUrl({
-            filter: { _id: map(selectedAlerts, '_id') },
+          selectedItemsCount={selectedFocalPeopleCount}
+          exportUrl={getFocalPeopleExportUrl({
+            filter: { _id: map(selectedFocalPeople, '_id') },
           })}
           onFilter={onFilter}
+          onNotify={() => onNotify(selectedFocalPeople)}
           onPaginate={nextPage => {
-            paginateAlerts(nextPage);
+            paginateFocalPeople(nextPage);
           }}
           onRefresh={() =>
-            refreshAlerts(
+            refreshFocalPeople(
               () => {
-                notifySuccess('Alerts refreshed successfully');
+                notifySuccess('Focal People refreshed successfully');
               },
               () => {
                 notifyError(
-                  'An Error occurred while refreshing Alerts please contact system administrator'
+                  'An Error occurred while refreshing Focal People please contact system administrator'
                 );
               }
             )
           }
+          onShare={() => onBulkShare(selectedFocalPeople)}
         />
         {/* end toolbar */}
 
-        {/* alert list header */}
+        {/* focalPerson list header */}
         <ListHeader
           headerLayout={headerLayout}
           onSelectAll={this.handleSelectAll}
           onDeselectAll={this.handleDeselectAll}
           isBulkSelected={selectedPages.includes(page)}
         />
-        {/* end alert list header */}
+        {/* end focalPerson list header */}
 
-        {/* alerts list */}
+        {/* focalPeople list */}
         <List
           loading={loading}
-          dataSource={alerts}
-          renderItem={alert => {
-            return (
-              <AlertListItem
-                key={alert._id} // eslint-disable-line
-                abbreviation={alert.source.toUpperCase().charAt(0)}
-                urgency={alert.urgency}
-                area={alert.area}
-                certainty={alert.certainty}
-                event={alert.event}
-                headline={alert.headline}
-                description={alert.description}
-                source={alert.source}
-                color={alert.color}
-                reportedAt={alert.reportedAt}
-                expiredAt={alert.expiredAt}
-                expectedAt={alert.expectedAt}
-                severity={alert.severity}
-                onShare={() => {
-                  onShare(alert);
-                }}
-                isSelected={
-                  // eslint-disable-next-line
-                  map(selectedAlerts, item => item._id).includes(alert._id)
-                }
-                onSelectItem={() => {
-                  this.handleOnSelectAlert(alert);
-                }}
-                onDeselectItem={() => {
-                  this.handleOnDeselectAlert(alert);
-                }}
-                onEdit={() => onEdit(alert)}
-                onArchive={() =>
-                  deleteAlert(
-                    alert._id, // eslint-disable-line
-                    () => {
-                      notifySuccess('Alert was archived successfully');
-                    },
-                    () => {
-                      notifyError(
-                        'An Error occurred while archiving Alert please alert system administrator'
-                      );
-                    }
-                  )
-                }
-              />
-            );
-          }}
+          dataSource={focalPeople}
+          renderItem={focalPerson => (
+            <FocalPersonsListItem
+              key={focalPerson._id} // eslint-disable-line
+              abbreviation={focalPerson.abbreviation}
+              location={compact([
+                focalPerson.location.name,
+                focalPerson.location.place.district,
+                focalPerson.location.place.region,
+                focalPerson.location.place.country,
+              ]).join(', ')}
+              name={focalPerson.name}
+              agency={focalPerson.party ? focalPerson.party.name : 'N/A'}
+              agencyAbbreviation={
+                focalPerson.party ? focalPerson.party.abbreviation : 'N/A'
+              }
+              role={focalPerson.role ? focalPerson.role.name : 'N/A'}
+              email={focalPerson.email}
+              mobile={focalPerson.mobile}
+              isSelected={
+                // eslint-disable-next-line
+                map(selectedFocalPeople, item => item._id).includes(
+                  focalPerson._id // eslint-disable-line
+                )
+              }
+              onSelectItem={() => {
+                this.handleOnSelectFocalPerson(focalPerson);
+              }}
+              onDeselectItem={() => {
+                this.handleOnDeselectFocalPerson(focalPerson);
+              }}
+              onEdit={() => onEdit(focalPerson)}
+              onArchive={() =>
+                deleteFocalPerson(
+                  focalPerson._id, // eslint-disable-line
+                  () => {
+                    notifySuccess('Focal Person was archived successfully');
+                  },
+                  () => {
+                    notifyError(
+                      'An Error occurred while archiving Focal Person please contact system administrator'
+                    );
+                  }
+                )
+              }
+              onShare={() => {
+                onShare(focalPerson);
+              }}
+            />
+          )}
         />
-        {/* end alerts list */}
+        {/* end focalPeople list */}
       </Fragment>
     );
   }
 }
 
-export default AlertList;
+export default FocalPersonsList;
