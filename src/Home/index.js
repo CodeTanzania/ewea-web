@@ -2,10 +2,8 @@ import React from 'react';
 import alertIcon from '../assets/icons/alerts.svg';
 import assessmentIcon from '../assets/icons/assessments-disabled.svg';
 import dashboardIcon from '../assets/icons/dashboards-disabled.svg';
-import planIcon from '../assets/icons/emergencyplans-disabled.svg';
 import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures-disabled.svg';
 import incidentIcon from '../assets/icons/incidents-disabled.svg';
-import resourceIcon from '../assets/icons/resources-disabled.svg';
 import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
 import contactsIcon from '../assets/icons/stakeholders/contacts.svg';
 import rolesIcon from '../assets/icons/stakeholders/roles.svg';
@@ -27,7 +25,6 @@ const routes = [
     description: modules.assessments,
     disabled: true,
   },
-  { name: 'Emergency Plans', path: '/plans', icon: planIcon, disabled: true },
   {
     name: 'Geographical Features',
     path: '/app/geographicalfeatures',
@@ -40,13 +37,6 @@ const routes = [
     path: '/app/incidents',
     icon: incidentIcon,
     description: modules.incidents,
-    disabled: true,
-  },
-  {
-    name: 'Resources',
-    path: '/app/resources',
-    icon: resourceIcon,
-    description: modules.resources,
     disabled: true,
   },
   {
