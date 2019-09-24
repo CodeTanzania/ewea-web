@@ -10,7 +10,6 @@ import AlertsFeedback from '../Alerts/layouts/Feedback';
 import AlertsFeeds from '../Alerts/layouts/Feeds';
 import AlertsServiceRequests from '../Alerts/layouts/ServiceRequests';
 import AlertsSources from '../Alerts/components/AlertSources';
-import Assessments from '../Assessments';
 import PageNotFound from '../components/UIState/PageNotFound';
 import GeographicalFeatures from '../GeographicalFeatures';
 import AdministrativeBoundaries from '../GeographicalFeatures/components/AdministrativeBoundaries';
@@ -224,11 +223,6 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/alerts/servicerequests`}
             component={AlertsServiceRequests}
-          />
-          <SecureRoute
-            exact
-            path={`${baseUrl}/assessments`}
-            component={Assessments}
           />
           <SecureRoute
             exact
