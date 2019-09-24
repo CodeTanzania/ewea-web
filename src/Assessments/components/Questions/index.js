@@ -102,7 +102,7 @@ class Questions extends Component {
   /**
    *
    * @function closeForm
-   * @name
+   * @name closeForm
    * @description close question form
    *
    * @returns {undefined} - Nothing is returned

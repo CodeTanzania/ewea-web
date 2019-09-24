@@ -104,7 +104,7 @@ class Indicators extends Component {
   /**
    *
    * @function closeForm
-   * @name
+   * @name closeForm
    * @description close indicator form
    *
    * @returns {undefined} - Nothing is returned
