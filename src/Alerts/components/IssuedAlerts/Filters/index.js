@@ -1,42 +1,52 @@
 import {
-  clearFocalPersonFilters,
+  clearAlertFilters,
   Connect,
-  filterFocalPeople,
+  filterAlerts,
 } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { Button, Form } from 'antd';
+import { Button, Form, Checkbox, Row, Col } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import SearchableSelectInput from '../../../../components/SearchableSelectInput';
 
 /* declarations */
-const { getPartyGroups, getJurisdictions, getRoles, getAgencies } = httpActions;
+const { getIncidentTypes, getJurisdictions } = httpActions;
 
 /**
  * @class
- * @name FocalPeopleFilters
- * @description Filter modal component for filtering contacts
+ * @name AlertsFilters
+ * @description Filter modal component for filtering alerts
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class FocalPeopleFilters extends Component {
+class AlertsFilters extends Component {
   static propTypes = {
     filter: PropTypes.objectOf(
       PropTypes.shape({
         groups: PropTypes.arrayOf(PropTypes.string),
       })
     ),
+    alertSchema: PropTypes.shape({
+      urgency: PropTypes.arrayOf(
+        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+      ),
+      severity: PropTypes.arrayOf(
+        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+      ),
+      certainty: PropTypes.arrayOf(
+        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+      ),
+      status: PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) }),
+    }).isRequired,
     form: PropTypes.shape({
       getFieldDecorator: PropTypes.func,
       validateFields: PropTypes.func,
     }).isRequired,
     onCancel: PropTypes.func.isRequired,
     cached: PropTypes.shape({
-      groups: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+      events: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
       locations: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
-      roles: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
-      agencies: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
     }),
     onCache: PropTypes.func.isRequired,
     onClearCache: PropTypes.func.isRequired,
@@ -67,7 +77,7 @@ class FocalPeopleFilters extends Component {
 
     validateFields((error, values) => {
       if (!error) {
-        filterFocalPeople(values);
+        filterAlerts(values);
         onCancel();
       }
     });
@@ -83,7 +93,7 @@ class FocalPeopleFilters extends Component {
    */
   handleClearFilter = () => {
     const { onCancel, onClearCache } = this.props;
-    clearFocalPersonFilters();
+    clearAlertFilters();
 
     onClearCache();
     onCancel();
@@ -104,12 +114,31 @@ class FocalPeopleFilters extends Component {
     onCache(values);
   };
 
+  /**
+   * @function
+   * @name renderSelectOptions
+   * @description  display select options
+   * @param {Array} options select options
+   *
+   * @returns {object[]} Selected options components
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  renderSelectOptions = options =>
+    options.map(option => (
+      <option key={option} value={option}>
+        {option}
+      </option>
+    ));
+
   render() {
     const {
       form: { getFieldDecorator },
       onCancel,
       filter,
       cached,
+      alertSchema,
     } = this.props;
 
     const formItemLayout = {
@@ -133,7 +162,24 @@ class FocalPeopleFilters extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* start contact group filters */}
+        {/* start alert event filters */}
+        <Form.Item {...formItemLayout} label="By Event(s)">
+          {getFieldDecorator('event', {
+            initialValue: filter ? filter.group : [],
+          })(
+            <SearchableSelectInput
+              onSearch={getIncidentTypes}
+              optionLabel="name"
+              optionValue="_id"
+              mode="multiple"
+              onCache={events => this.cacheFilters({ events })}
+              initialValue={cached && cached.events ? cached.events : []}
+            />
+          )}
+        </Form.Item>
+        {/* end alert event filters */}
+
+        {/* start alert area filters */}
         <Form.Item {...formItemLayout} label="By Area(s)">
           {getFieldDecorator('location', {
             initialValue: filter ? filter.location : [],
@@ -148,58 +194,81 @@ class FocalPeopleFilters extends Component {
             />
           )}
         </Form.Item>
-        {/* end contact group filters */}
+        {/* end alert area filters */}
 
-        {/* start contact group filters */}
-        <Form.Item {...formItemLayout} label="By Group(s)">
-          {getFieldDecorator('group', {
-            initialValue: filter ? filter.group : [],
+        {/* start alert certainty filters */}
+        <Form.Item {...formItemLayout} label="By  Certainity">
+          {getFieldDecorator('certainty', {
+            initialValue: filter ? filter.certainty : [],
           })(
-            <SearchableSelectInput
-              onSearch={getPartyGroups}
-              optionLabel="name"
-              optionValue="_id"
-              mode="multiple"
-              onCache={groups => this.cacheFilters({ groups })}
-              initialValue={cached && cached.groups ? cached.groups : []}
-            />
+            <Checkbox.Group style={{ width: '100%' }}>
+              <Row>
+                {/* eslint-disable-next-line react/prop-types */}
+                {alertSchema.certainty.enum.map(certainty => (
+                  <Col span={6} style={{ margin: '10px 0' }} key={certainty}>
+                    <Checkbox value={certainty}>{certainty}</Checkbox>
+                  </Col>
+                ))}
+              </Row>
+            </Checkbox.Group>
           )}
         </Form.Item>
-        {/* end contact group filters */}
-
-        {/* start contact group filters */}
-        <Form.Item {...formItemLayout} label="By Role(s)">
-          {getFieldDecorator('role', {
-            initialValue: filter ? filter.role : [],
+        {/* end alert certainty filters */}
+        {/* start alert status filters */}
+        <Form.Item {...formItemLayout} label="By  Status">
+          {getFieldDecorator('status', {
+            initialValue: filter ? filter.status : [],
           })(
-            <SearchableSelectInput
-              onSearch={getRoles}
-              optionLabel="name"
-              optionValue="_id"
-              mode="multiple"
-              onCache={roles => this.cacheFilters({ roles })}
-              initialValue={cached && cached.roles ? cached.roles : []}
-            />
+            <Checkbox.Group style={{ width: '100%' }}>
+              <Row>
+                {alertSchema.status.enum.map(status => (
+                  <Col span={6} style={{ margin: '10px 0' }} key={status}>
+                    <Checkbox value={status}>{status}</Checkbox>
+                  </Col>
+                ))}
+              </Row>
+            </Checkbox.Group>
           )}
         </Form.Item>
-        {/* end contact group filters */}
+        {/* end alert status filters */}
 
-        {/* start contact group filters */}
-        <Form.Item {...formItemLayout} label="By Agencies">
-          {getFieldDecorator('party', {
-            initialValue: filter ? filter.party : [],
+        {/* start alert urgency filters */}
+        <Form.Item {...formItemLayout} label="By  Urgency">
+          {getFieldDecorator('urgency', {
+            initialValue: filter ? filter.urgency : [],
           })(
-            <SearchableSelectInput
-              onSearch={getAgencies}
-              optionLabel="name"
-              optionValue="_id"
-              mode="multiple"
-              onCache={agencies => this.cacheFilters({ agencies })}
-              initialValue={cached && cached.agencies ? cached.agencies : []}
-            />
+            <Checkbox.Group style={{ width: '100%' }}>
+              <Row>
+                {/* eslint-disable-next-line react/prop-types */}
+                {alertSchema.urgency.enum.map(urgency => (
+                  <Col span={6} style={{ margin: '10px 0' }} key={urgency}>
+                    <Checkbox value={urgency}>{urgency}</Checkbox>
+                  </Col>
+                ))}
+              </Row>
+            </Checkbox.Group>
           )}
         </Form.Item>
-        {/* end contact group filters */}
+        {/* end alert urgency filters */}
+
+        {/* start alert severity filters */}
+        <Form.Item {...formItemLayout} label="By  Severity">
+          {getFieldDecorator('severity', {
+            initialValue: filter ? filter.severity : [],
+          })(
+            <Checkbox.Group style={{ width: '100%' }}>
+              <Row>
+                {/* eslint-disable-next-line react/prop-types */}
+                {alertSchema.severity.enum.map(severity => (
+                  <Col span={6} style={{ margin: '10px 0' }} key={severity}>
+                    <Checkbox value={severity}>{severity}</Checkbox>
+                  </Col>
+                ))}
+              </Row>
+            </Checkbox.Group>
+          )}
+        </Form.Item>
+        {/* end alert severity filters */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -217,6 +286,7 @@ class FocalPeopleFilters extends Component {
   }
 }
 
-export default Connect(Form.create()(FocalPeopleFilters), {
-  filter: 'focalPeople.filter',
+export default Connect(Form.create()(AlertsFilters), {
+  filter: 'alerts.filter',
+  alertSchema: 'alerts.schema.properties',
 });
