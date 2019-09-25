@@ -1,6 +1,6 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { postFocalPerson, putFocalPerson } from '@codetanzania/ewea-api-states';
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Connect, postAlert, putAlert } from '@codetanzania/ewea-api-states';
+import { Button, Col, Form, Row, Select } from 'antd';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -8,38 +8,39 @@ import SearchableSelectInput from '../../../../components/SearchableSelectInput'
 import { notifyError, notifySuccess } from '../../../../util';
 
 /* constants */
-const { getAgencies, getFeatures, getRoles, getPartyGroups } = httpActions;
-const { TextArea } = Input;
+const { getIncidentTypes, getFeatures } = httpActions;
 
 /**
  * @class
- * @name FocalPersonForm
- * @description Render Focal Person form for creating and updating stakeholder
- * focalPerson details
+ * @name AlertForm
+ * @description Render Alert form for creating and updating stakeholder
+ * alert details
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class FocalPersonForm extends Component {
+class AlertForm extends Component {
   static propTypes = {
     isEditForm: PropTypes.bool.isRequired,
-    focalPerson: PropTypes.shape({
-      name: PropTypes.string,
-      title: PropTypes.string,
-      abbreviation: PropTypes.string,
-      mobile: PropTypes.string,
-      email: PropTypes.string,
-      party: PropTypes.shape({
-        name: PropTypes.string,
-        title: PropTypes.string,
-      }),
-      group: PropTypes.string,
-      location: PropTypes.string,
-      role: PropTypes.string,
-      landline: PropTypes.string,
-      fax: PropTypes.string,
-      physicalAddress: PropTypes.string,
-      postalAddress: PropTypes.string,
+    alert: PropTypes.shape({
+      event: PropTypes.string,
+      description: PropTypes.string,
+      certainty: PropTypes.string,
+      urgency: PropTypes.string,
+      color: PropTypes.string,
+      severity: PropTypes.string,
+    }).isRequired,
+    alertSchema: PropTypes.shape({
+      urgency: PropTypes.arrayOf(
+        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+      ),
+      severity: PropTypes.arrayOf(
+        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+      ),
+      certainty: PropTypes.arrayOf(
+        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+      ),
+      status: PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) }),
     }).isRequired,
     form: PropTypes.shape({
       getFieldDecorator: PropTypes.func,
@@ -65,34 +66,34 @@ class FocalPersonForm extends Component {
 
     const {
       form: { validateFieldsAndScroll },
-      focalPerson,
+      alert,
       isEditForm,
     } = this.props;
 
     validateFieldsAndScroll((error, values) => {
       if (!error) {
         if (isEditForm) {
-          const updatedFocalPerson = Object.assign({}, focalPerson, values);
-          putFocalPerson(
-            updatedFocalPerson,
+          const updatedAlert = Object.assign({}, alert, values);
+          putAlert(
+            updatedAlert,
             () => {
-              notifySuccess('Focal Person was updated successfully');
+              notifySuccess('Alert was updated successfully');
             },
             () => {
               notifyError(
-                'Something occurred while updating focal Person, please try again!'
+                'Something occurred while updating alert, please try again!'
               );
             }
           );
         } else {
-          postFocalPerson(
+          postAlert(
             values,
             () => {
-              notifySuccess('Focal Person was created successfully');
+              notifySuccess('Alert was created successfully');
             },
             () => {
               notifyError(
-                'Something occurred while saving focal Person, please try again!'
+                'Something occurred while saving alert, please try again!'
               );
             }
           );
@@ -101,12 +102,31 @@ class FocalPersonForm extends Component {
     });
   };
 
+  /**
+   * @function
+   * @name renderSelectOptions
+   * @description  display select options
+   * @param {Array} options select options
+   *
+   * @returns {object[]} Selected options components
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  renderSelectOptions = options =>
+    options.map(option => (
+      <option key={option} value={option}>
+        {option}
+      </option>
+    ));
+
   render() {
     const {
       isEditForm,
-      focalPerson,
+      alert,
       posting,
       onCancel,
+      alertSchema,
       form: { getFieldDecorator },
     } = this.props;
 
@@ -131,234 +151,152 @@ class FocalPersonForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* focalPerson name, phone number and email section */}
+        {/* alert event */}
         <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson name */}
-            <Form.Item {...formItemLayout} label="Name">
-              {getFieldDecorator('name', {
-                initialValue: isEditForm ? focalPerson.name : undefined,
+          <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
+            <Form.Item {...formItemLayout} label="Event">
+              {getFieldDecorator('event', {
+                initialValue:
+                  isEditForm && alert
+                    ? alert._id // eslint-disable-line
+                    : undefined,
                 rules: [
                   {
                     required: true,
-                    message: 'Focal Person full name is required',
+                    message: 'Alert event is required',
                   },
                 ],
-              })(<Input />)}
-            </Form.Item>
-            {/* end focalPerson name */}
-          </Col>
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            <Row type="flex" justify="space-between">
-              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
-                {/* focalPerson mobile number */}
-                <Form.Item {...formItemLayout} label="Phone Number">
-                  {getFieldDecorator('mobile', {
-                    initialValue: isEditForm ? focalPerson.mobile : undefined,
-                    rules: [
-                      { required: true, message: 'Phone number is required' },
-                    ],
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson mobile number */}
-              </Col>
-              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24} span={12}>
-                {/* focalPerson email */}
-                <Form.Item {...formItemLayout} label="Email">
-                  {getFieldDecorator('email', {
-                    initialValue: isEditForm ? focalPerson.email : undefined,
-                    rules: [
-                      {
-                        type: 'email',
-                        message: 'The input is not valid E-mail!',
-                      },
-                      {
-                        required: true,
-                        message: 'E-mail address is required',
-                      },
-                    ],
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson email */}
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-        {/* end focalPerson name, phone number and email section */}
-
-        {/* focalPerson organization, group and area section */}
-        <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson organization */}
-            <Form.Item {...formItemLayout} label="Organization/Agency">
-              {getFieldDecorator('party', {
-                initialValue:
-                  isEditForm && focalPerson.party
-                    ? focalPerson.party._id // eslint-disable-line
-                    : undefined,
               })(
                 <SearchableSelectInput
-                  onSearch={getAgencies}
+                  onSearch={getIncidentTypes}
                   optionLabel="name"
                   optionValue="_id"
-                  initialValue={
-                    isEditForm && focalPerson.party
-                      ? focalPerson.party
-                      : undefined
-                  }
+                  initialValue={isEditForm && alert ? alert : undefined}
                 />
               )}
             </Form.Item>
-            {/* end focalPerson organization */}
-          </Col>
-
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            <Row type="flex" justify="space-between">
-              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
-                {/* focalPerson group */}
-                <Form.Item {...formItemLayout} label="Group">
-                  {getFieldDecorator('group', {
-                    initialValue:
-                      isEditForm && focalPerson.group
-                        ? focalPerson.group._id // eslint-disable-line
-                        : undefined,
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Focal Person group is required',
-                      },
-                    ],
-                  })(
-                    <SearchableSelectInput
-                      onSearch={getPartyGroups}
-                      optionLabel="name"
-                      optionValue="_id"
-                      initialValue={
-                        isEditForm && focalPerson.group
-                          ? focalPerson.group
-                          : undefined
-                      }
-                    />
-                  )}
-                </Form.Item>
-                {/* end focalPerson group */}
-              </Col>
-              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
-                {/* focalPerson location */}
-                <Form.Item {...formItemLayout} label="Area">
-                  {getFieldDecorator('location', {
-                    initialValue:
-                      isEditForm && focalPerson.location
-                        ? focalPerson.location._id // eslint-disable-line
-                        : undefined,
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Focal Person area is required',
-                      },
-                    ],
-                  })(
-                    <SearchableSelectInput
-                      onSearch={getFeatures}
-                      optionLabel={feature =>
-                        `${feature.name} (${upperFirst(feature.type)})`
-                      }
-                      optionValue="_id"
-                      initialValue={
-                        isEditForm && focalPerson.location
-                          ? focalPerson.location
-                          : undefined
-                      }
-                    />
-                  )}
-                </Form.Item>
-                {/* end focalPerson location */}
-              </Col>
-            </Row>
           </Col>
         </Row>
-        {/* end focalPerson organization, group and area section */}
+        {/* end alert event */}
 
-        {/* focalPerson role, landline and fax section */}
+        {/* alert area */}
         <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson role */}
-            <Form.Item {...formItemLayout} label="Role">
-              {getFieldDecorator('role', {
+          <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
+            <Form.Item {...formItemLayout} label="Area">
+              {getFieldDecorator('area', {
                 initialValue:
-                  isEditForm && focalPerson.role
-                    ? focalPerson.role._id // eslint-disable-line
+                  isEditForm && alert
+                    ? alert._id // eslint-disable-line
                     : undefined,
                 rules: [
-                  { required: true, message: 'Focal Person time is required' },
+                  {
+                    required: true,
+                    message: 'Alert area is required',
+                  },
                 ],
               })(
                 <SearchableSelectInput
-                  onSearch={getRoles}
-                  optionLabel="name"
+                  onSearch={getFeatures}
+                  optionLabel={feature =>
+                    `${feature.name} (${upperFirst(feature.type)})`
+                  }
                   optionValue="_id"
                   initialValue={
-                    isEditForm && focalPerson.role
-                      ? focalPerson.role
+                    isEditForm && alert
+                      ? alert._id // eslint-disable-line
                       : undefined
                   }
                 />
               )}
             </Form.Item>
-            {/* end focalPerson role */}
-          </Col>
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            <Row type="flex" justify="space-between">
-              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
-                {/* focalPerson landline number */}
-                <Form.Item {...formItemLayout} label="Landline/Other Number">
-                  {getFieldDecorator('landline', {
-                    initialValue: isEditForm ? focalPerson.landline : undefined,
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson landline number */}
-              </Col>
-              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
-                {/* focalPerson fax */}
-                <Form.Item {...formItemLayout} label="Fax">
-                  {getFieldDecorator('fax', {
-                    initialValue: isEditForm ? focalPerson.fax : undefined,
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson fax */}
-              </Col>
-            </Row>
           </Col>
         </Row>
-        {/* end focalPerson role, landline and fax section */}
+        {/* end alert area */}
 
-        {/* focalPerson Physical Address, Postal Address section */}
+        {/* alert status and severity section */}
         <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson physical Address */}
-            <Form.Item {...formItemLayout} label="Physical Address">
-              {getFieldDecorator('physicalAddress', {
-                initialValue: isEditForm
-                  ? focalPerson.physicalAddress
-                  : undefined,
-              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
+          <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
+            {/* alert status */}
+            <Form.Item {...formItemLayout} label="Status">
+              {getFieldDecorator('status', {
+                initialValue:
+                  isEditForm && alert
+                    ? alert._id // eslint-disable-line
+                    : undefined,
+              })(
+                <Select showSearch>
+                  {this.renderSelectOptions(alertSchema.status.enum)}
+                </Select>
+              )}
             </Form.Item>
-            {/* end focalPerson physical Address */}
+            {/* end alert status */}
           </Col>
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            {/* focalPerson postal address */}
-            <Form.Item {...formItemLayout} label="Postal Address">
-              {getFieldDecorator('postalAddress', {
-                initialValue: isEditForm
-                  ? focalPerson.postalAddress
-                  : undefined,
-              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
+          <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
+            {/* alert severity */}
+            <Form.Item {...formItemLayout} label="Severity">
+              {getFieldDecorator('severity', {
+                initialValue:
+                  isEditForm && alert
+                    ? alert._id // eslint-disable-line
+                    : undefined,
+                rules: [
+                  {
+                    required: true,
+                    message: 'Alert severity is required',
+                  },
+                ],
+              })(
+                <Select showSearch>
+                  {this.renderSelectOptions(alertSchema.severity.enum)}
+                </Select>
+              )}
             </Form.Item>
-            {/* end focalPerson postal address */}
+            {/* end alert severity */}
           </Col>
         </Row>
-        {/* end focalPerson physical Address, Postal Address section */}
-
+        {/* end alert status and severity section */}
+        {/* alert urgency and certainty section */}
+        <Row type="flex" justify="space-between">
+          <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
+            {/* alert urgency */}
+            <Form.Item {...formItemLayout} label="Urgency">
+              {getFieldDecorator('urgency', {
+                initialValue:
+                  isEditForm && alert
+                    ? alert._id // eslint-disable-line
+                    : undefined,
+                rules: [
+                  {
+                    required: true,
+                    message: 'Alert urgency is required',
+                  },
+                ],
+              })(
+                <Select showSearch>
+                  {this.renderSelectOptions(alertSchema.urgency.enum)}
+                </Select>
+              )}
+            </Form.Item>
+            {/* end alert urgency */}
+          </Col>
+          <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
+            {/* alert certainty */}
+            <Form.Item {...formItemLayout} label="Certainty">
+              {getFieldDecorator('certainty', {
+                initialValue:
+                  isEditForm && alert
+                    ? alert._id // eslint-disable-line
+                    : undefined,
+              })(
+                <Select showSearch>
+                  {this.renderSelectOptions(alertSchema.certainty.enum)}
+                </Select>
+              )}
+            </Form.Item>
+            {/* end alert certainty */}
+          </Col>
+        </Row>
+        {/* end alert urgency and certainty section */}
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
           <Button onClick={onCancel}>Cancel</Button>
@@ -377,4 +315,8 @@ class FocalPersonForm extends Component {
   }
 }
 
-export default Form.create()(FocalPersonForm);
+export default Form.create()(
+  Connect(AlertForm, {
+    alertSchema: 'alerts.schema.properties',
+  })
+);
