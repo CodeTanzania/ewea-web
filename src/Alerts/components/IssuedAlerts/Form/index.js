@@ -148,7 +148,6 @@ class AlertForm extends Component {
         xxl: { span: 24 },
       },
     };
-
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
         {/* alert event */}
@@ -221,7 +220,7 @@ class AlertForm extends Component {
               {getFieldDecorator('status', {
                 initialValue:
                   isEditForm && alert
-                    ? alert._id // eslint-disable-line
+                    ? alert.status // eslint-disable-line
                     : undefined,
               })(
                 <Select showSearch>
@@ -237,7 +236,7 @@ class AlertForm extends Component {
               {getFieldDecorator('severity', {
                 initialValue:
                   isEditForm && alert
-                    ? alert._id // eslint-disable-line
+                    ? alert.severity // eslint-disable-line
                     : undefined,
                 rules: [
                   {
@@ -263,7 +262,7 @@ class AlertForm extends Component {
               {getFieldDecorator('urgency', {
                 initialValue:
                   isEditForm && alert
-                    ? alert._id // eslint-disable-line
+                    ? alert.urgency // eslint-disable-line
                     : undefined,
                 rules: [
                   {
@@ -285,7 +284,7 @@ class AlertForm extends Component {
               {getFieldDecorator('certainty', {
                 initialValue:
                   isEditForm && alert
-                    ? alert._id // eslint-disable-line
+                    ? alert.certainty // eslint-disable-line
                     : undefined,
               })(
                 <Select showSearch>
