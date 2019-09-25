@@ -53,7 +53,6 @@ class AlertTypesList extends Component {
     page: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
     onEdit: PropTypes.func.isRequired,
-    onFilter: PropTypes.func.isRequired,
   };
 
   state = {
@@ -170,7 +169,7 @@ class AlertTypesList extends Component {
   };
 
   render() {
-    const { alertTpyes, loading, page, total, onEdit, onFilter } = this.props;
+    const { alertTpyes, loading, page, total, onEdit } = this.props;
     const { selectedAlertTypes, selectedPages } = this.state;
     const selectedAlertTypesCount = intersectionBy(
       selectedAlertTypes,
@@ -189,7 +188,6 @@ class AlertTypesList extends Component {
           exportUrl={getAlertsExportUrl({
             filter: { _id: map(selectedAlertTypes, '_id') },
           })}
-          onFilter={onFilter}
           onPaginate={nextPage => {
             paginateAlerts(nextPage);
           }}

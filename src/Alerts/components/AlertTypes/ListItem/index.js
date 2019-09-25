@@ -41,7 +41,6 @@ class AlertTypesListItem extends Component {
     isSelected: PropTypes.bool.isRequired,
     onSelectItem: PropTypes.func.isRequired,
     onDeselectItem: PropTypes.func.isRequired,
-    onShare: PropTypes.func.isRequired,
   };
 
   /**
@@ -120,7 +119,6 @@ class AlertTypesListItem extends Component {
       scope,
       name,
       onEdit,
-      onShare,
     } = this.props;
     const { isHovered } = this.state;
     const { isSelected } = this.props;
@@ -169,18 +167,13 @@ class AlertTypesListItem extends Component {
             {isHovered && (
               <ListItemActions
                 edit={{
-                  name: 'Edit Focal Person',
-                  title: 'Update Focal Person Details',
+                  name: 'Edit Alert Type',
+                  title: 'Update Alert Type Details',
                   onClick: onEdit,
                 }}
-                share={{
-                  name: 'Share Focal Person',
-                  title: 'Share Focal Person details with others',
-                  onClick: onShare,
-                }}
                 archive={{
-                  name: 'Archive Focal Person',
-                  title: 'Remove Focal Person from list of active focal People',
+                  name: 'Archive Alert Type',
+                  title: 'Remove Alert Type from list of active Alert Types',
                   onClick: this.showArchiveConfirm,
                 }}
               />

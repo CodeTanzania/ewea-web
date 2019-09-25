@@ -1,16 +1,16 @@
 import {
-  //   closeFocalPersonForm,
   Connect,
   getAlerts,
   openAlertForm,
   searchAlerts,
   selectAlert,
+  closeAlertForm,
 } from '@codetanzania/emis-api-states';
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
+import { Modal } from 'antd';
 import Topbar from '../../../components/Topbar';
-// import FocalPersonFilters from './Filters';
-// import FocalPersonForm from './Form';
+import AlertTypeForm from './Form';
 import AlertTypesList from './List';
 import './styles.css';
 
@@ -26,8 +26,7 @@ import './styles.css';
  */
 class AlertTypes extends Component {
   state = {
-    // isEditForm: false,
-    cached: null,
+    isEditForm: false,
   };
 
   static propTypes = {
@@ -38,6 +37,8 @@ class AlertTypes extends Component {
     page: PropTypes.number.isRequired,
     searchQuery: PropTypes.string,
     total: PropTypes.number.isRequired,
+    posting: PropTypes.bool.isRequired,
+    showForm: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -51,30 +52,27 @@ class AlertTypes extends Component {
 
   /**
    * @function
-   * @name handleOnCachedValues
-   * @description Cached selected values for filters
-   *
-   * @param {object} cached values to be cached from filter
+   * @name openAlertTypesForm
+   * @description Open focalPerson form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnCachedValues = cached => {
-    const { cached: previousCached } = this.state;
-    const values = { ...previousCached, ...cached };
-    this.setState({ cached: values });
+  openAlertTypesForm = () => {
+    openAlertForm();
   };
 
   /**
    * @function
-   * @name handleClearCachedValues
-   * @description Clear cached values
+   * @name closeAlertTypesForm
+   * @description close focalPerson form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleClearCachedValues = () => {
-    this.setState({ cached: null });
+  closeAlertTypesForm = () => {
+    closeAlertForm();
+    this.setState({ isEditForm: false });
   };
 
   /**
@@ -103,7 +101,7 @@ class AlertTypes extends Component {
    */
   handleEdit = alertType => {
     selectAlert(alertType);
-    // this.setState({ isEditForm: true });
+    this.setState({ isEditForm: true });
     openAlertForm();
   };
 
@@ -112,17 +110,13 @@ class AlertTypes extends Component {
       alertTpyes,
       loading,
       page,
-      //   posting,
-      //   alertType,
-      //   showForm,
+      posting,
+      alertType,
+      showForm,
       searchQuery,
       total,
     } = this.props;
-    // const {
-    //   //   showFilters,
-    //   //   isEditForm,
-    //   //   cached,
-    // } = this.state;
+    const { isEditForm } = this.state;
     return (
       <Fragment>
         {/* Topbar */}
@@ -139,7 +133,7 @@ class AlertTypes extends Component {
               icon: 'plus',
               size: 'large',
               title: 'Add New Alert Type',
-              onClick: this.openAlertForm,
+              onClick: this.openAlertTypesForm,
             },
           ]}
         />
@@ -153,47 +147,27 @@ class AlertTypes extends Component {
             alertTpyes={alertTpyes}
             loading={loading}
             onEdit={this.handleEdit}
-            onFilter={this.openFiltersModal}
           />
           {/* end list */}
 
-          {/* filter modal */}
-          {/* <Modal
-            title="Filter Focal People"
-            visible={showFilters}
-            onCancel={this.closeFiltersModal}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-          >
-            <FocalPersonFilters
-              onCancel={this.closeFiltersModal}
-              cached={cached}
-              onCache={this.handleOnCachedValues}
-              onClearCache={this.handleClearCachedValues}
-            />
-          </Modal> */}
-          {/* end filter modal */}
-
           {/* create/edit form modal */}
-          {/* <Modal
-            title={isEditForm ? 'Edit Focal Person' : 'Add New Focal Person'}
+          <Modal
+            title={isEditForm ? 'Edit Alert Type' : 'Add New Alert Type'}
             visible={showForm}
             className="FormModal"
             footer={null}
-            onCancel={this.closeFocalPersonForm}
+            onCancel={this.closeAlertTypesForm}
             destroyOnClose
             maskClosable={false}
             afterClose={this.handleAfterCloseForm}
           >
-            <FocalPersonForm
+            <AlertTypeForm
               posting={posting}
               isEditForm={isEditForm}
               alertType={alertType}
-              onCancel={this.closeFocalPersonForm}
+              onCancel={this.closeAlertTypesForm}
             />
-          </Modal> */}
+          </Modal>
           {/* end create/edit form modal */}
         </div>
       </Fragment>
