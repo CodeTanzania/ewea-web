@@ -20,10 +20,10 @@ import { notifyError, notifySuccess } from '../../../../util';
 import AlertsListItem from '../ListItem';
 
 /* constants */
-const urgencySpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
-const statusSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
+const urgencySpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 0, xs: 0 };
+const statusSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 0, xs: 0 };
 const severitySpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const eventSpan = { xxl: 8, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
+const eventSpan = { xxl: 8, xl: 7, lg: 7, md: 0, sm: 19, xs: 19 };
 const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 
 const headerLayout = [
@@ -243,7 +243,7 @@ class AlertsList extends Component {
               agencyAbbreviation={alert.urgency}
               role={alert.certainty}
               email={alert.severity}
-              mobile={alert.severity}
+              mobile={alert.status}
               isSelected={
                 // eslint-disable-next-line
                 map(selectedAlerts, item => item._id).includes(

@@ -8,10 +8,10 @@ import './styles.css';
 /* constants */
 const { confirm } = Modal;
 const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 3, xs: 3 };
-const nameSpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 10, xs: 10 };
-const phoneSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
+const nameSpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 0, xs: 0 };
+const phoneSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 0, xs: 0 };
 const emailSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const roleSpan = { xxl: 8, xl: 7, lg: 6, md: 0, sm: 0, xs: 0 };
+const roleSpan = { xxl: 8, xl: 7, lg: 6, md: 0, sm: 19, xs: 19 };
 const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 
@@ -121,7 +121,6 @@ class FocalPeopleListItem extends Component {
       agency,
       agencyAbbreviation,
       name,
-      role,
       location,
       onEdit,
       onShare,
@@ -161,13 +160,13 @@ class FocalPeopleListItem extends Component {
       >
         <Row>
           <Col {...sideSpan}>{sideComponent}</Col>
-          <Col {...nameSpan}>{name}</Col>
           <Col {...roleSpan} title={agency}>
-            {role}, {agencyAbbreviation}
+            {name}
           </Col>
+          <Col {...areaSpan}>{location}</Col>
           <Col {...phoneSpan}>{mobile}</Col>
           <Col {...emailSpan}>{email}</Col>
-          <Col {...areaSpan}>{location}</Col>
+          <Col {...nameSpan}>{agencyAbbreviation}</Col>
           <Col {...isHoveredSpan}>
             {isHovered && (
               <ListItemActions
