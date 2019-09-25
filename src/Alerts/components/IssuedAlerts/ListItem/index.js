@@ -124,7 +124,6 @@ class AlertsListItem extends Component {
       color,
       location,
       onEdit,
-      onShare,
     } = this.props;
     const { isHovered } = this.state;
     const { isSelected } = this.props;
@@ -175,11 +174,6 @@ class AlertsListItem extends Component {
                   name: 'Edit Alert',
                   title: 'Update Alert Details',
                   onClick: onEdit,
-                }}
-                share={{
-                  name: 'Share Alert',
-                  title: 'Share Alert details with others',
-                  onClick: onShare,
                 }}
                 archive={{
                   name: 'Archive Alert',

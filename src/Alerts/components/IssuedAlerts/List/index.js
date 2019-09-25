@@ -53,7 +53,6 @@ class AlertsList extends Component {
     total: PropTypes.number.isRequired,
     onEdit: PropTypes.func.isRequired,
     onFilter: PropTypes.func.isRequired,
-    onNotify: PropTypes.func.isRequired,
     onShare: PropTypes.func.isRequired,
     onBulkShare: PropTypes.func.isRequired,
   };
@@ -179,7 +178,6 @@ class AlertsList extends Component {
       total,
       onEdit,
       onFilter,
-      onNotify,
       onShare,
       onBulkShare,
     } = this.props;
@@ -199,7 +197,6 @@ class AlertsList extends Component {
             filter: { _id: map(selectedAlerts, '_id') },
           })}
           onFilter={onFilter}
-          onNotify={() => onNotify(selectedAlerts)}
           onPaginate={nextPage => {
             paginateAlerts(nextPage);
           }}
