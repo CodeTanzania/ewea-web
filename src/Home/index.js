@@ -25,19 +25,19 @@ const routes = [
   },
   {
     name: 'Focal People',
-    path: '/app/stakeholders/focalpeople',
+    path: '/app/focalpeople',
     icon: contactsIcon,
     description: modules.stakeholdersFocalPeople,
   },
   {
     name: 'Agencies',
-    path: '/app/stakeholders/agencies',
+    path: '/app/agencies',
     icon: agenciesIcon,
     description: modules.stakeholdersAgencies,
   },
   {
     name: 'Roles',
-    path: '/app/stakeholders/roles',
+    path: '/app/roles',
     icon: rolesIcon,
     description: modules.stakeholdersRoles,
   },

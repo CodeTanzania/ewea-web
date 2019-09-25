@@ -290,7 +290,7 @@ class FocalPersonForm extends Component {
                     ? focalPerson.role._id // eslint-disable-line
                     : undefined,
                 rules: [
-                  { required: true, message: 'Focal Person time is required' },
+                  { required: true, message: 'Focal Person role is required' },
                 ],
               })(
                 <SearchableSelectInput

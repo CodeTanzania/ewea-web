@@ -100,11 +100,11 @@ const breadcrumbNameMap = {
     title: 'List of all wards',
   },
   /* Stakeholders Routes */
-  '/app/stakeholders/focalpeople': {
+  '/app/focalpeople': {
     name: 'Focal People',
     title: 'List of all focal persons',
   },
-  '/app/stakeholders/agencies': {
+  '/app/agencies': {
     name: 'Agencies',
     title: 'List of all agencies',
   },
@@ -112,7 +112,7 @@ const breadcrumbNameMap = {
     name: 'Notifications',
     title: 'Notify stakeholders',
   },
-  '/app/stakeholders/roles': {
+  '/app/roles': {
     name: 'Roles',
     title: 'Roles of Stakeholders',
   },
@@ -275,15 +275,15 @@ const BaseLayout = props => {
             component={StakeholdersNotifications}
           />
           <SecureRoute
-            path={`${baseUrl}/stakeholders/focalpeople`}
+            path={`${baseUrl}/focalpeople`}
             component={StakeholdersFocalPeople}
           />
           <SecureRoute
-            path={`${baseUrl}/stakeholders/agencies`}
+            path={`${baseUrl}/agencies`}
             component={StakeholdersAgencies}
           />
           <SecureRoute
-            path={`${baseUrl}/stakeholders/roles`}
+            path={`${baseUrl}/roles`}
             component={StakeholdersRoles}
           />
           <SecureRoute component={PageNotFound} />
