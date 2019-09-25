@@ -237,13 +237,12 @@ class AlertsList extends Component {
               key={alert._id} // eslint-disable-line
               abbreviation={alert.event.toUpperCase().charAt(0)}
               location={compact(['Tandale', 'Hananasif', 'Kigogo']).join(', ')}
-              name={alert.event}
+              event={alert.event}
               color={alert.color}
-              agency={alert.description ? alert.description : 'N/A'}
-              agencyAbbreviation={alert.urgency}
-              role={alert.certainty}
-              email={alert.severity}
-              mobile={alert.status}
+              description={alert.description ? alert.description : 'N/A'}
+              urgency={alert.urgency}
+              severity={alert.severity}
+              status={alert.status}
               isSelected={
                 // eslint-disable-next-line
                 map(selectedAlerts, item => item._id).includes(
