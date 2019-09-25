@@ -20,18 +20,18 @@ import { notifyError, notifySuccess } from '../../../../util';
 import AlertsListItem from '../ListItem';
 
 /* constants */
-const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
-const phoneSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
-const emailSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const roleSpan = { xxl: 8, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
+const urgencySpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
+const statusSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
+const severitySpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
+const eventSpan = { xxl: 8, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
 const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 
 const headerLayout = [
-  { ...nameSpan, header: 'Name' },
-  { ...roleSpan, header: 'Title & Organization' },
-  { ...phoneSpan, header: 'Phone Number' },
-  { ...emailSpan, header: 'Email' },
+  { ...eventSpan, header: 'Event' },
   { ...areaSpan, header: 'Area' },
+  { ...statusSpan, header: 'Status' },
+  { ...severitySpan, header: 'Severity' },
+  { ...urgencySpan, header: 'Urgency' },
 ];
 const { getAlertsExportUrl } = httpActions;
 
