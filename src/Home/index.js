@@ -1,5 +1,4 @@
 import React from 'react';
-import alertIcon from '../assets/icons/alerts.svg';
 import dashboardIcon from '../assets/icons/dashboards-disabled.svg';
 import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures-disabled.svg';
 import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
@@ -7,14 +6,15 @@ import contactsIcon from '../assets/icons/stakeholders/contacts.svg';
 import rolesIcon from '../assets/icons/stakeholders/roles.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
+import issuedAlertsIcon from '../assets/icons/alerts/issuedalerts.svg';
 
 /* constants */
 const routes = [
   {
-    name: 'Alerts',
-    path: '/app/alerts',
-    icon: alertIcon,
-    description: modules.alerts,
+    name: 'Issued Alerts',
+    path: '/app/alerts/issuedalerts',
+    icon: issuedAlertsIcon,
+    description: modules.alertsIssued,
   },
   {
     name: 'Geographical Features',
