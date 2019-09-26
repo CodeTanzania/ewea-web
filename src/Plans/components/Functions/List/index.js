@@ -1,11 +1,10 @@
 import { httpActions } from '@codetanzania/emis-api-client';
 import {
-  deleteFocalPerson,
-  paginateFocalPeople,
-  refreshFocalPeople,
+  paginateIncidentTypes,
+  refreshIncidentTypes,
+  deleteIncidentType,
 } from '@codetanzania/emis-api-states';
 import { List } from 'antd';
-import compact from 'lodash/compact';
 import concat from 'lodash/concat';
 import intersectionBy from 'lodash/intersectionBy';
 import map from 'lodash/map';
@@ -17,87 +16,89 @@ import React, { Component, Fragment } from 'react';
 import ListHeader from '../../../../components/ListHeader';
 import Toolbar from '../../../../components/Toolbar';
 import { notifyError, notifySuccess } from '../../../../util';
-import FocalPersonsListItem from '../ListItem';
+import EmergencyFunctionsListItem from '../ListItem';
 
 /* constants */
-const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
-const phoneSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
-const emailSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const roleSpan = { xxl: 8, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
-const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const nameSpan = { xxl: 5, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
+const natureSpan = { xxl: 4, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
+const familySpan = { xxl: 5, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
+const codeSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
+const capSpan = { xxl: 4, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
-  { ...roleSpan, header: 'Title & Organization' },
-  { ...phoneSpan, header: 'Phone Number' },
-  { ...emailSpan, header: 'Email' },
-  { ...areaSpan, header: 'Area' },
+  { ...natureSpan, header: 'Nature' },
+  { ...familySpan, header: 'Family' },
+  { ...codeSpan, header: 'Code' },
+  { ...capSpan, header: 'Cap' },
 ];
-const { getFocalPeopleExportUrl } = httpActions;
+const { getIncidentTypesExportUrl } = httpActions;
 
 /**
  * @class
- * @name FocalPersonsList
- * @description Render FocalPersonsList component which have actionBar, focal People
- * header and focal People list components
+ * @name FunctionsList
+ * @description Render FunctionsList component which have actionBar, emergency functions
+ * header and emergency functions list components
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class FocalPersonsList extends Component {
+class FunctionsList extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
-    focalPeople: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
-      .isRequired,
+    emergencyFunctions: PropTypes.arrayOf(
+      PropTypes.shape({ name: PropTypes.string })
+    ).isRequired,
     page: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
     onEdit: PropTypes.func.isRequired,
     onFilter: PropTypes.func.isRequired,
-    onNotify: PropTypes.func.isRequired,
-    onShare: PropTypes.func.isRequired,
-    onBulkShare: PropTypes.func.isRequired,
   };
 
   state = {
-    selectedFocalPeople: [],
+    selectedEmergencyFunctions: [],
     selectedPages: [],
   };
 
   /**
    * @function
-   * @name handleOnSelectFocalPerson
-   * @description Handle select a single focalPerson action
+   * @name handleOnSelectEmergencyFunction
+   * @description Handle select a single emergency function action
    *
-   * @param {object} focalPerson selected focalPerson object
+   * @param {object} emergencyFunction selected emergency function object
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnSelectFocalPerson = focalPerson => {
-    const { selectedFocalPeople } = this.state;
+  handleOnSelectEmergencyFunction = emergencyFunction => {
+    const { selectedEmergencyFunctions } = this.state;
     this.setState({
-      selectedFocalPeople: concat([], selectedFocalPeople, focalPerson),
+      selectedEmergencyFunctions: concat(
+        [],
+        selectedEmergencyFunctions,
+        emergencyFunction
+      ),
     });
   };
 
   /**
    * @function
    * @name handleSelectAll
-   * @description Handle select all focalPeople actions from current page
+   * @description Handle select all Emergency Functions actions from current page
    *
    * @version 0.1.0
    * @since 0.1.0
    */
   handleSelectAll = () => {
-    const { selectedFocalPeople, selectedPages } = this.state;
-    const { focalPeople, page } = this.props;
+    const { selectedEmergencyFunctions, selectedPages } = this.state;
+    const { emergencyFunctions, page } = this.props;
     const selectedList = uniqBy(
-      [...selectedFocalPeople, ...focalPeople],
+      [...selectedEmergencyFunctions, ...emergencyFunctions],
       '_id'
     );
     const pages = uniq([...selectedPages, page]);
     this.setState({
-      selectedFocalPeople: selectedList,
+      selectedEmergencyFunctions: selectedList,
       selectedPages: pages,
     });
   };
@@ -105,7 +106,7 @@ class FocalPersonsList extends Component {
   /**
    * @function
    * @name handleDeselectAll
-   * @description Handle deselect all focalPeople in a current page
+   * @description Handle deselect all emergency functions in a current page
    *
    * @returns {undefined} undefined
    *
@@ -113,83 +114,62 @@ class FocalPersonsList extends Component {
    * @since 0.1.0
    */
   handleDeselectAll = () => {
-    const { focalPeople, page } = this.props;
-    const { selectedFocalPeople, selectedPages } = this.state;
-    const selectedList = uniqBy([...selectedFocalPeople], '_id');
+    const { emergencyFunctions, page } = this.props;
+    const { selectedEmergencyFunctions, selectedPages } = this.state;
+    const selectedList = uniqBy([...selectedEmergencyFunctions], '_id');
     const pages = uniq([...selectedPages]);
 
     remove(pages, item => item === page);
 
-    focalPeople.forEach(focalPerson => {
+    emergencyFunctions.forEach(emergencyFunction => {
       remove(
         selectedList,
-        item => item._id === focalPerson._id // eslint-disable-line
+        item => item._id === emergencyFunction._id // eslint-disable-line
       );
     });
 
     this.setState({
-      selectedFocalPeople: selectedList,
+      selectedEmergencyFunctions: selectedList,
       selectedPages: pages,
     });
   };
 
   /**
    * @function
-   * @name handleFilterByStatus
-   * @description Handle filter focalPeople by status action
+   * @name handleOnDeselectEmergencyFunction
+   * @description Handle deselect a single emergency function action
    *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleFilterByStatus = () => {
-    // if (status === 'All') {
-    //   filter({});
-    // } else if (status === 'Active') {
-    //   filter({});
-    // } else if (status === 'Archived') {
-    //   filter({});
-    // }
-  };
-
-  /**
-   * @function
-   * @name handleOnDeselectFocalPerson
-   * @description Handle deselect a single focalPerson action
-   *
-   * @param {object} focalPerson focalPerson to be removed from selected focalPeople
+   * @param {object} emergencyFunction emergency function to be removed from selected Emergency Functions
    * @returns {undefined} undefined
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnDeselectFocalPerson = focalPerson => {
-    const { selectedFocalPeople } = this.state;
-    const selectedList = [...selectedFocalPeople];
+  handleOnDeselectEmergencyFunction = emergencyFunction => {
+    const { selectedEmergencyFunctions } = this.state;
+    const selectedList = [...selectedEmergencyFunctions];
 
     remove(
       selectedList,
-      item => item._id === focalPerson._id // eslint-disable-line
+      item => item._id === emergencyFunction._id // eslint-disable-line
     );
 
-    this.setState({ selectedFocalPeople: selectedList });
+    this.setState({ selectedEmergencyFunctions: selectedList });
   };
 
   render() {
     const {
-      focalPeople,
+      emergencyFunctions,
       loading,
       page,
       total,
       onEdit,
       onFilter,
-      onNotify,
-      onShare,
-      onBulkShare,
     } = this.props;
-    const { selectedFocalPeople, selectedPages } = this.state;
-    const selectedFocalPeopleCount = intersectionBy(
-      selectedFocalPeople,
-      focalPeople,
+    const { selectedEmergencyFunctions, selectedPages } = this.state;
+    const selectedEmergencyFunctionCount = intersectionBy(
+      selectedEmergencyFunctions,
+      emergencyFunctions,
       '_id'
     ).length;
 
@@ -197,101 +177,93 @@ class FocalPersonsList extends Component {
       <Fragment>
         {/* toolbar */}
         <Toolbar
-          itemName="focal person"
+          itemName="Emergency Functions"
           page={page}
           total={total}
-          selectedItemsCount={selectedFocalPeopleCount}
-          exportUrl={getFocalPeopleExportUrl({
-            filter: { _id: map(selectedFocalPeople, '_id') },
+          selectedItemsCount={selectedEmergencyFunctionCount}
+          exportUrl={getIncidentTypesExportUrl({
+            filter: { _id: map(selectedEmergencyFunctions, '_id') },
           })}
           onFilter={onFilter}
-          onNotify={() => onNotify(selectedFocalPeople)}
           onPaginate={nextPage => {
-            paginateFocalPeople(nextPage);
+            paginateIncidentTypes(nextPage);
           }}
           onRefresh={() =>
-            refreshFocalPeople(
+            refreshIncidentTypes(
               () => {
-                notifySuccess('Focal People refreshed successfully');
+                notifySuccess('Emergency Functions refreshed successfully');
               },
               () => {
                 notifyError(
-                  'An Error occurred while refreshing Focal People please contact system administrator'
+                  'An Error occurred while refreshing Emergency Functions please contact system administrator'
                 );
               }
             )
           }
-          onShare={() => onBulkShare(selectedFocalPeople)}
         />
         {/* end toolbar */}
 
-        {/* focalPerson list header */}
+        {/* emergency function list header */}
         <ListHeader
           headerLayout={headerLayout}
           onSelectAll={this.handleSelectAll}
           onDeselectAll={this.handleDeselectAll}
           isBulkSelected={selectedPages.includes(page)}
         />
-        {/* end focalPerson list header */}
+        {/* end emergency function list header */}
 
-        {/* focalPeople list */}
+        {/* emergency functions list */}
         <List
           loading={loading}
-          dataSource={focalPeople}
-          renderItem={focalPerson => (
-            <FocalPersonsListItem
-              key={focalPerson._id} // eslint-disable-line
-              abbreviation={focalPerson.abbreviation}
-              location={compact([
-                focalPerson.location.name,
-                focalPerson.location.place.district,
-                focalPerson.location.place.region,
-                focalPerson.location.place.country,
-              ]).join(', ')}
-              name={focalPerson.name}
-              agency={focalPerson.party ? focalPerson.party.name : 'N/A'}
-              agencyAbbreviation={
-                focalPerson.party ? focalPerson.party.abbreviation : 'N/A'
+          dataSource={emergencyFunctions}
+          renderItem={emergencyFunction => (
+            <EmergencyFunctionsListItem
+              key={emergencyFunction._id} // eslint-disable-line
+              abbreviation={emergencyFunction.name.charAt(0)}
+              name={emergencyFunction.name}
+              nature={
+                emergencyFunction.nature ? emergencyFunction.nature : 'N/A'
               }
-              role={focalPerson.role ? focalPerson.role.name : 'N/A'}
-              email={focalPerson.email}
-              mobile={focalPerson.mobile}
+              family={
+                emergencyFunction.family ? emergencyFunction.family : 'N/A'
+              }
+              code={emergencyFunction.code}
+              cap={emergencyFunction.cap}
               isSelected={
                 // eslint-disable-next-line
-                map(selectedFocalPeople, item => item._id).includes(
-                  focalPerson._id // eslint-disable-line
+                map(selectedEmergencyFunctions, item => item._id).includes(
+                  emergencyFunction._id // eslint-disable-line
                 )
               }
               onSelectItem={() => {
-                this.handleOnSelectFocalPerson(focalPerson);
+                this.handleOnSelectEmergencyFunction(emergencyFunction);
               }}
               onDeselectItem={() => {
-                this.handleOnDeselectFocalPerson(focalPerson);
+                this.handleOnDeselectEmergencyFunction(emergencyFunction);
               }}
-              onEdit={() => onEdit(focalPerson)}
+              onEdit={() => onEdit(emergencyFunction)}
               onArchive={() =>
-                deleteFocalPerson(
-                  focalPerson._id, // eslint-disable-line
+                deleteIncidentType(
+                  emergencyFunction._id, // eslint-disable-line
                   () => {
-                    notifySuccess('Focal Person was archived successfully');
+                    notifySuccess(
+                      'Emergency Function was archived successfully'
+                    );
                   },
                   () => {
                     notifyError(
-                      'An Error occurred while archiving Focal Person please contact system administrator'
+                      'An Error occurred while archiving Emergency Function please contact system administrator'
                     );
                   }
                 )
               }
-              onShare={() => {
-                onShare(focalPerson);
-              }}
             />
           )}
         />
-        {/* end focalPeople list */}
+        {/* end emergency functions list */}
       </Fragment>
     );
   }
 }
 
-export default FocalPersonsList;
+export default FunctionsList;

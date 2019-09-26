@@ -41,6 +41,7 @@ import EmergencyPlanDisseminations from '../Plans/layouts/Disseminations';
 import EmergencyPlanDrills from '../Plans/layouts/Drills';
 import EmergencyPlanPlanner from '../Plans/components/Planner';
 import EmergencyPlanProcedures from '../Plans/components/Procedures';
+import EmergencyFunctions from '../Plans/components/Functions';
 import Resources from '../Resources';
 import ResourcesAdjustments from '../Resources/components/Adjustments';
 import ResourcesItemCategories from '../Resources/components/ItemCategories';
@@ -443,7 +444,7 @@ const BaseLayout = props => {
           />
           <SecureRoute
             path={`${baseUrl}/functions`}
-            component={StakeholdersFocalPeople}
+            component={EmergencyFunctions}
           />
           <SecureRoute
             path={`${baseUrl}/plans/planner/:planId/:activityId`}

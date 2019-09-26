@@ -1,55 +1,42 @@
-import { httpActions } from '@codetanzania/emis-api-client';
 import {
   closeFocalPersonForm,
   Connect,
-  getFocalPeople,
   openFocalPersonForm,
-  searchFocalPeople,
+  searchIncidentTypes,
   selectFocalPerson,
+  getIncidentTypes,
 } from '@codetanzania/emis-api-states';
 import { Modal } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
-import NotificationForm from '../../../components/NotificationForm';
 import Topbar from '../../../components/Topbar';
 import FocalPersonFilters from './Filters';
 import FocalPersonForm from './Form';
-import FocalPeopleList from './List';
+import FunctionsList from './List';
 import './styles.css';
-
-/* constants */
-const {
-  getFocalPeople: getFocalPeopleFromAPI,
-  getJurisdictions,
-  getPartyGroups,
-  getRoles,
-  getAgencies,
-} = httpActions;
 
 /**
  * @class
- * @name FocalPeople
- * @description Render focalPerson list which have search box, actions and focalPerson list
+ * @name EmergencyFunctions
+ * @description Render functions list which have search box, actions and list emergency functions
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class FocalPeople extends Component {
+class EmergencyFunctions extends Component {
   state = {
     showFilters: false,
     isEditForm: false,
-    showNotificationForm: false,
-    selectedFocalPeople: [],
-    notificationBody: undefined,
     cached: null,
   };
 
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     posting: PropTypes.bool.isRequired,
-    focalPeople: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
-      .isRequired,
-    focalPerson: PropTypes.shape({ name: PropTypes.string }),
+    emergencyFunctions: PropTypes.arrayOf(
+      PropTypes.shape({ name: PropTypes.string })
+    ).isRequired,
+    emergencyFunction: PropTypes.shape({ name: PropTypes.string }),
     page: PropTypes.number.isRequired,
     showForm: PropTypes.bool.isRequired,
     searchQuery: PropTypes.string,
@@ -57,12 +44,12 @@ class FocalPeople extends Component {
   };
 
   static defaultProps = {
-    focalPerson: null,
+    emergencyFunction: null,
     searchQuery: undefined,
   };
 
   componentDidMount() {
-    getFocalPeople();
+    getIncidentTypes();
   }
 
   /**
@@ -122,7 +109,7 @@ class FocalPeople extends Component {
   /**
    * @function
    * @name openFocalPersonForm
-   * @description Open focalPerson form
+   * @description Open emergencyFunction form
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -134,7 +121,7 @@ class FocalPeople extends Component {
   /**
    * @function
    * @name openFocalPersonForm
-   * @description close focalPerson form
+   * @description close emergencyFunction form
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -146,16 +133,16 @@ class FocalPeople extends Component {
 
   /**
    * @function
-   * @name searchFocalPeople
-   * @description Search FocalPeople List based on supplied filter word
+   * @name searchEmergencyFunctions
+   * @description Search EmergencyFunctions List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchFocalPeople = event => {
-    searchFocalPeople(event.target.value);
+  searchEmergencyFunctions = event => {
+    searchIncidentTypes(event.target.value);
   };
 
   /**
@@ -163,117 +150,21 @@ class FocalPeople extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} focalPerson focalPerson to be edited
+   * @param {object} emergencyFunction emergencyFunction to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = focalPerson => {
-    selectFocalPerson(focalPerson);
+  handleEdit = emergencyFunction => {
+    selectFocalPerson(emergencyFunction);
     this.setState({ isEditForm: true });
     openFocalPersonForm();
   };
 
-  /**
-   * @function
-   * @name handleShare
-   * @description Handle share single focalPerson action
-   *
-   * @param {object} focalPerson focalPerson to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleShare = focalPerson => {
-    const message = `${focalPerson.name}\nMobile: ${
-      // eslint-disable-line
-      focalPerson.mobile
-    }\nEmail: ${focalPerson.email}`;
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name handleBulkShare
-   * @description Handle share multiple focal People
-   *
-   * @param {object[]} focalPeople focal People list to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleBulkShare = focalPeople => {
-    const focalPersonList = focalPeople.map(
-      focalPerson =>
-        `${focalPerson.name}\nMobile: ${focalPerson.mobile}\nEmail: ${
-          // eslint-disable-line
-          focalPerson.email
-        }`
-    );
-
-    const message = focalPersonList.join('\n\n\n');
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name openNotificationForm
-   * @description Handle on notify focalPeople
-   *
-   * @param {object[]} focalPeople List of focalPeople selected to be notified
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  openNotificationForm = focalPeople => {
-    this.setState({
-      selectedFocalPeople: focalPeople,
-      showNotificationForm: true,
-    });
-  };
-
-  /**
-   * @function
-   * @name closeNotificationForm
-   * @description Handle on notify focalPeople
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closeNotificationForm = () => {
-    this.setState({ showNotificationForm: false });
-  };
-
-  /**
-   * @function
-   * @name handleAfterCloseForm
-   * @description Perform post close form cleanups
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleAfterCloseForm = () => {
-    this.setState({ isEditForm: false });
-  };
-
-  /**
-   * @function
-   * @name handleAfterCloseNotificationForm
-   * @description Perform post close notification form cleanups
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleAfterCloseNotificationForm = () => {
-    this.setState({ notificationBody: undefined });
-  };
-
   render() {
     const {
-      focalPeople,
-      focalPerson,
+      emergencyFunctions,
+      emergencyFunction,
       loading,
       posting,
       page,
@@ -281,48 +172,38 @@ class FocalPeople extends Component {
       searchQuery,
       total,
     } = this.props;
-    const {
-      showFilters,
-      isEditForm,
-      showNotificationForm,
-      selectedFocalPeople,
-      notificationBody,
-      cached,
-    } = this.state;
+    const { showFilters, isEditForm, cached } = this.state;
     return (
       <Fragment>
         {/* Topbar */}
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for focal people here ...',
-            onChange: this.searchFocalPeople,
+            placeholder: 'Search for Emergency Functions here ...',
+            onChange: this.searchEmergencyFunctions,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Focal Person',
+              label: 'New Function',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Focal Person',
+              title: 'Add New Emergency Function',
               onClick: this.openFocalPersonForm,
             },
           ]}
         />
         {/* end Topbar */}
 
-        <div className="FocalPeopleList">
+        <div className="FunctionsList">
           {/* list starts */}
-          <FocalPeopleList
+          <FunctionsList
             total={total}
             page={page}
-            focalPeople={focalPeople}
+            emergencyFunctions={emergencyFunctions}
             loading={loading}
             onEdit={this.handleEdit}
             onFilter={this.openFiltersModal}
-            onNotify={this.openNotificationForm}
-            onShare={this.handleShare}
-            onBulkShare={this.handleBulkShare}
           />
           {/* end list */}
 
@@ -345,30 +226,6 @@ class FocalPeople extends Component {
           </Modal>
           {/* end filter modal */}
 
-          {/* Notification Modal modal */}
-          <Modal
-            title="Notify Focal People"
-            visible={showNotificationForm}
-            onCancel={this.closeNotificationForm}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-            afterClose={this.handleAfterCloseNotificationForm}
-          >
-            <NotificationForm
-              recipients={selectedFocalPeople}
-              onSearchRecipients={getFocalPeopleFromAPI}
-              onSearchJurisdictions={getJurisdictions}
-              onSearchGroups={getPartyGroups}
-              onSearchAgencies={getAgencies}
-              onSearchRoles={getRoles}
-              body={notificationBody}
-              onCancel={this.closeNotificationForm}
-            />
-          </Modal>
-          {/* end Notification modal */}
-
           {/* create/edit form modal */}
           <Modal
             title={isEditForm ? 'Edit Focal Person' : 'Add New Focal Person'}
@@ -383,7 +240,7 @@ class FocalPeople extends Component {
             <FocalPersonForm
               posting={posting}
               isEditForm={isEditForm}
-              focalPerson={focalPerson}
+              emergencyFunction={emergencyFunction}
               onCancel={this.closeFocalPersonForm}
             />
           </Modal>
@@ -394,13 +251,13 @@ class FocalPeople extends Component {
   }
 }
 
-export default Connect(FocalPeople, {
-  focalPeople: 'focalPeople.list',
-  focalPerson: 'focalPeople.selected',
-  loading: 'focalPeople.loading',
-  posting: 'focalPeople.posting',
-  page: 'focalPeople.page',
-  showForm: 'focalPeople.showForm',
-  total: 'focalPeople.total',
-  searchQuery: 'focalPeople.q',
+export default Connect(EmergencyFunctions, {
+  emergencyFunctions: 'incidentTypes.list',
+  emergencyFunction: 'incidentTypes.selected',
+  loading: 'incidentTypes.loading',
+  posting: 'incidentTypes.posting',
+  page: 'incidentTypes.page',
+  showForm: 'incidentTypes.showForm',
+  total: 'incidentTypes.total',
+  searchQuery: 'incidentTypes.q',
 });
