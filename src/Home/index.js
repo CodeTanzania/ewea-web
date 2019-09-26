@@ -7,6 +7,7 @@ import rolesIcon from '../assets/icons/stakeholders/roles.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
 import issuedAlertsIcon from '../assets/icons/alerts/issuedalerts.svg';
+import alertIcon from '../assets/icons/alerts.svg';
 
 /* constants */
 const routes = [
@@ -15,6 +16,12 @@ const routes = [
     path: '/app/issuedalerts',
     icon: issuedAlertsIcon,
     description: modules.alertsIssued,
+  },
+  {
+    name: 'Alert Types',
+    path: '/app/alerttypes',
+    icon: alertIcon,
+    description: modules.alerts,
   },
   {
     name: 'Geographical Features',

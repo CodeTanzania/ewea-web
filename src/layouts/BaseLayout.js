@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Link, Switch } from 'react-router-dom';
 import UserMenu from './components/UserMenu';
 import Alerts from '../Alerts';
+import AlertTypes from '../Alerts/components/AlertTypes';
 import AlertsActions from '../Alerts/layouts/Actions';
 import IssuedAlerts from '../Alerts/components/IssuedAlerts';
 import AlertsFeedback from '../Alerts/layouts/Feedback';
@@ -37,6 +38,7 @@ const breadcrumbNameMap = {
   '/app': { name: 'Home', title: 'EMIS' },
   /* Alerts Routes */
   '/app/alerts': { name: 'Alerts', title: 'Alerts module' },
+  '/app/alerttypes': { name: 'AlertTypes', title: 'Alert Types module' },
   '/app/alerts/actions': {
     name: 'Actions Taken',
     title: 'List of all performed actions',
@@ -46,7 +48,7 @@ const breadcrumbNameMap = {
     title: 'Alerts surveys and feedback',
   },
   '/app/alerts/feeds': { name: 'Feeds', title: 'Alerts feeds' },
-  '/app/issuedalerts': {
+  '/app/alerts/issuedalerts': {
     name: 'Issued Alerts',
     title: 'List of all alerts',
   },
@@ -200,6 +202,11 @@ const BaseLayout = props => {
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
           <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
+          <SecureRoute
+            exact
+            path={`${baseUrl}/alerttypes`}
+            component={AlertTypes}
+          />
           <SecureRoute
             path={`${baseUrl}/issuedalerts`}
             component={IssuedAlerts}
