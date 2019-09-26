@@ -1,103 +1,50 @@
+import { httpActions } from '@codetanzania/ewea-api-client';
 import {
   deleteAlert,
   paginateAlerts,
   refreshAlerts,
 } from '@codetanzania/ewea-api-states';
-import { httpActions } from '@codetanzania/ewea-api-client';
 import { List } from 'antd';
-// import moment from 'moment';
+import compact from 'lodash/compact';
 import concat from 'lodash/concat';
+import intersectionBy from 'lodash/intersectionBy';
 import map from 'lodash/map';
+import remove from 'lodash/remove';
 import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
-import remove from 'lodash/remove';
-import intersectionBy from 'lodash/intersectionBy';
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import ListHeader from '../../../../components/ListHeader';
-import { notifyError, notifySuccess } from '../../../../util';
 import Toolbar from '../../../../components/Toolbar';
-import AlertListItem from '../ListItem';
+import { notifyError, notifySuccess } from '../../../../util';
+import AlertsListItem from '../ListItem';
+
+/* constants */
+const urgencySpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 0, xs: 0 };
+const statusSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 0, xs: 0 };
+const severitySpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
+const eventSpan = { xxl: 8, xl: 7, lg: 7, md: 0, sm: 19, xs: 19 };
+const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 
 const headerLayout = [
-  { span: 7, header: 'Event' },
-  { span: 2, header: 'Severity' },
-  { span: 2, header: 'Certainty' },
-  { span: 2, header: 'Urgency' },
-  { span: 2, header: 'Expected' },
-  { span: 2, header: 'Expires' },
-  { span: 3, header: 'Source' },
+  { ...eventSpan, header: 'Event' },
+  { ...areaSpan, header: 'Area' },
+  { ...statusSpan, header: 'Status' },
+  { ...severitySpan, header: 'Severity' },
+  { ...urgencySpan, header: 'Urgency' },
 ];
 const { getAlertsExportUrl } = httpActions;
 
 /**
- * @function
- * @name dateSortDesc
- * @description This is a comparison function that will result in dates being
- *  sorted in DESCENDING order
- *
- * @param {object} date1 first date object
- * @param {object} date2 second date object
- *
- * @returns {number} result
- *
- * @version 0.1.0
- * @since 0.1.0
- */
-// const dateSortDesc = (date1, date2) => {
-//   if (date1 > date2) return -1;
-//   if (date1 < date2) return 1;
-//   return 0;
-// };
-
-/**
- * @function
- * @name sortByExpiredAt
- * @description Sorts alerts  in ASCENDING ORDER by expiredAt field
- *
- * @param {Array} alerts alerts to be sorted
- *
- * @returns {Array} sorted Alerts
- *
- * @version 0.1.0
- * @since 0.1.0
- */
-// const sortByExpiredAt = alerts =>
-//   alerts.sort(({ expiredAt: ISOdate1 }, { expiredAt: ISOdate2 }) => {
-//     const date1 = moment(ISOdate1);
-//     const date2 = moment(ISOdate2);
-//     return dateSortDesc(date1, date2);
-//   });
-
-/**
- * @function
- * @name sortByUpdatedAt
- * @description Sorts alerts  in DESCENDING ORDER by updatedAt field
- *
- * @param {Array} alerts alerts to be filtered
- *
- * @returns {Array} sortedAlerts
- *
- * @version 0.1.0
- * @since 0.1.0
- */
-// const sortByUpdatedAt = alerts =>
-//   alerts.sort(({ updatedAt: ISOdate1 }, { updatedAt: ISOdate2 }) => {
-//     const date1 = moment(ISOdate1);
-//     const date2 = moment(ISOdate2);
-//     return dateSortDesc(date1, date2);
-//   });
-
-/**
  * @class
- * @name AlertList
- * @description Render AlertList component which have actionBar, alerts header and
- * alert list item components
+ * @name AlertsList
+ * @description Render AlertsList component which have actionBar, alerts
+ * header and alerts list components
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class AlertList extends Component {
+class AlertsList extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     alerts: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
@@ -105,8 +52,9 @@ class AlertList extends Component {
     page: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
     onEdit: PropTypes.func.isRequired,
-    onShare: PropTypes.func.isRequired,
     onFilter: PropTypes.func.isRequired,
+    onShare: PropTypes.func.isRequired,
+    onBulkShare: PropTypes.func.isRequired,
   };
 
   state = {
@@ -126,25 +74,9 @@ class AlertList extends Component {
    */
   handleOnSelectAlert = alert => {
     const { selectedAlerts } = this.state;
-    this.setState({ selectedAlerts: concat([], selectedAlerts, alert) });
-  };
-
-  /**
-   * @function
-   * @name handleFilterByStatus
-   * @description Handle filter alerts by status action
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleFilterByStatus = () => {
-    // if (status === 'All') {
-    //   filterStakeholders({});
-    // } else if (status === 'Active') {
-    //   filterStakeholders({});
-    // } else if (status === 'Archived') {
-    //   filterStakeholders({});
-    // }
+    this.setState({
+      selectedAlerts: concat([], selectedAlerts, alert),
+    });
   };
 
   /**
@@ -171,7 +103,7 @@ class AlertList extends Component {
    * @name handleDeselectAll
    * @description Handle deselect all alerts in a current page
    *
-   * @returns {undefined}
+   * @returns {undefined} undefined
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -199,11 +131,29 @@ class AlertList extends Component {
 
   /**
    * @function
+   * @name handleFilterByStatus
+   * @description Handle filter alerts by status action
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleFilterByStatus = () => {
+    // if (status === 'All') {
+    //   filter({});
+    // } else if (status === 'Active') {
+    //   filter({});
+    // } else if (status === 'Archived') {
+    //   filter({});
+    // }
+  };
+
+  /**
+   * @function
    * @name handleOnDeselectAlert
    * @description Handle deselect a single alert action
    *
    * @param {object} alert alert to be removed from selected alerts
-   * @returns {undefined}
+   * @returns {undefined} undefined
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -229,9 +179,9 @@ class AlertList extends Component {
       onEdit,
       onFilter,
       onShare,
+      onBulkShare,
     } = this.props;
     const { selectedAlerts, selectedPages } = this.state;
-    // const sortedAlerts = sortByUpdatedAt(sortByExpiredAt(alerts));
     const selectedAlertsCount = intersectionBy(selectedAlerts, alerts, '_id')
       .length;
 
@@ -239,7 +189,7 @@ class AlertList extends Component {
       <Fragment>
         {/* toolbar */}
         <Toolbar
-          itemName="Alert"
+          itemName="alert"
           page={page}
           total={total}
           selectedItemsCount={selectedAlertsCount}
@@ -262,6 +212,7 @@ class AlertList extends Component {
               }
             )
           }
+          onShare={() => onBulkShare(selectedAlerts)}
         />
         {/* end toolbar */}
 
@@ -278,53 +229,48 @@ class AlertList extends Component {
         <List
           loading={loading}
           dataSource={alerts}
-          renderItem={alert => {
-            return (
-              <AlertListItem
-                key={alert._id} // eslint-disable-line
-                abbreviation={alert.source.toUpperCase().charAt(0)}
-                urgency={alert.urgency}
-                area={alert.area}
-                certainty={alert.certainty}
-                event={alert.event}
-                headline={alert.headline}
-                description={alert.description}
-                source={alert.source}
-                color={alert.color}
-                reportedAt={alert.reportedAt}
-                expiredAt={alert.expiredAt}
-                expectedAt={alert.expectedAt}
-                severity={alert.severity}
-                onShare={() => {
-                  onShare(alert);
-                }}
-                isSelected={
-                  // eslint-disable-next-line
-                  map(selectedAlerts, item => item._id).includes(alert._id)
-                }
-                onSelectItem={() => {
-                  this.handleOnSelectAlert(alert);
-                }}
-                onDeselectItem={() => {
-                  this.handleOnDeselectAlert(alert);
-                }}
-                onEdit={() => onEdit(alert)}
-                onArchive={() =>
-                  deleteAlert(
-                    alert._id, // eslint-disable-line
-                    () => {
-                      notifySuccess('Alert was archived successfully');
-                    },
-                    () => {
-                      notifyError(
-                        'An Error occurred while archiving Alert please alert system administrator'
-                      );
-                    }
-                  )
-                }
-              />
-            );
-          }}
+          renderItem={alert => (
+            <AlertsListItem
+              key={alert._id} // eslint-disable-line
+              abbreviation={alert.event.toUpperCase().charAt(0)}
+              location={compact(['Tandale', 'Hananasif', 'Kigogo']).join(', ')}
+              event={alert.event}
+              color={alert.color}
+              description={alert.description ? alert.description : 'N/A'}
+              urgency={alert.urgency}
+              severity={alert.severity}
+              status={alert.status}
+              isSelected={
+                // eslint-disable-next-line
+                map(selectedAlerts, item => item._id).includes(
+                  alert._id // eslint-disable-line
+                )
+              }
+              onSelectItem={() => {
+                this.handleOnSelectAlert(alert);
+              }}
+              onDeselectItem={() => {
+                this.handleOnDeselectAlert(alert);
+              }}
+              onEdit={() => onEdit(alert)}
+              onArchive={() =>
+                deleteAlert(
+                  alert._id, // eslint-disable-line
+                  () => {
+                    notifySuccess('Alert was archived successfully');
+                  },
+                  () => {
+                    notifyError(
+                      'An Error occurred while archiving Alert please contact system administrator'
+                    );
+                  }
+                )
+              }
+              onShare={() => {
+                onShare(alert);
+              }}
+            />
+          )}
         />
         {/* end alerts list */}
       </Fragment>
@@ -332,4 +278,4 @@ class AlertList extends Component {
   }
 }
 
-export default AlertList;
+export default AlertsList;

@@ -3,63 +3,58 @@ import {
   Connect,
   filterAlerts,
 } from '@codetanzania/ewea-api-states';
-import { Button, Checkbox, Col, Form, Row } from 'antd';
+import { httpActions } from '@codetanzania/ewea-api-client';
+import { Button, Form, Checkbox, Row, Col } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import SearchableSelectInput from '../../../../components/SearchableSelectInput';
+
+/* declarations */
+const { getIncidentTypes, getJurisdictions } = httpActions;
 
 /**
  * @class
  * @name AlertsFilters
  * @description Filter modal component for filtering alerts
  *
- * @param {object} props props object
- * @param {object} props.alertSchema alert schema object
- * @param {object} props.filter alert filter object
- * @param {object} props.form antd form
- * @param {Function} props.onCancel function to cancel alert filters
- *
  * @version 0.1.0
  * @since 0.1.0
  */
 class AlertsFilters extends Component {
   static propTypes = {
-    alertSchema: PropTypes.shape({
-      category: PropTypes.shape(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      urgency: PropTypes.shape(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      severity: PropTypes.shape(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      certainty: PropTypes.shape(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      response: PropTypes.shape(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      type: PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) }),
-    }).isRequired,
     filter: PropTypes.objectOf(
       PropTypes.shape({
-        category: PropTypes.arrayOf(PropTypes.string),
-        urgency: PropTypes.arrayOf(PropTypes.string),
-        severity: PropTypes.arrayOf(PropTypes.string),
-        certainty: PropTypes.arrayOf(PropTypes.string),
-        type: PropTypes.arrayOf(PropTypes.string),
-        response: PropTypes.arrayOf(PropTypes.string),
+        groups: PropTypes.arrayOf(PropTypes.string),
       })
     ),
-    onCancel: PropTypes.func.isRequired,
+    alertSchema: PropTypes.shape({
+      urgency: PropTypes.arrayOf(
+        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+      ),
+      severity: PropTypes.arrayOf(
+        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+      ),
+      certainty: PropTypes.arrayOf(
+        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+      ),
+      status: PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) }),
+    }).isRequired,
     form: PropTypes.shape({
       getFieldDecorator: PropTypes.func,
       validateFields: PropTypes.func,
     }).isRequired,
+    onCancel: PropTypes.func.isRequired,
+    cached: PropTypes.shape({
+      events: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+      locations: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+    }),
+    onCache: PropTypes.func.isRequired,
+    onClearCache: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     filter: null,
+    cached: null,
   };
 
   /**
@@ -67,13 +62,14 @@ class AlertsFilters extends Component {
    * @name handleSubmit
    * @description Handle filter action
    *
-   * @param {object} e event object
+   * @param {object} event onSubmit event object
+   * @returns {undefined}
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = e => {
-    e.preventDefault();
+  handleSubmit = event => {
+    event.preventDefault();
     const {
       form: { validateFields },
       onCancel,
@@ -88,25 +84,60 @@ class AlertsFilters extends Component {
   };
 
   /**
-   * Action handle when clear
-   *
    * @function
    * @name handleClearFilter
+   * @description Action handle when clear
    *
    * @version 0.1.0
    * @since 0.1.0
    */
   handleClearFilter = () => {
-    const { onCancel } = this.props;
+    const { onCancel, onClearCache } = this.props;
     clearAlertFilters();
+
+    onClearCache();
     onCancel();
   };
+
+  /**
+   * @function
+   * @name cacheFilters
+   * @description cache lazy loaded value from filters
+   *
+   * @param {object} values Object with key value of what is to be cached
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  cacheFilters = values => {
+    const { onCache } = this.props;
+    onCache(values);
+  };
+
+  /**
+   * @function
+   * @name renderSelectOptions
+   * @description  display select options
+   * @param {Array} options select options
+   *
+   * @returns {object[]} Selected options components
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  renderSelectOptions = options =>
+    options.map(option => (
+      <option key={option} value={option}>
+        {option}
+      </option>
+    ));
 
   render() {
     const {
       form: { getFieldDecorator },
       onCancel,
       filter,
+      cached,
       alertSchema,
     } = this.props;
 
@@ -131,59 +162,75 @@ class AlertsFilters extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* start alert types filters */}
-        <Form.Item {...formItemLayout} label="By  Message Types">
-          {getFieldDecorator('type', {
-            initialValue: filter ? filter.type : [],
+        {/* start alert event filters */}
+        <Form.Item {...formItemLayout} label="By Event(s)">
+          {getFieldDecorator('event', {
+            initialValue: filter ? filter.group : [],
           })(
-            <Checkbox.Group style={{ width: '100%' }}>
-              <Row>
-                {alertSchema.type.enum.map(type => (
-                  <Col span={6} style={{ margin: '10px 0' }} key={type}>
-                    <Checkbox value={type}>{type}</Checkbox>
-                  </Col>
-                ))}
-              </Row>
-            </Checkbox.Group>
+            <SearchableSelectInput
+              onSearch={getIncidentTypes}
+              optionLabel="name"
+              optionValue="_id"
+              mode="multiple"
+              onCache={events => this.cacheFilters({ events })}
+              initialValue={cached && cached.events ? cached.events : []}
+            />
           )}
         </Form.Item>
-        {/* end alert types filters */}
+        {/* end alert event filters */}
 
-        {/* start alert categories filters */}
-        <Form.Item {...formItemLayout} label="By  Categories">
-          {getFieldDecorator('category', {
-            initialValue: filter ? filter.category : [],
+        {/* start alert area filters */}
+        <Form.Item {...formItemLayout} label="By Area(s)">
+          {getFieldDecorator('location', {
+            initialValue: filter ? filter.location : [],
           })(
-            <Checkbox.Group style={{ width: '100%' }}>
-              <Row>
-                {alertSchema.category.enum.map(category => (
-                  <Col span={6} style={{ margin: '10px 0' }} key={category}>
-                    <Checkbox value={category}>{category}</Checkbox>
-                  </Col>
-                ))}
-              </Row>
-            </Checkbox.Group>
+            <SearchableSelectInput
+              onSearch={getJurisdictions}
+              optionLabel="name"
+              optionValue="_id"
+              mode="multiple"
+              onCache={locations => this.cacheFilters({ locations })}
+              initialValue={cached && cached.locations ? cached.locations : []}
+            />
           )}
         </Form.Item>
-        {/* end alert categories filters */}
+        {/* end alert area filters */}
 
-        {/* start alert responses filters */}
-        <Form.Item {...formItemLayout} label="By  Response Type">
-          {getFieldDecorator('response', {
-            initialValue: filter ? filter.response : [],
+        {/* start alert certainty filters */}
+        <Form.Item {...formItemLayout} label="By  Certainity">
+          {getFieldDecorator('certainty', {
+            initialValue: filter ? filter.certainty : [],
           })(
             <Checkbox.Group style={{ width: '100%' }}>
               <Row>
-                {alertSchema.response.enum.map(response => (
-                  <Col span={6} style={{ margin: '10px 0' }} key={response}>
-                    <Checkbox value={response}>{response}</Checkbox>
+                {/* eslint-disable-next-line react/prop-types */}
+                {alertSchema.certainty.enum.map(certainty => (
+                  <Col span={6} style={{ margin: '10px 0' }} key={certainty}>
+                    <Checkbox value={certainty}>{certainty}</Checkbox>
                   </Col>
                 ))}
               </Row>
             </Checkbox.Group>
           )}
         </Form.Item>
-        {/* end alert responses filters */}
+        {/* end alert certainty filters */}
+        {/* start alert status filters */}
+        <Form.Item {...formItemLayout} label="By  Status">
+          {getFieldDecorator('status', {
+            initialValue: filter ? filter.status : [],
+          })(
+            <Checkbox.Group style={{ width: '100%' }}>
+              <Row>
+                {alertSchema.status.enum.map(status => (
+                  <Col span={6} style={{ margin: '10px 0' }} key={status}>
+                    <Checkbox value={status}>{status}</Checkbox>
+                  </Col>
+                ))}
+              </Row>
+            </Checkbox.Group>
+          )}
+        </Form.Item>
+        {/* end alert status filters */}
 
         {/* start alert urgency filters */}
         <Form.Item {...formItemLayout} label="By  Urgency">
@@ -192,6 +239,7 @@ class AlertsFilters extends Component {
           })(
             <Checkbox.Group style={{ width: '100%' }}>
               <Row>
+                {/* eslint-disable-next-line react/prop-types */}
                 {alertSchema.urgency.enum.map(urgency => (
                   <Col span={6} style={{ margin: '10px 0' }} key={urgency}>
                     <Checkbox value={urgency}>{urgency}</Checkbox>
@@ -210,6 +258,7 @@ class AlertsFilters extends Component {
           })(
             <Checkbox.Group style={{ width: '100%' }}>
               <Row>
+                {/* eslint-disable-next-line react/prop-types */}
                 {alertSchema.severity.enum.map(severity => (
                   <Col span={6} style={{ margin: '10px 0' }} key={severity}>
                     <Checkbox value={severity}>{severity}</Checkbox>
@@ -220,24 +269,6 @@ class AlertsFilters extends Component {
           )}
         </Form.Item>
         {/* end alert severity filters */}
-
-        {/* start alert cetainity filters */}
-        <Form.Item {...formItemLayout} label="By  Certainity">
-          {getFieldDecorator('certainty', {
-            initialValue: filter ? filter.certainty : [],
-          })(
-            <Checkbox.Group style={{ width: '100%' }}>
-              <Row>
-                {alertSchema.certainty.enum.map(certainty => (
-                  <Col span={6} style={{ margin: '10px 0' }} key={certainty}>
-                    <Checkbox value={certainty}>{certainty}</Checkbox>
-                  </Col>
-                ))}
-              </Row>
-            </Checkbox.Group>
-          )}
-        </Form.Item>
-        {/* end alert certainity filters */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -254,9 +285,8 @@ class AlertsFilters extends Component {
     );
   }
 }
-export default Form.create()(
-  Connect(AlertsFilters, {
-    alertSchema: 'alerts.schema.properties',
-    filter: 'alerts.filter',
-  })
-);
+
+export default Connect(Form.create()(AlertsFilters), {
+  filter: 'alerts.filter',
+  alertSchema: 'alerts.schema.properties',
+});
