@@ -1,22 +1,21 @@
 import React from 'react';
-import alertIcon from '../assets/icons/alerts.svg';
-import assessmentIcon from '../assets/icons/assessments-disabled.svg';
 import dashboardIcon from '../assets/icons/dashboards-disabled.svg';
-import planIcon from '../assets/icons/emergencyplans-disabled.svg';
 import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures-disabled.svg';
-import incidentIcon from '../assets/icons/incidents-disabled.svg';
-import resourceIcon from '../assets/icons/resources-disabled.svg';
-import stakeholderIcon from '../assets/icons/stakeholders.svg';
+import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
+import contactsIcon from '../assets/icons/stakeholders/contacts.svg';
+import rolesIcon from '../assets/icons/stakeholders/roles.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
+import issuedAlertsIcon from '../assets/icons/alerts/issuedalerts.svg';
+import alertIcon from '../assets/icons/alerts.svg';
 
 /* constants */
 const routes = [
   {
-    name: 'Alerts',
-    path: '/app/alerts',
-    icon: alertIcon,
-    description: modules.alerts,
+    name: 'Issued Alerts',
+    path: '/app/alerts/issuedalerts',
+    icon: issuedAlertsIcon,
+    description: modules.alertsIssued,
   },
   {
     name: 'Alert Types',
@@ -25,14 +24,6 @@ const routes = [
     description: modules.alerts,
   },
   {
-    name: 'Assessment',
-    path: '/app/assessments',
-    icon: assessmentIcon,
-    description: modules.assessments,
-    disabled: true,
-  },
-  { name: 'Emergency Plans', path: '/plans', icon: planIcon, disabled: true },
-  {
     name: 'Geographical Features',
     path: '/app/geographicalfeatures',
     icon: geographicalFeaturesIcon,
@@ -40,25 +31,24 @@ const routes = [
     disabled: true,
   },
   {
-    name: 'Incidents',
-    path: '/app/incidents',
-    icon: incidentIcon,
-    description: modules.incidents,
-    disabled: true,
+    name: 'Focal People',
+    path: '/app/focalpeople',
+    icon: contactsIcon,
+    description: modules.stakeholdersFocalPeople,
   },
   {
-    name: 'Resources',
-    path: '/app/resources',
-    icon: resourceIcon,
-    description: modules.resources,
-    disabled: true,
+    name: 'Agencies',
+    path: '/app/agencies',
+    icon: agenciesIcon,
+    description: modules.stakeholdersAgencies,
   },
   {
-    name: 'Stakeholders',
-    path: '/app/stakeholders',
-    icon: stakeholderIcon,
-    description: modules.stakeholders,
+    name: 'Roles',
+    path: '/app/roles',
+    icon: rolesIcon,
+    description: modules.stakeholdersRoles,
   },
+
   {
     name: 'Dashboards',
     path: '/app/dashboards',

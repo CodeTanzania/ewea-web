@@ -1,4 +1,4 @@
-import { httpActions } from '@codetanzania/emis-api-client';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import { Button, Form, Input } from 'antd';
 import map from 'lodash/map';
 import PropTypes from 'prop-types';

@@ -5,7 +5,7 @@ import {
   selectFeature,
   closeFeatureForm,
   searchFeatures,
-} from '@codetanzania/emis-api-states';
+} from '@codetanzania/ewea-api-states';
 import { Input, Modal, Col, Row, Button } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';

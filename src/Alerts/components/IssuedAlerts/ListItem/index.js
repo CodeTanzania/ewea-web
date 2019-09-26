@@ -1,50 +1,49 @@
-import { Avatar, Checkbox, Col, Row, Modal } from 'antd';
+import { Avatar, Checkbox, Col, Modal, Row } from 'antd';
 import PropTypes from 'prop-types';
 import randomColor from 'randomcolor';
 import React, { Component } from 'react';
-// eslint-disable-next-line import/named
-import { formatTime, timeAgo } from '../../../../util';
 import ListItemActions from '../../../../components/ListItemActions';
 import './styles.css';
 
 /* constants */
 const { confirm } = Modal;
+const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 3, xs: 3 };
+const urgencySpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 0, xs: 0 };
+const statusSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 0, xs: 0 };
+const severitySpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
+const eventSpan = { xxl: 8, xl: 7, lg: 6, md: 0, sm: 19, xs: 19 };
+const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 
 /**
  * @class
- * @name AlertListItem
- * @description Single alert list item component. Render single alert details
+ * @name AlertsListItem
+ * @description Single alert list item component.
+ * Render single alert details
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class AlertListItem extends Component {
+class AlertsListItem extends Component {
   state = {
     isHovered: false,
   };
 
   static propTypes = {
     abbreviation: PropTypes.string.isRequired,
-    headline: PropTypes.string,
-    description: PropTypes.string,
+    urgency: PropTypes.string.isRequired,
+    severity: PropTypes.string.isRequired,
+    location: PropTypes.string.isRequired,
     event: PropTypes.string.isRequired,
-    source: PropTypes.string.isRequired,
+    status: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired,
-    certainty: PropTypes.string.isRequired,
-    expiredAt: PropTypes.string.isRequired,
-    expectedAt: PropTypes.string.isRequired,
-    severity: PropTypes.func.isRequired,
-    urgency: PropTypes.func.isRequired,
+    description: PropTypes.string.isRequired,
     onArchive: PropTypes.func.isRequired,
     onEdit: PropTypes.func.isRequired,
     isSelected: PropTypes.bool.isRequired,
     onSelectItem: PropTypes.func.isRequired,
     onDeselectItem: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    description: '',
-    headline: '',
+    onShare: PropTypes.func.isRequired,
   };
 
   /**
@@ -117,21 +116,17 @@ class AlertListItem extends Component {
   render() {
     const {
       abbreviation,
-      color,
-      source,
-      certainty,
-      event,
-      headline,
-      description,
-      expiredAt,
-      expectedAt,
       urgency,
       severity,
+      status,
+      description,
+      event,
+      color,
+      location,
       onEdit,
     } = this.props;
     const { isHovered } = this.state;
     const { isSelected } = this.props;
-    const eventTitle = description || headline;
     const avatarBackground = color || randomColor();
     let sideComponent = null;
 
@@ -159,36 +154,30 @@ class AlertListItem extends Component {
 
     return (
       <div
-        className="AlertListItem"
+        className="AlertsListItem"
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
         <Row>
-          <Col span={1}>{sideComponent}</Col>
-          <Col span={7} title={eventTitle}>
+          <Col {...sideSpan}>{sideComponent}</Col>
+          <Col {...eventSpan} title={description}>
             {event}
           </Col>
-          <Col span={2}>{severity}</Col>
-          <Col span={2}>{certainty}</Col>
-          <Col span={2}>{urgency}</Col>
-          <Col span={2} title={formatTime(expectedAt)}>
-            {timeAgo(expectedAt)}
-          </Col>
-          <Col span={2} title={formatTime(expectedAt)}>
-            {timeAgo(expiredAt)}
-          </Col>
-          <Col span={3}>{source}</Col>
-          <Col span={3}>
+          <Col {...areaSpan}>{location}</Col>
+          <Col {...statusSpan}>{status}</Col>
+          <Col {...severitySpan}>{severity}</Col>
+          <Col {...urgencySpan}>{urgency}</Col>
+          <Col {...isHoveredSpan}>
             {isHovered && (
               <ListItemActions
                 edit={{
                   name: 'Edit Alert',
-                  title: 'Update Alert details',
+                  title: 'Update Alert Details',
                   onClick: onEdit,
                 }}
                 archive={{
                   name: 'Archive Alert',
-                  title: 'Remove Alert from the list of Active Alerts',
+                  title: 'Remove Alert from list of active alerts',
                   onClick: this.showArchiveConfirm,
                 }}
               />
@@ -200,4 +189,4 @@ class AlertListItem extends Component {
   }
 }
 
-export default AlertListItem;
+export default AlertsListItem;

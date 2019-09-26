@@ -5,7 +5,7 @@ import {
   searchAlerts,
   selectAlert,
   closeAlertForm,
-} from '@codetanzania/emis-api-states';
+} from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import { Modal } from 'antd';

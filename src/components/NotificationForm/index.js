@@ -1,5 +1,5 @@
 import { Button, Form, Input, Icon, Tooltip } from 'antd';
-import { Connect, postCampaign } from '@codetanzania/emis-api-states';
+import { Connect, postCampaign } from '@codetanzania/ewea-api-states';
 import compact from 'lodash/compact';
 import isEmpty from 'lodash/isEmpty';
 import map from 'lodash/map';

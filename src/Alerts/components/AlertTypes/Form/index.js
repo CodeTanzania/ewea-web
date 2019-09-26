@@ -1,4 +1,4 @@
-import { putAlert, postAlert } from '@codetanzania/emis-api-states';
+import { putAlert, postAlert } from '@codetanzania/ewea-api-states';
 import { Button, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
