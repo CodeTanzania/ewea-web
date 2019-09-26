@@ -19,7 +19,8 @@ import './styles.css';
 /**
  * @class
  * @name AlertTypes
- * @description Render AlertTypes list which have search box, actions and alert types list
+ * @description Render Alert Types list which have search box,
+ * actions and alert types list
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -31,7 +32,7 @@ class AlertTypes extends Component {
 
   static propTypes = {
     loading: PropTypes.bool.isRequired,
-    alertTpyes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+    alertTypes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
       .isRequired,
     alertType: PropTypes.shape({ name: PropTypes.string }),
     page: PropTypes.number.isRequired,
@@ -53,7 +54,7 @@ class AlertTypes extends Component {
   /**
    * @function
    * @name openAlertTypesForm
-   * @description Open focalPerson form
+   * @description Open alert type form
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -65,7 +66,7 @@ class AlertTypes extends Component {
   /**
    * @function
    * @name closeAlertTypesForm
-   * @description close focalPerson form
+   * @description close alert type form
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -107,7 +108,7 @@ class AlertTypes extends Component {
 
   render() {
     const {
-      alertTpyes,
+      alertTypes,
       loading,
       page,
       posting,
@@ -144,7 +145,7 @@ class AlertTypes extends Component {
           <AlertTypesList
             total={total}
             page={page}
-            alertTpyes={alertTpyes}
+            alertTypes={alertTypes}
             loading={loading}
             onEdit={this.handleEdit}
           />
@@ -176,7 +177,7 @@ class AlertTypes extends Component {
 }
 
 export default Connect(AlertTypes, {
-  alertTpyes: 'alerts.list',
+  alertTypes: 'alerts.list',
   alertType: 'alerts.selected',
   loading: 'alerts.loading',
   posting: 'alerts.posting',

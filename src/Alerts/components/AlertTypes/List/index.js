@@ -39,8 +39,8 @@ const { getAlertsExportUrl } = httpActions;
  * @name AlertTypesList
  *
  * @description Render AlertTypesList
- * component which have actionBar, focal People
- * header and focal People list components
+ * component which have actionBar, alert types
+ * header and alert types list components
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -48,7 +48,7 @@ const { getAlertsExportUrl } = httpActions;
 class AlertTypesList extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
-    alertTpyes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+    alertTypes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
       .isRequired,
     page: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
@@ -80,15 +80,15 @@ class AlertTypesList extends Component {
   /**
    * @function
    * @name handleSelectAll
-   * @description Handle select all alertTpyes actions from current page
+   * @description Handle select all alert Types actions from current page
    *
    * @version 0.1.0
    * @since 0.1.0
    */
   handleSelectAll = () => {
     const { selectedAlertTypes, selectedPages } = this.state;
-    const { alertTpyes, page } = this.props;
-    const selectedList = uniqBy([...selectedAlertTypes, ...alertTpyes], '_id');
+    const { alertTypes, page } = this.props;
+    const selectedList = uniqBy([...selectedAlertTypes, ...alertTypes], '_id');
     const pages = uniq([...selectedPages, page]);
     this.setState({
       selectedAlertTypes: selectedList,
@@ -99,7 +99,7 @@ class AlertTypesList extends Component {
   /**
    * @function
    * @name handleDeselectAll
-   * @description Handle deselect all alertTpyes in a current page
+   * @description Handle deselect all alert Types in a current page
    *
    * @returns {undefined} undefined
    *
@@ -107,14 +107,14 @@ class AlertTypesList extends Component {
    * @since 0.1.0
    */
   handleDeselectAll = () => {
-    const { alertTpyes, page } = this.props;
+    const { alertTypes, page } = this.props;
     const { selectedAlertTypes, selectedPages } = this.state;
     const selectedList = uniqBy([...selectedAlertTypes], '_id');
     const pages = uniq([...selectedPages]);
 
     remove(pages, item => item === page);
 
-    alertTpyes.forEach(alertType => {
+    alertTypes.forEach(alertType => {
       remove(
         selectedList,
         item => item._id === alertType._id // eslint-disable-line
@@ -130,7 +130,7 @@ class AlertTypesList extends Component {
   /**
    * @function
    * @name handleFilterByStatus
-   * @description Handle filter alertTpyes by status action
+   * @description Handle filter alertTypes by status action
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -169,11 +169,11 @@ class AlertTypesList extends Component {
   };
 
   render() {
-    const { alertTpyes, loading, page, total, onEdit } = this.props;
+    const { alertTypes, loading, page, total, onEdit } = this.props;
     const { selectedAlertTypes, selectedPages } = this.state;
     const selectedAlertTypesCount = intersectionBy(
       selectedAlertTypes,
-      alertTpyes,
+      alertTypes,
       '_id'
     ).length;
 
@@ -215,10 +215,10 @@ class AlertTypesList extends Component {
         />
         {/* end alertType list header */}
 
-        {/* alertTpyes list */}
+        {/* alertTypes list */}
         <List
           loading={loading}
-          dataSource={alertTpyes}
+          dataSource={alertTypes}
           renderItem={alertType => (
             <FocalPersonsListItem
               key={alertType._id} // eslint-disable-line
@@ -257,7 +257,7 @@ class AlertTypesList extends Component {
             />
           )}
         />
-        {/* end alertTpyes list */}
+        {/* end alertTypes list */}
       </Fragment>
     );
   }

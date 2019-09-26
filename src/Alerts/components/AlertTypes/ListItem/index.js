@@ -18,8 +18,8 @@ const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 /**
  * @class
  * @name AlertTypesListItem
- * @description Single focal person list item component.
- * Render single focal person details
+ * @description Single alert type list item component.
+ * Render single alert type details
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -92,7 +92,7 @@ class AlertTypesListItem extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a focal person
+   * @description show confirm modal before archiving a alert type
    *
    * @version 0.1.0
    * @since 0.1.0
