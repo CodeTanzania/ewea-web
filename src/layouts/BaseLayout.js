@@ -39,7 +39,7 @@ const breadcrumbNameMap = {
   /* Alerts Routes */
   '/app/alerts': { name: 'Alerts', title: 'Alerts module' },
   '/app/alerttypes': { name: 'AlertTypes', title: 'Alert Types module' },
-  '/app/alerts/actions': {
+  '/app/actions': {
     name: 'Actions Taken',
     title: 'List of all performed actions',
   },
@@ -211,10 +211,7 @@ const BaseLayout = props => {
             path={`${baseUrl}/alerts/issuedalerts`}
             component={IssuedAlerts}
           />
-          <SecureRoute
-            path={`${baseUrl}/alerts/actions`}
-            component={AlertsActions}
-          />
+          <SecureRoute path={`${baseUrl}/actions`} component={AlertsActions} />
           <SecureRoute
             path={`${baseUrl}/alerts/feeds`}
             component={AlertsFeeds}
