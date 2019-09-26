@@ -2,7 +2,7 @@
 
 I'm really glad you're reading this, because we need volunteer developers to help this project come to fruition.
 
-EMIS is an open source project and we love to receive contributions from our community — you! There are many ways to contribute, from writing tutorials or blog posts, improving the documentation, submitting bug reports and feature requests or writing code which can be incorporated into EMIS itself.
+EWEA is an open source project and we love to receive contributions from our community — you! There are many ways to contribute, from writing tutorials or blog posts, improving the documentation, submitting bug reports and feature requests or writing code which can be incorporated into ewea-web itself.
 
 Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open source project. In return, they should reciprocate that respect in addressing your issue, assessing changes, and helping you finalize your pull requests.
 
@@ -10,29 +10,29 @@ These are mostly guidelines, not rules. Use your best judgment, and feel free to
 
 ## Code of Conduct
 
-EMIS project has adopted a Code of Conduct that we expect project participants to adhere to. Please read [the full text](https://github.com/CodeTanzania/emis/blob/develop/CODE_OF_CONDUCT.md) so that you can understand what actions will and will not be tolerated.
+EWEA project has adopted a Code of Conduct that we expect project participants to adhere to. Please read [the full text](https://github.com/CodeTanzania/ewea-web/blob/develop/CODE_OF_CONDUCT.md) so that you can understand what actions will and will not be tolerated.
 
 ## Open Development
 
-All work on EMIS happens directly on [GitHub](https://github.com/CodeTanzania/emis). Both core team members and external contributors send pull requests which go through the same review process.
+All work on EWEA happens directly on [GitHub](https://github.com/CodeTanzania/ewea-web). Both core team members and external contributors send pull requests which go through the same review process.
 
 ## Branch Organization
 
-We will do our best to keep the [`master` branch](https://github.com/CodeTanzania/emis/tree/master) in good shape, with tests passing at all times.
+We will do our best to keep the [`master` branch](https://github.com/CodeTanzania/ewea-web/tree/master) in good shape, with tests passing at all times.
 
-If you send a pull request, please do it against the [`develop` branch](https://github.com/CodeTanzania/emis/tree/develop).
+If you send a pull request, please do it against the [`develop` branch](https://github.com/CodeTanzania/ewea-web/tree/develop).
 
 ## Semantic Versioning
 
-EMIS follows [semantic versioning](http://semver.org/). We release patch versions for bugfixes, minor versions for new features, and major versions for any breaking changes.
+EWEA follows [semantic versioning](http://semver.org/). We release patch versions for bugfixes, minor versions for new features, and major versions for any breaking changes.
 
 ## Where to Find Known Issues
 
-We are using [GitHub Issues](https://github.com/CodeTanzania/emis/issues) for all issues. Before filing a new task, try to make sure your problem doesn't already exist.
+We are using [GitHub Issues](https://github.com/CodeTanzania/ewea-web/issues) for all issues. Before filing a new task, try to make sure your problem doesn't already exist.
 
 ## Proposing a Change
 
-If you intend to change the public API, or make any non-trivial changes to the implementation, we recommend [filing an issue](https://github.com/CodeTanzania/emis/issues/new). This lets us reach an agreement on your proposal before you put significant effort into it.
+If you intend to change the public API, or make any non-trivial changes to the implementation, we recommend [filing an issue](https://github.com/CodeTanzania/ewea-web/issues/new). This lets us reach an agreement on your proposal before you put significant effort into it.
 
 If you're only fixing a bug, it's fine to submit a pull request right away but we still recommend to file an issue detailing what you're fixing. This is helpful in case we don't accept that specific fix but want to keep track of the issue.
 
@@ -117,7 +117,7 @@ The footer should contain any information about **Breaking Changes** and is also
 
 ## License
 
-By contributing to EMIS, you agree that your contributions will be licensed under its MIT license.
+By contributing to EWEA, you agree that your contributions will be licensed under its MIT license.
 
 ## Developer's Certificate of Origin 1.1
 
