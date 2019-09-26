@@ -115,7 +115,6 @@ class FocalPeopleListItem extends Component {
 
   render() {
     const {
-      abbreviation,
       mobile,
       email,
       agency,
@@ -148,7 +147,7 @@ class FocalPeopleListItem extends Component {
         />
       ) : (
         <Avatar style={{ backgroundColor: avatarBackground }}>
-          {abbreviation}
+          {name.toUpperCase().charAt(0)}
         </Avatar>
       );
     }
