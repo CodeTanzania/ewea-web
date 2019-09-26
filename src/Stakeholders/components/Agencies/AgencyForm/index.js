@@ -1,5 +1,5 @@
-import { httpActions } from '@codetanzania/emis-api-client';
-import { postAgency, putAgency } from '@codetanzania/emis-api-states';
+import { httpActions } from '@codetanzania/ewea-api-client';
+import { postAgency, putAgency } from '@codetanzania/ewea-api-states';
 import { Button, Col, Form, Input, Row } from 'antd';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
@@ -183,7 +183,7 @@ class AgencyForm extends Component {
           <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
             {/* agency organization */}
             <Form.Item {...formItemLayout} label="Abbreviation">
-              {getFieldDecorator('abbreviation', {
+              {getFieldDecorator('Abbreviation', {
                 rules: [{ required: true }],
                 initialValue: isEditForm ? agency.abbreviation : undefined,
               })(<Input />)}
@@ -204,7 +204,7 @@ class AgencyForm extends Component {
                     rules: [
                       {
                         required: true,
-                        message: 'Focal Person group is required',
+                        message: 'Agency group is required',
                       },
                     ],
                   })(

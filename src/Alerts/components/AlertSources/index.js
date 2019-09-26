@@ -5,7 +5,7 @@ import {
   openAlertSourceForm,
   searchAlertSources,
   selectAlertSource,
-} from '@codetanzania/emis-api-states';
+} from '@codetanzania/ewea-api-states';
 import { Button, Col, Input, Modal, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';

@@ -1,4 +1,4 @@
-import { httpActions } from '@codetanzania/emis-api-client';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import {
   closeFocalPersonForm,
   Connect,
@@ -6,7 +6,7 @@ import {
   openFocalPersonForm,
   searchFocalPeople,
   selectFocalPerson,
-} from '@codetanzania/emis-api-states';
+} from '@codetanzania/ewea-api-states';
 import { Modal } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';

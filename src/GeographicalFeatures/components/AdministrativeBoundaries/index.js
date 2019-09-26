@@ -1,4 +1,4 @@
-import { Connect, getFeatures } from '@codetanzania/emis-api-states';
+import { Connect, getFeatures } from '@codetanzania/ewea-api-states';
 import { Input, Modal, Col, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';

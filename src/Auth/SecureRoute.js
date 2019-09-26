@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { isTokenValid } from '@codetanzania/emis-api-client';
+import { isTokenValid } from '@codetanzania/ewea-api-client';
 import PropTypes from 'prop-types';
 
 /**
