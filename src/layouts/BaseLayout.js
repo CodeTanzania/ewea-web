@@ -179,6 +179,10 @@ const breadcrumbNameMap = {
     title: 'List of drills and exercises',
   },
   '/app/plans': { name: 'Emergency Plans', title: 'Emergency plans module' },
+  '/app/functions': {
+    name: 'Emergency Functions',
+    title: 'Emergency functions module',
+  },
   '/app/plans/planner': { name: 'Planner', title: 'Planner' },
   '/app/plans/procedures': {
     name: 'Standard Operating Procedures',
@@ -436,6 +440,10 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/plans/planner`}
             component={EmergencyPlanPlanner}
+          />
+          <SecureRoute
+            path={`${baseUrl}/functions`}
+            component={StakeholdersFocalPeople}
           />
           <SecureRoute
             path={`${baseUrl}/plans/planner/:planId/:activityId`}

@@ -8,6 +8,7 @@ import incidentIcon from '../assets/icons/incidents-disabled.svg';
 import resourceIcon from '../assets/icons/resources-disabled.svg';
 import stakeholderIcon from '../assets/icons/stakeholders.svg';
 import NavigationMenu from '../components/NavigationMenu';
+import functionIcon from '../assets/icons/emergencyplans.svg';
 import modules from '../modules.json';
 
 /* constants */
@@ -26,6 +27,11 @@ const routes = [
     disabled: true,
   },
   { name: 'Emergency Plans', path: '/plans', icon: planIcon, disabled: true },
+  {
+    name: 'Emergency Functions',
+    path: '/app/functions',
+    icon: functionIcon,
+  },
   {
     name: 'Geographical Features',
     path: '/app/geographicalfeatures',
