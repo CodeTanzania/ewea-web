@@ -30,11 +30,6 @@ EWEA alerts consists of alerts created This component consists of an up to date 
 
 See source code [repository](https://github.com/CodeTanzania/emis-alert).
 
-#### Emergency Plans
-
-EMIS Plans consists of Standard Operating Procedures (SOPs) that provide a guide for early actions that accompany the early warnings.
-
-See source code [repository](https://github.com/CodeTanzania/emis-plan).
 
 #### Dashboards
 
