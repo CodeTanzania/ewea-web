@@ -19,7 +19,7 @@ It that can be shared and analyzed in order generate insights for local authorit
 
 #### Stakeholders
 
-EMIS Stakeholders contains an up to date database of all stakeholders responsible for emergency/disaster management within a specific region.
+EWEA Stakeholders contains an up to date database of all stakeholders responsible for emergency/disaster management within a specific region.
 
 See source code [repository](https://github.com/CodeTanzania/emis-stakeholder).
 
