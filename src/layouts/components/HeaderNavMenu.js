@@ -8,26 +8,52 @@ import geographicalFeaturesIcon from '../../assets/icons/geographicalfeatures-di
 import agenciesIcon from '../../assets/icons/stakeholders/agency.svg';
 import contactsIcon from '../../assets/icons/stakeholders/contacts.svg';
 import rolesIcon from '../../assets/icons/stakeholders/roles.svg';
+import issuedAlertsIcon from '../../assets/icons/alerts/issuedalerts.svg';
+import actionsIcon from '../../assets/icons/alerts/actions.svg';
 import './styles.css';
 
 /* constants */
 const routes = [
-  { name: 'Alerts', path: '/alerts', icon: alertIcon },
-
+  {
+    name: 'Issued Alerts',
+    path: '/app/issuedalerts',
+    icon: issuedAlertsIcon,
+  },
+  {
+    name: 'Actions Taken',
+    path: '/app/actions',
+    icon: actionsIcon,
+  },
+  {
+    name: 'Alert Types',
+    path: '/app/alerttypes',
+    icon: alertIcon,
+  },
   {
     name: 'Geographical Features',
-    path: '/geographicalfeatures',
+    path: '/app/geographicalfeatures',
     icon: geographicalFeaturesIcon,
-    disabled: true,
   },
-  { name: 'Focal People', path: '/focalpeople', icon: contactsIcon },
-  { name: 'Agencies', path: '/agencies', icon: agenciesIcon },
-  { name: 'Roles', path: '/roles', icon: rolesIcon },
+  {
+    name: 'Focal People',
+    path: '/app/focalpeople',
+    icon: contactsIcon,
+  },
+  {
+    name: 'Agencies',
+    path: '/app/agencies',
+    icon: agenciesIcon,
+  },
+  {
+    name: 'Roles',
+    path: '/app/roles',
+    icon: rolesIcon,
+  },
+
   {
     name: 'Dashboards',
-    path: '/dashboards',
+    path: '/app/dashboards',
     icon: dashboardIcon,
-    disabled: true,
   },
 ];
 
