@@ -7,14 +7,29 @@ import rolesIcon from '../assets/icons/stakeholders/roles.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
 import issuedAlertsIcon from '../assets/icons/alerts/issuedalerts.svg';
+import alertIcon from '../assets/icons/alerts.svg';
+import actionsIcon from '../assets/icons/alerts/actions-disabled.svg';
 
 /* constants */
 const routes = [
   {
     name: 'Issued Alerts',
-    path: '/app/alerts/issuedalerts',
+    path: '/app/issuedalerts',
     icon: issuedAlertsIcon,
     description: modules.alertsIssued,
+  },
+  {
+    name: 'Actions Taken',
+    path: '/app/actions',
+    icon: actionsIcon,
+    description: modules.alertsActions,
+    disabled: true,
+  },
+  {
+    name: 'Alert Types',
+    path: '/app/alerttypes',
+    icon: alertIcon,
+    description: modules.alerts,
   },
   {
     name: 'Geographical Features',
