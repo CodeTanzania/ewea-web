@@ -3,14 +3,14 @@ import {
   Connect,
   openFocalPersonForm,
   searchIncidentTypes,
-  selectFocalPerson,
+  selectIncidentType,
   getIncidentTypes,
 } from '@codetanzania/ewea-api-states';
 import { Modal } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import Topbar from '../../../components/Topbar';
-import FocalPersonFilters from './Filters';
+import EmergencyFunctionsFilters from './Filters';
 import FocalPersonForm from './Form';
 import FunctionsList from './List';
 import './styles.css';
@@ -156,7 +156,7 @@ class EmergencyFunctions extends Component {
    * @since 0.1.0
    */
   handleEdit = emergencyFunction => {
-    selectFocalPerson(emergencyFunction);
+    selectIncidentType(emergencyFunction);
     this.setState({ isEditForm: true });
     openFocalPersonForm();
   };
@@ -209,7 +209,7 @@ class EmergencyFunctions extends Component {
 
           {/* filter modal */}
           <Modal
-            title="Filter Focal People"
+            title="Filter Emergency Function"
             visible={showFilters}
             onCancel={this.closeFiltersModal}
             footer={null}
@@ -217,7 +217,7 @@ class EmergencyFunctions extends Component {
             maskClosable={false}
             className="FormModal"
           >
-            <FocalPersonFilters
+            <EmergencyFunctionsFilters
               onCancel={this.closeFiltersModal}
               cached={cached}
               onCache={this.handleOnCachedValues}
@@ -228,7 +228,11 @@ class EmergencyFunctions extends Component {
 
           {/* create/edit form modal */}
           <Modal
-            title={isEditForm ? 'Edit Focal Person' : 'Add New Focal Person'}
+            title={
+              isEditForm
+                ? 'Edit Emergency Function'
+                : 'Add New Emergency Function'
+            }
             visible={showForm}
             className="FormModal"
             footer={null}

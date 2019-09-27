@@ -1,7 +1,7 @@
 import {
   clearFocalPersonFilters,
   Connect,
-  filterFocalPeople,
+  filterIncidentTypes,
 } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Button, Form } from 'antd';
@@ -10,21 +10,21 @@ import React, { Component } from 'react';
 import SearchableSelectInput from '../../../../components/SearchableSelectInput';
 
 /* declarations */
-const { getPartyGroups, getJurisdictions, getRoles, getAgencies } = httpActions;
+const { getIncidentTypes } = httpActions;
 
 /**
  * @class
- * @name FocalPeopleFilters
- * @description Filter modal component for filtering contacts
+ * @name EmergencyFunctionsFilters
+ * @description Filter modal component for filtering functions
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class FocalPeopleFilters extends Component {
+class EmergencyFunctionsFilters extends Component {
   static propTypes = {
     filter: PropTypes.objectOf(
       PropTypes.shape({
-        groups: PropTypes.arrayOf(PropTypes.string),
+        families: PropTypes.arrayOf(PropTypes.string),
       })
     ),
     form: PropTypes.shape({
@@ -33,10 +33,9 @@ class FocalPeopleFilters extends Component {
     }).isRequired,
     onCancel: PropTypes.func.isRequired,
     cached: PropTypes.shape({
-      groups: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
-      locations: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
-      roles: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
-      agencies: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+      natures: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+      families: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+      codes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
     }),
     onCache: PropTypes.func.isRequired,
     onClearCache: PropTypes.func.isRequired,
@@ -67,7 +66,7 @@ class FocalPeopleFilters extends Component {
 
     validateFields((error, values) => {
       if (!error) {
-        filterFocalPeople(values);
+        filterIncidentTypes(values);
         onCancel();
       }
     });
@@ -134,68 +133,51 @@ class FocalPeopleFilters extends Component {
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
         {/* start contact group filters */}
-        <Form.Item {...formItemLayout} label="By Area(s)">
-          {getFieldDecorator('location', {
-            initialValue: filter ? filter.location : [],
+        <Form.Item {...formItemLayout} label="By Nature">
+          {getFieldDecorator('nature', {
+            initialValue: filter ? filter.nature : [],
           })(
             <SearchableSelectInput
-              onSearch={getJurisdictions}
+              onSearch={getIncidentTypes}
               optionLabel="name"
               optionValue="_id"
               mode="multiple"
-              onCache={locations => this.cacheFilters({ locations })}
-              initialValue={cached && cached.locations ? cached.locations : []}
+              onCache={natures => this.cacheFilters({ natures })}
+              initialValue={cached && cached.natures ? cached.natures : []}
             />
           )}
         </Form.Item>
         {/* end contact group filters */}
 
         {/* start contact group filters */}
-        <Form.Item {...formItemLayout} label="By Group(s)">
-          {getFieldDecorator('group', {
-            initialValue: filter ? filter.group : [],
+        <Form.Item {...formItemLayout} label="By Family">
+          {getFieldDecorator('family', {
+            initialValue: filter ? filter.family : [],
           })(
             <SearchableSelectInput
-              onSearch={getPartyGroups}
+              onSearch={getIncidentTypes}
               optionLabel="name"
               optionValue="_id"
               mode="multiple"
-              onCache={groups => this.cacheFilters({ groups })}
-              initialValue={cached && cached.groups ? cached.groups : []}
+              onCache={families => this.cacheFilters({ families })}
+              initialValue={cached && cached.families ? cached.families : []}
             />
           )}
         </Form.Item>
         {/* end contact group filters */}
 
         {/* start contact group filters */}
-        <Form.Item {...formItemLayout} label="By Role(s)">
-          {getFieldDecorator('role', {
-            initialValue: filter ? filter.role : [],
+        <Form.Item {...formItemLayout} label="By code(s)">
+          {getFieldDecorator('code', {
+            initialValue: filter ? filter.codes : [],
           })(
             <SearchableSelectInput
-              onSearch={getRoles}
+              onSearch={getIncidentTypes}
               optionLabel="name"
               optionValue="_id"
               mode="multiple"
-              onCache={roles => this.cacheFilters({ roles })}
-              initialValue={cached && cached.roles ? cached.roles : []}
-            />
-          )}
-        </Form.Item>
-        {/* end contact group filters */}
-
-        {/* start contact group filters */}
-        <Form.Item {...formItemLayout} label="By Agencies">
-          {getFieldDecorator('party', {
-            initialValue: filter ? filter.party : [],
-          })(
-            <SearchableSelectInput
-              onSearch={getAgencies}
-              optionLabel="name"
-              optionValue="_id"
-              mode="multiple"
-              onCache={agencies => this.cacheFilters({ agencies })}
-              initialValue={cached && cached.agencies ? cached.agencies : []}
+              onCache={codes => this.cacheFilters({ codes })}
+              initialValue={cached && cached.codes ? cached.codes : []}
             />
           )}
         </Form.Item>
@@ -217,6 +199,6 @@ class FocalPeopleFilters extends Component {
   }
 }
 
-export default Connect(Form.create()(FocalPeopleFilters), {
-  filter: 'focalPeople.filter',
+export default Connect(Form.create()(EmergencyFunctionsFilters), {
+  filter: 'incidentTypes.filter',
 });
