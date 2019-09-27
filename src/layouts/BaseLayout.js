@@ -38,7 +38,7 @@ const breadcrumbNameMap = {
   '/app': { name: 'Home', title: 'EMIS' },
   /* Alerts Routes */
   '/app/alerts': { name: 'Alerts', title: 'Alerts module' },
-  '/app/alerttypes': { name: 'AlertTypes', title: 'Alert Types module' },
+  '/app/alerttypes': { name: 'Alert Types', title: 'Alert Types module' },
   '/app/actions': {
     name: 'Actions Taken',
     title: 'List of all performed actions',
