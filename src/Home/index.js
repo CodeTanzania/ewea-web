@@ -9,6 +9,7 @@ import modules from '../modules.json';
 import issuedAlertsIcon from '../assets/icons/alerts/issuedalerts.svg';
 import alertIcon from '../assets/icons/alerts.svg';
 import actionsIcon from '../assets/icons/alerts/actions.svg';
+import actionCatalogIcon from '../assets/icons/alerts/actioncatalog.svg';
 
 /* constants */
 const routes = [
@@ -22,6 +23,12 @@ const routes = [
     name: 'Actions Taken',
     path: '/app/actions',
     icon: actionsIcon,
+    description: modules.alertsActions,
+  },
+  {
+    name: 'Action Catalog',
+    path: '/app/actioncatalog',
+    icon: actionCatalogIcon,
     description: modules.alertsActions,
   },
   {

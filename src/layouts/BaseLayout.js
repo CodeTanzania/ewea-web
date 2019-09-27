@@ -6,6 +6,7 @@ import UserMenu from './components/UserMenu';
 import Alerts from '../Alerts';
 import AlertTypes from '../Alerts/components/AlertTypes';
 import AlertsActions from '../Alerts/layouts/Actions';
+import ActionCatalog from '../Alerts/layouts/Catalog';
 import IssuedAlerts from '../Alerts/components/IssuedAlerts';
 import AlertsFeedback from '../Alerts/layouts/Feedback';
 import AlertsFeeds from '../Alerts/layouts/Feeds';
@@ -35,19 +36,35 @@ import './styles.css';
 /* constants */
 const { Header, Content } = Layout;
 const breadcrumbNameMap = {
-  '/app': { name: 'Home', title: 'EMIS' },
+  '/app': {
+    name: 'Home',
+    title: 'EMIS',
+  },
   /* Alerts Routes */
-  '/app/alerts': { name: 'Alerts', title: 'Alerts module' },
-  '/app/alerttypes': { name: 'AlertTypes', title: 'Alert Types module' },
+  '/app/alerts': {
+    name: 'Alerts',
+    title: 'Alerts module',
+  },
+  '/app/alerttypes': {
+    name: 'AlertTypes',
+    title: 'Alert Types module',
+  },
   '/app/actions': {
     name: 'Actions Taken',
     title: 'List of all performed actions',
+  },
+  '/app/actioncatalog': {
+    name: 'Action Catalog',
+    title: 'List of all actions to be performed',
   },
   '/app/alerts/feedback': {
     name: 'Surveys & Feedback',
     title: 'Alerts surveys and feedback',
   },
-  '/app/alerts/feeds': { name: 'Feeds', title: 'Alerts feeds' },
+  '/app/alerts/feeds': {
+    name: 'Feeds',
+    title: 'Alerts feeds',
+  },
   '/app/alerts/issuedalerts': {
     name: 'Issued Alerts',
     title: 'List of all alerts',
@@ -118,7 +135,10 @@ const breadcrumbNameMap = {
     name: 'Roles',
     title: 'Roles of Stakeholders',
   },
-  '/app/stakeholders': { name: 'Stakeholders', title: 'Stakeholders module' },
+  '/app/stakeholders': {
+    name: 'Stakeholders',
+    title: 'Stakeholders module',
+  },
 };
 
 /**
@@ -212,6 +232,10 @@ const BaseLayout = props => {
             component={IssuedAlerts}
           />
           <SecureRoute path={`${baseUrl}/actions`} component={AlertsActions} />
+          <SecureRoute
+            path={`${baseUrl}/actioncatalog`}
+            component={ActionCatalog}
+          />
           <SecureRoute
             path={`${baseUrl}/alerts/feeds`}
             component={AlertsFeeds}
