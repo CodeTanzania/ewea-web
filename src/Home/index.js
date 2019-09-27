@@ -32,18 +32,6 @@ const routes = [
     description: modules.alertsActions,
   },
   {
-    name: 'Alert Types',
-    path: '/app/alerttypes',
-    icon: alertIcon,
-    description: modules.alerts,
-  },
-  {
-    name: 'Geographical Features',
-    path: '/app/geographicalfeatures',
-    icon: geographicalFeaturesIcon,
-    description: modules.geographicalfeatures,
-  },
-  {
     name: 'Focal People',
     path: '/app/focalpeople',
     icon: contactsIcon,
@@ -61,7 +49,18 @@ const routes = [
     icon: rolesIcon,
     description: modules.stakeholdersRoles,
   },
-
+  {
+    name: 'Alert Types',
+    path: '/app/alerttypes',
+    icon: alertIcon,
+    description: modules.alerts,
+  },
+  {
+    name: 'Geographical Features',
+    path: '/app/geographicalfeatures',
+    icon: geographicalFeaturesIcon,
+    description: modules.geographicalfeatures,
+  },
   {
     name: 'Dashboards',
     path: '/app/dashboards',
