@@ -1,10 +1,10 @@
 import {
-  closeFocalPersonForm,
   Connect,
-  openFocalPersonForm,
   searchIncidentTypes,
   selectIncidentType,
   getIncidentTypes,
+  openIncidentTypeForm,
+  closeIncidentTypeForm,
 } from '@codetanzania/ewea-api-states';
 import { Modal } from 'antd';
 import PropTypes from 'prop-types';
@@ -108,26 +108,26 @@ class EmergencyFunctions extends Component {
 
   /**
    * @function
-   * @name openFocalPersonForm
+   * @name openEmergencyFunctionForm
    * @description Open emergencyFunction form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openFocalPersonForm = () => {
-    openFocalPersonForm();
+  openEmergencyFunctionForm = () => {
+    openIncidentTypeForm();
   };
 
   /**
    * @function
-   * @name openFocalPersonForm
+   * @name closeEmergencyFunctionForm
    * @description close emergencyFunction form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeFocalPersonForm = () => {
-    closeFocalPersonForm();
+  closeEmergencyFunctionForm = () => {
+    closeIncidentTypeForm();
     this.setState({ isEditForm: false });
   };
 
@@ -158,7 +158,7 @@ class EmergencyFunctions extends Component {
   handleEdit = emergencyFunction => {
     selectIncidentType(emergencyFunction);
     this.setState({ isEditForm: true });
-    openFocalPersonForm();
+    openIncidentTypeForm();
   };
 
   render() {
@@ -189,7 +189,7 @@ class EmergencyFunctions extends Component {
               icon: 'plus',
               size: 'large',
               title: 'Add New Emergency Function',
-              onClick: this.openFocalPersonForm,
+              onClick: this.openEmergencyFunctionForm,
             },
           ]}
         />
@@ -236,7 +236,7 @@ class EmergencyFunctions extends Component {
             visible={showForm}
             className="FormModal"
             footer={null}
-            onCancel={this.closeFocalPersonForm}
+            onCancel={this.closeEmergencyFunctionForm}
             destroyOnClose
             maskClosable={false}
             afterClose={this.handleAfterCloseForm}
@@ -245,7 +245,7 @@ class EmergencyFunctions extends Component {
               posting={posting}
               isEditForm={isEditForm}
               emergencyFunction={emergencyFunction}
-              onCancel={this.closeFocalPersonForm}
+              onCancel={this.closeEmergencyFunctionForm}
             />
           </Modal>
           {/* end create/edit form modal */}
