@@ -6,7 +6,7 @@ import UserMenu from './components/UserMenu';
 import Alerts from '../Alerts';
 import AlertTypes from '../Alerts/components/AlertTypes';
 import AlertsActions from '../Alerts/layouts/Actions';
-import ActionCatalog from '../Alerts/layouts/Catalog';
+import ActionCatalog from '../Alerts/components/ActionCatalog';
 import IssuedAlerts from '../Alerts/components/IssuedAlerts';
 import AlertsFeedback from '../Alerts/layouts/Feedback';
 import AlertsFeeds from '../Alerts/layouts/Feeds';
