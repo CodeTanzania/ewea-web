@@ -208,7 +208,7 @@ const BaseLayout = props => {
             component={AlertTypes}
           />
           <SecureRoute
-            path={`${baseUrl}/alerts/issuedalerts`}
+            path={`${baseUrl}/issuedalerts`}
             component={IssuedAlerts}
           />
           <SecureRoute path={`${baseUrl}/actions`} component={AlertsActions} />

@@ -14,7 +14,7 @@ import actionsIcon from '../assets/icons/alerts/actions-disabled.svg';
 const routes = [
   {
     name: 'Issued Alerts',
-    path: '/app/alerts/issuedalerts',
+    path: '/app/issuedalerts',
     icon: issuedAlertsIcon,
     description: modules.alertsIssued,
   },
