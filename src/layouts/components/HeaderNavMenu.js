@@ -27,18 +27,8 @@ const routes = [
   },
   {
     name: 'Action Catalog',
-    path: '/app/action/catalog',
+    path: '/app/actioncatalog',
     icon: actionCatalogIcon,
-  },
-  {
-    name: 'Alert Types',
-    path: '/app/alerttypes',
-    icon: alertIcon,
-  },
-  {
-    name: 'Geographical Features',
-    path: '/app/geographicalfeatures',
-    icon: geographicalFeaturesIcon,
   },
   {
     name: 'Focal People',
@@ -55,7 +45,16 @@ const routes = [
     path: '/app/roles',
     icon: rolesIcon,
   },
-
+  {
+    name: 'Alert Types',
+    path: '/app/alerttypes',
+    icon: alertIcon,
+  },
+  {
+    name: 'Geographical Features',
+    path: '/app/geographicalfeatures',
+    icon: geographicalFeaturesIcon,
+  },
   {
     name: 'Dashboards',
     path: '/app/dashboards',
