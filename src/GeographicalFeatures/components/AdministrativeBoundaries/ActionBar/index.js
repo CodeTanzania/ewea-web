@@ -1,4 +1,4 @@
-import { getFeatures } from '@codetanzania/emis-api-states';
+import { getFeatures } from '@codetanzania/ewea-api-states';
 import { Button, Col, Pagination, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';

@@ -2,7 +2,7 @@ import {
   postFeature,
   putFeature,
   Connect,
-} from '@codetanzania/emis-api-states';
+} from '@codetanzania/ewea-api-states';
 import { Button, Form, Input, Select } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';

@@ -1,4 +1,4 @@
-import { postRole, putRole } from '@codetanzania/emis-api-states';
+import { postRole, putRole } from '@codetanzania/ewea-api-states';
 import { Button, Col, Form, Input, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
