@@ -63,7 +63,7 @@ const routes = [
   },
   {
     name: 'Dashboards',
-    path: '/app/dashboards',
+    path: '/app/overview',
     icon: dashboardIcon,
     description: modules.dashboards,
   },

@@ -6,12 +6,17 @@ import PropTypes from 'prop-types';
 /**
  * @function
  * @name SecureRoute
- * @description Route which check authentication status and route to appropiate component
+ * @description Route which check authentication status and route to appropriate
+ *  component
  *
  * @param {object} props  React props
- * @param {object} props.Component Component to be rendered
+ * @param {object} props.component Component to be rendered
+ * @param {object} props.rest rest All remaining props for secure root
  *
  * @returns {object} React Element
+ *
+ * @version 0.1.0
+ * @since 0.1.0
  */
 const SecureRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = isTokenValid();
