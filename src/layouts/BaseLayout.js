@@ -28,6 +28,7 @@ import StakeholdersAgencies from '../Stakeholders/components/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
 import StakeholdersNotifications from '../Stakeholders/components/Notifications';
 import StakeholdersRoles from '../Stakeholders/components/Roles';
+import OverviewDashboard from '../Dashboards';
 import SecureRoute from '../Auth/SecureRoute';
 import HeaderNavMenu from './components/HeaderNavMenu';
 import './styles.css';
@@ -119,6 +120,7 @@ const breadcrumbNameMap = {
     title: 'Roles of Stakeholders',
   },
   '/app/stakeholders': { name: 'Stakeholders', title: 'Stakeholders module' },
+  '/app/overview': { name: 'Overview Dashboard', title: 'Overview Dashboard' },
 };
 
 /**
@@ -289,6 +291,10 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/roles`}
             component={StakeholdersRoles}
+          />
+          <SecureRoute
+            path={`${baseUrl}/overview`}
+            component={OverviewDashboard}
           />
           <SecureRoute component={PageNotFound} />
         </Switch>
