@@ -1,5 +1,5 @@
 import React from 'react';
-import dashboardIcon from '../assets/icons/dashboards-disabled.svg';
+import dashboardIcon from '../assets/icons/dashboards.svg';
 import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures-disabled.svg';
 import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
 import contactsIcon from '../assets/icons/stakeholders/contacts.svg';
