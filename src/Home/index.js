@@ -1,6 +1,6 @@
 import React from 'react';
 import dashboardIcon from '../assets/icons/dashboards.svg';
-import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures-disabled.svg';
+import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures.svg';
 import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
 import contactsIcon from '../assets/icons/stakeholders/contacts.svg';
 import rolesIcon from '../assets/icons/stakeholders/roles.svg';
@@ -8,7 +8,8 @@ import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
 import issuedAlertsIcon from '../assets/icons/alerts/issuedalerts.svg';
 import alertIcon from '../assets/icons/alerts.svg';
-import actionsIcon from '../assets/icons/alerts/actions-disabled.svg';
+import actionsIcon from '../assets/icons/alerts/actions.svg';
+import actionCatalogIcon from '../assets/icons/alerts/actioncatalog.svg';
 
 /* constants */
 const routes = [
@@ -23,20 +24,12 @@ const routes = [
     path: '/app/actions',
     icon: actionsIcon,
     description: modules.alertsActions,
-    disabled: true,
   },
   {
-    name: 'Alert Types',
-    path: '/app/alerttypes',
-    icon: alertIcon,
-    description: modules.alerts,
-  },
-  {
-    name: 'Geographical Features',
-    path: '/app/geographicalfeatures',
-    icon: geographicalFeaturesIcon,
-    description: modules.geographicalfeatures,
-    disabled: true,
+    name: 'Action Catalog',
+    path: '/app/actioncatalog',
+    icon: actionCatalogIcon,
+    description: modules.alertsActions,
   },
   {
     name: 'Focal People',
@@ -56,7 +49,18 @@ const routes = [
     icon: rolesIcon,
     description: modules.stakeholdersRoles,
   },
-
+  {
+    name: 'Alert Types',
+    path: '/app/alerttypes',
+    icon: alertIcon,
+    description: modules.alerts,
+  },
+  {
+    name: 'Geographical Features',
+    path: '/app/geographicalfeatures',
+    icon: geographicalFeaturesIcon,
+    description: modules.geographicalfeatures,
+  },
   {
     name: 'Dashboards',
     path: '/app/overview',
