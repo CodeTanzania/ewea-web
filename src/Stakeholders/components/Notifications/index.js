@@ -2,8 +2,8 @@ import {
   Connect,
   getCampaigns,
   searchCampaigns,
-} from '@codetanzania/emis-api-states';
-import { httpActions } from '@codetanzania/emis-api-client';
+} from '@codetanzania/ewea-api-states';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import PropTypes from 'prop-types';
 import { Modal } from 'antd';
 import React, { Component, Fragment } from 'react';

@@ -1,26 +1,31 @@
-.Alerts {
-  padding: 40px;
+.AlertsList {
+  padding: 0 40px;
 }
 
+.FormModal {
+  width: 50% !important;
+}
+
+@media screen and (max-width: 1024px) {
+  .FormModal {
+    width: 70% !important;
+  }
+}
 
 @media screen and (max-width: 768px) {
-  .Alerts {
-    padding: 30px;
+  .AlertsList {
+    padding: 0 30px;
   }
-
- .Alerts .ant-btn-lg {
-  padding: 0 5px;
-  font-size: 14px;
- }
-}
-
-@media screen and (max-width: 426px) {
-  .Alerts {
-    padding: 20px;
-  }
-  .searchBox {
-    padding-bottom: 10px;
+  .FormModal {
+    width: 80% !important;
   }
 }
-
-
+ 
+ @media screen and (max-width: 426px) {
+  .AlertsList {
+    padding: 0 20px;
+  }
+  .FormModal {
+    width: 90% !important;
+  }
+}

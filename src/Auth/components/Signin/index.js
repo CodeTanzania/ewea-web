@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Icon, Input, Button } from 'antd';
-import { Connect, signin, initializeApp } from '@codetanzania/emis-api-states';
+import { Connect, signin, initializeApp } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
 import logo from '../../../assets/icons/emislogo-blue.png';
 import './styles.css';

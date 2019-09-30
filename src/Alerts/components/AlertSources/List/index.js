@@ -2,8 +2,8 @@ import {
   deleteAlertSource,
   paginateAlertSources,
   refreshAlertSources,
-} from '@codetanzania/emis-api-states';
-import { httpActions } from '@codetanzania/emis-api-client';
+} from '@codetanzania/ewea-api-states';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import { List } from 'antd';
 import concat from 'lodash/concat';
 import map from 'lodash/map';

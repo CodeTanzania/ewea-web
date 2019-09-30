@@ -2,7 +2,7 @@ import { Button, Checkbox, Col, Pagination, Row } from 'antd';
 import {
   paginateFeatures,
   refreshFeatures,
-} from '@codetanzania/emis-api-states';
+} from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { notifyError, notifySuccess } from '../../../../util';
