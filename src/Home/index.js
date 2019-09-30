@@ -8,7 +8,7 @@ import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
 import issuedAlertsIcon from '../assets/icons/alerts/issuedalerts.svg';
 import alertIcon from '../assets/icons/alerts.svg';
-import actionsIcon from '../assets/icons/alerts/actions-disabled.svg';
+import actionsIcon from '../assets/icons/alerts/actions.svg';
 
 /* constants */
 const routes = [
@@ -23,7 +23,6 @@ const routes = [
     path: '/app/actions',
     icon: actionsIcon,
     description: modules.alertsActions,
-    disabled: true,
   },
   {
     name: 'Alert Types',

@@ -5,7 +5,6 @@ import { Link, Switch } from 'react-router-dom';
 import UserMenu from './components/UserMenu';
 import Alerts from '../Alerts';
 import AlertTypes from '../Alerts/components/AlertTypes';
-import AlertsActions from '../Alerts/layouts/Actions';
 import IssuedAlerts from '../Alerts/components/IssuedAlerts';
 import AlertsFeedback from '../Alerts/layouts/Feedback';
 import AlertsFeeds from '../Alerts/layouts/Feeds';
@@ -29,6 +28,7 @@ import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
 import StakeholdersNotifications from '../Stakeholders/components/Notifications';
 import StakeholdersRoles from '../Stakeholders/components/Roles';
 import OverviewDashboard from '../Dashboards';
+import ActionsTaken from '../Dashboards/ActionsTaken';
 import SecureRoute from '../Auth/SecureRoute';
 import HeaderNavMenu from './components/HeaderNavMenu';
 import './styles.css';
@@ -213,7 +213,6 @@ const BaseLayout = props => {
             path={`${baseUrl}/issuedalerts`}
             component={IssuedAlerts}
           />
-          <SecureRoute path={`${baseUrl}/actions`} component={AlertsActions} />
           <SecureRoute
             path={`${baseUrl}/alerts/feeds`}
             component={AlertsFeeds}
@@ -296,6 +295,7 @@ const BaseLayout = props => {
             path={`${baseUrl}/overview`}
             component={OverviewDashboard}
           />
+          <SecureRoute path={`${baseUrl}/actions`} component={ActionsTaken} />
           <SecureRoute component={PageNotFound} />
         </Switch>
       </Content>
