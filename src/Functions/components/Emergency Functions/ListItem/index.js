@@ -1,6 +1,5 @@
 import { Avatar, Checkbox, Col, Modal, Row } from 'antd';
 import PropTypes from 'prop-types';
-import randomColor from 'randomcolor';
 import React, { Component } from 'react';
 import ListItemActions from '../../../../components/ListItemActions';
 import './styles.css';
@@ -34,6 +33,7 @@ class EmergencyFunctionsListItem extends Component {
     cap: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     nature: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired,
     code: PropTypes.string.isRequired,
     family: PropTypes.string.isRequired,
     onArchive: PropTypes.func.isRequired,
@@ -119,10 +119,10 @@ class EmergencyFunctionsListItem extends Component {
       name,
       nature,
       onEdit,
+      color,
     } = this.props;
     const { isHovered } = this.state;
     const { isSelected } = this.props;
-    const avatarBackground = randomColor();
     let sideComponent = null;
 
     if (isSelected) {
@@ -141,9 +141,7 @@ class EmergencyFunctionsListItem extends Component {
           checked={isSelected}
         />
       ) : (
-        <Avatar style={{ backgroundColor: avatarBackground }}>
-          {abbreviation}
-        </Avatar>
+        <Avatar style={{ backgroundColor: color }}>{abbreviation}</Avatar>
       );
     }
 

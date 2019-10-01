@@ -229,6 +229,7 @@ class FunctionsList extends Component {
               }
               code={emergencyFunction.code}
               cap={emergencyFunction.cap}
+              color={emergencyFunction.color}
               isSelected={
                 // eslint-disable-next-line
                 map(selectedEmergencyFunctions, item => item._id).includes(

@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import Topbar from '../../../components/Topbar';
 import EmergencyFunctionsFilters from './Filters';
-import FocalPersonForm from './Form';
+import FunctionForm from './Form';
 import FunctionsList from './List';
 import './styles.css';
 
@@ -241,7 +241,7 @@ class EmergencyFunctions extends Component {
             maskClosable={false}
             afterClose={this.handleAfterCloseForm}
           >
-            <FocalPersonForm
+            <FunctionForm
               posting={posting}
               isEditForm={isEditForm}
               emergencyFunction={emergencyFunction}

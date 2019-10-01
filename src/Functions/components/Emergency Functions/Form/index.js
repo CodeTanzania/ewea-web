@@ -1,98 +1,116 @@
-import { httpActions } from '@codetanzania/ewea-api-client';
-import { postFocalPerson, putFocalPerson } from '@codetanzania/ewea-api-states';
-import { Button, Col, Form, Input, Row } from 'antd';
-import upperFirst from 'lodash/upperFirst';
+import {
+  postIncidentType,
+  putIncidentType,
+  Connect,
+} from '@codetanzania/ewea-api-states';
+import { Button, Form, Input, Select, Col, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import SearchableSelectInput from '../../../../components/SearchableSelectInput';
+import ColorPicker from 'rc-color-picker';
 import { notifyError, notifySuccess } from '../../../../util';
+import 'rc-color-picker/assets/index.css';
 
-/* constants */
-const { getAgencies, getFeatures, getRoles, getPartyGroups } = httpActions;
-const { TextArea } = Input;
+const { Option } = Select;
 
 /**
  * @class
- * @name FocalPersonForm
- * @description Render Focal Person form for creating and updating stakeholder
- * focalPerson details
+ * @name FunctionForm
+ * @description Render function form for creating/editing function
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class FocalPersonForm extends Component {
+
+class FunctionForm extends Component {
   static propTypes = {
     isEditForm: PropTypes.bool.isRequired,
-    focalPerson: PropTypes.shape({
+    emergencyFunction: PropTypes.shape({
       name: PropTypes.string,
-      title: PropTypes.string,
-      abbreviation: PropTypes.string,
-      mobile: PropTypes.string,
-      email: PropTypes.string,
-      party: PropTypes.shape({
-        name: PropTypes.string,
-        title: PropTypes.string,
-      }),
-      group: PropTypes.string,
-      location: PropTypes.string,
-      role: PropTypes.string,
-      landline: PropTypes.string,
-      fax: PropTypes.string,
-      physicalAddress: PropTypes.string,
-      postalAddress: PropTypes.string,
-    }).isRequired,
+      nature: PropTypes.string,
+      family: PropTypes.string,
+      color: PropTypes.string,
+      cap: PropTypes.string,
+      code: PropTypes.string,
+    }),
     form: PropTypes.shape({
       getFieldDecorator: PropTypes.func,
       validateFieldsAndScroll: PropTypes.func,
+      setFieldsValue: PropTypes.func,
     }).isRequired,
-    groups: PropTypes.arrayOf(PropTypes.string).isRequired,
+    families: PropTypes.arrayOf(PropTypes.string).isRequired,
+    natures: PropTypes.arrayOf(PropTypes.string).isRequired,
+    caps: PropTypes.arrayOf(PropTypes.string).isRequired,
     onCancel: PropTypes.func.isRequired,
     posting: PropTypes.bool.isRequired,
+  };
+
+  static defaultProps = {
+    emergencyFunction: null,
+  };
+
+  /**
+   * @function
+   * @name onChangeColor
+   * @description Handle changing of color
+   *
+   * @param {string} color event object
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  onChangeColor = ({ color }) => {
+    const {
+      form: { setFieldsValue },
+    } = this.props;
+    setFieldsValue({ color });
   };
 
   /**
    * @function
    * @name handleSubmit
-   * @description Handle submit form action
+   * @description Handle create/edit action
    *
-   * @param {object} event onSubmit event object
-   *
+   * @param {object} e event object
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = event => {
-    event.preventDefault();
+  handleSubmit = e => {
+    e.preventDefault();
 
     const {
       form: { validateFieldsAndScroll },
-      focalPerson,
+      emergencyFunction,
       isEditForm,
     } = this.props;
 
     validateFieldsAndScroll((error, values) => {
       if (!error) {
         if (isEditForm) {
-          const updatedFocalPerson = Object.assign({}, focalPerson, values);
-          putFocalPerson(
-            updatedFocalPerson,
+          const updatedIncidentType = Object.assign(
+            {},
+            emergencyFunction,
+            values
+          );
+          putIncidentType(
+            updatedIncidentType,
             () => {
-              notifySuccess('Focal Person was updated successfully');
+              notifySuccess('Function was updated successfully');
             },
             () => {
               notifyError(
-                'Something occurred while updating focal Person, please try again!'
+                `Something occurred while updating Function,
+                 please try again!`
               );
             }
           );
         } else {
-          postFocalPerson(
+          postIncidentType(
             values,
             () => {
-              notifySuccess('Focal Person was created successfully');
+              notifySuccess('Function was created successfully');
             },
             () => {
               notifyError(
-                'Something occurred while saving focal Person, please try again!'
+                'Something occurred while saving Function, please try again!'
               );
             }
           );
@@ -104,9 +122,12 @@ class FocalPersonForm extends Component {
   render() {
     const {
       isEditForm,
-      focalPerson,
+      emergencyFunction,
       posting,
       onCancel,
+      families,
+      caps,
+      natures,
       form: { getFieldDecorator },
     } = this.props;
 
@@ -131,233 +152,93 @@ class FocalPersonForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* focalPerson name, phone number and email section */}
-        <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson name */}
-            <Form.Item {...formItemLayout} label="Name">
-              {getFieldDecorator('name', {
-                initialValue: isEditForm ? focalPerson.name : undefined,
-                rules: [
-                  {
-                    required: true,
-                    message: 'Focal Person full name is required',
-                  },
-                ],
-              })(<Input />)}
-            </Form.Item>
-            {/* end focalPerson name */}
-          </Col>
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            <Row type="flex" justify="space-between">
-              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
-                {/* focalPerson mobile number */}
-                <Form.Item {...formItemLayout} label="Phone Number">
-                  {getFieldDecorator('mobile', {
-                    initialValue: isEditForm ? focalPerson.mobile : undefined,
-                    rules: [
-                      { required: true, message: 'Phone number is required' },
-                    ],
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson mobile number */}
-              </Col>
-              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24} span={12}>
-                {/* focalPerson email */}
-                <Form.Item {...formItemLayout} label="Email">
-                  {getFieldDecorator('email', {
-                    initialValue: isEditForm ? focalPerson.email : undefined,
-                    rules: [
-                      {
-                        type: 'email',
-                        message: 'The input is not valid E-mail!',
-                      },
-                      {
-                        required: true,
-                        message: 'E-mail address is required',
-                      },
-                    ],
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson email */}
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-        {/* end focalPerson name, phone number and email section */}
+        {/* function  name */}
+        <Form.Item {...formItemLayout} label="Name ">
+          {getFieldDecorator('name', {
+            initialValue: isEditForm ? emergencyFunction.name : undefined,
+            rules: [{ required: true, message: 'name is required' }],
+          })(<Input placeholder="e.g Flood" />)}
+        </Form.Item>
+        {/* end function  name */}
 
-        {/* focalPerson organization, group and area section */}
-        <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson organization */}
-            <Form.Item {...formItemLayout} label="Organization/Agency">
-              {getFieldDecorator('party', {
-                initialValue:
-                  isEditForm && focalPerson.party
-                    ? focalPerson.party._id // eslint-disable-line
-                    : undefined,
+        {/* function nature */}
+        <Form.Item {...formItemLayout} label="Nature">
+          {getFieldDecorator('nature', {
+            initialValue: isEditForm ? emergencyFunction.nature : undefined,
+            rules: [{ required: true, message: 'Function nature is required' }],
+          })(
+            <Select placeholder="e.g Natural">
+              {natures.map(nature => (
+                <Option key={nature} value={nature}>
+                  {nature}
+                </Option>
+              ))}
+            </Select>
+          )}
+        </Form.Item>
+        {/* end nature */}
+
+        {/* function cap */}
+        <Form.Item {...formItemLayout} label="Cap">
+          {getFieldDecorator('cap', {
+            initialValue: isEditForm ? emergencyFunction.cap : undefined,
+            rules: [{ required: true, message: 'Cap is required' }],
+          })(
+            <Select placeholder="e.g Geo">
+              {caps.map(cap => (
+                <Option key={cap} value={cap}>
+                  {cap}
+                </Option>
+              ))}
+            </Select>
+          )}
+        </Form.Item>
+        {/* end function  cap */}
+
+        {/*  function family */}
+        <Form.Item {...formItemLayout} label="Family">
+          {getFieldDecorator('family', {
+            initialValue: isEditForm ? emergencyFunction.family : undefined,
+            rules: [{ required: true, message: 'Family is required' }],
+          })(
+            <Select placeholder="e.g Geographical">
+              {families.map(family => (
+                <Option key={family} value={family}>
+                  {family}
+                </Option>
+              ))}
+            </Select>
+          )}
+        </Form.Item>
+        {/* end function */}
+
+        {/* function  */}
+        <Form.Item {...formItemLayout} label="Code">
+          {getFieldDecorator('code', {
+            initialValue: isEditForm ? emergencyFunction.code : undefined,
+            rules: [{ required: true, message: 'Code is required' }],
+          })(<Input placeholder="e.g NMS" />)}
+        </Form.Item>
+        {/* end function */}
+
+        <Row>
+          <Col span={19}>
+            <Form.Item {...formItemLayout} label="Color Code">
+              {getFieldDecorator('color', {
+                initialValue: isEditForm ? emergencyFunction.color : undefined,
               })(
-                <SearchableSelectInput
-                  onSearch={getAgencies}
-                  optionLabel="name"
-                  optionValue="_id"
-                  initialValue={
-                    isEditForm && focalPerson.party
-                      ? focalPerson.party
-                      : undefined
-                  }
+                <Input
+                  placeholder="e.g #36c"
+                  title="Click button to select color"
                 />
               )}
             </Form.Item>
-            {/* end focalPerson organization */}
           </Col>
-
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            <Row type="flex" justify="space-between">
-              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
-                {/* focalPerson group */}
-                <Form.Item {...formItemLayout} label="Group">
-                  {getFieldDecorator('group', {
-                    initialValue:
-                      isEditForm && focalPerson.group
-                        ? focalPerson.group._id // eslint-disable-line
-                        : undefined,
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Focal Person group is required',
-                      },
-                    ],
-                  })(
-                    <SearchableSelectInput
-                      onSearch={getPartyGroups}
-                      optionLabel="name"
-                      optionValue="_id"
-                      initialValue={
-                        isEditForm && focalPerson.group
-                          ? focalPerson.group
-                          : undefined
-                      }
-                    />
-                  )}
-                </Form.Item>
-                {/* end focalPerson group */}
-              </Col>
-              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
-                {/* focalPerson location */}
-                <Form.Item {...formItemLayout} label="Area">
-                  {getFieldDecorator('location', {
-                    initialValue:
-                      isEditForm && focalPerson.location
-                        ? focalPerson.location._id // eslint-disable-line
-                        : undefined,
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Focal Person area is required',
-                      },
-                    ],
-                  })(
-                    <SearchableSelectInput
-                      onSearch={getFeatures}
-                      optionLabel={feature =>
-                        `${feature.name} (${upperFirst(feature.type)})`
-                      }
-                      optionValue="_id"
-                      initialValue={
-                        isEditForm && focalPerson.location
-                          ? focalPerson.location
-                          : undefined
-                      }
-                    />
-                  )}
-                </Form.Item>
-                {/* end focalPerson location */}
-              </Col>
-            </Row>
+          <Col span={4} offset={1} className="IncidentTypeFormColor">
+            <ColorPicker animation="slide-up" onChange={this.onChangeColor} />
           </Col>
         </Row>
-        {/* end focalPerson organization, group and area section */}
-
-        {/* focalPerson role, landline and fax section */}
-        <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson role */}
-            <Form.Item {...formItemLayout} label="Role">
-              {getFieldDecorator('role', {
-                initialValue:
-                  isEditForm && focalPerson.role
-                    ? focalPerson.role._id // eslint-disable-line
-                    : undefined,
-                rules: [
-                  { required: true, message: 'Focal Person time is required' },
-                ],
-              })(
-                <SearchableSelectInput
-                  onSearch={getRoles}
-                  optionLabel="name"
-                  optionValue="_id"
-                  initialValue={
-                    isEditForm && focalPerson.role
-                      ? focalPerson.role
-                      : undefined
-                  }
-                />
-              )}
-            </Form.Item>
-            {/* end focalPerson role */}
-          </Col>
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            <Row type="flex" justify="space-between">
-              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
-                {/* focalPerson landline number */}
-                <Form.Item {...formItemLayout} label="Landline/Other Number">
-                  {getFieldDecorator('landline', {
-                    initialValue: isEditForm ? focalPerson.landline : undefined,
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson landline number */}
-              </Col>
-              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
-                {/* focalPerson fax */}
-                <Form.Item {...formItemLayout} label="Fax">
-                  {getFieldDecorator('fax', {
-                    initialValue: isEditForm ? focalPerson.fax : undefined,
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson fax */}
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-        {/* end focalPerson role, landline and fax section */}
-
-        {/* focalPerson Physical Address, Postal Address section */}
-        <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson physical Address */}
-            <Form.Item {...formItemLayout} label="Physical Address">
-              {getFieldDecorator('physicalAddress', {
-                initialValue: isEditForm
-                  ? focalPerson.physicalAddress
-                  : undefined,
-              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
-            </Form.Item>
-            {/* end focalPerson physical Address */}
-          </Col>
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            {/* focalPerson postal address */}
-            <Form.Item {...formItemLayout} label="Postal Address">
-              {getFieldDecorator('postalAddress', {
-                initialValue: isEditForm
-                  ? focalPerson.postalAddress
-                  : undefined,
-              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
-            </Form.Item>
-            {/* end focalPerson postal address */}
-          </Col>
-        </Row>
-        {/* end focalPerson physical Address, Postal Address section */}
+        {/* end function color code */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -377,4 +258,8 @@ class FocalPersonForm extends Component {
   }
 }
 
-export default Form.create()(FocalPersonForm);
+export default Connect(Form.create()(FunctionForm), {
+  natures: 'incidentTypes.schema.properties.nature.enum',
+  families: 'incidentTypes.schema.properties.family.enum',
+  caps: 'incidentTypes.schema.properties.cap.enum',
+});
