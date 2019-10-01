@@ -5,6 +5,7 @@ import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
 import contactsIcon from '../assets/icons/stakeholders/contacts.svg';
 import rolesIcon from '../assets/icons/stakeholders/roles.svg';
 import NavigationMenu from '../components/NavigationMenu';
+import functionIcon from '../assets/icons/emergencyplans.svg';
 import modules from '../modules.json';
 import issuedAlertsIcon from '../assets/icons/alerts/issuedalerts.svg';
 import alertIcon from '../assets/icons/alerts.svg';
@@ -24,6 +25,11 @@ const routes = [
     path: '/app/actions',
     icon: actionsIcon,
     description: modules.alertsActions,
+  },
+  {
+    name: 'Emergency Functions',
+    path: '/app/functions',
+    icon: functionIcon,
   },
   {
     name: 'Action Catalog',
