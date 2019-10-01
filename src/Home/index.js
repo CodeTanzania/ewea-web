@@ -1,6 +1,6 @@
 import React from 'react';
-import dashboardIcon from '../assets/icons/dashboards-disabled.svg';
-import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures-disabled.svg';
+import dashboardIcon from '../assets/icons/dashboards.svg';
+import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures.svg';
 import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
 import contactsIcon from '../assets/icons/stakeholders/contacts.svg';
 import rolesIcon from '../assets/icons/stakeholders/roles.svg';
@@ -9,20 +9,22 @@ import functionIcon from '../assets/icons/emergencyplans.svg';
 import modules from '../modules.json';
 import issuedAlertsIcon from '../assets/icons/alerts/issuedalerts.svg';
 import alertIcon from '../assets/icons/alerts.svg';
+import actionsIcon from '../assets/icons/alerts/actions.svg';
+import actionCatalogIcon from '../assets/icons/alerts/actioncatalog.svg';
 
 /* constants */
 const routes = [
   {
     name: 'Issued Alerts',
-    path: '/app/alerts/issuedalerts',
+    path: '/app/issuedalerts',
     icon: issuedAlertsIcon,
     description: modules.alertsIssued,
   },
   {
-    name: 'Alert Types',
-    path: '/app/alerttypes',
-    icon: alertIcon,
-    description: modules.alerts,
+    name: 'Actions Taken',
+    path: '/app/actions',
+    icon: actionsIcon,
+    description: modules.alertsActions,
   },
   {
     name: 'Emergency Functions',
@@ -30,11 +32,10 @@ const routes = [
     icon: functionIcon,
   },
   {
-    name: 'Geographical Features',
-    path: '/app/geographicalfeatures',
-    icon: geographicalFeaturesIcon,
-    description: modules.geographicalfeatures,
-    disabled: true,
+    name: 'Action Catalog',
+    path: '/app/actioncatalog',
+    icon: actionCatalogIcon,
+    description: modules.alertsActions,
   },
   {
     name: 'Focal People',
@@ -54,13 +55,23 @@ const routes = [
     icon: rolesIcon,
     description: modules.stakeholdersRoles,
   },
-
+  {
+    name: 'Alert Types',
+    path: '/app/alerttypes',
+    icon: alertIcon,
+    description: modules.alerts,
+  },
+  {
+    name: 'Geographical Features',
+    path: '/app/geographicalfeatures',
+    icon: geographicalFeaturesIcon,
+    description: modules.geographicalfeatures,
+  },
   {
     name: 'Dashboards',
-    path: '/app/dashboards',
+    path: '/app/overview',
     icon: dashboardIcon,
     description: modules.dashboards,
-    disabled: true,
   },
 ];
 

@@ -5,7 +5,7 @@ import { Link, Switch } from 'react-router-dom';
 import UserMenu from './components/UserMenu';
 import Alerts from '../Alerts';
 import AlertTypes from '../Alerts/components/AlertTypes';
-import AlertsActions from '../Alerts/layouts/Actions';
+import ActionCatalog from '../Alerts/components/ActionCatalog';
 import IssuedAlerts from '../Alerts/components/IssuedAlerts';
 import AlertsFeedback from '../Alerts/layouts/Feedback';
 import AlertsFeeds from '../Alerts/layouts/Feeds';
@@ -29,6 +29,8 @@ import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
 import StakeholdersNotifications from '../Stakeholders/components/Notifications';
 import StakeholdersRoles from '../Stakeholders/components/Roles';
 import EmergencyFunctions from '../Functions/components/Emergency Functions';
+import OverviewDashboard from '../Dashboards';
+import ActionsTaken from '../Dashboards/ActionsTaken';
 import SecureRoute from '../Auth/SecureRoute';
 import HeaderNavMenu from './components/HeaderNavMenu';
 import './styles.css';
@@ -36,19 +38,35 @@ import './styles.css';
 /* constants */
 const { Header, Content } = Layout;
 const breadcrumbNameMap = {
-  '/app': { name: 'Home', title: 'EMIS' },
+  '/app': {
+    name: 'Home',
+    title: 'EMIS',
+  },
   /* Alerts Routes */
-  '/app/alerts': { name: 'Alerts', title: 'Alerts module' },
-  '/app/alerttypes': { name: 'AlertTypes', title: 'Alert Types module' },
-  '/app/alerts/actions': {
+  '/app/alerts': {
+    name: 'Alerts',
+    title: 'Alerts module',
+  },
+  '/app/alerttypes': {
+    name: 'AlertTypes',
+    title: 'Alert Types module',
+  },
+  '/app/actions': {
     name: 'Actions Taken',
     title: 'List of all performed actions',
+  },
+  '/app/actioncatalog': {
+    name: 'Action Catalog',
+    title: 'List of all actions to be performed',
   },
   '/app/alerts/feedback': {
     name: 'Surveys & Feedback',
     title: 'Alerts surveys and feedback',
   },
-  '/app/alerts/feeds': { name: 'Feeds', title: 'Alerts feeds' },
+  '/app/alerts/feeds': {
+    name: 'Feeds',
+    title: 'Alerts feeds',
+  },
   '/app/alerts/issuedalerts': {
     name: 'Issued Alerts',
     title: 'List of all alerts',
@@ -124,6 +142,13 @@ const breadcrumbNameMap = {
     title: 'Emergency functions module',
   },
   '/app/stakeholders': { name: 'Stakeholders', title: 'Stakeholders module' },
+
+  /* Dashboards */
+
+  '/app/overview': {
+    name: 'Overview Dashboard',
+    title: 'Overview Dashboard',
+  },
 };
 
 /**
@@ -213,12 +238,12 @@ const BaseLayout = props => {
             component={AlertTypes}
           />
           <SecureRoute
-            path={`${baseUrl}/alerts/issuedalerts`}
+            path={`${baseUrl}/issuedalerts`}
             component={IssuedAlerts}
           />
           <SecureRoute
-            path={`${baseUrl}/alerts/actions`}
-            component={AlertsActions}
+            path={`${baseUrl}/actioncatalog`}
+            component={ActionCatalog}
           />
           <SecureRoute
             path={`${baseUrl}/alerts/feeds`}
@@ -303,6 +328,11 @@ const BaseLayout = props => {
             path={`${baseUrl}/roles`}
             component={StakeholdersRoles}
           />
+          <SecureRoute
+            path={`${baseUrl}/overview`}
+            component={OverviewDashboard}
+          />
+          <SecureRoute path={`${baseUrl}/actions`} component={ActionsTaken} />
           <SecureRoute component={PageNotFound} />
         </Switch>
       </Content>
