@@ -4,10 +4,11 @@ import {
   filterAlerts,
 } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { Button, Form, Checkbox, Row, Col } from 'antd';
+import { Button, Form } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import SearchableSelectInput from '../../../../components/SearchableSelectInput';
+import SelectInput from '../../../../components/SelectInput';
 
 /* declarations */
 const { getIncidentTypes, getJurisdictions } = httpActions;
@@ -141,6 +142,8 @@ class AlertsFilters extends Component {
       alertSchema,
     } = this.props;
 
+    const { certainty, urgency, severity, status } = alertSchema;
+
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -159,7 +162,6 @@ class AlertsFilters extends Component {
         xxl: { span: 24 },
       },
     };
-
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
         {/* start alert event filters */}
@@ -200,35 +202,14 @@ class AlertsFilters extends Component {
         <Form.Item {...formItemLayout} label="By  Certainity">
           {getFieldDecorator('certainty', {
             initialValue: filter ? filter.certainty : [],
-          })(
-            <Checkbox.Group style={{ width: '100%' }}>
-              <Row>
-                {/* eslint-disable-next-line react/prop-types */}
-                {alertSchema.certainty.enum.map(certainty => (
-                  <Col span={6} style={{ margin: '10px 0' }} key={certainty}>
-                    <Checkbox value={certainty}>{certainty}</Checkbox>
-                  </Col>
-                ))}
-              </Row>
-            </Checkbox.Group>
-          )}
+          })(<SelectInput options={certainty.enum} mode="multiple" />)}
         </Form.Item>
         {/* end alert certainty filters */}
         {/* start alert status filters */}
         <Form.Item {...formItemLayout} label="By  Status">
           {getFieldDecorator('status', {
             initialValue: filter ? filter.status : [],
-          })(
-            <Checkbox.Group style={{ width: '100%' }}>
-              <Row>
-                {alertSchema.status.enum.map(status => (
-                  <Col span={6} style={{ margin: '10px 0' }} key={status}>
-                    <Checkbox value={status}>{status}</Checkbox>
-                  </Col>
-                ))}
-              </Row>
-            </Checkbox.Group>
-          )}
+          })(<SelectInput options={status.enum} mode="multiple" />)}
         </Form.Item>
         {/* end alert status filters */}
 
@@ -236,18 +217,7 @@ class AlertsFilters extends Component {
         <Form.Item {...formItemLayout} label="By  Urgency">
           {getFieldDecorator('urgency', {
             initialValue: filter ? filter.urgency : [],
-          })(
-            <Checkbox.Group style={{ width: '100%' }}>
-              <Row>
-                {/* eslint-disable-next-line react/prop-types */}
-                {alertSchema.urgency.enum.map(urgency => (
-                  <Col span={6} style={{ margin: '10px 0' }} key={urgency}>
-                    <Checkbox value={urgency}>{urgency}</Checkbox>
-                  </Col>
-                ))}
-              </Row>
-            </Checkbox.Group>
-          )}
+          })(<SelectInput options={urgency.enum} mode="multiple" />)}
         </Form.Item>
         {/* end alert urgency filters */}
 
@@ -255,18 +225,7 @@ class AlertsFilters extends Component {
         <Form.Item {...formItemLayout} label="By  Severity">
           {getFieldDecorator('severity', {
             initialValue: filter ? filter.severity : [],
-          })(
-            <Checkbox.Group style={{ width: '100%' }}>
-              <Row>
-                {/* eslint-disable-next-line react/prop-types */}
-                {alertSchema.severity.enum.map(severity => (
-                  <Col span={6} style={{ margin: '10px 0' }} key={severity}>
-                    <Checkbox value={severity}>{severity}</Checkbox>
-                  </Col>
-                ))}
-              </Row>
-            </Checkbox.Group>
-          )}
+          })(<SelectInput options={severity.enum} mode="multiple" />)}
         </Form.Item>
         {/* end alert severity filters */}
 
