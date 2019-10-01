@@ -67,7 +67,7 @@ const breadcrumbNameMap = {
     name: 'Feeds',
     title: 'Alerts feeds',
   },
-  '/app/alerts/issuedalerts': {
+  '/app/issuedalerts': {
     name: 'Issued Alerts',
     title: 'List of all alerts',
   },
