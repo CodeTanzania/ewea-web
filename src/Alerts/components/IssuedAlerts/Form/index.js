@@ -1,11 +1,12 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, postAlert, putAlert } from '@codetanzania/ewea-api-states';
-import { Button, Col, Form, Row, Select } from 'antd';
+import { Button, Col, Form, Row } from 'antd';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import SearchableSelectInput from '../../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../../util';
+import SelectInput from '../../../../components/SelectInput';
 
 /* constants */
 const { getIncidentTypes, getFeatures } = httpActions;
@@ -130,6 +131,8 @@ class AlertForm extends Component {
       form: { getFieldDecorator },
     } = this.props;
 
+    const { certainty, urgency, severity, status } = alertSchema;
+
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -222,11 +225,7 @@ class AlertForm extends Component {
                   isEditForm && alert
                     ? alert.status // eslint-disable-line
                     : undefined,
-              })(
-                <Select showSearch>
-                  {this.renderSelectOptions(alertSchema.status.enum)}
-                </Select>
-              )}
+              })(<SelectInput options={status.enum} />)}
             </Form.Item>
             {/* end alert status */}
           </Col>
@@ -244,11 +243,7 @@ class AlertForm extends Component {
                     message: 'Alert severity is required',
                   },
                 ],
-              })(
-                <Select showSearch>
-                  {this.renderSelectOptions(alertSchema.severity.enum)}
-                </Select>
-              )}
+              })(<SelectInput options={severity.enum} />)}
             </Form.Item>
             {/* end alert severity */}
           </Col>
@@ -270,11 +265,7 @@ class AlertForm extends Component {
                     message: 'Alert urgency is required',
                   },
                 ],
-              })(
-                <Select showSearch>
-                  {this.renderSelectOptions(alertSchema.urgency.enum)}
-                </Select>
-              )}
+              })(<SelectInput options={urgency.enum} />)}
             </Form.Item>
             {/* end alert urgency */}
           </Col>
@@ -286,11 +277,7 @@ class AlertForm extends Component {
                   isEditForm && alert
                     ? alert.certainty // eslint-disable-line
                     : undefined,
-              })(
-                <Select showSearch>
-                  {this.renderSelectOptions(alertSchema.certainty.enum)}
-                </Select>
-              )}
+              })(<SelectInput options={certainty.enum} />)}
             </Form.Item>
             {/* end alert certainty */}
           </Col>
