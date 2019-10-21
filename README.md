@@ -1,6 +1,6 @@
 # ewea-web
 
-[![Build Status](https://travis-ci.org/CodeTanzania/emis-web.svg?branch=develop)](https://travis-ci.org/CodeTanzania/emis-web)
+[![Build Status](https://travis-ci.org/CodeTanzania/ewea-web.svg?branch=develop)](https://travis-ci.org/CodeTanzania/ewea-web)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 
@@ -21,14 +21,14 @@ It that can be shared and analyzed in order generate insights for local authorit
 
 EWEA Stakeholders contains an up to date database of all stakeholders responsible for emergency/disaster management within a specific region.
 
-See source code [repository](https://github.com/CodeTanzania/emis-stakeholder).
+See source code [repository](https://github.com/CodeTanzania/ewea-stakeholder).
 
 
 #### Alerts
 
 EWEA alerts consists of alerts created This component consists of an up to date database of ingested emergency / disaster alerts from multiple sources in near real time and disseminating them to disaster management stakeholders.
 
-See source code [repository](https://github.com/CodeTanzania/emis-alert).
+See source code [repository](https://github.com/CodeTanzania/ewea-alert).
 
 
 #### Dashboards
@@ -41,7 +41,7 @@ See source code [repository]().
 
 Provides an up to date geographical database of all features of interest that can be used to study and control the expected and the actual extent of impact that may be caused in case of an emergency/disaster.
 
-See source code [repository](https://github.com/CodeTanzania/emis-feature).
+See source code [repository](https://github.com/CodeTanzania/ewea-feature).
 
 ## Contribute
 
@@ -76,9 +76,9 @@ and view it on http://localhost:3000
 ## Documentation
 
 - [Project website]()
-- [A collection of references for EMIS]()
-- [Http client for EWEA API](https://github.com/CodeTanzania/emis-api-client)
-- [Redux state manager for EWEA](https://github.com/CodeTanzania/emis-api-states)
+- [A collection of references for ewea]()
+- [Http client for EWEA API](https://github.com/CodeTanzania/ewea-api-client)
+- [Redux state manager for EWEA](https://github.com/CodeTanzania/ewea-api-states)
 
 
 ## License
