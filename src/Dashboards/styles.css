@@ -1,0 +1,8 @@
+.card-widget {
+  height: calc((100vh - 64px) / 6);
+}
+
+.map-widget {
+  height: calc((100vh - 70px) - (100vh - 64px) / 6);
+  background-color: #fafafa;
+}
