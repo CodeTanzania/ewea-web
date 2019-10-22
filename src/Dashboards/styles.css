@@ -6,3 +6,18 @@
   height: calc((100vh - 70px) - (100vh - 64px) / 6);
   background-color: #fafafa;
 }
+
+.ZoomControl {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  z-index: 10000;
+  /*pointer-events: none;*/
+  top: 0;
+  left: 0;
+  margin: 10px 0 0 10px;
+}
+
+.ZoomControl button {
+  font-size: 1.6em;
+}
