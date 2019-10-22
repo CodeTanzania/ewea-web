@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Tooltip, Row, Col, Card, Icon, Statistic } from 'antd';
+import PropTypes from 'prop-types';
+import { Tooltip, Row, Button, Col, Card, Icon, Statistic } from 'antd';
 import {
   ComposableMap,
   Geographies,
@@ -16,6 +17,57 @@ const BASE_COLOR = '#ff0000';
 
 /**
  * @function
+ * @name ZoomControl
+ * @description component that renders zoom controls
+ *
+ * @param {object} props - react props
+ * @param {Function}  props.handleZoomIn - handles zoom in
+ * @param {Function}  props.handleZoomOut - handles zoom in
+ *
+ * @returns {object} React Element
+ *
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const ZoomControl = ({ handleZoomIn, handleZoomOut }) => {
+  return (
+    <div className="ZoomControl">
+      <Button onClick={handleZoomIn}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="3"
+        >
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+      </Button>
+      <Button onClick={handleZoomOut}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="3"
+        >
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+      </Button>
+    </div>
+  );
+};
+
+ZoomControl.propTypes = {
+  handleZoomIn: PropTypes.func.isRequired,
+  handleZoomOut: PropTypes.func.isRequired,
+};
+
+/**
+ * @function
  * @name OverviewDashboard
  * @description Simple dashboard to get overview of data in EMIS
  *
@@ -26,11 +78,55 @@ const BASE_COLOR = '#ff0000';
  */
 const OverviewDashboard = () => {
   const [ward, setWard] = useState(null);
+  const [zoom, setZoom] = useState(1);
+
+  /**
+   * @function
+   * @name handleZoomIn
+   * @description handle zoom in of svg map
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  const handleZoomIn = () => {
+    if (zoom >= 4) return;
+    setZoom(zoom * 2);
+  };
+
+  /**
+   * @function
+   * @name handleZoomOut
+   * @description handle zoom out of svg map
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  const handleZoomOut = () => {
+    console.log('inside handle zoom out');
+    if (zoom <= 0.25) return;
+    setZoom(zoom / 2);
+  };
+
+  /**
+   * @function
+   * @name handleZoomEnd
+   * @description handle zoom end of svg map
+   * @version 0.1.0
+   * @since 0.1.0
+   * @param position
+   */
+  const handleZoomEnd = position => {
+    setZoom(position.zoom);
+  };
 
   return (
     <div>
       <Row>
         <Col span={16}>
+          <ZoomControl
+            handleZoomOut={handleZoomOut}
+            handleZoomIn={handleZoomIn}
+          />
           {/* ward svg map */}
           <ComposableMap
             projectionConfig={{
@@ -39,7 +135,11 @@ const OverviewDashboard = () => {
             width={1000}
             className="map-widget"
           >
-            <ZoomableGroup center={[39.6067144, -6.9699698]} zoom={1}>
+            <ZoomableGroup
+              center={[39.6067144, -6.9699698]}
+              zoom={zoom}
+              onZoomEnd={handleZoomEnd}
+            >
               <Geographies geography={DarWards} disableOptimization>
                 {({ geographies, projection }) =>
                   geographies.map(geography => {
