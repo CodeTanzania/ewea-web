@@ -34,7 +34,7 @@ const OverviewDashboard = () => {
           {/* ward svg map */}
           <ComposableMap
             projectionConfig={{
-              scale: 55000,
+              scale: 50000,
             }}
             width={1000}
             className="map-widget"
