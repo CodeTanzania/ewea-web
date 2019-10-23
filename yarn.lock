@@ -10729,10 +10729,10 @@ redux-starter-kit@>=0.6.3:
     redux-thunk "^2.2.0"
     reselect "^4.0.0"
 
-redux-starter-kit@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/redux-starter-kit/-/redux-starter-kit-0.9.0.tgz#ad9283599c76f9f27ad91e7dd7c3d1fdfd922007"
-  integrity sha512-CwlLKKzK/0sGamZJawRtLjYNpH8sosv/gFJAfPe4WyHtDiuVP4UQmL2BLOy7a+oJG5LUWzAr7lMj6QW6caYusQ==
+redux-starter-kit@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/redux-starter-kit/-/redux-starter-kit-1.0.0.tgz#7c317306755dafd49a1e8f09e4fe36dd0633736f"
+  integrity sha512-vOJ8hJw28bAGJimyb7eICL1KYk/F3X5xnpCck8uuwJdo0Bj9myTzxEnphOBriiXemt19E1jafjhD22eaeTOcfg==
   dependencies:
     immer "^4.0.1"
     redux "^4.0.0"
