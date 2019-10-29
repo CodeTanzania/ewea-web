@@ -12,7 +12,6 @@
   flex-direction: column;
   position: absolute;
   z-index: 10000;
-  /*pointer-events: none;*/
   top: 0;
   left: 0;
   margin: 10px 0 0 10px;
@@ -20,4 +19,6 @@
 
 .ZoomControl button {
   font-size: 1.6em;
+  height: 55px;
+  margin: 5px;
 }
