@@ -7,7 +7,18 @@ import {
   Geography,
   ZoomableGroup,
 } from 'react-simple-maps';
+
+import DataWidget from './DataWidget';
 import { getRGBAColor } from '../util';
+import MenIcon from '../assets/icons/dashboards/men.svg';
+import WomenIcon from '../assets/icons/dashboards/women.svg';
+import ChildrenIcon from '../assets/icons/dashboards/children.svg';
+import DisabledIcon from '../assets/icons/dashboards/disabled.svg';
+import EldersIcon from '../assets/icons/dashboards/elders.svg';
+import BuildingsIcon from '../assets/icons/dashboards/buildingsatrisk.svg';
+import HouseholdsIcon from '../assets/icons/dashboards/houseatrisk.svg';
+import HospitalsIcon from '../assets/icons/dashboards/hospitalsatrisk.svg';
+import RoadsIcons from '../assets/icons/dashboards/roadsatrisk.svg';
 import DarWards from '../assets/maps/dar.wards.json';
 import './styles.css';
 
@@ -58,7 +69,7 @@ ZoomControl.propTypes = {
  * @version 0.1.0
  * @since 0.1.0
  */
-const OverviewDashboard = () => {
+const AlertDashboard = () => {
   const [ward, setWard] = useState(null);
   const [zoom, setZoom] = useState(1);
 
@@ -84,7 +95,6 @@ const OverviewDashboard = () => {
    * @since 0.1.0
    */
   const handleZoomOut = () => {
-    console.log('inside handle zoom out');
     if (zoom <= 0.25) return;
     setZoom(zoom / 2);
   };
@@ -93,9 +103,10 @@ const OverviewDashboard = () => {
    * @function
    * @name handleZoomEnd
    * @description handle zoom end of svg map
+   * @param {object} position zoom position
+   *
    * @version 0.1.0
    * @since 0.1.0
-   * @param position
    */
   const handleZoomEnd = position => {
     setZoom(position.zoom);
@@ -214,16 +225,12 @@ const OverviewDashboard = () => {
               </Card>
             </Col>
             <Col span={6}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
+              <DataWidget
+                label="Men"
+                value={12}
+                title="Men Population"
+                icon={MenIcon}
+              />
             </Col>
           </Row>
         </Col>
@@ -243,129 +250,116 @@ const OverviewDashboard = () => {
                 />
               </Card>
             </Col>
-            <Col span={12}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
-            </Col>
-            <Col span={12}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
-            </Col>
 
+            {/* Men data Widget */}
             <Col span={12}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
+              <DataWidget
+                label="Men"
+                value="2M"
+                title="Men Population"
+                icon={MenIcon}
+              />
             </Col>
-            <Col span={12}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
-            </Col>
+            {/* Men data Widget */}
 
+            {/* Women Data Widget */}
             <Col span={12}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
+              <DataWidget
+                label="Women"
+                value="1.9M"
+                title="Women Population"
+                icon={WomenIcon}
+              />
             </Col>
-            <Col span={12}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
-            </Col>
+            {/* End Women Data Widget */}
 
+            {/* Children Widget */}
             <Col span={12}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
+              <DataWidget
+                label="Children"
+                value="500K"
+                title="Children Population"
+                icon={ChildrenIcon}
+              />
             </Col>
+            {/* end Children Widget */}
+
+            {/* Disabled Widget */}
             <Col span={12}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
+              <DataWidget
+                label="Disabled"
+                value="120"
+                title="Disabled Population"
+                icon={DisabledIcon}
+              />
             </Col>
+            {/* End Disabled Widget */}
+
+            {/* Elders Widget */}
             <Col span={12}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
+              <DataWidget
+                label="Elders"
+                value="200"
+                title="Elders Population"
+                icon={EldersIcon}
+              />
             </Col>
+            {/* end Elders Widget */}
+
+            {/* Responders Widget */}
             <Col span={12}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
+              <DataWidget
+                label="Responders"
+                value="4"
+                title="Responders Population"
+                icon={MenIcon}
+              />
             </Col>
+            {/* End Responder Widget */}
+
+            {/* Buildings At Risks */}
+            <Col span={12}>
+              <DataWidget
+                label="Buildings At Risks"
+                value="4"
+                title="Buildings At Risks"
+                icon={BuildingsIcon}
+              />
+            </Col>
+            {/* End Building At Risks */}
+
+            {/* Households at Risk */}
+            <Col span={12}>
+              <DataWidget
+                label="Households At Risks"
+                value="4"
+                title="Households At Risks"
+                icon={HouseholdsIcon}
+              />
+            </Col>
+            {/* End Households at Risks */}
+
+            {/* Hospitals At Risks */}
+            <Col span={12}>
+              <DataWidget
+                label="Hospitals At Risks"
+                value="4"
+                title="Hospitals At Risks"
+                icon={HospitalsIcon}
+              />
+            </Col>
+            {/* Hospital At Risk */}
+
+            {/* Roads At Risks */}
+            <Col span={12}>
+              <DataWidget
+                label="Roads At Risks"
+                value="4"
+                title="Roads At Risks"
+                icon={RoadsIcons}
+              />
+            </Col>
+            {/* Roads At Risk */}
           </Row>
         </Col>
         {/* end ward summary card */}
@@ -374,4 +368,4 @@ const OverviewDashboard = () => {
   );
 };
 
-export default OverviewDashboard;
+export default AlertDashboard;

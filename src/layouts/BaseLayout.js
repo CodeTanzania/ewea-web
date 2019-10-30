@@ -140,8 +140,8 @@ const breadcrumbNameMap = {
   /* Dashboards */
 
   '/app/overview': {
-    name: 'Overview Dashboard',
-    title: 'Overview Dashboard',
+    name: 'Alert Dashboard',
+    title: 'Alert Dashboard',
   },
 };
 
