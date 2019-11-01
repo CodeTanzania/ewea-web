@@ -8,7 +8,7 @@ import {
   ZoomableGroup,
 } from 'react-simple-maps';
 
-import DataWidget from './DataWidget';
+import DataWidget from '../components/DataWidget';
 import { getRGBAColor } from '../util';
 import MenIcon from '../assets/icons/dashboards/men.svg';
 import WomenIcon from '../assets/icons/dashboards/women.svg';

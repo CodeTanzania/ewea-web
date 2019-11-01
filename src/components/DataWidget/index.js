@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Card } from 'antd';
+import './styles.css';
 
 /**
  * @function
@@ -15,7 +16,7 @@ import { Row, Col, Card } from 'antd';
  */
 const DataWidget = ({ label, icon, value, title }) => {
   return (
-    <Card className="card-widget">
+    <Card className="data-widget">
       <Row>
         <Col span={12}>
           <img src={icon} alt="Icon" />

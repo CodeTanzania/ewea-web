@@ -2,30 +2,6 @@
   height: calc((100vh - 64px) / 6);
 }
 
-.card-widget img {
-  height: 10vh;
-  width: 10vh;
-}
-
-.card-widget .value {
-  display: inline-block;
-  text-align: center;
-  width: 100%;
-  font-size: 4.5vh;
-  font-weight: 700;
-  color: #039be5;
-}
-
-.card-widget .label {
-  display: inline-block;
-  text-align: center;
-  width: 100%;
-  font-size: 1.5vh;
-  display: inline-block;
-  text-align: center;
-  text-transform: uppercase;
-}
-
 .map-widget {
   height: calc((100vh - 70px) - (100vh - 64px) / 6);
   background-color: #fafafa;

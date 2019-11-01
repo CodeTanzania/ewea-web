@@ -1,0 +1,27 @@
+.data-widget {
+  height: calc((100vh - 64px) / 6);
+}
+
+.data-widget img {
+  height: 10vh;
+  width: 10vh;
+}
+
+.data-widget .value {
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  font-size: 4.5vh;
+  font-weight: 700;
+  color: #039be5;
+}
+
+.data-widget .label {
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  font-size: 1.5vh;
+  display: inline-block;
+  text-align: center;
+  text-transform: uppercase;
+}
