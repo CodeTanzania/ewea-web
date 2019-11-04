@@ -11,7 +11,7 @@
   display: inline-block;
   text-align: center;
   width: 100%;
-  font-size: 4.5vh;
+  font-size: 3vh;
   font-weight: 700;
   color: #039be5;
 }
@@ -24,4 +24,17 @@
   display: inline-block;
   text-align: center;
   text-transform: uppercase;
+  color: #929191;
+}
+
+.data-widget .header {
+  text-transform: uppercase;
+  color: #039be5;
+  font-weight: 700;
+}
+
+.data-widget .text-muted {
+  float: inline-end;
+  font-size: 14px;
+  color: #8d898d;
 }

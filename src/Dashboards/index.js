@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip, Row, Button, Col, Card, Icon, Statistic } from 'antd';
+import { Tooltip, Row, Button, Col } from 'antd';
 import {
   ComposableMap,
   Geographies,
@@ -43,13 +43,26 @@ const BASE_COLOR = '#ff0000';
 const ZoomControl = ({ handleZoomIn, handleZoomOut }) => {
   return (
     <div className="ZoomControl">
-      <Button type="default" shape="round" icon="plus" onClick={handleZoomIn} />
-      <Button
-        type="default"
-        shape="round"
-        icon="minus"
-        onClick={handleZoomOut}
-      />
+      <Row>
+        <Col>
+          <Button
+            type="default"
+            shape="round"
+            icon="plus"
+            size="small"
+            onClick={handleZoomIn}
+          />
+        </Col>
+        <Col>
+          <Button
+            type="default"
+            shape="round"
+            icon="minus"
+            size="small"
+            onClick={handleZoomOut}
+          />
+        </Col>
+      </Row>
     </div>
   );
 };
@@ -116,119 +129,113 @@ const AlertDashboard = () => {
     <div>
       <Row>
         <Col span={16}>
-          <ZoomControl
-            handleZoomOut={handleZoomOut}
-            handleZoomIn={handleZoomIn}
-          />
-          {/* ward svg map */}
-          <ComposableMap
-            projectionConfig={{
-              scale: 50000,
-            }}
-            width={1000}
-            className="map-widget"
-          >
-            <ZoomableGroup
-              center={[39.6067144, -6.9699698]}
-              zoom={zoom}
-              onZoomEnd={handleZoomEnd}
-            >
-              <Geographies geography={DarWards} disableOptimization>
-                {({ geographies, projection }) =>
-                  geographies.map(geography => {
-                    const defaultColor = getRGBAColor(
-                      BASE_COLOR,
-                      (geography.properties.Ward_Pop / DAR_POPULATION) * 10
-                    );
-
-                    const hoverColor = getRGBAColor(BASE_COLOR, 0.55);
-                    const pressedColor = getRGBAColor(BASE_COLOR, 0.75);
-
-                    return (
-                      <Tooltip
-                        key={geography.properties.fid}
-                        trigger="hover"
-                        title={geography.properties.Ward_Name}
-                      >
-                        <Geography
-                          key={geography.properties.fid}
-                          geography={geography}
-                          projection={projection}
-                          onClick={() => setWard(geography.properties)}
-                          style={{
-                            default: {
-                              fill:
-                                ward && geography.properties.fid === ward.fid
-                                  ? pressedColor
-                                  : defaultColor,
-                              stroke: '#607D8B',
-                              strokeWidth: 0.75,
-                              outline: 'none',
-                            },
-                            hover: {
-                              fill: hoverColor,
-                              stroke: '#607D8B',
-                              strokeWidth: 0.75,
-                              outline: 'none',
-                            },
-                            pressed: {
-                              fill: pressedColor,
-                              stroke: '#607D8B',
-                              strokeWidth: 0.75,
-                              outline: 'none',
-                            },
-                          }}
-                        />
-                      </Tooltip>
-                    );
-                  })
-                }
-              </Geographies>
-            </ZoomableGroup>
-          </ComposableMap>
-          {/* end ward svg map */}
           <Row>
-            <Col span={6}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
+            <Col span={24}>
+              <ZoomControl
+                handleZoomOut={handleZoomOut}
+                handleZoomIn={handleZoomIn}
+              />
+              {/* ward svg map */}
             </Col>
+
+            <ComposableMap
+              projectionConfig={{
+                scale: 50000,
+              }}
+              className="map-widget"
+            >
+              <ZoomableGroup
+                center={[39.6067144, -6.9699698]}
+                zoom={zoom}
+                onZoomEnd={handleZoomEnd}
+              >
+                <Geographies geography={DarWards} disableOptimization>
+                  {({ geographies, projection }) =>
+                    geographies.map(geography => {
+                      const defaultColor = getRGBAColor(
+                        BASE_COLOR,
+                        (geography.properties.Ward_Pop / DAR_POPULATION) * 10
+                      );
+
+                      const hoverColor = getRGBAColor(BASE_COLOR, 0.55);
+                      const pressedColor = getRGBAColor(BASE_COLOR, 0.75);
+
+                      return (
+                        <Tooltip
+                          key={geography.properties.fid}
+                          trigger="hover"
+                          title={geography.properties.Ward_Name}
+                        >
+                          <Geography
+                            key={geography.properties.fid}
+                            geography={geography}
+                            projection={projection}
+                            onClick={() => setWard(geography.properties)}
+                            style={{
+                              default: {
+                                fill:
+                                  ward && geography.properties.fid === ward.fid
+                                    ? pressedColor
+                                    : defaultColor,
+                                stroke: '#607D8B',
+                                strokeWidth: 0.75,
+                                outline: 'none',
+                              },
+                              hover: {
+                                fill: hoverColor,
+                                stroke: '#607D8B',
+                                strokeWidth: 0.75,
+                                outline: 'none',
+                              },
+                              pressed: {
+                                fill: pressedColor,
+                                stroke: '#607D8B',
+                                strokeWidth: 0.75,
+                                outline: 'none',
+                              },
+                            }}
+                          />
+                        </Tooltip>
+                      );
+                    })
+                  }
+                </Geographies>
+              </ZoomableGroup>
+            </ComposableMap>
+            {/* end ward svg map */}
             <Col span={6}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
-            </Col>
-            <Col span={6}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
+              <DataWidget
+                label="Strong Winds"
+                value={12}
+                title="Recently Issued Alert"
+                header="Recently Issued"
+                duration="2 days ago"
+                icon={MenIcon}
+              />
             </Col>
             <Col span={6}>
               <DataWidget
-                label="Men"
+                label="Heavy Rainfall"
                 value={12}
-                title="Men Population"
+                title="Recently Updated Alert"
+                header="Recently Updated"
+                duration="1 hour ago"
+                icon={MenIcon}
+              />
+            </Col>
+            <Col span={6}>
+              <DataWidget
+                label="Active Alerts"
+                value={12}
+                title="Active Alerts"
+                icon={MenIcon}
+              />
+            </Col>
+            <Col span={6}>
+              <DataWidget
+                label="Prone Areas"
+                value={12}
+                title="Prone Areas"
                 icon={MenIcon}
               />
             </Col>
@@ -239,16 +246,12 @@ const AlertDashboard = () => {
         <Col span={8}>
           <Row type="flex">
             <Col span={24}>
-              <Card className="card-widget">
-                <Statistic
-                  title="Active"
-                  value={11.28}
-                  precision={2}
-                  valueStyle={{ color: '#3f8600' }}
-                  prefix={<Icon type="arrow-up" />}
-                  suffix="%"
-                />
-              </Card>
+              <DataWidget
+                label="Population"
+                value={12}
+                title="Population"
+                icon={MenIcon}
+              />
             </Col>
 
             {/* Men data Widget */}
