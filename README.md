@@ -11,7 +11,7 @@ alt="EWEA Logo" width="100" height="auto" />
 
 EWEA web is an Early Warning, Early Action tool that facilitates the disseminationn of warnings, communication and actions associated with the warnings.
 
-It that can be shared and analyzed in order generate insights for local authorities and communities to better manage disasters and increase resilience to disaster risk. The data is organized in core components.
+Information that is shared with the tool can be analyzed in order generate insights for local authorities and communities to better manage disasters and increase resilience to disaster risk. The data is organized in core components as shown below.
 
 ![EWEA Homepage](docs/images/home.png 'EWEA Homepage')
 
@@ -19,62 +19,51 @@ It that can be shared and analyzed in order generate insights for local authorit
 
 #### Issued Alerts
 
-EWEA alerts consists of alerts created This component consists of an up to date database of ingested emergency / disaster alerts from multiple sources in near real time and disseminating them to disaster management stakeholders.
+Issued Alerts consists of alerts have been sent to stakeholders. These alerts are normally sent with actions to be taken.
 
-See source code [repository](https://github.com/CodeTanzania/emis-alert).
+See API source code [repository](https://github.com/CodeTanzania/emis-alert).
 
 
 #### Actions Taken
 
-Actions Taken contains visualizations of actions that have been dispatched in regard to a particular alerts
+Actions Taken is a set of visualizations that show activity for actions that have been dispatched with issued alerts
 
 See API source code [repository](https://github.com/CodeTanzania/emis-stakeholder).
 
 #### Emergency Functions
 
-EWEA Stakeholders contains an up to date database of all stakeholders responsible for emergency/disaster management within a specific region.
+Emergency Functions is a collection of all major activities that are expected to take place during emergency management.
 
-See source code [repository](https://github.com/CodeTanzania/emis-stakeholder).
+See API source code [repository](https://github.com/CodeTanzania/emis-stakeholder).
 
 #### Action Catalog
 
-EWEA Action Catalog contains a collection of all actions that can be executed when managing disasters.
+Action Catalog is a collection of all tasks that can take place when an alert is issued. 
 
-See source code [repository](https://github.com/CodeTanzania/emis-stakeholder).
+See API source code [repository](https://github.com/CodeTanzania/emis-stakeholder).
 
 
 #### Stakehholders
 
-EWEA Stakeholders contains an up to date database of all stakeholders responsible for emergency/disaster management within a specific region. They are categorized into three groups
+EWEA Stakeholders contains an up to date database of all stakeholders responsible for emergency/disaster management within a specific area. They are categorized into three groups
 - Focal People - Individual personnel who has a responsibility in disaster management.
-- Agencies - Organizations that carry out disaster management activities.
+- Agencies - Organizations that carry out disaster management activities. 
 - Roles - These are configured functions that a focal person or agency is part of.
 
 See API source code [repository](https://github.com/CodeTanzania/emis-stakeholder).
 
-#### Agencies
-
-EWEA Stakeholders contains an up to date database of all stakeholders responsible for emergency/disaster management within a specific region.
-
-See source code [repository](https://github.com/CodeTanzania/emis-stakeholder).
-
-#### Roles
-
-EWEA Stakeholders contains an up to date database of all stakeholders responsible for emergency/disaster management within a specific region.
-
-See source code [repository](https://github.com/CodeTanzania/emis-stakeholder).
 
 #### Alert Types 
 
-EWEA alerts consists of alerts created This component consists of an up to date database of ingested emergency / disaster alerts from multiple sources in near real time and disseminating them to disaster management stakeholders.
+Alert Types are configured names of all expected events 
 
-See source code [repository](https://github.com/CodeTanzania/emis-alert).
+See API source code [repository](https://github.com/CodeTanzania/emis-alert).
 
 
 
 #### Geographical Features
 
-Provides an up to date geographical database of all features of interest that can be used to study and control the expected and the actual extent of impact that may be caused in case of an emergency/disaster. It includes administrative boundaries of regions, districts, wards, subwards (streets), evacuation centers, facilities, warehouses and critical infrastructures.
+Geographical Features provides an up to date geographical database of all features of interest that can be used to study and control the expected and the actual extent of impact that may be caused in case of an emergency/disaster. It includes administrative boundaries of regions, districts, wards, subwards (streets), evacuation centers, facilities, warehouses and critical infrastructures.
 
 See API source code [repository](https://github.com/CodeTanzania/emis-feature).
 
