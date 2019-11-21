@@ -17,31 +17,73 @@ It that can be shared and analyzed in order generate insights for local authorit
 
 ## EWEA Components
 
-#### Stakeholders
-
-EWEA Stakeholders contains an up to date database of all stakeholders responsible for emergency/disaster management within a specific region.
-
-See source code [repository](https://github.com/CodeTanzania/ewea-stakeholder).
-
-
-#### Alerts
+#### Issued Alerts
 
 EWEA alerts consists of alerts created This component consists of an up to date database of ingested emergency / disaster alerts from multiple sources in near real time and disseminating them to disaster management stakeholders.
 
 See source code [repository](https://github.com/CodeTanzania/ewea-alert).
 
 
+#### Actions Taken
+
+Actions Taken contains visualizations of actions that have been dispatched in regard to a particular alerts
+
+See API source code [repository](https://github.com/CodeTanzania/ewea-stakeholder).
+
+#### Emergency Functions
+
+EWEA Stakeholders contains an up to date database of all stakeholders responsible for emergency/disaster management within a specific region.
+
+See source code [repository](https://github.com/CodeTanzania/ewea-stakeholder).
+
+#### Action Catalog
+
+EWEA Action Catalog contains a collection of all actions that can be executed when managing disasters.
+
+See source code [repository](https://github.com/CodeTanzania/ewea-stakeholder).
+
+
+#### Stakehholders
+
+EWEA Stakeholders contains an up to date database of all stakeholders responsible for emergency/disaster management within a specific region. They are categorized into three groups
+- Focal People - Individual personnel who has a responsibility in disaster management.
+- Agencies - Organizations that carry out disaster management activities.
+- Roles - These are configured functions that a focal person or agency is part of.
+
+See API source code [repository](https://github.com/CodeTanzania/ewea-stakeholder).
+
+#### Agencies
+
+EWEA Stakeholders contains an up to date database of all stakeholders responsible for emergency/disaster management within a specific region.
+
+See source code [repository](https://github.com/CodeTanzania/ewea-stakeholder).
+
+#### Roles
+
+EWEA Stakeholders contains an up to date database of all stakeholders responsible for emergency/disaster management within a specific region.
+
+See source code [repository](https://github.com/CodeTanzania/ewea-stakeholder).
+
+#### Alert Types 
+
+EWEA alerts consists of alerts created This component consists of an up to date database of ingested emergency / disaster alerts from multiple sources in near real time and disseminating them to disaster management stakeholders.
+
+See source code [repository](https://github.com/CodeTanzania/ewea-alert).
+
+
+
+#### Geographical Features
+
+Provides an up to date geographical database of all features of interest that can be used to study and control the expected and the actual extent of impact that may be caused in case of an emergency/disaster. It includes administrative boundaries of regions, districts, wards, subwards (streets), evacuation centers, facilities, warehouses and critical infrastructures.
+
+See API source code [repository](https://github.com/CodeTanzania/ewea-feature).
+
+
 #### Dashboards
 
 EWEA dashboards consists of maps used for visualization and analysis of warnings and areas of interest.
 
-See source code [repository]().
-
-#### Geographical Features
-
-Provides an up to date geographical database of all features of interest that can be used to study and control the expected and the actual extent of impact that may be caused in case of an emergency/disaster.
-
-See source code [repository](https://github.com/CodeTanzania/ewea-feature).
+See API source code [repository]().
 
 ## Contribute
 
