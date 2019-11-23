@@ -1009,10 +1009,10 @@
     lodash ">=4.17.15"
     moment ">=2.24.0"
 
-"@codetanzania/ewea-api-client@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@codetanzania/ewea-api-client/-/ewea-api-client-0.1.1.tgz#006223261588aacae11b15369ebb54cf2e223bee"
-  integrity sha512-SjXo22va8P4ZHKN8SHEkFmn9EyIMDlXRBX+AavmcfSKydjmt3QuBcnXeXketca4lNsvuArej2QOymDmAib/s0w==
+"@codetanzania/ewea-api-client@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@codetanzania/ewea-api-client/-/ewea-api-client-0.2.0.tgz#a25fbed31ea279e618f5c501b634e2e0748d714d"
+  integrity sha512-uib+TmUasl39LTdMxDG8h0LlI89T8kFxFqBoHrjY++qmIMM4BRCE4TDXBvZpoAbb2KKO2fAJ7WVfd/cZxTihkQ==
   dependencies:
     "@lykmapipo/common" ">=0.25.0"
     "@lykmapipo/env" ">=0.12.0"
