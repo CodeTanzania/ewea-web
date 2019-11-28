@@ -52,7 +52,7 @@ class Signin extends Component {
             // populate app store with schemas
             initializeApp();
 
-            notifySuccess('Welcome to EMIS');
+            notifySuccess('Welcome to EWEA');
           },
           () => {
             notifyError('Invalid Credentials Please Try Again');
