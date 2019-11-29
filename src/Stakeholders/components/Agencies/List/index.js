@@ -222,9 +222,6 @@ class AgencyList extends Component {
           loading={loading}
           dataSource={agencies}
           renderItem={agency => {
-            const {
-              location: { name: area },
-            } = agency;
             return (
               <AgencyListItem
                 key={agency._id} // eslint-disable-line
@@ -232,7 +229,7 @@ class AgencyList extends Component {
                 name={agency.name}
                 title={agency.role ? agency.role.name : 'N/A'}
                 email={agency.email}
-                area={area}
+                area={agency.location ? agency.location.name : 'N/A'}
                 mobile={agency.mobile}
                 onShare={() => {
                   onShare(agency);
