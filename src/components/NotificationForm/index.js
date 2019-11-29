@@ -1,12 +1,12 @@
 import { Button, Form, Input, Icon, Tooltip } from 'antd';
-import { Connect, postCampaign } from '@codetanzania/ewea-api-states';
-import compact from 'lodash/compact';
-import isEmpty from 'lodash/isEmpty';
+// import { Connect, postCampaign } from '@codetanzania/ewea-api-states';
+// import compact from 'lodash/compact';
+// import isEmpty from 'lodash/isEmpty';
 import map from 'lodash/map';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import SearchableSelectInput from '../SearchableSelectInput';
-import { notifySuccess, notifyError } from '../../util';
+// import { notifySuccess, notifyError } from '../../util';
 
 /* constants */
 const { TextArea } = Input;
@@ -63,72 +63,72 @@ class NotificationForm extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    const {
-      form: { validateFieldsAndScroll },
-      onCancel,
-    } = this.props;
+    // const {
+    //   form: { validateFieldsAndScroll },
+    //   onCancel,
+    // } = this.props;
 
-    validateFieldsAndScroll((error, values) => {
-      if (!error) {
-        const criteria = {};
+    // validateFieldsAndScroll((error, values) => {
+    //   if (!error) {
+    //     const criteria = {};
 
-        if (!isEmpty(values.agencies)) {
-          // eslint-disable-next-line
-          criteria._id = {
-            $in: compact([].concat(values.agencies)),
-          };
-        }
+    //     if (!isEmpty(values.agencies)) {
+    //       // eslint-disable-next-line
+    //       criteria._id = {
+    //         $in: compact([].concat(values.agencies)),
+    //       };
+    //     }
 
-        if (!isEmpty(values.groups)) {
-          criteria.group = {
-            $in: compact([].concat(values.groups)),
-          };
-        }
+    //     if (!isEmpty(values.groups)) {
+    //       criteria.group = {
+    //         $in: compact([].concat(values.groups)),
+    //       };
+    //     }
 
-        if (!isEmpty(values.roles)) {
-          criteria.role = {
-            $in: compact([].concat(values.roles)),
-          };
-        }
+    //     if (!isEmpty(values.roles)) {
+    //       criteria.role = {
+    //         $in: compact([].concat(values.roles)),
+    //       };
+    //     }
 
-        if (!isEmpty(values.features)) {
-          criteria.location = {
-            $in: compact([].concat(values.features)),
-          };
-        }
+    //     if (!isEmpty(values.features)) {
+    //       criteria.location = {
+    //         $in: compact([].concat(values.features)),
+    //       };
+    //     }
 
-        if (!isEmpty(values.recipients)) {
-          // eslint-disable-next-line
-          const agencies = criteria._id ? criteria._id.$in : [];
+    //     if (!isEmpty(values.recipients)) {
+    //       // eslint-disable-next-line
+    //       const agencies = criteria._id ? criteria._id.$in : [];
 
-          // eslint-disable-next-line
-          criteria._id = {
-            $in: compact([].concat(values.recipients).concat(agencies)), // eslint-disable-line
-          };
-        }
+    //       // eslint-disable-next-line
+    //       criteria._id = {
+    //         $in: compact([].concat(values.recipients).concat(agencies)), // eslint-disable-line
+    //       };
+    //     }
 
-        const notification = {
-          criteria: {
-            ...criteria,
-          },
-          subject: values.subject,
-          message: values.body,
-        };
+    // const notification = {
+    //   criteria: {
+    //     ...criteria,
+    //   },
+    //   subject: values.subject,
+    //   message: values.body,
+    // };
 
-        postCampaign(
-          notification,
-          () => {
-            notifySuccess('Notification Sent Successfully');
-            onCancel();
-          },
-          () => {
-            notifyError(
-              'An Error occurred when sending notification, please contact System Administrator'
-            );
-          }
-        );
-      }
-    });
+    // postCampaign(
+    //   notification,
+    //   () => {
+    //     notifySuccess('Notification Sent Successfully');
+    //     onCancel();
+    //   },
+    //   () => {
+    //     notifyError(
+    //       'An Error occurred when sending notification, please contact System Administrator'
+    //     );
+    //   }
+    // );
+    //   }
+    // });
   };
 
   /**
@@ -314,6 +314,8 @@ class NotificationForm extends Component {
   }
 }
 
-export default Connect(Form.create()(NotificationForm), {
-  posting: 'campaigns.posting',
-});
+export default Form.create()(NotificationForm);
+
+// export default Connect(Form.create()(NotificationForm), {
+//   posting: 'campaigns.posting',
+// });

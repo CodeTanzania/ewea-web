@@ -21,6 +21,8 @@ import PropTypes from 'prop-types';
 const SecureRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = isTokenValid();
 
+  console.log(isTokenValid());
+
   return (
     <Route
       {...rest}

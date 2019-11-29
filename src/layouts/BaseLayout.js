@@ -3,32 +3,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, Switch } from 'react-router-dom';
 import UserMenu from './components/UserMenu';
-import Alerts from '../Alerts';
-import AlertTypes from '../Alerts/components/AlertTypes';
-import ActionCatalog from '../Alerts/components/ActionCatalog';
-import IssuedAlerts from '../Alerts/components/IssuedAlerts';
-import AlertsFeedback from '../Alerts/layouts/Feedback';
-import AlertsFeeds from '../Alerts/layouts/Feeds';
-import AlertsServiceRequests from '../Alerts/layouts/ServiceRequests';
-import AlertsSources from '../Alerts/components/AlertSources';
+// import Alerts from '../Alerts';
+// import AlertTypes from '../Alerts/components/AlertTypes';
+// import ActionCatalog from '../Alerts/components/ActionCatalog';
+// import IssuedAlerts from '../Alerts/components/IssuedAlerts';
+// import AlertsFeedback from '../Alerts/layouts/Feedback';
+// import AlertsFeeds from '../Alerts/layouts/Feeds';
+// import AlertsServiceRequests from '../Alerts/layouts/ServiceRequests';
+// import AlertsSources from '../Alerts/components/AlertSources';
 import PageNotFound from '../components/UIState/PageNotFound';
-import GeographicalFeatures from '../GeographicalFeatures';
-import AdministrativeBoundaries from '../GeographicalFeatures/components/AdministrativeBoundaries';
-import Districts from '../GeographicalFeatures/components/Districts';
-import EvacuationCenters from '../GeographicalFeatures/components/EvacuationCenters';
-import GeographicalFeaturesFacilities from '../GeographicalFeatures/components/Facilities';
-import GeographicalFeaturesInfrastructure from '../GeographicalFeatures/components/Infrastructure';
-import Regions from '../GeographicalFeatures/components/Regions';
-import SubWards from '../GeographicalFeatures/layouts/SubWards';
-import Wards from '../GeographicalFeatures/components/Wards';
-import GeographicalFeaturesWarehouses from '../GeographicalFeatures/components/Warehouses';
+// import GeographicalFeatures from '../GeographicalFeatures';
+// import AdministrativeBoundaries from '../GeographicalFeatures/components/AdministrativeBoundaries';
+// import Districts from '../GeographicalFeatures/components/Districts';
+// import EvacuationCenters from '../GeographicalFeatures/components/EvacuationCenters';
+// import GeographicalFeaturesFacilities from '../GeographicalFeatures/components/Facilities';
+// import GeographicalFeaturesInfrastructure from '../GeographicalFeatures/components/Infrastructure';
+// import Regions from '../GeographicalFeatures/components/Regions';
+// import SubWards from '../GeographicalFeatures/layouts/SubWards';
+// import Wards from '../GeographicalFeatures/components/Wards';
+// import GeographicalFeaturesWarehouses from '../GeographicalFeatures/components/Warehouses';
 import Home from '../Home';
 import Stakeholders from '../Stakeholders';
 import StakeholdersAgencies from '../Stakeholders/components/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
-import StakeholdersNotifications from '../Stakeholders/components/Notifications';
+// import StakeholdersNotifications from '../Stakeholders/components/Notifications';
 import StakeholdersRoles from '../Stakeholders/components/Roles';
-import EmergencyFunctions from '../Functions/components/Emergency Functions';
+// import EmergencyFunctions from '../Functions/components/Emergency Functions';
 import OverviewDashboard from '../Dashboards';
 import ActionsTaken from '../Dashboards/ActionsTaken';
 import SecureRoute from '../Auth/SecureRoute';
@@ -225,7 +225,7 @@ const BaseLayout = props => {
       <Content className="BaseLayoutContent">
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
-          <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
+          {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
           <SecureRoute
             exact
             path={`${baseUrl}/alerttypes`}
@@ -254,8 +254,8 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/alerts/servicerequests`}
             component={AlertsServiceRequests}
-          />
-          <SecureRoute
+          /> */}
+          {/* <SecureRoute
             exact
             path={`${baseUrl}/geographicalfeatures`}
             component={GeographicalFeatures}
@@ -295,21 +295,21 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/geographicalfeatures/wards`}
             component={Wards}
-          />
+          /> */}
           <SecureRoute
             exact
             path={`${baseUrl}/stakeholders`}
             component={Stakeholders}
           />
-          <SecureRoute
+          {/* <SecureRoute
             path={`${baseUrl}/functions`}
             component={EmergencyFunctions}
-          />
+          /> */}
 
-          <SecureRoute
+          {/* <SecureRoute
             path={`${baseUrl}/stakeholders/notifications`}
             component={StakeholdersNotifications}
-          />
+          /> */}
           <SecureRoute
             path={`${baseUrl}/focalpeople`}
             component={StakeholdersFocalPeople}
