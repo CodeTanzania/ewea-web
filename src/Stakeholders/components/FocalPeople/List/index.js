@@ -242,12 +242,16 @@ class FocalPersonsList extends Component {
             <FocalPersonsListItem
               key={focalPerson._id} // eslint-disable-line
               abbreviation={focalPerson.abbreviation}
-              location={compact([
-                focalPerson.location.name,
-                focalPerson.location.place.district,
-                focalPerson.location.place.region,
-                focalPerson.location.place.country,
-              ]).join(', ')}
+              location={
+                focalPerson.location
+                  ? compact([
+                      focalPerson.location.name,
+                      focalPerson.location.place.district,
+                      focalPerson.location.place.region,
+                      focalPerson.location.place.country,
+                    ]).join(', ')
+                  : 'N/A'
+              }
               name={focalPerson.name}
               agency={focalPerson.party ? focalPerson.party.name : 'N/A'}
               agencyAbbreviation={

@@ -162,7 +162,7 @@ class FocalPeopleListItem extends Component {
           <Col {...sideSpan}>{sideComponent}</Col>
           <Col {...nameSpan}>{name}</Col>
           <Col {...roleSpan} title={agency}>
-            {role}, {agencyAbbreviation}
+            {role ? `${role}, ${agencyAbbreviation}` : 'N/A'}
           </Col>
           <Col {...phoneSpan}>{mobile}</Col>
           <Col {...emailSpan}>{email}</Col>
