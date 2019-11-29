@@ -305,7 +305,6 @@ const BaseLayout = props => {
             path={`${baseUrl}/functions`}
             component={EmergencyFunctions}
           /> */}
-
           {/* <SecureRoute
             path={`${baseUrl}/stakeholders/notifications`}
             component={StakeholdersNotifications}

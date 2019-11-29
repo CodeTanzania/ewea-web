@@ -1,9 +1,9 @@
 import {
   Connect,
-  getRoles,
-  openRoleForm,
-  selectRole,
-  closeRoleForm,
+  getPartyRoles,
+  openPartyRoleForm,
+  selectPartyRole,
+  closePartyRoleForm,
 } from '@codetanzania/ewea-api-states';
 import { Input, Col, Row, Button, Modal } from 'antd';
 import PropTypes from 'prop-types';
@@ -58,7 +58,7 @@ class Roles extends Component {
   };
 
   componentWillMount() {
-    getRoles();
+    getPartyRoles();
   }
 
   /**
@@ -94,7 +94,7 @@ class Roles extends Component {
    * @since 0.1.0
    */
   openForm = () => {
-    openRoleForm();
+    openPartyRoleForm();
   };
 
   /**
@@ -108,7 +108,7 @@ class Roles extends Component {
    * @since 0.1.0
    */
   closeForm = () => {
-    closeRoleForm();
+    closePartyRoleForm();
     this.setState({ isEditForm: false });
   };
 
@@ -123,7 +123,7 @@ class Roles extends Component {
    * @since 0.1.0
    */
   searchRoles = event => {
-    getRoles({ q: event.target.value });
+    getPartyRoles({ q: event.target.value });
   };
 
   /**
@@ -137,9 +137,9 @@ class Roles extends Component {
    * @since 0.1.0
    */
   handleEdit = role => {
-    selectRole(role);
+    selectPartyRole(role);
     this.setState({ isEditForm: true });
-    openRoleForm();
+    openPartyRoleForm();
   };
 
   /**
@@ -294,11 +294,11 @@ class Roles extends Component {
 }
 
 export default Connect(Roles, {
-  roles: 'roles.list',
-  role: 'roles.selected',
-  showForm: 'roles.showForm',
-  posting: 'roles.posting',
-  loading: 'roles.loading',
-  page: 'roles.page',
-  total: 'roles.total',
+  roles: 'partyRoles.list',
+  role: 'partyRoles.selected',
+  showForm: 'partyRoles.showForm',
+  posting: 'partyRoles.posting',
+  loading: 'partyRoles.loading',
+  page: 'partyRoles.page',
+  total: 'partyRoles.total',
 });
