@@ -1,7 +1,7 @@
 import {
-  clearRoleFilters,
+  clearPartyRoleFilters,
   Connect,
-  filterRoles,
+  filterPartyRoles,
 } from '@codetanzania/ewea-api-states';
 import { Button, Checkbox, Col, Form, Row } from 'antd';
 import PropTypes from 'prop-types';
@@ -53,7 +53,7 @@ class RolesFilters extends Component {
 
     validateFields((error, values) => {
       if (!error) {
-        filterRoles(values);
+        filterPartyRoles(values);
         onCancel();
       }
     });
@@ -69,7 +69,7 @@ class RolesFilters extends Component {
    */
   handleClearFilter = () => {
     const { onCancel } = this.props;
-    clearRoleFilters();
+    clearPartyRoleFilters();
     onCancel();
   };
 

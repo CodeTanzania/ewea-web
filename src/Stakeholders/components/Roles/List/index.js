@@ -1,8 +1,8 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import {
-  deleteRole,
-  paginateRoles,
-  refreshRoles,
+  deletePartyRole,
+  paginatePartyRoles,
+  refreshPartyRoles,
 } from '@codetanzania/ewea-api-states';
 import { List } from 'antd';
 import concat from 'lodash/concat';
@@ -177,10 +177,10 @@ class RoleList extends Component {
           })}
           onNotify={() => onNotify(selectedRoles)}
           onPaginate={nextPage => {
-            paginateRoles(nextPage);
+            paginatePartyRoles(nextPage);
           }}
           onRefresh={() =>
-            refreshRoles(
+            refreshPartyRoles(
               () => {
                 notifySuccess('Roles refreshed successfully');
               },
@@ -205,10 +205,10 @@ class RoleList extends Component {
           dataSource={roles}
           renderItem={role => (
             <RoleListItem
-              key={role.name}
-              abbreviation={role.abbreviation}
-              name={role.name}
-              description={role.description}
+              key={role._id /*eslint-disable-line */}
+              abbreviation={role.strings.abbreviation.en}
+              name={role.strings.name.en}
+              description={role.strings.description.en}
               isSelected={
                 // eslint-disable-next-line
                 map(selectedRoles, item => item._id).includes(role._id)
@@ -221,7 +221,7 @@ class RoleList extends Component {
               }}
               onEdit={() => onEdit(role)}
               onArchive={() =>
-                deleteRole(
+                deletePartyRole(
                   role._id, // eslint-disable-line
                   () => {
                     console.log(role._id); // eslint-disable-line
