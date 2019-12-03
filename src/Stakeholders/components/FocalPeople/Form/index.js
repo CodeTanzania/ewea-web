@@ -8,7 +8,7 @@ import SearchableSelectInput from '../../../../components/SearchableSelectInput'
 import { notifyError, notifySuccess } from '../../../../util';
 
 /* constants */
-const { getAgencies, getFeatures, getRoles, getPartyGroups } = httpActions;
+const { getAgencies, getFeatures, getPartyRoles, getPartyGroups } = httpActions;
 const { TextArea } = Input;
 
 /**
@@ -231,7 +231,7 @@ class FocalPersonForm extends Component {
                   })(
                     <SearchableSelectInput
                       onSearch={getPartyGroups}
-                      optionLabel="name"
+                      optionLabel={group => group.strings.name.en}
                       optionValue="_id"
                       initialValue={
                         isEditForm && focalPerson.group
@@ -251,12 +251,6 @@ class FocalPersonForm extends Component {
                       isEditForm && focalPerson.location
                         ? focalPerson.location._id // eslint-disable-line
                         : undefined,
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Focal Person area is required',
-                      },
-                    ],
                   })(
                     <SearchableSelectInput
                       onSearch={getFeatures}
@@ -294,8 +288,8 @@ class FocalPersonForm extends Component {
                 ],
               })(
                 <SearchableSelectInput
-                  onSearch={getRoles}
-                  optionLabel="name"
+                  onSearch={getPartyRoles}
+                  optionLabel={role => role.strings.name.en}
                   optionValue="_id"
                   initialValue={
                     isEditForm && focalPerson.role
