@@ -20,34 +20,7 @@ const { TextArea } = Input;
  * @since 0.1.0
  */
 class NotificationForm extends Component {
-  static propTypes = {
-    recipients: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string,
-        title: PropTypes.string,
-        abbreviation: PropTypes.string,
-        mobile: PropTypes.string,
-        email: PropTypes.string,
-      })
-    ).isRequired,
-    form: PropTypes.shape({
-      getFieldDecorator: PropTypes.func,
-      validateFieldsAndScroll: PropTypes.func,
-    }).isRequired,
-    body: PropTypes.string,
-    onCancel: PropTypes.func.isRequired,
-    onSearchRecipients: PropTypes.func.isRequired,
-    onSearchJurisdictions: PropTypes.func.isRequired,
-    onSearchGroups: PropTypes.func.isRequired,
-    onSearchRoles: PropTypes.func.isRequired,
-    onSearchAgencies: PropTypes.func.isRequired,
-    posting: PropTypes.bool.isRequired,
-  };
-
-  static defaultProps = {
-    body: undefined,
-  };
-
+  // eslint-disable-next-line react/state-in-constructor
   state = { moreFilters: false };
 
   /**
@@ -185,6 +158,7 @@ class NotificationForm extends Component {
       <Form onSubmit={this.handleSubmit} autoComplete="off">
         {/* notify recipients per jurisdictions */}
         {onSearchJurisdictions && moreFilters && (
+          // eslint-disable-next-line react/jsx-props-no-spreading
           <Form.Item {...formItemLayout} label="Areas">
             {getFieldDecorator('features')(
               <SearchableSelectInput
@@ -200,6 +174,7 @@ class NotificationForm extends Component {
 
         {/* notify recipients per group */}
         {onSearchGroups && moreFilters && (
+          // eslint-disable-next-line react/jsx-props-no-spreading
           <Form.Item {...formItemLayout} label="Group(s)">
             {getFieldDecorator('groups')(
               <SearchableSelectInput
@@ -215,6 +190,7 @@ class NotificationForm extends Component {
 
         {/* notify recipients per role */}
         {onSearchRoles && moreFilters && (
+          // eslint-disable-next-line react/jsx-props-no-spreading
           <Form.Item {...formItemLayout} label="Role(s)">
             {getFieldDecorator('roles')(
               <SearchableSelectInput
@@ -230,6 +206,7 @@ class NotificationForm extends Component {
 
         {/* notify recipients per agency */}
         {onSearchAgencies && moreFilters && (
+          // eslint-disable-next-line react/jsx-props-no-spreading
           <Form.Item {...formItemLayout} label="Agencies">
             {getFieldDecorator('agencies')(
               <SearchableSelectInput
@@ -245,6 +222,7 @@ class NotificationForm extends Component {
 
         {/* notification recipients */}
         {onSearchRecipients && (
+          // eslint-disable-next-line react/jsx-props-no-spreading
           <Form.Item {...formItemLayout} label="Recipients">
             {getFieldDecorator('recipients', {
               initialValue: map(recipients, contact => contact._id), // eslint-disable-line
@@ -263,6 +241,7 @@ class NotificationForm extends Component {
 
         {/* notification subject */}
         <Form.Item
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...formItemLayout}
           label={
             <span>
@@ -278,6 +257,7 @@ class NotificationForm extends Component {
         {/* notification subject */}
 
         {/* notification body */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Message">
           {getFieldDecorator('body', {
             rules: [
@@ -313,6 +293,34 @@ class NotificationForm extends Component {
     );
   }
 }
+
+NotificationForm.propTypes = {
+  recipients: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      title: PropTypes.string,
+      abbreviation: PropTypes.string,
+      mobile: PropTypes.string,
+      email: PropTypes.string,
+    })
+  ).isRequired,
+  form: PropTypes.shape({
+    getFieldDecorator: PropTypes.func,
+    validateFieldsAndScroll: PropTypes.func,
+  }).isRequired,
+  body: PropTypes.string,
+  onCancel: PropTypes.func.isRequired,
+  onSearchRecipients: PropTypes.func.isRequired,
+  onSearchJurisdictions: PropTypes.func.isRequired,
+  onSearchGroups: PropTypes.func.isRequired,
+  onSearchRoles: PropTypes.func.isRequired,
+  onSearchAgencies: PropTypes.func.isRequired,
+  posting: PropTypes.bool.isRequired,
+};
+
+NotificationForm.defaultProps = {
+  body: undefined,
+};
 
 export default Form.create()(NotificationForm);
 

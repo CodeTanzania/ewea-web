@@ -8,7 +8,7 @@ import {
 } from '@codetanzania/ewea-api-states';
 import { Modal } from 'antd';
 import PropTypes from 'prop-types';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Topbar from '../../../components/Topbar';
 import EmergencyFunctionsFilters from './Filters';
 import FunctionForm from './Form';
@@ -24,28 +24,11 @@ import './styles.css';
  * @since 0.1.0
  */
 class EmergencyFunctions extends Component {
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     showFilters: false,
     isEditForm: false,
     cached: null,
-  };
-
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    posting: PropTypes.bool.isRequired,
-    emergencyFunctions: PropTypes.arrayOf(
-      PropTypes.shape({ name: PropTypes.string })
-    ).isRequired,
-    emergencyFunction: PropTypes.shape({ name: PropTypes.string }),
-    page: PropTypes.number.isRequired,
-    showForm: PropTypes.bool.isRequired,
-    searchQuery: PropTypes.string,
-    total: PropTypes.number.isRequired,
-  };
-
-  static defaultProps = {
-    emergencyFunction: null,
-    searchQuery: undefined,
   };
 
   componentDidMount() {
@@ -174,7 +157,7 @@ class EmergencyFunctions extends Component {
     } = this.props;
     const { showFilters, isEditForm, cached } = this.state;
     return (
-      <Fragment>
+      <>
         {/* Topbar */}
         <Topbar
           search={{
@@ -250,10 +233,28 @@ class EmergencyFunctions extends Component {
           </Modal>
           {/* end create/edit form modal */}
         </div>
-      </Fragment>
+      </>
     );
   }
 }
+
+EmergencyFunctions.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  posting: PropTypes.bool.isRequired,
+  emergencyFunctions: PropTypes.arrayOf(
+    PropTypes.shape({ name: PropTypes.string })
+  ).isRequired,
+  emergencyFunction: PropTypes.shape({ name: PropTypes.string }),
+  page: PropTypes.number.isRequired,
+  showForm: PropTypes.bool.isRequired,
+  searchQuery: PropTypes.string,
+  total: PropTypes.number.isRequired,
+};
+
+EmergencyFunctions.defaultProps = {
+  emergencyFunction: null,
+  searchQuery: undefined,
+};
 
 export default Connect(EmergencyFunctions, {
   emergencyFunctions: 'incidentTypes.list',

@@ -22,42 +22,6 @@ const { getIncidentTypes, getJurisdictions } = httpActions;
  * @since 0.1.0
  */
 class AlertsFilters extends Component {
-  static propTypes = {
-    filter: PropTypes.objectOf(
-      PropTypes.shape({
-        groups: PropTypes.arrayOf(PropTypes.string),
-      })
-    ),
-    alertSchema: PropTypes.shape({
-      urgency: PropTypes.arrayOf(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      severity: PropTypes.arrayOf(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      certainty: PropTypes.arrayOf(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      status: PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) }),
-    }).isRequired,
-    form: PropTypes.shape({
-      getFieldDecorator: PropTypes.func,
-      validateFields: PropTypes.func,
-    }).isRequired,
-    onCancel: PropTypes.func.isRequired,
-    cached: PropTypes.shape({
-      events: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
-      locations: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
-    }),
-    onCache: PropTypes.func.isRequired,
-    onClearCache: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    filter: null,
-    cached: null,
-  };
-
   /**
    * @function
    * @name handleSubmit
@@ -165,6 +129,7 @@ class AlertsFilters extends Component {
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
         {/* start alert event filters */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="By Event(s)">
           {getFieldDecorator('event', {
             initialValue: filter ? filter.group : [],
@@ -182,6 +147,7 @@ class AlertsFilters extends Component {
         {/* end alert event filters */}
 
         {/* start alert area filters */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="By Area(s)">
           {getFieldDecorator('location', {
             initialValue: filter ? filter.location : [],
@@ -199,6 +165,7 @@ class AlertsFilters extends Component {
         {/* end alert area filters */}
 
         {/* start alert certainty filters */}
+        {/* eslint-disable react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="By  Certainity">
           {getFieldDecorator('certainty', {
             initialValue: filter ? filter.certainty : [],
@@ -228,6 +195,7 @@ class AlertsFilters extends Component {
           })(<SelectInput options={severity.enum} mode="multiple" />)}
         </Form.Item>
         {/* end alert severity filters */}
+        {/* eslint-enable react/jsx-props-no-spreading */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -244,6 +212,42 @@ class AlertsFilters extends Component {
     );
   }
 }
+
+AlertsFilters.propTypes = {
+  filter: PropTypes.objectOf(
+    PropTypes.shape({
+      groups: PropTypes.arrayOf(PropTypes.string),
+    })
+  ),
+  alertSchema: PropTypes.shape({
+    urgency: PropTypes.arrayOf(
+      PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+    ),
+    severity: PropTypes.arrayOf(
+      PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+    ),
+    certainty: PropTypes.arrayOf(
+      PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+    ),
+    status: PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) }),
+  }).isRequired,
+  form: PropTypes.shape({
+    getFieldDecorator: PropTypes.func,
+    validateFields: PropTypes.func,
+  }).isRequired,
+  onCancel: PropTypes.func.isRequired,
+  cached: PropTypes.shape({
+    events: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+    locations: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+  }),
+  onCache: PropTypes.func.isRequired,
+  onClearCache: PropTypes.func.isRequired,
+};
+
+AlertsFilters.defaultProps = {
+  filter: null,
+  cached: null,
+};
 
 export default Connect(Form.create()(AlertsFilters), {
   filter: 'alerts.filter',

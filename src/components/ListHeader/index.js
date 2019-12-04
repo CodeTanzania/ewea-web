@@ -14,6 +14,7 @@ import './styles.css';
  * @param {Function} props.onDeselectAll callback to handle deselect all checkbox
  * @param {boolean} props.isBulkSelected flag to show if current page results are
  * selected
+ * @returns {object} react element
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -40,6 +41,7 @@ const ListHeader = ({
     </Col>
 
     {headerLayout.map(item => (
+      // eslint-disable-next-line react/jsx-props-no-spreading
       <Col key={item.header} {...item}>
         <h4 className="title">{item.header}</h4>
       </Col>
