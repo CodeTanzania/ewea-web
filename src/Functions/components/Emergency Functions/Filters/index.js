@@ -21,31 +21,6 @@ const { getIncidentTypes } = httpActions;
  * @since 0.1.0
  */
 class EmergencyFunctionsFilters extends Component {
-  static propTypes = {
-    filter: PropTypes.objectOf(
-      PropTypes.shape({
-        families: PropTypes.arrayOf(PropTypes.string),
-      })
-    ),
-    form: PropTypes.shape({
-      getFieldDecorator: PropTypes.func,
-      validateFields: PropTypes.func,
-    }).isRequired,
-    onCancel: PropTypes.func.isRequired,
-    cached: PropTypes.shape({
-      natures: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
-      families: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
-      codes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
-    }),
-    onCache: PropTypes.func.isRequired,
-    onClearCache: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    filter: null,
-    cached: null,
-  };
-
   /**
    * @function
    * @name handleSubmit
@@ -133,6 +108,7 @@ class EmergencyFunctionsFilters extends Component {
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
         {/* start contact group filters */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="By Nature">
           {getFieldDecorator('nature', {
             initialValue: filter ? filter.nature : [],
@@ -150,6 +126,7 @@ class EmergencyFunctionsFilters extends Component {
         {/* end contact group filters */}
 
         {/* start contact group filters */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="By Family">
           {getFieldDecorator('family', {
             initialValue: filter ? filter.family : [],
@@ -167,6 +144,7 @@ class EmergencyFunctionsFilters extends Component {
         {/* end contact group filters */}
 
         {/* start contact group filters */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="By code(s)">
           {getFieldDecorator('code', {
             initialValue: filter ? filter.codes : [],
@@ -198,6 +176,31 @@ class EmergencyFunctionsFilters extends Component {
     );
   }
 }
+
+EmergencyFunctionsFilters.propTypes = {
+  filter: PropTypes.objectOf(
+    PropTypes.shape({
+      families: PropTypes.arrayOf(PropTypes.string),
+    })
+  ),
+  form: PropTypes.shape({
+    getFieldDecorator: PropTypes.func,
+    validateFields: PropTypes.func,
+  }).isRequired,
+  onCancel: PropTypes.func.isRequired,
+  cached: PropTypes.shape({
+    natures: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+    families: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+    codes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+  }),
+  onCache: PropTypes.func.isRequired,
+  onClearCache: PropTypes.func.isRequired,
+};
+
+EmergencyFunctionsFilters.defaultProps = {
+  filter: null,
+  cached: null,
+};
 
 export default Connect(Form.create()(EmergencyFunctionsFilters), {
   filter: 'incidentTypes.filter',

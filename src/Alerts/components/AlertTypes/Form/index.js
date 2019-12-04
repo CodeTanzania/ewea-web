@@ -13,24 +13,6 @@ import { notifyError, notifySuccess } from '../../../../util';
  * @since 0.1.0
  */
 class AlertTypeForm extends Component {
-  static propTypes = {
-    alertType: PropTypes.shape({
-      type: PropTypes.string,
-      scope: PropTypes.string,
-      severity: PropTypes.string,
-      _id: PropTypes.string,
-      category: PropTypes.string,
-      status: PropTypes.string,
-    }).isRequired,
-    isEditForm: PropTypes.bool.isRequired,
-    posting: PropTypes.bool.isRequired,
-    onCancel: PropTypes.func.isRequired,
-    form: PropTypes.shape({
-      getFieldDecorator: PropTypes.func,
-      validateFieldsAndScroll: PropTypes.func,
-    }).isRequired,
-  };
-
   /**
    * @function
    * @name handleSubmit
@@ -55,7 +37,7 @@ class AlertTypeForm extends Component {
     validateFieldsAndScroll((error, values) => {
       if (!error) {
         if (isEditForm) {
-          const updatedContact = Object.assign({}, alertType, values);
+          const updatedContact = { ...alertType, ...values };
           putAlert(
             updatedContact,
             () => {
@@ -115,6 +97,7 @@ class AlertTypeForm extends Component {
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
         {/* Alert Type name */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Name">
           {getFieldDecorator('type', {
             initialValue: isEditForm ? alertType.type : undefined,
@@ -129,6 +112,7 @@ class AlertTypeForm extends Component {
         {/* end Alert Type name */}
 
         {/* Alert Type category */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Category">
           {getFieldDecorator('category', {
             initialValue: isEditForm ? alertType.category : undefined,
@@ -140,6 +124,7 @@ class AlertTypeForm extends Component {
         {/* end Alert Type category */}
 
         {/* Alert type */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Scope">
           {getFieldDecorator('scope', {
             initialValue: isEditForm ? alertType.scope : undefined,
@@ -149,6 +134,7 @@ class AlertTypeForm extends Component {
         {/* end Alert Type */}
 
         {/* Alert Type severity */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Severity">
           {getFieldDecorator('severity', {
             initialValue: isEditForm ? alertType.severity : undefined,
@@ -158,6 +144,7 @@ class AlertTypeForm extends Component {
         {/* end Alert Type severity */}
 
         {/* Alert Type status */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Status">
           {getFieldDecorator('status', {
             initialValue: isEditForm ? alertType.status : undefined,
@@ -183,5 +170,23 @@ class AlertTypeForm extends Component {
     );
   }
 }
+
+AlertTypeForm.propTypes = {
+  alertType: PropTypes.shape({
+    type: PropTypes.string,
+    scope: PropTypes.string,
+    severity: PropTypes.string,
+    _id: PropTypes.string,
+    category: PropTypes.string,
+    status: PropTypes.string,
+  }).isRequired,
+  isEditForm: PropTypes.bool.isRequired,
+  posting: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  form: PropTypes.shape({
+    getFieldDecorator: PropTypes.func,
+    validateFieldsAndScroll: PropTypes.func,
+  }).isRequired,
+};
 
 export default Form.create()(AlertTypeForm);

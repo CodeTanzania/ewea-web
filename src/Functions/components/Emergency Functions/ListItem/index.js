@@ -24,23 +24,9 @@ const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
  * @since 0.1.0
  */
 class EmergencyFunctionsListItem extends Component {
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     isHovered: false,
-  };
-
-  static propTypes = {
-    abbreviation: PropTypes.string.isRequired,
-    cap: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    nature: PropTypes.string.isRequired,
-    color: PropTypes.string.isRequired,
-    code: PropTypes.string.isRequired,
-    family: PropTypes.string.isRequired,
-    onArchive: PropTypes.func.isRequired,
-    onEdit: PropTypes.func.isRequired,
-    isSelected: PropTypes.bool.isRequired,
-    onSelectItem: PropTypes.func.isRequired,
-    onDeselectItem: PropTypes.func.isRequired,
   };
 
   /**
@@ -152,6 +138,7 @@ class EmergencyFunctionsListItem extends Component {
         onMouseLeave={this.handleMouseLeave}
       >
         <Row>
+          {/* eslint-disable react/jsx-props-no-spreading */}
           <Col {...sideSpan}>{sideComponent}</Col>
           <Col {...nameSpan}>{name}</Col>
           <Col {...natureSpan}> {nature} </Col>
@@ -159,6 +146,7 @@ class EmergencyFunctionsListItem extends Component {
           <Col {...codeSpan}>{code}</Col>
           <Col {...capSpan}>{cap}</Col>
           <Col {...isHoveredSpan}>
+            {/* eslint-enable react/jsx-props-no-spreading */}
             {isHovered && (
               <ListItemActions
                 edit={{
@@ -180,5 +168,20 @@ class EmergencyFunctionsListItem extends Component {
     );
   }
 }
+
+EmergencyFunctionsListItem.propTypes = {
+  abbreviation: PropTypes.string.isRequired,
+  cap: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  nature: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
+  code: PropTypes.string.isRequired,
+  family: PropTypes.string.isRequired,
+  onArchive: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  onSelectItem: PropTypes.func.isRequired,
+  onDeselectItem: PropTypes.func.isRequired,
+};
 
 export default EmergencyFunctionsListItem;

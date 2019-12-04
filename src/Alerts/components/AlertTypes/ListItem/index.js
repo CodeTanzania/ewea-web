@@ -25,22 +25,9 @@ const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
  * @since 0.1.0
  */
 class AlertTypesListItem extends Component {
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     isHovered: false,
-  };
-
-  static propTypes = {
-    abbreviation: PropTypes.string.isRequired,
-    scope: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    severity: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
-    onArchive: PropTypes.func.isRequired,
-    onEdit: PropTypes.func.isRequired,
-    isSelected: PropTypes.bool.isRequired,
-    onSelectItem: PropTypes.func.isRequired,
-    onDeselectItem: PropTypes.func.isRequired,
   };
 
   /**
@@ -154,6 +141,7 @@ class AlertTypesListItem extends Component {
         onMouseLeave={this.handleMouseLeave}
       >
         <Row>
+          {/* eslint-disable react/jsx-props-no-spreading */}
           <Col {...sideSpan}>{sideComponent}</Col>
           <Col {...nameSpan}>{name}</Col>
           <Col {...categorySpan}>{category}</Col>
@@ -164,6 +152,7 @@ class AlertTypesListItem extends Component {
           <Col {...severitySpan}>{severity}</Col>
           <Col {...statusSpan}>{status}</Col>
           <Col {...isHoveredSpan}>
+            {/* eslint-disable react/jsx-props-no-spreading */}
             {isHovered && (
               <ListItemActions
                 edit={{
@@ -184,5 +173,19 @@ class AlertTypesListItem extends Component {
     );
   }
 }
+
+AlertTypesListItem.propTypes = {
+  abbreviation: PropTypes.string.isRequired,
+  scope: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  severity: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  onArchive: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  onSelectItem: PropTypes.func.isRequired,
+  onDeselectItem: PropTypes.func.isRequired,
+};
 
 export default AlertTypesListItem;

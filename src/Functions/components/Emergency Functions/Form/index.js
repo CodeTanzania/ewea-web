@@ -22,32 +22,6 @@ const { Option } = Select;
  */
 
 class FunctionForm extends Component {
-  static propTypes = {
-    isEditForm: PropTypes.bool.isRequired,
-    emergencyFunction: PropTypes.shape({
-      name: PropTypes.string,
-      nature: PropTypes.string,
-      family: PropTypes.string,
-      color: PropTypes.string,
-      cap: PropTypes.string,
-      code: PropTypes.string,
-    }),
-    form: PropTypes.shape({
-      getFieldDecorator: PropTypes.func,
-      validateFieldsAndScroll: PropTypes.func,
-      setFieldsValue: PropTypes.func,
-    }).isRequired,
-    families: PropTypes.arrayOf(PropTypes.string).isRequired,
-    natures: PropTypes.arrayOf(PropTypes.string).isRequired,
-    caps: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onCancel: PropTypes.func.isRequired,
-    posting: PropTypes.bool.isRequired,
-  };
-
-  static defaultProps = {
-    emergencyFunction: null,
-  };
-
   /**
    * @function
    * @name onChangeColor
@@ -85,11 +59,10 @@ class FunctionForm extends Component {
     validateFieldsAndScroll((error, values) => {
       if (!error) {
         if (isEditForm) {
-          const updatedIncidentType = Object.assign(
-            {},
-            emergencyFunction,
-            values
-          );
+          const updatedIncidentType = {
+            ...emergencyFunction,
+            ...values,
+          };
           putIncidentType(
             updatedIncidentType,
             () => {
@@ -153,6 +126,7 @@ class FunctionForm extends Component {
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
         {/* function  name */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Name ">
           {getFieldDecorator('name', {
             initialValue: isEditForm ? emergencyFunction.name : undefined,
@@ -162,6 +136,7 @@ class FunctionForm extends Component {
         {/* end function  name */}
 
         {/* function nature */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Nature">
           {getFieldDecorator('nature', {
             initialValue: isEditForm ? emergencyFunction.nature : undefined,
@@ -179,6 +154,7 @@ class FunctionForm extends Component {
         {/* end nature */}
 
         {/* function cap */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Cap">
           {getFieldDecorator('cap', {
             initialValue: isEditForm ? emergencyFunction.cap : undefined,
@@ -196,6 +172,7 @@ class FunctionForm extends Component {
         {/* end function  cap */}
 
         {/*  function family */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Family">
           {getFieldDecorator('family', {
             initialValue: isEditForm ? emergencyFunction.family : undefined,
@@ -213,6 +190,7 @@ class FunctionForm extends Component {
         {/* end function */}
 
         {/* function  */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Code">
           {getFieldDecorator('code', {
             initialValue: isEditForm ? emergencyFunction.code : undefined,
@@ -223,6 +201,7 @@ class FunctionForm extends Component {
 
         <Row>
           <Col span={19}>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Color Code">
               {getFieldDecorator('color', {
                 initialValue: isEditForm ? emergencyFunction.color : undefined,
@@ -257,6 +236,32 @@ class FunctionForm extends Component {
     );
   }
 }
+
+FunctionForm.propTypes = {
+  isEditForm: PropTypes.bool.isRequired,
+  emergencyFunction: PropTypes.shape({
+    name: PropTypes.string,
+    nature: PropTypes.string,
+    family: PropTypes.string,
+    color: PropTypes.string,
+    cap: PropTypes.string,
+    code: PropTypes.string,
+  }),
+  form: PropTypes.shape({
+    getFieldDecorator: PropTypes.func,
+    validateFieldsAndScroll: PropTypes.func,
+    setFieldsValue: PropTypes.func,
+  }).isRequired,
+  families: PropTypes.arrayOf(PropTypes.string).isRequired,
+  natures: PropTypes.arrayOf(PropTypes.string).isRequired,
+  caps: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onCancel: PropTypes.func.isRequired,
+  posting: PropTypes.bool.isRequired,
+};
+
+FunctionForm.defaultProps = {
+  emergencyFunction: null,
+};
 
 export default Connect(Form.create()(FunctionForm), {
   natures: 'incidentTypes.schema.properties.nature.enum',

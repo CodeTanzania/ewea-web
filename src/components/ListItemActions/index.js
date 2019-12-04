@@ -14,6 +14,7 @@ import './styles.css';
  * @param {object} props.archive on archive action callback
  * @param {object} props.transfer on transfer action callback
  * @param {object} props.adjust on adjust action callback
+ * @returns {object} react element
  *
  * @version 0.1.0
  * @since 0.1.0

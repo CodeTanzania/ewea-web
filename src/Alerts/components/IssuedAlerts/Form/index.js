@@ -21,37 +21,6 @@ const { getIncidentTypes, getFeatures } = httpActions;
  * @since 0.1.0
  */
 class AlertForm extends Component {
-  static propTypes = {
-    isEditForm: PropTypes.bool.isRequired,
-    alert: PropTypes.shape({
-      event: PropTypes.string,
-      description: PropTypes.string,
-      certainty: PropTypes.string,
-      urgency: PropTypes.string,
-      color: PropTypes.string,
-      severity: PropTypes.string,
-    }).isRequired,
-    alertSchema: PropTypes.shape({
-      urgency: PropTypes.arrayOf(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      severity: PropTypes.arrayOf(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      certainty: PropTypes.arrayOf(
-        PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
-      ),
-      status: PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) }),
-    }).isRequired,
-    form: PropTypes.shape({
-      getFieldDecorator: PropTypes.func,
-      validateFieldsAndScroll: PropTypes.func,
-    }).isRequired,
-    groups: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onCancel: PropTypes.func.isRequired,
-    posting: PropTypes.bool.isRequired,
-  };
-
   /**
    * @function
    * @name handleSubmit
@@ -74,7 +43,7 @@ class AlertForm extends Component {
     validateFieldsAndScroll((error, values) => {
       if (!error) {
         if (isEditForm) {
-          const updatedAlert = Object.assign({}, alert, values);
+          const updatedAlert = { ...alert, ...values };
           putAlert(
             updatedAlert,
             () => {
@@ -156,6 +125,7 @@ class AlertForm extends Component {
         {/* alert event */}
         <Row type="flex" justify="space-between">
           <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Event">
               {getFieldDecorator('event', {
                 initialValue:
@@ -184,6 +154,7 @@ class AlertForm extends Component {
         {/* alert area */}
         <Row type="flex" justify="space-between">
           <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Area">
               {getFieldDecorator('area', {
                 initialValue:
@@ -219,6 +190,7 @@ class AlertForm extends Component {
         <Row type="flex" justify="space-between">
           <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
             {/* alert status */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Status">
               {getFieldDecorator('status', {
                 initialValue:
@@ -231,6 +203,7 @@ class AlertForm extends Component {
           </Col>
           <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
             {/* alert severity */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Severity">
               {getFieldDecorator('severity', {
                 initialValue:
@@ -253,6 +226,7 @@ class AlertForm extends Component {
         <Row type="flex" justify="space-between">
           <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
             {/* alert urgency */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Urgency">
               {getFieldDecorator('urgency', {
                 initialValue:
@@ -271,6 +245,7 @@ class AlertForm extends Component {
           </Col>
           <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
             {/* alert certainty */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Certainty">
               {getFieldDecorator('certainty', {
                 initialValue:
@@ -300,6 +275,37 @@ class AlertForm extends Component {
     );
   }
 }
+
+AlertForm.propTypes = {
+  isEditForm: PropTypes.bool.isRequired,
+  alert: PropTypes.shape({
+    event: PropTypes.string,
+    description: PropTypes.string,
+    certainty: PropTypes.string,
+    urgency: PropTypes.string,
+    color: PropTypes.string,
+    severity: PropTypes.string,
+  }).isRequired,
+  alertSchema: PropTypes.shape({
+    urgency: PropTypes.arrayOf(
+      PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+    ),
+    severity: PropTypes.arrayOf(
+      PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+    ),
+    certainty: PropTypes.arrayOf(
+      PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) })
+    ),
+    status: PropTypes.shape({ enum: PropTypes.arrayOf(PropTypes.string) }),
+  }).isRequired,
+  form: PropTypes.shape({
+    getFieldDecorator: PropTypes.func,
+    validateFieldsAndScroll: PropTypes.func,
+  }).isRequired,
+  groups: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onCancel: PropTypes.func.isRequired,
+  posting: PropTypes.bool.isRequired,
+};
 
 export default Form.create()(
   Connect(AlertForm, {

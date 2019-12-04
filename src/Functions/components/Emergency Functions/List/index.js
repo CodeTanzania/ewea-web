@@ -12,7 +12,7 @@ import remove from 'lodash/remove';
 import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
 import PropTypes from 'prop-types';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import ListHeader from '../../../../components/ListHeader';
 import Toolbar from '../../../../components/Toolbar';
 import { notifyError, notifySuccess } from '../../../../util';
@@ -44,17 +44,7 @@ const { getIncidentTypesExportUrl } = httpActions;
  * @since 0.1.0
  */
 class FunctionsList extends Component {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    emergencyFunctions: PropTypes.arrayOf(
-      PropTypes.shape({ name: PropTypes.string })
-    ).isRequired,
-    page: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
-    onEdit: PropTypes.func.isRequired,
-    onFilter: PropTypes.func.isRequired,
-  };
-
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     selectedEmergencyFunctions: [],
     selectedPages: [],
@@ -174,7 +164,7 @@ class FunctionsList extends Component {
     ).length;
 
     return (
-      <Fragment>
+      <>
         {/* toolbar */}
         <Toolbar
           itemName="Emergency Functions"
@@ -262,9 +252,20 @@ class FunctionsList extends Component {
           )}
         />
         {/* end emergency functions list */}
-      </Fragment>
+      </>
     );
   }
 }
+
+FunctionsList.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  emergencyFunctions: PropTypes.arrayOf(
+    PropTypes.shape({ name: PropTypes.string })
+  ).isRequired,
+  page: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onFilter: PropTypes.func.isRequired,
+};
 
 export default FunctionsList;

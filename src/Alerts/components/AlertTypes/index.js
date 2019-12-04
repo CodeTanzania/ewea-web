@@ -7,7 +7,7 @@ import {
   closeAlertForm,
 } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Modal } from 'antd';
 import Topbar from '../../../components/Topbar';
 import AlertTypeForm from './Form';
@@ -26,25 +26,9 @@ import './styles.css';
  * @since 0.1.0
  */
 class AlertTypes extends Component {
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     isEditForm: false,
-  };
-
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    alertTypes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
-      .isRequired,
-    alertType: PropTypes.shape({ name: PropTypes.string }),
-    page: PropTypes.number.isRequired,
-    searchQuery: PropTypes.string,
-    total: PropTypes.number.isRequired,
-    posting: PropTypes.bool.isRequired,
-    showForm: PropTypes.bool.isRequired,
-  };
-
-  static defaultProps = {
-    alertType: null,
-    searchQuery: undefined,
   };
 
   componentDidMount() {
@@ -119,7 +103,7 @@ class AlertTypes extends Component {
     } = this.props;
     const { isEditForm } = this.state;
     return (
-      <Fragment>
+      <>
         {/* Topbar */}
         <Topbar
           search={{
@@ -171,10 +155,27 @@ class AlertTypes extends Component {
           </Modal>
           {/* end create/edit form modal */}
         </div>
-      </Fragment>
+      </>
     );
   }
 }
+
+AlertTypes.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  alertTypes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+    .isRequired,
+  alertType: PropTypes.shape({ name: PropTypes.string }),
+  page: PropTypes.number.isRequired,
+  searchQuery: PropTypes.string,
+  total: PropTypes.number.isRequired,
+  posting: PropTypes.bool.isRequired,
+  showForm: PropTypes.bool.isRequired,
+};
+
+AlertTypes.defaultProps = {
+  alertType: null,
+  searchQuery: undefined,
+};
 
 export default Connect(AlertTypes, {
   alertTypes: 'alerts.list',
