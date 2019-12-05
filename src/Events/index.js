@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import issuedAlertsIcon from '../assets/icons/alerts/issuedalerts.svg';
+import issuedEventsIcon from '../assets/icons/alerts/issuedalerts.svg';
 import actionsIcon from '../assets/icons/alerts/actions-disabled.svg';
 import surveyAndFeedbackIcon from '../assets/icons/alerts/surveyandfeedback-disabled.svg';
 import serviceRequestsIcon from '../assets/icons/alerts/servicerequest-disabled.svg';
@@ -11,9 +11,9 @@ import modules from '../modules.json';
 
 const routes = [
   {
-    name: 'Issued Alerts',
-    path: '/issuedalerts',
-    icon: issuedAlertsIcon,
+    name: 'Events',
+    path: '/events',
+    icon: issuedEventsIcon,
     description: modules.alertsIssued,
   },
   {
@@ -24,7 +24,7 @@ const routes = [
     disabled: true,
   },
   {
-    name: 'Alerts Feed',
+    name: 'Events Feed',
     path: '/feeds',
     icon: feedsIcon,
     description: modules.alertsFeeds,
@@ -54,8 +54,8 @@ const routes = [
 
 /**
  * @function
- * @name Alerts
- * @description Alerts component which shows to navigation Nav
+ * @name Events
+ * @description Events component which shows to navigation Nav
  *
  * @param {object} match object with routes information
  *
@@ -64,11 +64,11 @@ const routes = [
  * @version 0.1.0
  * @since 0.1.0
  */
-const Alerts = ({ match }) => <NavigationMenu match={match} routes={routes} />;
+const Events = ({ match }) => <NavigationMenu match={match} routes={routes} />;
 
 /* props validation */
-Alerts.propTypes = {
+Events.propTypes = {
   match: PropTypes.shape({ url: PropTypes.string }).isRequired,
 };
 
-export default Alerts;
+export default Events;

@@ -1,4 +1,4 @@
-.AlertsList {
+.EventsList {
   padding: 0 40px;
 }
 
@@ -13,16 +13,16 @@
 }
 
 @media screen and (max-width: 768px) {
-  .AlertsList {
+  .EventsList {
     padding: 0 30px;
   }
   .FormModal {
     width: 80% !important;
   }
 }
- 
- @media screen and (max-width: 426px) {
-  .AlertsList {
+
+@media screen and (max-width: 426px) {
+  .EventsList {
     padding: 0 20px;
   }
   .FormModal {

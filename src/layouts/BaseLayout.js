@@ -11,6 +11,7 @@ import UserMenu from './components/UserMenu';
 // import AlertsFeeds from '../Alerts/layouts/Feeds';
 // import AlertsServiceRequests from '../Alerts/layouts/ServiceRequests';
 // import AlertsSources from '../Alerts/components/AlertSources';
+import Events from '../Events/components/Events';
 import PageNotFound from '../components/UIState/PageNotFound';
 // import GeographicalFeatures from '../GeographicalFeatures';
 // import AdministrativeBoundaries from '../GeographicalFeatures/components/AdministrativeBoundaries';
@@ -61,9 +62,9 @@ const breadcrumbNameMap = {
     name: 'Feeds',
     title: 'Alerts feeds',
   },
-  '/app/issuedalerts': {
-    name: 'Issued Alerts',
-    title: 'List of all alerts',
+  '/app/events': {
+    name: 'Events',
+    title: 'List of all Events(Alerts and Incidents)',
   },
   '/app/alerts/servicerequests': {
     name: 'Service Requests',
@@ -225,16 +226,14 @@ const BaseLayout = props => {
       <Content className="BaseLayoutContent">
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
+          <SecureRoute path={`${baseUrl}/events`} component={Events} />
           {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
           <SecureRoute
             exact
             path={`${baseUrl}/alerttypes`}
             component={AlertTypes}
           />
-          <SecureRoute
-            path={`${baseUrl}/issuedalerts`}
-            component={IssuedAlerts}
-          />
+        
           <SecureRoute
             path={`${baseUrl}/actioncatalog`}
             component={ActionCatalog}

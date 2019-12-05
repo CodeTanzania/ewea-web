@@ -1,5 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { Connect, postAlert, putAlert } from '@codetanzania/ewea-api-states';
+import { Connect, postEvent, putEvent } from '@codetanzania/ewea-api-states';
 import { Button, Col, Form, Row } from 'antd';
 import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
@@ -9,18 +9,18 @@ import { notifyError, notifySuccess } from '../../../../util';
 import SelectInput from '../../../../components/SelectInput';
 
 /* constants */
-const { getIncidentTypes, getFeatures } = httpActions;
+const { getEventTypes, getFeatures } = httpActions;
 
 /**
  * @class
- * @name AlertForm
- * @description Render Alert form for creating and updating stakeholder
+ * @name EventForm
+ * @description Render Event form for creating and updating stakeholder
  * alert details
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class AlertForm extends Component {
+class EventForm extends Component {
   /**
    * @function
    * @name handleSubmit
@@ -43,11 +43,11 @@ class AlertForm extends Component {
     validateFieldsAndScroll((error, values) => {
       if (!error) {
         if (isEditForm) {
-          const updatedAlert = { ...alert, ...values };
-          putAlert(
-            updatedAlert,
+          const updatedEvent = { ...alert, ...values };
+          putEvent(
+            updatedEvent,
             () => {
-              notifySuccess('Alert was updated successfully');
+              notifySuccess('Event was updated successfully');
             },
             () => {
               notifyError(
@@ -56,10 +56,10 @@ class AlertForm extends Component {
             }
           );
         } else {
-          postAlert(
+          postEvent(
             values,
             () => {
-              notifySuccess('Alert was created successfully');
+              notifySuccess('Event was created successfully');
             },
             () => {
               notifyError(
@@ -135,13 +135,13 @@ class AlertForm extends Component {
                 rules: [
                   {
                     required: true,
-                    message: 'Alert event is required',
+                    message: 'Event event is required',
                   },
                 ],
               })(
                 <SearchableSelectInput
-                  onSearch={getIncidentTypes}
-                  optionLabel="name"
+                  onSearch={getEventTypes}
+                  optionLabel={type => type.strings.name.en}
                   optionValue="_id"
                   initialValue={isEditForm && alert ? alert : undefined}
                 />
@@ -164,7 +164,7 @@ class AlertForm extends Component {
                 rules: [
                   {
                     required: true,
-                    message: 'Alert area is required',
+                    message: 'Event area is required',
                   },
                 ],
               })(
@@ -213,7 +213,7 @@ class AlertForm extends Component {
                 rules: [
                   {
                     required: true,
-                    message: 'Alert severity is required',
+                    message: 'Event severity is required',
                   },
                 ],
               })(<SelectInput options={severity.enum} />)}
@@ -236,7 +236,7 @@ class AlertForm extends Component {
                 rules: [
                   {
                     required: true,
-                    message: 'Alert urgency is required',
+                    message: 'Event urgency is required',
                   },
                 ],
               })(<SelectInput options={urgency.enum} />)}
@@ -276,7 +276,7 @@ class AlertForm extends Component {
   }
 }
 
-AlertForm.propTypes = {
+EventForm.propTypes = {
   isEditForm: PropTypes.bool.isRequired,
   alert: PropTypes.shape({
     event: PropTypes.string,
@@ -308,7 +308,7 @@ AlertForm.propTypes = {
 };
 
 export default Form.create()(
-  Connect(AlertForm, {
+  Connect(EventForm, {
     alertSchema: 'alerts.schema.properties',
   })
 );

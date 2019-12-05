@@ -8,23 +8,23 @@ import './styles.css';
 /* constants */
 const { confirm } = Modal;
 const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 3, xs: 3 };
-const urgencySpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 0, xs: 0 };
-const statusSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 0, xs: 0 };
-const severitySpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const eventSpan = { xxl: 8, xl: 7, lg: 6, md: 0, sm: 19, xs: 19 };
-const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+// const urgencySpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 0, xs: 0 };
+const referenceIDSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 0, xs: 0 };
+// const severitySpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
+const eventSpan = { xxl: 8, xl: 18, lg: 17, md: 0, sm: 19, xs: 19 };
+// const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 
 /**
  * @class
- * @name AlertsListItem
- * @description Single alert list item component.
- * Render single alert details
+ * @name EventListItem
+ * @description Single event list item component.
+ * Render single event details
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class AlertsListItem extends Component {
+class EventListItem extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isHovered: false,
@@ -79,7 +79,7 @@ class AlertsListItem extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a alert
+   * @description show confirm modal before archiving a event
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -99,14 +99,15 @@ class AlertsListItem extends Component {
 
   render() {
     const {
+      number,
       abbreviation,
-      urgency,
-      severity,
-      status,
+      // urgency,
+      // severity,
+      // status,
       description,
-      event,
+      // event,
       color,
-      location,
+      // location,
       onEdit,
     } = this.props;
     const { isHovered } = this.state;
@@ -138,7 +139,7 @@ class AlertsListItem extends Component {
 
     return (
       <div
-        className="AlertsListItem"
+        className="EventListItem"
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
@@ -146,24 +147,24 @@ class AlertsListItem extends Component {
           {/* eslint-disable react/jsx-props-no-spreading */}
           <Col {...sideSpan}>{sideComponent}</Col>
           <Col {...eventSpan} title={description}>
-            {event}
+            {description}
           </Col>
-          <Col {...areaSpan}>{location}</Col>
-          <Col {...statusSpan}>{status}</Col>
-          <Col {...severitySpan}>{severity}</Col>
-          <Col {...urgencySpan}>{urgency}</Col>
+          {/* <Col {...areaSpan}>{location}</Col> */}
+          <Col {...referenceIDSpan}>{number}</Col>
+          {/* <Col {...severitySpan}>{severity}</Col> */}
+          {/* <Col {...urgencySpan}>{urgency}</Col> */}
           <Col {...isHoveredSpan}>
             {/* eslint-enable react/jsx-props-no-spreading */}
             {isHovered && (
               <ListItemActions
                 edit={{
-                  name: 'Edit Alert',
-                  title: 'Update Alert Details',
+                  name: 'Edit Event',
+                  title: 'Update Event Details',
                   onClick: onEdit,
                 }}
                 archive={{
-                  name: 'Archive Alert',
-                  title: 'Remove Alert from list of active alerts',
+                  name: 'Archive Event',
+                  title: 'Remove Event from list of active Events',
                   onClick: this.showArchiveConfirm,
                 }}
               />
@@ -175,7 +176,7 @@ class AlertsListItem extends Component {
   }
 }
 
-AlertsListItem.propTypes = {
+EventListItem.propTypes = {
   abbreviation: PropTypes.string.isRequired,
   urgency: PropTypes.string.isRequired,
   severity: PropTypes.string.isRequired,
@@ -184,6 +185,7 @@ AlertsListItem.propTypes = {
   status: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  number: PropTypes.string.isRequired,
   onArchive: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
@@ -192,4 +194,4 @@ AlertsListItem.propTypes = {
   onShare: PropTypes.func.isRequired,
 };
 
-export default AlertsListItem;
+export default EventListItem;
