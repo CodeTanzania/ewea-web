@@ -24,13 +24,15 @@ import EventsListItem from '../ListItem';
 // const statusSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 0, xs: 0 };
 // const severitySpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
 const eventSpan = { xxl: 8, xl: 18, lg: 17, md: 0, sm: 19, xs: 19 };
-const ReferenceIDSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const referenceIDSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const typeSpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 0, xs: 0 };
+const groupSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
 
 const headerLayout = [
   { ...eventSpan, header: 'Event' },
-  { ...ReferenceIDSpan, header: 'Reference ID' },
-  // { ...statusSpan, header: 'Status' },
-  // { ...severitySpan, header: 'Severity' },
+  { ...referenceIDSpan, header: 'Reference ID' },
+  { ...typeSpan, header: 'Event Type' },
+  { ...groupSpan, header: 'Event Group' },
   // { ...urgencySpan, header: 'Urgency' },
 ];
 const { getEventsExportUrl } = httpActions;
@@ -230,6 +232,7 @@ class EventsList extends Component {
               urgency={event.urgency}
               severity={event.severity}
               status={event.status}
+              type={event.type.strings.name.en}
               isSelected={
                 // eslint-disable-next-line
                 map(selectedEvents, item => item._id).includes(
