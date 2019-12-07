@@ -39,7 +39,7 @@ const headerLayout = [
   },
 ];
 
-const { getRolesExportUrl } = httpActions;
+const { getPartyRolesExportUrl } = httpActions;
 
 /**
  * @class
@@ -158,7 +158,7 @@ class RoleList extends Component {
           page={page}
           total={total}
           selectedItemsCount={selectedRolesCount}
-          exportUrl={getRolesExportUrl({
+          exportUrl={getPartyRolesExportUrl({
             filter: { _id: map(selectedRoles, '_id') },
           })}
           onNotify={() => onNotify(selectedRoles)}
