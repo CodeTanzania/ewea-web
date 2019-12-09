@@ -52,7 +52,7 @@ class FunctionForm extends Component {
 
     const {
       form: { validateFieldsAndScroll },
-      emergencyFunction,
+      eventFunction,
       isEditForm,
     } = this.props;
 
@@ -60,7 +60,7 @@ class FunctionForm extends Component {
       if (!error) {
         if (isEditForm) {
           const updatedEventFunction = {
-            ...emergencyFunction,
+            ...eventFunction,
             ...values,
           };
           putEventFunction(
@@ -76,8 +76,16 @@ class FunctionForm extends Component {
             }
           );
         } else {
+          const payload = {
+            strings: {
+              name: { en: values.name },
+              description: { en: values.description },
+              code: values.code,
+              color: values.color,
+            },
+          };
           postEventFunction(
-            values,
+            payload,
             () => {
               notifySuccess('Function was created successfully');
             },
@@ -95,14 +103,18 @@ class FunctionForm extends Component {
   render() {
     const {
       isEditForm,
-      emergencyFunction,
+      eventFunction,
+      types,
       posting,
       onCancel,
-      families,
-      caps,
-      natures,
       form: { getFieldDecorator },
     } = this.props;
+
+    const {
+      strings: { name, description, code, color },
+    } = eventFunction || {
+      strings: { name: {}, code: '', description: {}, color: '' },
+    };
 
     const formItemLayout = {
       labelCol: {
@@ -129,21 +141,21 @@ class FunctionForm extends Component {
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Name ">
           {getFieldDecorator('name', {
-            initialValue: isEditForm ? emergencyFunction.name : undefined,
-            rules: [{ required: true, message: 'name is required' }],
-          })(<Input placeholder="e.g Flood" />)}
+            initialValue: isEditForm ? name.en : undefined,
+            rules: [{ required: true, message: 'Function name is required' }],
+          })(<Input placeholder="e.g Direction and Control" />)}
         </Form.Item>
         {/* end function  name */}
 
-        {/* function nature */}
+        {/* function Type */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Nature">
-          {getFieldDecorator('nature', {
-            initialValue: isEditForm ? emergencyFunction.nature : undefined,
-            rules: [{ required: true, message: 'Function nature is required' }],
+        <Form.Item {...formItemLayout} label="Type">
+          {getFieldDecorator('type', {
+            initialValue: isEditForm ? name.en : undefined,
+            rules: [{ required: false, message: 'Function type is required' }],
           })(
-            <Select placeholder="e.g Natural">
-              {natures.map(nature => (
+            <Select placeholder="e.g Flood">
+              {types.map(nature => (
                 <Option key={nature} value={nature}>
                   {nature}
                 </Option>
@@ -153,58 +165,34 @@ class FunctionForm extends Component {
         </Form.Item>
         {/* end nature */}
 
-        {/* function cap */}
+        {/* function description */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Cap">
-          {getFieldDecorator('cap', {
-            initialValue: isEditForm ? emergencyFunction.cap : undefined,
-            rules: [{ required: true, message: 'Cap is required' }],
-          })(
-            <Select placeholder="e.g Geo">
-              {caps.map(cap => (
-                <Option key={cap} value={cap}>
-                  {cap}
-                </Option>
-              ))}
-            </Select>
-          )}
+        <Form.Item {...formItemLayout} label="Description">
+          {getFieldDecorator('description', {
+            initialValue: isEditForm ? description.en : undefined,
+            rules: [
+              { required: true, message: 'Function description is required' },
+            ],
+          })(<Input placeholder="e.g Direction and Control" />)}
         </Form.Item>
-        {/* end function  cap */}
+        {/* end description */}
 
-        {/*  function family */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Family">
-          {getFieldDecorator('family', {
-            initialValue: isEditForm ? emergencyFunction.family : undefined,
-            rules: [{ required: true, message: 'Family is required' }],
-          })(
-            <Select placeholder="e.g Geographical">
-              {families.map(family => (
-                <Option key={family} value={family}>
-                  {family}
-                </Option>
-              ))}
-            </Select>
-          )}
-        </Form.Item>
-        {/* end function */}
-
-        {/* function  */}
+        {/* function code */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Code">
           {getFieldDecorator('code', {
-            initialValue: isEditForm ? emergencyFunction.code : undefined,
+            initialValue: isEditForm ? code : undefined,
             rules: [{ required: true, message: 'Code is required' }],
           })(<Input placeholder="e.g NMS" />)}
         </Form.Item>
-        {/* end function */}
+        {/* end function code */}
 
         <Row>
           <Col span={19}>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Color Code">
               {getFieldDecorator('color', {
-                initialValue: isEditForm ? emergencyFunction.color : undefined,
+                initialValue: isEditForm ? color : undefined,
               })(
                 <Input
                   placeholder="e.g #36c"
@@ -239,32 +227,32 @@ class FunctionForm extends Component {
 
 FunctionForm.propTypes = {
   isEditForm: PropTypes.bool.isRequired,
-  emergencyFunction: PropTypes.shape({
-    name: PropTypes.string,
-    nature: PropTypes.string,
-    family: PropTypes.string,
-    color: PropTypes.string,
-    cap: PropTypes.string,
-    code: PropTypes.string,
+  eventFunction: PropTypes.shape({
+    strings: PropTypes.shape({
+      name: PropTypes.shape({
+        en: PropTypes.string.isRequired,
+      }),
+      description: PropTypes.shape({
+        en: PropTypes.string.isRequired,
+      }),
+      code: PropTypes.string.isRequired,
+      color: PropTypes.string.isRequired,
+    }),
   }),
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func,
     validateFieldsAndScroll: PropTypes.func,
     setFieldsValue: PropTypes.func,
   }).isRequired,
-  families: PropTypes.arrayOf(PropTypes.string).isRequired,
-  natures: PropTypes.arrayOf(PropTypes.string).isRequired,
-  caps: PropTypes.arrayOf(PropTypes.string).isRequired,
+  types: PropTypes.arrayOf(PropTypes.string).isRequired,
   onCancel: PropTypes.func.isRequired,
   posting: PropTypes.bool.isRequired,
 };
 
 FunctionForm.defaultProps = {
-  emergencyFunction: null,
+  eventFunction: null,
 };
 
 export default Connect(Form.create()(FunctionForm), {
-  natures: 'incidentTypes.schema.properties.nature.enum',
-  families: 'incidentTypes.schema.properties.family.enum',
-  caps: 'incidentTypes.schema.properties.cap.enum',
+  types: 'eventTypes.list',
 });
