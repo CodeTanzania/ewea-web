@@ -162,7 +162,7 @@ class EventFunctions extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Event Functions here ...',
+            placeholder: 'Search for Emergency Functions here ...',
             onChange: this.searchEventFunctions,
             value: searchQuery,
           }}
@@ -171,7 +171,7 @@ class EventFunctions extends Component {
               label: 'New Function',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Event Function',
+              title: 'Add New Emergency Function',
               onClick: this.openEventFunctionForm,
             },
           ]}
@@ -192,7 +192,7 @@ class EventFunctions extends Component {
 
           {/* filter modal */}
           <Modal
-            title="Filter Event Function"
+            title="Filter Emergency Function"
             visible={showFilters}
             onCancel={this.closeFiltersModal}
             footer={null}
@@ -212,7 +212,9 @@ class EventFunctions extends Component {
           {/* create/edit form modal */}
           <Modal
             title={
-              isEditForm ? 'Edit Event Function' : 'Add New Event Function'
+              isEditForm
+                ? 'Edit Emergency Function'
+                : 'Add New Emergency Function'
             }
             visible={showForm}
             className="FormModal"
