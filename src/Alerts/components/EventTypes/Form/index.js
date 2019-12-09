@@ -1,4 +1,4 @@
-import { putAlert, postAlert } from '@codetanzania/ewea-api-states';
+import { putEventType, postEventType } from '@codetanzania/ewea-api-states';
 import { Button, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -38,7 +38,7 @@ class AlertTypeForm extends Component {
       if (!error) {
         if (isEditForm) {
           const updatedContact = { ...alertType, ...values };
-          putAlert(
+          putEventType(
             updatedContact,
             () => {
               notifySuccess('Alert Type was updated successfully');
@@ -50,7 +50,7 @@ class AlertTypeForm extends Component {
             }
           );
         } else {
-          postAlert(
+          postEventType(
             values,
             () => {
               notifySuccess('Alert Type was created successfully');

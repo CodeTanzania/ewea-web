@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Link, Switch } from 'react-router-dom';
 import UserMenu from './components/UserMenu';
 // import Alerts from '../Alerts';
-// import AlertTypes from '../Alerts/components/AlertTypes';
+import AlertTypes from '../Alerts/components/EventTypes';
 // import ActionCatalog from '../Alerts/components/ActionCatalog';
 // import IssuedAlerts from '../Alerts/components/IssuedAlerts';
 // import AlertsFeedback from '../Alerts/layouts/Feedback';
@@ -225,12 +225,13 @@ const BaseLayout = props => {
       <Content className="BaseLayoutContent">
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
-          {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
           <SecureRoute
             exact
             path={`${baseUrl}/alerttypes`}
             component={AlertTypes}
           />
+          {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
+          
           <SecureRoute
             path={`${baseUrl}/issuedalerts`}
             component={IssuedAlerts}

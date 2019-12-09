@@ -1,8 +1,8 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import {
-  deleteFocalPerson,
-  paginateAlerts,
-  refreshAlerts,
+  deleteEventType,
+  paginateEventTypes,
+  refreshEventTypes,
 } from '@codetanzania/ewea-api-states';
 import { List } from 'antd';
 import concat from 'lodash/concat';
@@ -32,7 +32,7 @@ const headerLayout = [
   { ...severitySpan, header: 'Severity' },
   { ...statusSpan, header: 'Status' },
 ];
-const { getAlertsExportUrl } = httpActions;
+const { getEventTypesExportUrl } = httpActions;
 
 /**
  * @class
@@ -177,14 +177,14 @@ class AlertTypesList extends Component {
           page={page}
           total={total}
           selectedItemsCount={selectedAlertTypesCount}
-          exportUrl={getAlertsExportUrl({
+          exportUrl={getEventTypesExportUrl({
             filter: { _id: map(selectedAlertTypes, '_id') },
           })}
           onPaginate={nextPage => {
-            paginateAlerts(nextPage);
+            paginateEventTypes(nextPage);
           }}
           onRefresh={() =>
-            refreshAlerts(
+            refreshEventTypes(
               () => {
                 notifySuccess('Alert Types refreshed successfully');
               },
@@ -234,7 +234,7 @@ class AlertTypesList extends Component {
               }}
               onEdit={() => onEdit(alertType)}
               onArchive={() =>
-                deleteFocalPerson(
+                deleteEventType(
                   alertType._id, // eslint-disable-line
                   () => {
                     notifySuccess('Focal Person was archived successfully');

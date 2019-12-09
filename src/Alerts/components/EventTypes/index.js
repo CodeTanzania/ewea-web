@@ -1,10 +1,10 @@
 import {
   Connect,
-  getAlerts,
-  openAlertForm,
-  searchAlerts,
-  selectAlert,
-  closeAlertForm,
+  getEventTypes,
+  openEventTypeForm,
+  searchEventTypes,
+  selectEventType,
+  closeEventTypeForm,
 } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -19,7 +19,7 @@ import './styles.css';
 /**
  * @class
  * @name AlertTypes
- * @description Render Alert Types list which have search box,
+ * @description Render Event Types list which have search box,
  * actions and alert types list
  *
  * @version 0.1.0
@@ -32,7 +32,7 @@ class AlertTypes extends Component {
   };
 
   componentDidMount() {
-    getAlerts();
+    getEventTypes();
   }
 
   /**
@@ -44,26 +44,26 @@ class AlertTypes extends Component {
    * @since 0.1.0
    */
   openAlertTypesForm = () => {
-    openAlertForm();
+    openEventTypeForm();
   };
 
   /**
    * @function
-   * @name closeAlertTypesForm
+   * @name closeEventTypesForm
    * @description close alert type form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeAlertTypesForm = () => {
-    closeAlertForm();
+  closeEventTypesForm = () => {
+    closeEventTypeForm();
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
    * @name searchAlerts
-   * @description Search Alert Types List based on supplied filter word
+   * @description Search Event Types List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
@@ -71,7 +71,7 @@ class AlertTypes extends Component {
    * @since 0.1.0
    */
   searchAlerts = event => {
-    searchAlerts(event.target.value);
+    searchEventTypes(event.target.value);
   };
 
   /**
@@ -85,9 +85,9 @@ class AlertTypes extends Component {
    * @since 0.1.0
    */
   handleEdit = alertType => {
-    selectAlert(alertType);
+    selectEventType(alertType);
     this.setState({ isEditForm: true });
-    openAlertForm();
+    openEventTypeForm();
   };
 
   render() {
@@ -108,16 +108,16 @@ class AlertTypes extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Alert types here ...',
+            placeholder: 'Search for Event types here ...',
             onChange: this.searchAlerts,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Alert Type',
+              label: 'New Event Type',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Alert Type',
+              title: 'Add New Event Type',
               onClick: this.openAlertTypesForm,
             },
           ]}
@@ -137,11 +137,11 @@ class AlertTypes extends Component {
 
           {/* create/edit form modal */}
           <Modal
-            title={isEditForm ? 'Edit Alert Type' : 'Add New Alert Type'}
+            title={isEditForm ? 'Edit Event Type' : 'Add New Event Type'}
             visible={showForm}
             className="FormModal"
             footer={null}
-            onCancel={this.closeAlertTypesForm}
+            onCancel={this.closeEventTypesForm}
             destroyOnClose
             maskClosable={false}
             afterClose={this.handleAfterCloseForm}
@@ -150,7 +150,7 @@ class AlertTypes extends Component {
               posting={posting}
               isEditForm={isEditForm}
               alertType={alertType}
-              onCancel={this.closeAlertTypesForm}
+              onCancel={this.closeEventTypesForm}
             />
           </Modal>
           {/* end create/edit form modal */}
