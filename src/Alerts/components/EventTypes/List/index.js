@@ -16,74 +16,70 @@ import React, { Component } from 'react';
 import ListHeader from '../../../../components/ListHeader';
 import Toolbar from '../../../../components/Toolbar';
 import { notifyError, notifySuccess } from '../../../../util';
-import FocalPersonsListItem from '../ListItem';
+import EventTypesListItem from '../ListItem';
 
 /* constants */
-const nameSpan = { xxl: 4, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
-const categorySpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
-const scopeSpan = { xxl: 4, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
-const severitySpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const statusSpan = { xxl: 5, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
+const nameSpan = { xxl: 7, xl: 7, lg: 6, md: 7, sm: 10, xs: 10 };
+const groupSpan = { xxl: 7, xl: 7, lg: 7, md: 7, sm: 0, xs: 0 };
+const descriptionSpan = { xxl: 8, xl: 8, lg: 9, md: 7, sm: 9, xs: 9 };
 
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
-  { ...categorySpan, header: 'Category' },
-  { ...scopeSpan, header: 'Scope' },
-  { ...severitySpan, header: 'Severity' },
-  { ...statusSpan, header: 'Status' },
+  { ...groupSpan, header: 'Group' },
+  { ...descriptionSpan, header: 'Description' },
 ];
 const { getEventTypesExportUrl } = httpActions;
 
 /**
  * @class
- * @name AlertTypesList
+ * @name EventTypesList
  *
- * @description Render AlertTypesList
- * component which have actionBar, alert types
- * header and alert types list components
+ * @description Render EventTypesList
+ * component which have actionBar, event types
+ * header and event types list components
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class AlertTypesList extends Component {
+class EventTypesList extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
-    selectedAlertTypes: [],
+    selectedEventTypes: [],
     selectedPages: [],
   };
 
   /**
    * @function
    * @name handleOnSelectFocalPerson
-   * @description Handle select a single alertType action
+   * @description Handle select a single eventType action
    *
-   * @param {object} alertType selected alertType object
+   * @param {object} eventType selected eventType object
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnSelectFocalPerson = alertType => {
-    const { selectedAlertTypes } = this.state;
+  handleOnSelectFocalPerson = eventType => {
+    const { selectedEventTypes } = this.state;
     this.setState({
-      selectedAlertTypes: concat([], selectedAlertTypes, alertType),
+      selectedEventTypes: concat([], selectedEventTypes, eventType),
     });
   };
 
   /**
    * @function
    * @name handleSelectAll
-   * @description Handle select all alert Types actions from current page
+   * @description Handle select all event Types actions from current page
    *
    * @version 0.1.0
    * @since 0.1.0
    */
   handleSelectAll = () => {
-    const { selectedAlertTypes, selectedPages } = this.state;
-    const { alertTypes, page } = this.props;
-    const selectedList = uniqBy([...selectedAlertTypes, ...alertTypes], '_id');
+    const { selectedEventTypes, selectedPages } = this.state;
+    const { eventTypes, page } = this.props;
+    const selectedList = uniqBy([...selectedEventTypes, ...eventTypes], '_id');
     const pages = uniq([...selectedPages, page]);
     this.setState({
-      selectedAlertTypes: selectedList,
+      selectedEventTypes: selectedList,
       selectedPages: pages,
     });
   };
@@ -91,7 +87,7 @@ class AlertTypesList extends Component {
   /**
    * @function
    * @name handleDeselectAll
-   * @description Handle deselect all alert Types in a current page
+   * @description Handle deselect all event Types in a current page
    *
    * @returns {undefined} undefined
    *
@@ -99,22 +95,22 @@ class AlertTypesList extends Component {
    * @since 0.1.0
    */
   handleDeselectAll = () => {
-    const { alertTypes, page } = this.props;
-    const { selectedAlertTypes, selectedPages } = this.state;
-    const selectedList = uniqBy([...selectedAlertTypes], '_id');
+    const { eventTypes, page } = this.props;
+    const { selectedEventTypes, selectedPages } = this.state;
+    const selectedList = uniqBy([...selectedEventTypes], '_id');
     const pages = uniq([...selectedPages]);
 
     remove(pages, item => item === page);
 
-    alertTypes.forEach(alertType => {
+    eventTypes.forEach(eventType => {
       remove(
         selectedList,
-        item => item._id === alertType._id // eslint-disable-line
+        item => item._id === eventType._id // eslint-disable-line
       );
     });
 
     this.setState({
-      selectedAlertTypes: selectedList,
+      selectedEventTypes: selectedList,
       selectedPages: pages,
     });
   };
@@ -122,7 +118,7 @@ class AlertTypesList extends Component {
   /**
    * @function
    * @name handleFilterByStatus
-   * @description Handle filter alertTypes by status action
+   * @description Handle filter eventTypes by status action
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -139,33 +135,33 @@ class AlertTypesList extends Component {
 
   /**
    * @function
-   * @name handleOnDeselectFocalPerson
-   * @description Handle deselect a single alertType action
+   * @name handleOnDeselectEventTypes
+   * @description Handle deselect a single eventType action
    *
-   * @param {object} alertType alertType to be removed from selected focalPeople
+   * @param {object} eventType eventType to be removed from selected focalPeople
    * @returns {undefined} undefined
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnDeselectFocalPerson = alertType => {
-    const { selectedAlertTypes } = this.state;
-    const selectedList = [...selectedAlertTypes];
+  handleOnDeselectEventTypes = eventType => {
+    const { selectedEventTypes } = this.state;
+    const selectedList = [...selectedEventTypes];
 
     remove(
       selectedList,
-      item => item._id === alertType._id // eslint-disable-line
+      item => item._id === eventType._id // eslint-disable-line
     );
 
-    this.setState({ selectedAlertTypes: selectedList });
+    this.setState({ selectedEventTypes: selectedList });
   };
 
   render() {
-    const { alertTypes, loading, page, total, onEdit } = this.props;
-    const { selectedAlertTypes, selectedPages } = this.state;
-    const selectedAlertTypesCount = intersectionBy(
-      selectedAlertTypes,
-      alertTypes,
+    const { eventTypes, loading, page, total, onEdit } = this.props;
+    const { selectedEventTypes, selectedPages } = this.state;
+    const selectedEventTypesCount = intersectionBy(
+      selectedEventTypes,
+      eventTypes,
       '_id'
     ).length;
 
@@ -173,12 +169,12 @@ class AlertTypesList extends Component {
       <>
         {/* toolbar */}
         <Toolbar
-          itemName="Alert Types"
+          itemName="Event Types"
           page={page}
           total={total}
-          selectedItemsCount={selectedAlertTypesCount}
+          selectedItemsCount={selectedEventTypesCount}
           exportUrl={getEventTypesExportUrl({
-            filter: { _id: map(selectedAlertTypes, '_id') },
+            filter: { _id: map(selectedEventTypes, '_id') },
           })}
           onPaginate={nextPage => {
             paginateEventTypes(nextPage);
@@ -186,11 +182,11 @@ class AlertTypesList extends Component {
           onRefresh={() =>
             refreshEventTypes(
               () => {
-                notifySuccess('Alert Types refreshed successfully');
+                notifySuccess('Event Types refreshed successfully');
               },
               () => {
                 notifyError(
-                  'An Error occurred while refreshing Alert Types please contact system administrator'
+                  'An Error occurred while refreshing Event Types please contact system administrator'
                 );
               }
             )
@@ -198,50 +194,52 @@ class AlertTypesList extends Component {
         />
         {/* end toolbar */}
 
-        {/* alertType list header */}
+        {/* eventType list header */}
         <ListHeader
           headerLayout={headerLayout}
           onSelectAll={this.handleSelectAll}
           onDeselectAll={this.handleDeselectAll}
           isBulkSelected={selectedPages.includes(page)}
         />
-        {/* end alertType list header */}
+        {/* end eventType list header */}
 
-        {/* alertTypes list */}
+        {/* eventTypes list */}
         <List
           loading={loading}
-          dataSource={alertTypes}
-          renderItem={alertType => (
-            <FocalPersonsListItem
-              key={alertType._id} // eslint-disable-line
-              abbreviation={alertType.type.charAt(0)}
-              name={alertType.type}
-              category={alertType.category ? alertType.category : 'N/A'}
-              scope={alertType.scope ? alertType.scope : 'N/A'}
-              severity={alertType.severity}
-              status={alertType.status}
+          dataSource={eventTypes}
+          renderItem={eventType => (
+            <EventTypesListItem
+              key={eventType._id} // eslint-disable-line
+              abbreviation={eventType.strings.abbreviation.en}
+              name={eventType.strings.name.en}
+              group={eventType.strings.group ? eventType.strings.group : 'N/A'}
+              description={
+                eventType.strings.description
+                  ? eventType.strings.description.en
+                  : 'N/A'
+              }
               isSelected={
                 // eslint-disable-next-line
-                map(selectedAlertTypes, item => item._id).includes(
-                  alertType._id // eslint-disable-line
+                map(selectedEventTypes, item => item._id).includes(
+                  eventType._id // eslint-disable-line
                 )
               }
               onSelectItem={() => {
-                this.handleOnSelectFocalPerson(alertType);
+                this.handleOnSelectFocalPerson(eventType);
               }}
               onDeselectItem={() => {
-                this.handleOnDeselectFocalPerson(alertType);
+                this.handleOnDeselectEventTypes(eventType);
               }}
-              onEdit={() => onEdit(alertType)}
+              onEdit={() => onEdit(eventType)}
               onArchive={() =>
                 deleteEventType(
-                  alertType._id, // eslint-disable-line
+                  eventType._id, // eslint-disable-line
                   () => {
-                    notifySuccess('Focal Person was archived successfully');
+                    notifySuccess('Event type was archived successfully');
                   },
                   () => {
                     notifyError(
-                      'An Error occurred while archiving Focal Person please contact system administrator'
+                      'An Error occurred while archiving Event type please contact system administrator'
                     );
                   }
                 )
@@ -249,19 +247,19 @@ class AlertTypesList extends Component {
             />
           )}
         />
-        {/* end alertTypes list */}
+        {/* end eventTypes list */}
       </>
     );
   }
 }
 
-AlertTypesList.propTypes = {
+EventTypesList.propTypes = {
   loading: PropTypes.bool.isRequired,
-  alertTypes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+  eventTypes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
   page: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
   onEdit: PropTypes.func.isRequired,
 };
 
-export default AlertTypesList;
+export default EventTypesList;
