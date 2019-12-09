@@ -1,6 +1,6 @@
 import {
-  postIncidentType,
-  putIncidentType,
+  postEventFunction,
+  putEventFunction,
   Connect,
 } from '@codetanzania/ewea-api-states';
 import { Button, Form, Input, Select, Col, Row } from 'antd';
@@ -59,12 +59,12 @@ class FunctionForm extends Component {
     validateFieldsAndScroll((error, values) => {
       if (!error) {
         if (isEditForm) {
-          const updatedIncidentType = {
+          const updatedEventFunction = {
             ...emergencyFunction,
             ...values,
           };
-          putIncidentType(
-            updatedIncidentType,
+          putEventFunction(
+            updatedEventFunction,
             () => {
               notifySuccess('Function was updated successfully');
             },
@@ -76,7 +76,7 @@ class FunctionForm extends Component {
             }
           );
         } else {
-          postIncidentType(
+          postEventFunction(
             values,
             () => {
               notifySuccess('Function was created successfully');
@@ -213,7 +213,7 @@ class FunctionForm extends Component {
               )}
             </Form.Item>
           </Col>
-          <Col span={4} offset={1} className="IncidentTypeFormColor">
+          <Col span={4} offset={1} className="EventFunctionFormColor">
             <ColorPicker animation="slide-up" onChange={this.onChangeColor} />
           </Col>
         </Row>

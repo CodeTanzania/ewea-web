@@ -1,7 +1,7 @@
 import {
   clearFocalPersonFilters,
   Connect,
-  filterIncidentTypes,
+  filterEventFunctions,
 } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Button, Form } from 'antd';
@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 import SearchableSelectInput from '../../../../components/SearchableSelectInput';
 
 /* declarations */
-const { getIncidentTypes } = httpActions;
+const { getEventFunctions } = httpActions;
 
 /**
  * @class
@@ -41,7 +41,7 @@ class EmergencyFunctionsFilters extends Component {
 
     validateFields((error, values) => {
       if (!error) {
-        filterIncidentTypes(values);
+        filterEventFunctions(values);
         onCancel();
       }
     });
@@ -114,7 +114,7 @@ class EmergencyFunctionsFilters extends Component {
             initialValue: filter ? filter.nature : [],
           })(
             <SearchableSelectInput
-              onSearch={getIncidentTypes}
+              onSearch={getEventFunctions}
               optionLabel="name"
               optionValue="_id"
               mode="multiple"
@@ -132,7 +132,7 @@ class EmergencyFunctionsFilters extends Component {
             initialValue: filter ? filter.family : [],
           })(
             <SearchableSelectInput
-              onSearch={getIncidentTypes}
+              onSearch={getEventFunctions}
               optionLabel="name"
               optionValue="_id"
               mode="multiple"
@@ -150,7 +150,7 @@ class EmergencyFunctionsFilters extends Component {
             initialValue: filter ? filter.codes : [],
           })(
             <SearchableSelectInput
-              onSearch={getIncidentTypes}
+              onSearch={getEventFunctions}
               optionLabel="name"
               optionValue="_id"
               mode="multiple"
