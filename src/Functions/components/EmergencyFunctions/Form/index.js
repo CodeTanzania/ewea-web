@@ -58,10 +58,18 @@ class FunctionForm extends Component {
 
     validateFieldsAndScroll((error, values) => {
       if (!error) {
+        const payload = {
+          strings: {
+            name: { en: values.name },
+            description: { en: values.description },
+            code: values.code,
+            color: values.color,
+          },
+        };
         if (isEditForm) {
           const updatedEventFunction = {
             ...eventFunction,
-            ...values,
+            ...payload,
           };
           putEventFunction(
             updatedEventFunction,
@@ -76,14 +84,6 @@ class FunctionForm extends Component {
             }
           );
         } else {
-          const payload = {
-            strings: {
-              name: { en: values.name },
-              description: { en: values.description },
-              code: values.code,
-              color: values.color,
-            },
-          };
           postEventFunction(
             payload,
             () => {
