@@ -111,6 +111,7 @@ class EventListItem extends Component {
       color,
       // location,
       onEdit,
+      onView,
     } = this.props;
     const { isHovered } = this.state;
     const { isSelected } = this.props;
@@ -159,6 +160,11 @@ class EventListItem extends Component {
             {/* eslint-enable react/jsx-props-no-spreading */}
             {isHovered && (
               <ListItemActions
+                view={{
+                  name: 'View Event',
+                  title: 'View Event Details',
+                  onClick: onView,
+                }}
                 edit={{
                   name: 'Edit Event',
                   title: 'Update Event Details',
@@ -191,6 +197,7 @@ EventListItem.propTypes = {
   description: PropTypes.string.isRequired,
   number: PropTypes.string.isRequired,
   onArchive: PropTypes.func.isRequired,
+  onView: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
   onSelectItem: PropTypes.func.isRequired,

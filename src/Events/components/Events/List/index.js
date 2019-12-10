@@ -167,6 +167,7 @@ class EventsList extends Component {
       loading,
       page,
       total,
+      onView,
       onEdit,
       onFilter,
       onShare,
@@ -250,6 +251,7 @@ class EventsList extends Component {
                 this.handleOnDeselectEvent(event);
               }}
               onEdit={() => onEdit(event)}
+              onView={() => onView(event)}
               onArchive={() =>
                 deleteEvent(
                   event._id, // eslint-disable-line
@@ -281,6 +283,7 @@ EventsList.propTypes = {
     .isRequired,
   page: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
+  onView: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,

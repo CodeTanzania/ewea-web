@@ -7,7 +7,7 @@ import {
   searchEvents,
   selectEvent,
 } from '@codetanzania/ewea-api-states';
-import { Modal } from 'antd';
+import { Modal, Drawer } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import NotificationForm from '../../../components/NotificationForm';
@@ -15,6 +15,8 @@ import Topbar from '../../../components/Topbar';
 import EventFilters from './Filters';
 import EventForm from './Form';
 import EventsList from './List';
+import EventDetailsViewHeader from './DetailsView/Header';
+import EventDetailsViewBody from './DetailsView/Body';
 import './styles.css';
 
 /* constants */
@@ -37,6 +39,7 @@ const {
 class Events extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
+    showEventDetails: false,
     showFilters: false,
     isEditForm: false,
     showNotificationForm: false,
@@ -130,6 +133,18 @@ class Events extends Component {
 
   /**
    * @function
+   * @name closeEventDetails
+   * @description close event details drawer
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeEventDetails = () => {
+    this.setState({ showEventDetails: false });
+  };
+
+  /**
+   * @function
    * @name searchEvents
    * @description Search Events List based on supplied filter word
    *
@@ -156,6 +171,21 @@ class Events extends Component {
     selectEvent(event);
     this.setState({ isEditForm: true });
     openEventForm();
+  };
+
+  /**
+   * @function
+   * @name handleView
+   * @description Handle on view event details action for list item
+   *
+   * @param {object} event event to be viewed
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleView = event => {
+    selectEvent(event);
+    this.setState({ showEventDetails: true });
   };
 
   /**
@@ -266,6 +296,7 @@ class Events extends Component {
       total,
     } = this.props;
     const {
+      showEventDetails,
       showFilters,
       isEditForm,
       showNotificationForm,
@@ -302,6 +333,7 @@ class Events extends Component {
             page={page}
             events={events}
             loading={loading}
+            onView={this.handleView}
             onEdit={this.handleEdit}
             onFilter={this.openFiltersModal}
             onNotify={this.openNotificationForm}
@@ -309,7 +341,6 @@ class Events extends Component {
             onBulkShare={this.handleBulkShare}
           />
           {/* end list */}
-
           {/* filter modal */}
           <Modal
             title="Filter Events"
@@ -328,7 +359,6 @@ class Events extends Component {
             />
           </Modal>
           {/* end filter modal */}
-
           {/* Notification Modal modal */}
           <Modal
             title="Notify Events"
@@ -352,7 +382,6 @@ class Events extends Component {
             />
           </Modal>
           {/* end Notification modal */}
-
           {/* create/edit form modal */}
           <Modal
             title={isEditForm ? 'Edit Event' : 'Add New Event'}
@@ -372,6 +401,24 @@ class Events extends Component {
             />
           </Modal>
           {/* end create/edit form modal */}
+          {/* Event details drawer */}
+          <Drawer
+            title={
+              <EventDetailsViewHeader
+                number={event ? event.number : 'N/A'}
+                description={event ? event.description : 'N/A'}
+                type={event ? event.type.strings.name.en : 'N/A'}
+              />
+            }
+            placement="right"
+            width="100%"
+            onClose={this.closeEventDetails}
+            visible={showEventDetails}
+          >
+            <EventDetailsViewBody />
+          </Drawer>
+
+          {/* End Event details drawer */}
         </div>
       </>
     );
@@ -383,7 +430,16 @@ Events.propTypes = {
   posting: PropTypes.bool.isRequired,
   events: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
-  event: PropTypes.shape({ name: PropTypes.string }),
+  event: PropTypes.shape({
+    description: PropTypes.string,
+    number: PropTypes.string,
+    type: PropTypes.shape({
+      _id: PropTypes.string,
+      strings: PropTypes.shape({
+        name: PropTypes.shape({ en: PropTypes.string }),
+      }),
+    }),
+  }),
   page: PropTypes.number.isRequired,
   showForm: PropTypes.bool.isRequired,
   searchQuery: PropTypes.string,
