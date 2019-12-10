@@ -11,7 +11,7 @@ const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 3, xs: 3 };
 const referenceIDSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 const typeSpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 0, xs: 0 };
 const groupSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const eventSpan = { xxl: 8, xl: 18, lg: 17, md: 0, sm: 19, xs: 19 };
+const eventSpan = { xxl: 8, xl: 9, lg: 17, md: 0, sm: 19, xs: 19 };
 // const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 

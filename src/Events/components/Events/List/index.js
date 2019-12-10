@@ -23,7 +23,7 @@ import EventsListItem from '../ListItem';
 // const urgencySpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 0, xs: 0 };
 // const statusSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 0, xs: 0 };
 // const severitySpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const eventSpan = { xxl: 8, xl: 18, lg: 17, md: 0, sm: 19, xs: 19 };
+const eventSpan = { xxl: 8, xl: 9, lg: 9, md: 0, sm: 19, xs: 19 };
 const referenceIDSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 const typeSpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 0, xs: 0 };
 const groupSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
@@ -223,7 +223,11 @@ class EventsList extends Component {
           renderItem={event => (
             <EventsListItem
               key={event._id} // eslint-disable-line
-              abbreviation={event.description.toUpperCase().charAt(0)}
+              abbreviation={
+                event.description
+                  ? event.description.toUpperCase().charAt(0)
+                  : 'A'
+              }
               location={compact(['Tandale', 'Hananasif', 'Kigogo']).join(', ')}
               number={event.number}
               event={event.event}
