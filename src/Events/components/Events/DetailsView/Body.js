@@ -1,5 +1,6 @@
 import React from 'react';
 import { Typography, Timeline, Icon, Row, Col, Button } from 'antd';
+import PropTypes from 'prop-types';
 
 import './styles.css';
 
@@ -20,10 +21,22 @@ const actionsTaken = [
   'Ensure all important information have been disseminated to responsible personnel',
 ];
 
+export const EventDetailsSectionHeader = ({ title }) => {
+  return (
+    <div className="EventDetailsSectionHeader">
+      <h4>{title}</h4>
+    </div>
+  );
+};
+
+EventDetailsSectionHeader.propTypes = {
+  title: PropTypes.string.isRequired,
+};
+
 export const EventLocation = () => {
   return (
     <>
-      <h4>EVENT LOCATION</h4>
+      <EventDetailsSectionHeader title="EVENT LOCATION" />
       <h5>
         <Text strong>Region:</Text> Mwanza
       </h5>
@@ -43,7 +56,7 @@ export const EventLocation = () => {
 export const EventActionTaken = () => {
   return (
     <div style={{ marginTop: '40px' }}>
-      <h4>ACTION TAKEN/ INTERVENTIONS</h4>
+      <EventDetailsSectionHeader title="ACTION TAKEN/ INTERVENTIONS" />
       {actionsTaken.map((action, key) => (
         <p key={action} style={{ fontSize: '12px' }}>
           {key + 1}. {action}
@@ -56,7 +69,7 @@ export const EventActionTaken = () => {
 export const EventRespondingAgencies = () => {
   return (
     <div style={{ marginTop: '40px' }}>
-      <h4>AGENCIES RESPONDED</h4>
+      <EventDetailsSectionHeader title="AGENCIES RESPONDED" />
       {respondingAgencies.map((agency, key) => (
         <p key={agency} style={{ fontSize: '12px' }}>
           {key + 1}. {agency}
@@ -117,7 +130,7 @@ const EventToolbar = () => {
 export const EventFeed = () => {
   return (
     <>
-      <h4>EVENT FEED</h4>
+      <EventDetailsSectionHeader title="EVENT FEED" />
       <Timeline>
         <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
         <Timeline.Item color="green">
