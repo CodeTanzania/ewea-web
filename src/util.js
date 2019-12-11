@@ -139,15 +139,3 @@ export const truncateString = (str, num) => {
   // Return str truncated with '...' concatenated to the end of str.
   return `${str.slice(0, num)}...`;
 };
-
-/**
- * @function
- * @name isString
- * @description checks if a variable is a string
- * @param {string} data  string to truncate
- * @returns {boolean} truthy value based on comparison
- * @version 0.1.0
- * @since 0.1.0
- */
-export const isString = data =>
-  typeof data === 'string' || data instanceof String;
