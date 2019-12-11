@@ -115,7 +115,7 @@ class EmergencyFunctionsFilters extends Component {
           })(
             <SearchableSelectInput
               onSearch={getEventTypes}
-              optionLabel="name"
+              optionLabel={type => type.strings.name.en}
               optionValue="_id"
               mode="multiple"
               onCache={types => this.cacheFilters({ types })}

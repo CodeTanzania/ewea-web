@@ -5,31 +5,9 @@ import isFunction from 'lodash/isFunction';
 import filter from 'lodash/filter';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { isString } from '../../util';
 
 /* local constants */
 const { Option } = Select;
-
-/**
- * @function
- * @name formatData
- * @description formats fetched  data and  puts it in a format
- * that SearchableSelectInput can work with
- *
- * @param {Array} data array of non-formatted data
- *
- * @version 0.1.0
- * @since 0.1.0
- */
-const formatData = data =>
-  data.length > 0 && data[0].strings
-    ? data.map(({ _id, strings, numbers, booleans }) => ({
-        _id,
-        ...strings,
-        ...numbers,
-        ...booleans,
-      }))
-    : data;
 
 /**
  * @class
@@ -146,17 +124,16 @@ class SearchableSelectInput extends Component {
    */
   getOptionProp = (prop, option) => {
     if (isFunction(prop)) {
-      return isString(prop(option)) ? prop(option) : prop(option).en;
+      return prop(option);
     }
-    return isString(option[prop]) ? option[prop] : option[prop].en;
+    return option[prop];
   };
 
   render() {
     const { data, loading, value } = this.state;
     const { optionValue, optionLabel, isFilter, ...otherProps } = this.props;
-    const formattedData = formatData(data);
 
-    const options = formattedData.map(option => (
+    const options = data.map(option => (
       <Option key={this.getOptionProp(optionValue, option)}>
         {this.getOptionProp(optionLabel, option)}
       </Option>
