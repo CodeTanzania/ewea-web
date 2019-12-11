@@ -1,7 +1,7 @@
 import {
   clearFocalPersonFilters,
   Connect,
-  filterIncidentTypes,
+  filterEventFunctions,
 } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Button, Form } from 'antd';
@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 import SearchableSelectInput from '../../../../components/SearchableSelectInput';
 
 /* declarations */
-const { getIncidentTypes } = httpActions;
+const { getEventTypes } = httpActions;
 
 /**
  * @class
@@ -41,7 +41,7 @@ class EmergencyFunctionsFilters extends Component {
 
     validateFields((error, values) => {
       if (!error) {
-        filterIncidentTypes(values);
+        filterEventFunctions(values);
         onCancel();
       }
     });
@@ -107,59 +107,23 @@ class EmergencyFunctionsFilters extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* start contact group filters */}
+        {/* start emergency function type filters */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="By Nature">
-          {getFieldDecorator('nature', {
+        <Form.Item {...formItemLayout} label="By Type">
+          {getFieldDecorator('type', {
             initialValue: filter ? filter.nature : [],
           })(
             <SearchableSelectInput
-              onSearch={getIncidentTypes}
-              optionLabel="name"
+              onSearch={getEventTypes}
+              optionLabel={type => type.strings.name.en}
               optionValue="_id"
               mode="multiple"
-              onCache={natures => this.cacheFilters({ natures })}
-              initialValue={cached && cached.natures ? cached.natures : []}
+              onCache={types => this.cacheFilters({ types })}
+              initialValue={cached && cached.types ? cached.types : []}
             />
           )}
         </Form.Item>
-        {/* end contact group filters */}
-
-        {/* start contact group filters */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="By Family">
-          {getFieldDecorator('family', {
-            initialValue: filter ? filter.family : [],
-          })(
-            <SearchableSelectInput
-              onSearch={getIncidentTypes}
-              optionLabel="name"
-              optionValue="_id"
-              mode="multiple"
-              onCache={families => this.cacheFilters({ families })}
-              initialValue={cached && cached.families ? cached.families : []}
-            />
-          )}
-        </Form.Item>
-        {/* end contact group filters */}
-
-        {/* start contact group filters */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="By code(s)">
-          {getFieldDecorator('code', {
-            initialValue: filter ? filter.codes : [],
-          })(
-            <SearchableSelectInput
-              onSearch={getIncidentTypes}
-              optionLabel="name"
-              optionValue="_id"
-              mode="multiple"
-              onCache={codes => this.cacheFilters({ codes })}
-              initialValue={cached && cached.codes ? cached.codes : []}
-            />
-          )}
-        </Form.Item>
-        {/* end contact group filters */}
+        {/* end emergency function type filters */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -189,9 +153,7 @@ EmergencyFunctionsFilters.propTypes = {
   }).isRequired,
   onCancel: PropTypes.func.isRequired,
   cached: PropTypes.shape({
-    natures: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
-    families: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
-    codes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+    types: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
   }),
   onCache: PropTypes.func.isRequired,
   onClearCache: PropTypes.func.isRequired,

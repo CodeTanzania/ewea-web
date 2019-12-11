@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ListItemActions from '../../../../components/ListItemActions';
 import './styles.css';
+import { truncateString } from '../../../../util';
 
 /* constants */
 const { confirm } = Modal;
 const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 3, xs: 3 };
 const nameSpan = { xxl: 5, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
-const natureSpan = { xxl: 4, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
-const familySpan = { xxl: 5, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
-const codeSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const capSpan = { xxl: 4, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const typeSpan = { xxl: 4, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
+const codeSpan = { xxl: 3, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
+const descriptionSpan = { xxl: 10, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
 const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 
 /**
@@ -99,11 +99,10 @@ class EmergencyFunctionsListItem extends Component {
   render() {
     const {
       abbreviation,
-      family,
+      type,
       code,
-      cap,
       name,
-      nature,
+      description,
       onEdit,
       color,
     } = this.props;
@@ -141,10 +140,11 @@ class EmergencyFunctionsListItem extends Component {
           {/* eslint-disable react/jsx-props-no-spreading */}
           <Col {...sideSpan}>{sideComponent}</Col>
           <Col {...nameSpan}>{name}</Col>
-          <Col {...natureSpan}> {nature} </Col>
-          <Col {...familySpan}>{family}</Col>
           <Col {...codeSpan}>{code}</Col>
-          <Col {...capSpan}>{cap}</Col>
+          <Col {...typeSpan}> {type} </Col>
+          <Col {...descriptionSpan}>
+            <span title={description}>{truncateString(description, 120)}</span>
+          </Col>
           <Col {...isHoveredSpan}>
             {/* eslint-enable react/jsx-props-no-spreading */}
             {isHovered && (
@@ -171,12 +171,11 @@ class EmergencyFunctionsListItem extends Component {
 
 EmergencyFunctionsListItem.propTypes = {
   abbreviation: PropTypes.string.isRequired,
-  cap: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  nature: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
-  family: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
   onArchive: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,

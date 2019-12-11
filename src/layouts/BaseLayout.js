@@ -28,7 +28,7 @@ import StakeholdersAgencies from '../Stakeholders/components/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
 // import StakeholdersNotifications from '../Stakeholders/components/Notifications';
 import StakeholdersRoles from '../Stakeholders/components/Roles';
-// import EmergencyFunctions from '../Functions/components/Emergency Functions';
+import EmergencyFunctions from '../Functions/components/EmergencyFunctions';
 import OverviewDashboard from '../Dashboards';
 import ActionsTaken from '../Dashboards/ActionsTaken';
 import SecureRoute from '../Auth/SecureRoute';
@@ -132,7 +132,7 @@ const breadcrumbNameMap = {
     title: 'Roles of Stakeholders',
   },
   '/app/functions': {
-    name: 'Emergency Functions',
+    name: 'EmergencyFunctions',
     title: 'Emergency functions module',
   },
   '/app/stakeholders': { name: 'Stakeholders', title: 'Stakeholders module' },
@@ -301,10 +301,10 @@ const BaseLayout = props => {
             path={`${baseUrl}/stakeholders`}
             component={Stakeholders}
           />
-          {/* <SecureRoute
+          <SecureRoute
             path={`${baseUrl}/functions`}
             component={EmergencyFunctions}
-          /> */}
+          />
           {/* <SecureRoute
             path={`${baseUrl}/stakeholders/notifications`}
             component={StakeholdersNotifications}
