@@ -27,7 +27,7 @@ const routes = [
     description: modules.alertsActions,
   },
   {
-    name: 'Emergency Functions',
+    name: 'EmergencyFunctions',
     path: '/app/functions',
     icon: functionIcon,
   },
