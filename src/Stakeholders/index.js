@@ -33,6 +33,12 @@ const routes = [
     icon: notificationsIcon,
     description: modules.stakeholdersNotifications,
   },
+  {
+    name: 'Notifications Template',
+    path: '/notificationtemplates',
+    icon: notificationsIcon,
+    description: modules.notificationTemplates,
+  },
 ];
 
 /**
