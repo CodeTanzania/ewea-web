@@ -1,9 +1,12 @@
 import { putEventType, postEventType } from '@codetanzania/ewea-api-states';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import { Button, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import SearchableSelectInput from '../../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../../util';
 
+const { getEventGroups } = httpActions;
 /**
  * @class
  * @name EventTypeForm
@@ -126,9 +129,23 @@ class EventTypeForm extends Component {
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Group">
           {getFieldDecorator('group', {
-            initialValue: isEditForm ? eventType.strings.group : undefined,
+            initialValue:
+              isEditForm && eventType.group // eslint-disable-line
+                ? eventType.strings.group._id // eslint-disable-line
+                : undefined,
             rules: [{ message: 'Event Type group is required' }],
-          })(<Input />)}
+          })(
+            <SearchableSelectInput
+              onSearch={getEventGroups}
+              optionLabel={group => group.strings.name.en}
+              optionValue="_id"
+              initialValue={
+                isEditForm && eventType.strings.group
+                  ? eventType.strings.group
+                  : undefined
+              }
+            />
+          )}
         </Form.Item>
         {/* end Event Type group */}
 
