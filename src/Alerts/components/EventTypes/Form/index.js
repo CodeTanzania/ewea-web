@@ -6,13 +6,13 @@ import { notifyError, notifySuccess } from '../../../../util';
 
 /**
  * @class
- * @name AlertTypeForm
- * @description  Render form for creating a new alert type
+ * @name EventTypeForm
+ * @description  Render form for creating a new event type
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class AlertTypeForm extends Component {
+class EventTypeForm extends Component {
   /**
    * @function
    * @name handleSubmit
@@ -30,34 +30,45 @@ class AlertTypeForm extends Component {
 
     const {
       form: { validateFieldsAndScroll },
-      alertType,
+      eventType,
       isEditForm,
     } = this.props;
 
     validateFieldsAndScroll((error, values) => {
       if (!error) {
+        const payload = {
+          strings: {
+            name: {
+              en: values.name,
+            },
+            description: {
+              en: values.description,
+            },
+            group: values.group,
+          },
+        };
         if (isEditForm) {
-          const updatedContact = { ...alertType, ...values };
+          const updatedContact = { ...eventType, ...payload };
           putEventType(
             updatedContact,
             () => {
-              notifySuccess('Alert Type was updated successfully');
+              notifySuccess('Event Type was updated successfully');
             },
             () => {
               notifyError(
-                'Something occurred while updating Alert Type, please try again!'
+                'Something occurred while updating Event Type, please try again!'
               );
             }
           );
         } else {
           postEventType(
-            values,
+            payload,
             () => {
-              notifySuccess('Alert Type was created successfully');
+              notifySuccess('Event Type was created successfully');
             },
             () => {
               notifyError(
-                'Something occurred while saving Alert Type, please try again!'
+                'Something occurred while saving Event Type, please try again!'
               );
             }
           );
@@ -71,7 +82,7 @@ class AlertTypeForm extends Component {
       posting,
       onCancel,
       isEditForm,
-      alertType,
+      eventType,
       form: { getFieldDecorator },
     } = this.props;
 
@@ -96,62 +107,42 @@ class AlertTypeForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* Alert Type name */}
+        {/* Event Type name */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Name">
-          {getFieldDecorator('type', {
-            initialValue: isEditForm ? alertType.type : undefined,
+          {getFieldDecorator('name', {
+            initialValue: isEditForm ? eventType.strings.name.en : undefined,
             rules: [
               {
                 required: true,
-                message: ' Alert Types organization name is required',
+                message: ' Event Types organization name is required',
               },
             ],
           })(<Input />)}
         </Form.Item>
-        {/* end Alert Type name */}
+        {/* end Event Type name */}
 
-        {/* Alert Type category */}
+        {/* Event Type group */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Category">
-          {getFieldDecorator('category', {
-            initialValue: isEditForm ? alertType.category : undefined,
-            rules: [
-              { required: true, message: 'Alert Type Category is required' },
-            ],
+        <Form.Item {...formItemLayout} label="Group">
+          {getFieldDecorator('group', {
+            initialValue: isEditForm ? eventType.strings.group : undefined,
+            rules: [{ message: 'Event Type group is required' }],
           })(<Input />)}
         </Form.Item>
-        {/* end Alert Type category */}
+        {/* end Event Type group */}
 
-        {/* Alert type */}
+        {/* Event type */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Scope">
-          {getFieldDecorator('scope', {
-            initialValue: isEditForm ? alertType.scope : undefined,
-            rules: [{ required: true, message: 'Scope is required' }],
+        <Form.Item {...formItemLayout} label="Description">
+          {getFieldDecorator('description', {
+            initialValue: isEditForm
+              ? eventType.strings.description.en
+              : undefined,
+            rules: [{ required: true, message: 'Description is required' }],
           })(<Input />)}
         </Form.Item>
-        {/* end Alert Type */}
-
-        {/* Alert Type severity */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Severity">
-          {getFieldDecorator('severity', {
-            initialValue: isEditForm ? alertType.severity : undefined,
-            rules: [{ required: true, message: 'Severity is required' }],
-          })(<Input />)}
-        </Form.Item>
-        {/* end Alert Type severity */}
-
-        {/* Alert Type status */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Status">
-          {getFieldDecorator('status', {
-            initialValue: isEditForm ? alertType.status : undefined,
-            rules: [{ required: true, message: 'status is required' }],
-          })(<Input />)}
-        </Form.Item>
-        {/* end Alert Type status */}
+        {/* end Event Type */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -171,14 +162,18 @@ class AlertTypeForm extends Component {
   }
 }
 
-AlertTypeForm.propTypes = {
-  alertType: PropTypes.shape({
-    type: PropTypes.string,
-    scope: PropTypes.string,
-    severity: PropTypes.string,
-    _id: PropTypes.string,
-    category: PropTypes.string,
-    status: PropTypes.string,
+EventTypeForm.propTypes = {
+  eventType: PropTypes.shape({
+    strings: PropTypes.shape({
+      name: PropTypes.shape({
+        en: PropTypes.string.isRequired,
+      }),
+      description: PropTypes.shape({
+        en: PropTypes.string.isRequired,
+      }),
+      _id: PropTypes.string,
+      group: PropTypes.string,
+    }),
   }).isRequired,
   isEditForm: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
@@ -189,4 +184,4 @@ AlertTypeForm.propTypes = {
   }).isRequired,
 };
 
-export default Form.create()(AlertTypeForm);
+export default Form.create()(EventTypeForm);
