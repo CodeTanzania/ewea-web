@@ -25,6 +25,7 @@ import Home from '../Home';
 import Stakeholders from '../Stakeholders';
 import StakeholdersAgencies from '../Stakeholders/components/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
+import NotificationTemplates from '../Stakeholders/components/NotificationTemplates';
 import EventTypes from '../Alerts/components/EventTypes';
 // import StakeholdersNotifications from '../Stakeholders/components/Notifications';
 import StakeholdersRoles from '../Stakeholders/components/Roles';
@@ -313,6 +314,10 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/focalpeople`}
             component={StakeholdersFocalPeople}
+          />
+          <SecureRoute
+            path={`${baseUrl}/notificationTemplates`}
+            component={NotificationTemplates}
           />
           <SecureRoute
             path={`${baseUrl}/agencies`}
