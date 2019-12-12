@@ -16,27 +16,6 @@ const { TextArea } = Input;
  * @since 0.1.0
  */
 class RoleForm extends Component {
-  static propTypes = {
-    isEditForm: PropTypes.bool.isRequired,
-    role: PropTypes.shape({
-      strings: PropTypes.shape({
-        name: PropTypes.shape({ en: PropTypes.string }),
-        abbreviation: PropTypes.shape({ en: PropTypes.string }),
-        description: PropTypes.shape({ en: PropTypes.string }),
-      }),
-    }),
-    form: PropTypes.shape({
-      getFieldDecorator: PropTypes.func,
-      validateFieldsAndScroll: PropTypes.func,
-    }).isRequired,
-    onCancel: PropTypes.func.isRequired,
-    posting: PropTypes.bool.isRequired,
-  };
-
-  static defaultProps = {
-    role: null,
-  };
-
   /**
    * @function
    * @name handleSubmit
@@ -59,7 +38,7 @@ class RoleForm extends Component {
     validateFieldsAndScroll((error, values) => {
       if (!error) {
         if (isEditForm) {
-          const updatedRole = Object.assign({}, role, values);
+          const updatedRole = { ...role, ...values };
           putPartyRole(
             updatedRole,
             () => {
@@ -122,6 +101,7 @@ class RoleForm extends Component {
         <Row type="flex" justify="space-between">
           <Col xxl={17} xl={17} lg={17} md={17} sm={24} xs={24}>
             {/* role name */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label=" Name">
               {getFieldDecorator('strings.name.en', {
                 initialValue: isEditForm ? role.strings.name.en : undefined,
@@ -133,6 +113,7 @@ class RoleForm extends Component {
 
           <Col xxl={6} xl={6} lg={6} md={6} sm={24} xs={24}>
             {/* role abbreviation */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Abbreviation">
               {getFieldDecorator('strings.abbreviation.en', {
                 initialValue: isEditForm
@@ -146,6 +127,7 @@ class RoleForm extends Component {
         {/* end role name and abbreviation */}
 
         {/* role description */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Description">
           {getFieldDecorator('strings.description.en', {
             initialValue: isEditForm ? role.strings.description.en : undefined,
@@ -170,5 +152,26 @@ class RoleForm extends Component {
     );
   }
 }
+
+RoleForm.propTypes = {
+  isEditForm: PropTypes.bool.isRequired,
+  role: PropTypes.shape({
+    strings: PropTypes.shape({
+      name: PropTypes.shape({ en: PropTypes.string }),
+      abbreviation: PropTypes.shape({ en: PropTypes.string }),
+      description: PropTypes.shape({ en: PropTypes.string }),
+    }),
+  }),
+  form: PropTypes.shape({
+    getFieldDecorator: PropTypes.func,
+    validateFieldsAndScroll: PropTypes.func,
+  }).isRequired,
+  onCancel: PropTypes.func.isRequired,
+  posting: PropTypes.bool.isRequired,
+};
+
+RoleForm.defaultProps = {
+  role: null,
+};
 
 export default Form.create()(RoleForm);

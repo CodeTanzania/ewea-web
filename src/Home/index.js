@@ -27,7 +27,7 @@ const routes = [
     description: modules.alertsActions,
   },
   {
-    name: 'Emergency Functions',
+    name: 'EmergencyFunctions',
     path: '/app/functions',
     icon: functionIcon,
   },
@@ -56,8 +56,8 @@ const routes = [
     description: modules.stakeholdersRoles,
   },
   {
-    name: 'Alert Types',
-    path: '/app/alerttypes',
+    name: 'Event Types',
+    path: '/app/eventtypes',
     icon: alertIcon,
     description: modules.alerts,
   },

@@ -1,6 +1,6 @@
 import { List } from 'antd';
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import AdminstrativeBoundaryListHeader from '../ListHeader';
 import AdminstrativeBoundaryListItem from '../ListItem';
 
@@ -15,12 +15,13 @@ import AdminstrativeBoundaryListItem from '../ListItem';
  * @param {boolean} props.loading preload list of adminstrativeBoundaries
  * @param {Array} props.adminstrativeBoundaries array list of
  *  adminstrativeBoundaries
+ * @returns {object} react component
  *
  * @version 0.1.0
  * @since 0.1.0
  */
 const AdminstrativeBoundaryList = ({ adminstrativeBoundaries, loading }) => (
-  <Fragment>
+  <>
     <AdminstrativeBoundaryListHeader />
     <List
       loading={loading}
@@ -33,7 +34,7 @@ const AdminstrativeBoundaryList = ({ adminstrativeBoundaries, loading }) => (
         />
       )}
     />
-  </Fragment>
+  </>
 );
 
 AdminstrativeBoundaryList.propTypes = {

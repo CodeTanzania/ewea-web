@@ -1,46 +1,32 @@
 import { Avatar, Checkbox, Col, Modal, Row } from 'antd';
 import PropTypes from 'prop-types';
-import randomColor from 'randomcolor';
 import React, { Component } from 'react';
 import ListItemActions from '../../../../components/ListItemActions';
 import './styles.css';
+import { truncateString } from '../../../../util';
 
 /* constants */
 const { confirm } = Modal;
 const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 3, xs: 3 };
-const nameSpan = { xxl: 4, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
-const categorySpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
-const scopeSpan = { xxl: 4, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
-const severitySpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const statusSpan = { xxl: 5, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
+const nameSpan = { xxl: 5, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
+const typeSpan = { xxl: 4, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
+const codeSpan = { xxl: 3, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
+const descriptionSpan = { xxl: 10, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
 const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 
 /**
  * @class
- * @name AlertTypesListItem
- * @description Single alert type list item component.
- * Render single alert type details
+ * @name EmergencyFunctionsListItem
+ * @description Single emergency function list item component.
+ * Render single emergency function details
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class AlertTypesListItem extends Component {
+class EmergencyFunctionsListItem extends Component {
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     isHovered: false,
-  };
-
-  static propTypes = {
-    abbreviation: PropTypes.string.isRequired,
-    scope: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    severity: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
-    onArchive: PropTypes.func.isRequired,
-    onEdit: PropTypes.func.isRequired,
-    isSelected: PropTypes.bool.isRequired,
-    onSelectItem: PropTypes.func.isRequired,
-    onDeselectItem: PropTypes.func.isRequired,
   };
 
   /**
@@ -92,7 +78,7 @@ class AlertTypesListItem extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a alert type
+   * @description show confirm modal before archiving a emergency function
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -113,16 +99,15 @@ class AlertTypesListItem extends Component {
   render() {
     const {
       abbreviation,
-      category,
-      severity,
-      status,
-      scope,
+      type,
+      code,
       name,
+      description,
       onEdit,
+      color,
     } = this.props;
     const { isHovered } = this.state;
     const { isSelected } = this.props;
-    const avatarBackground = randomColor();
     let sideComponent = null;
 
     if (isSelected) {
@@ -141,39 +126,38 @@ class AlertTypesListItem extends Component {
           checked={isSelected}
         />
       ) : (
-        <Avatar style={{ backgroundColor: avatarBackground }}>
-          {abbreviation}
-        </Avatar>
+        <Avatar style={{ backgroundColor: color }}>{abbreviation}</Avatar>
       );
     }
 
     return (
       <div
-        className="AlertTypesListItem"
+        className="EmergencyFunctionsListItem"
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
         <Row>
+          {/* eslint-disable react/jsx-props-no-spreading */}
           <Col {...sideSpan}>{sideComponent}</Col>
           <Col {...nameSpan}>{name}</Col>
-          <Col {...categorySpan}>{category}</Col>
-          <Col {...scopeSpan} title={scope}>
-            {' '}
-            {scope}{' '}
+          <Col {...codeSpan}>{code}</Col>
+          <Col {...typeSpan}> {type} </Col>
+          <Col {...descriptionSpan}>
+            <span title={description}>{truncateString(description, 120)}</span>
           </Col>
-          <Col {...severitySpan}>{severity}</Col>
-          <Col {...statusSpan}>{status}</Col>
           <Col {...isHoveredSpan}>
+            {/* eslint-enable react/jsx-props-no-spreading */}
             {isHovered && (
               <ListItemActions
                 edit={{
-                  name: 'Edit Alert Type',
-                  title: 'Update Alert Type Details',
+                  name: 'Edit Emergency Function',
+                  title: 'Update Emergency Function Details',
                   onClick: onEdit,
                 }}
                 archive={{
-                  name: 'Archive Alert Type',
-                  title: 'Remove Alert Type from list of active Alert Types',
+                  name: 'Archive Emergency Function',
+                  title:
+                    'Remove Emergency Function from list of active emergency functions',
                   onClick: this.showArchiveConfirm,
                 }}
               />
@@ -185,4 +169,18 @@ class AlertTypesListItem extends Component {
   }
 }
 
-export default AlertTypesListItem;
+EmergencyFunctionsListItem.propTypes = {
+  abbreviation: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
+  code: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  onArchive: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  onSelectItem: PropTypes.func.isRequired,
+  onDeselectItem: PropTypes.func.isRequired,
+};
+
+export default EmergencyFunctionsListItem;

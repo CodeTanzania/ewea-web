@@ -25,25 +25,9 @@ const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
  * @since 0.1.0
  */
 class AlertsListItem extends Component {
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     isHovered: false,
-  };
-
-  static propTypes = {
-    abbreviation: PropTypes.string.isRequired,
-    urgency: PropTypes.string.isRequired,
-    severity: PropTypes.string.isRequired,
-    location: PropTypes.string.isRequired,
-    event: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-    color: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    onArchive: PropTypes.func.isRequired,
-    onEdit: PropTypes.func.isRequired,
-    isSelected: PropTypes.bool.isRequired,
-    onSelectItem: PropTypes.func.isRequired,
-    onDeselectItem: PropTypes.func.isRequired,
-    onShare: PropTypes.func.isRequired,
   };
 
   /**
@@ -159,6 +143,7 @@ class AlertsListItem extends Component {
         onMouseLeave={this.handleMouseLeave}
       >
         <Row>
+          {/* eslint-disable react/jsx-props-no-spreading */}
           <Col {...sideSpan}>{sideComponent}</Col>
           <Col {...eventSpan} title={description}>
             {event}
@@ -168,6 +153,7 @@ class AlertsListItem extends Component {
           <Col {...severitySpan}>{severity}</Col>
           <Col {...urgencySpan}>{urgency}</Col>
           <Col {...isHoveredSpan}>
+            {/* eslint-enable react/jsx-props-no-spreading */}
             {isHovered && (
               <ListItemActions
                 edit={{
@@ -188,5 +174,22 @@ class AlertsListItem extends Component {
     );
   }
 }
+
+AlertsListItem.propTypes = {
+  abbreviation: PropTypes.string.isRequired,
+  urgency: PropTypes.string.isRequired,
+  severity: PropTypes.string.isRequired,
+  location: PropTypes.string.isRequired,
+  event: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  onArchive: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  onSelectItem: PropTypes.func.isRequired,
+  onDeselectItem: PropTypes.func.isRequired,
+  onShare: PropTypes.func.isRequired,
+};
 
 export default AlertsListItem;

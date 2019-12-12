@@ -110,10 +110,10 @@ const OverviewDashboard = () => {
   /**
    * @function
    * @name handleZoomEnd
-   * @description handle zoom end of svg map
+   * @description {string} handle zoom end of svg map
    * @version 0.1.0
    * @since 0.1.0
-   * @param position
+   * @param {object} position handle position
    */
   const handleZoomEnd = position => {
     setZoom(position.zoom);
