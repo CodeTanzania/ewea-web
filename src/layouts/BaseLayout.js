@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Link, Switch } from 'react-router-dom';
 import UserMenu from './components/UserMenu';
 // import Alerts from '../Alerts';
-// import AlertTypes from '../Alerts/components/AlertTypes';
 // import ActionCatalog from '../Alerts/components/ActionCatalog';
 // import IssuedAlerts from '../Alerts/components/IssuedAlerts';
 // import AlertsFeedback from '../Alerts/layouts/Feedback';
@@ -26,6 +25,7 @@ import Home from '../Home';
 import Stakeholders from '../Stakeholders';
 import StakeholdersAgencies from '../Stakeholders/components/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
+import EventTypes from '../Alerts/components/EventTypes';
 // import StakeholdersNotifications from '../Stakeholders/components/Notifications';
 import StakeholdersRoles from '../Stakeholders/components/Roles';
 import EmergencyFunctions from '../Functions/components/EmergencyFunctions';
@@ -44,7 +44,7 @@ const breadcrumbNameMap = {
   },
   /* Alerts Routes */
   '/app/alerts': { name: 'Alerts', title: 'Alerts module' },
-  '/app/alerttypes': { name: 'Alert Types', title: 'Alert Types module' },
+  '/app/eventtypes': { name: 'Event Types', title: 'Event Types module' },
   '/app/actions': {
     name: 'Actions Taken',
     title: 'List of all performed actions',
@@ -225,12 +225,13 @@ const BaseLayout = props => {
       <Content className="BaseLayoutContent">
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
-          {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
           <SecureRoute
             exact
-            path={`${baseUrl}/alerttypes`}
-            component={AlertTypes}
+            path={`${baseUrl}/eventtypes`}
+            component={EventTypes}
           />
+          {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
+          
           <SecureRoute
             path={`${baseUrl}/issuedalerts`}
             component={IssuedAlerts}
