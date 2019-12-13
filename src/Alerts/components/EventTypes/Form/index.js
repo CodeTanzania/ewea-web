@@ -30,7 +30,6 @@ class EventTypeForm extends Component {
    */
   handleSubmit = e => {
     e.preventDefault();
-
     const {
       form: { validateFieldsAndScroll },
       eventType,
@@ -47,7 +46,9 @@ class EventTypeForm extends Component {
             description: {
               en: values.description,
             },
-            group: values.group,
+          },
+          relations: {
+            group: { _id: values.group },
           },
         };
         if (isEditForm) {
@@ -130,8 +131,8 @@ class EventTypeForm extends Component {
         <Form.Item {...formItemLayout} label="Group">
           {getFieldDecorator('group', {
             initialValue:
-              isEditForm && eventType.group // eslint-disable-line
-                ? eventType.strings.group._id // eslint-disable-line
+              isEditForm && eventType.relations.group // eslint-disable-line
+                ? eventType.relations.group._id // eslint-disable-line
                 : undefined,
             rules: [{ message: 'Event Type group is required' }],
           })(
@@ -140,8 +141,8 @@ class EventTypeForm extends Component {
               optionLabel={group => group.strings.name.en}
               optionValue="_id"
               initialValue={
-                isEditForm && eventType.strings.group
-                  ? eventType.strings.group
+                isEditForm && eventType.relations.group
+                  ? eventType.relations.group
                   : undefined
               }
             />
@@ -189,6 +190,8 @@ EventTypeForm.propTypes = {
         en: PropTypes.string.isRequired,
       }),
       _id: PropTypes.string,
+    }),
+    relations: PropTypes.shape({
       group: PropTypes.string,
     }),
   }).isRequired,
