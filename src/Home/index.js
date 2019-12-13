@@ -15,8 +15,8 @@ import actionCatalogIcon from '../assets/icons/alerts/actioncatalog.svg';
 /* constants */
 const routes = [
   {
-    name: 'Issued Alerts',
-    path: '/app/issuedalerts',
+    name: 'Events',
+    path: '/app/events',
     icon: issuedAlertsIcon,
     description: modules.alertsIssued,
   },

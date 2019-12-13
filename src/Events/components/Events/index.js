@@ -1,25 +1,27 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import {
-  closeAlertForm,
+  closeEventForm,
   Connect,
-  getAlerts,
-  openAlertForm,
-  searchAlerts,
-  selectAlert,
+  getEvents,
+  openEventForm,
+  searchEvents,
+  selectEvent,
 } from '@codetanzania/ewea-api-states';
-import { Modal } from 'antd';
+import { Modal, Drawer } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import NotificationForm from '../../../components/NotificationForm';
 import Topbar from '../../../components/Topbar';
-import AlertFilters from './Filters';
-import AlertForm from './Form';
-import AlertsList from './List';
+import EventFilters from './Filters';
+import EventForm from './Form';
+import EventsList from './List';
+import EventDetailsViewHeader from './DetailsView/Header';
+import EventDetailsViewBody from './DetailsView/Body';
 import './styles.css';
 
 /* constants */
 const {
-  getAlerts: getAlertsFromAPI,
+  getEvents: getEventsFromAPI,
   getJurisdictions,
   getPartyGroups,
   getRoles,
@@ -28,25 +30,26 @@ const {
 
 /**
  * @class
- * @name Alerts
- * @description Render alert list which have search box, actions and alert list
+ * @name Events
+ * @description Render event list which have search box, actions and event list
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class Alerts extends Component {
+class Events extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
+    showEventDetails: false,
     showFilters: false,
     isEditForm: false,
     showNotificationForm: false,
-    selectedAlerts: [],
+    selectedEvents: [],
     notificationBody: undefined,
     cached: null,
   };
 
   componentDidMount() {
-    getAlerts();
+    getEvents();
   }
 
   /**
@@ -105,41 +108,53 @@ class Alerts extends Component {
 
   /**
    * @function
-   * @name openAlertForm
-   * @description Open alert form
+   * @name openEventForm
+   * @description Open event form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openAlertForm = () => {
-    openAlertForm();
+  openEventForm = () => {
+    openEventForm();
   };
 
   /**
    * @function
-   * @name openAlertForm
-   * @description close alert form
+   * @name openEventForm
+   * @description close event form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeAlertForm = () => {
-    closeAlertForm();
+  closeEventForm = () => {
+    closeEventForm();
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
-   * @name searchAlerts
-   * @description Search Alerts List based on supplied filter word
+   * @name closeEventDetails
+   * @description close event details drawer
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeEventDetails = () => {
+    this.setState({ showEventDetails: false });
+  };
+
+  /**
+   * @function
+   * @name searchEvents
+   * @description Search Events List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchAlerts = event => {
-    searchAlerts(event.target.value);
+  searchEvents = event => {
+    searchEvents(event.target.value);
   };
 
   /**
@@ -147,32 +162,47 @@ class Alerts extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} alert alert to be edited
+   * @param {object} event event to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = alert => {
-    selectAlert(alert);
+  handleEdit = event => {
+    selectEvent(event);
     this.setState({ isEditForm: true });
-    openAlertForm();
+    openEventForm();
+  };
+
+  /**
+   * @function
+   * @name handleView
+   * @description Handle on view event details action for list item
+   *
+   * @param {object} event event to be viewed
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleView = event => {
+    selectEvent(event);
+    this.setState({ showEventDetails: true });
   };
 
   /**
    * @function
    * @name handleShare
-   * @description Handle share single alert action
+   * @description Handle share single event action
    *
-   * @param {object} alert alert to be shared
+   * @param {object} event event to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = alert => {
-    const message = `${alert.name}\nMobile: ${
+  handleShare = event => {
+    const message = `${event.name}\nMobile: ${
       // eslint-disable-line
-      alert.mobile
-    }\nEmail: ${alert.email}`;
+      event.mobile
+    }\nEmail: ${event.email}`;
 
     this.setState({ notificationBody: message, showNotificationForm: true });
   };
@@ -182,21 +212,21 @@ class Alerts extends Component {
    * @name handleBulkShare
    * @description Handle share multiple focal People
    *
-   * @param {object[]} alerts focal People list to be shared
+   * @param {object[]} events focal People list to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleBulkShare = alerts => {
-    const alertList = alerts.map(
-      alert =>
-        `${alert.name}\nMobile: ${alert.mobile}\nEmail: ${
+  handleBulkShare = events => {
+    const eventList = events.map(
+      event =>
+        `${event.name}\nMobile: ${event.mobile}\nEmail: ${
           // eslint-disable-line
-          alert.email
+          event.email
         }`
     );
 
-    const message = alertList.join('\n\n\n');
+    const message = eventList.join('\n\n\n');
 
     this.setState({ notificationBody: message, showNotificationForm: true });
   };
@@ -204,16 +234,16 @@ class Alerts extends Component {
   /**
    * @function
    * @name openNotificationForm
-   * @description Handle on notify alerts
+   * @description Handle on notify events
    *
-   * @param {object[]} alerts List of alerts selected to be notified
+   * @param {object[]} events List of events selected to be notified
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openNotificationForm = alerts => {
+  openNotificationForm = events => {
     this.setState({
-      selectedAlerts: alerts,
+      selectedEvents: events,
       showNotificationForm: true,
     });
   };
@@ -221,7 +251,7 @@ class Alerts extends Component {
   /**
    * @function
    * @name closeNotificationForm
-   * @description Handle on notify alerts
+   * @description Handle on notify events
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -256,8 +286,8 @@ class Alerts extends Component {
 
   render() {
     const {
-      alerts,
-      alert,
+      events,
+      event,
       loading,
       posting,
       page,
@@ -266,10 +296,11 @@ class Alerts extends Component {
       total,
     } = this.props;
     const {
+      showEventDetails,
       showFilters,
       isEditForm,
       showNotificationForm,
-      selectedAlerts,
+      selectedEvents,
       notificationBody,
       cached,
     } = this.state;
@@ -279,29 +310,30 @@ class Alerts extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for alerts here ...',
-            onChange: this.searchAlerts,
+            placeholder: 'Search for events here ...',
+            onChange: this.searchEvents,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Alert',
+              label: 'New Event',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Alert',
-              onClick: this.openAlertForm,
+              title: 'Add New Event',
+              onClick: this.openEventForm,
             },
           ]}
         />
         {/* end Topbar */}
 
-        <div className="AlertsList">
+        <div className="EventsList">
           {/* list starts */}
-          <AlertsList
+          <EventsList
             total={total}
             page={page}
-            alerts={alerts}
+            events={events}
             loading={loading}
+            onView={this.handleView}
             onEdit={this.handleEdit}
             onFilter={this.openFiltersModal}
             onNotify={this.openNotificationForm}
@@ -309,10 +341,9 @@ class Alerts extends Component {
             onBulkShare={this.handleBulkShare}
           />
           {/* end list */}
-
           {/* filter modal */}
           <Modal
-            title="Filter Alerts"
+            title="Filter Events"
             visible={showFilters}
             onCancel={this.closeFiltersModal}
             footer={null}
@@ -320,7 +351,7 @@ class Alerts extends Component {
             maskClosable={false}
             className="FormModal"
           >
-            <AlertFilters
+            <EventFilters
               onCancel={this.closeFiltersModal}
               cached={cached}
               onCache={this.handleOnCachedValues}
@@ -328,10 +359,9 @@ class Alerts extends Component {
             />
           </Modal>
           {/* end filter modal */}
-
           {/* Notification Modal modal */}
           <Modal
-            title="Notify Alerts"
+            title="Notify Events"
             visible={showNotificationForm}
             onCancel={this.closeNotificationForm}
             footer={null}
@@ -341,8 +371,8 @@ class Alerts extends Component {
             afterClose={this.handleAfterCloseNotificationForm}
           >
             <NotificationForm
-              recipients={selectedAlerts}
-              onSearchRecipients={getAlertsFromAPI}
+              recipients={selectedEvents}
+              onSearchRecipients={getEventsFromAPI}
               onSearchJurisdictions={getJurisdictions}
               onSearchGroups={getPartyGroups}
               onSearchAgencies={getAgencies}
@@ -352,56 +382,82 @@ class Alerts extends Component {
             />
           </Modal>
           {/* end Notification modal */}
-
           {/* create/edit form modal */}
           <Modal
-            title={isEditForm ? 'Edit Alert' : 'Add New Alert'}
+            title={isEditForm ? 'Edit Event' : 'Add New Event'}
             visible={showForm}
             className="FormModal"
             footer={null}
-            onCancel={this.closeAlertForm}
+            onCancel={this.closeEventForm}
             destroyOnClose
             maskClosable={false}
             afterClose={this.handleAfterCloseForm}
           >
-            <AlertForm
+            <EventForm
               posting={posting}
               isEditForm={isEditForm}
-              alert={alert}
-              onCancel={this.closeAlertForm}
+              event={event}
+              onCancel={this.closeEventForm}
             />
           </Modal>
           {/* end create/edit form modal */}
+          {/* Event details drawer */}
+          <Drawer
+            title={
+              <EventDetailsViewHeader
+                number={event ? event.number : 'N/A'}
+                description={event ? event.description : 'N/A'}
+                type={event ? event.type.strings.name.en : 'N/A'}
+              />
+            }
+            placement="right"
+            width="100%"
+            onClose={this.closeEventDetails}
+            visible={showEventDetails}
+          >
+            <EventDetailsViewBody />
+          </Drawer>
+
+          {/* End Event details drawer */}
         </div>
       </>
     );
   }
 }
 
-Alerts.propTypes = {
+Events.propTypes = {
   loading: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
-  alerts: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+  events: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
-  alert: PropTypes.shape({ name: PropTypes.string }),
+  event: PropTypes.shape({
+    description: PropTypes.string,
+    number: PropTypes.string,
+    type: PropTypes.shape({
+      _id: PropTypes.string,
+      strings: PropTypes.shape({
+        name: PropTypes.shape({ en: PropTypes.string }),
+      }),
+    }),
+  }),
   page: PropTypes.number.isRequired,
   showForm: PropTypes.bool.isRequired,
   searchQuery: PropTypes.string,
   total: PropTypes.number.isRequired,
 };
 
-Alerts.defaultProps = {
-  alert: null,
+Events.defaultProps = {
+  event: null,
   searchQuery: undefined,
 };
 
-export default Connect(Alerts, {
-  alerts: 'alerts.list',
-  alert: 'alerts.selected',
-  loading: 'alerts.loading',
-  posting: 'alerts.posting',
-  page: 'alerts.page',
-  showForm: 'alerts.showForm',
-  total: 'alerts.total',
-  searchQuery: 'alerts.q',
+export default Connect(Events, {
+  events: 'events.list',
+  event: 'events.selected',
+  loading: 'events.loading',
+  posting: 'events.posting',
+  page: 'events.page',
+  showForm: 'events.showForm',
+  total: 'events.total',
+  searchQuery: 'events.q',
 });
