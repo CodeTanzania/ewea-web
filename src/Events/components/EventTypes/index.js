@@ -1,69 +1,69 @@
 import {
   Connect,
-  getAlerts,
-  openAlertForm,
-  searchAlerts,
-  selectAlert,
-  closeAlertForm,
+  getEventTypes,
+  openEventTypeForm,
+  searchEventTypes,
+  selectEventType,
+  closeEventTypeForm,
 } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal } from 'antd';
 import Topbar from '../../../components/Topbar';
-import AlertTypeForm from './Form';
-import AlertTypesList from './List';
+import EventTypeForm from './Form';
+import EventTypesList from './List';
 import './styles.css';
 
 /* constants */
 
 /**
  * @class
- * @name AlertTypes
- * @description Render Alert Types list which have search box,
- * actions and alert types list
+ * @name EventTypes
+ * @description Render Event Types list which have search box,
+ * actions and event types list
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class AlertTypes extends Component {
+class EventTypes extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isEditForm: false,
   };
 
   componentDidMount() {
-    getAlerts();
+    getEventTypes();
   }
 
   /**
    * @function
-   * @name openAlertTypesForm
-   * @description Open alert type form
+   * @name openEventTypesForm
+   * @description Open event type form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openAlertTypesForm = () => {
-    openAlertForm();
+  openEventTypesForm = () => {
+    openEventTypeForm();
   };
 
   /**
    * @function
-   * @name closeAlertTypesForm
-   * @description close alert type form
+   * @name closeEventTypesForm
+   * @description close event type form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeAlertTypesForm = () => {
-    closeAlertForm();
+  closeEventTypesForm = () => {
+    closeEventTypeForm();
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
    * @name searchAlerts
-   * @description Search Alert Types List based on supplied filter word
+   * @description Search Event Types List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
@@ -71,7 +71,7 @@ class AlertTypes extends Component {
    * @since 0.1.0
    */
   searchAlerts = event => {
-    searchAlerts(event.target.value);
+    searchEventTypes(event.target.value);
   };
 
   /**
@@ -79,24 +79,24 @@ class AlertTypes extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} alertType alertType to be edited
+   * @param {object} eventType event type to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = alertType => {
-    selectAlert(alertType);
+  handleEdit = eventType => {
+    selectEventType(eventType);
     this.setState({ isEditForm: true });
-    openAlertForm();
+    openEventTypeForm();
   };
 
   render() {
     const {
-      alertTypes,
+      eventTypes,
       loading,
       page,
       posting,
-      alertType,
+      eventType,
       showForm,
       searchQuery,
       total,
@@ -108,28 +108,28 @@ class AlertTypes extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Alert types here ...',
+            placeholder: 'Search for Event types here ...',
             onChange: this.searchAlerts,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Alert Type',
+              label: 'New Event Type',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Alert Type',
-              onClick: this.openAlertTypesForm,
+              title: 'Add New Event Type',
+              onClick: this.openEventTypesForm,
             },
           ]}
         />
         {/* end Topbar */}
 
-        <div className="AlertTypesList">
+        <div className="EventTypesList">
           {/* list starts */}
-          <AlertTypesList
+          <EventTypesList
             total={total}
             page={page}
-            alertTypes={alertTypes}
+            eventTypes={eventTypes}
             loading={loading}
             onEdit={this.handleEdit}
           />
@@ -137,20 +137,20 @@ class AlertTypes extends Component {
 
           {/* create/edit form modal */}
           <Modal
-            title={isEditForm ? 'Edit Alert Type' : 'Add New Alert Type'}
+            title={isEditForm ? 'Edit Event Type' : 'Add New Event Type'}
             visible={showForm}
             className="FormModal"
             footer={null}
-            onCancel={this.closeAlertTypesForm}
+            onCancel={this.closeEventTypesForm}
             destroyOnClose
             maskClosable={false}
             afterClose={this.handleAfterCloseForm}
           >
-            <AlertTypeForm
+            <EventTypeForm
               posting={posting}
               isEditForm={isEditForm}
-              alertType={alertType}
-              onCancel={this.closeAlertTypesForm}
+              eventType={eventType}
+              onCancel={this.closeEventTypesForm}
             />
           </Modal>
           {/* end create/edit form modal */}
@@ -160,11 +160,11 @@ class AlertTypes extends Component {
   }
 }
 
-AlertTypes.propTypes = {
+EventTypes.propTypes = {
   loading: PropTypes.bool.isRequired,
-  alertTypes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+  eventTypes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
-  alertType: PropTypes.shape({ name: PropTypes.string }),
+  eventType: PropTypes.shape({ name: PropTypes.string }),
   page: PropTypes.number.isRequired,
   searchQuery: PropTypes.string,
   total: PropTypes.number.isRequired,
@@ -172,18 +172,18 @@ AlertTypes.propTypes = {
   showForm: PropTypes.bool.isRequired,
 };
 
-AlertTypes.defaultProps = {
-  alertType: null,
+EventTypes.defaultProps = {
+  eventType: null,
   searchQuery: undefined,
 };
 
-export default Connect(AlertTypes, {
-  alertTypes: 'alerts.list',
-  alertType: 'alerts.selected',
-  loading: 'alerts.loading',
-  posting: 'alerts.posting',
-  page: 'alerts.page',
-  showForm: 'alerts.showForm',
-  total: 'alerts.total',
-  searchQuery: 'alerts.q',
+export default Connect(EventTypes, {
+  eventTypes: 'eventTypes.list',
+  eventType: 'eventTypes.selected',
+  loading: 'eventTypes.loading',
+  posting: 'eventTypes.posting',
+  page: 'eventTypes.page',
+  showForm: 'eventTypes.showForm',
+  total: 'eventTypes.total',
+  searchQuery: 'eventTypes.q',
 });

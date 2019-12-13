@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Link, Switch } from 'react-router-dom';
 import UserMenu from './components/UserMenu';
 // import Alerts from '../Alerts';
-// import AlertTypes from '../Alerts/components/AlertTypes';
 // import ActionCatalog from '../Alerts/components/ActionCatalog';
 // import IssuedAlerts from '../Alerts/components/IssuedAlerts';
 // import AlertsFeedback from '../Alerts/layouts/Feedback';
@@ -27,6 +26,7 @@ import Home from '../Home';
 import Stakeholders from '../Stakeholders';
 import StakeholdersAgencies from '../Stakeholders/components/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
+import EventTypes from '../Events/components/EventTypes';
 // import StakeholdersNotifications from '../Stakeholders/components/Notifications';
 import StakeholdersRoles from '../Stakeholders/components/Roles';
 import EmergencyFunctions from '../Functions/components/EmergencyFunctions';
@@ -43,9 +43,8 @@ const breadcrumbNameMap = {
     name: 'Home',
     title: 'EMIS',
   },
-  /* Alerts Routes */
-  '/app/alerts': { name: 'Alerts', title: 'Alerts module' },
-  '/app/alerttypes': { name: 'Alert Types', title: 'Alert Types module' },
+  /* Event Routes */
+  '/app/eventtypes': { name: 'Event Types', title: 'Event Types module' },
   '/app/actions': {
     name: 'Actions Taken',
     title: 'List of all performed actions',
@@ -227,11 +226,13 @@ const BaseLayout = props => {
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
           <SecureRoute path={`${baseUrl}/events`} component={Events} />
+          <SecureRoute path={`${baseUrl}/eventtypes`} component={EventTypes} />
+
           {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
           <SecureRoute
             exact
-            path={`${baseUrl}/alerttypes`}
-            component={AlertTypes}
+            path={`${baseUrl}/eventtypes`}
+            component={EventTypes}
           />
         
           <SecureRoute

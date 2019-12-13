@@ -56,8 +56,8 @@ const routes = [
     description: modules.stakeholdersRoles,
   },
   {
-    name: 'Alert Types',
-    path: '/app/alerttypes',
+    name: 'Event Types',
+    path: '/app/eventtypes',
     icon: alertIcon,
     description: modules.alerts,
   },
