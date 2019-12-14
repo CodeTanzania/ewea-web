@@ -212,7 +212,11 @@ class EventTypesList extends Component {
               key={eventType._id} // eslint-disable-line
               abbreviation={eventType.strings.abbreviation.en}
               name={eventType.strings.name.en}
-              group={eventType.strings.group ? eventType.strings.group : 'N/A'}
+              group={
+                eventType.relations.group
+                  ? eventType.relations.group.strings.name.en
+                  : 'N/A'
+              }
               description={
                 eventType.strings.description
                   ? eventType.strings.description.en
