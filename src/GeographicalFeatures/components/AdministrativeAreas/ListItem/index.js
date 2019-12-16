@@ -140,14 +140,14 @@ class AdministrativeAreasListItem extends Component {
             {isHovered && (
               <ListItemActions
                 edit={{
-                  name: 'Edit Emergency Function',
-                  title: 'Update Emergency Function Details',
+                  name: 'Edit Administrative Area',
+                  title: 'Update Administrative Area Details',
                   onClick: onEdit,
                 }}
                 archive={{
-                  name: 'Archive Emergency Function',
+                  name: 'Archive Administrative Area',
                   title:
-                    'Remove Emergency Function from list of active administrative areas',
+                    'Remove Administrative Area from list of active Administrative Areas',
                   onClick: this.showArchiveConfirm,
                 }}
               />

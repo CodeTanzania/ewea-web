@@ -78,6 +78,10 @@ const breadcrumbNameMap = {
     name: 'Administrative Boundaries',
     title: 'List of administrative boundaries',
   },
+  '/app/administrativeareas': {
+    name: 'Administrative Areas',
+    title: 'List of administrative areas',
+  },
   '/app/geographicalfeatures/districts': {
     name: 'Districts',
     title: 'List of Districts',
