@@ -1,4 +1,4 @@
-.EventTypesList {
+.FeaturesList {
     padding: 0 40px;
   }
   
@@ -13,7 +13,7 @@
   }
   
   @media screen and (max-width: 768px) {
-    .EventTypesList {
+    .FeaturesList {
       padding: 0 30px;
     }
     .FormModal {
@@ -22,7 +22,7 @@
   }
    
    @media screen and (max-width: 426px) {
-    .EventTypesList {
+    .FeaturesList {
       padding: 0 20px;
     }
     .FormModal {

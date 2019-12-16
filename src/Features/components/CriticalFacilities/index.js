@@ -3,14 +3,15 @@ import {
   getFeatures,
   openFeatureForm,
   searchFeatures,
-  // selectFeature,
-  // closeFeatureForm,
+  selectFeature,
+  closeFeatureForm,
 } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-// import { Modal } from 'antd';
+import { Modal } from 'antd';
 import Topbar from '../../../components/Topbar';
-import EventTypesList from './List';
+import FeaturesList from './List';
+import FeaturesForm from './Form';
 import './styles.css';
 
 /* constants */
@@ -18,17 +19,17 @@ import './styles.css';
 /**
  * @class
  * @name Features
- * @description Render Features list which have search box,
- * actions and features list
+ * @description Render Critical facilities list which have search box,
+ * actions and critical facilities list
  *
  * @version 0.1.0
  * @since 0.1.0
  */
 class Features extends Component {
   // eslint-disable-next-line react/state-in-constructor
-  // state = {
-  //   isEditForm: false,
-  // };
+  state = {
+    isEditForm: false,
+  };
 
   componentDidMount() {
     getFeatures();
@@ -36,33 +37,33 @@ class Features extends Component {
 
   /**
    * @function
-   * @name openEventTypesForm
+   * @name openFeaturesForm
    * @description Open feature form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openEventTypesForm = () => {
+  openFeaturesForm = () => {
     openFeatureForm();
   };
 
-  // /**
-  //  * @function
-  //  * @name closeEventTypesForm
-  //  * @description close feature form
-  //  *
-  //  * @version 0.1.0
-  //  * @since 0.1.0
-  //  */
-  // closeEventTypesForm = () => {
-  //   closeFeatureForm();
-  //   this.setState({ isEditForm: false });
-  // };
+  /**
+   * @function
+   * @name closeFeaturesForm
+   * @description close feature form
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeFeaturesForm = () => {
+    closeFeatureForm();
+    this.setState({ isEditForm: false });
+  };
 
   /**
    * @function
    * @name searchFeatures
-   * @description Search Feature List based on supplied filter word
+   * @description Search critical facility List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
@@ -73,53 +74,53 @@ class Features extends Component {
     searchFeatures(event.target.value);
   };
 
-  // /**
-  //  * @function
-  //  * @name handleEdit
-  //  * @description Handle on Edit action for list item
-  //  *
-  //  * @param {object} feature feature to be edited
-  //  *
-  //  * @version 0.1.0
-  //  * @since 0.1.0
-  //  */
-  // handleEdit = feature => {
-  //   selectFeature(feature);
-  //   this.setState({ isEditForm: true });
-  //   openFeatureForm();
-  // };
+  /**
+   * @function
+   * @name handleEdit
+   * @description Handle on Edit action for list item
+   *
+   * @param {object} feature critical facility to be edited
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleEdit = feature => {
+    selectFeature(feature);
+    this.setState({ isEditForm: true });
+    openFeatureForm();
+  };
 
-  // /**
-  //  * @function
-  //  * @name handleAfterCloseForm
-  //  * @description Perform post close form cleanups
-  //  *
-  //  * @version 0.1.0
-  //  * @since 0.1.0
-  //  */
-  // handleAfterCloseForm = () => {
-  //   this.setState({ isEditForm: false });
-  // };
+  /**
+   * @function
+   * @name handleAfterCloseForm
+   * @description Perform post close form cleanups
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleAfterCloseForm = () => {
+    this.setState({ isEditForm: false });
+  };
 
   render() {
     const {
       features,
       loading,
       page,
-      // posting,
-      // feature,
-      // showForm,
+      posting,
+      feature,
+      showForm,
       searchQuery,
       total,
     } = this.props;
-    // const { isEditForm } = this.state;
+    const { isEditForm } = this.state;
     return (
       <>
         {/* Topbar */}
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Features here ...',
+            placeholder: 'Search for Critical facilities here ...',
             onChange: this.searchFeatures,
             value: searchQuery,
           }}
@@ -128,16 +129,16 @@ class Features extends Component {
               label: 'New Feature',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Feature',
-              onClick: this.openEventTypesForm,
+              title: 'Add New Critical facility',
+              onClick: this.openFeaturesForm,
             },
           ]}
         />
         {/* end Topbar */}
 
-        <div className="EventTypesList">
+        <div className="FeaturesList">
           {/* list starts */}
-          <EventTypesList
+          <FeaturesList
             total={total}
             page={page}
             features={features}
@@ -147,23 +148,27 @@ class Features extends Component {
           {/* end list */}
 
           {/* create/edit form modal */}
-          {/* <Modal
-            title={isEditForm ? 'Edit Event Type' : 'Add New Event Type'}
+          <Modal
+            title={
+              isEditForm
+                ? 'Edit Critical Facility'
+                : 'Add New Critical Facility'
+            }
             visible={showForm}
             className="FormModal"
             footer={null}
-            onCancel={this.closeEventTypesForm}
+            onCancel={this.closeFeaturesForm}
             destroyOnClose
             maskClosable={false}
             afterClose={this.handleAfterCloseForm}
           >
-            <EventTypeForm
+            <FeaturesForm
               posting={posting}
               isEditForm={isEditForm}
               feature={feature}
-              onCancel={this.closeEventTypesForm}
+              onCancel={this.closeFeaturesForm}
             />
-          </Modal> */}
+          </Modal>
           {/* end create/edit form modal */}
         </div>
       </>
@@ -179,8 +184,8 @@ Features.propTypes = {
   page: PropTypes.number.isRequired,
   searchQuery: PropTypes.string,
   total: PropTypes.number.isRequired,
-  // posting: PropTypes.bool.isRequired,
-  // showForm: PropTypes.bool.isRequired,
+  posting: PropTypes.bool.isRequired,
+  showForm: PropTypes.bool.isRequired,
 };
 
 Features.defaultProps = {

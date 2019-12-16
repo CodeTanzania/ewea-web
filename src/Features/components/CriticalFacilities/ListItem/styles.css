@@ -1,24 +1,24 @@
-.EventTypesListItem {
+.FeaturesListItem {
   width: 100%;
   border-bottom: 1px solid #e8e8e8;
   padding: 15px 0;
   height: 60px;
 }
 
-.EventTypesListItem .Checkbox {
+.FeaturesListItem .Checkbox {
   padding: 0 8px;
 }
 
-.EventTypesListItem:hover {
+.FeaturesListItem:hover {
   background-color: #f5f5f5;
 }
 
-.EventTypesListItem .actionIcon:hover {
+.FeaturesListItem .actionIcon:hover {
   color: #008efa;
   background-color: #e8e8e8;
 }
 
-.EventTypesListItem .actionIcon {
+.FeaturesListItem .actionIcon {
   padding-top: 8px;
   margin-bottom: 5px;
   width: 32px;
@@ -30,13 +30,13 @@
   cursor: pointer;
 }
 
-.EventTypesListItem .actionIcon {
+.FeaturesListItem .actionIcon {
   display: inline-block;
   margin: 0 10px;
   font-size: 16px;
 }
 
-.EventTypesListItem .actionIcon:hover {
+.FeaturesListItem .actionIcon:hover {
   color: #008efa;
   background-color: #e8e8e8;
 }

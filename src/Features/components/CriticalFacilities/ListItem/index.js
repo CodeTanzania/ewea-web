@@ -17,14 +17,14 @@ const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 
 /**
  * @class
- * @name EventTypesListItem
- * @description Single alert type list item component.
- * Render single alert type details
+ * @name FeaturesListItem
+ * @description Single critical facility list item component.
+ * Render single critical facility details
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EventTypesListItem extends Component {
+class FeaturesListItem extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isHovered: false,
@@ -32,7 +32,7 @@ class EventTypesListItem extends Component {
 
   /**
    * @function
-   * @name handleMo
+   * @name handleMouseEnter
    * useEnter
    * @description Handle on MouseEnter ListItem event
    *
@@ -80,7 +80,7 @@ class EventTypesListItem extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a alert type
+   * @description show confirm modal before archiving a critical facility
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -137,7 +137,7 @@ class EventTypesListItem extends Component {
 
     return (
       <div
-        className="EventTypesListItem"
+        className="FeaturesListItem"
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
@@ -157,13 +157,14 @@ class EventTypesListItem extends Component {
             {isHovered && (
               <ListItemActions
                 edit={{
-                  name: 'Edit Event Type',
-                  title: 'Update Event Type Details',
+                  name: 'Edit Critical Facility',
+                  title: 'Update Critical Facility Details',
                   onClick: onEdit,
                 }}
                 archive={{
-                  name: 'Archive Event Type',
-                  title: 'Remove Event Type from list of active Event Types',
+                  name: 'Archive Critical Facility',
+                  title:
+                    'Remove Critical Facility from list of active Critical Facilities',
                   onClick: this.showArchiveConfirm,
                 }}
               />
@@ -175,7 +176,7 @@ class EventTypesListItem extends Component {
   }
 }
 
-EventTypesListItem.propTypes = {
+FeaturesListItem.propTypes = {
   abbreviation: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
@@ -189,4 +190,4 @@ EventTypesListItem.propTypes = {
   onDeselectItem: PropTypes.func.isRequired,
 };
 
-export default EventTypesListItem;
+export default FeaturesListItem;

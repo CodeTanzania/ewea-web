@@ -1,8 +1,8 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import {
-  deleteEventType,
-  paginateEventTypes,
-  refreshEventTypes,
+  deleteFeature,
+  paginateFeatures,
+  refreshFeatures,
 } from '@codetanzania/ewea-api-states';
 import { List } from 'antd';
 import concat from 'lodash/concat';
@@ -16,7 +16,7 @@ import React, { Component } from 'react';
 import ListHeader from '../../../../components/ListHeader';
 import Toolbar from '../../../../components/Toolbar';
 import { notifyError, notifySuccess } from '../../../../util';
-import EventTypesListItem from '../ListItem';
+import FeaturesListItem from '../ListItem';
 
 /* constants */
 
@@ -33,58 +33,58 @@ const headerLayout = [
   { ...addressSpan, header: 'Address' },
   { ...descriptionSpan, header: 'Description' },
 ];
-const { getEventTypesExportUrl } = httpActions;
+const { getFeaturesExportUrl } = httpActions;
 
 /**
  * @class
- * @name EventTypesList
+ * @name FeaturesList
  *
- * @description Render EventTypesList
- * component which have actionBar, event types
- * header and event types list components
+ * @description Render Critical Facilities List
+ * component which have actionBar, Critical Facilities
+ * header and Critical Facilities list components
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EventTypesList extends Component {
+class FeaturesList extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
-    selectedEventTypes: [],
+    selectedFeatures: [],
     selectedPages: [],
   };
 
   /**
    * @function
-   * @name handleOnSelectFocalPerson
-   * @description Handle select a single feature action
+   * @name handleOnSelectCriticalFacility
+   * @description Handle select a single Critical Facility action
    *
-   * @param {object} feature selected feature object
+   * @param {object} feature selected Critical Facility object
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnSelectFocalPerson = feature => {
-    const { selectedEventTypes } = this.state;
+  handleOnSelectCriticalFacility = feature => {
+    const { selectedFeatures } = this.state;
     this.setState({
-      selectedEventTypes: concat([], selectedEventTypes, feature),
+      selectedFeatures: concat([], selectedFeatures, feature),
     });
   };
 
   /**
    * @function
    * @name handleSelectAll
-   * @description Handle select all event Types actions from current page
+   * @description Handle select all Critical Facilities actions from current page
    *
    * @version 0.1.0
    * @since 0.1.0
    */
   handleSelectAll = () => {
-    const { selectedEventTypes, selectedPages } = this.state;
+    const { selectedFeatures, selectedPages } = this.state;
     const { features, page } = this.props;
-    const selectedList = uniqBy([...selectedEventTypes, ...features], '_id');
+    const selectedList = uniqBy([...selectedFeatures, ...features], '_id');
     const pages = uniq([...selectedPages, page]);
     this.setState({
-      selectedEventTypes: selectedList,
+      selectedFeatures: selectedList,
       selectedPages: pages,
     });
   };
@@ -92,7 +92,7 @@ class EventTypesList extends Component {
   /**
    * @function
    * @name handleDeselectAll
-   * @description Handle deselect all event Types in a current page
+   * @description Handle deselect all Critical Facilities in a current page
    *
    * @returns {undefined} undefined
    *
@@ -101,8 +101,8 @@ class EventTypesList extends Component {
    */
   handleDeselectAll = () => {
     const { features, page } = this.props;
-    const { selectedEventTypes, selectedPages } = this.state;
-    const selectedList = uniqBy([...selectedEventTypes], '_id');
+    const { selectedFeatures, selectedPages } = this.state;
+    const selectedList = uniqBy([...selectedFeatures], '_id');
     const pages = uniq([...selectedPages]);
 
     remove(pages, item => item === page);
@@ -115,7 +115,7 @@ class EventTypesList extends Component {
     });
 
     this.setState({
-      selectedEventTypes: selectedList,
+      selectedFeatures: selectedList,
       selectedPages: pages,
     });
   };
@@ -123,7 +123,7 @@ class EventTypesList extends Component {
   /**
    * @function
    * @name handleFilterByStatus
-   * @description Handle filter features by status action
+   * @description Handle filter critical facilities by status action
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -140,32 +140,32 @@ class EventTypesList extends Component {
 
   /**
    * @function
-   * @name handleOnDeselectEventTypes
-   * @description Handle deselect a single feature action
+   * @name handleOnDeselectCriticalFacilities
+   * @description Handle deselect a single critical facility action
    *
-   * @param {object} feature feature to be removed from selected focalPeople
+   * @param {object} feature critical facility to be removed from selected critical facility
    * @returns {undefined} undefined
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnDeselectEventTypes = feature => {
-    const { selectedEventTypes } = this.state;
-    const selectedList = [...selectedEventTypes];
+  handleOnDeselectCriticalFacilities = feature => {
+    const { selectedFeatures } = this.state;
+    const selectedList = [...selectedFeatures];
 
     remove(
       selectedList,
       item => item._id === feature._id // eslint-disable-line
     );
 
-    this.setState({ selectedEventTypes: selectedList });
+    this.setState({ selectedFeatures: selectedList });
   };
 
   render() {
     const { features, loading, page, total, onEdit } = this.props;
-    const { selectedEventTypes, selectedPages } = this.state;
-    const selectedEventTypesCount = intersectionBy(
-      selectedEventTypes,
+    const { selectedFeatures, selectedPages } = this.state;
+    const selectedFeaturesCount = intersectionBy(
+      selectedFeatures,
       features,
       '_id'
     ).length;
@@ -177,21 +177,21 @@ class EventTypesList extends Component {
           itemName="Features"
           page={page}
           total={total}
-          selectedItemsCount={selectedEventTypesCount}
-          exportUrl={getEventTypesExportUrl({
-            filter: { _id: map(selectedEventTypes, '_id') },
+          selectedItemsCount={selectedFeaturesCount}
+          exportUrl={getFeaturesExportUrl({
+            filter: { _id: map(selectedFeatures, '_id') },
           })}
           onPaginate={nextPage => {
-            paginateEventTypes(nextPage);
+            paginateFeatures(nextPage);
           }}
           onRefresh={() =>
-            refreshEventTypes(
+            refreshFeatures(
               () => {
-                notifySuccess('Features refreshed successfully');
+                notifySuccess('Critical Facilities refreshed successfully');
               },
               () => {
                 notifyError(
-                  'An Error occurred while refreshing Features please contact system administrator'
+                  'An Error occurred while refreshing Critical Facilities please contact system administrator'
                 );
               }
             )
@@ -213,7 +213,7 @@ class EventTypesList extends Component {
           loading={loading}
           dataSource={features}
           renderItem={feature => (
-            <EventTypesListItem
+            <FeaturesListItem
               key={feature._id} // eslint-disable-line
               abbreviation={feature.strings.abbreviation.en}
               name={feature.strings.name.en}
@@ -233,26 +233,28 @@ class EventTypesList extends Component {
               }
               isSelected={
                 // eslint-disable-next-line
-                map(selectedEventTypes, item => item._id).includes(
+                map(selectedFeatures, item => item._id).includes(
                   feature._id // eslint-disable-line
                 )
               }
               onSelectItem={() => {
-                this.handleOnSelectFocalPerson(feature);
+                this.handleOnSelectCriticalFacility(feature);
               }}
               onDeselectItem={() => {
-                this.handleOnDeselectEventTypes(feature);
+                this.handleOnDeselectCriticalFacilities(feature);
               }}
               onEdit={() => onEdit(feature)}
               onArchive={() =>
-                deleteEventType(
+                deleteFeature(
                   feature._id, // eslint-disable-line
                   () => {
-                    notifySuccess('Feature was archived successfully');
+                    notifySuccess(
+                      'Critical Facility was archived successfully'
+                    );
                   },
                   () => {
                     notifyError(
-                      'An Error occurred while archiving Feature please contact system administrator'
+                      'An Error occurred while archiving Critical Facility please contact system administrator'
                     );
                   }
                 )
@@ -266,7 +268,7 @@ class EventTypesList extends Component {
   }
 }
 
-EventTypesList.propTypes = {
+FeaturesList.propTypes = {
   loading: PropTypes.bool.isRequired,
   features: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
@@ -275,4 +277,4 @@ EventTypesList.propTypes = {
   onEdit: PropTypes.func.isRequired,
 };
 
-export default EventTypesList;
+export default FeaturesList;
