@@ -13,17 +13,17 @@ import UserMenu from './components/UserMenu';
 // import AlertsSources from '../Alerts/components/AlertSources';
 import PageNotFound from '../components/UIState/PageNotFound';
 // import GeographicalFeatures from '../GeographicalFeatures';
-// import AdministrativeBoundaries from '../GeographicalFeatures/components/AdministrativeBoundaries';
+// import AdministrativeAreas from '../GeographicalFeatures/components/AdministrativeAreas';
 // import Districts from '../GeographicalFeatures/components/Districts';
 // import EvacuationCenters from '../GeographicalFeatures/components/EvacuationCenters';
 // import GeographicalFeaturesFacilities from '../GeographicalFeatures/components/Facilities';
 // import GeographicalFeaturesInfrastructure from '../GeographicalFeatures/components/Infrastructure';
 // import Regions from '../GeographicalFeatures/components/Regions';
 // import SubWards from '../GeographicalFeatures/layouts/SubWards';
-// import Wards from '../GeographicalFeatures/components/Wards';
 // import GeographicalFeaturesWarehouses from '../GeographicalFeatures/components/Warehouses';
 import Home from '../Home';
 import Stakeholders from '../Stakeholders';
+import AdministrativeAreas from '../GeographicalFeatures/components/AdministrativeAreas';
 import StakeholdersAgencies from '../Stakeholders/components/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
 // import StakeholdersNotifications from '../Stakeholders/components/Notifications';
@@ -262,7 +262,7 @@ const BaseLayout = props => {
           />
           <SecureRoute
             path={`${baseUrl}/geographicalfeatures/administrativeboundaries`}
-            component={AdministrativeBoundaries}
+            component={AdministrativeAreas}
           />
           <SecureRoute
             path={`${baseUrl}/geographicalfeatures/districts`}
@@ -292,10 +292,11 @@ const BaseLayout = props => {
             path={`${baseUrl}/geographicalfeatures/warehouses`}
             component={GeographicalFeaturesWarehouses}
           />
+          */}
           <SecureRoute
-            path={`${baseUrl}/geographicalfeatures/wards`}
-            component={Wards}
-          /> */}
+            path={`${baseUrl}/administrativeareas`}
+            component={AdministrativeAreas}
+          />
           <SecureRoute
             exact
             path={`${baseUrl}/stakeholders`}
