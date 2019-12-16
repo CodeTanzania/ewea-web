@@ -1,7 +1,7 @@
 import {
-  clearFocalPersonFilters,
+  clearAdministrativeAreaFilters,
   Connect,
-  filterEventFunctions,
+  filterAdministrativeAreas,
 } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Button, Form } from 'antd';
@@ -10,17 +10,17 @@ import React, { Component } from 'react';
 import SearchableSelectInput from '../../../../components/SearchableSelectInput';
 
 /* declarations */
-const { getEventTypes } = httpActions;
+const { getAdministrativeLevels } = httpActions;
 
 /**
  * @class
- * @name EmergencyFunctionsFilters
+ * @name AdministrativeAreaFilters
  * @description Filter modal component for filtering functions
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EmergencyFunctionsFilters extends Component {
+class AdministrativeAreaFilters extends Component {
   /**
    * @function
    * @name handleSubmit
@@ -41,7 +41,7 @@ class EmergencyFunctionsFilters extends Component {
 
     validateFields((error, values) => {
       if (!error) {
-        filterEventFunctions(values);
+        filterAdministrativeAreas(values);
         onCancel();
       }
     });
@@ -57,7 +57,7 @@ class EmergencyFunctionsFilters extends Component {
    */
   handleClearFilter = () => {
     const { onCancel, onClearCache } = this.props;
-    clearFocalPersonFilters();
+    clearAdministrativeAreaFilters();
 
     onClearCache();
     onCancel();
@@ -109,12 +109,12 @@ class EmergencyFunctionsFilters extends Component {
       <Form onSubmit={this.handleSubmit} autoComplete="off">
         {/* start emergency function type filters */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="By Type">
+        <Form.Item {...formItemLayout} label="By Administrative Levels">
           {getFieldDecorator('type', {
             initialValue: filter ? filter.nature : [],
           })(
             <SearchableSelectInput
-              onSearch={getEventTypes}
+              onSearch={getAdministrativeLevels}
               optionLabel={type => type.strings.name.en}
               optionValue="_id"
               mode="multiple"
@@ -123,8 +123,7 @@ class EmergencyFunctionsFilters extends Component {
             />
           )}
         </Form.Item>
-        {/* end emergency
-        function type filters */}
+        {/* end administrative area  filters */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -142,7 +141,7 @@ class EmergencyFunctionsFilters extends Component {
   }
 }
 
-EmergencyFunctionsFilters.propTypes = {
+AdministrativeAreaFilters.propTypes = {
   filter: PropTypes.objectOf(
     PropTypes.shape({
       families: PropTypes.arrayOf(PropTypes.string),
@@ -160,11 +159,11 @@ EmergencyFunctionsFilters.propTypes = {
   onClearCache: PropTypes.func.isRequired,
 };
 
-EmergencyFunctionsFilters.defaultProps = {
+AdministrativeAreaFilters.defaultProps = {
   filter: null,
   cached: null,
 };
 
-export default Connect(Form.create()(EmergencyFunctionsFilters), {
-  filter: 'incidentTypes.filter',
+export default Connect(Form.create()(AdministrativeAreaFilters), {
+  filter: 'administrativeAreas.filter',
 });
