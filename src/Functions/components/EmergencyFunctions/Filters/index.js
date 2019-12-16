@@ -1,5 +1,5 @@
 import {
-  clearFocalPersonFilters,
+  clearEventFunctionFilters,
   Connect,
   filterEventFunctions,
 } from '@codetanzania/ewea-api-states';
@@ -57,7 +57,7 @@ class EmergencyFunctionsFilters extends Component {
    */
   handleClearFilter = () => {
     const { onCancel, onClearCache } = this.props;
-    clearFocalPersonFilters();
+    clearEventFunctionFilters();
 
     onClearCache();
     onCancel();
@@ -165,5 +165,5 @@ EmergencyFunctionsFilters.defaultProps = {
 };
 
 export default Connect(Form.create()(EmergencyFunctionsFilters), {
-  filter: 'incidentTypes.filter',
+  filter: 'eventFunctions.filter',
 });
