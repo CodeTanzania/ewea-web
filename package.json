@@ -25,7 +25,7 @@
   ],
   "dependencies": {
     "@codetanzania/ewea-api-client": "^0.7.0",
-    "@codetanzania/ewea-api-states": "^0.7.1",
+    "@codetanzania/ewea-api-states": "^0.8.0",
     "antd": "^3.26.3",
     "axios": "^0.19.0",
     "inflection": "^1.12.0",
