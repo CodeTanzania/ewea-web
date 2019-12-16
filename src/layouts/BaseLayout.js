@@ -35,6 +35,7 @@ import ActionsTaken from '../Dashboards/ActionsTaken';
 import SecureRoute from '../Auth/SecureRoute';
 import HeaderNavMenu from './components/HeaderNavMenu';
 import './styles.css';
+import Features from '../Features/components/CriticalFacilities';
 
 /* constants */
 const { Header, Content } = Layout;
@@ -113,6 +114,10 @@ const breadcrumbNameMap = {
   '/app/geographicalfeatures/wards': {
     name: 'Wards',
     title: 'List of all wards',
+  },
+  '/app/features': {
+    name: 'Critical facilities',
+    title: 'List of all critical facilities',
   },
   /* Stakeholders Routes */
   '/app/focalpeople': {
@@ -227,6 +232,7 @@ const BaseLayout = props => {
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
           <SecureRoute path={`${baseUrl}/events`} component={Events} />
           <SecureRoute path={`${baseUrl}/eventtypes`} component={EventTypes} />
+          <SecureRoute path={`${baseUrl}/features`} component={Features} />
 
           {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
           <SecureRoute

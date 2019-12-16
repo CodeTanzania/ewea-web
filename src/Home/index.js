@@ -62,6 +62,12 @@ const routes = [
     description: modules.alerts,
   },
   {
+    name: 'Critical facilities',
+    path: '/app/features',
+    icon: geographicalFeaturesIcon,
+    description: modules.geographicalFeaturesIcon,
+  },
+  {
     name: 'Geographical Features',
     path: '/app/geographicalfeatures',
     icon: geographicalFeaturesIcon,
