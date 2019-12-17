@@ -75,7 +75,7 @@ const routes = [
     description: modules.dashboards,
   },
   {
-    name: 'Notification Template',
+    name: 'Notification Templates',
     path: '/app/notificationtemplates',
     icon: notificationIcon,
     description: modules.notificationTemplate,

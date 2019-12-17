@@ -96,7 +96,7 @@ class NotificationTemplatesListItem extends Component {
   };
 
   render() {
-    const { name, description, code, onEdit, onShare } = this.props;
+    const { name, description, code, onEdit } = this.props;
     const { isHovered } = this.state;
     const { isSelected } = this.props;
     const avatarBackground = randomColor();
@@ -126,7 +126,7 @@ class NotificationTemplatesListItem extends Component {
 
     return (
       <div
-        className="FocalPeopleListItem"
+        className="NotificationTemplateListItem"
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
@@ -144,11 +144,6 @@ class NotificationTemplatesListItem extends Component {
                   name: 'Edit Notification Template',
                   title: 'Update Notification Template Details',
                   onClick: onEdit,
-                }}
-                share={{
-                  name: 'Share Notification Template',
-                  title: 'Share Notification Template with others',
-                  onClick: onShare,
                 }}
                 archive={{
                   name: 'Archive Notification Template',
@@ -176,7 +171,6 @@ NotificationTemplatesListItem.propTypes = {
   isSelected: PropTypes.bool.isRequired,
   onSelectItem: PropTypes.func.isRequired,
   onDeselectItem: PropTypes.func.isRequired,
-  onShare: PropTypes.func.isRequired,
 };
 
 export default NotificationTemplatesListItem;

@@ -10,7 +10,6 @@ import {
 import { Modal } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import NotificationForm from './NotificationForm';
 import Topbar from '../../../components/Topbar';
 import NotificationTemplateForm from './Form';
 import NotificationTemplatesList from './List';
@@ -29,10 +28,6 @@ class NotificationTemplates extends Component {
   state = {
     showFilters: false,
     isEditForm: false,
-    showNotificationForm: false,
-    selectedNotificationTemplates: [],
-    notificationBody: undefined,
-    notificationSubject: undefined,
     cached: null,
   };
 
@@ -151,80 +146,6 @@ class NotificationTemplates extends Component {
 
   /**
    * @function
-   * @name handleShare
-   * @description Handle share single notification templates action
-   *
-   * @param {object} notificationTemplate notificationTemplate to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleShare = notificationTemplate => {
-    const subject = `${notificationTemplate.strings.name.en}`;
-    const message = `${notificationTemplate.strings.description.en}`;
-
-    this.setState({
-      notificationSubject: subject,
-      notificationBody: message,
-      showNotificationForm: true,
-    });
-  };
-
-  /**
-   * @function
-   * @name handleBulkShare
-   * @description Handle share multiple Notification templates
-   *
-   * @param {object[]} notificationTemplates Notification Templates list to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleBulkShare = notificationTemplates => {
-    const notificationTemplatesList = notificationTemplates.map(
-      notificationTemplate =>
-        `${notificationTemplate.strings.name.en}\nDescription: ${
-          // eslint-disable-line
-          notificationTemplate.strings.description.en
-        }`
-    );
-
-    const message = notificationTemplatesList.join('\n\n\n');
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name openNotificationForm
-   * @description Handle on notify notification template
-   *
-   * @param {object[]} notificationTemplate List of notification template selected to be notified
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  openNotificationForm = notificationTemplate => {
-    this.setState({
-      selectedNotificationTemplates: notificationTemplate,
-      showNotificationForm: true,
-    });
-  };
-
-  /**
-   * @function
-   * @name closeNotificationForm
-   * @description Handle on notify notification template
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closeNotificationForm = () => {
-    this.setState({ showNotificationForm: false });
-  };
-
-  /**
-   * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
    *
@@ -233,18 +154,6 @@ class NotificationTemplates extends Component {
    */
   handleAfterCloseForm = () => {
     this.setState({ isEditForm: false });
-  };
-
-  /**
-   * @function
-   * @name handleAfterCloseNotificationForm
-   * @description Perform post close notification form cleanups
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleAfterCloseNotificationForm = () => {
-    this.setState({ notificationBody: undefined });
   };
 
   render() {
@@ -261,10 +170,6 @@ class NotificationTemplates extends Component {
     const {
       showFilters,
       isEditForm,
-      showNotificationForm,
-      selectedNotificationTemplates,
-      notificationBody,
-      notificationSubject,
       // cached,
     } = this.state;
     return (
@@ -289,7 +194,7 @@ class NotificationTemplates extends Component {
         />
         {/* end Topbar */}
 
-        <div className="FocalPeopleList">
+        <div className="NotificationTemplatesList">
           {/* list starts */}
           <NotificationTemplatesList
             total={total}
@@ -322,26 +227,6 @@ class NotificationTemplates extends Component {
             /> */}
           </Modal>
           {/* end filter modal */}
-
-          {/* Notification Modal modal */}
-          <Modal
-            title="Send Notification Template"
-            visible={showNotificationForm}
-            onCancel={this.closeNotificationForm}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-            afterClose={this.handleAfterCloseNotificationForm}
-          >
-            <NotificationForm
-              recipients={selectedNotificationTemplates}
-              body={notificationBody}
-              subject={notificationSubject}
-              onCancel={this.closeNotificationForm}
-            />
-          </Modal>
-          {/* end Notification modal */}
 
           {/* create/edit form modal */}
           <Modal
