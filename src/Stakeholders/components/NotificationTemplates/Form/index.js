@@ -1,15 +1,12 @@
-import { httpActions } from '@codetanzania/ewea-api-client';
-import { postFocalPerson, putFocalPerson } from '@codetanzania/ewea-api-states';
+// import { httpActions } from '@codetanzania/ewea-api-client';
+import {
+  postNotificationTemplate,
+  putNotificationTemplate,
+} from '@codetanzania/ewea-api-states';
 import { Button, Col, Form, Input, Row } from 'antd';
-import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import SearchableSelectInput from '../../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../../util';
-
-/* constants */
-const { getAgencies, getFeatures, getPartyRoles, getPartyGroups } = httpActions;
-const { TextArea } = Input;
 
 /**
  * @class
@@ -35,34 +32,43 @@ class NotificationTemplateForm extends Component {
 
     const {
       form: { validateFieldsAndScroll },
-      focalPerson,
+      notificationTemplate,
       isEditForm,
     } = this.props;
 
     validateFieldsAndScroll((error, values) => {
       if (!error) {
+        const payload = {
+          strings: {
+            name: { en: values.name },
+            description: { en: values.description },
+          },
+        };
         if (isEditForm) {
-          const updatedFocalPerson = { ...focalPerson, ...values };
-          putFocalPerson(
-            updatedFocalPerson,
+          const updatedNotificationTemplate = {
+            ...notificationTemplate,
+            ...payload,
+          };
+          putNotificationTemplate(
+            updatedNotificationTemplate,
             () => {
-              notifySuccess('Focal Person was updated successfully');
+              notifySuccess('Notification template was updated successfully');
             },
             () => {
               notifyError(
-                'Something occurred while updating focal Person, please try again!'
+                'Something occurred while updating Notification template, please try again!'
               );
             }
           );
         } else {
-          postFocalPerson(
-            values,
+          postNotificationTemplate(
+            payload,
             () => {
-              notifySuccess('Focal Person was created successfully');
+              notifySuccess('Notification template was created successfully');
             },
             () => {
               notifyError(
-                'Something occurred while saving focal Person, please try again!'
+                'Something occurred while saving Notification template, please try again!'
               );
             }
           );
@@ -74,7 +80,7 @@ class NotificationTemplateForm extends Component {
   render() {
     const {
       isEditForm,
-      focalPerson,
+      notificationTemplate,
       posting,
       onCancel,
       form: { getFieldDecorator },
@@ -101,238 +107,46 @@ class NotificationTemplateForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* focalPerson name, phone number and email section */}
-        <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson name */}
+        <Row>
+          <Col>
+            {/* notification template name */}
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Name">
               {getFieldDecorator('name', {
-                initialValue: isEditForm ? focalPerson.name : undefined,
+                initialValue: isEditForm
+                  ? notificationTemplate.strings.name.en
+                  : undefined,
                 rules: [
                   {
                     required: true,
-                    message: 'Focal Person full name is required',
+                    message: 'Notificaton Template name is required',
                   },
                 ],
               })(<Input />)}
             </Form.Item>
-            {/* end focalPerson name */}
-          </Col>
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            <Row type="flex" justify="space-between">
-              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
-                {/* focalPerson mobile number */}
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Phone Number">
-                  {getFieldDecorator('mobile', {
-                    initialValue: isEditForm ? focalPerson.mobile : undefined,
-                    rules: [
-                      { required: true, message: 'Phone number is required' },
-                    ],
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson mobile number */}
-              </Col>
-              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24} span={12}>
-                {/* focalPerson email */}
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Email">
-                  {getFieldDecorator('email', {
-                    initialValue: isEditForm ? focalPerson.email : undefined,
-                    rules: [
-                      {
-                        type: 'email',
-                        message: 'The input is not valid E-mail!',
-                      },
-                      {
-                        required: true,
-                        message: 'E-mail address is required',
-                      },
-                    ],
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson email */}
-              </Col>
-            </Row>
+            {/* end notification template name */}
           </Col>
         </Row>
-        {/* end focalPerson name, phone number and email section */}
-
-        {/* focalPerson organization, group and area section */}
-        <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson organization */}
+        <Row>
+          <Col>
+            {/* notification template description */}
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Form.Item {...formItemLayout} label="Organization/Agency">
-              {getFieldDecorator('party', {
-                initialValue:
-                  isEditForm && focalPerson.party
-                    ? focalPerson.party._id // eslint-disable-line
-                    : undefined,
-              })(
-                <SearchableSelectInput
-                  onSearch={getAgencies}
-                  optionLabel="name"
-                  optionValue="_id"
-                  initialValue={
-                    isEditForm && focalPerson.party
-                      ? focalPerson.party
-                      : undefined
-                  }
-                />
-              )}
-            </Form.Item>
-            {/* end focalPerson organization */}
-          </Col>
-
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            <Row type="flex" justify="space-between">
-              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
-                {/* focalPerson group */}
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Group">
-                  {getFieldDecorator('group', {
-                    initialValue:
-                      isEditForm && focalPerson.group
-                        ? focalPerson.group._id // eslint-disable-line
-                        : undefined,
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Focal Person group is required',
-                      },
-                    ],
-                  })(
-                    <SearchableSelectInput
-                      onSearch={getPartyGroups}
-                      optionLabel={group => group.strings.name.en}
-                      optionValue="_id"
-                      initialValue={
-                        isEditForm && focalPerson.group
-                          ? focalPerson.group
-                          : undefined
-                      }
-                    />
-                  )}
-                </Form.Item>
-                {/* end focalPerson group */}
-              </Col>
-              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
-                {/* focalPerson location */}
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Area">
-                  {getFieldDecorator('location', {
-                    initialValue:
-                      isEditForm && focalPerson.location
-                        ? focalPerson.location._id // eslint-disable-line
-                        : undefined,
-                  })(
-                    <SearchableSelectInput
-                      onSearch={getFeatures}
-                      optionLabel={feature =>
-                        `${feature.name} (${upperFirst(feature.type)})`
-                      }
-                      optionValue="_id"
-                      initialValue={
-                        isEditForm && focalPerson.location
-                          ? focalPerson.location
-                          : undefined
-                      }
-                    />
-                  )}
-                </Form.Item>
-                {/* end focalPerson location */}
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-        {/* end focalPerson organization, group and area section */}
-
-        {/* focalPerson role, landline and fax section */}
-        <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson role */}
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Form.Item {...formItemLayout} label="Role">
-              {getFieldDecorator('role', {
-                initialValue:
-                  isEditForm && focalPerson.role
-                    ? focalPerson.role._id // eslint-disable-line
-                    : undefined,
+            <Form.Item {...formItemLayout} label="Description">
+              {getFieldDecorator('description', {
+                initialValue: isEditForm
+                  ? notificationTemplate.strings.description.en
+                  : undefined,
                 rules: [
-                  { required: true, message: 'Focal Person role is required' },
+                  {
+                    required: true,
+                    message: 'Notificaton Template description is required',
+                  },
                 ],
-              })(
-                <SearchableSelectInput
-                  onSearch={getPartyRoles}
-                  optionLabel={role => role.strings.name.en}
-                  optionValue="_id"
-                  initialValue={
-                    isEditForm && focalPerson.role
-                      ? focalPerson.role
-                      : undefined
-                  }
-                />
-              )}
+              })(<Input />)}
             </Form.Item>
-            {/* end focalPerson role */}
-          </Col>
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            <Row type="flex" justify="space-between">
-              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
-                {/* focalPerson landline number */}
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Landline/Other Number">
-                  {getFieldDecorator('landline', {
-                    initialValue: isEditForm ? focalPerson.landline : undefined,
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson landline number */}
-              </Col>
-              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
-                {/* focalPerson fax */}
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Fax">
-                  {getFieldDecorator('fax', {
-                    initialValue: isEditForm ? focalPerson.fax : undefined,
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson fax */}
-              </Col>
-            </Row>
+            {/* end notification template description */}
           </Col>
         </Row>
-        {/* end focalPerson role, landline and fax section */}
-
-        {/* focalPerson Physical Address, Postal Address section */}
-        <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson physical Address */}
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Form.Item {...formItemLayout} label="Physical Address">
-              {getFieldDecorator('physicalAddress', {
-                initialValue: isEditForm
-                  ? focalPerson.physicalAddress
-                  : undefined,
-              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
-            </Form.Item>
-            {/* end focalPerson physical Address */}
-          </Col>
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            {/* focalPerson postal address */}
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Form.Item {...formItemLayout} label="Postal Address">
-              {getFieldDecorator('postalAddress', {
-                initialValue: isEditForm
-                  ? focalPerson.postalAddress
-                  : undefined,
-              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
-            </Form.Item>
-            {/* end focalPerson postal address */}
-          </Col>
-        </Row>
-        {/* end focalPerson physical Address, Postal Address section */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -354,29 +168,22 @@ class NotificationTemplateForm extends Component {
 
 NotificationTemplateForm.propTypes = {
   isEditForm: PropTypes.bool.isRequired,
-  focalPerson: PropTypes.shape({
-    name: PropTypes.string,
-    title: PropTypes.string,
-    abbreviation: PropTypes.string,
-    mobile: PropTypes.string,
-    email: PropTypes.string,
-    party: PropTypes.shape({
-      name: PropTypes.string,
-      title: PropTypes.string,
+  notificationTemplate: PropTypes.shape({
+    strings: PropTypes.shape({
+      name: PropTypes.shape({
+        en: PropTypes.string,
+        sw: PropTypes.string,
+      }),
+      description: PropTypes.shape({
+        en: PropTypes.string,
+        sw: PropTypes.string,
+      }),
     }),
-    group: PropTypes.string,
-    location: PropTypes.string,
-    role: PropTypes.string,
-    landline: PropTypes.string,
-    fax: PropTypes.string,
-    physicalAddress: PropTypes.string,
-    postalAddress: PropTypes.string,
   }).isRequired,
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func,
     validateFieldsAndScroll: PropTypes.func,
   }).isRequired,
-  groups: PropTypes.arrayOf(PropTypes.string).isRequired,
   onCancel: PropTypes.func.isRequired,
   posting: PropTypes.bool.isRequired,
 };

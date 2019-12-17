@@ -19,14 +19,12 @@ import { notifyError, notifySuccess } from '../../../../util';
 import NotificationTemplatesListItem from '../ListItem';
 
 /* constants */
-const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
-const abbreviationSpan = { xxl: 6, xl: 8, lg: 5, md: 4, sm: 9, xs: 9 };
-const descriptionSpan = { xxl: 8, xl: 7, lg: 4, md: 7, sm: 0, xs: 0 };
+const nameSpan = { xxl: 7, xl: 8, lg: 6, md: 8, sm: 10, xs: 10 };
+const descriptionSpan = { xxl: 10, xl: 10, lg: 6, md: 8, sm: 0, xs: 0 };
 const codeSpan = { xxl: 4, xl: 3, lg: 6, md: 0, sm: 0, xs: 0 };
 
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
-  { ...abbreviationSpan, header: 'Abbreviation' },
   { ...descriptionSpan, header: 'Description' },
   { ...codeSpan, header: 'Code' },
 ];
@@ -34,9 +32,9 @@ const { getNotificationTemplatesExportUrl } = httpActions;
 
 /**
  * @class
- * @name FocalPersonsList
- * @description Render FocalPersonsList component which have actionBar, focal People
- * header and focal People list components
+ * @name NotificationTemplatesList
+ * @description Render NotificationTemplatesList component which have actionBar, Notification Template
+ * header and Notification Template list components
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -50,10 +48,10 @@ class NotificationTemplatesList extends Component {
 
   /**
    * @function
-   * @name handleOnSelectFocalPerson
-   * @description Handle select a single focalPerson action
+   * @name handleOnSelectNotificationtionTemplate
+   * @description Handle select a single Notification Template action
    *
-   * @param {object} notificationTemplate selected focalPerson object
+   * @param {object} notificationTemplate selected Notification Template object
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -72,16 +70,16 @@ class NotificationTemplatesList extends Component {
   /**
    * @function
    * @name handleSelectAll
-   * @description Handle select all focalPeople actions from current page
+   * @description Handle select all Notification templates actions from current page
    *
    * @version 0.1.0
    * @since 0.1.0
    */
   handleSelectAll = () => {
-    const { selectedFocalPeople, selectedPages } = this.state;
+    const { selectedNotificationTemplates, selectedPages } = this.state;
     const { notificationTemplates, page } = this.props;
     const selectedList = uniqBy(
-      [...selectedFocalPeople, ...notificationTemplates],
+      [...selectedNotificationTemplates, ...notificationTemplates],
       '_id'
     );
     const pages = uniq([...selectedPages, page]);
@@ -94,7 +92,7 @@ class NotificationTemplatesList extends Component {
   /**
    * @function
    * @name handleDeselectAll
-   * @description Handle deselect all focalPeople in a current page
+   * @description Handle deselect all Notification templates in a current page
    *
    * @returns {undefined} undefined
    *
@@ -142,10 +140,10 @@ class NotificationTemplatesList extends Component {
 
   /**
    * @function
-   * @name handleOnDeselectFocalPerson
-   * @description Handle deselect a single focalPerson action
+   * @name handleOnDeselectNotificationTemplate
+   * @description Handle deselect a single NotificationTemplate action
    *
-   * @param {object} notificationTemplates focalPerson to be removed from selected focalPeople
+   * @param {object} notificationTemplates NotificationTemplate to be removed from selected NotificationTemplates
    * @returns {undefined} undefined
    *
    * @version 0.1.0
@@ -171,9 +169,9 @@ class NotificationTemplatesList extends Component {
       total,
       onEdit,
       onFilter,
-      onNotify,
+      // onNotify,
       onShare,
-      onBulkShare,
+      // onBulkShare,
     } = this.props;
     const { selectedNotificationTemplates, selectedPages } = this.state;
     const selectedNotificationTemplatesCount = intersectionBy(
@@ -194,7 +192,7 @@ class NotificationTemplatesList extends Component {
             filter: { _id: map(selectedNotificationTemplates, '_id') },
           })}
           onFilter={onFilter}
-          onNotify={() => onNotify(selectedNotificationTemplates)}
+          // onNotify={() => onNotify(selectedNotificationTemplates)}
           onPaginate={nextPage => {
             paginateNotificationTemplates(nextPage);
           }}
@@ -210,7 +208,7 @@ class NotificationTemplatesList extends Component {
               }
             )
           }
-          onShare={() => onBulkShare(selectedNotificationTemplates)}
+          // onShare={() => onBulkShare(selectedNotificationTemplates)}
         />
         {/* end toolbar */}
 
@@ -231,9 +229,8 @@ class NotificationTemplatesList extends Component {
             <NotificationTemplatesListItem
               key={notificationTemplate._id} // eslint-disable-line
               name={notificationTemplate.strings.name.en}
-              abbreviation={notificationTemplate.strings.abbreviation.en}
               description={notificationTemplate.strings.description.en}
-              code={notificationTemplate.strings.code.en}
+              code={notificationTemplate.strings.code}
               isSelected={
                 // eslint-disable-next-line
                 map(selectedNotificationTemplates, item => item._id).includes(
@@ -283,9 +280,9 @@ NotificationTemplatesList.propTypes = {
   total: PropTypes.number.isRequired,
   onEdit: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
-  onNotify: PropTypes.func.isRequired,
+  // onNotify: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,
-  onBulkShare: PropTypes.func.isRequired,
+  // onBulkShare: PropTypes.func.isRequired,
 };
 
 export default NotificationTemplatesList;

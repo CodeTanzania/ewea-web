@@ -1,4 +1,4 @@
-import { httpActions } from '@codetanzania/ewea-api-client';
+// import { httpActions } from '@codetanzania/ewea-api-client';
 import {
   closeNotificationTemplateForm,
   Connect,
@@ -10,26 +10,16 @@ import {
 import { Modal } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import NotificationForm from '../../../components/NotificationForm';
+import NotificationForm from './NotificationForm';
 import Topbar from '../../../components/Topbar';
-// import FocalPersonFilters from './Filters';
 import NotificationTemplateForm from './Form';
 import NotificationTemplatesList from './List';
 import './styles.css';
 
-/* constants */
-const {
-  getNotificationTemplates: getFocalPeopleFromAPI,
-  getJurisdictions,
-  getPartyGroups,
-  getRoles,
-  getAgencies,
-} = httpActions;
-
 /**
  * @class
  * @name NotificationTemplates
- * @description Render focalPerson list which have search box, actions and focalPerson list
+ * @description Render notification templates list which have search box, actions and Notification template list
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -42,6 +32,7 @@ class NotificationTemplates extends Component {
     showNotificationForm: false,
     selectedNotificationTemplates: [],
     notificationBody: undefined,
+    notificationSubject: undefined,
     cached: null,
   };
 
@@ -130,8 +121,8 @@ class NotificationTemplates extends Component {
 
   /**
    * @function
-   * @name searchFocalPeople
-   * @description Search FocalPeople List based on supplied filter word
+   * @name searchNotificationTemplates
+   * @description Search Notification Templates List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
@@ -161,42 +152,44 @@ class NotificationTemplates extends Component {
   /**
    * @function
    * @name handleShare
-   * @description Handle share single focalPerson action
+   * @description Handle share single notification templates action
    *
-   * @param {object} focalPerson focalPerson to be shared
+   * @param {object} notificationTemplate notificationTemplate to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = focalPerson => {
-    const message = `${focalPerson.name}\nMobile: ${
-      // eslint-disable-line
-      focalPerson.mobile
-    }\nEmail: ${focalPerson.email}`;
+  handleShare = notificationTemplate => {
+    const subject = `${notificationTemplate.strings.name.en}`;
+    const message = `${notificationTemplate.strings.description.en}`;
 
-    this.setState({ notificationBody: message, showNotificationForm: true });
+    this.setState({
+      notificationSubject: subject,
+      notificationBody: message,
+      showNotificationForm: true,
+    });
   };
 
   /**
    * @function
    * @name handleBulkShare
-   * @description Handle share multiple focal People
+   * @description Handle share multiple Notification templates
    *
-   * @param {object[]} focalPeople focal People list to be shared
+   * @param {object[]} notificationTemplates Notification Templates list to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleBulkShare = focalPeople => {
-    const focalPersonList = focalPeople.map(
-      focalPerson =>
-        `${focalPerson.name}\nMobile: ${focalPerson.mobile}\nEmail: ${
+  handleBulkShare = notificationTemplates => {
+    const notificationTemplatesList = notificationTemplates.map(
+      notificationTemplate =>
+        `${notificationTemplate.strings.name.en}\nDescription: ${
           // eslint-disable-line
-          focalPerson.email
+          notificationTemplate.strings.description.en
         }`
     );
 
-    const message = focalPersonList.join('\n\n\n');
+    const message = notificationTemplatesList.join('\n\n\n');
 
     this.setState({ notificationBody: message, showNotificationForm: true });
   };
@@ -204,9 +197,9 @@ class NotificationTemplates extends Component {
   /**
    * @function
    * @name openNotificationForm
-   * @description Handle on notify focalPeople
+   * @description Handle on notify notification template
    *
-   * @param {object[]} notificationTemplate List of focalPeople selected to be notified
+   * @param {object[]} notificationTemplate List of notification template selected to be notified
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -221,7 +214,7 @@ class NotificationTemplates extends Component {
   /**
    * @function
    * @name closeNotificationForm
-   * @description Handle on notify focalPeople
+   * @description Handle on notify notification template
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -271,6 +264,7 @@ class NotificationTemplates extends Component {
       showNotificationForm,
       selectedNotificationTemplates,
       notificationBody,
+      notificationSubject,
       // cached,
     } = this.state;
     return (
@@ -280,7 +274,7 @@ class NotificationTemplates extends Component {
           search={{
             size: 'large',
             placeholder: 'Search for Notification Template here ...',
-            onChange: this.searchFocalPeople,
+            onChange: this.searchNotificationTemplates,
             value: searchQuery,
           }}
           actions={[
@@ -289,7 +283,7 @@ class NotificationTemplates extends Component {
               icon: 'plus',
               size: 'large',
               title: 'Add New Notification Template',
-              onClick: this.openNotificationForm,
+              onClick: this.openNotificationTemplateForm,
             },
           ]}
         />
@@ -312,7 +306,7 @@ class NotificationTemplates extends Component {
 
           {/* filter modal */}
           <Modal
-            title="Filter Focal People"
+            title="Filter Notification templates"
             visible={showFilters}
             onCancel={this.closeFiltersModal}
             footer={null}
@@ -331,7 +325,7 @@ class NotificationTemplates extends Component {
 
           {/* Notification Modal modal */}
           <Modal
-            title="Notify Focal People"
+            title="Send Notification Template"
             visible={showNotificationForm}
             onCancel={this.closeNotificationForm}
             footer={null}
@@ -342,12 +336,8 @@ class NotificationTemplates extends Component {
           >
             <NotificationForm
               recipients={selectedNotificationTemplates}
-              onSearchRecipients={getFocalPeopleFromAPI}
-              onSearchJurisdictions={getJurisdictions}
-              onSearchGroups={getPartyGroups}
-              onSearchAgencies={getAgencies}
-              onSearchRoles={getRoles}
               body={notificationBody}
+              subject={notificationSubject}
               onCancel={this.closeNotificationForm}
             />
           </Modal>
@@ -363,7 +353,7 @@ class NotificationTemplates extends Component {
             visible={showForm}
             className="FormModal"
             footer={null}
-            onCancel={this.closeNotificationForm}
+            onCancel={this.closeNotificationTemplateForm}
             destroyOnClose
             maskClosable={false}
             afterClose={this.handleAfterCloseForm}
@@ -372,7 +362,7 @@ class NotificationTemplates extends Component {
               posting={posting}
               isEditForm={isEditForm}
               notificationTemplate={notificationTemplate}
-              onCancel={this.closeNotificationForm}
+              onCancel={this.closeNotificationTemplateForm}
             />
           </Modal>
           {/* end create/edit form modal */}

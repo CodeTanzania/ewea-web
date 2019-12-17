@@ -136,6 +136,10 @@ const breadcrumbNameMap = {
     name: 'EmergencyFunctions',
     title: 'Emergency functions module',
   },
+  '/app/notificationtemplates': {
+    name: 'Notification Templates',
+    title: 'Notification template module',
+  },
   '/app/stakeholders': { name: 'Stakeholders', title: 'Stakeholders module' },
 
   /* Dashboards */

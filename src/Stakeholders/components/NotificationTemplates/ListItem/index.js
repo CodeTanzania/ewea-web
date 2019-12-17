@@ -8,18 +8,16 @@ import './styles.css';
 /* constants */
 const { confirm } = Modal;
 const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 3, xs: 3 };
-const nameSpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 10, xs: 10 };
-const abbreviationSpan = { xxl: 6, xl: 8, lg: 5, md: 4, sm: 9, xs: 9 };
-const descriptionSpan = { xxl: 8, xl: 7, lg: 4, md: 7, sm: 0, xs: 0 };
+const nameSpan = { xxl: 7, xl: 8, lg: 7, md: 7, sm: 10, xs: 10 };
+const descriptionSpan = { xxl: 10, xl: 9, lg: 6, md: 9, sm: 0, xs: 0 };
 const codeSpan = { xxl: 4, xl: 3, lg: 6, md: 0, sm: 0, xs: 0 };
-// const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 
 /**
  * @class
  * @name NotificationTemplatesListItem
- * @description Single focal person list item component.
- * Render single focal person details
+ * @description Single notification template list item component.
+ * Render single notification template details
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -79,7 +77,7 @@ class NotificationTemplatesListItem extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a focal person
+   * @description show confirm modal before archiving a notification template
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -98,14 +96,7 @@ class NotificationTemplatesListItem extends Component {
   };
 
   render() {
-    const {
-      abbreviation,
-      name,
-      description,
-      code,
-      onEdit,
-      onShare,
-    } = this.props;
+    const { name, description, code, onEdit, onShare } = this.props;
     const { isHovered } = this.state;
     const { isSelected } = this.props;
     const avatarBackground = randomColor();
@@ -143,10 +134,6 @@ class NotificationTemplatesListItem extends Component {
           {/* eslint-disable react/jsx-props-no-spreading */}
           <Col {...sideSpan}>{sideComponent}</Col>
           <Col {...nameSpan}>{name}</Col>
-          <Col {...abbreviationSpan}>
-            {abbreviation}
-            {/* {role ? `${role}, ${agencyAbbreviation}` : 'N/A'} */}
-          </Col>
           <Col {...descriptionSpan}>{description}</Col>
           <Col {...codeSpan}>{code}</Col>
           <Col {...isHoveredSpan}>
@@ -154,18 +141,19 @@ class NotificationTemplatesListItem extends Component {
             {isHovered && (
               <ListItemActions
                 edit={{
-                  name: 'Edit Focal Person',
-                  title: 'Update Focal Person Details',
+                  name: 'Edit Notification Template',
+                  title: 'Update Notification Template Details',
                   onClick: onEdit,
                 }}
                 share={{
-                  name: 'Share Focal Person',
-                  title: 'Share Focal Person details with others',
+                  name: 'Share Notification Template',
+                  title: 'Share Notification Template with others',
                   onClick: onShare,
                 }}
                 archive={{
-                  name: 'Archive Focal Person',
-                  title: 'Remove Focal Person from list of active focal People',
+                  name: 'Archive Notification Template',
+                  title:
+                    'Remove Notification Template from list of active focal People',
                   onClick: this.showArchiveConfirm,
                 }}
               />
