@@ -63,10 +63,10 @@ const routes = [
     description: modules.alerts,
   },
   {
-    name: 'Geographical Features',
-    path: '/app/geographicalfeatures',
+    name: 'Administrative Areas',
+    path: '/app/administrativeareas',
     icon: geographicalFeaturesIcon,
-    description: modules.geographicalfeatures,
+    description: modules.administrativeareas,
   },
   {
     name: 'Dashboards',
