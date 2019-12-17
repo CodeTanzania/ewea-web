@@ -90,6 +90,18 @@ class EventTypes extends Component {
     openEventTypeForm();
   };
 
+  /**
+   * @function
+   * @name handleAfterCloseForm
+   * @description Perform post close form cleanups
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleAfterCloseForm = () => {
+    this.setState({ isEditForm: false });
+  };
+
   render() {
     const {
       eventTypes,

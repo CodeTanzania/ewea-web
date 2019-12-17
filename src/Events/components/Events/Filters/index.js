@@ -1,7 +1,7 @@
 import {
-  clearAlertFilters,
+  clearEventFilters,
   Connect,
-  filterAlerts,
+  filterEvents,
 } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Button, Form } from 'antd';
@@ -15,13 +15,13 @@ const { getIncidentTypes, getJurisdictions } = httpActions;
 
 /**
  * @class
- * @name AlertsFilters
- * @description Filter modal component for filtering alerts
+ * @name EventFilters
+ * @description Filter modal component for filtering events
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class AlertsFilters extends Component {
+class EventFilters extends Component {
   /**
    * @function
    * @name handleSubmit
@@ -42,7 +42,7 @@ class AlertsFilters extends Component {
 
     validateFields((error, values) => {
       if (!error) {
-        filterAlerts(values);
+        filterEvents(values);
         onCancel();
       }
     });
@@ -58,7 +58,7 @@ class AlertsFilters extends Component {
    */
   handleClearFilter = () => {
     const { onCancel, onClearCache } = this.props;
-    clearAlertFilters();
+    clearEventFilters();
 
     onClearCache();
     onCancel();
@@ -213,7 +213,7 @@ class AlertsFilters extends Component {
   }
 }
 
-AlertsFilters.propTypes = {
+EventFilters.propTypes = {
   filter: PropTypes.objectOf(
     PropTypes.shape({
       groups: PropTypes.arrayOf(PropTypes.string),
@@ -244,12 +244,12 @@ AlertsFilters.propTypes = {
   onClearCache: PropTypes.func.isRequired,
 };
 
-AlertsFilters.defaultProps = {
+EventFilters.defaultProps = {
   filter: null,
   cached: null,
 };
 
-export default Connect(Form.create()(AlertsFilters), {
-  filter: 'alerts.filter',
-  alertSchema: 'alerts.schema.properties',
+export default Connect(Form.create()(EventFilters), {
+  filter: 'events.filter',
+  alertSchema: 'events.schema.properties',
 });
