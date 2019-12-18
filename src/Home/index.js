@@ -63,8 +63,14 @@ const routes = [
     description: modules.alerts,
   },
   {
+    name: 'Event Severity',
+    path: '/app/eventseverity',
+    icon: alertIcon,
+    description: modules.eventSeverity,
+  },
+  {
     name: 'Administrative Areas',
-    path: '/app/administrativeareas',
+    path: '/app/administrativeAreas',
     icon: geographicalFeaturesIcon,
     description: modules.administrativeareas,
   },
