@@ -13,7 +13,7 @@ import remove from 'lodash/remove';
 import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
 import PropTypes from 'prop-types';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import ListHeader from '../../../../components/ListHeader';
 import Toolbar from '../../../../components/Toolbar';
 import { notifyError, notifySuccess } from '../../../../util';
@@ -45,19 +45,7 @@ const { getFocalPeopleExportUrl } = httpActions;
  * @since 0.1.0
  */
 class FocalPersonsList extends Component {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    focalPeople: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
-      .isRequired,
-    page: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
-    onEdit: PropTypes.func.isRequired,
-    onFilter: PropTypes.func.isRequired,
-    onNotify: PropTypes.func.isRequired,
-    onShare: PropTypes.func.isRequired,
-    onBulkShare: PropTypes.func.isRequired,
-  };
-
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     selectedFocalPeople: [],
     selectedPages: [],
@@ -194,7 +182,7 @@ class FocalPersonsList extends Component {
     ).length;
 
     return (
-      <Fragment>
+      <>
         {/* toolbar */}
         <Toolbar
           itemName="focal person"
@@ -242,12 +230,16 @@ class FocalPersonsList extends Component {
             <FocalPersonsListItem
               key={focalPerson._id} // eslint-disable-line
               abbreviation={focalPerson.abbreviation}
-              location={compact([
-                focalPerson.location.name,
-                focalPerson.location.place.district,
-                focalPerson.location.place.region,
-                focalPerson.location.place.country,
-              ]).join(', ')}
+              location={
+                focalPerson.location
+                  ? compact([
+                      focalPerson.location.name,
+                      focalPerson.location.place.district,
+                      focalPerson.location.place.region,
+                      focalPerson.location.place.country,
+                    ]).join(', ')
+                  : 'N/A'
+              }
               name={focalPerson.name}
               agency={focalPerson.party ? focalPerson.party.name : 'N/A'}
               agencyAbbreviation={
@@ -289,9 +281,22 @@ class FocalPersonsList extends Component {
           )}
         />
         {/* end focalPeople list */}
-      </Fragment>
+      </>
     );
   }
 }
+
+FocalPersonsList.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  focalPeople: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+    .isRequired,
+  page: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onFilter: PropTypes.func.isRequired,
+  onNotify: PropTypes.func.isRequired,
+  onShare: PropTypes.func.isRequired,
+  onBulkShare: PropTypes.func.isRequired,
+};
 
 export default FocalPersonsList;

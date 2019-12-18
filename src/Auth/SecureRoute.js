@@ -21,11 +21,15 @@ import PropTypes from 'prop-types';
 const SecureRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = isTokenValid();
 
+  console.log(isTokenValid());
+
   return (
     <Route
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
       render={props =>
         isAuthenticated ? (
+          // eslint-disable-next-line react/jsx-props-no-spreading
           <Component {...props} />
         ) : (
           <Redirect

@@ -12,7 +12,7 @@ import uniqBy from 'lodash/uniqBy';
 import remove from 'lodash/remove';
 import intersectionBy from 'lodash/intersectionBy';
 import PropTypes from 'prop-types';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import ListHeader from '../../../../components/ListHeader';
 import { notifyError, notifySuccess } from '../../../../util';
 import Toolbar from '../../../../components/Toolbar';
@@ -44,19 +44,7 @@ const { getAgenciesExportUrl } = httpActions;
  * @since 0.1.0
  */
 class AgencyList extends Component {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    agencies: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
-      .isRequired,
-    page: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
-    onEdit: PropTypes.func.isRequired,
-    onNotify: PropTypes.func.isRequired,
-    onBulkShare: PropTypes.func.isRequired,
-    onShare: PropTypes.func.isRequired,
-    onFilter: PropTypes.func.isRequired,
-  };
-
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     selectedAgencies: [],
     selectedPages: [],
@@ -188,7 +176,7 @@ class AgencyList extends Component {
     ).length;
 
     return (
-      <Fragment>
+      <>
         {/* toolbar */}
         <Toolbar
           itemName="Agency"
@@ -222,9 +210,6 @@ class AgencyList extends Component {
           loading={loading}
           dataSource={agencies}
           renderItem={agency => {
-            const {
-              location: { name: area },
-            } = agency;
             return (
               <AgencyListItem
                 key={agency._id} // eslint-disable-line
@@ -232,7 +217,7 @@ class AgencyList extends Component {
                 name={agency.name}
                 title={agency.role ? agency.role.name : 'N/A'}
                 email={agency.email}
-                area={area}
+                area={agency.location ? agency.location.name : 'N/A'}
                 mobile={agency.mobile}
                 onShare={() => {
                   onShare(agency);
@@ -266,9 +251,22 @@ class AgencyList extends Component {
           }}
         />
         {/* end agencies list */}
-      </Fragment>
+      </>
     );
   }
 }
+
+AgencyList.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  agencies: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+    .isRequired,
+  page: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onNotify: PropTypes.func.isRequired,
+  onBulkShare: PropTypes.func.isRequired,
+  onShare: PropTypes.func.isRequired,
+  onFilter: PropTypes.func.isRequired,
+};
 
 export default AgencyList;

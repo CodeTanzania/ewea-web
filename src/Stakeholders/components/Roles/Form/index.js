@@ -1,4 +1,4 @@
-import { postRole, putRole } from '@codetanzania/ewea-api-states';
+import { postPartyRole, putPartyRole } from '@codetanzania/ewea-api-states';
 import { Button, Col, Form, Input, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -16,25 +16,6 @@ const { TextArea } = Input;
  * @since 0.1.0
  */
 class RoleForm extends Component {
-  static propTypes = {
-    isEditForm: PropTypes.bool.isRequired,
-    role: PropTypes.shape({
-      name: PropTypes.string,
-      abbreviation: PropTypes.string,
-      description: PropTypes.string,
-    }),
-    form: PropTypes.shape({
-      getFieldDecorator: PropTypes.func,
-      validateFieldsAndScroll: PropTypes.func,
-    }).isRequired,
-    onCancel: PropTypes.func.isRequired,
-    posting: PropTypes.bool.isRequired,
-  };
-
-  static defaultProps = {
-    role: null,
-  };
-
   /**
    * @function
    * @name handleSubmit
@@ -57,8 +38,8 @@ class RoleForm extends Component {
     validateFieldsAndScroll((error, values) => {
       if (!error) {
         if (isEditForm) {
-          const updatedRole = Object.assign({}, role, values);
-          putRole(
+          const updatedRole = { ...role, ...values };
+          putPartyRole(
             updatedRole,
             () => {
               notifySuccess('Role was updated successfully');
@@ -70,7 +51,7 @@ class RoleForm extends Component {
             }
           );
         } else {
-          postRole(
+          postPartyRole(
             values,
             () => {
               notifySuccess('Role was created successfully');
@@ -120,9 +101,10 @@ class RoleForm extends Component {
         <Row type="flex" justify="space-between">
           <Col xxl={17} xl={17} lg={17} md={17} sm={24} xs={24}>
             {/* role name */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label=" Name">
-              {getFieldDecorator('name', {
-                initialValue: isEditForm ? role.name : undefined,
+              {getFieldDecorator('strings.name.en', {
+                initialValue: isEditForm ? role.strings.name.en : undefined,
                 rules: [{ required: true, message: 'Role  name is required' }],
               })(<Input />)}
             </Form.Item>
@@ -131,9 +113,12 @@ class RoleForm extends Component {
 
           <Col xxl={6} xl={6} lg={6} md={6} sm={24} xs={24}>
             {/* role abbreviation */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Abbreviation">
-              {getFieldDecorator('abbreviation', {
-                initialValue: isEditForm ? role.abbreviation : undefined,
+              {getFieldDecorator('strings.abbreviation.en', {
+                initialValue: isEditForm
+                  ? role.strings.abbreviation.en
+                  : undefined,
               })(<Input />)}
             </Form.Item>
             {/* end role abbreviation */}
@@ -142,10 +127,11 @@ class RoleForm extends Component {
         {/* end role name and abbreviation */}
 
         {/* role description */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Description">
-          {getFieldDecorator('description', {
-            initialValue: isEditForm ? role.description : undefined,
-          })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
+          {getFieldDecorator('strings.description.en', {
+            initialValue: isEditForm ? role.strings.description.en : undefined,
+          })(<TextArea autosize={{ minRows: 3, maxRows: 10 }} />)}
         </Form.Item>
         {/* end role description */}
 
@@ -166,5 +152,26 @@ class RoleForm extends Component {
     );
   }
 }
+
+RoleForm.propTypes = {
+  isEditForm: PropTypes.bool.isRequired,
+  role: PropTypes.shape({
+    strings: PropTypes.shape({
+      name: PropTypes.shape({ en: PropTypes.string }),
+      abbreviation: PropTypes.shape({ en: PropTypes.string }),
+      description: PropTypes.shape({ en: PropTypes.string }),
+    }),
+  }),
+  form: PropTypes.shape({
+    getFieldDecorator: PropTypes.func,
+    validateFieldsAndScroll: PropTypes.func,
+  }).isRequired,
+  onCancel: PropTypes.func.isRequired,
+  posting: PropTypes.bool.isRequired,
+};
+
+RoleForm.defaultProps = {
+  role: null,
+};
 
 export default Form.create()(RoleForm);

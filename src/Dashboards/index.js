@@ -1,18 +1,70 @@
 import React, { useState } from 'react';
-import { Tooltip, Row, Col, Card, Typography } from 'antd';
+import PropTypes from 'prop-types';
+import { Tooltip, Row, Button, Col, Card, Icon, Statistic } from 'antd';
 import {
   ComposableMap,
   Geographies,
   Geography,
   ZoomableGroup,
 } from 'react-simple-maps';
-import { formatNumber, getRGBAColor } from '../util';
+import { getRGBAColor } from '../util';
 import DarWards from '../assets/maps/dar.wards.json';
+import './styles.css';
 
 /* declarations */
-const { Text } = Typography;
 const DAR_POPULATION = 4365000;
 const BASE_COLOR = '#ff0000';
+
+/**
+ * @function
+ * @name ZoomControl
+ * @description component that renders zoom controls
+ *
+ * @param {object} props - react props
+ * @param {Function}  props.handleZoomIn - handles zoom in
+ * @param {Function}  props.handleZoomOut - handles zoom in
+ *
+ * @returns {object} React Element
+ *
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const ZoomControl = ({ handleZoomIn, handleZoomOut }) => {
+  return (
+    <div className="ZoomControl">
+      <Button onClick={handleZoomIn}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="3"
+        >
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+      </Button>
+      <Button onClick={handleZoomOut}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="3"
+        >
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+      </Button>
+    </div>
+  );
+};
+
+ZoomControl.propTypes = {
+  handleZoomIn: PropTypes.func.isRequired,
+  handleZoomOut: PropTypes.func.isRequired,
+};
 
 /**
  * @function
@@ -26,27 +78,70 @@ const BASE_COLOR = '#ff0000';
  */
 const OverviewDashboard = () => {
   const [ward, setWard] = useState(null);
+  const [zoom, setZoom] = useState(1);
+
+  /**
+   * @function
+   * @name handleZoomIn
+   * @description handle zoom in of svg map
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  const handleZoomIn = () => {
+    if (zoom >= 4) return;
+    setZoom(zoom * 2);
+  };
+
+  /**
+   * @function
+   * @name handleZoomOut
+   * @description handle zoom out of svg map
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  const handleZoomOut = () => {
+    console.log('inside handle zoom out');
+    if (zoom <= 0.25) return;
+    setZoom(zoom / 2);
+  };
+
+  /**
+   * @function
+   * @name handleZoomEnd
+   * @description {string} handle zoom end of svg map
+   * @version 0.1.0
+   * @since 0.1.0
+   * @param {object} position handle position
+   */
+  const handleZoomEnd = position => {
+    setZoom(position.zoom);
+  };
 
   return (
     <div>
       <Row>
         <Col span={16}>
+          <ZoomControl
+            handleZoomOut={handleZoomOut}
+            handleZoomIn={handleZoomIn}
+          />
           {/* ward svg map */}
           <ComposableMap
             projectionConfig={{
-              scale: 90000,
-              xOffset: -70,
-              yOffset: -50,
+              scale: 50000,
             }}
             width={1000}
-            height={850}
-            style={{
-              margin: '10px 50px',
-            }}
+            className="map-widget"
           >
-            <ZoomableGroup center={[39.1037144, -6.7923668]}>
+            <ZoomableGroup
+              center={[39.6067144, -6.9699698]}
+              zoom={zoom}
+              onZoomEnd={handleZoomEnd}
+            >
               <Geographies geography={DarWards} disableOptimization>
-                {(geographies, projection) =>
+                {({ geographies, projection }) =>
                   geographies.map(geography => {
                     const defaultColor = getRGBAColor(
                       BASE_COLOR,
@@ -99,118 +194,197 @@ const OverviewDashboard = () => {
             </ZoomableGroup>
           </ComposableMap>
           {/* end ward svg map */}
+          <Row>
+            <Col span={6}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
+            <Col span={6}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
+          </Row>
         </Col>
 
         {/* Ward summary card */}
         <Col span={8}>
-          <div style={{ margin: '20px 10px' }}>
-            <Card title="Ward Summary">
-              <p>
-                <Row>
-                  <Col span={12}>
-                    <Text strong> Ward : </Text>
-                  </Col>
-                  <Col span={12}> {ward ? ward.Ward_Name : 'N/A'}</Col>
-                </Row>
-              </p>
+          <Row type="flex">
+            <Col span={24}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
 
-              <p>
-                <Row>
-                  <Col span={12}>
-                    <Text strong> District : </Text>
-                  </Col>
-                  <Col span={12}> {ward ? ward.District_N : 'N/A'}</Col>
-                </Row>
-              </p>
+            <Col span={12}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
 
-              <p>
-                <Row>
-                  <Col span={12}>
-                    <Text strong> Population : </Text>
-                  </Col>
-                  <Col span={12}>
-                    {ward ? formatNumber(ward.Ward_Pop) : 'N/A'}
-                  </Col>
-                </Row>
-              </p>
+            <Col span={12}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
 
-              <p>
-                <Row>
-                  <Col span={12}>
-                    <Text strong> Male Population : </Text>
-                  </Col>
-                  <Col span={12}>
-                    {ward ? formatNumber(ward.Male_Pop) : 'N/A'}
-                  </Col>
-                </Row>
-              </p>
-
-              <p>
-                <Row>
-                  <Col span={12}>
-                    <Text strong> Female Population : </Text>
-                  </Col>
-                  <Col span={12}>
-                    {ward ? formatNumber(ward.Female_Pop) : 'N/A'}
-                  </Col>
-                </Row>
-              </p>
-
-              <p>
-                <Row>
-                  <Col span={12}>
-                    <Text strong> Below 10 Years Population : </Text>
-                  </Col>
-                  <Col span={12}> {ward ? 'N/A' : 'N/A'}</Col>
-                </Row>
-              </p>
-
-              <p>
-                <Row>
-                  <Col span={12}>
-                    <Text strong> Above 65 Years Population : </Text>
-                  </Col>
-                  <Col span={12}> {ward ? 'N/A' : 'N/A'}</Col>
-                </Row>
-              </p>
-
-              <p>
-                <Row>
-                  <Col span={12}>
-                    <Text strong> Evacuation Centers : </Text>
-                  </Col>
-                  <Col span={12}> {ward ? 'N/A' : 'N/A'}</Col>
-                </Row>
-              </p>
-
-              <p>
-                <Row>
-                  <Col span={12}>
-                    <Text strong> Health Centers : </Text>
-                  </Col>
-                  <Col span={12}> {ward ? 'N/A' : 'N/A'}</Col>
-                </Row>
-              </p>
-
-              <p>
-                <Row>
-                  <Col span={12}>
-                    <Text strong> Households at risk : </Text>
-                  </Col>
-                  <Col span={12}> {ward ? 'N/A' : 'N/A'}</Col>
-                </Row>
-              </p>
-
-              <p>
-                <Row>
-                  <Col span={12}>
-                    <Text strong> Focal Person : </Text>
-                  </Col>
-                  <Col span={12}> {ward ? 'N/A' : 'N/A'}</Col>
-                </Row>
-              </p>
-            </Card>
-          </div>
+            <Col span={12}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card className="card-widget">
+                <Statistic
+                  title="Active"
+                  value={11.28}
+                  precision={2}
+                  valueStyle={{ color: '#3f8600' }}
+                  prefix={<Icon type="arrow-up" />}
+                  suffix="%"
+                />
+              </Card>
+            </Col>
+          </Row>
         </Col>
         {/* end ward summary card */}
       </Row>

@@ -1,8 +1,8 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import {
-  deleteRole,
-  paginateRoles,
-  refreshRoles,
+  deletePartyRole,
+  paginatePartyRoles,
+  refreshPartyRoles,
 } from '@codetanzania/ewea-api-states';
 import { List } from 'antd';
 import concat from 'lodash/concat';
@@ -11,7 +11,7 @@ import remove from 'lodash/remove';
 import uniq from 'lodash/uniq';
 import intersectionBy from 'lodash/intersectionBy';
 import PropTypes from 'prop-types';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import RoleListHeader from '../../../../components/ListHeader';
 import Toolbar from '../../../../components/Toolbar';
 import { notifyError, notifySuccess } from '../../../../util';
@@ -39,7 +39,7 @@ const headerLayout = [
   },
 ];
 
-const { getRolesExportUrl } = httpActions;
+const { getPartyRolesExportUrl } = httpActions;
 
 /**
  * @class
@@ -50,21 +50,7 @@ const { getRolesExportUrl } = httpActions;
  * @since 0.1.0
  */
 class RoleList extends Component {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    onEdit: PropTypes.func.isRequired,
-    roles: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string,
-        abbreviation: PropTypes.string,
-        description: PropTypes.string,
-      })
-    ).isRequired,
-    total: PropTypes.number.isRequired,
-    page: PropTypes.number.isRequired,
-    onNotify: PropTypes.func.isRequired,
-  };
-
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     selectedRoles: [],
     selectedPages: [],
@@ -165,22 +151,22 @@ class RoleList extends Component {
       .length;
 
     return (
-      <Fragment>
+      <>
         {/* toolbar */}
         <Toolbar
           itemName="Role"
           page={page}
           total={total}
           selectedItemsCount={selectedRolesCount}
-          exportUrl={getRolesExportUrl({
+          exportUrl={getPartyRolesExportUrl({
             filter: { _id: map(selectedRoles, '_id') },
           })}
           onNotify={() => onNotify(selectedRoles)}
           onPaginate={nextPage => {
-            paginateRoles(nextPage);
+            paginatePartyRoles(nextPage);
           }}
           onRefresh={() =>
-            refreshRoles(
+            refreshPartyRoles(
               () => {
                 notifySuccess('Roles refreshed successfully');
               },
@@ -205,10 +191,10 @@ class RoleList extends Component {
           dataSource={roles}
           renderItem={role => (
             <RoleListItem
-              key={role.name}
-              abbreviation={role.abbreviation}
-              name={role.name}
-              description={role.description}
+              key={role._id /*eslint-disable-line */}
+              abbreviation={role.strings.abbreviation.en}
+              name={role.strings.name.en}
+              description={role.strings.description.en}
               isSelected={
                 // eslint-disable-next-line
                 map(selectedRoles, item => item._id).includes(role._id)
@@ -221,7 +207,7 @@ class RoleList extends Component {
               }}
               onEdit={() => onEdit(role)}
               onArchive={() =>
-                deleteRole(
+                deletePartyRole(
                   role._id, // eslint-disable-line
                   () => {
                     console.log(role._id); // eslint-disable-line
@@ -238,9 +224,24 @@ class RoleList extends Component {
             />
           )}
         />
-      </Fragment>
+      </>
     );
   }
 }
+
+RoleList.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  roles: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      abbreviation: PropTypes.string,
+      description: PropTypes.string,
+    })
+  ).isRequired,
+  total: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired,
+  onNotify: PropTypes.func.isRequired,
+};
 
 export default RoleList;

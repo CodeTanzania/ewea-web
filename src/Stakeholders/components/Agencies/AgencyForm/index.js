@@ -21,30 +21,6 @@ const { TextArea } = Input;
  * @since 0.1.0
  */
 class AgencyForm extends Component {
-  static propTypes = {
-    isEditForm: PropTypes.bool.isRequired,
-    agency: PropTypes.shape({
-      name: PropTypes.string,
-      title: PropTypes.string,
-      abbreviation: PropTypes.string,
-      mobile: PropTypes.string,
-      email: PropTypes.string,
-      group: PropTypes.string,
-      location: PropTypes.string,
-      landline: PropTypes.string,
-      fax: PropTypes.string,
-      physicalAddress: PropTypes.string,
-      postalAddress: PropTypes.string,
-    }).isRequired,
-    form: PropTypes.shape({
-      getFieldDecorator: PropTypes.func,
-      validateFieldsAndScroll: PropTypes.func,
-    }).isRequired,
-    groups: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onCancel: PropTypes.func.isRequired,
-    posting: PropTypes.bool.isRequired,
-  };
-
   /**
    * @function
    * @name handleSubmit
@@ -67,7 +43,7 @@ class AgencyForm extends Component {
     validateFieldsAndScroll((error, values) => {
       if (!error) {
         if (isEditForm) {
-          const updatedAgency = Object.assign({}, agency, values);
+          const updatedAgency = { ...agency, ...values };
           putAgency(
             updatedAgency,
             () => {
@@ -130,6 +106,7 @@ class AgencyForm extends Component {
         <Row type="flex" justify="space-between">
           <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
             {/* agency name */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Name">
               {getFieldDecorator('name', {
                 initialValue: isEditForm ? agency.name : undefined,
@@ -144,6 +121,7 @@ class AgencyForm extends Component {
             <Row type="flex" justify="space-between">
               <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
                 {/* agency mobile number */}
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <Form.Item {...formItemLayout} label="Phone Number">
                   {getFieldDecorator('mobile', {
                     initialValue: isEditForm ? agency.mobile : undefined,
@@ -156,6 +134,7 @@ class AgencyForm extends Component {
               </Col>
               <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
                 {/* agency email */}
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <Form.Item {...formItemLayout} label="Email">
                   {getFieldDecorator('email', {
                     initialValue: isEditForm ? agency.email : undefined,
@@ -182,6 +161,7 @@ class AgencyForm extends Component {
         <Row type="flex" justify="space-between">
           <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
             {/* agency organization */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Abbreviation">
               {getFieldDecorator('Abbreviation', {
                 rules: [{ required: true }],
@@ -195,6 +175,7 @@ class AgencyForm extends Component {
             <Row type="flex" justify="space-between">
               <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
                 {/* agency group */}
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <Form.Item {...formItemLayout} label="Group">
                   {getFieldDecorator('group', {
                     initialValue:
@@ -222,6 +203,7 @@ class AgencyForm extends Component {
               </Col>
               <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
                 {/* agency location */}
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <Form.Item {...formItemLayout} label="Area">
                   {getFieldDecorator('location', {
                     initialValue:
@@ -257,6 +239,7 @@ class AgencyForm extends Component {
         <Row type="flex" justify="space-between">
           <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
             {/* agency role */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Website">
               {getFieldDecorator('website', {
                 initialValue:
@@ -269,6 +252,7 @@ class AgencyForm extends Component {
             <Row type="flex" justify="space-between">
               <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
                 {/* agency landline number */}
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <Form.Item {...formItemLayout} label="Landline/Other Number">
                   {getFieldDecorator('landline', {
                     initialValue: isEditForm ? agency.landline : undefined,
@@ -278,6 +262,7 @@ class AgencyForm extends Component {
               </Col>
               <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
                 {/* agency fax */}
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <Form.Item {...formItemLayout} label="Fax">
                   {getFieldDecorator('fax', {
                     initialValue: isEditForm ? agency.fax : undefined,
@@ -294,6 +279,7 @@ class AgencyForm extends Component {
         <Row type="flex" justify="space-between">
           <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
             {/* agency physical Address */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Physical Address">
               {getFieldDecorator('physicalAddress', {
                 initialValue: isEditForm ? agency.physicalAddress : undefined,
@@ -303,6 +289,7 @@ class AgencyForm extends Component {
           </Col>
           <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
             {/* agency postal address */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Postal Address">
               {getFieldDecorator('postalAddress', {
                 initialValue: isEditForm ? agency.postalAddress : undefined,
@@ -330,5 +317,29 @@ class AgencyForm extends Component {
     );
   }
 }
+
+AgencyForm.propTypes = {
+  isEditForm: PropTypes.bool.isRequired,
+  agency: PropTypes.shape({
+    name: PropTypes.string,
+    title: PropTypes.string,
+    abbreviation: PropTypes.string,
+    mobile: PropTypes.string,
+    email: PropTypes.string,
+    group: PropTypes.string,
+    location: PropTypes.string,
+    landline: PropTypes.string,
+    fax: PropTypes.string,
+    physicalAddress: PropTypes.string,
+    postalAddress: PropTypes.string,
+  }).isRequired,
+  form: PropTypes.shape({
+    getFieldDecorator: PropTypes.func,
+    validateFieldsAndScroll: PropTypes.func,
+  }).isRequired,
+  groups: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onCancel: PropTypes.func.isRequired,
+  posting: PropTypes.bool.isRequired,
+};
 
 export default Form.create()(AgencyForm);

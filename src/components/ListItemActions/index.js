@@ -14,11 +14,13 @@ import './styles.css';
  * @param {object} props.archive on archive action callback
  * @param {object} props.transfer on transfer action callback
  * @param {object} props.adjust on adjust action callback
+ * @returns {object} react element
  *
  * @version 0.1.0
  * @since 0.1.0
  */
 const ListItemActions = ({
+  view,
   edit,
   share,
   archive,
@@ -29,6 +31,12 @@ const ListItemActions = ({
   <Dropdown
     overlay={
       <Menu>
+        {view && (
+          <Menu.Item key="view" onClick={view.onClick} title={view.title}>
+            <Icon type="eye" /> {view.name}
+          </Menu.Item>
+        )}
+
         {edit && (
           <Menu.Item key="edit" onClick={edit.onClick} title={edit.title}>
             <Icon type="edit" /> {edit.name}
@@ -92,6 +100,11 @@ const ListItemActions = ({
 
 /* props validation */
 ListItemActions.propTypes = {
+  view: PropTypes.shape({
+    name: PropTypes.string,
+    title: PropTypes.string,
+    onClick: PropTypes.func,
+  }),
   edit: PropTypes.shape({
     name: PropTypes.string,
     title: PropTypes.string,
@@ -125,6 +138,7 @@ ListItemActions.propTypes = {
 };
 
 ListItemActions.defaultProps = {
+  view: null,
   edit: null,
   reload: null,
   share: null,

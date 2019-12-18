@@ -222,7 +222,7 @@ const ActionsTaken = () => (
           >
             <ZoomableGroup center={[39.1037144, -6.7923668]}>
               <Geographies geography={DarWards} disableOptimization>
-                {(geographies, projection) =>
+                {({ geographies, projection }) =>
                   geographies.map(geography => {
                     const fillColor = SELECTED_WARDS.includes(
                       geography.properties.Ward_Name

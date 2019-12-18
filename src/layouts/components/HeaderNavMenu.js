@@ -46,8 +46,8 @@ const routes = [
     icon: rolesIcon,
   },
   {
-    name: 'Alert Types',
-    path: '/app/alerttypes',
+    name: 'Event Types',
+    path: '/app/eventtypes',
     icon: alertIcon,
   },
   {

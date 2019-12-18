@@ -3,32 +3,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, Switch } from 'react-router-dom';
 import UserMenu from './components/UserMenu';
-import Alerts from '../Alerts';
-import AlertTypes from '../Alerts/components/AlertTypes';
-import ActionCatalog from '../Alerts/components/ActionCatalog';
-import IssuedAlerts from '../Alerts/components/IssuedAlerts';
-import AlertsFeedback from '../Alerts/layouts/Feedback';
-import AlertsFeeds from '../Alerts/layouts/Feeds';
-import AlertsServiceRequests from '../Alerts/layouts/ServiceRequests';
-import AlertsSources from '../Alerts/components/AlertSources';
+// import Alerts from '../Alerts';
+// import ActionCatalog from '../Alerts/components/ActionCatalog';
+// import IssuedAlerts from '../Alerts/components/IssuedAlerts';
+// import AlertsFeedback from '../Alerts/layouts/Feedback';
+// import AlertsFeeds from '../Alerts/layouts/Feeds';
+// import AlertsServiceRequests from '../Alerts/layouts/ServiceRequests';
+// import AlertsSources from '../Alerts/components/AlertSources';
+import Events from '../Events/components/Events';
 import PageNotFound from '../components/UIState/PageNotFound';
-import GeographicalFeatures from '../GeographicalFeatures';
-import AdministrativeBoundaries from '../GeographicalFeatures/components/AdministrativeBoundaries';
-import Districts from '../GeographicalFeatures/components/Districts';
-import EvacuationCenters from '../GeographicalFeatures/components/EvacuationCenters';
-import GeographicalFeaturesFacilities from '../GeographicalFeatures/components/Facilities';
-import GeographicalFeaturesInfrastructure from '../GeographicalFeatures/components/Infrastructure';
-import Regions from '../GeographicalFeatures/components/Regions';
-import SubWards from '../GeographicalFeatures/layouts/SubWards';
-import Wards from '../GeographicalFeatures/components/Wards';
-import GeographicalFeaturesWarehouses from '../GeographicalFeatures/components/Warehouses';
+// import GeographicalFeatures from '../GeographicalFeatures';
+// import AdministrativeAreas from '../GeographicalFeatures/components/AdministrativeAreas';
+// import Districts from '../GeographicalFeatures/components/Districts';
+// import EvacuationCenters from '../GeographicalFeatures/components/EvacuationCenters';
+// import GeographicalFeaturesFacilities from '../GeographicalFeatures/components/Facilities';
+// import GeographicalFeaturesInfrastructure from '../GeographicalFeatures/components/Infrastructure';
+// import Regions from '../GeographicalFeatures/components/Regions';
+// import SubWards from '../GeographicalFeatures/layouts/SubWards';
+// import GeographicalFeaturesWarehouses from '../GeographicalFeatures/components/Warehouses';
 import Home from '../Home';
 import Stakeholders from '../Stakeholders';
+import AdministrativeAreas from '../GeographicalFeatures/components/AdministrativeAreas';
 import StakeholdersAgencies from '../Stakeholders/components/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
-import StakeholdersNotifications from '../Stakeholders/components/Notifications';
+import NotificationTemplates from '../Stakeholders/components/NotificationTemplates';
+import EventTypes from '../Events/components/EventTypes';
+// import StakeholdersNotifications from '../Stakeholders/components/Notifications';
 import StakeholdersRoles from '../Stakeholders/components/Roles';
-import EmergencyFunctions from '../Functions/components/Emergency Functions';
+import EmergencyFunctions from '../Functions/components/EmergencyFunctions';
 import OverviewDashboard from '../Dashboards';
 import ActionsTaken from '../Dashboards/ActionsTaken';
 import SecureRoute from '../Auth/SecureRoute';
@@ -42,9 +44,8 @@ const breadcrumbNameMap = {
     name: 'Home',
     title: 'EMIS',
   },
-  /* Alerts Routes */
-  '/app/alerts': { name: 'Alerts', title: 'Alerts module' },
-  '/app/alerttypes': { name: 'Alert Types', title: 'Alert Types module' },
+  /* Event Routes */
+  '/app/eventtypes': { name: 'Event Types', title: 'Event Types module' },
   '/app/actions': {
     name: 'Actions Taken',
     title: 'List of all performed actions',
@@ -61,9 +62,9 @@ const breadcrumbNameMap = {
     name: 'Feeds',
     title: 'Alerts feeds',
   },
-  '/app/issuedalerts': {
-    name: 'Issued Alerts',
-    title: 'List of all alerts',
+  '/app/events': {
+    name: 'Events',
+    title: 'List of all Events(Alerts and Incidents)',
   },
   '/app/alerts/servicerequests': {
     name: 'Service Requests',
@@ -77,6 +78,10 @@ const breadcrumbNameMap = {
   '/app/geographicalfeatures/administrativeboundaries': {
     name: 'Administrative Boundaries',
     title: 'List of administrative boundaries',
+  },
+  '/app/administrativeareas': {
+    name: 'Administrative Areas',
+    title: 'List of administrative areas',
   },
   '/app/geographicalfeatures/districts': {
     name: 'Districts',
@@ -132,8 +137,12 @@ const breadcrumbNameMap = {
     title: 'Roles of Stakeholders',
   },
   '/app/functions': {
-    name: 'Emergency Functions',
+    name: 'EmergencyFunctions',
     title: 'Emergency functions module',
+  },
+  '/app/notificationtemplates': {
+    name: 'Notification Templates',
+    title: 'Notification template module',
   },
   '/app/stakeholders': { name: 'Stakeholders', title: 'Stakeholders module' },
 
@@ -225,16 +234,16 @@ const BaseLayout = props => {
       <Content className="BaseLayoutContent">
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
-          <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
+          <SecureRoute path={`${baseUrl}/events`} component={Events} />
+          <SecureRoute path={`${baseUrl}/eventtypes`} component={EventTypes} />
+
+          {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
           <SecureRoute
             exact
-            path={`${baseUrl}/alerttypes`}
-            component={AlertTypes}
+            path={`${baseUrl}/eventtypes`}
+            component={EventTypes}
           />
-          <SecureRoute
-            path={`${baseUrl}/issuedalerts`}
-            component={IssuedAlerts}
-          />
+        
           <SecureRoute
             path={`${baseUrl}/actioncatalog`}
             component={ActionCatalog}
@@ -254,15 +263,15 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/alerts/servicerequests`}
             component={AlertsServiceRequests}
-          />
-          <SecureRoute
+          /> */}
+          {/* <SecureRoute
             exact
             path={`${baseUrl}/geographicalfeatures`}
             component={GeographicalFeatures}
           />
           <SecureRoute
             path={`${baseUrl}/geographicalfeatures/administrativeboundaries`}
-            component={AdministrativeBoundaries}
+            component={AdministrativeAreas}
           />
           <SecureRoute
             path={`${baseUrl}/geographicalfeatures/districts`}
@@ -292,9 +301,10 @@ const BaseLayout = props => {
             path={`${baseUrl}/geographicalfeatures/warehouses`}
             component={GeographicalFeaturesWarehouses}
           />
+          */}
           <SecureRoute
-            path={`${baseUrl}/geographicalfeatures/wards`}
-            component={Wards}
+            path={`${baseUrl}/administrativeareas`}
+            component={AdministrativeAreas}
           />
           <SecureRoute
             exact
@@ -305,14 +315,17 @@ const BaseLayout = props => {
             path={`${baseUrl}/functions`}
             component={EmergencyFunctions}
           />
-
-          <SecureRoute
+          {/* <SecureRoute
             path={`${baseUrl}/stakeholders/notifications`}
             component={StakeholdersNotifications}
-          />
+          /> */}
           <SecureRoute
             path={`${baseUrl}/focalpeople`}
             component={StakeholdersFocalPeople}
+          />
+          <SecureRoute
+            path={`${baseUrl}/notificationTemplates`}
+            component={NotificationTemplates}
           />
           <SecureRoute
             path={`${baseUrl}/agencies`}

@@ -70,6 +70,7 @@ const routes = [
  *
  * @param {object} props props object
  * @param {object} props.match match object from url router
+ * @returns {object} React Navigation Component
  *
  * @version 0.1.0
  * @since 0.1.0
