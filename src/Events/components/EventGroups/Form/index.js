@@ -1,21 +1,18 @@
-import { putEventType, postEventType } from '@codetanzania/ewea-api-states';
-import { httpActions } from '@codetanzania/ewea-api-client';
+import { putEventGroup, postEventGroup } from '@codetanzania/ewea-api-states';
 import { Button, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import SearchableSelectInput from '../../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../../util';
 
-const { getEventGroups } = httpActions;
 /**
  * @class
- * @name EventTypeForm
- * @description  Render form for creating a new event type
+ * @name EventGroupForm
+ * @description  Render form for creating a new event group
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EventTypeForm extends Component {
+class EventGroupForm extends Component {
   /**
    * @function
    * @name handleSubmit
@@ -40,6 +37,7 @@ class EventTypeForm extends Component {
       if (!error) {
         const payload = {
           strings: {
+            code: values.code,
             name: {
               en: values.name,
             },
@@ -47,32 +45,29 @@ class EventTypeForm extends Component {
               en: values.description,
             },
           },
-          relations: {
-            group: { _id: values.group },
-          },
         };
         if (isEditForm) {
           const updatedContact = { ...eventType, ...payload };
-          putEventType(
+          putEventGroup(
             updatedContact,
             () => {
-              notifySuccess('Event Type was updated successfully');
+              notifySuccess('Event Group was updated successfully');
             },
             () => {
               notifyError(
-                'Something occurred while updating Event Type, please try again!'
+                'Something occurred while updating Event Group, please try again!'
               );
             }
           );
         } else {
-          postEventType(
+          postEventGroup(
             payload,
             () => {
-              notifySuccess('Event Type was created successfully');
+              notifySuccess('Event Group was created successfully');
             },
             () => {
               notifyError(
-                'Something occurred while saving Event Type, please try again!'
+                'Something occurred while saving Event Group, please try again!'
               );
             }
           );
@@ -111,7 +106,7 @@ class EventTypeForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* Event Type name */}
+        {/* Event Group name */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Name">
           {getFieldDecorator('name', {
@@ -119,48 +114,43 @@ class EventTypeForm extends Component {
             rules: [
               {
                 required: true,
-                message: ' Event Types organization name is required',
+                message: ' Event Groups  name is required',
               },
             ],
           })(<Input />)}
         </Form.Item>
-        {/* end Event Type name */}
+        {/* end Event Group name */}
 
-        {/* Event Type group */}
+        {/* Event Group code */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Group">
-          {getFieldDecorator('group', {
-            initialValue:
-              isEditForm && eventType.relations.group // eslint-disable-line
-                ? eventType.relations.group._id // eslint-disable-line
-                : undefined,
-            rules: [{ message: 'Event Type group is required' }],
-          })(
-            <SearchableSelectInput
-              onSearch={getEventGroups}
-              optionLabel={group => group.strings.name.en}
-              optionValue="_id"
-              initialValue={
-                isEditForm && eventType.relations.group
-                  ? eventType.relations.group
-                  : undefined
-              }
-            />
-          )}
+        <Form.Item {...formItemLayout} label="Event Group code">
+          {getFieldDecorator('code', {
+            initialValue: isEditForm ? eventType.strings.code : undefined,
+            rules: [
+              {
+                required: false,
+              },
+            ],
+          })(<Input />)}
         </Form.Item>
-        {/* end Event Type group */}
+        {/* end Event Group code */}
 
-        {/* Event type */}
+        {/* Event Group Description */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Description">
           {getFieldDecorator('description', {
             initialValue: isEditForm
               ? eventType.strings.description.en
               : undefined,
-            rules: [{ required: true, message: 'Description is required' }],
+            rules: [
+              {
+                required: true,
+                message: 'Event Group Description is required',
+              },
+            ],
           })(<Input />)}
         </Form.Item>
-        {/* end Event Type */}
+        {/* end Event Group */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -180,9 +170,10 @@ class EventTypeForm extends Component {
   }
 }
 
-EventTypeForm.propTypes = {
+EventGroupForm.propTypes = {
   eventType: PropTypes.shape({
     strings: PropTypes.shape({
+      code: PropTypes.string.isRequired,
       name: PropTypes.shape({
         en: PropTypes.string.isRequired,
       }),
@@ -190,9 +181,6 @@ EventTypeForm.propTypes = {
         en: PropTypes.string.isRequired,
       }),
       _id: PropTypes.string,
-    }),
-    relations: PropTypes.shape({
-      group: PropTypes.string,
     }),
   }).isRequired,
   isEditForm: PropTypes.bool.isRequired,
@@ -204,4 +192,4 @@ EventTypeForm.propTypes = {
   }).isRequired,
 };
 
-export default Form.create()(EventTypeForm);
+export default Form.create()(EventGroupForm);
