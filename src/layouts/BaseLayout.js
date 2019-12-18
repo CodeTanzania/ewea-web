@@ -28,6 +28,7 @@ import StakeholdersAgencies from '../Stakeholders/components/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
 import NotificationTemplates from '../Stakeholders/components/NotificationTemplates';
 import EventTypes from '../Events/components/EventTypes';
+import EventGroups from '../Events/components/EventGroups';
 // import StakeholdersNotifications from '../Stakeholders/components/Notifications';
 import StakeholdersRoles from '../Stakeholders/components/Roles';
 import EmergencyFunctions from '../Functions/components/EmergencyFunctions';
@@ -50,6 +51,7 @@ const breadcrumbNameMap = {
     name: 'Actions Taken',
     title: 'List of all performed actions',
   },
+  '/app/eventgroups': { name: 'Event Groups', title: 'Event Groups module' },
   '/app/actioncatalog': {
     name: 'Action Catalog',
     title: 'List of all actions to be performed',
@@ -236,6 +238,10 @@ const BaseLayout = props => {
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
           <SecureRoute path={`${baseUrl}/events`} component={Events} />
           <SecureRoute path={`${baseUrl}/eventtypes`} component={EventTypes} />
+          <SecureRoute
+            path={`${baseUrl}/eventgroups`}
+            component={EventGroups}
+          />
 
           {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
           <SecureRoute
