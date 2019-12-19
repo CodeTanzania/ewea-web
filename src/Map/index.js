@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'mapbox-gl/dist/mapbox-gl.css';
-import ReactMapGL from 'react-map-gl';
+import MapGL from 'react-map-gl';
+
+const TOKEN = process.env.REACT_APP_MapboxAccessToken;
 
 class BaseMap extends Component {
   // eslint-disable-next-line react/state-in-constructor
@@ -15,9 +17,52 @@ class BaseMap extends Component {
     },
   };
 
+  componentDidMount() {
+    const map = this.reactMap.getMap();
+    map.on('load', function() {
+      map.addLayer({
+        id: 'maine',
+        type: 'fill',
+        source: {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [
+              {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'Polygon',
+                  coordinates: [
+                    [
+                      [39.26539421081543, -6.828005683086681],
+                      [39.28436279296875, -6.828005683086681],
+                      [39.28436279296875, -6.811216667493757],
+                      [39.26539421081543, -6.811216667493757],
+                      [39.26539421081543, -6.828005683086681],
+                    ],
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        layout: {},
+        paint: {
+          'fill-color': '#088',
+          'fill-opacity': 0.8,
+        },
+      });
+    });
+  }
+
   render() {
     return (
-      <ReactMapGL
+      <MapGL
+        /* eslint-disable-next-line no-return-assign */
+        ref={reactMap => (this.reactMap = reactMap)}
+        mapStyle="mapbox://styles/mapbox/light-v9"
+        mapboxApiAccessToken={TOKEN}
         /* eslint-disable-next-line react/jsx-props-no-spreading,react/destructuring-assignment */
         {...this.state.viewport}
         onViewportChange={viewport => this.setState({ viewport })}
