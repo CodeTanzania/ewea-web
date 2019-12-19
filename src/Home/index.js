@@ -63,6 +63,12 @@ const routes = [
     description: modules.alerts,
   },
   {
+    name: 'Event Groups',
+    path: '/app/eventgroups',
+    icon: alertIcon,
+    description: modules.eventGroups,
+  },
+  {
     name: 'Administrative Areas',
     path: '/app/administrativeareas',
     icon: geographicalFeaturesIcon,
