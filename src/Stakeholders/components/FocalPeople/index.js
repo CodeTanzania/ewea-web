@@ -6,6 +6,8 @@ import {
   openFocalPersonForm,
   searchFocalPeople,
   selectFocalPerson,
+  refreshFocalPeople,
+  paginateFocalPeople,
 } from '@codetanzania/ewea-api-states';
 import { Modal } from 'antd';
 import PropTypes from 'prop-types';
@@ -14,7 +16,9 @@ import NotificationForm from '../../../components/NotificationForm';
 import Topbar from '../../../components/Topbar';
 import FocalPersonFilters from './Filters';
 import FocalPersonForm from './Form';
-import FocalPeopleList from './List';
+import FocalPersonsListItem from './ListItem';
+import ItemList from '../../../components/List';
+import { notifyError, notifySuccess } from '../../../util';
 import './styles.css';
 
 /* constants */
@@ -25,6 +29,20 @@ const {
   getRoles,
   getAgencies,
 } = httpActions;
+
+const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
+const phoneSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
+const emailSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
+const roleSpan = { xxl: 8, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
+const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+
+const headerLayout = [
+  { ...nameSpan, header: 'Name' },
+  { ...roleSpan, header: 'Title & Organization' },
+  { ...phoneSpan, header: 'Phone Number' },
+  { ...emailSpan, header: 'Email' },
+  { ...areaSpan, header: 'Area' },
+];
 
 /**
  * @class
@@ -295,84 +313,117 @@ class FocalPeople extends Component {
         />
         {/* end Topbar */}
 
-        <div className="FocalPeopleList">
-          {/* list starts */}
-          <FocalPeopleList
-            total={total}
-            page={page}
-            focalPeople={focalPeople}
-            loading={loading}
-            onEdit={this.handleEdit}
-            onFilter={this.openFiltersModal}
-            onNotify={this.openNotificationForm}
-            onShare={this.handleShare}
-            onBulkShare={this.handleBulkShare}
-          />
-          {/* end list */}
+        {/* list starts */}
+        <ItemList
+          itemName="focal People"
+          items={focalPeople}
+          page={page}
+          itemCount={total}
+          loading={loading}
+          onEdit={this.handleEdit}
+          onFilter={this.openFiltersModal}
+          onNotify={this.openNotificationForm}
+          onShare={this.handleBulkShare}
+          onRefresh={() =>
+            refreshFocalPeople(
+              () => {
+                notifySuccess('Focal People refreshed successfully');
+              },
+              () => {
+                notifyError(
+                  'An Error occurred while refreshing Focal People please contact system administrator'
+                );
+              }
+            )
+          }
+          onPaginate={nextPage => paginateFocalPeople(nextPage)}
+          headerLayout={headerLayout}
+          renderListItem={({
+            item,
+            isSelected,
+            onSelectItem,
+            onDeselectItem,
+            onEdit,
+            onShare,
+          }) => (
+            <FocalPersonsListItem
+              key={item._id} // eslint-disable-line
+              item={item}
+              isSelected={isSelected}
+              onSelectItem={onSelectItem}
+              onDeselectItem={onDeselectItem}
+              onEdit={onEdit}
+              onArchive={() => {}}
+              onShare={() => {
+                onShare(item);
+              }}
+            />
+          )}
+        />
+        {/* end list */}
 
-          {/* filter modal */}
-          <Modal
-            title="Filter Focal People"
-            visible={showFilters}
+        {/* filter modal */}
+        <Modal
+          title="Filter Focal People"
+          visible={showFilters}
+          onCancel={this.closeFiltersModal}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+        >
+          <FocalPersonFilters
             onCancel={this.closeFiltersModal}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-          >
-            <FocalPersonFilters
-              onCancel={this.closeFiltersModal}
-              cached={cached}
-              onCache={this.handleOnCachedValues}
-              onClearCache={this.handleClearCachedValues}
-            />
-          </Modal>
-          {/* end filter modal */}
+            cached={cached}
+            onCache={this.handleOnCachedValues}
+            onClearCache={this.handleClearCachedValues}
+          />
+        </Modal>
+        {/* end filter modal */}
 
-          {/* Notification Modal modal */}
-          <Modal
-            title="Notify Focal People"
-            visible={showNotificationForm}
+        {/* Notification Modal modal */}
+        <Modal
+          title="Notify Focal People"
+          visible={showNotificationForm}
+          onCancel={this.closeNotificationForm}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+          afterClose={this.handleAfterCloseNotificationForm}
+        >
+          <NotificationForm
+            recipients={selectedFocalPeople}
+            onSearchRecipients={getFocalPeopleFromAPI}
+            onSearchJurisdictions={getJurisdictions}
+            onSearchGroups={getPartyGroups}
+            onSearchAgencies={getAgencies}
+            onSearchRoles={getRoles}
+            body={notificationBody}
             onCancel={this.closeNotificationForm}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-            afterClose={this.handleAfterCloseNotificationForm}
-          >
-            <NotificationForm
-              recipients={selectedFocalPeople}
-              onSearchRecipients={getFocalPeopleFromAPI}
-              onSearchJurisdictions={getJurisdictions}
-              onSearchGroups={getPartyGroups}
-              onSearchAgencies={getAgencies}
-              onSearchRoles={getRoles}
-              body={notificationBody}
-              onCancel={this.closeNotificationForm}
-            />
-          </Modal>
-          {/* end Notification modal */}
+          />
+        </Modal>
+        {/* end Notification modal */}
 
-          {/* create/edit form modal */}
-          <Modal
-            title={isEditForm ? 'Edit Focal Person' : 'Add New Focal Person'}
-            visible={showForm}
-            className="FormModal"
-            footer={null}
+        {/* create/edit form modal */}
+        <Modal
+          title={isEditForm ? 'Edit Focal Person' : 'Add New Focal Person'}
+          visible={showForm}
+          className="FormModal"
+          footer={null}
+          onCancel={this.closeFocalPersonForm}
+          destroyOnClose
+          maskClosable={false}
+          afterClose={this.handleAfterCloseForm}
+        >
+          <FocalPersonForm
+            posting={posting}
+            isEditForm={isEditForm}
+            focalPerson={focalPerson}
             onCancel={this.closeFocalPersonForm}
-            destroyOnClose
-            maskClosable={false}
-            afterClose={this.handleAfterCloseForm}
-          >
-            <FocalPersonForm
-              posting={posting}
-              isEditForm={isEditForm}
-              focalPerson={focalPerson}
-              onCancel={this.closeFocalPersonForm}
-            />
-          </Modal>
-          {/* end create/edit form modal */}
-        </div>
+          />
+        </Modal>
+        {/* end create/edit form modal */}
       </>
     );
   }
