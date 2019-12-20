@@ -1,0 +1,15 @@
+.List {
+  padding: 0 40px;
+}
+
+@media screen and (max-width: 768px) {
+  .List {
+    padding: 0 30px;
+  }
+}
+
+@media screen and (max-width: 426px) {
+  .List {
+    padding: 0 20px;
+  }
+}

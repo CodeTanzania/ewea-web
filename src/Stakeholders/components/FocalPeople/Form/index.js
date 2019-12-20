@@ -1,14 +1,18 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { postFocalPerson, putFocalPerson } from '@codetanzania/ewea-api-states';
 import { Button, Col, Form, Input, Row } from 'antd';
-import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import SearchableSelectInput from '../../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../../util';
 
 /* constants */
-const { getAgencies, getFeatures, getPartyRoles, getPartyGroups } = httpActions;
+const {
+  getAgencies,
+  getAdministrativeAreas,
+  getPartyRoles,
+  getPartyGroups,
+} = httpActions;
 const { TextArea } = Input;
 
 /**
@@ -223,21 +227,19 @@ class FocalPersonForm extends Component {
                 {/* focalPerson location */}
                 {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <Form.Item {...formItemLayout} label="Area">
-                  {getFieldDecorator('location', {
+                  {getFieldDecorator('area', {
                     initialValue:
-                      isEditForm && focalPerson.location
-                        ? focalPerson.location._id // eslint-disable-line
+                      isEditForm && focalPerson.area
+                        ? focalPerson.area._id // eslint-disable-line
                         : undefined,
                   })(
                     <SearchableSelectInput
-                      onSearch={getFeatures}
-                      optionLabel={feature =>
-                        `${feature.name} (${upperFirst(feature.type)})`
-                      }
+                      onSearch={getAdministrativeAreas}
+                      optionLabel={area => area.strings.name.en}
                       optionValue="_id"
                       initialValue={
-                        isEditForm && focalPerson.location
-                          ? focalPerson.location
+                        isEditForm && focalPerson.area
+                          ? focalPerson.area
                           : undefined
                       }
                     />
@@ -366,7 +368,7 @@ FocalPersonForm.propTypes = {
       title: PropTypes.string,
     }),
     group: PropTypes.string,
-    location: PropTypes.string,
+    area: PropTypes.string,
     role: PropTypes.string,
     landline: PropTypes.string,
     fax: PropTypes.string,
