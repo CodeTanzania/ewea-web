@@ -10,7 +10,12 @@ import React, { Component } from 'react';
 import SearchableSelectInput from '../../../../components/SearchableSelectInput';
 
 /* declarations */
-const { getPartyGroups, getJurisdictions, getRoles, getAgencies } = httpActions;
+const {
+  getPartyGroups,
+  getAdministrativeAreas,
+  getPartyRoles,
+  getAgencies,
+} = httpActions;
 
 /**
  * @class
@@ -110,16 +115,18 @@ class FocalPeopleFilters extends Component {
         {/* start contact group filters */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="By Area(s)">
-          {getFieldDecorator('location', {
-            initialValue: filter ? filter.location : [],
+          {getFieldDecorator('area', {
+            initialValue: filter ? filter.area : [],
           })(
             <SearchableSelectInput
-              onSearch={getJurisdictions}
-              optionLabel="name"
+              onSearch={getAdministrativeAreas}
+              optionLabel={area => area.strings.name.en}
               optionValue="_id"
               mode="multiple"
-              onCache={locations => this.cacheFilters({ locations })}
-              initialValue={cached && cached.locations ? cached.locations : []}
+              onCache={areas => {
+                this.cacheFilters({ areas });
+              }}
+              initialValue={cached && cached.areas ? cached.areas : []}
             />
           )}
         </Form.Item>
@@ -133,7 +140,7 @@ class FocalPeopleFilters extends Component {
           })(
             <SearchableSelectInput
               onSearch={getPartyGroups}
-              optionLabel="name"
+              optionLabel={group => group.strings.name.en}
               optionValue="_id"
               mode="multiple"
               onCache={groups => this.cacheFilters({ groups })}
@@ -150,8 +157,8 @@ class FocalPeopleFilters extends Component {
             initialValue: filter ? filter.role : [],
           })(
             <SearchableSelectInput
-              onSearch={getRoles}
-              optionLabel="name"
+              onSearch={getPartyRoles}
+              optionLabel={role => role.strings.name.en}
               optionValue="_id"
               mode="multiple"
               onCache={roles => this.cacheFilters({ roles })}
@@ -208,7 +215,7 @@ FocalPeopleFilters.propTypes = {
   onCancel: PropTypes.func.isRequired,
   cached: PropTypes.shape({
     groups: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
-    locations: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+    areas: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
     roles: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
     agencies: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
   }),
