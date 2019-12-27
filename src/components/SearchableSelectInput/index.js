@@ -1,5 +1,6 @@
 import { Select, Spin } from 'antd';
 import isArray from 'lodash/isArray';
+import uniqBy from 'lodash/uniqBy';
 import isEmpty from 'lodash/isEmpty';
 import isFunction from 'lodash/isFunction';
 import filter from 'lodash/filter';
@@ -26,16 +27,19 @@ class SearchableSelectInput extends Component {
       this.state = {
         data: [...initialValue],
         loading: false,
+        cached: [],
       };
     } else if (!isEmpty(initialValue)) {
       this.state = {
         data: [initialValue],
         loading: false,
+        cached: [],
       };
     } else {
       this.state = {
         data: [],
         loading: false,
+        cached: [],
       };
     }
   }
@@ -69,14 +73,16 @@ class SearchableSelectInput extends Component {
    */
   handleChange = value => {
     const { onChange, onCache } = this.props;
-    const { data } = this.state;
+    const { data, cached } = this.state;
     this.setState({
       value,
     });
 
     if (isFunction(onCache)) {
       const state = filter(data, entry => value.includes(entry._id)); // eslint-disable-line
-      onCache(state);
+      const cachedValues = uniqBy([...cached, ...state], '_id');
+      onCache(cachedValues);
+      this.setState({ cached: cachedValues });
     }
 
     onChange(value);

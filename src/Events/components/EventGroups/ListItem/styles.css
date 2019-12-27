@@ -1,24 +1,24 @@
-.AdminstrativeBoundaryListItem {
+.EventGroupsListItem {
   width: 100%;
   border-bottom: 1px solid #e8e8e8;
   padding: 15px 0;
   height: 60px;
 }
 
-.AdminstrativeBoundaryListItem .Checkbox {
+.EventGroupsListItem .Checkbox {
   padding: 0 8px;
 }
 
-.AdminstrativeBoundaryListItem:hover {
+.EventGroupsListItem:hover {
   background-color: #f5f5f5;
 }
 
-.AdminstrativeBoundaryListItem .actionIcon:hover {
-  color: #008EFA;
+.EventGroupsListItem .actionIcon:hover {
+  color: #008efa;
   background-color: #e8e8e8;
 }
 
-.AdminstrativeBoundaryListItem .actionIcon {
+.EventGroupsListItem .actionIcon {
   padding-top: 8px;
   margin-bottom: 5px;
   width: 32px;
@@ -27,16 +27,16 @@
   display: inline-block;
   text-align: center;
   border-radius: 50%;
+  cursor: pointer;
 }
 
-.AdminstrativeBoundaryListItem .actionIcon {
+.EventGroupsListItem .actionIcon {
   display: inline-block;
   margin: 0 10px;
   font-size: 16px;
-
 }
 
-.AdminstrativeBoundaryListItem .actionIcon:hover {
-  color: #008EFA;
+.EventGroupsListItem .actionIcon:hover {
+  color: #008efa;
   background-color: #e8e8e8;
 }

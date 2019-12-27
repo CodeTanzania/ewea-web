@@ -13,20 +13,22 @@ import UserMenu from './components/UserMenu';
 import Events from '../Events/components/Events';
 import PageNotFound from '../components/UIState/PageNotFound';
 // import GeographicalFeatures from '../GeographicalFeatures';
-// import AdministrativeBoundaries from '../GeographicalFeatures/components/AdministrativeBoundaries';
+// import AdministrativeAreas from '../GeographicalFeatures/components/AdministrativeAreas';
 // import Districts from '../GeographicalFeatures/components/Districts';
 // import EvacuationCenters from '../GeographicalFeatures/components/EvacuationCenters';
 // import GeographicalFeaturesFacilities from '../GeographicalFeatures/components/Facilities';
 // import GeographicalFeaturesInfrastructure from '../GeographicalFeatures/components/Infrastructure';
 // import Regions from '../GeographicalFeatures/components/Regions';
 // import SubWards from '../GeographicalFeatures/layouts/SubWards';
-// import Wards from '../GeographicalFeatures/components/Wards';
 // import GeographicalFeaturesWarehouses from '../GeographicalFeatures/components/Warehouses';
 import Home from '../Home';
 import Stakeholders from '../Stakeholders';
+import AdministrativeAreas from '../GeographicalFeatures/components/AdministrativeAreas';
 import StakeholdersAgencies from '../Stakeholders/components/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
+import NotificationTemplates from '../Stakeholders/components/NotificationTemplates';
 import EventTypes from '../Events/components/EventTypes';
+import EventGroups from '../Events/components/EventGroups';
 // import StakeholdersNotifications from '../Stakeholders/components/Notifications';
 import StakeholdersRoles from '../Stakeholders/components/Roles';
 import EmergencyFunctions from '../Functions/components/EmergencyFunctions';
@@ -50,6 +52,7 @@ const breadcrumbNameMap = {
     name: 'Actions Taken',
     title: 'List of all performed actions',
   },
+  '/app/eventgroups': { name: 'Event Groups', title: 'Event Groups module' },
   '/app/actioncatalog': {
     name: 'Action Catalog',
     title: 'List of all actions to be performed',
@@ -78,6 +81,10 @@ const breadcrumbNameMap = {
   '/app/geographicalfeatures/administrativeboundaries': {
     name: 'Administrative Boundaries',
     title: 'List of administrative boundaries',
+  },
+  '/app/administrativeareas': {
+    name: 'Administrative Areas',
+    title: 'List of administrative areas',
   },
   '/app/geographicalfeatures/districts': {
     name: 'Districts',
@@ -139,6 +146,10 @@ const breadcrumbNameMap = {
   '/app/functions': {
     name: 'EmergencyFunctions',
     title: 'Emergency functions module',
+  },
+  '/app/notificationtemplates': {
+    name: 'Notification Templates',
+    title: 'Notification template module',
   },
   '/app/stakeholders': { name: 'Stakeholders', title: 'Stakeholders module' },
 
@@ -233,6 +244,10 @@ const BaseLayout = props => {
           <SecureRoute path={`${baseUrl}/events`} component={Events} />
           <SecureRoute path={`${baseUrl}/eventtypes`} component={EventTypes} />
           <SecureRoute path={`${baseUrl}/features`} component={Features} />
+          <SecureRoute
+            path={`${baseUrl}/eventgroups`}
+            component={EventGroups}
+          />
 
           {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
           <SecureRoute
@@ -268,7 +283,7 @@ const BaseLayout = props => {
           />
           <SecureRoute
             path={`${baseUrl}/geographicalfeatures/administrativeboundaries`}
-            component={AdministrativeBoundaries}
+            component={AdministrativeAreas}
           />
           <SecureRoute
             path={`${baseUrl}/geographicalfeatures/districts`}
@@ -298,10 +313,11 @@ const BaseLayout = props => {
             path={`${baseUrl}/geographicalfeatures/warehouses`}
             component={GeographicalFeaturesWarehouses}
           />
+          */}
           <SecureRoute
-            path={`${baseUrl}/geographicalfeatures/wards`}
-            component={Wards}
-          /> */}
+            path={`${baseUrl}/administrativeareas`}
+            component={AdministrativeAreas}
+          />
           <SecureRoute
             exact
             path={`${baseUrl}/stakeholders`}
@@ -318,6 +334,10 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/focalpeople`}
             component={StakeholdersFocalPeople}
+          />
+          <SecureRoute
+            path={`${baseUrl}/notificationTemplates`}
+            component={NotificationTemplates}
           />
           <SecureRoute
             path={`${baseUrl}/agencies`}

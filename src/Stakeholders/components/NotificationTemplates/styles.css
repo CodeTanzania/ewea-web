@@ -1,3 +1,7 @@
+.NotificationTemplatesList {
+  padding: 0 40px;
+}
+
 .FormModal {
   width: 50% !important;
 }
@@ -9,12 +13,18 @@
 }
 
 @media screen and (max-width: 768px) {
+  .NotificationTemplatesList {
+    padding: 0 30px;
+  }
   .FormModal {
     width: 80% !important;
   }
 }
 
 @media screen and (max-width: 426px) {
+  .NotificationTemplatesList {
+    padding: 0 20px;
+  }
   .FormModal {
     width: 90% !important;
   }

@@ -18,7 +18,8 @@
   "emergencyPlansDisseminations": "",
   "emergencyPlansActivations": "",
   "emergencyPlansDrillsExercises": "",
-  "geographicalFeatures": "",
+  "eventGroups": "",
+  "administrativeareas": "",
   "geographicalFeaturesRegions": "",
   "geographicalFeaturesDistricts": "",
   "geographicalFeaturesWards": "",
@@ -46,5 +47,6 @@
   "stakeholdersAgencies": "",
   "stakeholdersRoles": "",
   "stakeholdersNotifications": "",
-  "dashboards": ""
+  "dashboards": "",
+  "notificationTemplates": ""
 }

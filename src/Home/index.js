@@ -1,5 +1,6 @@
 import React from 'react';
 import dashboardIcon from '../assets/icons/dashboards.svg';
+import notificationIcon from '../assets/icons/stakeholders/notifications.svg';
 import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures.svg';
 import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
 import contactsIcon from '../assets/icons/stakeholders/contacts.svg';
@@ -70,14 +71,26 @@ const routes = [
   {
     name: 'Geographical Features',
     path: '/app/geographicalfeatures',
+    icon: alertIcon,
+    description: modules.eventGroups,
+  },
+  {
+    name: 'Administrative Areas',
+    path: '/app/administrativeareas',
     icon: geographicalFeaturesIcon,
-    description: modules.geographicalfeatures,
+    description: modules.administrativeareas,
   },
   {
     name: 'Dashboards',
     path: '/app/overview',
     icon: dashboardIcon,
     description: modules.dashboards,
+  },
+  {
+    name: 'Notification Templates',
+    path: '/app/notificationtemplates',
+    icon: notificationIcon,
+    description: modules.notificationTemplate,
   },
 ];
 
