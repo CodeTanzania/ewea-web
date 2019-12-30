@@ -104,7 +104,7 @@ const ItemList = ({
         total={itemCount}
         selectedItemsCount={getSelectedItemCount()}
         onFilter={onFilter}
-        onNotify={() => onNotify(selectedItems)}
+        onNotify={onNotify ? () => onNotify(selectedItems) : null}
         onPaginate={nextPage => onPaginate(nextPage)}
         onRefresh={() => onRefresh()}
         onShare={() => onShare(selectedItems)}
