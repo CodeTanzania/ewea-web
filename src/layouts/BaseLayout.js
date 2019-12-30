@@ -11,6 +11,7 @@ import UserMenu from './components/UserMenu';
 // import AlertsServiceRequests from '../Alerts/layouts/ServiceRequests';
 // import AlertsSources from '../Alerts/components/AlertSources';
 import Events from '../Events/components/Events';
+import EventActions from '../Events/components/EventActions';
 import PageNotFound from '../components/UIState/PageNotFound';
 // import GeographicalFeatures from '../GeographicalFeatures';
 // import AdministrativeAreas from '../GeographicalFeatures/components/AdministrativeAreas';
@@ -47,6 +48,7 @@ const breadcrumbNameMap = {
     title: 'EMIS',
   },
   /* Event Routes */
+  '/app/eventactions': { name: 'Event Actions', title: 'Event Actions Module' },
   '/app/eventtypes': { name: 'Event Types', title: 'Event Types module' },
   '/app/actions': {
     name: 'Actions Taken',
@@ -242,6 +244,10 @@ const BaseLayout = props => {
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
           <SecureRoute path={`${baseUrl}/events`} component={Events} />
+          <SecureRoute
+            path={`${baseUrl}/eventactions`}
+            component={EventActions}
+          />
           <SecureRoute path={`${baseUrl}/eventtypes`} component={EventTypes} />
           <SecureRoute path={`${baseUrl}/features`} component={Features} />
           <SecureRoute

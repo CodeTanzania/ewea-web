@@ -22,6 +22,12 @@ const routes = [
     description: modules.alertsIssued,
   },
   {
+    name: 'Events Actions',
+    path: '/app/eventactions',
+    icon: issuedAlertsIcon,
+    description: modules.eventActions,
+  },
+  {
     name: 'Actions Taken',
     path: '/app/actions',
     icon: actionsIcon,
