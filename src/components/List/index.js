@@ -91,9 +91,30 @@ const ItemList = ({
     setSelectedPages(uniquePages);
   };
 
+  /**
+   * @function
+   * @name getSelectedItemCount
+   * @description Count selected items on the list
+   *
+   * @returns {number} Number of selected items
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
   const getSelectedItemCount = () =>
     intersectionBy(selectedItems, items, '_id').length;
 
+  /**
+   * @function
+   * @name isSelected
+   * @description Check if item is among selected items
+   *
+   * @param {object} item item to check if it is selected
+   * @returns {boolean} boolean value is item is selected
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
   const isSelected = item => map(selectedItems, '_id').includes(item._id); // eslint-disable-line
 
   return (
