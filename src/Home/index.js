@@ -1,11 +1,10 @@
 import React from 'react';
 import dashboardIcon from '../assets/icons/dashboards.svg';
+import settingsIcon from '../assets/icons/alerts/servicerequest.svg';
 import eventActionsIcon from '../assets/icons/emergencyplans/planner.svg';
-import notificationIcon from '../assets/icons/stakeholders/notifications.svg';
 import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures.svg';
 import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
 import contactsIcon from '../assets/icons/stakeholders/contacts.svg';
-import rolesIcon from '../assets/icons/stakeholders/roles.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import functionIcon from '../assets/icons/emergencyplans.svg';
 import modules from '../modules.json';
@@ -35,7 +34,7 @@ const routes = [
     description: modules.alertsActions,
   },
   {
-    name: 'EmergencyFunctions',
+    name: 'Emergency Functions',
     path: '/app/functions',
     icon: functionIcon,
   },
@@ -56,18 +55,6 @@ const routes = [
     path: '/app/agencies',
     icon: agenciesIcon,
     description: modules.stakeholdersAgencies,
-  },
-  {
-    name: 'Roles',
-    path: '/app/roles',
-    icon: rolesIcon,
-    description: modules.stakeholdersRoles,
-  },
-  {
-    name: 'Event Types',
-    path: '/app/eventtypes',
-    icon: alertIcon,
-    description: modules.alerts,
   },
   {
     name: 'Critical facilities',
@@ -94,9 +81,9 @@ const routes = [
     description: modules.dashboards,
   },
   {
-    name: 'Notification Templates',
-    path: '/app/notificationtemplates',
-    icon: notificationIcon,
+    name: 'Settings',
+    path: '/app/settings',
+    icon: settingsIcon,
     description: modules.notificationTemplate,
   },
 ];
