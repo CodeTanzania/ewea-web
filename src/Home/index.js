@@ -1,5 +1,6 @@
 import React from 'react';
 import dashboardIcon from '../assets/icons/dashboards.svg';
+import eventActionsIcon from '../assets/icons/emergencyplans/planner.svg';
 import notificationIcon from '../assets/icons/stakeholders/notifications.svg';
 import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures.svg';
 import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
@@ -24,7 +25,7 @@ const routes = [
   {
     name: 'Events Actions',
     path: '/app/eventactions',
-    icon: issuedAlertsIcon,
+    icon: eventActionsIcon,
     description: modules.eventActions,
   },
   {
