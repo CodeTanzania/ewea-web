@@ -19,13 +19,13 @@ const {
 
 /**
  * @class
- * @name FocalPeopleFilters
+ * @name EventActionsFilters
  * @description Filter modal component for filtering contacts
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class FocalPeopleFilters extends Component {
+class EventActionsFilters extends Component {
   /**
    * @function
    * @name handleSubmit
@@ -202,7 +202,7 @@ class FocalPeopleFilters extends Component {
   }
 }
 
-FocalPeopleFilters.propTypes = {
+EventActionsFilters.propTypes = {
   filter: PropTypes.objectOf(
     PropTypes.shape({
       groups: PropTypes.arrayOf(PropTypes.string),
@@ -223,11 +223,11 @@ FocalPeopleFilters.propTypes = {
   onClearCache: PropTypes.func.isRequired,
 };
 
-FocalPeopleFilters.defaultProps = {
+EventActionsFilters.defaultProps = {
   filter: null,
   cached: null,
 };
 
-export default Connect(Form.create()(FocalPeopleFilters), {
-  filter: 'focalPeople.filter',
+export default Connect(Form.create()(EventActionsFilters), {
+  filter: 'eventActions.filter',
 });

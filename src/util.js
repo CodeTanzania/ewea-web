@@ -124,8 +124,7 @@ export const getRGBAColor = (baseColor, alpha) => {
  * @name truncateString
  * @description truncates string
  * @param {string} str  string to truncate
- * @param num
- * @param {number} length a string  will be truncated to
+ * @param {number} num number of characters to not exceed
  * @returns {string} truncated string
  * @version 0.1.0
  * @since 0.1.0
