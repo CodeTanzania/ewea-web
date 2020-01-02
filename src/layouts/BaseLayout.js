@@ -30,6 +30,7 @@ import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
 import NotificationTemplates from '../Stakeholders/components/NotificationTemplates';
 import EventTypes from '../Events/components/EventTypes';
 import EventSeverity from '../Events/components/EventSeverity';
+import EventCertainty from '../Events/components/EventCertainty';
 import EventGroups from '../Events/components/EventGroups';
 // import StakeholdersNotifications from '../Stakeholders/components/Notifications';
 import StakeholdersRoles from '../Stakeholders/components/Roles';
@@ -50,6 +51,11 @@ const breadcrumbNameMap = {
     title: 'Early Warning, Early Action Menu',
   },
   /* Event Routes */
+  '/app/eventtypes': { name: 'Event Types', title: 'Event Types module' },
+  '/app/eventcertainty': {
+    name: 'Event Certainty',
+    title: 'Event Certainty module',
+  },
   '/app/eventactions': { name: 'Event Actions', title: 'Event Actions Module' },
   '/app/actions': {
     name: 'Actions Taken',
@@ -284,19 +290,47 @@ const BaseLayout = props => {
             component={StakeholdersNotifications}
           /> */}
           <SecureRoute
+            path={`${baseUrl}/eventcertainty`}
+            component={EventCertainty}
+          />
+
+          {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
+          <SecureRoute
+            exact
+            path={`${baseUrl}/eventtypes`}
+            component={EventTypes}
+          />
+
+          <SecureRoute
+            path={`${baseUrl}/actioncatalog`}
+            component={ActionCatalog}
+          />
+          <SecureRoute
+            path={`${baseUrl}/alerts/feeds`}
+            component={AlertsFeeds}
+          />
+          <SecureRoute
+            path={`${baseUrl}/alerts/feedback`}
+            component={AlertsFeedback}
+          />
+       <SecureRoute
+            path={`${baseUrl}/stakeholders/notifications`}
+            component={StakeholdersNotifications}
+          /> */}
+          <SecureRoute
             path={`${baseUrl}/eventactions`}
             component={EventActions}
-          />
-          <SecureRoute path={`${baseUrl}/features`} component={Features} />
-          <SecureRoute
-            path={`${baseUrl}/administrativeareas`}
-            component={AdministrativeAreas}
           />
           <SecureRoute
             exact
             path={`${baseUrl}/stakeholders`}
             component={Stakeholders}
           />
+          <SecureRoute
+            path={`${baseUrl}/administrativeareas`}
+            component={AdministrativeAreas}
+          />
+          <SecureRoute path={`${baseUrl}/features`} component={Features} />
           <SecureRoute
             path={`${baseUrl}/functions`}
             component={EmergencyFunctions}

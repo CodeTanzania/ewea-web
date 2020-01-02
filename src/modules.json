@@ -21,6 +21,7 @@
   "emergencyPlansActivations": "",
   "emergencyPlansDrillsExercises": "",
   "eventSeverity": "",
+  "eventCertainty": "",
   "eventGroups": "",
   "geographicalFeaturesRegions": "",
   "geographicalFeaturesDistricts": "",
