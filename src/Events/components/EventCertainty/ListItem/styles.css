@@ -1,0 +1,42 @@
+.EventCertaintiesListItem {
+  width: 100%;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 15px 0;
+  height: 60px;
+}
+
+.EventCertaintiesListItem .Checkbox {
+  padding: 0 8px;
+}
+
+.EventCertaintiesListItem:hover {
+  background-color: #f5f5f5;
+}
+
+.EventCertaintiesListItem .actionIcon:hover {
+  color: #008efa;
+  background-color: #e8e8e8;
+}
+
+.EventCertaintiesListItem .actionIcon {
+  padding-top: 8px;
+  margin-bottom: 5px;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.EventCertaintiesListItem .actionIcon {
+  display: inline-block;
+  margin: 0 10px;
+  font-size: 16px;
+}
+
+.EventCertaintiesListItem .actionIcon:hover {
+  color: #008efa;
+  background-color: #e8e8e8;
+}
