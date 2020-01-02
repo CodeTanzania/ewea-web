@@ -51,11 +51,6 @@ const breadcrumbNameMap = {
     title: 'Early Warning, Early Action Menu',
   },
   /* Event Routes */
-  '/app/eventtypes': { name: 'Event Types', title: 'Event Types module' },
-  '/app/eventcertainty': {
-    name: 'Event Certainty',
-    title: 'Event Certainty module',
-  },
   '/app/eventactions': { name: 'Event Actions', title: 'Event Actions Module' },
   '/app/actions': {
     name: 'Actions Taken',
@@ -65,10 +60,6 @@ const breadcrumbNameMap = {
   '/app/actioncatalog': {
     name: 'Action Catalog',
     title: 'List of all actions to be performed',
-  },
-  '/app/eventseverity': {
-    name: 'Event Severity',
-    title: 'Event Severity module',
   },
   '/app/alerts/feedback': {
     name: 'Surveys & Feedback',
@@ -169,6 +160,14 @@ const breadcrumbNameMap = {
     name: 'Event Types',
     title: 'Event Types module',
   },
+  '/app/settings/eventcertainty': {
+    name: 'Event Certainty',
+    title: 'Event Certainty module',
+  },
+  '/app/settings/eventseverity': {
+    name: 'Event Severity',
+    title: 'Event Severity module',
+  },
   '/app/settings/notificationtemplates': {
     name: 'Notification Templates',
     title: 'Notification template module',
@@ -260,11 +259,6 @@ const BaseLayout = props => {
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
           <SecureRoute path={`${baseUrl}/events`} component={Events} />
-          <SecureRoute path={`${baseUrl}/eventtypes`} component={EventTypes} />
-          <SecureRoute
-            path={`${baseUrl}/eventseverity`}
-            component={EventSeverity}
-          />
 
           {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
           <SecureRoute
@@ -289,10 +283,6 @@ const BaseLayout = props => {
             path={`${baseUrl}/stakeholders/notifications`}
             component={StakeholdersNotifications}
           /> */}
-          <SecureRoute
-            path={`${baseUrl}/eventcertainty`}
-            component={EventCertainty}
-          />
 
           {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
           <SecureRoute
@@ -368,6 +358,14 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/settings/eventtypes`}
             component={EventTypes}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/eventcertainty`}
+            component={EventCertainty}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/eventseverity`}
+            component={EventSeverity}
           />
           <SecureRoute component={PageNotFound} />
         </Switch>

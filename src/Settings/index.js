@@ -28,6 +28,18 @@ const routes = [
     description: modules.alerts,
   },
   {
+    name: 'Event Certainty',
+    path: '/eventcertainty',
+    icon: alertIcon,
+    description: modules.eventCertainty,
+  },
+  {
+    name: 'Event Severity',
+    path: '/eventseverity',
+    icon: alertIcon,
+    description: modules.eventSeverity,
+  },
+  {
     name: 'Notification Templates',
     path: '/notificationtemplates',
     icon: notificationIcon,
