@@ -14,8 +14,6 @@ import EventCertaintyForm from './Form';
 import EventCertaintiesList from './List';
 import './styles.css';
 
-/* constants */
-
 /**
  * @class
  * @name EventCertainties

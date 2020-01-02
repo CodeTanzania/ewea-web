@@ -10,7 +10,7 @@ import { notifyError, notifySuccess } from '../../../../util';
 /**
  * @class
  * @name EventCertaintyForm
- * @description  Render form for creating a new event group
+ * @description  Render form for creating a new event certainty
  *
  * @version 0.1.0
  * @since 0.1.0
