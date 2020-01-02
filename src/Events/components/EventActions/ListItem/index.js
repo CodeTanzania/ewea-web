@@ -8,16 +8,12 @@ import './styles.css';
 /* constants */
 const { confirm } = Modal;
 const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 3, xs: 3 };
-const nameSpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 10, xs: 10 };
-const phoneSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
-const emailSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const roleSpan = { xxl: 8, xl: 7, lg: 6, md: 0, sm: 0, xs: 0 };
-const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const nameSpan = { xxl: 22, xl: 22, lg: 22, md: 21, sm: 19, xs: 19 };
 const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 
 /**
  * @function
- * @name FocalPeopleListItem
+ * @name EventActionListItem
  * @description Single focal person list item component.
  * Render single focal person details
  *
@@ -25,7 +21,7 @@ const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
  * @version 0.1.0
  * @since 0.1.0
  */
-const FocalPeopleListItem = ({
+const EventActionListItem = ({
   item,
   isSelected,
   onSelectItem,
@@ -35,7 +31,7 @@ const FocalPeopleListItem = ({
   onShare,
 }) => {
   const [isHovered, setHovered] = useState(false);
-  const avatarBackground = randomColor();
+  const avatarBackground = item.strings.color || randomColor();
 
   /**
    * @function
@@ -89,7 +85,7 @@ const FocalPeopleListItem = ({
    */
   const showArchiveConfirm = () => {
     confirm({
-      title: `Are you sure you want to archive ${item.name} ?`,
+      title: `Are you sure you want to archive ${item.strings.name.en} ?`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
@@ -118,51 +114,38 @@ const FocalPeopleListItem = ({
       />
     ) : (
       <Avatar style={{ backgroundColor: avatarBackground }}>
-        {item.name.toUpperCase().charAt(0)}
+        {item.strings.name.en.toUpperCase().charAt(0)}
       </Avatar>
     );
   };
 
   return (
     <div
-      className="FocalPeopleListItem"
+      className="EventActionListItem"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <Row>
         {/* eslint-disable react/jsx-props-no-spreading */}
         <Col {...sideSpan}>{renderSideComponent()}</Col>
-        <Col {...nameSpan}>{item.name}</Col>
-        <Col
-          {...roleSpan}
-          title={item.role ? item.role.strings.name.en : 'N/A'}
-        >
-          {item.role
-            ? `${item.role.strings.name.en}, ${
-                item.party ? item.party.abbreviation : 'N/A'
-              }`
-            : 'N/A'}
-        </Col>
-        <Col {...phoneSpan}>{item.mobile}</Col>
-        <Col {...emailSpan}>{item.email}</Col>
-        <Col {...areaSpan}>{item.area ? item.area.strings.name.en : 'N/A'}</Col>
+        <Col {...nameSpan}>{item.strings.name.en}</Col>
         <Col {...isHoveredSpan}>
           {/* eslint-enable react/jsx-props-no-spreading */}
           {isHovered && (
             <ListItemActions
               edit={{
-                name: 'Edit Focal Person',
-                title: 'Update Focal Person Details',
+                name: 'Edit Event Action',
+                title: 'Update Event Action Details',
                 onClick: onEdit,
               }}
               share={{
-                name: 'Share Focal Person',
-                title: 'Share Focal Person details with others',
+                name: 'Share Event Action',
+                title: 'Share Event Action details with others',
                 onClick: onShare,
               }}
               archive={{
-                name: 'Archive Focal Person',
-                title: 'Remove Focal Person from list of active focal People',
+                name: 'Archive Event Action',
+                title: 'Remove Event Action from list of active focal People',
                 onClick: showArchiveConfirm,
               }}
             />
@@ -173,17 +156,11 @@ const FocalPeopleListItem = ({
   );
 };
 
-FocalPeopleListItem.propTypes = {
+EventActionListItem.propTypes = {
   item: PropTypes.shape({
-    location: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    role: PropTypes.shape({ strings: PropTypes.object }),
-    area: PropTypes.shape({ strings: PropTypes.object }),
-    email: PropTypes.string.isRequired,
-    mobile: PropTypes.string.isRequired,
-    party: PropTypes.shape({
-      name: PropTypes.string,
-      abbreviation: PropTypes.string,
+    strings: PropTypes.shape({
+      name: PropTypes.shape({ en: PropTypes.string }).isRequired,
+      color: PropTypes.string,
     }),
   }).isRequired,
   abbreviation: PropTypes.string.isRequired,
@@ -198,4 +175,4 @@ FocalPeopleListItem.propTypes = {
   onShare: PropTypes.func.isRequired,
 };
 
-export default FocalPeopleListItem;
+export default EventActionListItem;
