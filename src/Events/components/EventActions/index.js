@@ -8,8 +8,9 @@ import {
   selectEventAction,
   refreshEventActions,
   paginateEventActions,
+  deleteEventAction,
 } from '@codetanzania/ewea-api-states';
-import { Modal } from 'antd';
+import { Col, Modal } from 'antd';
 import isArray from 'lodash/isArray';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -17,7 +18,8 @@ import NotificationForm from '../../../components/NotificationForm';
 import Topbar from '../../../components/Topbar';
 import EventActionFilters from './Filters';
 import EventActionForm from './Form';
-import EventActionsListItem from './ListItem';
+import ListItemActions from '../../../components/ListItemActions';
+import ListItem from '../../../components/ListItem';
 import ItemList from '../../../components/List';
 import { notifyError, notifySuccess } from '../../../util';
 import './styles.css';
@@ -34,6 +36,8 @@ const {
 const nameSpan = { xxl: 22, xl: 22, lg: 22, md: 21, sm: 19, xs: 19 };
 
 const headerLayout = [{ ...nameSpan, header: 'Name' }];
+
+const { confirm } = Modal;
 
 /**
  * @class
@@ -235,6 +239,43 @@ class EventActions extends Component {
     this.setState({ notificationBody: undefined });
   };
 
+  /**
+   * @function
+   * @name showArchiveConfirm
+   * @description show confirm modal before archiving a focal person
+   * @param {object} item Resource item to be archived
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  showArchiveConfirm = item => {
+    confirm({
+      title: `Are you sure you want to archive this record ?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteEventAction(
+          item._id, // eslint-disable-line
+          () => notifySuccess('Focal Person was archived successfully'),
+          () =>
+            notifyError(
+              'An error occurred while archiving Focal Person, Please contact your system Administrator'
+            )
+        );
+      },
+    });
+  };
+
+  handleRefreshEventActions = () =>
+    refreshEventActions(
+      () => notifySuccess('Event Actions refreshed successfully'),
+      () =>
+        notifyError(
+          'An Error occurred while refreshing Event Actions, please contact system administrator'
+        )
+    );
+
   render() {
     const {
       eventActions,
@@ -254,6 +295,7 @@ class EventActions extends Component {
       notificationBody,
       cached,
     } = this.state;
+
     return (
       <>
         {/* Topbar */}
@@ -283,21 +325,9 @@ class EventActions extends Component {
           page={page}
           itemCount={total}
           loading={loading}
-          onEdit={this.handleEdit}
           // onFilter={this.openFiltersModal}
           onShare={this.handleShare}
-          onRefresh={() =>
-            refreshEventActions(
-              () => {
-                notifySuccess('Event Actions refreshed successfully');
-              },
-              () => {
-                notifyError(
-                  'An Error occurred while refreshing Event Actions please contact system administrator'
-                );
-              }
-            )
-          }
+          onRefresh={this.handleRefreshEventActions}
           onPaginate={nextPage => paginateEventActions(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
@@ -305,21 +335,38 @@ class EventActions extends Component {
             isSelected,
             onSelectItem,
             onDeselectItem,
-            onEdit,
-            onShare,
           }) => (
-            <EventActionsListItem
+            <ListItem
               key={item._id} // eslint-disable-line
+              name={item.strings.name.en}
               item={item}
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              onEdit={onEdit}
-              onArchive={() => {}}
-              onShare={() => {
-                onShare(item);
-              }}
-            />
+              renderActions={() => (
+                <ListItemActions
+                  edit={{
+                    name: 'Edit Event Action',
+                    title: 'Update Event Action Details',
+                    onClick: () => this.handleEdit(item),
+                  }}
+                  share={{
+                    name: 'Share Event Action',
+                    title: 'Share Event Action details with others',
+                    onClick: () => this.handleShare(item),
+                  }}
+                  archive={{
+                    name: 'Archive Event Action',
+                    title:
+                      'Remove Event Action from list of active focal People',
+                    onClick: () => this.showArchiveConfirm(item),
+                  }}
+                />
+              )}
+            >
+              {/* eslint-disable-next-line */}
+              <Col {...nameSpan}>{item.strings.name.en}</Col>
+            </ListItem>
           )}
         />
         {/* end list */}

@@ -19,6 +19,7 @@ const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
  * @since 0.1.0
  */
 const ListItem = ({
+  name,
   item,
   isSelected,
   onSelectItem,
@@ -90,7 +91,7 @@ const ListItem = ({
       />
     ) : (
       <Avatar style={{ backgroundColor: avatarBackground }}>
-        {item.name.toUpperCase().charAt(0)}
+        {(name || item.name).toUpperCase().charAt(0)}
       </Avatar>
     );
   };
@@ -127,17 +128,16 @@ ListItem.propTypes = {
       abbreviation: PropTypes.string,
     }),
   }).isRequired,
+  name: PropTypes.string,
   children: PropTypes.node.isRequired,
-  abbreviation: PropTypes.string.isRequired,
-  agency: PropTypes.string.isRequired,
-  agencyAbbreviation: PropTypes.string.isRequired,
   renderActions: PropTypes.string.isRequired,
-  onArchive: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
   onSelectItem: PropTypes.func.isRequired,
   onDeselectItem: PropTypes.func.isRequired,
-  onShare: PropTypes.func.isRequired,
+};
+
+ListItem.defaultProps = {
+  name: undefined,
 };
 
 export default ListItem;
