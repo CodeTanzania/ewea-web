@@ -18,12 +18,10 @@ const ItemList = ({
   loading,
   itemCount,
   headerLayout,
-  onArchive,
   onFilter,
   onNotify,
   onPaginate,
   onRefresh,
-  onEdit,
   onShare,
   renderListItem,
 }) => {
@@ -147,9 +145,6 @@ const ItemList = ({
             isSelected: isSelected(item),
             onSelectItem: () => handleSelectItem(item),
             onDeselectItem: () => handleDeselectItem(item),
-            onEdit: () => onEdit(item),
-            onArchive: () => onArchive(item),
-            onShare: () => onShare(item),
           })
         }
       />
@@ -166,8 +161,6 @@ ItemList.propTypes = {
   itemName: PropTypes.string.isRequired,
   page: PropTypes.number.isRequired,
   itemCount: PropTypes.number.isRequired,
-  onArchive: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
   onNotify: PropTypes.func.isRequired,
   onPaginate: PropTypes.func.isRequired,
