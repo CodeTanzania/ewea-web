@@ -1,38 +1,30 @@
-import { Avatar, Checkbox, Col, Modal, Row } from 'antd';
-import PropTypes from 'prop-types';
-import randomColor from 'randomcolor';
 import React, { useState } from 'react';
-import ListItemActions from '../../../../components/ListItemActions';
+import PropTypes from 'prop-types';
+import { Avatar, Checkbox, Col, Row } from 'antd';
+import randomColor from 'randomcolor';
 import './styles.css';
 
 /* constants */
-const { confirm } = Modal;
 const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 3, xs: 3 };
-const nameSpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 10, xs: 10 };
-const phoneSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
-const emailSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const roleSpan = { xxl: 8, xl: 7, lg: 6, md: 0, sm: 0, xs: 0 };
-const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 
 /**
  * @function
- * @name FocalPeopleListItem
- * @description Single focal person list item component.
- * Render single focal person details
+ * @name ListItem
+ * @description Generic list item for list component
  *
- * @returns {object} React component
+ *
+ * @returns {object} React Component
  * @version 0.1.0
  * @since 0.1.0
  */
-const FocalPeopleListItem = ({
+const ListItem = ({
   item,
   isSelected,
   onSelectItem,
   onDeselectItem,
-  onArchive,
-  onEdit,
-  onShare,
+  renderActions,
+  children,
 }) => {
   const [isHovered, setHovered] = useState(false);
   const avatarBackground = randomColor();
@@ -79,26 +71,6 @@ const FocalPeopleListItem = ({
     }
   };
 
-  /**
-   * @function
-   * @name showArchiveConfirm
-   * @description show confirm modal before archiving a focal person
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  const showArchiveConfirm = () => {
-    confirm({
-      title: `Are you sure you want to archive ${item.name} ?`,
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
-      onOk() {
-        onArchive();
-      },
-    });
-  };
-
   const renderSideComponent = () => {
     if (isSelected) {
       return (
@@ -125,55 +97,24 @@ const FocalPeopleListItem = ({
 
   return (
     <div
-      className="FocalPeopleListItem"
+      className="ListItem"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <Row>
         {/* eslint-disable react/jsx-props-no-spreading */}
         <Col {...sideSpan}>{renderSideComponent()}</Col>
-        <Col {...nameSpan}>{item.name}</Col>
-        <Col
-          {...roleSpan}
-          title={item.role ? item.role.strings.name.en : 'N/A'}
-        >
-          {item.role
-            ? `${item.role.strings.name.en}, ${
-                item.party ? item.party.abbreviation : 'N/A'
-              }`
-            : 'N/A'}
-        </Col>
-        <Col {...phoneSpan}>{item.mobile}</Col>
-        <Col {...emailSpan}>{item.email}</Col>
-        <Col {...areaSpan}>{item.area ? item.area.strings.name.en : 'N/A'}</Col>
+        {children}
         <Col {...isHoveredSpan}>
           {/* eslint-enable react/jsx-props-no-spreading */}
-          {isHovered && (
-            <ListItemActions
-              edit={{
-                name: 'Edit Focal Person',
-                title: 'Update Focal Person Details',
-                onClick: onEdit,
-              }}
-              share={{
-                name: 'Share Focal Person',
-                title: 'Share Focal Person details with others',
-                onClick: onShare,
-              }}
-              archive={{
-                name: 'Archive Focal Person',
-                title: 'Remove Focal Person from list of active focal People',
-                onClick: showArchiveConfirm,
-              }}
-            />
-          )}
+          {isHovered && renderActions()}
         </Col>
       </Row>
     </div>
   );
 };
 
-FocalPeopleListItem.propTypes = {
+ListItem.propTypes = {
   item: PropTypes.shape({
     location: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
@@ -186,10 +127,11 @@ FocalPeopleListItem.propTypes = {
       abbreviation: PropTypes.string,
     }),
   }).isRequired,
+  children: PropTypes.node.isRequired,
   abbreviation: PropTypes.string.isRequired,
   agency: PropTypes.string.isRequired,
   agencyAbbreviation: PropTypes.string.isRequired,
-
+  renderActions: PropTypes.string.isRequired,
   onArchive: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
@@ -198,4 +140,4 @@ FocalPeopleListItem.propTypes = {
   onShare: PropTypes.func.isRequired,
 };
 
-export default FocalPeopleListItem;
+export default ListItem;

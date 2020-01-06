@@ -1,4 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
+import isArray from 'lodash/isArray';
 import {
   closeFocalPersonForm,
   Connect,
@@ -8,16 +9,18 @@ import {
   selectFocalPerson,
   refreshFocalPeople,
   paginateFocalPeople,
+  deleteFocalPerson,
 } from '@codetanzania/ewea-api-states';
-import { Modal } from 'antd';
+import { Modal, Col } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import NotificationForm from '../../../components/NotificationForm';
 import Topbar from '../../../components/Topbar';
 import FocalPersonFilters from './Filters';
 import FocalPersonForm from './Form';
-import FocalPersonsListItem from './ListItem';
 import ItemList from '../../../components/List';
+import ListItem from '../../../components/ListItem';
+import ListItemActions from '../../../components/ListItemActions';
 import { notifyError, notifySuccess } from '../../../util';
 import './styles.css';
 
@@ -29,6 +32,7 @@ const {
   getRoles,
   getAgencies,
 } = httpActions;
+const { confirm } = Modal;
 
 const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
 const phoneSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
@@ -181,40 +185,29 @@ class FocalPeople extends Component {
    * @name handleShare
    * @description Handle share single focalPerson action
    *
-   * @param {object} focalPerson focalPerson to be shared
+   * @param {object| object[]} focalPeople focalPerson to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = focalPerson => {
-    const message = `${focalPerson.name}\nMobile: ${
-      // eslint-disable-line
-      focalPerson.mobile
-    }\nEmail: ${focalPerson.email}`;
+  handleShare = focalPeople => {
+    let message = '';
+    if (isArray(focalPeople)) {
+      const focalPeopleList = focalPeople.map(
+        focalPerson =>
+          `Name: ${focalPerson.name}\nMobile: ${
+            // eslint-disable-line
+            focalPerson.mobile
+          }\nEmail: ${focalPerson.email}`
+      );
 
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name handleBulkShare
-   * @description Handle share multiple focal People
-   *
-   * @param {object[]} focalPeople focal People list to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleBulkShare = focalPeople => {
-    const focalPersonList = focalPeople.map(
-      focalPerson =>
-        `${focalPerson.name}\nMobile: ${focalPerson.mobile}\nEmail: ${
-          // eslint-disable-line
-          focalPerson.email
-        }`
-    );
-
-    const message = focalPersonList.join('\n\n\n');
+      message = focalPeopleList.join('\n\n\n');
+    } else {
+      message = `Name: ${focalPeople.name}\nMobile: ${
+        // eslint-disable-line
+        focalPeople.mobile
+      }\nEmail: ${focalPeople.email}`;
+    }
 
     this.setState({ notificationBody: message, showNotificationForm: true });
   };
@@ -272,6 +265,55 @@ class FocalPeople extends Component {
     this.setState({ notificationBody: undefined });
   };
 
+  /**
+   * @function
+   * @name handleRefreshFocalPeople
+   * @description Handle list refresh action
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleRefreshFocalPeople = () => {
+    refreshFocalPeople(
+      () => {
+        notifySuccess('Focal People refreshed successfully');
+      },
+      () => {
+        notifyError(
+          'An Error occurred while refreshing Focal People please contact system administrator'
+        );
+      }
+    );
+  };
+
+  /**
+   * @function
+   * @name showArchiveConfirm
+   * @description show confirm modal before archiving a focal person
+   * @param {object} item Resource item to be archived
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  showArchiveConfirm = item => {
+    confirm({
+      title: `Are you sure you want to archive this record ?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteFocalPerson(
+          item._id, // eslint-disable-line
+          () => notifySuccess('Focal Person was archived successfully'),
+          () =>
+            notifyError(
+              'An error occured while archiving Focal Person, Please contact your system Administrator'
+            )
+        );
+      },
+    });
+  };
+
   render() {
     const {
       focalPeople,
@@ -320,22 +362,10 @@ class FocalPeople extends Component {
           page={page}
           itemCount={total}
           loading={loading}
-          onEdit={this.handleEdit}
           onFilter={this.openFiltersModal}
           onNotify={this.openNotificationForm}
-          onShare={this.handleBulkShare}
-          onRefresh={() =>
-            refreshFocalPeople(
-              () => {
-                notifySuccess('Focal People refreshed successfully');
-              },
-              () => {
-                notifyError(
-                  'An Error occurred while refreshing Focal People please contact system administrator'
-                );
-              }
-            )
-          }
+          onShare={this.handleShare}
+          onRefresh={this.handleRefreshFocalPeople}
           onPaginate={nextPage => paginateFocalPeople(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
@@ -343,21 +373,53 @@ class FocalPeople extends Component {
             isSelected,
             onSelectItem,
             onDeselectItem,
-            onEdit,
-            onShare,
           }) => (
-            <FocalPersonsListItem
+            <ListItem
               key={item._id} // eslint-disable-line
               item={item}
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              onEdit={onEdit}
-              onArchive={() => {}}
-              onShare={() => {
-                onShare(item);
-              }}
-            />
+              renderActions={() => (
+                <ListItemActions
+                  edit={{
+                    name: 'Edit Focal Person',
+                    title: 'Update Focal Person Details',
+                    onClick: () => this.handleEdit(item),
+                  }}
+                  share={{
+                    name: 'Share Focal Person',
+                    title: 'Share Focal Person details with others',
+                    onClick: () => this.handleShare(item),
+                  }}
+                  archive={{
+                    name: 'Archive Focal Person',
+                    title:
+                      'Remove Focal Person from list of active focal People',
+                    onClick: () => this.showArchiveConfirm(item),
+                  }}
+                />
+              )}
+            >
+              {/* eslint-disable react/jsx-props-no-spreading */}
+              <Col {...nameSpan}>{item.name}</Col>
+              <Col
+                {...roleSpan}
+                title={item.role ? item.role.strings.name.en : 'N/A'}
+              >
+                {item.role
+                  ? `${item.role.strings.name.en}, ${
+                      item.party ? item.party.abbreviation : 'N/A'
+                    }`
+                  : 'N/A'}
+              </Col>
+              <Col {...phoneSpan}>{item.mobile}</Col>
+              <Col {...emailSpan}>{item.email}</Col>
+              <Col {...areaSpan}>
+                {item.area ? item.area.strings.name.en : 'N/A'}
+              </Col>
+              {/* eslint-enable react/jsx-props-no-spreading */}
+            </ListItem>
           )}
         />
         {/* end list */}
