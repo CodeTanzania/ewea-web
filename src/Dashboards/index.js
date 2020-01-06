@@ -102,7 +102,6 @@ const OverviewDashboard = () => {
    * @since 0.1.0
    */
   const handleZoomOut = () => {
-    console.log('inside handle zoom out');
     if (zoom <= 0.25) return;
     setZoom(zoom / 2);
   };

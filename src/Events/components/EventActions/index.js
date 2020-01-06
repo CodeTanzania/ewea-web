@@ -1,70 +1,61 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import {
-  closeFocalPersonForm,
+  closeEventActionForm,
   Connect,
-  getFocalPeople,
-  openFocalPersonForm,
-  searchFocalPeople,
-  selectFocalPerson,
-  refreshFocalPeople,
-  paginateFocalPeople,
+  getEventActions,
+  openEventActionForm,
+  searchEventActions,
+  selectEventAction,
+  refreshEventActions,
+  paginateEventActions,
 } from '@codetanzania/ewea-api-states';
 import { Modal } from 'antd';
+import isArray from 'lodash/isArray';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import NotificationForm from '../../../components/NotificationForm';
 import Topbar from '../../../components/Topbar';
-import FocalPersonFilters from './Filters';
-import FocalPersonForm from './Form';
-import FocalPersonsListItem from './ListItem';
+import EventActionFilters from './Filters';
+import EventActionForm from './Form';
+import EventActionsListItem from './ListItem';
 import ItemList from '../../../components/List';
 import { notifyError, notifySuccess } from '../../../util';
 import './styles.css';
 
 /* constants */
 const {
-  getFocalPeople: getFocalPeopleFromAPI,
+  getEventActions: getEventActionsFromAPI,
   getJurisdictions,
   getPartyGroups,
   getRoles,
   getAgencies,
 } = httpActions;
 
-const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
-const phoneSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
-const emailSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const roleSpan = { xxl: 8, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
-const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const nameSpan = { xxl: 22, xl: 22, lg: 22, md: 21, sm: 19, xs: 19 };
 
-const headerLayout = [
-  { ...nameSpan, header: 'Name' },
-  { ...roleSpan, header: 'Title & Organization' },
-  { ...phoneSpan, header: 'Phone Number' },
-  { ...emailSpan, header: 'Email' },
-  { ...areaSpan, header: 'Area' },
-];
+const headerLayout = [{ ...nameSpan, header: 'Name' }];
 
 /**
  * @class
- * @name FocalPeople
- * @description Render focalPerson list which have search box, actions and focalPerson list
+ * @name EventActions
+ * @description Render eventAction list which have search box, actions and eventAction list
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class FocalPeople extends Component {
+class EventActions extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     showFilters: false,
     isEditForm: false,
     showNotificationForm: false,
-    selectedFocalPeople: [],
+    selectedEventActions: [],
     notificationBody: undefined,
     cached: null,
   };
 
   componentDidMount() {
-    getFocalPeople();
+    getEventActions();
   }
 
   /**
@@ -123,41 +114,41 @@ class FocalPeople extends Component {
 
   /**
    * @function
-   * @name openFocalPersonForm
-   * @description Open focalPerson form
+   * @name openEventActionForm
+   * @description Open eventAction form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openFocalPersonForm = () => {
-    openFocalPersonForm();
+  openEventActionForm = () => {
+    openEventActionForm();
   };
 
   /**
    * @function
-   * @name openFocalPersonForm
-   * @description close focalPerson form
+   * @name openEventActionForm
+   * @description close eventAction form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeFocalPersonForm = () => {
-    closeFocalPersonForm();
+  closeEventActionForm = () => {
+    closeEventActionForm();
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
-   * @name searchFocalPeople
-   * @description Search FocalPeople List based on supplied filter word
+   * @name searchEventActions
+   * @description Search EventActions List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchFocalPeople = event => {
-    searchFocalPeople(event.target.value);
+  searchEventActions = event => {
+    searchEventActions(event.target.value);
   };
 
   /**
@@ -165,81 +156,53 @@ class FocalPeople extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} focalPerson focalPerson to be edited
+   * @param {object} eventAction eventAction to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = focalPerson => {
-    selectFocalPerson(focalPerson);
+  handleEdit = eventAction => {
+    selectEventAction(eventAction);
     this.setState({ isEditForm: true });
-    openFocalPersonForm();
+    openEventActionForm();
   };
 
   /**
    * @function
    * @name handleShare
-   * @description Handle share single focalPerson action
+   * @description Handle share multiple event Actions
    *
-   * @param {object} focalPerson focalPerson to be shared
+   * @param {object[]| object} eventActions event Actions list to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = focalPerson => {
-    const message = `${focalPerson.name}\nMobile: ${
-      // eslint-disable-line
-      focalPerson.mobile
-    }\nEmail: ${focalPerson.email}`;
+  handleShare = eventActions => {
+    let message = '';
+    if (isArray(eventActions)) {
+      const eventActionList = eventActions.map(
+        eventAction =>
+          `Name: ${eventAction.strings.name.en}\nDescription: ${
+            // eslint-disable-line
+            eventAction.strings.description.en
+          }\n`
+      );
+
+      message = eventActionList.join('\n\n\n');
+    } else {
+      message = `Name: ${eventActions.strings.name.en}\nDescription: ${
+        // eslint-disable-line
+        eventActions.strings.description.en
+      }\n`;
+    }
 
     this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name handleBulkShare
-   * @description Handle share multiple focal People
-   *
-   * @param {object[]} focalPeople focal People list to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleBulkShare = focalPeople => {
-    const focalPersonList = focalPeople.map(
-      focalPerson =>
-        `${focalPerson.name}\nMobile: ${focalPerson.mobile}\nEmail: ${
-          // eslint-disable-line
-          focalPerson.email
-        }`
-    );
-
-    const message = focalPersonList.join('\n\n\n');
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name openNotificationForm
-   * @description Handle on notify focalPeople
-   *
-   * @param {object[]} focalPeople List of focalPeople selected to be notified
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  openNotificationForm = focalPeople => {
-    this.setState({
-      selectedFocalPeople: focalPeople,
-      showNotificationForm: true,
-    });
   };
 
   /**
    * @function
    * @name closeNotificationForm
-   * @description Handle on notify focalPeople
+   * @description Handle on notify eventActions
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -274,8 +237,8 @@ class FocalPeople extends Component {
 
   render() {
     const {
-      focalPeople,
-      focalPerson,
+      eventActions,
+      eventAction,
       loading,
       posting,
       page,
@@ -287,7 +250,7 @@ class FocalPeople extends Component {
       showFilters,
       isEditForm,
       showNotificationForm,
-      selectedFocalPeople,
+      selectedEventActions,
       notificationBody,
       cached,
     } = this.state;
@@ -297,17 +260,17 @@ class FocalPeople extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for focal people here ...',
-            onChange: this.searchFocalPeople,
+            placeholder: 'Search for event actions here ...',
+            onChange: this.searchEventActions,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Focal Person',
+              label: 'New Event Action',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Focal Person',
-              onClick: this.openFocalPersonForm,
+              title: 'Add New Event Action',
+              onClick: this.openEventActionForm,
             },
           ]}
         />
@@ -315,28 +278,27 @@ class FocalPeople extends Component {
 
         {/* list starts */}
         <ItemList
-          itemName="focal People"
-          items={focalPeople}
+          itemName="event Actions"
+          items={eventActions}
           page={page}
           itemCount={total}
           loading={loading}
           onEdit={this.handleEdit}
-          onFilter={this.openFiltersModal}
-          onNotify={this.openNotificationForm}
-          onShare={this.handleBulkShare}
+          // onFilter={this.openFiltersModal}
+          onShare={this.handleShare}
           onRefresh={() =>
-            refreshFocalPeople(
+            refreshEventActions(
               () => {
-                notifySuccess('Focal People refreshed successfully');
+                notifySuccess('Event Actions refreshed successfully');
               },
               () => {
                 notifyError(
-                  'An Error occurred while refreshing Focal People please contact system administrator'
+                  'An Error occurred while refreshing Event Actions please contact system administrator'
                 );
               }
             )
           }
-          onPaginate={nextPage => paginateFocalPeople(nextPage)}
+          onPaginate={nextPage => paginateEventActions(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
             item,
@@ -346,7 +308,7 @@ class FocalPeople extends Component {
             onEdit,
             onShare,
           }) => (
-            <FocalPersonsListItem
+            <EventActionsListItem
               key={item._id} // eslint-disable-line
               item={item}
               isSelected={isSelected}
@@ -364,7 +326,7 @@ class FocalPeople extends Component {
 
         {/* filter modal */}
         <Modal
-          title="Filter Focal People"
+          title="Filter Event Actions"
           visible={showFilters}
           onCancel={this.closeFiltersModal}
           footer={null}
@@ -372,7 +334,7 @@ class FocalPeople extends Component {
           maskClosable={false}
           className="FormModal"
         >
-          <FocalPersonFilters
+          <EventActionFilters
             onCancel={this.closeFiltersModal}
             cached={cached}
             onCache={this.handleOnCachedValues}
@@ -383,7 +345,7 @@ class FocalPeople extends Component {
 
         {/* Notification Modal modal */}
         <Modal
-          title="Notify Focal People"
+          title="Notify Event Actions"
           visible={showNotificationForm}
           onCancel={this.closeNotificationForm}
           footer={null}
@@ -393,8 +355,8 @@ class FocalPeople extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={selectedFocalPeople}
-            onSearchRecipients={getFocalPeopleFromAPI}
+            recipients={selectedEventActions}
+            onSearchRecipients={getEventActionsFromAPI}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
@@ -407,20 +369,20 @@ class FocalPeople extends Component {
 
         {/* create/edit form modal */}
         <Modal
-          title={isEditForm ? 'Edit Focal Person' : 'Add New Focal Person'}
+          title={isEditForm ? 'Edit Event Action' : 'Add New Event Action'}
           visible={showForm}
           className="FormModal"
           footer={null}
-          onCancel={this.closeFocalPersonForm}
+          onCancel={this.closeEventActionForm}
           destroyOnClose
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <FocalPersonForm
+          <EventActionForm
             posting={posting}
             isEditForm={isEditForm}
-            focalPerson={focalPerson}
-            onCancel={this.closeFocalPersonForm}
+            eventAction={eventAction}
+            onCancel={this.closeEventActionForm}
           />
         </Modal>
         {/* end create/edit form modal */}
@@ -429,30 +391,30 @@ class FocalPeople extends Component {
   }
 }
 
-FocalPeople.propTypes = {
+EventActions.propTypes = {
   loading: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
-  focalPeople: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+  eventActions: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
-  focalPerson: PropTypes.shape({ name: PropTypes.string }),
+  eventAction: PropTypes.shape({ name: PropTypes.string }),
   page: PropTypes.number.isRequired,
   showForm: PropTypes.bool.isRequired,
   searchQuery: PropTypes.string,
   total: PropTypes.number.isRequired,
 };
 
-FocalPeople.defaultProps = {
-  focalPerson: null,
+EventActions.defaultProps = {
+  eventAction: null,
   searchQuery: undefined,
 };
 
-export default Connect(FocalPeople, {
-  focalPeople: 'focalPeople.list',
-  focalPerson: 'focalPeople.selected',
-  loading: 'focalPeople.loading',
-  posting: 'focalPeople.posting',
-  page: 'focalPeople.page',
-  showForm: 'focalPeople.showForm',
-  total: 'focalPeople.total',
-  searchQuery: 'focalPeople.q',
+export default Connect(EventActions, {
+  eventActions: 'eventActions.list',
+  eventAction: 'eventActions.selected',
+  loading: 'eventActions.loading',
+  posting: 'eventActions.posting',
+  page: 'eventActions.page',
+  showForm: 'eventActions.showForm',
+  total: 'eventActions.total',
+  searchQuery: 'eventActions.q',
 });

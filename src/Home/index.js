@@ -1,10 +1,10 @@
 import React from 'react';
 import dashboardIcon from '../assets/icons/dashboards.svg';
-import notificationIcon from '../assets/icons/stakeholders/notifications.svg';
+import settingsIcon from '../assets/icons/alerts/servicerequest.svg';
+import eventActionsIcon from '../assets/icons/emergencyplans/planner.svg';
 import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures.svg';
 import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
 import contactsIcon from '../assets/icons/stakeholders/contacts.svg';
-import rolesIcon from '../assets/icons/stakeholders/roles.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import functionIcon from '../assets/icons/emergencyplans.svg';
 import modules from '../modules.json';
@@ -22,13 +22,19 @@ const routes = [
     description: modules.alertsIssued,
   },
   {
+    name: 'Events Actions',
+    path: '/app/eventactions',
+    icon: eventActionsIcon,
+    description: modules.eventActions,
+  },
+  {
     name: 'Actions Taken',
     path: '/app/actions',
     icon: actionsIcon,
     description: modules.alertsActions,
   },
   {
-    name: 'EmergencyFunctions',
+    name: 'Emergency Functions',
     path: '/app/functions',
     icon: functionIcon,
   },
@@ -51,20 +57,20 @@ const routes = [
     description: modules.stakeholdersAgencies,
   },
   {
-    name: 'Roles',
-    path: '/app/roles',
-    icon: rolesIcon,
-    description: modules.stakeholdersRoles,
+    name: 'Critical facilities',
+    path: '/app/features',
+    icon: geographicalFeaturesIcon,
+    description: modules.geographicalFeaturesIcon,
   },
   {
-    name: 'Event Types',
-    path: '/app/eventtypes',
+    name: 'Geographical Features',
+    path: '/app/geographicalfeatures',
     icon: alertIcon,
-    description: modules.alerts,
+    description: modules.eventGroups,
   },
   {
     name: 'Administrative Areas',
-    path: '/app/administrativeareas',
+    path: '/app/administrativeAreas',
     icon: geographicalFeaturesIcon,
     description: modules.administrativeareas,
   },
@@ -75,9 +81,9 @@ const routes = [
     description: modules.dashboards,
   },
   {
-    name: 'Notification Templates',
-    path: '/app/notificationtemplates',
-    icon: notificationIcon,
+    name: 'Settings',
+    path: '/app/settings',
+    icon: settingsIcon,
     description: modules.notificationTemplate,
   },
 ];
