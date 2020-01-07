@@ -1,23 +1,19 @@
-.card-widget {
-  height: calc((100vh - 64px) / 6);
-}
-
 .map-widget {
-  height: calc((100vh - 70px) - (100vh - 64px) / 6);
+  /* height: calc(100vh - (70px + ((100vh - 64px) / 6))); */
+  height: calc(100vh - (71px + (100vh - 64px) / 6));
   background-color: #fafafa;
+  width: 100%;
 }
 
 .ZoomControl {
-  display: flex;
-  flex-direction: column;
   position: absolute;
   z-index: 10000;
-  /*pointer-events: none;*/
-  top: 0;
-  left: 0;
-  margin: 10px 0 0 10px;
+  top: 10px;
+  left: 10px;
 }
 
 .ZoomControl button {
-  font-size: 1.6em;
+  display: block;
+  height: 50px;
+  margin: 5px;
 }

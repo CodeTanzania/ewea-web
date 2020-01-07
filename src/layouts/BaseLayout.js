@@ -3,44 +3,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, Switch } from 'react-router-dom';
 import UserMenu from './components/UserMenu';
-// import Alerts from '../Alerts';
-// import ActionCatalog from '../Alerts/components/ActionCatalog';
-// import IssuedAlerts from '../Alerts/components/IssuedAlerts';
-// import AlertsFeedback from '../Alerts/layouts/Feedback';
-// import AlertsFeeds from '../Alerts/layouts/Feeds';
-// import AlertsServiceRequests from '../Alerts/layouts/ServiceRequests';
-// import AlertsSources from '../Alerts/components/AlertSources';
-import Events from '../Events/components/Events';
-import EventActions from '../Events/components/EventActions';
+
+import EventActions from '../Events/EventActions';
 import PageNotFound from '../components/UIState/PageNotFound';
-// import GeographicalFeatures from '../GeographicalFeatures';
-// import AdministrativeAreas from '../GeographicalFeatures/components/AdministrativeAreas';
-// import Districts from '../GeographicalFeatures/components/Districts';
-// import EvacuationCenters from '../GeographicalFeatures/components/EvacuationCenters';
-// import GeographicalFeaturesFacilities from '../GeographicalFeatures/components/Facilities';
-// import GeographicalFeaturesInfrastructure from '../GeographicalFeatures/components/Infrastructure';
-// import Regions from '../GeographicalFeatures/components/Regions';
-// import SubWards from '../GeographicalFeatures/layouts/SubWards';
-// import GeographicalFeaturesWarehouses from '../GeographicalFeatures/components/Warehouses';
 import Home from '../Home';
-import Stakeholders from '../Stakeholders';
-import AdministrativeAreas from '../GeographicalFeatures/components/AdministrativeAreas';
-import StakeholdersAgencies from '../Stakeholders/components/Agencies';
-import StakeholdersFocalPeople from '../Stakeholders/components/FocalPeople';
-import NotificationTemplates from '../Stakeholders/components/NotificationTemplates';
-import EventTypes from '../Events/components/EventTypes';
-import EventSeverity from '../Events/components/EventSeverity';
-import EventCertainty from '../Events/components/EventCertainty';
-import EventGroups from '../Events/components/EventGroups';
-// import StakeholdersNotifications from '../Stakeholders/components/Notifications';
-import StakeholdersRoles from '../Stakeholders/components/Roles';
-import EmergencyFunctions from '../Functions/components/EmergencyFunctions';
+import AdministrativeAreas from '../GeographicalFeatures/AdministrativeAreas';
+import StakeholdersAgencies from '../Stakeholders/Agencies';
+import StakeholdersFocalPeople from '../Stakeholders/FocalPeople';
+import NotificationTemplates from '../Stakeholders/NotificationTemplates';
+import Events from '../Events/Events';
+import EventFunctions from '../Events/EventFunctions';
+import EventTypes from '../Events/ActionCatalog/EventTypes';
+import EventSeverity from '../Events/EventSeverity';
+import EventCertainty from '../Events/EventCertainty';
+import EventGroups from '../Events/EventGroups';
+import Features from '../GeographicalFeatures/CriticalFacilities';
+// import StakeholdersNotifications from '../Stakeholders/Notifications';
+import StakeholdersRoles from '../Stakeholders/Roles';
 import OverviewDashboard from '../Dashboards';
 import Settings from '../Settings';
 import ActionsTaken from '../Dashboards/ActionsTaken';
 import SecureRoute from '../Auth/SecureRoute';
 import HeaderNavMenu from './components/HeaderNavMenu';
-import Features from '../Features/components/CriticalFacilities';
+
 import './styles.css';
 
 /* constants */
@@ -144,8 +129,8 @@ const breadcrumbNameMap = {
   /* Dashboards */
 
   '/app/overview': {
-    name: 'Overview Dashboard',
-    title: 'Overview Dashboard',
+    name: 'Alert Dashboard',
+    title: 'Alert Dashboard',
   },
   /* settings */
   '/app/settings/roles': {
@@ -259,62 +244,9 @@ const BaseLayout = props => {
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
           <SecureRoute path={`${baseUrl}/events`} component={Events} />
-
-          {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
-          <SecureRoute
-            exact
-            path={`${baseUrl}/eventtypes`}
-            component={EventTypes}
-          />
-        
-          <SecureRoute
-            path={`${baseUrl}/actioncatalog`}
-            component={ActionCatalog}
-          />
-          <SecureRoute
-            path={`${baseUrl}/alerts/feeds`}
-            component={AlertsFeeds}
-          />
-          <SecureRoute
-            path={`${baseUrl}/alerts/feedback`}
-            component={AlertsFeedback}
-          />
-          {/* <SecureRoute
-            path={`${baseUrl}/stakeholders/notifications`}
-            component={StakeholdersNotifications}
-          /> */}
-
-          {/* <SecureRoute exact path={`${baseUrl}/alerts`} component={Alerts} />
-          <SecureRoute
-            exact
-            path={`${baseUrl}/eventtypes`}
-            component={EventTypes}
-          />
-
-          <SecureRoute
-            path={`${baseUrl}/actioncatalog`}
-            component={ActionCatalog}
-          />
-          <SecureRoute
-            path={`${baseUrl}/alerts/feeds`}
-            component={AlertsFeeds}
-          />
-          <SecureRoute
-            path={`${baseUrl}/alerts/feedback`}
-            component={AlertsFeedback}
-          />
-       <SecureRoute
-            path={`${baseUrl}/stakeholders/notifications`}
-            component={StakeholdersNotifications}
-          /> */}
           <SecureRoute
             path={`${baseUrl}/eventactions`}
             component={EventActions}
-          />
-          <SecureRoute
-            exact
-            path={`${baseUrl}/stakeholders`}
-            component={Stakeholders}
           />
           <SecureRoute
             path={`${baseUrl}/administrativeareas`}
@@ -323,7 +255,7 @@ const BaseLayout = props => {
           <SecureRoute path={`${baseUrl}/features`} component={Features} />
           <SecureRoute
             path={`${baseUrl}/functions`}
-            component={EmergencyFunctions}
+            component={EventFunctions}
           />
           <SecureRoute
             path={`${baseUrl}/focalpeople`}
