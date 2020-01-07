@@ -2,11 +2,11 @@ import { Breadcrumb, Button, Col, Layout, Popover, Row } from 'antd';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, Switch } from 'react-router-dom';
-import UserMenu from './components/UserMenu';
+import UserMenu from '../navigation/UserMenu';
 
 import EventActions from '../Events/EventActions';
 import PageNotFound from '../components/UIState/PageNotFound';
-import Home from '../Home';
+import Home from '../navigation/Home';
 import AdministrativeAreas from '../GeographicalFeatures/AdministrativeAreas';
 import StakeholdersAgencies from '../Stakeholders/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/FocalPeople';
@@ -21,10 +21,10 @@ import Features from '../GeographicalFeatures/CriticalFacilities';
 // import StakeholdersNotifications from '../Stakeholders/Notifications';
 import StakeholdersRoles from '../Stakeholders/Roles';
 import OverviewDashboard from '../Dashboards';
-import Settings from '../Settings';
+import Settings from '../navigation/Settings';
 import ActionsTaken from '../Dashboards/ActionsTaken';
 import SecureRoute from '../Auth/SecureRoute';
-import HeaderNavMenu from './components/HeaderNavMenu';
+import HeaderNavMenu from '../navigation/HeaderNavMenu';
 
 import './styles.css';
 
