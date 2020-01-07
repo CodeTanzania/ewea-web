@@ -118,3 +118,23 @@ export const getRGBAColor = (baseColor, alpha) => {
 
   return `rgba(${r},${g},${b},${alpha})`;
 };
+
+/**
+ * @function
+ * @name truncateString
+ * @description truncates string
+ * @param {string} str  string to truncate
+ * @param {number} num number of characters to not exceed
+ * @returns {string} truncated string
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const truncateString = (str, num) => {
+  // If the length of str is less than or equal to num
+  // just return str--don't truncate it.
+  if (str.length <= num) {
+    return str;
+  }
+  // Return str truncated with '...' concatenated to the end of str.
+  return `${str.slice(0, num)}...`;
+};

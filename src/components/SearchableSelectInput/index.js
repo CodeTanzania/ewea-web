@@ -1,5 +1,6 @@
 import { Select, Spin } from 'antd';
 import isArray from 'lodash/isArray';
+import uniqBy from 'lodash/uniqBy';
 import isEmpty from 'lodash/isEmpty';
 import isFunction from 'lodash/isFunction';
 import filter from 'lodash/filter';
@@ -17,43 +18,7 @@ const { Option } = Select;
  * @version 0.1.0
  * @since 0.1.0
  */
-export default class SearchableSelectInput extends Component {
-  static propTypes = {
-    onChange: PropTypes.func,
-    onSearch: PropTypes.func.isRequired,
-    optionLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.func])
-      .isRequired,
-    optionValue: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-      PropTypes.func,
-    ]).isRequired,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-      PropTypes.func,
-    ]),
-    initialValue: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.array,
-      PropTypes.number,
-      PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-      }),
-    ]),
-    isFilter: PropTypes.bool,
-    onCache: PropTypes.func,
-  };
-
-  static defaultProps = {
-    onChange: null,
-    value: undefined,
-    initialValue: undefined,
-    isFilter: false,
-    onCache: null,
-  };
-
+class SearchableSelectInput extends Component {
   constructor(props) {
     super(props);
     const { initialValue } = props;
@@ -62,16 +27,19 @@ export default class SearchableSelectInput extends Component {
       this.state = {
         data: [...initialValue],
         loading: false,
+        cached: [],
       };
     } else if (!isEmpty(initialValue)) {
       this.state = {
         data: [initialValue],
         loading: false,
+        cached: [],
       };
     } else {
       this.state = {
         data: [],
         loading: false,
+        cached: [],
       };
     }
   }
@@ -105,14 +73,16 @@ export default class SearchableSelectInput extends Component {
    */
   handleChange = value => {
     const { onChange, onCache } = this.props;
-    const { data } = this.state;
+    const { data, cached } = this.state;
     this.setState({
       value,
     });
 
     if (isFunction(onCache)) {
       const state = filter(data, entry => value.includes(entry._id)); // eslint-disable-line
-      onCache(state);
+      const cachedValues = uniqBy([...cached, ...state], '_id');
+      onCache(cachedValues);
+      this.setState({ cached: cachedValues });
     }
 
     onChange(value);
@@ -178,6 +148,7 @@ export default class SearchableSelectInput extends Component {
     if (isFilter) {
       return (
         <Select
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...otherProps}
           showSearch
           mode="multiple"
@@ -198,6 +169,7 @@ export default class SearchableSelectInput extends Component {
 
     return (
       <Select
+        // eslint-disable-next-line react/jsx-props-no-spreading
         {...otherProps}
         showSearch
         onSearch={this.handleSearch}
@@ -212,3 +184,41 @@ export default class SearchableSelectInput extends Component {
     );
   }
 }
+
+SearchableSelectInput.propTypes = {
+  onChange: PropTypes.func,
+  onSearch: PropTypes.func.isRequired,
+  optionLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.func])
+    .isRequired,
+  optionValue: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.func,
+  ]).isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.func,
+  ]),
+  initialValue: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+    PropTypes.number,
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    }),
+  ]),
+  isFilter: PropTypes.bool,
+  onCache: PropTypes.func,
+};
+
+SearchableSelectInput.defaultProps = {
+  onChange: null,
+  value: undefined,
+  initialValue: undefined,
+  isFilter: false,
+  onCache: null,
+};
+
+export default SearchableSelectInput;
