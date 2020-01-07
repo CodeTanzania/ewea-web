@@ -2,15 +2,15 @@ import { Col, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import alertIcon from '../../assets/icons/alerts.svg';
-import dashboardIcon from '../../assets/icons/dashboards.svg';
-import geographicalFeaturesIcon from '../../assets/icons/geographicalfeatures.svg';
-import agenciesIcon from '../../assets/icons/stakeholders/agency.svg';
-import contactsIcon from '../../assets/icons/stakeholders/contacts.svg';
-import rolesIcon from '../../assets/icons/stakeholders/roles.svg';
-import issuedAlertsIcon from '../../assets/icons/alerts/issuedalerts.svg';
-import actionsIcon from '../../assets/icons/alerts/actions.svg';
-import actionCatalogIcon from '../../assets/icons/alerts/actioncatalog.svg';
+import alertIcon from '../assets/icons/alerts.svg';
+import dashboardIcon from '../assets/icons/dashboards.svg';
+import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures.svg';
+import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
+import contactsIcon from '../assets/icons/stakeholders/contacts.svg';
+import rolesIcon from '../assets/icons/stakeholders/roles.svg';
+import issuedAlertsIcon from '../assets/icons/alerts/issuedalerts.svg';
+import actionsIcon from '../assets/icons/alerts/actions.svg';
+import actionCatalogIcon from '../assets/icons/alerts/actioncatalog.svg';
 import './styles.css';
 
 /* constants */

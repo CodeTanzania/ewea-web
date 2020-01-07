@@ -3,7 +3,7 @@ import { signout } from '@codetanzania/ewea-api-states';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
-import ChangePasswordForm from '../../../Auth/components/ChangePassword';
+import ChangePasswordForm from '../Auth/components/ChangePassword';
 import './styles.css';
 
 class UserMenu extends React.Component {

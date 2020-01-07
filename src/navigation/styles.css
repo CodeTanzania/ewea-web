@@ -20,9 +20,14 @@
   display: block;
   text-align: center;
   text-transform: uppercase;
-  color: #1B98D1
+  color: #1b98d1;
 }
 
 .ModuleNavMenu .NavItem .text-disabled {
-  color: #A0B0B8;
+  color: #a0b0b8;
+}
+
+.UserButton {
+  margin-left: 8px;
+  border-radius: 50%;
 }
