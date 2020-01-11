@@ -19,6 +19,18 @@ class BaseMap extends Component {
 
   componentDidMount() {
     const map = this.reactMap.getMap();
+    const geometry = {
+      type: 'Polygon',
+      coordinates: [
+        [
+          [39.26539421081543, -6.828005683086681],
+          [39.28436279296875, -6.828005683086681],
+          [39.28436279296875, -6.811216667493757],
+          [39.26539421081543, -6.811216667493757],
+          [39.26539421081543, -6.828005683086681],
+        ],
+      ],
+    };
     map.on('load', function() {
       map.addLayer({
         id: 'maine',
@@ -26,25 +38,9 @@ class BaseMap extends Component {
         source: {
           type: 'geojson',
           data: {
-            type: 'FeatureCollection',
-            features: [
-              {
-                type: 'Feature',
-                properties: {},
-                geometry: {
-                  type: 'Polygon',
-                  coordinates: [
-                    [
-                      [39.26539421081543, -6.828005683086681],
-                      [39.28436279296875, -6.828005683086681],
-                      [39.28436279296875, -6.811216667493757],
-                      [39.26539421081543, -6.811216667493757],
-                      [39.26539421081543, -6.828005683086681],
-                    ],
-                  ],
-                },
-              },
-            ],
+            type: 'Feature',
+            properties: {},
+            geometry,
           },
         },
         layout: {},

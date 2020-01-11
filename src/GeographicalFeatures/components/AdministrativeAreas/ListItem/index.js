@@ -1,4 +1,5 @@
 import { Avatar, Checkbox, Col, Modal, Row } from 'antd';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ListItemActions from '../../../../components/ListItemActions';
@@ -95,6 +96,19 @@ class AdministrativeAreasListItem extends Component {
     });
   };
 
+  /**
+   * @function
+   * @name previewOnMap
+   * @description preview geo-spatial data on map
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  previewOnMap = () => {
+    const { history } = this.props;
+    history.push('/map');
+  };
+
   render() {
     const { abbreviation, code, name, description, onEdit, color } = this.props;
     const { isHovered } = this.state;
@@ -150,6 +164,11 @@ class AdministrativeAreasListItem extends Component {
                     'Remove Administrative Area from list of active Administrative Areas',
                   onClick: this.showArchiveConfirm,
                 }}
+                previewOnMap={{
+                  name: 'Preview Administrative Area on Map',
+                  title: 'Preview Administrative Area on Map',
+                  onClick: this.previewOnMap,
+                }}
               />
             )}
           </Col>
@@ -171,6 +190,7 @@ AdministrativeAreasListItem.propTypes = {
   isSelected: PropTypes.bool.isRequired,
   onSelectItem: PropTypes.func.isRequired,
   onDeselectItem: PropTypes.func.isRequired,
+  history: PropTypes.shape({ push: PropTypes.func }).isRequired,
 };
 
-export default AdministrativeAreasListItem;
+export default withRouter(AdministrativeAreasListItem);
