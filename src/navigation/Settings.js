@@ -40,6 +40,12 @@ const routes = [
     description: modules.eventSeverity,
   },
   {
+    name: 'Event Indicator',
+    path: '/eventindicator',
+    icon: alertIcon,
+    description: modules.eventIndicator,
+  },
+  {
     name: 'Notification Templates',
     path: '/notificationtemplates',
     icon: notificationIcon,
