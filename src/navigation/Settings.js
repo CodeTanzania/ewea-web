@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import rolesIcon from '../assets/icons/stakeholders/roles.svg';
-import alertIcon from '../assets/icons/alerts.svg';
-import notificationIcon from '../assets/icons/stakeholders/notifications.svg';
+import rolesIcon from '../assets/icons/settings/roles.svg';
+import eventTypesIcon from '../assets/icons/settings/eventtypes.svg';
+import eventGroupsIcon from '../assets/icons/settings/eventgroups.svg';
+import notificationTemplateIcon from '../assets/icons/settings/notificationtemplate.svg';
+import eventCertaintyIcon from '../assets/icons/settings/eventcertainty.svg';
+import eventSeverityIcon from '../assets/icons/settings/eventseverity.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
 
@@ -18,31 +21,31 @@ const routes = [
   {
     name: 'Event Types',
     path: '/eventtypes',
-    icon: alertIcon,
+    icon: eventTypesIcon,
     description: modules.alerts,
   },
   {
     name: 'Event Group',
     path: '/eventgroups',
-    icon: alertIcon,
+    icon: eventGroupsIcon,
     description: modules.alerts,
   },
   {
     name: 'Event Certainty',
     path: '/eventcertainty',
-    icon: alertIcon,
+    icon: eventCertaintyIcon,
     description: modules.eventCertainty,
   },
   {
     name: 'Event Severity',
     path: '/eventseverity',
-    icon: alertIcon,
+    icon: eventSeverityIcon,
     description: modules.eventSeverity,
   },
   {
     name: 'Notification Templates',
     path: '/notificationtemplates',
-    icon: notificationIcon,
+    icon: notificationTemplateIcon,
     description: modules.notificationTemplate,
   },
 ];
