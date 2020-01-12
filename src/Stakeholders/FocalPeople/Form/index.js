@@ -286,7 +286,7 @@ class FocalPersonForm extends Component {
               <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
                 {/* focalPerson landline number */}
                 {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Landline/Other Number">
+                <Form.Item {...formItemLayout} label="Other Number">
                   {getFieldDecorator('landline', {
                     initialValue: isEditForm ? focalPerson.landline : undefined,
                   })(<Input />)}
