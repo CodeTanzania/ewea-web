@@ -10,15 +10,15 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal } from 'antd';
 import Topbar from '../../components/Topbar';
-import EventCertaintyForm from './Form';
-import EventCertaintiesList from './List';
+import EventIndicatorForm from './Form';
+import EventIndicatorList from './List';
 import './styles.css';
 
 /**
  * @class
  * @name EventIndicator
- * @description Render Event Certainties list which have search box,
- * actions and event certainties list
+ * @description Render Event Indicators list which have search box,
+ * actions and event indicators list
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -35,40 +35,40 @@ class EventIndicator extends Component {
 
   /**
    * @function
-   * @name openEventCertaintiesForm
-   * @description Open event certainty form
+   * @name openEventIndicatorsForm
+   * @description Open event indicator form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openEventCertaintiesForm = () => {
+  openEventIndicatorsForm = () => {
     openEventCertaintyForm();
   };
 
   /**
    * @function
-   * @name closeEventCertaintiesForm
-   * @description close event certainty form
+   * @name closeEventIndicatorsForm
+   * @description close event indicator form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeEventCertaintiesForm = () => {
+  closeEventIndicatorsForm = () => {
     closeEventCertaintyForm();
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
-   * @name searchEventCertainties
-   * @description Search Event Certainties List based on supplied filter word
+   * @name searchEventIndicators
+   * @description Search Event Indicators List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventCertainties = event => {
+  searchEventIndicators = event => {
     searchEventCertainties(event.target.value);
   };
 
@@ -77,13 +77,13 @@ class EventIndicator extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} eventCertainty event certainty to be edited
+   * @param {object} eventIndicator event indicator to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventCertainty => {
-    selectEventCertainty(eventCertainty);
+  handleEdit = eventIndicator => {
+    selectEventCertainty(eventIndicator);
     this.setState({ isEditForm: true });
     openEventCertaintyForm();
   };
@@ -102,11 +102,11 @@ class EventIndicator extends Component {
 
   render() {
     const {
-      eventCertainties,
+      eventIndicators,
       loading,
       page,
       posting,
-      eventCertainty,
+      eventIndicator,
       showForm,
       searchQuery,
       total,
@@ -118,28 +118,28 @@ class EventIndicator extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Event certainties here ...',
-            onChange: this.searchEventCertainties,
+            placeholder: 'Search for Event indicators here ...',
+            onChange: this.searchEventIndicators,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Event Certainty',
+              label: 'New Event Indicator',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Event Certainty',
-              onClick: this.openEventCertaintiesForm,
+              title: 'Add New Event Indicator',
+              onClick: this.openEventIndicatorsForm,
             },
           ]}
         />
         {/* end Topbar */}
 
-        <div className="EventCertaintiesList">
+        <div className="EventIndicatorList">
           {/* list starts */}
-          <EventCertaintiesList
+          <EventIndicatorList
             total={total}
             page={page}
-            eventCertainties={eventCertainties}
+            eventIndicators={eventIndicators}
             loading={loading}
             onEdit={this.handleEdit}
           />
@@ -148,21 +148,21 @@ class EventIndicator extends Component {
           {/* create/edit form modal */}
           <Modal
             title={
-              isEditForm ? 'Edit Event Certainty' : 'Add New Event Certainty'
+              isEditForm ? 'Edit Event Indicator' : 'Add New Event Indicator'
             }
             visible={showForm}
             className="FormModal"
             footer={null}
-            onCancel={this.closeEventCertaintiesForm}
+            onCancel={this.closeEventIndicatorsForm}
             destroyOnClose
             maskClosable={false}
             afterClose={this.handleAfterCloseForm}
           >
-            <EventCertaintyForm
+            <EventIndicatorForm
               posting={posting}
               isEditForm={isEditForm}
-              eventCertainty={eventCertainty}
-              onCancel={this.closeEventCertaintiesForm}
+              eventIndicator={eventIndicator}
+              onCancel={this.closeEventIndicatorsForm}
             />
           </Modal>
           {/* end create/edit form modal */}
@@ -174,10 +174,10 @@ class EventIndicator extends Component {
 
 EventIndicator.propTypes = {
   loading: PropTypes.bool.isRequired,
-  eventCertainties: PropTypes.arrayOf(
+  eventIndicators: PropTypes.arrayOf(
     PropTypes.shape({ name: PropTypes.string })
   ).isRequired,
-  eventCertainty: PropTypes.shape({ name: PropTypes.string }),
+  eventIndicator: PropTypes.shape({ name: PropTypes.string }),
   page: PropTypes.number.isRequired,
   searchQuery: PropTypes.string,
   total: PropTypes.number.isRequired,
@@ -186,17 +186,17 @@ EventIndicator.propTypes = {
 };
 
 EventIndicator.defaultProps = {
-  eventCertainty: null,
+  eventIndicator: null,
   searchQuery: undefined,
 };
 
 export default Connect(EventIndicator, {
-  eventCertainties: 'eventCertainties.list',
-  eventCertainty: 'eventCertainties.selected',
-  loading: 'eventCertainties.loading',
-  posting: 'eventCertainties.posting',
-  page: 'eventCertainties.page',
-  showForm: 'eventCertainties.showForm',
-  total: 'eventCertainties.total',
-  searchQuery: 'eventCertainties.q',
+  eventIndicators: 'eventIndicators.list',
+  eventIndicator: 'eventIndicators.selected',
+  loading: 'eventIndicators.loading',
+  posting: 'eventIndicators.posting',
+  page: 'eventIndicators.page',
+  showForm: 'eventIndicators.showForm',
+  total: 'eventIndicators.total',
+  searchQuery: 'eventIndicators.q',
 });

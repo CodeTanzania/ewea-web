@@ -9,13 +9,13 @@ import { notifyError, notifySuccess } from '../../../util';
 
 /**
  * @class
- * @name EventCertaintyForm
- * @description  Render form for creating a new event certainty
+ * @name EventIndicatorForm
+ * @description  Render form for creating a new event indicator
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EventCertaintyForm extends Component {
+class EventIndicatorForm extends Component {
   /**
    * @function
    * @name handleSubmit
@@ -32,7 +32,7 @@ class EventCertaintyForm extends Component {
     e.preventDefault();
     const {
       form: { validateFieldsAndScroll },
-      eventCertainty,
+      eventIndicator,
       isEditForm,
     } = this.props;
 
@@ -50,15 +50,15 @@ class EventCertaintyForm extends Component {
           },
         };
         if (isEditForm) {
-          const updatedContact = { ...eventCertainty, ...payload };
+          const updatedContact = { ...eventIndicator, ...payload };
           putEventCertainty(
             updatedContact,
             () => {
-              notifySuccess('Event Certainty was updated successfully');
+              notifySuccess('Event Indicator was updated successfully');
             },
             () => {
               notifyError(
-                'Something occurred while updating Event Certainty, please try again!'
+                'Something occurred while updating Event Indicator, please try again!'
               );
             }
           );
@@ -66,11 +66,11 @@ class EventCertaintyForm extends Component {
           postEventCertainty(
             payload,
             () => {
-              notifySuccess('Event Certainty was created successfully');
+              notifySuccess('Event Indicator was created successfully');
             },
             () => {
               notifyError(
-                'Something occurred while saving Event Certainty, please try again!'
+                'Something occurred while saving Event Indicator, please try again!'
               );
             }
           );
@@ -84,7 +84,7 @@ class EventCertaintyForm extends Component {
       posting,
       onCancel,
       isEditForm,
-      eventCertainty,
+      eventIndicator,
       form: { getFieldDecorator },
     } = this.props;
 
@@ -109,28 +109,28 @@ class EventCertaintyForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* Event Certainty name */}
+        {/* Event Indicator name */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Name">
           {getFieldDecorator('name', {
             initialValue: isEditForm
-              ? eventCertainty.strings.name.en
+              ? eventIndicator.strings.name.en
               : undefined,
             rules: [
               {
                 required: true,
-                message: ' Event Certainties  name is required',
+                message: ' Event Indicator name is required',
               },
             ],
           })(<Input />)}
         </Form.Item>
-        {/* end Event Certainty name */}
+        {/* end Event Indicator name */}
 
-        {/* Event Certainty code */}
+        {/* Event Indicator code */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Event Certainty code">
+        <Form.Item {...formItemLayout} label="Event Indicator code">
           {getFieldDecorator('code', {
-            initialValue: isEditForm ? eventCertainty.strings.code : undefined,
+            initialValue: isEditForm ? eventIndicator.strings.code : undefined,
             rules: [
               {
                 required: false,
@@ -138,24 +138,24 @@ class EventCertaintyForm extends Component {
             ],
           })(<Input />)}
         </Form.Item>
-        {/* end Event Certainty code */}
+        {/* end Event Indicator code */}
 
-        {/* Event Certainty Description */}
+        {/* Event Indicator Description */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Description">
           {getFieldDecorator('description', {
             initialValue: isEditForm
-              ? eventCertainty.strings.description.en
+              ? eventIndicator.strings.description.en
               : undefined,
             rules: [
               {
                 required: true,
-                message: 'Event Certainty Description is required',
+                message: 'Event Indicator Description is required',
               },
             ],
           })(<Input />)}
         </Form.Item>
-        {/* end Event Certainty */}
+        {/* end Event Indicator */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -175,8 +175,8 @@ class EventCertaintyForm extends Component {
   }
 }
 
-EventCertaintyForm.propTypes = {
-  eventCertainty: PropTypes.shape({
+EventIndicatorForm.propTypes = {
+  eventIndicator: PropTypes.shape({
     strings: PropTypes.shape({
       code: PropTypes.string.isRequired,
       name: PropTypes.shape({
@@ -197,4 +197,4 @@ EventCertaintyForm.propTypes = {
   }).isRequired,
 };
 
-export default Form.create()(EventCertaintyForm);
+export default Form.create()(EventIndicatorForm);

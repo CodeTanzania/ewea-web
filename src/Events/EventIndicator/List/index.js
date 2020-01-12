@@ -16,7 +16,7 @@ import React, { Component } from 'react';
 import ListHeader from '../../../components/ListHeader';
 import Toolbar from '../../../components/Toolbar';
 import { notifyError, notifySuccess } from '../../../util';
-import EventCertaintiesListItem from '../ListItem';
+import EventIndicatorsListItem from '../ListItem';
 
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 14, xs: 14 };
@@ -32,39 +32,39 @@ const { getEventCertaintiesExportUrl } = httpActions;
 
 /**
  * @class
- * @name EventCertaintiesList
+ * @name EventIndicatorList
  *
- * @description Render EventCertaintiesList
- * component which have actionBar, event certainties
- * header and event certainties list components
+ * @description Render EventIndicatorList
+ * component which have actionBar, event indicators
+ * header and event indicators list components
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EventCertaintiesList extends Component {
+class EventIndicatorList extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
-    selectedEventCertainties: [],
+    selectedEventIndicators: [],
     selectedPages: [],
   };
 
   /**
    * @function
-   * @name handleOnSelectFocalPerson
-   * @description Handle select a single eventCertainty action
+   * @name handleOnSelectIndicator
+   * @description Handle select a single event indicator action
    *
-   * @param {object} eventCertainty selected eventCertainty object
+   * @param {object} eventIndicator selected event indicator object
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnSelectFocalPerson = eventCertainty => {
-    const { selectedEventCertainties } = this.state;
+  handleOnSelectIndicator = eventIndicator => {
+    const { selectedEventIndicators } = this.state;
     this.setState({
-      selectedEventCertainties: concat(
+      selectedEventIndicators: concat(
         [],
-        selectedEventCertainties,
-        eventCertainty
+        selectedEventIndicators,
+        eventIndicator
       ),
     });
   };
@@ -72,21 +72,21 @@ class EventCertaintiesList extends Component {
   /**
    * @function
    * @name handleSelectAll
-   * @description Handle select all event Certainties actions from current page
+   * @description Handle select all event Indicators actions from current page
    *
    * @version 0.1.0
    * @since 0.1.0
    */
   handleSelectAll = () => {
-    const { selectedEventCertainties, selectedPages } = this.state;
-    const { eventCertainties, page } = this.props;
+    const { selectedEventIndicators, selectedPages } = this.state;
+    const { eventIndicators, page } = this.props;
     const selectedList = uniqBy(
-      [...selectedEventCertainties, ...eventCertainties],
+      [...selectedEventIndicators, ...eventIndicators],
       '_id'
     );
     const pages = uniq([...selectedPages, page]);
     this.setState({
-      selectedEventCertainties: selectedList,
+      selectedEventIndicators: selectedList,
       selectedPages: pages,
     });
   };
@@ -94,7 +94,7 @@ class EventCertaintiesList extends Component {
   /**
    * @function
    * @name handleDeselectAll
-   * @description Handle deselect all event Certainties in a current page
+   * @description Handle deselect all event Indicators in a current page
    *
    * @returns {undefined} undefined
    *
@@ -102,55 +102,55 @@ class EventCertaintiesList extends Component {
    * @since 0.1.0
    */
   handleDeselectAll = () => {
-    const { eventCertainties, page } = this.props;
-    const { selectedEventCertainties, selectedPages } = this.state;
-    const selectedList = uniqBy([...selectedEventCertainties], '_id');
+    const { eventIndicators, page } = this.props;
+    const { selectedEventIndicators, selectedPages } = this.state;
+    const selectedList = uniqBy([...selectedEventIndicators], '_id');
     const pages = uniq([...selectedPages]);
 
     remove(pages, item => item === page);
 
-    eventCertainties.forEach(eventCertainty => {
+    eventIndicators.forEach(eventIndicator => {
       remove(
         selectedList,
-        item => item._id === eventCertainty._id // eslint-disable-line
+        item => item._id === eventIndicator._id // eslint-disable-line
       );
     });
 
     this.setState({
-      selectedEventCertainties: selectedList,
+      selectedEventIndicators: selectedList,
       selectedPages: pages,
     });
   };
 
   /**
    * @function
-   * @name handleOnDeselectEventCertainties
-   * @description Handle deselect a single eventCertainty action
+   * @name handleOnDeselectEventIndicators
+   * @description Handle deselect a single event indicator action
    *
-   * @param {object} eventCertainty eventCertainty instance to be removed from selected EventCertainties
+   * @param {object} eventIndicator eventIndicator instance to be removed from selected EventIndicators
    * @returns {undefined} undefined
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnDeselectEventCertainties = eventCertainty => {
-    const { selectedEventCertainties } = this.state;
-    const selectedList = [...selectedEventCertainties];
+  handleOnDeselectEventIndicators = eventIndicator => {
+    const { selectedEventIndicators } = this.state;
+    const selectedList = [...selectedEventIndicators];
 
     remove(
       selectedList,
-      item => item._id === eventCertainty._id // eslint-disable-line
+      item => item._id === eventIndicator._id // eslint-disable-line
     );
 
-    this.setState({ selectedEventCertainties: selectedList });
+    this.setState({ selectedEventIndicators: selectedList });
   };
 
   render() {
-    const { eventCertainties, loading, page, total, onEdit } = this.props;
-    const { selectedEventCertainties, selectedPages } = this.state;
-    const selectedEventCertaintiesCount = intersectionBy(
-      selectedEventCertainties,
-      eventCertainties,
+    const { eventIndicators, loading, page, total, onEdit } = this.props;
+    const { selectedEventIndicators, selectedPages } = this.state;
+    const selectedEventIndicatorsCount = intersectionBy(
+      selectedEventIndicators,
+      eventIndicators,
       '_id'
     ).length;
 
@@ -158,12 +158,12 @@ class EventCertaintiesList extends Component {
       <>
         {/* toolbar */}
         <Toolbar
-          itemName="Event Certainties"
+          itemName="Event Indicators"
           page={page}
           total={total}
-          selectedItemsCount={selectedEventCertaintiesCount}
+          selectedItemsCount={selectedEventIndicatorsCount}
           exportUrl={getEventCertaintiesExportUrl({
-            filter: { _id: map(selectedEventCertainties, '_id') },
+            filter: { _id: map(selectedEventIndicators, '_id') },
           })}
           onPaginate={nextPage => {
             paginateEventCertainties(nextPage);
@@ -171,11 +171,11 @@ class EventCertaintiesList extends Component {
           onRefresh={() =>
             refreshEventCertainties(
               () => {
-                notifySuccess('Event Certainties refreshed successfully');
+                notifySuccess('Event Indicators refreshed successfully');
               },
               () => {
                 notifyError(
-                  'An Error occurred while refreshing Event Certainties please contact system administrator'
+                  'An Error occurred while refreshing Event Indicators please contact system administrator'
                 );
               }
             )
@@ -183,52 +183,52 @@ class EventCertaintiesList extends Component {
         />
         {/* end toolbar */}
 
-        {/* eventCertainty list header */}
+        {/* eventIndicator list header */}
         <ListHeader
           headerLayout={headerLayout}
           onSelectAll={this.handleSelectAll}
           onDeselectAll={this.handleDeselectAll}
           isBulkSelected={selectedPages.includes(page)}
         />
-        {/* end eventCertainty list header */}
+        {/* end eventIndicator list header */}
 
-        {/* eventCertainties list */}
+        {/* eventIndicators list */}
         <List
           loading={loading}
-          dataSource={eventCertainties}
-          renderItem={eventCertainty => (
-            <EventCertaintiesListItem
-              key={eventCertainty._id} // eslint-disable-line
-              abbreviation={eventCertainty.strings.abbreviation.en}
-              name={eventCertainty.strings.name.en}
-              code={eventCertainty.strings.code}
+          dataSource={eventIndicators}
+          renderItem={eventIndicator => (
+            <EventIndicatorsListItem
+              key={eventIndicator._id} // eslint-disable-line
+              abbreviation={eventIndicator.strings.abbreviation.en}
+              name={eventIndicator.strings.name.en}
+              code={eventIndicator.strings.code}
               description={
-                eventCertainty.strings.description
-                  ? eventCertainty.strings.description.en
+                eventIndicator.strings.description
+                  ? eventIndicator.strings.description.en
                   : 'N/A'
               }
               isSelected={
                 // eslint-disable-next-line
-                map(selectedEventCertainties, item => item._id).includes(
-                  eventCertainty._id // eslint-disable-line
+                map(selectedEventIndicators, item => item._id).includes(
+                  eventIndicator._id // eslint-disable-line
                 )
               }
               onSelectItem={() => {
-                this.handleOnSelectFocalPerson(eventCertainty);
+                this.handleOnSelectIndicator(eventIndicator);
               }}
               onDeselectItem={() => {
-                this.handleOnDeselectEventCertainties(eventCertainty);
+                this.handleOnDeselectEventIndicators(eventIndicator);
               }}
-              onEdit={() => onEdit(eventCertainty)}
+              onEdit={() => onEdit(eventIndicator)}
               onArchive={() =>
                 deleteEventCertainty(
-                  eventCertainty._id, // eslint-disable-line
+                  eventIndicator._id, // eslint-disable-line
                   () => {
-                    notifySuccess('Event certainty was archived successfully');
+                    notifySuccess('Event indicator was archived successfully');
                   },
                   () => {
                     notifyError(
-                      'An Error occurred while archiving Event certainty please contact system administrator'
+                      'An Error occurred while archiving Event indicator please contact system administrator'
                     );
                   }
                 )
@@ -236,15 +236,15 @@ class EventCertaintiesList extends Component {
             />
           )}
         />
-        {/* end eventCertainties list */}
+        {/* end eventIndicators list */}
       </>
     );
   }
 }
 
-EventCertaintiesList.propTypes = {
+EventIndicatorList.propTypes = {
   loading: PropTypes.bool.isRequired,
-  eventCertainties: PropTypes.arrayOf(
+  eventIndicators: PropTypes.arrayOf(
     PropTypes.shape({ name: PropTypes.string })
   ).isRequired,
   page: PropTypes.number.isRequired,
@@ -252,4 +252,4 @@ EventCertaintiesList.propTypes = {
   onEdit: PropTypes.func.isRequired,
 };
 
-export default EventCertaintiesList;
+export default EventIndicatorList;

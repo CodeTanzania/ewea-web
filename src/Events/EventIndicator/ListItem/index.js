@@ -15,14 +15,14 @@ const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 
 /**
  * @class
- * @name EventCertaintiesListItem
- * @description Single event certainty list item component.
- * Render single event certainty details
+ * @name EventIndicatorsListItem
+ * @description Single event indicator list item component.
+ * Render single event indicator details
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EventCertaintiesListItem extends Component {
+class EventIndicatorsListItem extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isHovered: false,
@@ -77,7 +77,7 @@ class EventCertaintiesListItem extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving an event certainty
+   * @description show confirm modal before archiving an event indicator
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -126,7 +126,7 @@ class EventCertaintiesListItem extends Component {
 
     return (
       <div
-        className="EventCertaintiesListItem"
+        className="EventIndicatorsListItem"
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
@@ -144,14 +144,14 @@ class EventCertaintiesListItem extends Component {
             {isHovered && (
               <ListItemActions
                 edit={{
-                  name: 'Edit Event Certainty',
-                  title: 'Update Event Certainty Details',
+                  name: 'Edit Event Indicator',
+                  title: 'Update Event Indicator Details',
                   onClick: onEdit,
                 }}
                 archive={{
-                  name: 'Archive Event Certainty',
+                  name: 'Archive Event Indicator',
                   title:
-                    'Remove Event Certainty from list of active Event Certainties',
+                    'Remove Event Indicator from list of active Event Indicators',
                   onClick: this.showArchiveConfirm,
                 }}
               />
@@ -163,7 +163,7 @@ class EventCertaintiesListItem extends Component {
   }
 }
 
-EventCertaintiesListItem.propTypes = {
+EventIndicatorsListItem.propTypes = {
   abbreviation: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
@@ -175,4 +175,4 @@ EventCertaintiesListItem.propTypes = {
   onDeselectItem: PropTypes.func.isRequired,
 };
 
-export default EventCertaintiesListItem;
+export default EventIndicatorsListItem;
