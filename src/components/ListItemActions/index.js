@@ -20,7 +20,7 @@ import './styles.css';
  * @since 0.1.0
  */
 const ListItemActions = ({
-  previewOnMap,
+  onMapPreview,
   view,
   edit,
   share,
@@ -38,13 +38,13 @@ const ListItemActions = ({
           </Menu.Item>
         )}
 
-        {previewOnMap && (
+        {onMapPreview && (
           <Menu.Item
-            key="previewOnMap"
-            onClick={previewOnMap.onClick}
-            title={previewOnMap.title}
+            key="onMapPreview"
+            onClick={onMapPreview.onClick}
+            title={onMapPreview.title}
           >
-            <Icon type="eye" /> {previewOnMap.name}
+            <Icon type="eye" /> {onMapPreview.name}
           </Menu.Item>
         )}
 
@@ -116,7 +116,7 @@ ListItemActions.propTypes = {
     title: PropTypes.string,
     onClick: PropTypes.func,
   }),
-  previewOnMap: PropTypes.shape({
+  onMapPreview: PropTypes.shape({
     name: PropTypes.string,
     title: PropTypes.string,
     onClick: PropTypes.func,
@@ -155,7 +155,7 @@ ListItemActions.propTypes = {
 
 ListItemActions.defaultProps = {
   view: null,
-  previewOnMap: null,
+  onMapPreview: null,
   edit: null,
   reload: null,
   share: null,

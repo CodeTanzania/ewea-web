@@ -6,7 +6,7 @@ import {
   openAdministrativeAreaForm,
   closeAdministrativeAreaForm,
 } from '@codetanzania/ewea-api-states';
-import { Modal } from 'antd';
+import { Drawer, Modal } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Topbar from '../../../components/Topbar';
@@ -27,6 +27,7 @@ class AdministrativeAreas extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     showFilters: false,
+    showMap: false,
     isEditForm: false,
     cached: null,
   };
@@ -144,6 +145,21 @@ class AdministrativeAreas extends Component {
     openAdministrativeAreaForm();
   };
 
+  /**
+   * @function
+   * @name handleMapPreview
+   * @description Handle map preview
+   *
+   * @param {object} administrativeArea administrativeArea to be previewed
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleMapPreview = administrativeArea => {
+    selectAdministrativeArea(administrativeArea);
+    this.setState({ showMap: true });
+  };
+
   render() {
     const {
       administrativeAreas,
@@ -155,7 +171,7 @@ class AdministrativeAreas extends Component {
       searchQuery,
       total,
     } = this.props;
-    const { showFilters, isEditForm, cached } = this.state;
+    const { showFilters, isEditForm, cached, showMap } = this.state;
     return (
       <div className="AdministrativeAreas">
         {/* Topbar */}
@@ -186,6 +202,7 @@ class AdministrativeAreas extends Component {
             administrativeAreas={administrativeAreas}
             loading={loading}
             onEdit={this.handleEdit}
+            onMapPreview={this.handleMapPreview}
             onFilter={this.openFiltersModal}
           />
           {/* end list */}
@@ -232,6 +249,18 @@ class AdministrativeAreas extends Component {
             />
           </Modal>
           {/* end create/edit form modal */}
+          {/* Event details drawer */}
+          <Drawer
+            title="Map preview"
+            placement="right"
+            width="100%"
+            onClose={this.closeEventDetails}
+            visible={showMap}
+          >
+            <h1>It works yes</h1>
+          </Drawer>
+
+          {/* End Event details drawer */}
         </div>
       </div>
     );

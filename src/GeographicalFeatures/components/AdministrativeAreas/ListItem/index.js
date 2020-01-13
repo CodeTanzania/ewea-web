@@ -110,7 +110,15 @@ class AdministrativeAreasListItem extends Component {
   };
 
   render() {
-    const { abbreviation, code, name, description, onEdit, color } = this.props;
+    const {
+      abbreviation,
+      code,
+      name,
+      description,
+      onEdit,
+      onMapPreview,
+      color,
+    } = this.props;
     const { isHovered } = this.state;
     const { isSelected } = this.props;
     let sideComponent = null;
@@ -164,10 +172,10 @@ class AdministrativeAreasListItem extends Component {
                     'Remove Administrative Area from list of active Administrative Areas',
                   onClick: this.showArchiveConfirm,
                 }}
-                previewOnMap={{
+                onMapPreview={{
                   name: 'Preview Administrative Area on Map',
                   title: 'Preview Administrative Area on Map',
-                  onClick: this.previewOnMap,
+                  onClick: onMapPreview,
                 }}
               />
             )}
@@ -187,6 +195,7 @@ AdministrativeAreasListItem.propTypes = {
   type: PropTypes.string.isRequired,
   onArchive: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
+  onMapPreview: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
   onSelectItem: PropTypes.func.isRequired,
   onDeselectItem: PropTypes.func.isRequired,

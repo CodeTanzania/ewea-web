@@ -149,6 +149,7 @@ class AdministrativeAreasList extends Component {
       page,
       total,
       onEdit,
+      onMapPreview,
       onFilter,
     } = this.props;
     const { selectedAdministrativeAreas, selectedPages } = this.state;
@@ -224,6 +225,7 @@ class AdministrativeAreasList extends Component {
                   this.handleOnDeselectAdministrativeArea(administrativeArea);
                 }}
                 onEdit={() => onEdit(administrativeArea)}
+                onMapPreview={() => onMapPreview(administrativeArea)}
                 onArchive={() =>
                   deleteAdministrativeArea(
                     administrativeArea._id, // eslint-disable-line
@@ -257,6 +259,7 @@ AdministrativeAreasList.propTypes = {
   page: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
   onEdit: PropTypes.func.isRequired,
+  onMapPreview: PropTypes.func.isRequired,
   onFilter: PropTypes.func.isRequired,
 };
 
