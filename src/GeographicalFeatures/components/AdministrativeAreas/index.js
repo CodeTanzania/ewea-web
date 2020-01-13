@@ -184,6 +184,7 @@ class AdministrativeAreas extends Component {
       searchQuery,
       total,
     } = this.props;
+    const geometry = administrativeArea?.geos?.geometry;
     const { showFilters, isEditForm, cached, showMap } = this.state;
     return (
       <div className="AdministrativeAreas">
@@ -270,7 +271,7 @@ class AdministrativeAreas extends Component {
             onClose={this.closeMapPreview}
             visible={showMap}
           >
-            <BaseMap />
+            <BaseMap geometry={geometry} />
           </Drawer>
 
           {/* End Map preview drawer */}
@@ -286,7 +287,10 @@ AdministrativeAreas.propTypes = {
   administrativeAreas: PropTypes.arrayOf(
     PropTypes.shape({ name: PropTypes.string })
   ).isRequired,
-  administrativeArea: PropTypes.shape({ name: PropTypes.string }),
+  administrativeArea: PropTypes.shape({
+    name: PropTypes.string,
+    geos: PropTypes.shape({ geometry: PropTypes.object }),
+  }),
   page: PropTypes.number.isRequired,
   showForm: PropTypes.bool.isRequired,
   searchQuery: PropTypes.string,
