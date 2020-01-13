@@ -17,51 +17,56 @@ class BaseMap extends Component {
     },
   };
 
-  componentDidMount() {
-    const map = this.reactMap.getMap();
-    const geometry = {
-      type: 'Polygon',
-      coordinates: [
-        [
-          [39.26539421081543, -6.828005683086681],
-          [39.28436279296875, -6.828005683086681],
-          [39.28436279296875, -6.811216667493757],
-          [39.26539421081543, -6.811216667493757],
-          [39.26539421081543, -6.828005683086681],
-        ],
-      ],
-    };
-    map.on('load', function() {
-      map.addLayer({
-        id: 'maine',
-        type: 'fill',
-        source: {
-          type: 'geojson',
-          data: {
-            type: 'Feature',
-            properties: {},
-            geometry,
-          },
-        },
-        layout: {},
-        paint: {
-          'fill-color': '#088',
-          'fill-opacity': 0.8,
-        },
-      });
-    });
-  }
+  // componentDidMount() {
+  //   const map = this.reactMap.getMap();
+  //   const geometry = {
+  //     type: 'Polygon',
+  //     coordinates: [
+  //       [
+  //         [39.26539421081543, -6.828005683086681],
+  //         [39.28436279296875, -6.828005683086681],
+  //         [39.28436279296875, -6.811216667493757],
+  //         [39.26539421081543, -6.811216667493757],
+  //         [39.26539421081543, -6.828005683086681],
+  //       ],
+  //     ],
+  //   };
+  //   map.on('load', function() {
+  //     map.addLayer({
+  //       id: 'maine',
+  //       type: 'fill',
+  //       source: {
+  //         type: 'geojson',
+  //         data: {
+  //           type: 'Feature',
+  //           properties: {},
+  //           geometry,
+  //         },
+  //       },
+  //       layout: {},
+  //       paint: {
+  //         'fill-color': '#088',
+  //         'fill-opacity': 0.8,
+  //       },
+  //     });
+  //   });
+  // }
 
   render() {
+    console.log('render function is called');
     return (
       <MapGL
         /* eslint-disable-next-line no-return-assign */
-        ref={reactMap => (this.reactMap = reactMap)}
+        // ref={reactMap => (this.reactMap = reactMap)}
         mapStyle="mapbox://styles/mapbox/light-v9"
         mapboxApiAccessToken={TOKEN}
         /* eslint-disable-next-line react/jsx-props-no-spreading,react/destructuring-assignment */
         {...this.state.viewport}
-        onViewportChange={viewport => this.setState({ viewport })}
+        onViewportChange={viewport => {
+          console.log(viewport);
+          const modfiyViewPort = { ...viewport, width: 1920 };
+          this.setState({ viewport: modfiyViewPort });
+        }}
       />
     );
   }

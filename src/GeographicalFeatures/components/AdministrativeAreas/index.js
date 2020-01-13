@@ -148,6 +148,18 @@ class AdministrativeAreas extends Component {
 
   /**
    * @function
+   * @name closeMapPreview
+   * @description close event details drawer
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeMapPreview = () => {
+    this.setState({ showMap: false });
+  };
+
+  /**
+   * @function
    * @name handleMapPreview
    * @description Handle map preview
    *
@@ -255,7 +267,7 @@ class AdministrativeAreas extends Component {
             title="Map preview"
             placement="right"
             width="100%"
-            onClose={this.closeEventDetails}
+            onClose={this.closeMapPreview}
             visible={showMap}
           >
             <BaseMap />
