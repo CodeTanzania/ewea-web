@@ -14,6 +14,7 @@ import AdministrativeAreasFilters from './Filters';
 import AdministrativeAreaForm from './Form';
 import AdministrativeAreaList from './List';
 import './styles.css';
+import BaseMap from '../../../Map';
 
 /**
  * @class
@@ -249,7 +250,7 @@ class AdministrativeAreas extends Component {
             />
           </Modal>
           {/* end create/edit form modal */}
-          {/* Event details drawer */}
+          {/* Map preview drawer */}
           <Drawer
             title="Map preview"
             placement="right"
@@ -257,10 +258,10 @@ class AdministrativeAreas extends Component {
             onClose={this.closeEventDetails}
             visible={showMap}
           >
-            <h1>It works yes</h1>
+            <BaseMap />
           </Drawer>
 
-          {/* End Event details drawer */}
+          {/* End Map preview drawer */}
         </div>
       </div>
     );
