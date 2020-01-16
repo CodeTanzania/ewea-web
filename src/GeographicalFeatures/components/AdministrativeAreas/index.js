@@ -268,6 +268,7 @@ class AdministrativeAreas extends Component {
             title="Map preview"
             placement="right"
             width="100%"
+            className="map-drawer"
             onClose={this.closeMapPreview}
             visible={showMap}
           >

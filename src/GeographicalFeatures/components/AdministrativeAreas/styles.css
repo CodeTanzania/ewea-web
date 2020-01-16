@@ -29,3 +29,7 @@
     width: 90% !important;
   }
 }
+
+.map-drawer .ant-drawer-body {
+  padding: 0;
+}

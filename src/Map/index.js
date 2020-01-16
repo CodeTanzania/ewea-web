@@ -19,7 +19,7 @@ class BaseMap extends Component {
   state = {
     viewport: {
       width: '100%',
-      height: '100vh',
+      height: '94vh',
       latitude: -6.8042752,
       longitude: 39.247872,
       zoom: 13,
@@ -72,11 +72,6 @@ class BaseMap extends Component {
         mapboxApiAccessToken={TOKEN}
         /* eslint-disable-next-line react/jsx-props-no-spreading,react/destructuring-assignment */
         {...this.state.viewport}
-        onViewportChange={viewport => {
-          console.log(viewport);
-          const modfiyViewPort = { ...viewport, width: 1920 };
-          this.setState({ viewport: modfiyViewPort });
-        }}
       />
     );
   }
