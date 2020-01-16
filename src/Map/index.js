@@ -27,8 +27,20 @@ class BaseMap extends Component {
   };
 
   componentDidMount() {
-    const map = this.reactMap.getMap();
     const { geometry } = this.props;
+    this.renderGeoJSON(geometry);
+  }
+
+  componentDidUpdate(prevProps): void {
+    // eslint-disable-next-line react/destructuring-assignment
+    if (prevProps.geometry !== this.props.geometry) {
+      // eslint-disable-next-line react/destructuring-assignment
+      this.renderGeoJSON(this.props.geometry);
+    }
+  }
+
+  renderGeoJSON = geometry => {
+    const map = this.reactMap.getMap();
     map.on('load', function() {
       map.addLayer({
         id: 'maine',
@@ -48,7 +60,7 @@ class BaseMap extends Component {
         },
       });
     });
-  }
+  };
 
   render() {
     console.log('render function is called');
