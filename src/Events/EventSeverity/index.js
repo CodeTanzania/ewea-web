@@ -138,7 +138,7 @@ class EventSeverities extends Component {
    * @name handleEdit
    * @description Handle on Edit severity for list item
    *
-   * @param {object} eventSeverity eventSeverity to be edited
+   * @param {object} eventSeverity Event Severity to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -235,10 +235,10 @@ class EventSeverities extends Component {
       onOk() {
         deleteEventSeverity(
           item._id, // eslint-disable-line
-          () => notifySuccess('Focal Person was archived successfully'),
+          () => notifySuccess('Event Severity was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving Focal Person, Please contact your system Administrator'
+              'An error occurred while archiving Event Severity, Please contact your system Administrator'
             )
         );
       },
