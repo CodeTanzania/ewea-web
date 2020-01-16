@@ -7,6 +7,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { notifyError, notifySuccess } from '../../../util';
 
+/* constants */
+const { TextArea } = Input;
+
 /**
  * @class
  * @name EventSeverityForm
@@ -153,7 +156,7 @@ class EventSeverityForm extends Component {
                 message: 'Event Severity Description is required',
               },
             ],
-          })(<Input />)}
+          })(<TextArea autosize={{ minRows: 3, maxRows: 10 }} />)}
         </Form.Item>
         {/* end Event Severity */}
 
