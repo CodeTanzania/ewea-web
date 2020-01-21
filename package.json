@@ -26,7 +26,7 @@
   "dependencies": {
     "@codetanzania/ewea-api-client": "^0.8.0",
     "@codetanzania/ewea-api-states": "^0.10.0",
-    "antd": "^3.26.6",
+    "antd": "^3.26.7",
     "axios": "^0.19.1",
     "inflection": "^1.12.0",
     "lodash": "^4.17.15",
@@ -61,7 +61,7 @@
     "eslint-plugin-react": "7.18.0",
     "generate-changelog": "1.8.0",
     "husky": "4.0.10",
-    "lint-staged": "9.5.0",
+    "lint-staged": "10.0.1",
     "prettier": "1.19.1",
     "react-app-rewired": "2.1.5",
     "react-scripts": "3.3.0"
@@ -100,12 +100,13 @@
   },
   "lint-staged": {
     "*.js": [
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ],
     ".{css,scss}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
+    ],
+    "*.json": [
+      "prettier --write"
     ]
   },
   "husky": {
