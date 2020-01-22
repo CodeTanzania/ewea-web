@@ -161,12 +161,16 @@ ItemList.propTypes = {
   itemName: PropTypes.string.isRequired,
   page: PropTypes.number.isRequired,
   itemCount: PropTypes.number.isRequired,
-  onFilter: PropTypes.func.isRequired,
+  onFilter: PropTypes.func,
   onNotify: PropTypes.func.isRequired,
   onPaginate: PropTypes.func.isRequired,
   onRefresh: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,
   renderListItem: PropTypes.func.isRequired,
+};
+
+ItemList.defaultProps = {
+  onFilter: null,
 };
 
 export default ItemList;
