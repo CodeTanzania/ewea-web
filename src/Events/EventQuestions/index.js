@@ -1,24 +1,24 @@
 import {
   Connect,
-  getEventCertainties,
-  openEventCertaintyForm,
-  searchEventCertainties,
-  selectEventCertainty,
-  closeEventCertaintyForm,
+  getEventQuestions,
+  openEventQuestionForm,
+  searchEventQuestions,
+  selectEventQuestion,
+  closeEventQuestionForm,
 } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal } from 'antd';
 import Topbar from '../../components/Topbar';
-import EventCertaintyForm from './Form';
-import EventCertaintiesList from './List';
+import EventQuestionForm from './Form';
+import EventQuestionsList from './List';
 import './styles.css';
 
 /**
  * @class
  * @name EventQuestions
- * @description Render Event Certainties list which have search box,
- * actions and event certainties list
+ * @description Render Event Questions list which have search box,
+ * actions and event questions list
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -30,46 +30,46 @@ class EventQuestions extends Component {
   };
 
   componentDidMount() {
-    getEventCertainties();
+    getEventQuestions();
   }
 
   /**
    * @function
-   * @name openEventCertaintiesForm
-   * @description Open event certainty form
+   * @name openEventQuestionsForm
+   * @description Open event question form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openEventCertaintiesForm = () => {
-    openEventCertaintyForm();
+  openEventQuestionsForm = () => {
+    openEventQuestionForm();
   };
 
   /**
    * @function
-   * @name closeEventCertaintiesForm
-   * @description close event certainty form
+   * @name closeEventQuestionsForm
+   * @description close event question form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeEventCertaintiesForm = () => {
-    closeEventCertaintyForm();
+  closeEventQuestionsForm = () => {
+    closeEventQuestionForm();
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
-   * @name searchEventCertainties
-   * @description Search Event Certainties List based on supplied filter word
+   * @name searchEventQuestions
+   * @description Search Event Questions List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventCertainties = event => {
-    searchEventCertainties(event.target.value);
+  searchEventQuestions = event => {
+    searchEventQuestions(event.target.value);
   };
 
   /**
@@ -77,15 +77,15 @@ class EventQuestions extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} eventCertainty event certainty to be edited
+   * @param {object} eventQuestion event question to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventCertainty => {
-    selectEventCertainty(eventCertainty);
+  handleEdit = eventQuestion => {
+    selectEventQuestion(eventQuestion);
     this.setState({ isEditForm: true });
-    openEventCertaintyForm();
+    openEventQuestionForm();
   };
 
   /**
@@ -102,11 +102,11 @@ class EventQuestions extends Component {
 
   render() {
     const {
-      eventCertainties,
+      eventQuestions,
       loading,
       page,
       posting,
-      eventCertainty,
+      eventQuestion,
       showForm,
       searchQuery,
       total,
@@ -118,28 +118,28 @@ class EventQuestions extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Event certainties here ...',
-            onChange: this.searchEventCertainties,
+            placeholder: 'Search for Event questions here ...',
+            onChange: this.searchEventQuestions,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Event Certainty',
+              label: 'New Event Question',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Event Certainty',
-              onClick: this.openEventCertaintiesForm,
+              title: 'Add New Event Question',
+              onClick: this.openEventQuestionsForm,
             },
           ]}
         />
         {/* end Topbar */}
 
-        <div className="EventCertaintiesList">
+        <div className="EventQuestionsList">
           {/* list starts */}
-          <EventCertaintiesList
+          <EventQuestionsList
             total={total}
             page={page}
-            eventCertainties={eventCertainties}
+            eventQuestions={eventQuestions}
             loading={loading}
             onEdit={this.handleEdit}
           />
@@ -148,21 +148,21 @@ class EventQuestions extends Component {
           {/* create/edit form modal */}
           <Modal
             title={
-              isEditForm ? 'Edit Event Certainty' : 'Add New Event Certainty'
+              isEditForm ? 'Edit Event Question' : 'Add New Event Question'
             }
             visible={showForm}
             className="FormModal"
             footer={null}
-            onCancel={this.closeEventCertaintiesForm}
+            onCancel={this.closeEventQuestionsForm}
             destroyOnClose
             maskClosable={false}
             afterClose={this.handleAfterCloseForm}
           >
-            <EventCertaintyForm
+            <EventQuestionForm
               posting={posting}
               isEditForm={isEditForm}
-              eventCertainty={eventCertainty}
-              onCancel={this.closeEventCertaintiesForm}
+              eventQuestion={eventQuestion}
+              onCancel={this.closeEventQuestionsForm}
             />
           </Modal>
           {/* end create/edit form modal */}
@@ -174,10 +174,9 @@ class EventQuestions extends Component {
 
 EventQuestions.propTypes = {
   loading: PropTypes.bool.isRequired,
-  eventCertainties: PropTypes.arrayOf(
-    PropTypes.shape({ name: PropTypes.string })
-  ).isRequired,
-  eventCertainty: PropTypes.shape({ name: PropTypes.string }),
+  eventQuestions: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+    .isRequired,
+  eventQuestion: PropTypes.shape({ name: PropTypes.string }),
   page: PropTypes.number.isRequired,
   searchQuery: PropTypes.string,
   total: PropTypes.number.isRequired,
@@ -186,17 +185,17 @@ EventQuestions.propTypes = {
 };
 
 EventQuestions.defaultProps = {
-  eventCertainty: null,
+  eventQuestion: null,
   searchQuery: undefined,
 };
 
 export default Connect(EventQuestions, {
-  eventCertainties: 'eventCertainties.list',
-  eventCertainty: 'eventCertainties.selected',
-  loading: 'eventCertainties.loading',
-  posting: 'eventCertainties.posting',
-  page: 'eventCertainties.page',
-  showForm: 'eventCertainties.showForm',
-  total: 'eventCertainties.total',
-  searchQuery: 'eventCertainties.q',
+  eventQuestions: 'eventQuestions.list',
+  eventQuestion: 'eventQuestions.selected',
+  loading: 'eventQuestions.loading',
+  posting: 'eventQuestions.posting',
+  page: 'eventQuestions.page',
+  showForm: 'eventQuestions.showForm',
+  total: 'eventQuestions.total',
+  searchQuery: 'eventQuestions.q',
 });

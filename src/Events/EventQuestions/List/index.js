@@ -1,8 +1,8 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import {
-  deleteEventCertainty,
-  paginateEventCertainties,
-  refreshEventCertainties,
+  deleteEventQuestion,
+  paginateEventQuestions,
+  refreshEventQuestions,
 } from '@codetanzania/ewea-api-states';
 import { List } from 'antd';
 import concat from 'lodash/concat';
@@ -16,77 +16,76 @@ import React, { Component } from 'react';
 import ListHeader from '../../../components/ListHeader';
 import Toolbar from '../../../components/Toolbar';
 import { notifyError, notifySuccess } from '../../../util';
-import EventCertaintiesListItem from '../ListItem';
+import EventQuestionsListItem from '../ListItem';
 
 /* constants */
-const nameSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 14, xs: 14 };
+const nameSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 10, xs: 10 };
 const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 5, xs: 5 };
-const descriptionSpan = { xxl: 14, xl: 14, lg: 15, md: 14, sm: 0, xs: 0 };
+const indicatorSpan = { xxl: 5, xl: 5, lg: 5, md: 4, sm: 4, xs: 4 };
+const descriptionSpan = { xxl: 9, xl: 9, lg: 10, md: 10, sm: 0, xs: 0 };
 
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...codeSpan, header: 'Code' },
+  { ...indicatorSpan, header: 'Indicator' },
   { ...descriptionSpan, header: 'Description' },
+
 ];
-const { getEventCertaintiesExportUrl } = httpActions;
+const { getEventQuestionsExportUrl } = httpActions;
 
 /**
  * @class
- * @name EventCertaintiesList
+ * @name EventQuestionsList
  *
- * @description Render EventCertaintiesList
- * component which have actionBar, event certainties
- * header and event certainties list components
+ * @description Render EventQuestions List
+ * component which have actionBar, event questions
+ * header and event questions list components
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EventCertaintiesList extends Component {
+class EventQuestionsList extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
-    selectedEventCertainties: [],
+    selectedEventQuestions: [],
     selectedPages: [],
   };
 
   /**
    * @function
-   * @name handleOnSelectFocalPerson
-   * @description Handle select a single eventCertainty action
+   * @name handleOnSelectEventQuestion
+   * @description Handle select a single eventQuestion action
    *
-   * @param {object} eventCertainty selected eventCertainty object
+   * @param {object} eventQuestion selected eventQuestion object
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnSelectFocalPerson = eventCertainty => {
-    const { selectedEventCertainties } = this.state;
+  handleOnSelectEventQuestion = eventQuestion => {
+    const { selectedEventQuestions } = this.state;
     this.setState({
-      selectedEventCertainties: concat(
-        [],
-        selectedEventCertainties,
-        eventCertainty
-      ),
+      selectedEventQuestions: concat([], selectedEventQuestions, eventQuestion),
     });
   };
 
   /**
    * @function
    * @name handleSelectAll
-   * @description Handle select all event Certainties actions from current page
+   * @description Handle select all event Questions actions from current page
    *
    * @version 0.1.0
    * @since 0.1.0
    */
   handleSelectAll = () => {
-    const { selectedEventCertainties, selectedPages } = this.state;
-    const { eventCertainties, page } = this.props;
+    const { selectedEventQuestions, selectedPages } = this.state;
+    const { eventQuestions, page } = this.props;
     const selectedList = uniqBy(
-      [...selectedEventCertainties, ...eventCertainties],
+      [...selectedEventQuestions, ...eventQuestions],
       '_id'
     );
     const pages = uniq([...selectedPages, page]);
     this.setState({
-      selectedEventCertainties: selectedList,
+      selectedEventQuestions: selectedList,
       selectedPages: pages,
     });
   };
@@ -94,7 +93,7 @@ class EventCertaintiesList extends Component {
   /**
    * @function
    * @name handleDeselectAll
-   * @description Handle deselect all event Certainties in a current page
+   * @description Handle deselect all event Questions in a current page
    *
    * @returns {undefined} undefined
    *
@@ -102,55 +101,55 @@ class EventCertaintiesList extends Component {
    * @since 0.1.0
    */
   handleDeselectAll = () => {
-    const { eventCertainties, page } = this.props;
-    const { selectedEventCertainties, selectedPages } = this.state;
-    const selectedList = uniqBy([...selectedEventCertainties], '_id');
+    const { eventQuestions, page } = this.props;
+    const { selectedEventQuestions, selectedPages } = this.state;
+    const selectedList = uniqBy([...selectedEventQuestions], '_id');
     const pages = uniq([...selectedPages]);
 
     remove(pages, item => item === page);
 
-    eventCertainties.forEach(eventCertainty => {
+    eventQuestions.forEach(eventQuestion => {
       remove(
         selectedList,
-        item => item._id === eventCertainty._id // eslint-disable-line
+        item => item._id === eventQuestion._id // eslint-disable-line
       );
     });
 
     this.setState({
-      selectedEventCertainties: selectedList,
+      selectedEventQuestions: selectedList,
       selectedPages: pages,
     });
   };
 
   /**
    * @function
-   * @name handleOnDeselectEventCertainties
-   * @description Handle deselect a single eventCertainty action
+   * @name handleOnDeselectEventQuestions
+   * @description Handle deselect a single event question action
    *
-   * @param {object} eventCertainty eventCertainty instance to be removed from selected EventCertainties
+   * @param {object} eventQuestion event question instance to be removed from selected event questions
    * @returns {undefined} undefined
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnDeselectEventCertainties = eventCertainty => {
-    const { selectedEventCertainties } = this.state;
-    const selectedList = [...selectedEventCertainties];
+  handleOnDeselectEventQuestions = eventQuestion => {
+    const { selectedEventQuestions } = this.state;
+    const selectedList = [...selectedEventQuestions];
 
     remove(
       selectedList,
-      item => item._id === eventCertainty._id // eslint-disable-line
+      item => item._id === eventQuestion._id // eslint-disable-line
     );
 
-    this.setState({ selectedEventCertainties: selectedList });
+    this.setState({ selectedEventQuestions: selectedList });
   };
 
   render() {
-    const { eventCertainties, loading, page, total, onEdit } = this.props;
-    const { selectedEventCertainties, selectedPages } = this.state;
+    const { eventQuestions, loading, page, total, onEdit } = this.props;
+    const { selectedEventQuestions, selectedPages } = this.state;
     const selectedEventCertaintiesCount = intersectionBy(
-      selectedEventCertainties,
-      eventCertainties,
+      selectedEventQuestions,
+      eventQuestions,
       '_id'
     ).length;
 
@@ -158,24 +157,24 @@ class EventCertaintiesList extends Component {
       <>
         {/* toolbar */}
         <Toolbar
-          itemName="Event Certainties"
+          itemName="Event Questions"
           page={page}
           total={total}
           selectedItemsCount={selectedEventCertaintiesCount}
-          exportUrl={getEventCertaintiesExportUrl({
-            filter: { _id: map(selectedEventCertainties, '_id') },
+          exportUrl={getEventQuestionsExportUrl({
+            filter: { _id: map(selectedEventQuestions, '_id') },
           })}
           onPaginate={nextPage => {
-            paginateEventCertainties(nextPage);
+            paginateEventQuestions(nextPage);
           }}
           onRefresh={() =>
-            refreshEventCertainties(
+            refreshEventQuestions(
               () => {
-                notifySuccess('Event Certainties refreshed successfully');
+                notifySuccess('Event Questions refreshed successfully');
               },
               () => {
                 notifyError(
-                  'An Error occurred while refreshing Event Certainties please contact system administrator'
+                  'An Error occurred while refreshing Event Questions please contact system administrator'
                 );
               }
             )
@@ -183,52 +182,57 @@ class EventCertaintiesList extends Component {
         />
         {/* end toolbar */}
 
-        {/* eventCertainty list header */}
+        {/* event question list header */}
         <ListHeader
           headerLayout={headerLayout}
           onSelectAll={this.handleSelectAll}
           onDeselectAll={this.handleDeselectAll}
           isBulkSelected={selectedPages.includes(page)}
         />
-        {/* end eventCertainty list header */}
+        {/* end event Question list header */}
 
-        {/* eventCertainties list */}
+        {/* event questions list */}
         <List
           loading={loading}
-          dataSource={eventCertainties}
-          renderItem={eventCertainty => (
-            <EventCertaintiesListItem
-              key={eventCertainty._id} // eslint-disable-line
-              abbreviation={eventCertainty.strings.abbreviation.en}
-              name={eventCertainty.strings.name.en}
-              code={eventCertainty.strings.code}
+          dataSource={eventQuestions}
+          renderItem={eventQuestion => (
+            <EventQuestionsListItem
+              key={eventQuestion._id} // eslint-disable-line
+              abbreviation={eventQuestion.strings.abbreviation.en}
+              name={eventQuestion.strings.name.en}
+              code={eventQuestion.strings.code}
+              indicator={
+                eventQuestion.relations.indicator
+                  ? eventQuestion.relations.indicator.strings.name.en
+                  : 'N/A'
+              }
               description={
-                eventCertainty.strings.description
-                  ? eventCertainty.strings.description.en
+                eventQuestion.strings.description
+                  ? eventQuestion.strings.description.en
                   : 'N/A'
               }
               isSelected={
                 // eslint-disable-next-line
-                map(selectedEventCertainties, item => item._id).includes(
-                  eventCertainty._id // eslint-disable-line
+                map(selectedEventQuestions, item => item._id).includes(
+                  eventQuestion._id // eslint-disable-line
                 )
               }
               onSelectItem={() => {
-                this.handleOnSelectFocalPerson(eventCertainty);
+                this.handleOnSelectEventQuestion(eventQuestion);
               }}
               onDeselectItem={() => {
-                this.handleOnDeselectEventCertainties(eventCertainty);
+                this.handleOnDeselectEventQuestions(eventQuestion);
               }}
-              onEdit={() => onEdit(eventCertainty)}
+              onEdit={() => onEdit(eventQuestion)}
               onArchive={() =>
-                deleteEventCertainty(
-                  eventCertainty._id, // eslint-disable-line
+                deleteEventQuestion(
+                  eventQuestion._id, // eslint-disable-line
                   () => {
-                    notifySuccess('Event certainty was archived successfully');
+                    notifySuccess('Event question was archived successfully');
                   },
                   () => {
                     notifyError(
-                      'An Error occurred while archiving Event certainty please contact system administrator'
+                      'An Error occurred while archiving Event question please contact system administrator'
                     );
                   }
                 )
@@ -236,20 +240,19 @@ class EventCertaintiesList extends Component {
             />
           )}
         />
-        {/* end eventCertainties list */}
+        {/* end event Questions list */}
       </>
     );
   }
 }
 
-EventCertaintiesList.propTypes = {
+EventQuestionsList.propTypes = {
   loading: PropTypes.bool.isRequired,
-  eventCertainties: PropTypes.arrayOf(
-    PropTypes.shape({ name: PropTypes.string })
-  ).isRequired,
+  eventQuestions: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+    .isRequired,
   page: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
   onEdit: PropTypes.func.isRequired,
 };
 
-export default EventCertaintiesList;
+export default EventQuestionsList;

@@ -9,13 +9,13 @@ import { notifyError, notifySuccess } from '../../../util';
 
 /**
  * @class
- * @name EventCertaintyForm
+ * @name EventQuestionForm
  * @description  Render form for creating a new event certainty
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EventCertaintyForm extends Component {
+class EventQuestionForm extends Component {
   /**
    * @function
    * @name handleSubmit
@@ -175,7 +175,7 @@ class EventCertaintyForm extends Component {
   }
 }
 
-EventCertaintyForm.propTypes = {
+EventQuestionForm.propTypes = {
   eventCertainty: PropTypes.shape({
     strings: PropTypes.shape({
       code: PropTypes.string.isRequired,
@@ -197,4 +197,4 @@ EventCertaintyForm.propTypes = {
   }).isRequired,
 };
 
-export default Form.create()(EventCertaintyForm);
+export default Form.create()(EventQuestionForm);
