@@ -1,6 +1,6 @@
 import {
-  putEventCertainty,
-  postEventCertainty,
+  putEventIndicator,
+  postEventIndicator,
 } from '@codetanzania/ewea-api-states';
 import { Button, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
@@ -40,7 +40,6 @@ class EventIndicatorForm extends Component {
       if (!error) {
         const payload = {
           strings: {
-            code: values.code,
             name: {
               en: values.name,
             },
@@ -51,7 +50,7 @@ class EventIndicatorForm extends Component {
         };
         if (isEditForm) {
           const updatedContact = { ...eventIndicator, ...payload };
-          putEventCertainty(
+          putEventIndicator(
             updatedContact,
             () => {
               notifySuccess('Event Indicator was updated successfully');
@@ -63,7 +62,7 @@ class EventIndicatorForm extends Component {
             }
           );
         } else {
-          postEventCertainty(
+          postEventIndicator(
             payload,
             () => {
               notifySuccess('Event Indicator was created successfully');
@@ -125,20 +124,6 @@ class EventIndicatorForm extends Component {
           })(<Input />)}
         </Form.Item>
         {/* end Event Indicator name */}
-
-        {/* Event Indicator code */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Event Indicator code">
-          {getFieldDecorator('code', {
-            initialValue: isEditForm ? eventIndicator.strings.code : undefined,
-            rules: [
-              {
-                required: false,
-              },
-            ],
-          })(<Input />)}
-        </Form.Item>
-        {/* end Event Indicator code */}
 
         {/* Event Indicator Description */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}

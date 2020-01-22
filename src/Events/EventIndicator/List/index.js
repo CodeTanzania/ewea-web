@@ -1,8 +1,8 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import {
-  deleteEventCertainty,
-  paginateEventCertainties,
-  refreshEventCertainties,
+  deleteEventIndicator,
+  paginateEventIndicators,
+  refreshEventIndicators,
 } from '@codetanzania/ewea-api-states';
 import { List } from 'antd';
 import concat from 'lodash/concat';
@@ -28,7 +28,7 @@ const headerLayout = [
   { ...codeSpan, header: 'Code' },
   { ...descriptionSpan, header: 'Description' },
 ];
-const { getEventCertaintiesExportUrl } = httpActions;
+const { getEventIndicatorsExportUrl } = httpActions;
 
 /**
  * @class
@@ -162,14 +162,14 @@ class EventIndicatorList extends Component {
           page={page}
           total={total}
           selectedItemsCount={selectedEventIndicatorsCount}
-          exportUrl={getEventCertaintiesExportUrl({
+          exportUrl={getEventIndicatorsExportUrl({
             filter: { _id: map(selectedEventIndicators, '_id') },
           })}
           onPaginate={nextPage => {
-            paginateEventCertainties(nextPage);
+            paginateEventIndicators(nextPage);
           }}
           onRefresh={() =>
-            refreshEventCertainties(
+            refreshEventIndicators(
               () => {
                 notifySuccess('Event Indicators refreshed successfully');
               },
@@ -221,7 +221,7 @@ class EventIndicatorList extends Component {
               }}
               onEdit={() => onEdit(eventIndicator)}
               onArchive={() =>
-                deleteEventCertainty(
+                deleteEventIndicator(
                   eventIndicator._id, // eslint-disable-line
                   () => {
                     notifySuccess('Event indicator was archived successfully');

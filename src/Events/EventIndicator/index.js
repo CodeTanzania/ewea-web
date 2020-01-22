@@ -1,10 +1,10 @@
 import {
   Connect,
-  getEventCertainties,
-  openEventCertaintyForm,
-  searchEventCertainties,
-  selectEventCertainty,
-  closeEventCertaintyForm,
+  getEventIndicators,
+  openEventIndicatorForm,
+  searchEventIndicators,
+  selectEventIndicator,
+  closeEventIndicatorForm,
 } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -30,7 +30,7 @@ class EventIndicator extends Component {
   };
 
   componentDidMount() {
-    getEventCertainties();
+    getEventIndicators();
   }
 
   /**
@@ -42,7 +42,7 @@ class EventIndicator extends Component {
    * @since 0.1.0
    */
   openEventIndicatorsForm = () => {
-    openEventCertaintyForm();
+    openEventIndicatorForm();
   };
 
   /**
@@ -54,7 +54,7 @@ class EventIndicator extends Component {
    * @since 0.1.0
    */
   closeEventIndicatorsForm = () => {
-    closeEventCertaintyForm();
+    closeEventIndicatorForm();
     this.setState({ isEditForm: false });
   };
 
@@ -69,7 +69,7 @@ class EventIndicator extends Component {
    * @since 0.1.0
    */
   searchEventIndicators = event => {
-    searchEventCertainties(event.target.value);
+    searchEventIndicators(event.target.value);
   };
 
   /**
@@ -83,9 +83,9 @@ class EventIndicator extends Component {
    * @since 0.1.0
    */
   handleEdit = eventIndicator => {
-    selectEventCertainty(eventIndicator);
+    selectEventIndicator(eventIndicator);
     this.setState({ isEditForm: true });
-    openEventCertaintyForm();
+    openEventIndicatorForm();
   };
 
   /**
@@ -153,7 +153,7 @@ class EventIndicator extends Component {
             visible={showForm}
             className="FormModal"
             footer={null}
-            onCancel={this.closeEventIndicatorsForm}
+            onCancel={this.closeEventIndicatorForm}
             destroyOnClose
             maskClosable={false}
             afterClose={this.handleAfterCloseForm}
@@ -162,7 +162,7 @@ class EventIndicator extends Component {
               posting={posting}
               isEditForm={isEditForm}
               eventIndicator={eventIndicator}
-              onCancel={this.closeEventIndicatorsForm}
+              onCancel={this.closeEventIndicatorForm}
             />
           </Modal>
           {/* end create/edit form modal */}
