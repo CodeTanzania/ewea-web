@@ -16,6 +16,7 @@ import EventFunctions from '../Events/EventFunctions';
 import EventTypes from '../Events/ActionCatalog/EventTypes';
 import EventSeverity from '../Events/EventSeverity';
 import EventCertainty from '../Events/EventCertainty';
+import EventQuestions from '../Events/EventQuestions';
 import EventGroups from '../Events/EventGroups';
 import Features from '../GeographicalFeatures/CriticalFacilities';
 // import StakeholdersNotifications from '../Stakeholders/Notifications';
@@ -148,6 +149,10 @@ const breadcrumbNameMap = {
   '/app/settings/eventcertainty': {
     name: 'Event Certainty',
     title: 'Event Certainty module',
+  },
+  '/app/settings/eventquestions': {
+    name: 'Event Questions',
+    title: 'Event Questions module',
   },
   '/app/settings/eventseverity': {
     name: 'Event Severity',
@@ -294,6 +299,10 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/settings/eventcertainty`}
             component={EventCertainty}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/eventquestions`}
+            component={EventQuestions}
           />
           <SecureRoute
             path={`${baseUrl}/settings/eventseverity`}
