@@ -10,8 +10,8 @@ const { confirm } = Modal;
 const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 3, xs: 3 };
 const nameSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 10, xs: 10 };
 const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 5, xs: 5 };
-const indicatorSpan = { xxl: 5, xl: 5, lg: 5, md: 4, sm: 4, xs: 4 };
-const descriptionSpan = { xxl: 9, xl: 9, lg: 10, md: 10, sm: 0, xs: 0 };
+const indicatorSpan = { xxl: 6, xl: 6, lg: 6, md: 5, sm: 4, xs: 4 };
+const descriptionSpan = { xxl: 8, xl: 8, lg: 9, md: 9, sm: 0, xs: 0 };
 const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 
 /**

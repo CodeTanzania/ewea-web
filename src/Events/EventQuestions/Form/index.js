@@ -1,16 +1,20 @@
 import {
-  putEventCertainty,
-  postEventCertainty,
+  putEventQuestion,
+  postEventQuestion,
 } from '@codetanzania/ewea-api-states';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import { Button, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
+
+const { getEventIndicators } = httpActions;
 
 /**
  * @class
  * @name EventQuestionForm
- * @description  Render form for creating a new event certainty
+ * @description  Render form for creating a new event question
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -32,7 +36,7 @@ class EventQuestionForm extends Component {
     e.preventDefault();
     const {
       form: { validateFieldsAndScroll },
-      eventCertainty,
+      eventQuestion,
       isEditForm,
     } = this.props;
 
@@ -48,29 +52,32 @@ class EventQuestionForm extends Component {
               en: values.description,
             },
           },
+          relations: {
+            indicator: { _id: values.indicator },
+          },
         };
         if (isEditForm) {
-          const updatedContact = { ...eventCertainty, ...payload };
-          putEventCertainty(
+          const updatedContact = { ...eventQuestion, ...payload };
+          putEventQuestion(
             updatedContact,
             () => {
-              notifySuccess('Event Certainty was updated successfully');
+              notifySuccess('Event Question was updated successfully');
             },
             () => {
               notifyError(
-                'Something occurred while updating Event Certainty, please try again!'
+                'Something occurred while updating Event Question, please try again!'
               );
             }
           );
         } else {
-          postEventCertainty(
+          postEventQuestion(
             payload,
             () => {
-              notifySuccess('Event Certainty was created successfully');
+              notifySuccess('Event Question was created successfully');
             },
             () => {
               notifyError(
-                'Something occurred while saving Event Certainty, please try again!'
+                'Something occurred while saving Event Question, please try again!'
               );
             }
           );
@@ -84,7 +91,7 @@ class EventQuestionForm extends Component {
       posting,
       onCancel,
       isEditForm,
-      eventCertainty,
+      eventQuestion,
       form: { getFieldDecorator },
     } = this.props;
 
@@ -109,12 +116,12 @@ class EventQuestionForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* Event Certainty name */}
+        {/* Event Question name */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Name">
           {getFieldDecorator('name', {
             initialValue: isEditForm
-              ? eventCertainty.strings.name.en
+              ? eventQuestion.strings.name.en
               : undefined,
             rules: [
               {
@@ -124,38 +131,48 @@ class EventQuestionForm extends Component {
             ],
           })(<Input />)}
         </Form.Item>
-        {/* end Event Certainty name */}
+        {/* end Event Question name */}
 
-        {/* Event Certainty code */}
+        {/* Event Question Indicator */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Event Certainty code">
-          {getFieldDecorator('code', {
-            initialValue: isEditForm ? eventCertainty.strings.code : undefined,
-            rules: [
-              {
-                required: false,
-              },
-            ],
-          })(<Input />)}
+        <Form.Item {...formItemLayout} label="Indicator">
+          {getFieldDecorator('indicator', {
+            initialValue:
+              isEditForm && eventQuestion.relations.indicator // eslint-disable-line
+                ? eventQuestion.relations.indicator._id // eslint-disable-line
+                : undefined,
+            rules: [{ message: 'Event Indicator is required' }],
+          })(
+            <SearchableSelectInput
+              onSearch={getEventIndicators}
+              optionLabel={indicator => indicator.strings.name.en}
+              optionValue="_id"
+              initialValue={
+                isEditForm && eventQuestion.relations.indicator
+                  ? eventQuestion.relations.indicator
+                  : undefined
+              }
+            />
+          )}
         </Form.Item>
-        {/* end Event Certainty code */}
+        {/* end Event indicator */}
 
-        {/* Event Certainty Description */}
+        {/* Event Question Description */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Description">
           {getFieldDecorator('description', {
             initialValue: isEditForm
-              ? eventCertainty.strings.description.en
+              ? eventQuestion.strings.description.en
               : undefined,
             rules: [
               {
                 required: true,
-                message: 'Event Certainty Description is required',
+                message: 'Event Question Description is required',
               },
             ],
           })(<Input />)}
         </Form.Item>
-        {/* end Event Certainty */}
+        {/* end Event Question */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -176,7 +193,7 @@ class EventQuestionForm extends Component {
 }
 
 EventQuestionForm.propTypes = {
-  eventCertainty: PropTypes.shape({
+  eventQuestion: PropTypes.shape({
     strings: PropTypes.shape({
       code: PropTypes.string.isRequired,
       name: PropTypes.shape({
@@ -186,6 +203,9 @@ EventQuestionForm.propTypes = {
         en: PropTypes.string.isRequired,
       }),
       _id: PropTypes.string,
+    }),
+    relations: PropTypes.shape({
+      indicator: PropTypes.string,
     }),
   }).isRequired,
   isEditForm: PropTypes.bool.isRequired,
