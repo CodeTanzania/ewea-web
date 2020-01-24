@@ -17,6 +17,7 @@ import EventTypes from '../Events/ActionCatalog/EventTypes';
 import EventSeverity from '../Events/EventSeverity';
 import EventCertainty from '../Events/EventCertainty';
 import EventGroups from '../Events/EventGroups';
+import EventIndicator from '../Events/EventIndicator';
 import Features from '../GeographicalFeatures/CriticalFacilities';
 // import StakeholdersNotifications from '../Stakeholders/Notifications';
 import StakeholdersRoles from '../Stakeholders/Roles';
@@ -161,6 +162,10 @@ const breadcrumbNameMap = {
     name: 'Event Groups',
     title: 'Event Groups module',
   },
+  '/app/settings/eventindicator': {
+    name: 'Event Indicator',
+    title: 'Event Indicator module',
+  },
 };
 
 /**
@@ -298,6 +303,10 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/settings/eventseverity`}
             component={EventSeverity}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/eventindicator`}
+            component={EventIndicator}
           />
           <SecureRoute component={PageNotFound} />
         </Switch>
