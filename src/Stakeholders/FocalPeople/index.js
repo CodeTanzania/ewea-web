@@ -307,7 +307,7 @@ class FocalPeople extends Component {
           () => notifySuccess('Focal Person was archived successfully'),
           () =>
             notifyError(
-              'An error occured while archiving Focal Person, Please contact your system Administrator'
+              'An error occurred while archiving Focal Person, Please contact your system Administrator'
             )
         );
       },

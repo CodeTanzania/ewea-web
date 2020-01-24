@@ -6,17 +6,24 @@ import {
   openEventForm,
   searchEvents,
   selectEvent,
+  refreshEvents,
+  paginateEvents,
+  deleteEvent,
 } from '@codetanzania/ewea-api-states';
-import { Modal, Drawer } from 'antd';
+import { Modal, Drawer, Col, Tag } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import isArray from 'lodash/isArray';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import EventFilters from './Filters';
 import EventForm from './Form';
-import EventsList from './List';
+import ListItemActions from '../../components/ListItemActions';
+import ListItem from '../../components/ListItem';
+import ItemList from '../../components/List';
 import EventDetailsViewHeader from './DetailsView/Header';
 import EventDetailsViewBody from './DetailsView/Body';
+import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
 
 /* constants */
@@ -27,6 +34,21 @@ const {
   getRoles,
   getAgencies,
 } = httpActions;
+const { confirm } = Modal;
+const referenceIDSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const typeSpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 0, xs: 0 };
+const stageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
+const groupSpan = { xxl: 4, xl: 4, lg: 5, md: 5, sm: 0, xs: 0 };
+const eventSpan = { xxl: 6, xl: 7, lg: 15, md: 0, sm: 19, xs: 19 };
+
+const headerLayout = [
+  { ...eventSpan, header: 'Event' },
+  { ...referenceIDSpan, header: 'Reference ID' },
+  { ...stageSpan, header: 'Event Stage' },
+  { ...typeSpan, header: 'Event Type' },
+  { ...groupSpan, header: 'Event Group' },
+  // { ...urgencySpan, header: 'Urgency' },
+];
 
 /**
  * @class
@@ -191,42 +213,31 @@ class Events extends Component {
   /**
    * @function
    * @name handleShare
-   * @description Handle share single event action
+   * @description Handle share  event(s) action
    *
-   * @param {object} event event to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleShare = event => {
-    const message = `${event.name}\nMobile: ${
-      // eslint-disable-line
-      event.mobile
-    }\nEmail: ${event.email}`;
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name handleBulkShare
-   * @description Handle share multiple focal People
-   *
-   * @param {object[]} events focal People list to be shared
+   * @param {object| object[]} events event(s) to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleBulkShare = events => {
-    const eventList = events.map(
-      event =>
-        `${event.name}\nMobile: ${event.mobile}\nEmail: ${
-          // eslint-disable-line
-          event.email
-        }`
-    );
+  handleShare = events => {
+    let message = '';
+    if (isArray(events)) {
+      const eventList = events.map(
+        event =>
+          `Type: ${event.type.strings.name.en}\ndescription: ${
+            // eslint-disable-line
+            event.description
+          }\nStage: ${event.stage}`
+      );
 
-    const message = eventList.join('\n\n\n');
+      message = eventList.join('\n\n\n');
+    } else {
+      message = `Type: ${events.type.strings.name.en}\ndescription: ${
+        // eslint-disable-line
+        events.description
+      }\nStage: ${events.stage}`;
+    }
 
     this.setState({ notificationBody: message, showNotificationForm: true });
   };
@@ -284,6 +295,55 @@ class Events extends Component {
     this.setState({ notificationBody: undefined });
   };
 
+  /**
+   * @function
+   * @name handleRefreshEvents
+   * @description Handle list refresh action
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleRefreshEvents = () => {
+    refreshEvents(
+      () => {
+        notifySuccess('Events were refreshed successfully');
+      },
+      () => {
+        notifyError(
+          'An Error occurred while refreshing Events, Please contact system administrator'
+        );
+      }
+    );
+  };
+
+  /**
+   * @function
+   * @name showArchiveConfirm
+   * @description show confirm modal before archiving a focal person
+   * @param {object} item Resource item to be archived
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  showArchiveConfirm = item => {
+    confirm({
+      title: `Are you sure you want to archive this record ?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteEvent(
+          item._id, // eslint-disable-line
+          () => notifySuccess('Event was archived successfully'),
+          () =>
+            notifyError(
+              'An error occurred while archiving Event, Please contact your system Administrator'
+            )
+        );
+      },
+    });
+  };
+
   render() {
     const {
       events,
@@ -326,100 +386,157 @@ class Events extends Component {
         />
         {/* end Topbar */}
 
-        <div className="EventsList">
-          {/* list starts */}
-          <EventsList
-            total={total}
-            page={page}
-            events={events}
-            loading={loading}
-            onView={this.handleView}
-            onEdit={this.handleEdit}
-            onFilter={this.openFiltersModal}
-            onNotify={this.openNotificationForm}
-            onShare={this.handleShare}
-            onBulkShare={this.handleBulkShare}
-          />
-          {/* end list */}
-          {/* filter modal */}
-          <Modal
-            title="Filter Events"
-            visible={showFilters}
-            onCancel={this.closeFiltersModal}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-          >
-            <EventFilters
-              onCancel={this.closeFiltersModal}
-              cached={cached}
-              onCache={this.handleOnCachedValues}
-              onClearCache={this.handleClearCachedValues}
-            />
-          </Modal>
-          {/* end filter modal */}
-          {/* Notification Modal modal */}
-          <Modal
-            title="Notify Events"
-            visible={showNotificationForm}
-            onCancel={this.closeNotificationForm}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-            afterClose={this.handleAfterCloseNotificationForm}
-          >
-            <NotificationForm
-              recipients={selectedEvents}
-              onSearchRecipients={getEventsFromAPI}
-              onSearchJurisdictions={getJurisdictions}
-              onSearchGroups={getPartyGroups}
-              onSearchAgencies={getAgencies}
-              onSearchRoles={getRoles}
-              body={notificationBody}
-              onCancel={this.closeNotificationForm}
-            />
-          </Modal>
-          {/* end Notification modal */}
-          {/* create/edit form modal */}
-          <Modal
-            title={isEditForm ? 'Edit Event' : 'Add New Event'}
-            visible={showForm}
-            className="FormModal"
-            footer={null}
-            onCancel={this.closeEventForm}
-            destroyOnClose
-            maskClosable={false}
-            afterClose={this.handleAfterCloseForm}
-          >
-            <EventForm
-              posting={posting}
-              isEditForm={isEditForm}
-              event={event}
-              onCancel={this.closeEventForm}
-            />
-          </Modal>
-          {/* end create/edit form modal */}
-          {/* Event details drawer */}
-          <Drawer
-            title={
-              <EventDetailsViewHeader
-                number={event ? event.number : 'N/A'}
-                description={event ? event.description : 'N/A'}
-                type={event ? event.type.strings.name.en : 'N/A'}
-              />
-            }
-            placement="right"
-            width="100%"
-            onClose={this.closeEventDetails}
-            visible={showEventDetails}
-          >
-            <EventDetailsViewBody />
-          </Drawer>
+        {/* list starts */}
+        <ItemList
+          itemName="events"
+          items={events}
+          page={page}
+          itemCount={total}
+          loading={loading}
+          // onFilter={this.openFiltersModal}
+          onNotify={this.openNotificationForm}
+          onShare={this.handleShare}
+          onRefresh={this.handleRefresh}
+          onPaginate={nextPage => paginateEvents(nextPage)}
+          headerLayout={headerLayout}
+          renderListItem={({
+            item,
+            isSelected,
+            onSelectItem,
+            onDeselectItem,
+          }) => (
+            <ListItem
+              key={item._id} // eslint-disable-line
+              name={item.description}
+              item={item}
+              isSelected={isSelected}
+              onSelectItem={onSelectItem}
+              onDeselectItem={onDeselectItem}
+              renderActions={() => (
+                <ListItemActions
+                  view={{
+                    name: 'View Event',
+                    title: 'View Event Details',
+                    onClick: () => this.handleView(item),
+                  }}
+                  edit={{
+                    name: 'Edit Event',
+                    title: 'Update Event Details',
+                    onClick: () => this.handleEdit(item),
+                  }}
+                  share={{
+                    name: 'Share Event',
+                    title: 'Share Event details with others',
+                    onClick: () => this.handleShare(item),
+                  }}
+                  archive={{
+                    name: 'Archive Event',
+                    title: 'Remove Event from list of active Events',
+                    onClick: () => this.showArchiveConfirm(item),
+                  }}
+                />
+              )}
+            >
+              {/* eslint-disable react/jsx-props-no-spreading */}
+              <Col {...eventSpan} title={item.description}>
+                {item.description}
+              </Col>
+              {/* <Col {...areaSpan}>{location}</Col> */}
+              <Col {...referenceIDSpan}>{item.number}</Col>
+              <Col {...stageSpan}>
+                <Tag color="volcano">{item.stage}</Tag>
+              </Col>
+              <Col {...typeSpan}>{item.type.strings.name.en}</Col>
+              <Col {...groupSpan}>
+                {item.group ? item.group.strings.name.en : 'N/A'}
+              </Col>
+              {/* eslint-enable react/jsx-props-no-spreading */}
+            </ListItem>
+          )}
+        />
+        {/* end list */}
 
-          {/* End Event details drawer */}
-        </div>
+        {/* filter modal */}
+        <Modal
+          title="Filter Events"
+          visible={showFilters}
+          onCancel={this.closeFiltersModal}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+        >
+          <EventFilters
+            onCancel={this.closeFiltersModal}
+            cached={cached}
+            onCache={this.handleOnCachedValues}
+            onClearCache={this.handleClearCachedValues}
+          />
+        </Modal>
+        {/* end filter modal */}
+
+        {/* Notification Modal modal */}
+        <Modal
+          title="Notify Events"
+          visible={showNotificationForm}
+          onCancel={this.closeNotificationForm}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+          afterClose={this.handleAfterCloseNotificationForm}
+        >
+          <NotificationForm
+            recipients={selectedEvents}
+            onSearchRecipients={getEventsFromAPI}
+            onSearchJurisdictions={getJurisdictions}
+            onSearchGroups={getPartyGroups}
+            onSearchAgencies={getAgencies}
+            onSearchRoles={getRoles}
+            body={notificationBody}
+            onCancel={this.closeNotificationForm}
+          />
+        </Modal>
+        {/* end Notification modal */}
+
+        {/* create/edit form modal */}
+        <Modal
+          title={isEditForm ? 'Edit Event' : 'Add New Event'}
+          visible={showForm}
+          className="FormModal"
+          footer={null}
+          onCancel={this.closeEventForm}
+          destroyOnClose
+          maskClosable={false}
+          afterClose={this.handleAfterCloseForm}
+        >
+          <EventForm
+            posting={posting}
+            isEditForm={isEditForm}
+            event={event}
+            onCancel={this.closeEventForm}
+          />
+        </Modal>
+        {/* end create/edit form modal */}
+
+        {/* Event details drawer */}
+        <Drawer
+          title={
+            <EventDetailsViewHeader
+              number={event ? event.number : 'N/A'}
+              description={event ? event.description : 'N/A'}
+              type={event ? event.type.strings.name.en : 'N/A'}
+            />
+          }
+          placement="right"
+          width="100%"
+          onClose={this.closeEventDetails}
+          visible={showEventDetails}
+        >
+          <EventDetailsViewBody />
+        </Drawer>
+
+        {/* End Event details drawer */}
       </>
     );
   }

@@ -40,11 +40,6 @@ class EventForm extends Component {
     } = this.props;
 
     validateFieldsAndScroll((error, values) => {
-      // TODO remove this
-      const number = `FL-2018-0000${Math.floor(
-        Math.random() * Math.floor(10)
-      )}-TZA`;
-
       if (!error) {
         if (isEditForm) {
           const updatedEvent = { ...event, ...values };
@@ -61,7 +56,7 @@ class EventForm extends Component {
           );
         } else {
           postEvent(
-            { number, ...values },
+            { ...values },
             () => {
               notifySuccess('Event was created successfully');
             },
