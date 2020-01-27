@@ -6,14 +6,33 @@ import {
   openNotificationTemplateForm,
   searchNotificationTemplates,
   selectNotificationTemplate,
+  paginateNotificationTemplates,
+  deleteNotificationTemplate,
+  refreshNotificationTemplates,
 } from '@codetanzania/ewea-api-states';
-import { Modal } from 'antd';
+import { Modal, Col } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Topbar from '../../components/Topbar';
+import ItemList from '../../components/List';
+import ListItem from '../../components/ListItem';
+import ListItemActions from '../../components/ListItemActions';
 import NotificationTemplateForm from './Form';
-import NotificationTemplatesList from './List';
+import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
+
+const { confirm } = Modal;
+
+/* constants */
+const nameSpan = { xxl: 7, xl: 8, lg: 6, md: 8, sm: 10, xs: 10 };
+const descriptionSpan = { xxl: 10, xl: 10, lg: 6, md: 8, sm: 0, xs: 0 };
+const codeSpan = { xxl: 4, xl: 3, lg: 6, md: 0, sm: 0, xs: 0 };
+
+const headerLayout = [
+  { ...nameSpan, header: 'Name' },
+  { ...descriptionSpan, header: 'Description' },
+  { ...codeSpan, header: 'Code' },
+];
 
 /**
  * @class
@@ -156,6 +175,57 @@ class NotificationTemplates extends Component {
     this.setState({ isEditForm: false });
   };
 
+  /**
+   * @function
+   * @name handleRefreshNotificationTemplate
+   * @description Handle list refresh action
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleRefreshNotificationTemplate = () => {
+    refreshNotificationTemplates(
+      () => {
+        notifySuccess('Notification Templates refreshed successfully');
+      },
+      () => {
+        notifyError(
+          'An Error occurred while refreshing Notification Templates please contact system administrator'
+        );
+      }
+    );
+  };
+
+  /**
+   * @function
+   * @name showArchiveConfirm
+   * @description show confirm modal before archiving a notification template
+   *
+   * @param item {object} notificationTemplate to archive
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+
+  showArchiveConfirm = item => {
+    confirm({
+      title: `Are you sure you want to archive ${item.strings.name.en} ?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteNotificationTemplate(
+          item._id, // eslint-disable-line
+          () =>
+            notifySuccess('Notification Template was archived successfully'),
+          () =>
+            notifyError(
+              'An error occurred while archiving Notification Template, Please contact your system Administrator'
+            )
+        );
+      },
+    });
+  };
+
   render() {
     const {
       notificationTemplates,
@@ -194,64 +264,94 @@ class NotificationTemplates extends Component {
         />
         {/* end Topbar */}
 
-        <div className="NotificationTemplatesList">
-          {/* list starts */}
-          <NotificationTemplatesList
-            total={total}
-            page={page}
-            notificationTemplates={notificationTemplates}
-            loading={loading}
-            onEdit={this.handleEdit}
-            onFilter={this.openFiltersModal}
-            onNotify={this.openNotificationForm}
-            onShare={this.handleShare}
-            onBulkShare={this.handleBulkShare}
-          />
-          {/* end list */}
+        {/* list starts */}
+        <ItemList
+          itemName="Notification Templates"
+          items={notificationTemplates}
+          page={page}
+          itemCount={total}
+          loading={loading}
+          onFilter={this.openFiltersModal}
+          // onNotify={this.openNotificationForm}
+          // onShare={this.handleShare}
+          onRefresh={this.handleRefreshNotificationTemplate}
+          onPaginate={nextPage => paginateNotificationTemplates(nextPage)}
+          headerLayout={headerLayout}
+          renderListItem={({
+            item,
+            isSelected,
+            onSelectItem,
+            onDeselectItem,
+          }) => (
+            <ListItem
+              key={item._id} // eslint-disable-line
+              item={item}
+              isSelected={isSelected}
+              onSelectItem={onSelectItem}
+              onDeselectItem={onDeselectItem}
+              renderActions={() => (
+                <ListItemActions
+                  edit={{
+                    name: 'Edit Notification Template',
+                    title: 'Update Notification Template Details',
+                    onClick: () => this.handleEdit(item),
+                  }}
+                  archive={{
+                    name: 'Archive Notification Template',
+                    title:
+                      'Remove Notification Template from list of active notification templates',
+                    onClick: () => this.showArchiveConfirm(item),
+                  }}
+                />
+              )}
+            >
+              {/* eslint-disable react/jsx-props-no-spreading */}
+              <Col {...nameSpan}>{item.strings.name.en}</Col>
+              <Col {...descriptionSpan}>{item.strings.description.en}</Col>
+              <Col {...codeSpan}>{item.strings.code}</Col>
+              {/* eslint-enable react/jsx-props-no-spreading */}
+            </ListItem>
+          )}
+        />
+        {/* end list */}
 
-          {/* filter modal */}
-          <Modal
-            title="Filter Notification templates"
-            visible={showFilters}
-            onCancel={this.closeFiltersModal}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-          >
-            {/* <FocalPersonFilters
-              onCancel={this.closeFiltersModal}
-              cached={cached}
-              onCache={this.handleOnCachedValues}
-              onClearCache={this.handleClearCachedValues}
-            /> */}
-          </Modal>
-          {/* end filter modal */}
+        {/* filter modal */}
+        <Modal
+          title="Filter Notification templates"
+          visible={showFilters}
+          onCancel={this.closeFiltersModal}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+        >
+          <></>
+        </Modal>
+        {/* end filter modal */}
 
-          {/* create/edit form modal */}
-          <Modal
-            title={
-              isEditForm
-                ? 'Edit Notification Template'
-                : 'Add New Notification Template'
-            }
-            visible={showForm}
-            className="FormModal"
-            footer={null}
+        {/* create/edit form modal */}
+        <Modal
+          title={
+            isEditForm
+              ? 'Edit Notification Template'
+              : 'Add New Notification Template'
+          }
+          visible={showForm}
+          className="FormModal"
+          footer={null}
+          onCancel={this.closeNotificationTemplateForm}
+          destroyOnClose
+          maskClosable={false}
+          afterClose={this.handleAfterCloseForm}
+        >
+          <NotificationTemplateForm
+            posting={posting}
+            isEditForm={isEditForm}
+            notificationTemplate={notificationTemplate}
             onCancel={this.closeNotificationTemplateForm}
-            destroyOnClose
-            maskClosable={false}
-            afterClose={this.handleAfterCloseForm}
-          >
-            <NotificationTemplateForm
-              posting={posting}
-              isEditForm={isEditForm}
-              notificationTemplate={notificationTemplate}
-              onCancel={this.closeNotificationTemplateForm}
-            />
-          </Modal>
-          {/* end create/edit form modal */}
-        </div>
+          />
+        </Modal>
+        {/* end create/edit form modal */}
       </>
     );
   }
