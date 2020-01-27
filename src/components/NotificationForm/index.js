@@ -303,7 +303,7 @@ NotificationForm.propTypes = {
       mobile: PropTypes.string,
       email: PropTypes.string,
     })
-  ).isRequired,
+  ),
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func,
     validateFieldsAndScroll: PropTypes.func,
@@ -320,6 +320,7 @@ NotificationForm.propTypes = {
 
 NotificationForm.defaultProps = {
   body: undefined,
+  recipients: [],
 };
 
 export default Form.create()(NotificationForm);
