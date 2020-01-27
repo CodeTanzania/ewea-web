@@ -91,7 +91,8 @@ const ListItem = ({
       />
     ) : (
       <Avatar style={{ backgroundColor: avatarBackground }}>
-        {(name || item.name).toUpperCase().charAt(0)}
+        {/* eslint-disable-next-line react/prop-types */}
+        {(name || item.strings.name.en).toUpperCase().charAt(0)}
       </Avatar>
     );
   };
