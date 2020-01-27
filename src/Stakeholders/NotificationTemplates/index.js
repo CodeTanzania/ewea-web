@@ -1,4 +1,4 @@
-// import { httpActions } from '@codetanzania/ewea-api-client';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import {
   closeNotificationTemplateForm,
   Connect,
@@ -13,6 +13,8 @@ import {
 import { Modal, Col } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import isArray from 'lodash/isArray';
+import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
@@ -24,6 +26,15 @@ import './styles.css';
 const { confirm } = Modal;
 
 /* constants */
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getRoles,
+  getAgencies,
+  // getFocalPeople,
+} = httpActions;
+
 const nameSpan = { xxl: 7, xl: 8, lg: 6, md: 8, sm: 10, xs: 10 };
 const descriptionSpan = { xxl: 10, xl: 10, lg: 6, md: 8, sm: 0, xs: 0 };
 const codeSpan = { xxl: 4, xl: 3, lg: 6, md: 0, sm: 0, xs: 0 };
@@ -48,6 +59,8 @@ class NotificationTemplates extends Component {
     showFilters: false,
     isEditForm: false,
     cached: null,
+    notificationBody: undefined,
+    showNotificationForm: false,
   };
 
   componentDidMount() {
@@ -165,6 +178,18 @@ class NotificationTemplates extends Component {
 
   /**
    * @function
+   * @name closeNotificationForm
+   * @description Handle on notify notificationTemplate
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeNotificationForm = () => {
+    this.setState({ showNotificationForm: false });
+  };
+
+  /**
+   * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
    *
@@ -173,6 +198,62 @@ class NotificationTemplates extends Component {
    */
   handleAfterCloseForm = () => {
     this.setState({ isEditForm: false });
+  };
+
+  /**
+   * @function
+   * @name handleAfterCloseNotificationForm
+   * @description Perform post close notification form cleanups
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleAfterCloseNotificationForm = () => {
+    this.setState({ notificationBody: undefined });
+  };
+
+  /**
+   * @function
+   * @name handleAfterCloseForm
+   * @description Perform post close form cleanups
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleAfterCloseForm = () => {
+    this.setState({ isEditForm: false });
+  };
+
+  /**
+   * @function
+   * @name handleShare
+   * @description Handle share multiple Notification Template
+   *
+   * @param {object[]| object} notificationTemplate Notification Template list to be shared
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleShare = notificationTemplate => {
+    let message = '';
+    if (isArray(notificationTemplate)) {
+      const notificationTemplatesList = notificationTemplate.map(
+        notificationTemplates =>
+          `Name: ${notificationTemplates.strings.name.en}\nDescription: ${
+            // eslint-disable-line
+            notificationTemplates.strings.description.en
+          }\n`
+      );
+
+      message = notificationTemplatesList.join('\n\n\n');
+    } else {
+      message = `Name: ${notificationTemplate.strings.name.en}\nDescription: ${
+        // eslint-disable-line
+        notificationTemplate.strings.description.en
+      }\n`;
+    }
+
+    this.setState({ notificationBody: message, showNotificationForm: true });
   };
 
   /**
@@ -240,6 +321,8 @@ class NotificationTemplates extends Component {
     const {
       showFilters,
       isEditForm,
+      showNotificationForm,
+      notificationBody,
       // cached,
     } = this.state;
     return (
@@ -271,9 +354,9 @@ class NotificationTemplates extends Component {
           page={page}
           itemCount={total}
           loading={loading}
-          onFilter={this.openFiltersModal}
+          // onFilter={this.openFiltersModal}
           // onNotify={this.openNotificationForm}
-          // onShare={this.handleShare}
+          onShare={this.handleShare}
           onRefresh={this.handleRefreshNotificationTemplate}
           onPaginate={nextPage => paginateNotificationTemplates(nextPage)}
           headerLayout={headerLayout}
@@ -286,6 +369,7 @@ class NotificationTemplates extends Component {
             <ListItem
               key={item._id} // eslint-disable-line
               item={item}
+              name={item.strings.name.en}
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
@@ -295,6 +379,11 @@ class NotificationTemplates extends Component {
                     name: 'Edit Notification Template',
                     title: 'Update Notification Template Details',
                     onClick: () => this.handleEdit(item),
+                  }}
+                  share={{
+                    name: 'Share Notification Template',
+                    title: 'Share Notification Template details with others',
+                    onClick: () => this.handleShare(item),
                   }}
                   archive={{
                     name: 'Archive Notification Template',
@@ -328,6 +417,30 @@ class NotificationTemplates extends Component {
           <></>
         </Modal>
         {/* end filter modal */}
+
+        {/* Notification Modal modal */}
+        <Modal
+          title="Notify Notification Template"
+          visible={showNotificationForm}
+          onCancel={this.closeNotificationForm}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+          afterClose={this.handleAfterCloseNotificationForm}
+        >
+          <NotificationForm
+            // recipients={getFocalPeople}
+            onSearchRecipients={getFocalPeople}
+            onSearchJurisdictions={getJurisdictions}
+            onSearchGroups={getPartyGroups}
+            onSearchAgencies={getAgencies}
+            onSearchRoles={getRoles}
+            body={notificationBody}
+            onCancel={this.closeNotificationForm}
+          />
+        </Modal>
+        {/* end Notification modal */}
 
         {/* create/edit form modal */}
         <Modal
