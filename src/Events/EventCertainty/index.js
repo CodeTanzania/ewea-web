@@ -47,7 +47,7 @@ const { confirm } = Modal;
 /**
  * @class
  * @name EventCertainties
- * @description Render eventCertainty list which have search box, certainties and eventCertainty list
+ * @description Render eventCertainty list which have search box, certainties and Event Certainties list
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -109,7 +109,7 @@ class EventCertainties extends Component {
   /**
    * @function
    * @name openEventCertaintyForm
-   * @description close eventCertainty form
+   * @description close Event Certainties form
    *
    * @version 0.1.0
    * @since 0.1.0
