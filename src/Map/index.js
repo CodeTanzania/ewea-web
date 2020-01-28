@@ -27,23 +27,11 @@ class BaseMap extends Component {
   };
 
   componentDidMount() {
+    this.map = this.reactMap.getMap();
     const { geometry } = this.props;
-    this.renderGeoJSON(geometry);
-  }
-
-  componentDidUpdate(prevProps): void {
-    // eslint-disable-next-line react/destructuring-assignment
-    if (prevProps.geometry !== this.props.geometry) {
-      // eslint-disable-next-line react/destructuring-assignment
-      this.renderGeoJSON(this.props.geometry);
-    }
-  }
-
-  renderGeoJSON = geometry => {
-    const map = this.reactMap.getMap();
-    map.on('load', function() {
-      map.addLayer({
-        id: 'maine',
+    this.map.on('load', () => {
+      this.map.addLayer({
+        id: 'administrativearea',
         type: 'fill',
         source: {
           type: 'geojson',
@@ -59,11 +47,29 @@ class BaseMap extends Component {
           'fill-opacity': 0.8,
         },
       });
+      this.renderGeoJSON(geometry);
+    });
+  }
+
+  componentDidUpdate(prevProps): void {
+    // eslint-disable-next-line react/destructuring-assignment
+    if (prevProps.geometry !== this.props.geometry) {
+      // eslint-disable-next-line react/destructuring-assignment
+      this.renderGeoJSON(this.props.geometry);
+    }
+  }
+
+  renderGeoJSON = geometry => {
+    if (this.map.getLayer('administrativearea'))
+      this.map.removeLayer('administrativearea');
+    this.map.getSource('administrativearea').setData({
+      type: 'Feature',
+      properties: {},
+      geometry,
     });
   };
 
   render() {
-    console.log('render function is called');
     return (
       <MapGL
         /* eslint-disable-next-line no-return-assign */
