@@ -367,7 +367,7 @@ const EventDetailsViewBody = ({
   const [action, setAction] = useState({ key: '', label: '' });
 
   useEffect(() => {
-    getChangelogs({ event: event._id }); // eslint-disable-line
+    getChangelogs({ filter: { event: event._id } }); // eslint-disable-line
   }, [event]);
 
   const openForm = useCallback(type => {
