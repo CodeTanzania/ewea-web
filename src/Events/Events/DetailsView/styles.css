@@ -1,11 +1,26 @@
-.EventToolbar {
-  /* border-bottom: 1px solid #e8e8e8; */
-  height: 50px;
-  margin-bottom: 20px;
+.EventDetailsSectionHeader {
+  margin: 0 30px 20px 0;
   border-bottom: 1px solid #ededed;
 }
 
-.EventDetailsSectionHeader {
-  margin: 0 30px 20px 0;
+.EventBody {
+  /* display: flex;
+  direction: column; */
+  height: 100%;
+  overflow: hidden;
+}
+
+.EventBodyContent {
+  padding-top: 20px;
+  height: 100%;
+}
+
+.EventBodyContent:hover {
+  overflow-x: auto;
+}
+
+.EventToolbar {
+  /* border-bottom: 1px solid #e8e8e8; */
+  height: 50px;
   border-bottom: 1px solid #ededed;
 }

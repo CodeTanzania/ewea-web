@@ -1,7 +1,28 @@
-import React from 'react';
-import { Typography, Timeline, Icon, Row, Col, Button } from 'antd';
+import React, { useEffect, useCallback, useState } from 'react';
+import {
+  getChangelogs,
+  openChangelogForm,
+  closeChangelogForm,
+  getEvent,
+  Connect,
+  paginateChangelogs,
+} from '@codetanzania/ewea-api-states';
+import {
+  Typography,
+  Tag,
+  Timeline,
+  Row,
+  Col,
+  Button,
+  Modal,
+  Icon,
+  Card,
+  Pagination,
+} from 'antd';
 import PropTypes from 'prop-types';
 
+import { formatDate, notifySuccess, notifyError } from '../../../util';
+import EventChangelogForm from '../ChangelogForm';
 import './styles.css';
 
 const { Text } = Typography;
@@ -16,23 +37,44 @@ const respondingAgencies = [
 
 const actionsTaken = [
   'Cleanup drains',
-  'Ensure evacutation centers are in good condition',
+  'Ensure evacuation centers are in good condition',
   'Ensure clean water is available',
   'Ensure all important information have been disseminated to responsible personnel',
 ];
 
-export const EventDetailsSectionHeader = ({ title }) => {
+/**
+ * @function
+ * @name EventDetailsSectionHeader
+ * @description Header section for event details drawer
+ *
+ * @param {object} props React props
+ * @returns {object} React component
+ *
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const EventDetailsSectionHeader = ({ title, actions }) => {
   return (
     <div className="EventDetailsSectionHeader">
-      <h4>{title}</h4>
+      <Row>
+        <Col span={16}>
+          <h4>{title}</h4>
+        </Col>
+        <Col span={8}>{actions}</Col>
+      </Row>
     </div>
   );
 };
 
-EventDetailsSectionHeader.propTypes = {
-  title: PropTypes.string.isRequired,
-};
-
+/**
+ * @function
+ * @name EventLocation
+ * @description Section which show event location(s) in hierarchy
+ *
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 export const EventLocation = () => {
   return (
     <>
@@ -53,7 +95,16 @@ export const EventLocation = () => {
   );
 };
 
-export const EventActionTaken = () => {
+/**
+ * @function
+ * @name EventActionsTaken
+ * @description Section which show actions taken per event
+ *
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const EventActionsTaken = () => {
   return (
     <div style={{ marginTop: '40px' }}>
       <EventDetailsSectionHeader title="ACTION TAKEN/ INTERVENTIONS" />
@@ -66,6 +117,15 @@ export const EventActionTaken = () => {
   );
 };
 
+/**
+ * @function
+ * @name EventRespondingAgencies
+ * @description Section which show event responding agencies
+ *
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 export const EventRespondingAgencies = () => {
   return (
     <div style={{ marginTop: '40px' }}>
@@ -79,30 +139,70 @@ export const EventRespondingAgencies = () => {
   );
 };
 
-export const EventRespondingFocals = () => {};
-
-const EventToolbar = () => {
+/**
+ * @function
+ * @name EventToolbar
+ * @description List of actions user can perform on a particular event
+ *
+ * @param {object} props React props
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const EventToolbar = ({ event, openForm }) => {
   return (
     <div className="EventToolbar">
       <ButtonGroup>
-        <Button type="link" size="large" icon="reload" title="Refresh Event" />
+        <Button
+          type="link"
+          size="large"
+          icon="reload"
+          title="Refresh Event"
+          onClick={() =>
+            getEvent(
+              // eslint-disable-next-line
+              event._id,
+              () => notifySuccess('Event was refreshed successfully'),
+              () =>
+                notifyError(
+                  'An error occurred while refreshing event, please contact your system administrator'
+                )
+            )
+          }
+        />
         <Button
           type="link"
           size="large"
           icon="user-add"
           title="Add Focal Person"
+          onClick={() =>
+            openForm({
+              key: 'focalPeople',
+              label: 'Add participated Focal People',
+            })
+          }
         />
         <Button
           type="link"
           size="large"
           icon="usergroup-add"
           title="Add Agency"
+          onClick={() =>
+            openForm({ key: 'agencies', label: 'Add participated Agencies' })
+          }
         />
         <Button
           type="link"
           size="large"
           icon="environment"
           title="Update Location"
+        />
+        <Button
+          type="link"
+          size="large"
+          icon="file-image"
+          title="Upload Image"
+          onClick={() => openForm({ key: 'file', label: 'Upload File' })}
         />
         <Button
           type="link"
@@ -119,6 +219,22 @@ const EventToolbar = () => {
         <Button
           type="link"
           size="large"
+          icon="audit"
+          title="Record Damage & Losses"
+          onClick={() =>
+            openForm({ key: 'damage', label: 'Record Damage and Losses' })
+          }
+        />
+        <Button
+          type="link"
+          size="large"
+          icon="wechat"
+          title="Add Comment"
+          onClick={() => openForm({ key: 'comment', label: 'Add a Comment' })}
+        />
+        <Button
+          type="link"
+          size="large"
           icon="printer"
           title="Print Event Details"
         />
@@ -127,83 +243,214 @@ const EventToolbar = () => {
   );
 };
 
-export const EventFeed = () => {
+/**
+ * @function
+ * @name EventFeed
+ * @description A list of activities(feeds) happening on a particular event
+ *
+ * @param {object} props React props
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const EventFeed = ({ feeds = [], page, total }) => {
   return (
     <>
-      <EventDetailsSectionHeader title="EVENT FEED" />
+      <EventDetailsSectionHeader
+        title="EVENT FEED"
+        actions={
+          <Pagination
+            simple
+            defaultCurrent={page}
+            current={page}
+            total={total}
+            onChange={nextPage => paginateChangelogs(nextPage)}
+          />
+        }
+      />
       <Timeline>
-        <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-        <Timeline.Item color="green">
-          Solve initial network problems 2015-09-01
-        </Timeline.Item>
-        <Timeline.Item
-          dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />}
-        >
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae
-          ab illo inventore veritatis et quasi architecto beatae vitae dicta
-          sunt explicabo.
-        </Timeline.Item>
-        <Timeline.Item color="red">
-          Network problems being solved 2015-09-01
-        </Timeline.Item>
-        <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-        <Timeline.Item
-          dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />}
-        >
-          Technical testing 2015-09-01
-        </Timeline.Item>
-        <Timeline.Item
-          dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />}
-        >
-          Technical testing 2015-09-01
-        </Timeline.Item>
-        <Timeline.Item
-          dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />}
-        >
-          Technical testing 2015-09-01
-        </Timeline.Item>
-        <Timeline.Item
-          dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />}
-        >
-          Technical testing 2015-09-01
-        </Timeline.Item>
-        <Timeline.Item
-          dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />}
-        >
-          Technical testing 2015-09-01
-        </Timeline.Item>
-        <Timeline.Item
-          dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />}
-        >
-          Technical testing 2015-09-01
-        </Timeline.Item>
-        <Timeline.Item
-          dot={<Icon type="clock-circle-o" style={{ fontSize: '16px' }} />}
-        >
-          Technical testing 2015-09-01
-        </Timeline.Item>
+        {/* eslint-disable no-underscore-dangle */}
+        {feeds.map(feed => {
+          if (feed.comment) {
+            return (
+              <Timeline.Item key={feed._id} dot={<Icon type="message" />}>
+                {feed.comment}
+                <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+              </Timeline.Item>
+            );
+          }
+
+          if (feed.focals) {
+            return feed.focals.map(focal => (
+              <Timeline.Item key={feed._id} dot={<Icon type="user" />}>
+                Focal: <Tag color="cyan">{focal.name}</Tag> was added on{' '}
+                <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+              </Timeline.Item>
+            ));
+          }
+
+          if (feed.agencies) {
+            return feed.agencies.map(focal => (
+              <Timeline.Item key={feed._id} dot={<Icon type="apartment" />}>
+                Agency: <Tag color="magenta">{focal.name}</Tag> was added on{' '}
+                <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+              </Timeline.Item>
+            ));
+          }
+
+          if (feed.image) {
+            const baseUrl = 'http://localhost:5000/v1';
+            return (
+              <Timeline.Item key={feed._id} dot={<Icon type="file-image" />}>
+                <Card
+                  hoverable
+                  style={{ width: 300 }}
+                  bodyStyle={{ display: 'none' }}
+                  actions={[
+                    <a
+                      key={`view-${feed._id}`}
+                      href={`${baseUrl}${feed.image.stream}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Icon type="eye" key="eye" />
+                    </a>,
+                    <a
+                      key={`download-${feed._id}`}
+                      href={`${baseUrl}${feed.image.download}`}
+                    >
+                      <Icon type="download" key="download" />
+                    </a>,
+                  ]}
+                  cover={
+                    <img alt="example" src={`${baseUrl}${feed.image.stream}`} />
+                  }
+                />
+                <div style={{ marginTop: '12px' }}>
+                  <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+                </div>
+              </Timeline.Item>
+            );
+          }
+
+          return (
+            <Timeline.Item key={feed._id}>
+              {feed.comment}{' '}
+              <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+            </Timeline.Item>
+          );
+        })}
+        {/* eslint-enable no-underscore-dangle */}
       </Timeline>
     </>
   );
 };
 
-const EventDetailsViewBody = () => {
+/**
+ * @function
+ * @name  EventDetailsViewBody
+ * @description Event Details body view
+ *
+ * @param {object} props React props
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const EventDetailsViewBody = ({
+  event,
+  showForm,
+  posting,
+  changelogs,
+  page,
+  total,
+}) => {
+  const [action, setAction] = useState({ key: '', label: '' });
+
+  useEffect(() => {
+    getChangelogs({ event: event._id }); // eslint-disable-line
+  }, [event]);
+
+  const openForm = useCallback(type => {
+    setAction(type);
+    openChangelogForm();
+  }, []);
+
   return (
-    <>
-      <EventToolbar />
-      <Row>
-        <Col span={16}>
-          <EventLocation />
-          <EventRespondingAgencies />
-          <EventActionTaken />
-        </Col>
-        <Col span={8}>
-          <EventFeed />
-        </Col>
-      </Row>
-    </>
+    <div className="EventBody">
+      <EventToolbar event={event} openForm={openForm} />
+      <div className="EventBodyContent">
+        <Row>
+          <Col span={16}>
+            <EventLocation />
+            <EventRespondingAgencies />
+            <EventActionsTaken />
+          </Col>
+          <Col span={8}>
+            <EventFeed feeds={changelogs} page={page} total={total} />
+          </Col>
+        </Row>
+      </div>
+
+      <Modal
+        title={action.label}
+        visible={showForm}
+        className="FormModal"
+        footer={null}
+        onCancel={() => closeChangelogForm()}
+        destroyOnClose
+        maskClosable={false}
+      >
+        <EventChangelogForm
+          action={action.key}
+          event={event}
+          posting={posting}
+          onCancel={() => closeChangelogForm()}
+        />
+      </Modal>
+    </div>
   );
 };
 
-export default EventDetailsViewBody;
+EventDetailsSectionHeader.propTypes = {
+  title: PropTypes.string.isRequired,
+  actions: PropTypes.node,
+};
+
+EventDetailsSectionHeader.defaultProps = {
+  actions: null,
+};
+
+EventToolbar.propTypes = {
+  event: PropTypes.shape({
+    _id: PropTypes.string,
+  }).isRequired,
+  openForm: PropTypes.func.isRequired,
+};
+
+EventFeed.propTypes = {
+  feeds: PropTypes.arrayOf(
+    PropTypes.shape({ _id: PropTypes.string, comment: PropTypes.string })
+  ).isRequired,
+  page: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+};
+
+EventDetailsViewBody.propTypes = {
+  event: PropTypes.shape({
+    _id: PropTypes.string,
+  }).isRequired,
+  changelogs: PropTypes.arrayOf(PropTypes.shape({ _id: PropTypes.string }))
+    .isRequired,
+  page: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+  showForm: PropTypes.bool.isRequired,
+  posting: PropTypes.bool.isRequired,
+};
+
+export default Connect(EventDetailsViewBody, {
+  changelogs: 'changelogs.list',
+  page: 'changelogs.page',
+  total: 'changelogs.total',
+  showForm: 'changelogs.showForm',
+  posting: 'changelogs.posting',
+});
