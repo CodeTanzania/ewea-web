@@ -1,11 +1,11 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import {
-  getChangelogs,
   openChangelogForm,
   closeChangelogForm,
   getEvent,
   Connect,
   paginateChangelogs,
+  filterChangelogs,
 } from '@codetanzania/ewea-api-states';
 import {
   Typography,
@@ -18,7 +18,9 @@ import {
   Icon,
   Card,
   Pagination,
+  Empty,
 } from 'antd';
+import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 
 import { formatDate, notifySuccess, notifyError } from '../../../util';
@@ -259,89 +261,99 @@ export const EventFeed = ({ feeds = [], page, total }) => {
       <EventDetailsSectionHeader
         title="EVENT FEED"
         actions={
-          <Pagination
-            simple
-            defaultCurrent={page}
-            current={page}
-            total={total}
-            onChange={nextPage => paginateChangelogs(nextPage)}
-          />
+          !isEmpty(feeds) && (
+            <Pagination
+              simple
+              defaultCurrent={page}
+              current={page}
+              total={total}
+              onChange={nextPage => paginateChangelogs(nextPage)}
+            />
+          )
         }
       />
-      <Timeline>
-        {/* eslint-disable no-underscore-dangle */}
-        {feeds.map(feed => {
-          if (feed.comment) {
-            return (
-              <Timeline.Item key={feed._id} dot={<Icon type="message" />}>
-                {feed.comment}
-                <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-              </Timeline.Item>
-            );
-          }
 
-          if (feed.focals) {
-            return feed.focals.map(focal => (
-              <Timeline.Item key={feed._id} dot={<Icon type="user" />}>
-                Focal: <Tag color="cyan">{focal.name}</Tag> was added on{' '}
-                <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-              </Timeline.Item>
-            ));
-          }
-
-          if (feed.agencies) {
-            return feed.agencies.map(focal => (
-              <Timeline.Item key={feed._id} dot={<Icon type="apartment" />}>
-                Agency: <Tag color="magenta">{focal.name}</Tag> was added on{' '}
-                <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-              </Timeline.Item>
-            ));
-          }
-
-          if (feed.image) {
-            const baseUrl = 'http://localhost:5000/v1';
-            return (
-              <Timeline.Item key={feed._id} dot={<Icon type="file-image" />}>
-                <Card
-                  hoverable
-                  style={{ width: 300 }}
-                  bodyStyle={{ display: 'none' }}
-                  actions={[
-                    <a
-                      key={`view-${feed._id}`}
-                      href={`${baseUrl}${feed.image.stream}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Icon type="eye" key="eye" />
-                    </a>,
-                    <a
-                      key={`download-${feed._id}`}
-                      href={`${baseUrl}${feed.image.download}`}
-                    >
-                      <Icon type="download" key="download" />
-                    </a>,
-                  ]}
-                  cover={
-                    <img alt="example" src={`${baseUrl}${feed.image.stream}`} />
-                  }
-                />
-                <div style={{ marginTop: '12px' }}>
+      {isEmpty(feeds) ? (
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      ) : (
+        <Timeline>
+          {/* eslint-disable no-underscore-dangle */}
+          {feeds.map(feed => {
+            if (feed.comment) {
+              return (
+                <Timeline.Item key={feed._id} dot={<Icon type="message" />}>
+                  {feed.comment}
                   <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-                </div>
+                </Timeline.Item>
+              );
+            }
+
+            if (feed.focals) {
+              return feed.focals.map(focal => (
+                <Timeline.Item key={feed._id} dot={<Icon type="user" />}>
+                  Focal: <Tag color="cyan">{focal.name}</Tag> was added on{' '}
+                  <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+                </Timeline.Item>
+              ));
+            }
+
+            if (feed.agencies) {
+              return feed.agencies.map(focal => (
+                <Timeline.Item key={feed._id} dot={<Icon type="apartment" />}>
+                  Agency: <Tag color="magenta">{focal.name}</Tag> was added on{' '}
+                  <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+                </Timeline.Item>
+              ));
+            }
+
+            if (feed.image) {
+              const baseUrl = 'http://localhost:5000/v1';
+              return (
+                <Timeline.Item key={feed._id} dot={<Icon type="file-image" />}>
+                  <Card
+                    hoverable
+                    style={{ width: 300 }}
+                    bodyStyle={{ display: 'none' }}
+                    actions={[
+                      <a
+                        key={`view-${feed._id}`}
+                        href={`${baseUrl}${feed.image.stream}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Icon type="eye" key="eye" />
+                      </a>,
+                      <a
+                        key={`download-${feed._id}`}
+                        href={`${baseUrl}${feed.image.download}`}
+                      >
+                        <Icon type="download" key="download" />
+                      </a>,
+                    ]}
+                    cover={
+                      <img
+                        alt="example"
+                        src={`${baseUrl}${feed.image.stream}`}
+                      />
+                    }
+                  />
+                  <div style={{ marginTop: '12px' }}>
+                    <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+                  </div>
+                </Timeline.Item>
+              );
+            }
+
+            return (
+              <Timeline.Item key={feed._id}>
+                {feed.comment}{' '}
+                <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
               </Timeline.Item>
             );
-          }
-
-          return (
-            <Timeline.Item key={feed._id}>
-              {feed.comment}{' '}
-              <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-            </Timeline.Item>
-          );
-        })}
-        {/* eslint-enable no-underscore-dangle */}
-      </Timeline>
+          })}
+          {/* eslint-enable no-underscore-dangle */}
+        </Timeline>
+      )}
     </>
   );
 };
@@ -363,11 +375,12 @@ const EventDetailsViewBody = ({
   changelogs,
   page,
   total,
+  loading,
 }) => {
   const [action, setAction] = useState({ key: '', label: '' });
 
   useEffect(() => {
-    getChangelogs({ filter: { event: event._id } }); // eslint-disable-line
+    filterChangelogs({ event: event._id }); // eslint-disable-line
   }, [event]);
 
   const openForm = useCallback(type => {
@@ -386,7 +399,12 @@ const EventDetailsViewBody = ({
             <EventActionsTaken />
           </Col>
           <Col span={8}>
-            <EventFeed feeds={changelogs} page={page} total={total} />
+            <EventFeed
+              feeds={changelogs}
+              page={page}
+              total={total}
+              loading={loading}
+            />
           </Col>
         </Row>
       </div>
@@ -453,4 +471,5 @@ export default Connect(EventDetailsViewBody, {
   total: 'changelogs.total',
   showForm: 'changelogs.showForm',
   posting: 'changelogs.posting',
+  loading: 'changelogs.loading',
 });

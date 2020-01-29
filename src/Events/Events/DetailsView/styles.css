@@ -12,11 +12,8 @@
 
 .EventBodyContent {
   padding-top: 20px;
-  height: 100%;
-}
-
-.EventBodyContent:hover {
-  overflow-x: auto;
+  height: 90%;
+  overflow: auto;
 }
 
 .EventToolbar {
