@@ -64,7 +64,8 @@ class EventChangelogForm extends Component {
             notifyError(
               'Something occurred while saving event feed, please try again!'
             );
-          }
+          },
+          { filters: { event: event._id } } // eslint-disable-line
         );
       }
     });
