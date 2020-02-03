@@ -526,14 +526,17 @@ class Events extends Component {
               number={event ? event.number : 'N/A'}
               description={event ? event.description : 'N/A'}
               type={event ? event.type.strings.name.en : 'N/A'}
+              stage={event ? event.stage : 'N/A'}
             />
           }
           placement="right"
           width="100%"
           onClose={this.closeEventDetails}
           visible={showEventDetails}
+          drawerStyle={{ overflow: 'hidden' }}
+          bodyStyle={{ overflow: 'hidden', height: '100%' }}
         >
-          <EventDetailsViewBody />
+          <EventDetailsViewBody event={event} />
         </Drawer>
 
         {/* End Event details drawer */}
@@ -556,6 +559,7 @@ Events.propTypes = {
         name: PropTypes.shape({ en: PropTypes.string }),
       }),
     }),
+    stage: PropTypes.string,
   }),
   page: PropTypes.number.isRequired,
   showForm: PropTypes.bool.isRequired,
