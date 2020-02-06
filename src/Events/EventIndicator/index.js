@@ -118,7 +118,7 @@ class EventIndicator extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Event indicators here ...',
+            placeholder: 'Search for event indicators here ...',
             onChange: this.searchEventIndicators,
             value: searchQuery,
           }}

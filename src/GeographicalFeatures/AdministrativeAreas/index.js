@@ -162,7 +162,7 @@ class AdministrativeAreas extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Administrative Areas here ...',
+            placeholder: 'Search for administrative areas here ...',
             onChange: this.searchAdministrativeAreas,
             value: searchQuery,
           }}

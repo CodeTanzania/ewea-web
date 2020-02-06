@@ -2,28 +2,40 @@ import { Col, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import alertIcon from '../assets/icons/alerts.svg';
 import dashboardIcon from '../assets/icons/dashboards.svg';
-import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures.svg';
-import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
-import contactsIcon from '../assets/icons/stakeholders/contacts.svg';
-import rolesIcon from '../assets/icons/stakeholders/roles.svg';
-import issuedAlertsIcon from '../assets/icons/alerts/issuedalerts.svg';
-import actionsIcon from '../assets/icons/alerts/actions.svg';
-import actionCatalogIcon from '../assets/icons/alerts/actioncatalog.svg';
+import settingsIcon from '../assets/icons/settings.svg';
+import eventActionsIcon from '../assets/icons/eventactions.svg';
+import criticalFacilitiesIcon from '../assets/icons/criticalfacilities.svg';
+import administrativeAreasIcon from '../assets/icons/administrativeareas.svg';
+import agenciesIcon from '../assets/icons/agencies.svg';
+import focalPeopleIcon from '../assets/icons/focalpeople.svg';
+import emergencyFunctionsIcon from '../assets/icons/emergencyfunctions.svg';
+import eventsIcon from '../assets/icons/events.svg';
+import actionsTakenIcon from '../assets/icons/actionstaken.svg';
+import actionCatalogIcon from '../assets/icons/actioncatalog.svg';
 import './styles.css';
 
 /* constants */
 const routes = [
   {
-    name: 'Issued Alerts',
-    path: '/app/issuedalerts',
-    icon: issuedAlertsIcon,
+    name: 'Events',
+    path: '/app/events',
+    icon: eventsIcon,
+  },
+  {
+    name: 'Events Actions',
+    path: '/app/eventactions',
+    icon: eventActionsIcon,
   },
   {
     name: 'Actions Taken',
     path: '/app/actions',
-    icon: actionsIcon,
+    icon: actionsTakenIcon,
+  },
+  {
+    name: 'Emergency Functions',
+    path: '/app/functions',
+    icon: emergencyFunctionsIcon,
   },
   {
     name: 'Action Catalog',
@@ -33,7 +45,7 @@ const routes = [
   {
     name: 'Focal People',
     path: '/app/focalpeople',
-    icon: contactsIcon,
+    icon: focalPeopleIcon,
   },
   {
     name: 'Agencies',
@@ -41,24 +53,24 @@ const routes = [
     icon: agenciesIcon,
   },
   {
-    name: 'Roles',
-    path: '/app/roles',
-    icon: rolesIcon,
+    name: 'Critical Facilities',
+    path: '/app/features',
+    icon: criticalFacilitiesIcon,
   },
   {
-    name: 'Event Types',
-    path: '/app/eventtypes',
-    icon: alertIcon,
-  },
-  {
-    name: 'Geographical Features',
-    path: '/app/geographicalfeatures',
-    icon: geographicalFeaturesIcon,
+    name: 'Administrative Areas',
+    path: '/app/administrativeareas',
+    icon: administrativeAreasIcon,
   },
   {
     name: 'Dashboards',
-    path: '/app/dashboards',
+    path: '/app/overview',
     icon: dashboardIcon,
+  },
+  {
+    name: 'Settings',
+    path: '/app/settings',
+    icon: settingsIcon,
   },
 ];
 

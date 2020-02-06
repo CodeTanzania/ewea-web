@@ -120,7 +120,7 @@ class EventGroups extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Event groups here ...',
+            placeholder: 'Search for event groups here ...',
             onChange: this.searchEventGroups,
             value: searchQuery,
           }}

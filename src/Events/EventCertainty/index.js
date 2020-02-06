@@ -296,7 +296,7 @@ class EventCertainties extends Component {
 
         {/* list starts */}
         <ItemList
-          itemName="event Certainties"
+          itemName="event certainty"
           items={eventCertainties}
           page={page}
           itemCount={total}

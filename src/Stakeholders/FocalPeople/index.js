@@ -280,7 +280,7 @@ class FocalPeople extends Component {
       },
       () => {
         notifyError(
-          'An Error occurred while refreshing Focal People please contact system administrator'
+          'An error occurred while refreshing focal people please contact system administrator'
         );
       }
     );
@@ -357,7 +357,7 @@ class FocalPeople extends Component {
 
         {/* list starts */}
         <ItemList
-          itemName="focal People"
+          itemName="focal people"
           items={focalPeople}
           page={page}
           itemCount={total}
@@ -395,7 +395,7 @@ class FocalPeople extends Component {
                   archive={{
                     name: 'Archive Focal Person',
                     title:
-                      'Remove Focal Person from list of active focal People',
+                      'Remove focal person from list of active focal people',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                 />
