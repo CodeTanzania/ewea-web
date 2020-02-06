@@ -336,9 +336,9 @@ class EventQuestions extends Component {
           />
           {/* end list */}
 
-          {/* Notification Modal modal */}
+          {/* Event Question modal */}
           <Modal
-            title="Notify Notification Template"
+            title="Notify Event Question"
             visible={showNotificationForm}
             onCancel={this.closeNotificationForm}
             footer={null}
@@ -358,7 +358,7 @@ class EventQuestions extends Component {
               onCancel={this.closeNotificationForm}
             />
           </Modal>
-          {/* end Notification modal */}
+          {/* end Event Question modal */}
 
           {/* create/edit form modal */}
           <Modal
