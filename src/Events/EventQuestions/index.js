@@ -1,3 +1,4 @@
+import { httpActions } from '@codetanzania/ewea-api-client';
 import {
   Connect,
   getEventQuestions,
@@ -5,14 +6,46 @@ import {
   searchEventQuestions,
   selectEventQuestion,
   closeEventQuestionForm,
+  paginateEventQuestions,
+  refreshEventQuestions,
+  deleteEventQuestion,
 } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Modal } from 'antd';
+import { Modal, Col } from 'antd';
+import isArray from 'lodash/isArray';
 import Topbar from '../../components/Topbar';
 import EventQuestionForm from './Form';
-import EventQuestionsList from './List';
+import NotificationForm from '../../components/NotificationForm';
+import ItemList from '../../components/List';
+import ListItem from '../../components/ListItem';
+import ListItemActions from '../../components/ListItemActions';
+import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
+
+const { confirm } = Modal;
+
+/* constants */
+const nameSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 10, xs: 10 };
+const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 5, xs: 5 };
+const indicatorSpan = { xxl: 6, xl: 6, lg: 6, md: 5, sm: 4, xs: 4 };
+const descriptionSpan = { xxl: 8, xl: 8, lg: 9, md: 9, sm: 0, xs: 0 };
+
+const headerLayout = [
+  { ...nameSpan, header: 'Name' },
+  { ...codeSpan, header: 'Code' },
+  { ...indicatorSpan, header: 'Indicator' },
+  { ...descriptionSpan, header: 'Description' },
+];
+
+const {
+  // getEventQuestions: getEventQuestionFromAPI,
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getAgencies,
+  getRoles,
+} = httpActions;
 
 /**
  * @class
@@ -27,6 +60,8 @@ class EventQuestions extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isEditForm: false,
+    notificationBody: undefined,
+    showNotificationForm: false,
   };
 
   componentDidMount() {
@@ -100,6 +135,112 @@ class EventQuestions extends Component {
     this.setState({ isEditForm: false });
   };
 
+  /**
+   * @function
+   * @name handleRefreshEventQuestions
+   * @description Handle list refresh action
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleRefreshEventQuestions = () => {
+    refreshEventQuestions(
+      () => {
+        notifySuccess('Event Questions refreshed successfully');
+      },
+      () => {
+        notifyError(
+          'An Error occurred while refreshing Event Questions please contact system administrator'
+        );
+      }
+    );
+  };
+
+  /**
+   * @function
+   * @name closeNotificationForm
+   * @description Handle on notify notificationTemplate
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeNotificationForm = () => {
+    this.setState({ showNotificationForm: false });
+  };
+
+  /**
+   * @function
+   * @name handleAfterCloseForm
+   * @description Perform post close form cleanups
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleAfterCloseForm = () => {
+    this.setState({ isEditForm: false });
+  };
+
+  /**
+   * @function
+   * @name handleShare
+   * @description Handle share multiple event Questions
+   *
+   * @param {object[]| object} eventQuestions event Questions list to be shared
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleShare = eventQuestions => {
+    let message = '';
+    if (isArray(eventQuestions)) {
+      const eventQuestionList = eventQuestions.map(
+        eventQuestion =>
+          `Name: ${eventQuestion.strings.name.en}\nDescription: ${
+            // eslint-disable-line
+            eventQuestion.strings.description.en
+          }\n`
+      );
+
+      message = eventQuestionList.join('\n\n\n');
+    } else {
+      message = `Name: ${eventQuestions.strings.name.en}\nDescription: ${
+        // eslint-disable-line
+        eventQuestions.strings.description.en
+      }\n`;
+    }
+
+    this.setState({ notificationBody: message, showNotificationForm: true });
+  };
+
+  /**
+   * @function
+   * @name showArchiveConfirm
+   * @description show confirm modal before archiving a event question
+   *
+   * @param item {object} eventQuestion to archive
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+
+  showArchiveConfirm = item => {
+    confirm({
+      title: `Are you sure you want to archive ${item.strings.name.en} ?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteEventQuestion(
+          item._id, // eslint-disable-line
+          () => notifySuccess('Event Question was archived successfully'),
+          () =>
+            notifyError(
+              'An error occurred while archiving Event Question, Please contact your system Administrator'
+            )
+        );
+      },
+    });
+  };
+
   render() {
     const {
       eventQuestions,
@@ -111,7 +252,7 @@ class EventQuestions extends Component {
       searchQuery,
       total,
     } = this.props;
-    const { isEditForm } = this.state;
+    const { isEditForm, notificationBody, showNotificationForm } = this.state;
     return (
       <>
         {/* Topbar */}
@@ -136,14 +277,88 @@ class EventQuestions extends Component {
 
         <div className="EventQuestionsList">
           {/* list starts */}
-          <EventQuestionsList
-            total={total}
+          <ItemList
+            itemName="Event Question"
+            items={eventQuestions}
             page={page}
-            eventQuestions={eventQuestions}
+            itemCount={total}
             loading={loading}
-            onEdit={this.handleEdit}
+            // onFilter={this.openFiltersModal}
+            onNotify={this.openNotificationForm}
+            onShare={this.handleShare}
+            onRefresh={this.handleRefreshEventQuestions}
+            onPaginate={nextPage => paginateEventQuestions(nextPage)}
+            headerLayout={headerLayout}
+            renderListItem={({
+              item,
+              isSelected,
+              onSelectItem,
+              onDeselectItem,
+            }) => (
+              <ListItem
+                key={item._id} // eslint-disable-line
+                item={item}
+                name={item.strings.name.en}
+                isSelected={isSelected}
+                onSelectItem={onSelectItem}
+                onDeselectItem={onDeselectItem}
+                renderActions={() => (
+                  <ListItemActions
+                    edit={{
+                      name: 'Edit Event Question',
+                      title: 'Update Event Question Details',
+                      onClick: () => this.handleEdit(item),
+                    }}
+                    share={{
+                      name: 'Share Event Question',
+                      title: 'Share Event Question details with others',
+                      onClick: () => this.handleShare(item),
+                    }}
+                    archive={{
+                      name: 'Archive Event Question',
+                      title:
+                        'Remove Event Question from list of active event question',
+                      onClick: () => this.showArchiveConfirm(item),
+                    }}
+                  />
+                )}
+              >
+                {/* eslint-disable react/jsx-props-no-spreading */}
+                <Col {...nameSpan}>{item.strings.name.en}</Col>
+                <Col {...codeSpan}>{item.strings.code}</Col>
+                <Col {...indicatorSpan}>
+                  {item.relations.indicator.strings.name.en}
+                </Col>
+                <Col {...descriptionSpan}>{item.strings.description.en}</Col>
+                {/* eslint-enable react/jsx-props-no-spreading */}
+              </ListItem>
+            )}
           />
           {/* end list */}
+
+          {/* Notification Modal modal */}
+          <Modal
+            title="Notify Notification Template"
+            visible={showNotificationForm}
+            onCancel={this.closeNotificationForm}
+            footer={null}
+            destroyOnClose
+            maskClosable={false}
+            className="FormModal"
+            afterClose={this.handleAfterCloseNotificationForm}
+          >
+            <NotificationForm
+              recipients={getFocalPeople}
+              onSearchRecipients={getFocalPeople}
+              onSearchJurisdictions={getJurisdictions}
+              onSearchGroups={getPartyGroups}
+              onSearchAgencies={getAgencies}
+              onSearchRoles={getRoles}
+              body={notificationBody}
+              onCancel={this.closeNotificationForm}
+            />
+          </Modal>
+          {/* end Notification modal */}
 
           {/* create/edit form modal */}
           <Modal
