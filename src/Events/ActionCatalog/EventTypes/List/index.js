@@ -169,7 +169,7 @@ class EventTypesList extends Component {
       <>
         {/* toolbar */}
         <Toolbar
-          itemName="Event Types"
+          itemName="event types"
           page={page}
           total={total}
           selectedItemsCount={selectedEventTypesCount}
@@ -182,11 +182,11 @@ class EventTypesList extends Component {
           onRefresh={() =>
             refreshEventTypes(
               () => {
-                notifySuccess('Event Types refreshed successfully');
+                notifySuccess('Event types refreshed successfully');
               },
               () => {
                 notifyError(
-                  'An Error occurred while refreshing Event Types please contact system administrator'
+                  'An Error occurred while refreshing event types please contact system administrator'
                 );
               }
             )

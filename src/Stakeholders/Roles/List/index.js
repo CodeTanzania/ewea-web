@@ -154,7 +154,7 @@ class RoleList extends Component {
       <>
         {/* toolbar */}
         <Toolbar
-          itemName="Role"
+          itemName="role"
           page={page}
           total={total}
           selectedItemsCount={selectedRolesCount}

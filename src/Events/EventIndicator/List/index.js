@@ -158,7 +158,7 @@ class EventIndicatorList extends Component {
       <>
         {/* toolbar */}
         <Toolbar
-          itemName="Event Indicators"
+          itemName="event indicator"
           page={page}
           total={total}
           selectedItemsCount={selectedEventIndicatorsCount}

@@ -320,7 +320,7 @@ class EventActions extends Component {
 
         {/* list starts */}
         <ItemList
-          itemName="event Actions"
+          itemName="event actions"
           items={eventActions}
           page={page}
           itemCount={total}

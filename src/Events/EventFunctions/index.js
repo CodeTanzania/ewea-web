@@ -162,7 +162,7 @@ class EventFunctions extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Emergency Functions here ...',
+            placeholder: 'Search for emergency functions here ...',
             onChange: this.searchEventFunctions,
             value: searchQuery,
           }}
