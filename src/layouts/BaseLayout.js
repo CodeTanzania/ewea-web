@@ -16,7 +16,9 @@ import EventFunctions from '../Events/EventFunctions';
 import EventTypes from '../Events/ActionCatalog/EventTypes';
 import EventSeverity from '../Events/EventSeverity';
 import EventCertainty from '../Events/EventCertainty';
+import EventQuestions from '../Events/EventQuestions';
 import EventGroups from '../Events/EventGroups';
+import EventIndicator from '../Events/EventIndicator';
 import Features from '../GeographicalFeatures/CriticalFacilities';
 // import StakeholdersNotifications from '../Stakeholders/Notifications';
 import StakeholdersRoles from '../Stakeholders/Roles';
@@ -149,6 +151,10 @@ const breadcrumbNameMap = {
     name: 'Event Certainty',
     title: 'Event Certainty module',
   },
+  '/app/settings/eventquestions': {
+    name: 'Event Questions',
+    title: 'Event Questions module',
+  },
   '/app/settings/eventseverity': {
     name: 'Event Severity',
     title: 'Event Severity module',
@@ -160,6 +166,10 @@ const breadcrumbNameMap = {
   '/app/settings/eventgroups': {
     name: 'Event Groups',
     title: 'Event Groups module',
+  },
+  '/app/settings/eventindicator': {
+    name: 'Event Indicator',
+    title: 'Event Indicator module',
   },
 };
 
@@ -296,8 +306,16 @@ const BaseLayout = props => {
             component={EventCertainty}
           />
           <SecureRoute
+            path={`${baseUrl}/settings/eventquestions`}
+            component={EventQuestions}
+          />
+          <SecureRoute
             path={`${baseUrl}/settings/eventseverity`}
             component={EventSeverity}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/eventindicator`}
+            component={EventIndicator}
           />
           <SecureRoute component={PageNotFound} />
         </Switch>

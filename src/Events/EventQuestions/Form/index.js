@@ -1,24 +1,25 @@
 import {
-  putEventSeverity,
-  postEventSeverity,
+  putEventQuestion,
+  postEventQuestion,
 } from '@codetanzania/ewea-api-states';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import { Button, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
-/* constants */
-const { TextArea } = Input;
+const { getEventIndicators } = httpActions;
 
 /**
  * @class
- * @name EventSeverityForm
- * @description  Render form for creating a new event severity
+ * @name EventQuestionForm
+ * @description  Render form for creating a new event question
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EventSeverityForm extends Component {
+class EventQuestionForm extends Component {
   /**
    * @function
    * @name handleSubmit
@@ -35,7 +36,7 @@ class EventSeverityForm extends Component {
     e.preventDefault();
     const {
       form: { validateFieldsAndScroll },
-      eventSeverity,
+      eventQuestion,
       isEditForm,
     } = this.props;
 
@@ -51,29 +52,32 @@ class EventSeverityForm extends Component {
               en: values.description,
             },
           },
+          relations: {
+            indicator: { _id: values.indicator },
+          },
         };
         if (isEditForm) {
-          const updatedContact = { ...eventSeverity, ...payload };
-          putEventSeverity(
+          const updatedContact = { ...eventQuestion, ...payload };
+          putEventQuestion(
             updatedContact,
             () => {
-              notifySuccess('Event Severity was updated successfully');
+              notifySuccess('Event Question was updated successfully');
             },
             () => {
               notifyError(
-                'Something occurred while updating Event Severity, please try again!'
+                'Something occurred while updating Event Question, please try again!'
               );
             }
           );
         } else {
-          postEventSeverity(
+          postEventQuestion(
             payload,
             () => {
-              notifySuccess('Event Severity was created successfully');
+              notifySuccess('Event Question was created successfully');
             },
             () => {
               notifyError(
-                'Something occurred while saving Event Severity, please try again!'
+                'Something occurred while saving Event Question, please try again!'
               );
             }
           );
@@ -87,7 +91,7 @@ class EventSeverityForm extends Component {
       posting,
       onCancel,
       isEditForm,
-      eventSeverity,
+      eventQuestion,
       form: { getFieldDecorator },
     } = this.props;
 
@@ -112,53 +116,63 @@ class EventSeverityForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* Event Severity name */}
+        {/* Event Question name */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Name">
           {getFieldDecorator('name', {
             initialValue: isEditForm
-              ? eventSeverity.strings.name.en
+              ? eventQuestion.strings.name.en
               : undefined,
             rules: [
               {
                 required: true,
-                message: ' Event Severities  name is required',
+                message: ' Event Certainties  name is required',
               },
             ],
           })(<Input />)}
         </Form.Item>
-        {/* end Event Severity name */}
+        {/* end Event Question name */}
 
-        {/* Event Severity code */}
+        {/* Event Question Indicator */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Event Severity code">
-          {getFieldDecorator('code', {
-            initialValue: isEditForm ? eventSeverity.strings.code : undefined,
-            rules: [
-              {
-                required: false,
-              },
-            ],
-          })(<Input />)}
+        <Form.Item {...formItemLayout} label="Indicator">
+          {getFieldDecorator('indicator', {
+            initialValue:
+              isEditForm && eventQuestion.relations.indicator // eslint-disable-line
+                ? eventQuestion.relations.indicator._id // eslint-disable-line
+                : undefined,
+            rules: [{ message: 'Event Indicator is required' }],
+          })(
+            <SearchableSelectInput
+              onSearch={getEventIndicators}
+              optionLabel={indicator => indicator.strings.name.en}
+              optionValue="_id"
+              initialValue={
+                isEditForm && eventQuestion.relations.indicator
+                  ? eventQuestion.relations.indicator
+                  : undefined
+              }
+            />
+          )}
         </Form.Item>
-        {/* end Event Severity code */}
+        {/* end Event indicator */}
 
-        {/* Event Severity Description */}
+        {/* Event Question Description */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Description">
           {getFieldDecorator('description', {
             initialValue: isEditForm
-              ? eventSeverity.strings.description.en
+              ? eventQuestion.strings.description.en
               : undefined,
             rules: [
               {
                 required: true,
-                message: 'Event Severity Description is required',
+                message: 'Event Question Description is required',
               },
             ],
-          })(<TextArea autosize={{ minRows: 3, maxRows: 10 }} />)}
+          })(<Input />)}
         </Form.Item>
-        {/* end Event Severity */}
+        {/* end Event Question */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -178,8 +192,8 @@ class EventSeverityForm extends Component {
   }
 }
 
-EventSeverityForm.propTypes = {
-  eventSeverity: PropTypes.shape({
+EventQuestionForm.propTypes = {
+  eventQuestion: PropTypes.shape({
     strings: PropTypes.shape({
       code: PropTypes.string.isRequired,
       name: PropTypes.shape({
@@ -189,6 +203,9 @@ EventSeverityForm.propTypes = {
         en: PropTypes.string.isRequired,
       }),
       _id: PropTypes.string,
+    }),
+    relations: PropTypes.shape({
+      indicator: PropTypes.string,
     }),
   }).isRequired,
   isEditForm: PropTypes.bool.isRequired,
@@ -200,4 +217,4 @@ EventSeverityForm.propTypes = {
   }).isRequired,
 };
 
-export default Form.create()(EventSeverityForm);
+export default Form.create()(EventQuestionForm);

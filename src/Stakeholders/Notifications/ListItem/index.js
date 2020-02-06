@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import randomColor from 'randomcolor';
 import ListItemActions from '../../../components/ListItemActions';
 // eslint-disable-next-line import/named
-import { formatTime, timeAgo } from '../../../util';
+import { formatDate, timeAgo } from '../../../util';
 import './styles.css';
 
 const { confirm } = Modal;
@@ -136,7 +136,7 @@ class CampaignListItem extends Component {
           <Col span={4} title="Sent Notifications">
             {sent}
           </Col>
-          <Col span={5} title={formatTime(sentAt)}>
+          <Col span={5} title={formatDate(sentAt)}>
             {timeAgo(sentAt)}
           </Col>
           <Col span={2}>

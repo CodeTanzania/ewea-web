@@ -8,21 +8,22 @@ import './styles.css';
 /* constants */
 const { confirm } = Modal;
 const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 3, xs: 3 };
-const nameSpan = { xxl: 7, xl: 8, lg: 7, md: 7, sm: 10, xs: 10 };
-const descriptionSpan = { xxl: 10, xl: 9, lg: 6, md: 9, sm: 0, xs: 0 };
-const codeSpan = { xxl: 4, xl: 3, lg: 6, md: 0, sm: 0, xs: 0 };
+const nameSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 10, xs: 10 };
+const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 5, xs: 5 };
+const indicatorSpan = { xxl: 6, xl: 6, lg: 6, md: 5, sm: 4, xs: 4 };
+const descriptionSpan = { xxl: 8, xl: 8, lg: 9, md: 9, sm: 0, xs: 0 };
 const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 2 };
 
 /**
  * @class
- * @name NotificationTemplatesListItem
- * @description Single notification template list item component.
- * Render single notification template details
+ * @name EventQuestionsListItem
+ * @description Single event question list item component.
+ * Render single event question details
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class NotificationTemplatesListItem extends Component {
+class EventQuestionsListItem extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isHovered: false,
@@ -42,7 +43,7 @@ class NotificationTemplatesListItem extends Component {
 
   /**
    * @function
-   * @name handleMouseEnter
+   * @name handleMouseLeave
    * @description Handle on MouseLeave ListItem event
    *
    * @version 0.1.0
@@ -77,7 +78,7 @@ class NotificationTemplatesListItem extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a notification template
+   * @description show confirm modal before archiving an event question
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -96,7 +97,14 @@ class NotificationTemplatesListItem extends Component {
   };
 
   render() {
-    const { name, description, code, onEdit } = this.props;
+    const {
+      abbreviation,
+      description,
+      code,
+      name,
+      indicator,
+      onEdit,
+    } = this.props;
     const { isHovered } = this.state;
     const { isSelected } = this.props;
     const avatarBackground = randomColor();
@@ -119,14 +127,14 @@ class NotificationTemplatesListItem extends Component {
         />
       ) : (
         <Avatar style={{ backgroundColor: avatarBackground }}>
-          {name.toUpperCase().charAt(0)}
+          {abbreviation}
         </Avatar>
       );
     }
 
     return (
       <div
-        className="NotificationTemplateListItem"
+        className="EventQuestionsListItem"
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
@@ -134,21 +142,25 @@ class NotificationTemplatesListItem extends Component {
           {/* eslint-disable react/jsx-props-no-spreading */}
           <Col {...sideSpan}>{sideComponent}</Col>
           <Col {...nameSpan}>{name}</Col>
-          <Col {...descriptionSpan}>{description}</Col>
           <Col {...codeSpan}>{code}</Col>
+          <Col {...indicatorSpan}>{indicator}</Col>
+          <Col {...descriptionSpan} title={description}>
+            {' '}
+            {description}{' '}
+          </Col>
           <Col {...isHoveredSpan}>
-            {/* eslint-enable react/jsx-props-no-spreading */}
+            {/* eslint-disable react/jsx-props-no-spreading */}
             {isHovered && (
               <ListItemActions
                 edit={{
-                  name: 'Edit Notification Template',
-                  title: 'Update Notification Template Details',
+                  name: 'Edit Event Question',
+                  title: 'Update Event Question Details',
                   onClick: onEdit,
                 }}
                 archive={{
-                  name: 'Archive Notification Template',
+                  name: 'Archive Event Question',
                   title:
-                    'Remove Notification Template from list of active focal People',
+                    'Remove Event Question from list of active Event Questions',
                   onClick: this.showArchiveConfirm,
                 }}
               />
@@ -160,12 +172,12 @@ class NotificationTemplatesListItem extends Component {
   }
 }
 
-NotificationTemplatesListItem.propTypes = {
+EventQuestionsListItem.propTypes = {
   abbreviation: PropTypes.string.isRequired,
-  location: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  indicator: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
   onArchive: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
@@ -173,4 +185,4 @@ NotificationTemplatesListItem.propTypes = {
   onDeselectItem: PropTypes.func.isRequired,
 };
 
-export default NotificationTemplatesListItem;
+export default EventQuestionsListItem;

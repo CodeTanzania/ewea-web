@@ -37,10 +37,22 @@ const routes = [
     description: modules.eventCertainty,
   },
   {
+    name: 'Event Questions',
+    path: '/eventquestions',
+    icon: notificationIcon,
+    description: modules.eventQuestions,
+  },
+  {
     name: 'Event Severity',
     path: '/eventseverity',
     icon: eventSeverityIcon,
     description: modules.eventSeverity,
+  },
+  {
+    name: 'Event Indicator',
+    path: '/eventindicator',
+    icon: alertIcon,
+    description: modules.eventIndicator,
   },
   {
     name: 'Notification Templates',

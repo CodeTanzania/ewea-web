@@ -53,16 +53,18 @@ export const notifyInfo = info => {
 
 /**
  * @function
- * @name formatTime
+ * @name formatDate
  * @description formats date to ddd, MMM DD YYYY hA format
  *
  * @param {object} date date object
+ * @param {string} format format that date object will be formatted to
  * @returns {string} formatted date
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-export const formatTime = date => moment(date).format('ddd, MMM DD YYYY hA');
+export const formatDate = (date, format = 'ddd, MMM DD YYYY hA') =>
+  moment(date).format(format);
 
 /**
  * @function
