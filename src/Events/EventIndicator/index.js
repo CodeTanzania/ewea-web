@@ -79,13 +79,13 @@ class EventIndicator extends Component {
 
   /**
    * @function
-   * @name closeEventIndicatorsForm
+   * @name closeEventIndicatorForm
    * @description close event indicator form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeEventIndicatorsForm = () => {
+  closeEventIndicatorForm = () => {
     closeEventIndicatorForm();
     this.setState({ isEditForm: false });
   };
@@ -362,7 +362,7 @@ class EventIndicator extends Component {
             visible={showForm}
             className="FormModal"
             footer={null}
-            onCancel={this.closeEventIndicatorsForm}
+            onCancel={this.closeEventIndicatorForm}
             destroyOnClose
             maskClosable={false}
             afterClose={this.handleAfterCloseForm}
@@ -371,7 +371,7 @@ class EventIndicator extends Component {
               posting={posting}
               isEditForm={isEditForm}
               eventIndicator={eventIndicator}
-              onCancel={this.closeEventIndicatorsForm}
+              onCancel={this.closeEventIndicatorForm}
             />
           </Modal>
           {/* end create/edit form modal */}
