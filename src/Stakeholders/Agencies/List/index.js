@@ -179,7 +179,7 @@ class AgencyList extends Component {
       <>
         {/* toolbar */}
         <Toolbar
-          itemName="Agency"
+          itemName="agency"
           page={page}
           total={total}
           selectedItemsCount={selectedAgenciesCount}

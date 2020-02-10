@@ -120,16 +120,16 @@ class Features extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Critical facilities here ...',
+            placeholder: 'Search for critical facilities here ...',
             onChange: this.searchFeatures,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Feature',
+              label: 'New Critical Facility',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Critical facility',
+              title: 'Add New Critical Facility',
               onClick: this.openFeaturesForm,
             },
           ]}

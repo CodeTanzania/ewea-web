@@ -259,7 +259,7 @@ class EventQuestions extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Event questions here ...',
+            placeholder: 'Search for event questions here ...',
             onChange: this.searchEventQuestions,
             value: searchQuery,
           }}

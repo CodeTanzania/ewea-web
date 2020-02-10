@@ -120,7 +120,7 @@ class EventTypes extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Event types here ...',
+            placeholder: 'Search for event types here ...',
             onChange: this.searchAlerts,
             value: searchQuery,
           }}

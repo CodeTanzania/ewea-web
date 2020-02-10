@@ -174,7 +174,7 @@ class FeaturesList extends Component {
       <>
         {/* toolbar */}
         <Toolbar
-          itemName="Features"
+          itemName="critical facility"
           page={page}
           total={total}
           selectedItemsCount={selectedFeaturesCount}

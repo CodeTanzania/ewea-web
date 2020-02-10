@@ -1,24 +1,24 @@
 import React from 'react';
-import dashboardIcon from '../assets/icons/dashboards.svg';
-import settingsIcon from '../assets/icons/alerts/servicerequest.svg';
-import eventActionsIcon from '../assets/icons/emergencyplans/planner.svg';
-import geographicalFeaturesIcon from '../assets/icons/geographicalfeatures.svg';
-import agenciesIcon from '../assets/icons/stakeholders/agency.svg';
-import contactsIcon from '../assets/icons/stakeholders/contacts.svg';
-import NavigationMenu from '../components/NavigationMenu';
-import functionIcon from '../assets/icons/emergencyplans.svg';
 import modules from '../modules.json';
-import issuedAlertsIcon from '../assets/icons/alerts/issuedalerts.svg';
-import alertIcon from '../assets/icons/alerts.svg';
-import actionsIcon from '../assets/icons/alerts/actions.svg';
-import actionCatalogIcon from '../assets/icons/alerts/actioncatalog.svg';
+import dashboardIcon from '../assets/icons/dashboards.svg';
+import settingsIcon from '../assets/icons/settings.svg';
+import eventActionsIcon from '../assets/icons/eventactions.svg';
+import administrativeAreasIcon from '../assets/icons/administrativeareas.svg';
+import agenciesIcon from '../assets/icons/agencies.svg';
+import criticalFacilitiesIcon from '../assets/icons/criticalfacilities.svg';
+import focalPeopleIcon from '../assets/icons/focalpeople.svg';
+import NavigationMenu from '../components/NavigationMenu';
+import emergencyFunctionsIcon from '../assets/icons/emergencyfunctions.svg';
+import eventsIcon from '../assets/icons/events.svg';
+import actionsTakenIcon from '../assets/icons/actionstaken.svg';
+import actionCatalogIcon from '../assets/icons/actioncatalog.svg';
 
 /* constants */
 const routes = [
   {
     name: 'Events',
     path: '/app/events',
-    icon: issuedAlertsIcon,
+    icon: eventsIcon,
     description: modules.alertsIssued,
   },
   {
@@ -30,13 +30,13 @@ const routes = [
   {
     name: 'Actions Taken',
     path: '/app/actions',
-    icon: actionsIcon,
+    icon: actionsTakenIcon,
     description: modules.alertsActions,
   },
   {
     name: 'Emergency Functions',
     path: '/app/functions',
-    icon: functionIcon,
+    icon: emergencyFunctionsIcon,
   },
   {
     name: 'Action Catalog',
@@ -47,7 +47,7 @@ const routes = [
   {
     name: 'Focal People',
     path: '/app/focalpeople',
-    icon: contactsIcon,
+    icon: focalPeopleIcon,
     description: modules.stakeholdersFocalPeople,
   },
   {
@@ -59,19 +59,13 @@ const routes = [
   {
     name: 'Critical facilities',
     path: '/app/features',
-    icon: geographicalFeaturesIcon,
-    description: modules.geographicalFeaturesIcon,
-  },
-  {
-    name: 'Geographical Features',
-    path: '/app/geographicalfeatures',
-    icon: alertIcon,
-    description: modules.eventGroups,
+    icon: criticalFacilitiesIcon,
+    description: modules.criticalFacilities,
   },
   {
     name: 'Administrative Areas',
-    path: '/app/administrativeAreas',
-    icon: geographicalFeaturesIcon,
+    path: '/app/administrativeareas',
+    icon: administrativeAreasIcon,
     description: modules.administrativeareas,
   },
   {

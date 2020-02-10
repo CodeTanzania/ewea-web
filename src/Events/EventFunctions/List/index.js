@@ -164,7 +164,7 @@ class FunctionsList extends Component {
       <>
         {/* toolbar */}
         <Toolbar
-          itemName="Emergency Functions"
+          itemName="emergency functions"
           page={page}
           total={total}
           selectedItemsCount={selectedEmergencyFunctionCount}

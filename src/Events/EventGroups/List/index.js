@@ -154,7 +154,7 @@ class EventGroupsList extends Component {
       <>
         {/* toolbar */}
         <Toolbar
-          itemName="Event Groups"
+          itemName="event group"
           page={page}
           total={total}
           selectedItemsCount={selectedEventGroupsCount}
