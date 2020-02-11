@@ -2,7 +2,7 @@ import { Avatar, Checkbox, Col, Modal, Row } from 'antd';
 import PropTypes from 'prop-types';
 import randomColor from 'randomcolor';
 import React, { Component } from 'react';
-import ListItemActions from '../../../../components/ListItemActions';
+import ListItemActions from '../../../components/ListItemActions';
 import './styles.css';
 
 /* constants */

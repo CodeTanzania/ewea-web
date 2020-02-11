@@ -3,8 +3,8 @@ import { httpActions } from '@codetanzania/ewea-api-client';
 import { Button, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import SearchableSelectInput from '../../../../components/SearchableSelectInput';
-import { notifyError, notifySuccess } from '../../../../util';
+import SearchableSelectInput from '../../../components/SearchableSelectInput';
+import { notifyError, notifySuccess } from '../../../util';
 
 const { getEventGroups } = httpActions;
 /**

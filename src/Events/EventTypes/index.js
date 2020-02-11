@@ -9,7 +9,7 @@ import {
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal } from 'antd';
-import Topbar from '../../../components/Topbar';
+import Topbar from '../../components/Topbar';
 import EventTypeForm from './Form';
 import EventTypesList from './List';
 import './styles.css';

@@ -13,7 +13,7 @@ import StakeholdersFocalPeople from '../Stakeholders/FocalPeople';
 import NotificationTemplates from '../Stakeholders/NotificationTemplates';
 import Events from '../Events/Events';
 import EventFunctions from '../Events/EventFunctions';
-import EventTypes from '../Events/ActionCatalog/EventTypes';
+import EventTypes from '../Events/EventTypes';
 import EventSeverity from '../Events/EventSeverity';
 import EventCertainty from '../Events/EventCertainty';
 import EventQuestions from '../Events/EventQuestions';

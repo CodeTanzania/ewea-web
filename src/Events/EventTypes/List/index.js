@@ -13,9 +13,9 @@ import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import ListHeader from '../../../../components/ListHeader';
-import Toolbar from '../../../../components/Toolbar';
-import { notifyError, notifySuccess } from '../../../../util';
+import ListHeader from '../../../components/ListHeader';
+import Toolbar from '../../../components/Toolbar';
+import { notifyError, notifySuccess } from '../../../util';
 import EventTypesListItem from '../ListItem';
 
 /* constants */
