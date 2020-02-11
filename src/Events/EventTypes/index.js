@@ -5,16 +5,44 @@ import {
   searchEventTypes,
   selectEventType,
   closeEventTypeForm,
+  deleteEventType,
+  refreshEventTypes,
+  paginateEventTypes,
 } from '@codetanzania/ewea-api-states';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Modal } from 'antd';
+import { Modal, Col } from 'antd';
+import isArray from 'lodash/isArray';
+
 import Topbar from '../../components/Topbar';
+import NotificationForm from '../../components/NotificationForm';
 import EventTypeForm from './Form';
-import EventTypesList from './List';
+import ListItemActions from '../../components/ListItemActions';
+import ListItem from '../../components/ListItem';
+import ItemList from '../../components/List';
+import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
 
 /* constants */
+const nameSpan = { xxl: 7, xl: 7, lg: 6, md: 7, sm: 10, xs: 10 };
+const groupSpan = { xxl: 7, xl: 7, lg: 7, md: 7, sm: 0, xs: 0 };
+const descriptionSpan = { xxl: 8, xl: 8, lg: 9, md: 7, sm: 9, xs: 9 };
+const headerLayout = [
+  { ...nameSpan, header: 'Name' },
+  { ...groupSpan, header: 'Group' },
+  { ...descriptionSpan, header: 'Description' },
+];
+const {
+  getEventActions: getEventActionsFromAPI,
+  getJurisdictions,
+  getPartyGroups,
+  getRoles,
+  getAgencies,
+  getEventTypesExportUrl,
+} = httpActions;
+
+const { confirm } = Modal;
 
 /**
  * @class
@@ -29,6 +57,9 @@ class EventTypes extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isEditForm: false,
+    notificationBody: undefined,
+    showNotificationForm: false,
+    selectedEventActions: [],
   };
 
   componentDidMount() {
@@ -102,6 +133,99 @@ class EventTypes extends Component {
     this.setState({ isEditForm: false });
   };
 
+  /**
+   * @function
+   * @name handleShare
+   * @description Handle share multiple event Types
+   *
+   * @param {object[]| object} eventTypes event Types list to be shared
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleShare = eventTypes => {
+    let message = '';
+    if (isArray(eventTypes)) {
+      const eventTypeList = eventTypes.map(
+        eventType =>
+          `Name: ${eventType.strings.name.en}\nDescription: ${
+            // eslint-disable-line
+            eventType.strings.description.en
+          }\n`
+      );
+
+      message = eventTypeList.join('\n\n\n');
+    } else {
+      message = `Name: ${eventTypes.strings.name.en}\nDescription: ${
+        // eslint-disable-line
+        eventTypes.strings.description.en
+      }\n`;
+    }
+
+    this.setState({ notificationBody: message, showNotificationForm: true });
+  };
+
+  /**
+   * @function
+   * @name closeNotificationForm
+   * @description Handle on share
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeNotificationForm = () => {
+    this.setState({ showNotificationForm: false });
+  };
+
+  /**
+   * @function
+   * @name handleAfterCloseNotificationForm
+   * @description Perform post close notification form cleanups
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleAfterCloseNotificationForm = () => {
+    this.setState({ notificationBody: undefined });
+  };
+
+  /**
+   * @function
+   * @name showArchiveConfirm
+   * @description show confirm modal before archiving a focal person
+   * @param {object} item Resource item to be archived
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  showArchiveConfirm = item => {
+    confirm({
+      title: `Are you sure you want to archive this record ?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteEventType(
+          item._id, // eslint-disable-line
+          () => notifySuccess('Event Type was archived successfully'),
+          () =>
+            notifyError(
+              'An error occurred while archiving Event Type, Please contact your system Administrator'
+            )
+        );
+      },
+    });
+  };
+
+  handleRefreshEventTypes = () =>
+    refreshEventTypes(
+      () => notifySuccess('Event Types refreshed successfully'),
+      () =>
+        notifyError(
+          'An Error occurred while refreshing Event Types, please contact system administrator'
+        )
+    );
+
   render() {
     const {
       eventTypes,
@@ -113,7 +237,12 @@ class EventTypes extends Component {
       searchQuery,
       total,
     } = this.props;
-    const { isEditForm } = this.state;
+    const {
+      isEditForm,
+      showNotificationForm,
+      selectedEventActions,
+      notificationBody,
+    } = this.state;
     return (
       <>
         {/* Topbar */}
@@ -136,37 +265,110 @@ class EventTypes extends Component {
         />
         {/* end Topbar */}
 
-        <div className="EventTypesList">
-          {/* list starts */}
-          <EventTypesList
-            total={total}
-            page={page}
-            eventTypes={eventTypes}
-            loading={loading}
-            onEdit={this.handleEdit}
-          />
-          {/* end list */}
+        {/* list starts */}
+        <ItemList
+          itemName="event types"
+          items={eventTypes}
+          page={page}
+          itemCount={total}
+          loading={loading}
+          onShare={this.handleShare}
+          headerLayout={headerLayout}
+          onRefresh={this.handleRefreshEventTypes}
+          onPaginate={nextPage => paginateEventTypes(nextPage)}
+          generateExportUrl={getEventTypesExportUrl}
+          renderListItem={({
+            item,
+            isSelected,
+            onSelectItem,
+            onDeselectItem,
+          }) => (
+            <ListItem
+              key={item._id} // eslint-disable-line
+              name={item.strings.name.en}
+              item={item}
+              isSelected={isSelected}
+              onSelectItem={onSelectItem}
+              onDeselectItem={onDeselectItem}
+              renderActions={() => (
+                <ListItemActions
+                  edit={{
+                    name: 'Edit Event Type',
+                    title: 'Update Event Type Details',
+                    onClick: () => this.handleEdit(item),
+                  }}
+                  share={{
+                    name: 'Share Event Type',
+                    title: 'Share Event Type details with others',
+                    onClick: () => this.handleShare(item),
+                  }}
+                  archive={{
+                    name: 'Archive Event Type',
+                    title: 'Remove Event Type from list of active Event Types',
+                    onClick: () => this.showArchiveConfirm(item),
+                  }}
+                />
+              )}
+            >
+              {/* eslint-disable react/jsx-props-no-spreading */}
+              <Col {...nameSpan}>{item.strings.name.en}</Col>
+              <Col {...groupSpan}>
+                {item.relations.group
+                  ? item.relations.group.strings.name.en
+                  : 'N/A'}
+              </Col>
+              <Col {...descriptionSpan}>
+                {item.strings.description ? item.strings.description.en : 'N/A'}
+              </Col>
+              {/* eslint-enable react/jsx-props-no-spreading */}
+            </ListItem>
+          )}
+        />
+        {/* end list */}
 
-          {/* create/edit form modal */}
-          <Modal
-            title={isEditForm ? 'Edit Event Type' : 'Add New Event Type'}
-            visible={showForm}
-            className="FormModal"
-            footer={null}
+        {/* Notification Modal modal */}
+        <Modal
+          title="Notify Event Actions"
+          visible={showNotificationForm}
+          onCancel={this.closeNotificationForm}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+          afterClose={this.handleAfterCloseNotificationForm}
+        >
+          <NotificationForm
+            recipients={selectedEventActions}
+            onSearchRecipients={getEventActionsFromAPI}
+            onSearchJurisdictions={getJurisdictions}
+            onSearchGroups={getPartyGroups}
+            onSearchAgencies={getAgencies}
+            onSearchRoles={getRoles}
+            body={notificationBody}
+            onCancel={this.closeNotificationForm}
+          />
+        </Modal>
+        {/* end Notification modal */}
+
+        {/* create/edit form modal */}
+        <Modal
+          title={isEditForm ? 'Edit Event Type' : 'Add New Event Type'}
+          visible={showForm}
+          className="FormModal"
+          footer={null}
+          onCancel={this.closeEventTypesForm}
+          destroyOnClose
+          maskClosable={false}
+          afterClose={this.handleAfterCloseForm}
+        >
+          <EventTypeForm
+            posting={posting}
+            isEditForm={isEditForm}
+            eventType={eventType}
             onCancel={this.closeEventTypesForm}
-            destroyOnClose
-            maskClosable={false}
-            afterClose={this.handleAfterCloseForm}
-          >
-            <EventTypeForm
-              posting={posting}
-              isEditForm={isEditForm}
-              eventType={eventType}
-              onCancel={this.closeEventTypesForm}
-            />
-          </Modal>
-          {/* end create/edit form modal */}
-        </div>
+          />
+        </Modal>
+        {/* end create/edit form modal */}
       </>
     );
   }
