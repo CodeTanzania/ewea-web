@@ -275,113 +275,109 @@ class EventQuestions extends Component {
         />
         {/* end Topbar */}
 
-        <div className="EventQuestionsList">
-          {/* list starts */}
-          <ItemList
-            itemName="Event Question"
-            items={eventQuestions}
-            page={page}
-            itemCount={total}
-            loading={loading}
-            // onFilter={this.openFiltersModal}
-            onNotify={this.openNotificationForm}
-            onShare={this.handleShare}
-            onRefresh={this.handleRefreshEventQuestions}
-            onPaginate={nextPage => paginateEventQuestions(nextPage)}
-            headerLayout={headerLayout}
-            renderListItem={({
-              item,
-              isSelected,
-              onSelectItem,
-              onDeselectItem,
-            }) => (
-              <ListItem
-                key={item._id} // eslint-disable-line
-                item={item}
-                name={item.strings.name.en}
-                isSelected={isSelected}
-                onSelectItem={onSelectItem}
-                onDeselectItem={onDeselectItem}
-                renderActions={() => (
-                  <ListItemActions
-                    edit={{
-                      name: 'Edit Event Question',
-                      title: 'Update Event Question Details',
-                      onClick: () => this.handleEdit(item),
-                    }}
-                    share={{
-                      name: 'Share Event Question',
-                      title: 'Share Event Question details with others',
-                      onClick: () => this.handleShare(item),
-                    }}
-                    archive={{
-                      name: 'Archive Event Question',
-                      title:
-                        'Remove Event Question from list of active event question',
-                      onClick: () => this.showArchiveConfirm(item),
-                    }}
-                  />
-                )}
-              >
-                {/* eslint-disable react/jsx-props-no-spreading */}
-                <Col {...nameSpan}>{item.strings.name.en}</Col>
-                <Col {...codeSpan}>{item.strings.code}</Col>
-                <Col {...indicatorSpan}>
-                  {item.relations.indicator.strings.name.en}
-                </Col>
-                <Col {...descriptionSpan}>{item.strings.description.en}</Col>
-                {/* eslint-enable react/jsx-props-no-spreading */}
-              </ListItem>
-            )}
-          />
-          {/* end list */}
+        {/* list starts */}
+        <ItemList
+          itemName="Event Question"
+          items={eventQuestions}
+          page={page}
+          itemCount={total}
+          loading={loading}
+          // onFilter={this.openFiltersModal}
+          onNotify={this.openNotificationForm}
+          onShare={this.handleShare}
+          onRefresh={this.handleRefreshEventQuestions}
+          onPaginate={nextPage => paginateEventQuestions(nextPage)}
+          headerLayout={headerLayout}
+          renderListItem={({
+            item,
+            isSelected,
+            onSelectItem,
+            onDeselectItem,
+          }) => (
+            <ListItem
+              key={item._id} // eslint-disable-line
+              item={item}
+              name={item.strings.name.en}
+              isSelected={isSelected}
+              onSelectItem={onSelectItem}
+              onDeselectItem={onDeselectItem}
+              renderActions={() => (
+                <ListItemActions
+                  edit={{
+                    name: 'Edit Event Question',
+                    title: 'Update Event Question Details',
+                    onClick: () => this.handleEdit(item),
+                  }}
+                  share={{
+                    name: 'Share Event Question',
+                    title: 'Share Event Question details with others',
+                    onClick: () => this.handleShare(item),
+                  }}
+                  archive={{
+                    name: 'Archive Event Question',
+                    title:
+                      'Remove Event Question from list of active event question',
+                    onClick: () => this.showArchiveConfirm(item),
+                  }}
+                />
+              )}
+            >
+              {/* eslint-disable react/jsx-props-no-spreading */}
+              <Col {...nameSpan}>{item.strings.name.en}</Col>
+              <Col {...codeSpan}>{item.strings.code}</Col>
+              <Col {...indicatorSpan}>
+                {item.relations.indicator.strings.name.en}
+              </Col>
+              <Col {...descriptionSpan}>{item.strings.description.en}</Col>
+              {/* eslint-enable react/jsx-props-no-spreading */}
+            </ListItem>
+          )}
+        />
+        {/* end list */}
 
-          {/* Event Question modal */}
-          <Modal
-            title="Notify Event Question"
-            visible={showNotificationForm}
+        {/* Event Question modal */}
+        <Modal
+          title="Notify Event Question"
+          visible={showNotificationForm}
+          onCancel={this.closeNotificationForm}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+          afterClose={this.handleAfterCloseNotificationForm}
+        >
+          <NotificationForm
+            recipients={getFocalPeople}
+            onSearchRecipients={getFocalPeople}
+            onSearchJurisdictions={getJurisdictions}
+            onSearchGroups={getPartyGroups}
+            onSearchAgencies={getAgencies}
+            onSearchRoles={getRoles}
+            body={notificationBody}
             onCancel={this.closeNotificationForm}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-            afterClose={this.handleAfterCloseNotificationForm}
-          >
-            <NotificationForm
-              recipients={getFocalPeople}
-              onSearchRecipients={getFocalPeople}
-              onSearchJurisdictions={getJurisdictions}
-              onSearchGroups={getPartyGroups}
-              onSearchAgencies={getAgencies}
-              onSearchRoles={getRoles}
-              body={notificationBody}
-              onCancel={this.closeNotificationForm}
-            />
-          </Modal>
-          {/* end Event Question modal */}
+          />
+        </Modal>
+        {/* end Event Question modal */}
 
-          {/* create/edit form modal */}
-          <Modal
-            title={
-              isEditForm ? 'Edit Event Question' : 'Add New Event Question'
-            }
-            visible={showForm}
-            className="FormModal"
-            footer={null}
+        {/* create/edit form modal */}
+        <Modal
+          title={isEditForm ? 'Edit Event Question' : 'Add New Event Question'}
+          visible={showForm}
+          className="FormModal"
+          footer={null}
+          onCancel={this.closeEventQuestionsForm}
+          destroyOnClose
+          maskClosable={false}
+          afterClose={this.handleAfterCloseForm}
+        >
+          <EventQuestionForm
+            posting={posting}
+            isEditForm={isEditForm}
+            eventQuestion={eventQuestion}
             onCancel={this.closeEventQuestionsForm}
-            destroyOnClose
-            maskClosable={false}
-            afterClose={this.handleAfterCloseForm}
-          >
-            <EventQuestionForm
-              posting={posting}
-              isEditForm={isEditForm}
-              eventQuestion={eventQuestion}
-              onCancel={this.closeEventQuestionsForm}
-            />
-          </Modal>
-          {/* end create/edit form modal */}
-        </div>
+          />
+        </Modal>
+        {/* end create/edit form modal */}
       </>
     );
   }

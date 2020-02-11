@@ -272,110 +272,108 @@ class EventIndicator extends Component {
         />
         {/* end Topbar */}
 
-        <div className="EventIndicatorList">
-          {/* list starts */}
-          <ItemList
-            itemName="Event Indicator"
-            items={eventIndicators}
-            page={page}
-            itemCount={total}
-            loading={loading}
-            // onFilter={this.openFiltersModal}
-            onNotify={this.openNotificationForm}
-            onShare={this.handleShare}
-            onRefresh={this.handleRefreshEventIndicator}
-            onPaginate={nextPage => paginateEventIndicators(nextPage)}
-            headerLayout={headerLayout}
-            renderListItem={({
-              item,
-              isSelected,
-              onSelectItem,
-              onDeselectItem,
-            }) => (
-              <ListItem
-                key={item._id} // eslint-disable-line
-                item={item}
-                name={item.strings.name.en}
-                isSelected={isSelected}
-                onSelectItem={onSelectItem}
-                onDeselectItem={onDeselectItem}
-                renderActions={() => (
-                  <ListItemActions
-                    edit={{
-                      name: 'Edit Event Indicator',
-                      title: 'Update Event Indicator Details',
-                      onClick: () => this.handleEdit(item),
-                    }}
-                    share={{
-                      name: 'Share Event Indicator',
-                      title: 'Share Event Indicator details with others',
-                      onClick: () => this.handleShare(item),
-                    }}
-                    archive={{
-                      name: 'Archive Event Indicator',
-                      title:
-                        'Remove Event Indicator from list of active event indicator',
-                      onClick: () => this.showArchiveConfirm(item),
-                    }}
-                  />
-                )}
-              >
-                {/* eslint-disable react/jsx-props-no-spreading */}
-                <Col {...nameSpan}>{item.strings.name.en}</Col>
-                <Col {...codeSpan}>{item.strings.code}</Col>
-                <Col {...descriptionSpan}>{item.strings.description.en}</Col>
-                {/* eslint-enable react/jsx-props-no-spreading */}
-              </ListItem>
-            )}
-          />
-          {/* end list */}
+        {/* list starts */}
+        <ItemList
+          itemName="Event Indicator"
+          items={eventIndicators}
+          page={page}
+          itemCount={total}
+          loading={loading}
+          // onFilter={this.openFiltersModal}
+          onNotify={this.openNotificationForm}
+          onShare={this.handleShare}
+          onRefresh={this.handleRefreshEventIndicator}
+          onPaginate={nextPage => paginateEventIndicators(nextPage)}
+          headerLayout={headerLayout}
+          renderListItem={({
+            item,
+            isSelected,
+            onSelectItem,
+            onDeselectItem,
+          }) => (
+            <ListItem
+              key={item._id} // eslint-disable-line
+              item={item}
+              name={item.strings.name.en}
+              isSelected={isSelected}
+              onSelectItem={onSelectItem}
+              onDeselectItem={onDeselectItem}
+              renderActions={() => (
+                <ListItemActions
+                  edit={{
+                    name: 'Edit Event Indicator',
+                    title: 'Update Event Indicator Details',
+                    onClick: () => this.handleEdit(item),
+                  }}
+                  share={{
+                    name: 'Share Event Indicator',
+                    title: 'Share Event Indicator details with others',
+                    onClick: () => this.handleShare(item),
+                  }}
+                  archive={{
+                    name: 'Archive Event Indicator',
+                    title:
+                      'Remove Event Indicator from list of active event indicator',
+                    onClick: () => this.showArchiveConfirm(item),
+                  }}
+                />
+              )}
+            >
+              {/* eslint-disable react/jsx-props-no-spreading */}
+              <Col {...nameSpan}>{item.strings.name.en}</Col>
+              <Col {...codeSpan}>{item.strings.code}</Col>
+              <Col {...descriptionSpan}>{item.strings.description.en}</Col>
+              {/* eslint-enable react/jsx-props-no-spreading */}
+            </ListItem>
+          )}
+        />
+        {/* end list */}
 
-          {/* Event Indicator modal */}
-          <Modal
-            title="Notify Event Indicator"
-            visible={showNotificationForm}
+        {/* Event Indicator modal */}
+        <Modal
+          title="Notify Event Indicator"
+          visible={showNotificationForm}
+          onCancel={this.closeNotificationForm}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+          afterClose={this.handleAfterCloseNotificationForm}
+        >
+          <NotificationForm
+            recipients={getFocalPeople}
+            onSearchRecipients={getFocalPeople}
+            onSearchJurisdictions={getJurisdictions}
+            onSearchGroups={getPartyGroups}
+            onSearchAgencies={getAgencies}
+            onSearchRoles={getRoles}
+            body={notificationBody}
             onCancel={this.closeNotificationForm}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-            afterClose={this.handleAfterCloseNotificationForm}
-          >
-            <NotificationForm
-              recipients={getFocalPeople}
-              onSearchRecipients={getFocalPeople}
-              onSearchJurisdictions={getJurisdictions}
-              onSearchGroups={getPartyGroups}
-              onSearchAgencies={getAgencies}
-              onSearchRoles={getRoles}
-              body={notificationBody}
-              onCancel={this.closeNotificationForm}
-            />
-          </Modal>
-          {/* end Event Indicator modal */}
+          />
+        </Modal>
+        {/* end Event Indicator modal */}
 
-          {/* create/edit form modal */}
-          <Modal
-            title={
-              isEditForm ? 'Edit Event Indicator' : 'Add New Event Indicator'
-            }
-            visible={showForm}
-            className="FormModal"
-            footer={null}
+        {/* create/edit form modal */}
+        <Modal
+          title={
+            isEditForm ? 'Edit Event Indicator' : 'Add New Event Indicator'
+          }
+          visible={showForm}
+          className="FormModal"
+          footer={null}
+          onCancel={this.closeEventIndicatorForm}
+          destroyOnClose
+          maskClosable={false}
+          afterClose={this.handleAfterCloseForm}
+        >
+          <EventIndicatorForm
+            posting={posting}
+            isEditForm={isEditForm}
+            eventIndicator={eventIndicator}
             onCancel={this.closeEventIndicatorForm}
-            destroyOnClose
-            maskClosable={false}
-            afterClose={this.handleAfterCloseForm}
-          >
-            <EventIndicatorForm
-              posting={posting}
-              isEditForm={isEditForm}
-              eventIndicator={eventIndicator}
-              onCancel={this.closeEventIndicatorForm}
-            />
-          </Modal>
-          {/* end create/edit form modal */}
-        </div>
+          />
+        </Modal>
+        {/* end create/edit form modal */}
       </>
     );
   }
