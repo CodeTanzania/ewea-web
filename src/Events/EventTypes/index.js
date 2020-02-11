@@ -34,7 +34,7 @@ const headerLayout = [
   { ...descriptionSpan, header: 'Description' },
 ];
 const {
-  getEventActions: getEventActionsFromAPI,
+  getFocalPeople,
   getJurisdictions,
   getPartyGroups,
   getRoles,
@@ -339,7 +339,7 @@ class EventTypes extends Component {
         >
           <NotificationForm
             recipients={selectedEventActions}
-            onSearchRecipients={getEventActionsFromAPI}
+            onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
