@@ -23,6 +23,7 @@ const ItemList = ({
   onPaginate,
   onRefresh,
   onShare,
+  generateExportUrl,
   renderListItem,
 }) => {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -127,6 +128,13 @@ const ItemList = ({
         onPaginate={nextPage => onPaginate(nextPage)}
         onRefresh={() => onRefresh()}
         onShare={() => onShare(selectedItems)}
+        exportUrl={
+          generateExportUrl
+            ? generateExportUrl({
+                filter: { _id: map(selectedItems, '_id') },
+              })
+            : null
+        }
       />
 
       <ListHeader
@@ -166,11 +174,13 @@ ItemList.propTypes = {
   onPaginate: PropTypes.func.isRequired,
   onRefresh: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,
+  generateExportUrl: PropTypes.func,
   renderListItem: PropTypes.func.isRequired,
 };
 
 ItemList.defaultProps = {
   onFilter: null,
+  generateExportUrl: null,
 };
 
 export default ItemList;
