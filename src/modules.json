@@ -11,6 +11,8 @@
   "assessmentsQuestionnaires": "",
   "assessmentsQuestions": "",
   "assessmentsIndicators": "",
+  "administrativeAreas": "",
+  "eventActions": "",
   "emergencyPlans": "",
   "emergencyPlansPlanner": "",
   "emergencyPlansActivities": "",
@@ -18,7 +20,9 @@
   "emergencyPlansDisseminations": "",
   "emergencyPlansActivations": "",
   "emergencyPlansDrillsExercises": "",
-  "geographicalFeatures": "",
+  "eventSeverity": "",
+  "eventCertainty": "",
+  "eventGroups": "",
   "geographicalFeaturesRegions": "",
   "geographicalFeaturesDistricts": "",
   "geographicalFeaturesWards": "",
@@ -46,5 +50,6 @@
   "stakeholdersAgencies": "",
   "stakeholdersRoles": "",
   "stakeholdersNotifications": "",
-  "dashboards": ""
+  "dashboards": "",
+  "notificationTemplates": ""
 }

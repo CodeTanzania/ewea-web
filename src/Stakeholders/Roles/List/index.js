@@ -1,0 +1,247 @@
+import { httpActions } from '@codetanzania/ewea-api-client';
+import {
+  deletePartyRole,
+  paginatePartyRoles,
+  refreshPartyRoles,
+} from '@codetanzania/ewea-api-states';
+import { List } from 'antd';
+import concat from 'lodash/concat';
+import map from 'lodash/map';
+import remove from 'lodash/remove';
+import uniq from 'lodash/uniq';
+import intersectionBy from 'lodash/intersectionBy';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import RoleListHeader from '../../../components/ListHeader';
+import Toolbar from '../../../components/Toolbar';
+import { notifyError, notifySuccess } from '../../../util';
+import RoleListItem from '../ListItem';
+
+/* constants */
+const nameSpan = { xxl: 7, xl: 7, lg: 7, md: 7, sm: 16, xs: 16 };
+const abbreviationSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 3, xs: 3 };
+const descriptionSpan = { xxl: 11, xl: 11, lg: 11, md: 10, sm: 0, xs: 0 };
+const headerLayout = [
+  {
+    ...nameSpan,
+    header: 'Name',
+    title: 'Roles name associated with focal people',
+  },
+  {
+    ...abbreviationSpan,
+    header: 'Abbreviation',
+    title: 'A shortened form of roles',
+  },
+  {
+    ...descriptionSpan,
+    header: 'Description',
+    title: 'Explanation of roles',
+  },
+];
+
+const { getPartyRolesExportUrl } = httpActions;
+
+/**
+ * @class
+ * @name RoleList
+ * @description Render role list which have search box and actions
+ *
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+class RoleList extends Component {
+  // eslint-disable-next-line react/state-in-constructor
+  state = {
+    selectedRoles: [],
+    selectedPages: [],
+  };
+
+  /**
+   * @function
+   * @name handleOnSelectRole
+   * @description Handle select a single role action
+   *
+   * @param {object} role selected role object
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleOnSelectRole = role => {
+    const { selectedRoles } = this.state;
+    this.setState({ selectedRoles: concat([], selectedRoles, role) });
+  };
+
+  /**
+   * @function
+   * @name handleOnDeselectRole
+   * @description Handle deselect a single role action
+   *
+   * @param {object} role roles to be removed from selected roles
+   * @returns {undefined} undefined
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleOnDeselectRole = role => {
+    const { selectedRoles } = this.state;
+    const selectedList = [...selectedRoles];
+
+    remove(
+      selectedList,
+      item => item._id === role._id // eslint-disable-line
+    );
+
+    this.setState({ selectedRoles: selectedList });
+  };
+
+  /**
+   * @function
+   * @name handleSelectAll
+   * @description Handle select all contacts actions from current page
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleSelectAll = () => {
+    const { selectedRoles, selectedPages } = this.state;
+    const { roles, page } = this.props;
+    const selectedList = [...selectedRoles, ...roles];
+    const pages = uniq([...selectedPages, page]);
+    this.setState({
+      selectedRoles: selectedList,
+      selectedPages: pages,
+    });
+  };
+
+  /**
+   * @function
+   * @name handleDeselectAll
+   * @description Handle deselect all contacts in a current page
+   *
+   * @returns {undefined} undefined
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleDeselectAll = () => {
+    const { roles, page } = this.props;
+    const { selectedRoles, selectedPages } = this.state;
+    const selectedList = [...selectedRoles];
+    const pages = uniq([...selectedPages]);
+
+    remove(pages, item => item === page);
+
+    roles.forEach(contact => {
+      remove(
+        selectedList,
+        item => item._id === contact._id // eslint-disable-line
+      );
+    });
+
+    this.setState({
+      selectedRoles: selectedList,
+      selectedPages: pages,
+    });
+  };
+
+  render() {
+    const { roles, loading, page, total, onEdit, onNotify } = this.props;
+    const { selectedRoles, selectedPages } = this.state;
+    const selectedRolesCount = intersectionBy(selectedRoles, roles, '_id')
+      .length;
+
+    return (
+      <>
+        {/* toolbar */}
+        <Toolbar
+          itemName="role"
+          page={page}
+          total={total}
+          selectedItemsCount={selectedRolesCount}
+          exportUrl={getPartyRolesExportUrl({
+            filter: { _id: map(selectedRoles, '_id') },
+          })}
+          onNotify={() => onNotify(selectedRoles)}
+          onPaginate={nextPage => {
+            paginatePartyRoles(nextPage);
+          }}
+          onRefresh={() =>
+            refreshPartyRoles(
+              () => {
+                notifySuccess('Roles refreshed successfully');
+              },
+              () => {
+                notifyError(
+                  'An Error occurred while refreshing roles please contact system administrator'
+                );
+              }
+            )
+          }
+        />
+        {/* end toolbar */}
+
+        <RoleListHeader
+          headerLayout={headerLayout}
+          onSelectAll={this.handleSelectAll}
+          onDeselectAll={this.handleDeselectAll}
+          isBulkSelected={selectedPages.includes(page)}
+        />
+        <List
+          loading={loading}
+          dataSource={roles}
+          renderItem={role => (
+            <RoleListItem
+              key={role._id /*eslint-disable-line */}
+              abbreviation={role.strings.abbreviation.en}
+              name={role.strings.name.en}
+              description={role.strings.description.en}
+              isSelected={
+                // eslint-disable-next-line
+                map(selectedRoles, item => item._id).includes(role._id)
+              }
+              onSelectItem={() => {
+                this.handleOnSelectRole(role);
+              }}
+              onDeselectItem={() => {
+                this.handleOnDeselectRole(role);
+              }}
+              onEdit={() => onEdit(role)}
+              onArchive={() =>
+                deletePartyRole(
+                  role._id, // eslint-disable-line
+                  () => {
+                    console.log(role._id); // eslint-disable-line
+                    notifySuccess('Role was archived successfully');
+                  },
+                  () => {
+                    notifyError(
+                      `An Error occurred while archiving role please contact
+                   system administrator`
+                    );
+                  }
+                )
+              }
+            />
+          )}
+        />
+      </>
+    );
+  }
+}
+
+RoleList.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  roles: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      abbreviation: PropTypes.string,
+      description: PropTypes.string,
+    })
+  ).isRequired,
+  total: PropTypes.number.isRequired,
+  page: PropTypes.number.isRequired,
+  onNotify: PropTypes.func.isRequired,
+};
+
+export default RoleList;
