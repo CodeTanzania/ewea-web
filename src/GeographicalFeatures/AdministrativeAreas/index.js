@@ -313,7 +313,7 @@ class AdministrativeAreas extends Component {
       showNotificationForm,
     } = this.state;
     return (
-      <div className="AdministrativeAreas">
+      <>
         {/* Topbar */}
         <Topbar
           search={{
@@ -334,135 +334,131 @@ class AdministrativeAreas extends Component {
         />
         {/* end Topbar */}
 
-        <div className="AdministrativeAreaForm">
-          {/* list starts */}
-          <ItemList
-            itemName="administrative areas"
-            items={administrativeAreas}
-            page={page}
-            itemCount={total}
-            loading={loading}
-            onShare={this.handleShare}
-            headerLayout={headerLayout}
-            onRefresh={this.handleRefreshAdmistrativeAreas}
-            onPaginate={nextPage => paginateAdministrativeAreas(nextPage)}
-            // generateExportUrl={getAdministrativeAreasFromAPI}
-            renderListItem={({
-              item,
-              isSelected,
-              onSelectItem,
-              onDeselectItem,
-            }) => (
-              <ListItem
-                key={item._id} // eslint-disable-line
-                name={item.strings.name.en}
-                item={item}
-                isSelected={isSelected}
-                onSelectItem={onSelectItem}
-                onDeselectItem={onDeselectItem}
-                renderActions={() => (
-                  <ListItemActions
-                    edit={{
-                      name: 'Edit Administrative Area',
-                      title: 'Update Administrative Area Details',
-                      onClick: () => this.handleEdit(item),
-                    }}
-                    share={{
-                      name: 'Share Administrative Area',
-                      title: 'Share Administrative Area details with others',
-                      onClick: () => this.handleShare(item),
-                    }}
-                    archive={{
-                      name: 'Archive Administrative Area',
-                      title:
-                        'Remove Administrative Area from list of active Administrative Areas',
-                      onClick: () => this.showArchiveConfirm(item),
-                    }}
-                  />
-                )}
-              >
-                {/* eslint-disable react/jsx-props-no-spreading */}
-                <Col {...nameSpan}>{item.strings.name.en}</Col>
-                <Col {...codeSpan}>{item.strings.code}</Col>
-                <Col {...descriptionSpan}>
-                  {item.strings.description
-                    ? item.strings.description.en
-                    : 'N/A'}
-                </Col>
-                {/* eslint-enable react/jsx-props-no-spreading */}
-              </ListItem>
-            )}
-          />
-          {/* end list */}
+        {/* list starts */}
+        <ItemList
+          itemName="administrative areas"
+          items={administrativeAreas}
+          page={page}
+          itemCount={total}
+          loading={loading}
+          onShare={this.handleShare}
+          headerLayout={headerLayout}
+          onRefresh={this.handleRefreshAdmistrativeAreas}
+          onPaginate={nextPage => paginateAdministrativeAreas(nextPage)}
+          // generateExportUrl={getAdministrativeAreasFromAPI}
+          renderListItem={({
+            item,
+            isSelected,
+            onSelectItem,
+            onDeselectItem,
+          }) => (
+            <ListItem
+              key={item._id} // eslint-disable-line
+              name={item.strings.name.en}
+              item={item}
+              isSelected={isSelected}
+              onSelectItem={onSelectItem}
+              onDeselectItem={onDeselectItem}
+              renderActions={() => (
+                <ListItemActions
+                  edit={{
+                    name: 'Edit Administrative Area',
+                    title: 'Update Administrative Area Details',
+                    onClick: () => this.handleEdit(item),
+                  }}
+                  share={{
+                    name: 'Share Administrative Area',
+                    title: 'Share Administrative Area details with others',
+                    onClick: () => this.handleShare(item),
+                  }}
+                  archive={{
+                    name: 'Archive Administrative Area',
+                    title:
+                      'Remove Administrative Area from list of active Administrative Areas',
+                    onClick: () => this.showArchiveConfirm(item),
+                  }}
+                />
+              )}
+            >
+              {/* eslint-disable react/jsx-props-no-spreading */}
+              <Col {...nameSpan}>{item.strings.name.en}</Col>
+              <Col {...codeSpan}>{item.strings.code}</Col>
+              <Col {...descriptionSpan}>
+                {item.strings.description ? item.strings.description.en : 'N/A'}
+              </Col>
+              {/* eslint-enable react/jsx-props-no-spreading */}
+            </ListItem>
+          )}
+        />
+        {/* end list */}
 
-          {/* Notification Modal modal */}
-          <Modal
-            title="Notify Administrative Areas"
-            visible={showNotificationForm}
+        {/* Notification Modal modal */}
+        <Modal
+          title="Notify Administrative Areas"
+          visible={showNotificationForm}
+          onCancel={this.closeNotificationForm}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+          afterClose={this.handleAfterCloseNotificationForm}
+        >
+          <NotificationForm
+            recipients={getFocalPeople}
+            onSearchRecipients={getFocalPeople}
+            onSearchJurisdictions={getJurisdictions}
+            onSearchGroups={getPartyGroups}
+            onSearchAgencies={getAgencies}
+            onSearchRoles={getRoles}
+            body={notificationBody}
             onCancel={this.closeNotificationForm}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-            afterClose={this.handleAfterCloseNotificationForm}
-          >
-            <NotificationForm
-              recipients={getFocalPeople}
-              onSearchRecipients={getFocalPeople}
-              onSearchJurisdictions={getJurisdictions}
-              onSearchGroups={getPartyGroups}
-              onSearchAgencies={getAgencies}
-              onSearchRoles={getRoles}
-              body={notificationBody}
-              onCancel={this.closeNotificationForm}
-            />
-          </Modal>
-          {/* end Notification modal */}
+          />
+        </Modal>
+        {/* end Notification modal */}
 
-          {/* filter modal */}
-          <Modal
-            title="Filter Administrative Area"
-            visible={showFilters}
+        {/* filter modal */}
+        <Modal
+          title="Filter Administrative Area"
+          visible={showFilters}
+          onCancel={this.closeFiltersModal}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+        >
+          <AdministrativeAreasFilters
             onCancel={this.closeFiltersModal}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-          >
-            <AdministrativeAreasFilters
-              onCancel={this.closeFiltersModal}
-              cached={cached}
-              onCache={this.handleOnCachedValues}
-              onClearCache={this.handleClearCachedValues}
-            />
-          </Modal>
-          {/* end filter modal */}
+            cached={cached}
+            onCache={this.handleOnCachedValues}
+            onClearCache={this.handleClearCachedValues}
+          />
+        </Modal>
+        {/* end filter modal */}
 
-          {/* create/edit form modal */}
-          <Modal
-            title={
-              isEditForm
-                ? 'Edit Administrative Area'
-                : 'Add New Administrative Area'
-            }
-            visible={showForm}
-            className="FormModal"
-            footer={null}
+        {/* create/edit form modal */}
+        <Modal
+          title={
+            isEditForm
+              ? 'Edit Administrative Area'
+              : 'Add New Administrative Area'
+          }
+          visible={showForm}
+          className="FormModal"
+          footer={null}
+          onCancel={this.closeAdministrativeAreaForm}
+          destroyOnClose
+          maskClosable={false}
+          afterClose={this.handleAfterCloseForm}
+        >
+          <AdministrativeAreaForm
+            posting={posting}
+            isEditForm={isEditForm}
+            administrativeArea={administrativeArea}
             onCancel={this.closeAdministrativeAreaForm}
-            destroyOnClose
-            maskClosable={false}
-            afterClose={this.handleAfterCloseForm}
-          >
-            <AdministrativeAreaForm
-              posting={posting}
-              isEditForm={isEditForm}
-              administrativeArea={administrativeArea}
-              onCancel={this.closeAdministrativeAreaForm}
-            />
-          </Modal>
-          {/* end create/edit form modal */}
-        </div>
-      </div>
+          />
+        </Modal>
+        {/* end create/edit form modal */}
+      </>
     );
   }
 }
