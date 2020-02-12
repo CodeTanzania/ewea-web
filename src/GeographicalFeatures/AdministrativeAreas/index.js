@@ -324,7 +324,7 @@ class AdministrativeAreas extends Component {
           }}
           actions={[
             {
-              label: 'New Administrative Area',
+              label: 'New Area',
               icon: 'plus',
               size: 'large',
               title: 'Add New Administrative Area',
