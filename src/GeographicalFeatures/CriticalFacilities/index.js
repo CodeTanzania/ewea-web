@@ -208,10 +208,10 @@ class Features extends Component {
       onOk() {
         deleteFeature(
           item._id, // eslint-disable-line
-          () => notifySuccess('Administrative Area was archived successfully'),
+          () => notifySuccess('Feature was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving Administrative Area, Please contact your system Administrator'
+              'An error occurred while archiving Feature, Please contact your system Administrator'
             )
         );
       },
