@@ -192,9 +192,9 @@ class Features extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a event question
+   * @description show confirm modal before archiving a critical facility
    *
-   * @param item {object} features to archive
+   * @param item {object} criticalfacility to archive
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -208,10 +208,10 @@ class Features extends Component {
       onOk() {
         deleteFeature(
           item._id, // eslint-disable-line
-          () => notifySuccess('Feature was archived successfully'),
+          () => notifySuccess('Critical facility was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving Feature, Please contact your system Administrator'
+              'An error occurred while archiving Critical facility, Please contact your system Administrator'
             )
         );
       },
@@ -278,7 +278,7 @@ class Features extends Component {
 
         {/* list starts */}
         <ItemList
-          itemName="features"
+          itemName="Critical facility"
           items={features}
           page={page}
           itemCount={total}
@@ -304,18 +304,19 @@ class Features extends Component {
               renderActions={() => (
                 <ListItemActions
                   edit={{
-                    name: 'Edit Feature',
-                    title: 'Update Feature Details',
+                    name: 'Edit Critical facility',
+                    title: 'Update Critical facility Details',
                     onClick: () => this.handleEdit(item),
                   }}
                   share={{
-                    name: 'Share Feature',
-                    title: 'Share Feature details with others',
+                    name: 'Share Critical facility',
+                    title: 'Share Critical facility details with others',
                     onClick: () => this.handleShare(item),
                   }}
                   archive={{
-                    name: 'Archive Feature',
-                    title: 'Remove Feature from list of active Features',
+                    name: 'Archive Critical facility',
+                    title:
+                      'Remove Critical facility from list of active Critical facilities',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                 />
@@ -345,7 +346,7 @@ class Features extends Component {
 
         {/* Notification Modal modal */}
         <Modal
-          title="Notify Features"
+          title="Notify Critical facility"
           visible={showNotificationForm}
           onCancel={this.closeNotificationForm}
           footer={null}
