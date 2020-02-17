@@ -1,3 +1,4 @@
+import { httpActions } from '@codetanzania/ewea-api-client';
 import {
   closeAgencyForm,
   Connect,
@@ -5,18 +6,47 @@ import {
   openAgencyForm,
   searchAgencies,
   selectAgency,
+  refreshAgencies,
+  paginateAgencies,
+  deleteAgency,
 } from '@codetanzania/ewea-api-states';
-import { Button, Col, Input, Modal, Row } from 'antd';
+import { Col, Modal } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import isArray from 'lodash/isArray';
+import Topbar from '../../components/Topbar';
 import AgencyForm from './AgencyForm';
 import AgencyFilters from './Filters';
-import AgencyList from './List';
-import NotificationForm from './NotificationForm';
+import ItemList from '../../components/List';
+import ListItem from '../../components/ListItem';
+import ListItemActions from '../../components/ListItemActions';
+import NotificationForm from '../../components/NotificationForm';
+import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
 
 /* constants */
-const { Search } = Input;
+const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 7, sm: 14, xs: 14 };
+const abbreviationSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
+const areaSpan = { xxl: 4, xl: 4, lg: 4, md: 0, sm: 0, xs: 0 };
+const phoneSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 6, xs: 6 };
+const emailSpan = { xxl: 5, xl: 5, lg: 5, md: 6, sm: 0, xs: 0 };
+
+const headerLayout = [
+  { ...nameSpan, header: 'Name' },
+  { ...abbreviationSpan, header: 'Abbreviation' },
+  { ...areaSpan, header: 'Area' },
+  { ...phoneSpan, header: 'Phone Number' },
+  { ...emailSpan, header: 'Email' },
+];
+
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getRoles,
+} = httpActions;
+
+const { confirm } = Modal;
 
 /**
  * @function
@@ -236,6 +266,101 @@ class Agencies extends Component {
     this.setState({ isEditForm: false });
   };
 
+  /**
+   * @function
+   * @name handleRefreshAgencies
+   * @description Handle list refresh action
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleRefreshAgencies = () => {
+    refreshAgencies(
+      () => {
+        notifySuccess('Agencies refreshed successfully');
+      },
+      () => {
+        notifyError(
+          'An Error occurred while refreshing Agencies please contact system administrator'
+        );
+      }
+    );
+  };
+
+  /**
+   * @function
+   * @name handleShare
+   * @description Handle share multiple agencies
+   *
+   * @param {object[]| object} agencies agencies list to be shared
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleShare = agencies => {
+    let message = '';
+    if (isArray(agencies)) {
+      const agencyList = agencies.map(
+        agency =>
+          `Name: ${agency.name}\nDescription: ${
+            // eslint-disable-line
+            'N/A'
+          }\n`
+      );
+
+      message = agencyList.join('\n\n\n');
+    } else {
+      message = `Name: ${agencies.name}\nDescription: ${
+        // eslint-disable-line
+        'N/A'
+      }\n`;
+    }
+
+    this.setState({ notificationBody: message, showNotificationForm: true });
+  };
+
+  /**
+   * @function
+   * @name openFiltersModal
+   * @description open filters modal by setting it's visible property
+   * to false via state
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  openFiltersModal = () => {
+    this.setState({ showFilters: true });
+  };
+
+  /**
+   * @function
+   * @name showArchiveConfirm
+   * @description show confirm modal before archiving a agency
+   *
+   * @param item {object} agency to archive
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+
+  showArchiveConfirm = item => {
+    confirm({
+      title: `Are you sure you want to archive ${item.name} ?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteAgency(
+          item._id, // eslint-disable-line
+          () => notifySuccess('Agency was archived successfully'),
+          () =>
+            notifyError(
+              'An error occurred while archiving Agency, Please contact your system Administrator'
+            )
+        );
+      },
+    });
+  };
+
   render() {
     const {
       agencies,
@@ -257,77 +382,120 @@ class Agencies extends Component {
     } = this.state;
 
     return (
-      <div className="Agencies">
-        <Row>
-          <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
-            {/* search input component */}
-            <Search
-              size="large"
-              placeholder="Search for agencies here ..."
-              onChange={this.searchAgencies}
-              allowClear
-              value={searchQuery}
-              className="searchBox"
-            />
-            {/* end search input component */}
-          </Col>
-
-          {/* <Col span={3} offset={1}>
-            <Select
-              defaultValue="Active"
-              style={{ width: 120 }}
-              size="large"
-              type="primary"
-            >
-              <Option value="All">All</Option>
-              <Option value="Active">Active</Option>
-              <Option value="Archived">Archived</Option>
-            </Select>
-          </Col> */}
-
-          {/* primary actions */}
-          <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
-            <Row type="flex" justify="end">
-              <Col xxl={4} xl={5} lg={7} md={8} sm={24} xs={24}>
-                <Button
-                  type="primary"
-                  icon="plus"
-                  size="large"
-                  title="Add New Agency"
-                  onClick={this.openAgencyForm}
-                  block
-                >
-                  New Agency
-                </Button>
-              </Col>
-            </Row>
-          </Col>
-          {/* end primary actions */}
-        </Row>
+      <>
+        {/* Topbar */}
+        <Topbar
+          search={{
+            size: 'large',
+            placeholder: 'Search for agencies here ...',
+            onChange: this.searchAgencies,
+            value: searchQuery,
+          }}
+          actions={[
+            {
+              label: 'New Agency',
+              icon: 'plus',
+              size: 'large',
+              title: 'Add New Agency',
+              onClick: this.openAgencyForm,
+            },
+          ]}
+        />
+        {/* end Topbar */}
 
         {/* list starts */}
-        <AgencyList
-          total={total}
+        <ItemList
+          itemName="Agencies"
+          items={agencies}
           page={page}
-          agencies={agencies}
+          itemCount={total}
           loading={loading}
-          onEdit={this.handleEdit}
           onFilter={this.openFiltersModal}
           onNotify={this.openNotificationForm}
           onShare={this.handleShare}
-          onBulkShare={this.handleBulkShare}
+          onRefresh={this.handleRefreshAgencies}
+          onPaginate={nextPage => paginateAgencies(nextPage)}
+          headerLayout={headerLayout}
+          renderListItem={({
+            item,
+            isSelected,
+            onSelectItem,
+            onDeselectItem,
+          }) => (
+            <ListItem
+              key={item._id} // eslint-disable-line
+              item={item}
+              name={item.name}
+              isSelected={isSelected}
+              onSelectItem={onSelectItem}
+              onDeselectItem={onDeselectItem}
+              renderActions={() => (
+                <ListItemActions
+                  edit={{
+                    name: 'Edit Agency',
+                    title: 'Update Agency Details',
+                    onClick: () => this.handleEdit(item),
+                  }}
+                  share={{
+                    name: 'Share Agency',
+                    title: 'Share Agency details with others',
+                    onClick: () => this.handleShare(item),
+                  }}
+                  archive={{
+                    name: 'Archive Agency',
+                    title: 'Remove Agency from list of active agency',
+                    onClick: () => this.showArchiveConfirm(item),
+                  }}
+                />
+              )}
+            >
+              {/* eslint-disable react/jsx-props-no-spreading */}
+              <Col {...nameSpan}>{item.name}</Col>
+              <Col {...abbreviationSpan}>{item.abbreviation}</Col>
+              <Col {...areaSpan}>
+                {item.area ? item.area.strings.name.en : 'N/A'}
+              </Col>
+              <Col {...phoneSpan}>{item.mobile}</Col>
+              <Col {...emailSpan}>{item.email}</Col>
+              {/* eslint-enable react/jsx-props-no-spreading */}
+            </ListItem>
+          )}
         />
         {/* end list */}
 
-        {/* filter modal */}
+        {/* Notification Modal modal */}
         <Modal
-          title="Filter Agencies"
-          visible={showFilters}
-          onCancel={this.closeFiltersModal}
-          width="50%"
+          title="Notify Agencies"
+          visible={showNotificationForm}
+          onCancel={this.closeNotificationForm}
           footer={null}
           destroyOnClose
           maskClosable={false}
+          width="40%"
+        >
+          <NotificationForm
+            recipients={getFocalPeople}
+            onSearchRecipients={getFocalPeople}
+            onSearchJurisdictions={getJurisdictions}
+            onSearchGroups={getPartyGroups}
+            onSearchAgencies={getAgencies}
+            onSearchRoles={getRoles}
+            onCancel={this.closeNotificationForm}
+            selectedAgencies={selectedAgencies}
+            body={notificationBody}
+          />
+        </Modal>
+        {/* end Notification modal */}
+
+        {/* filter modal */}
+        <Modal
+          title="Filter Agency"
+          visible={showFilters}
+          onCancel={this.closeFiltersModal}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
         >
           <AgencyFilters
             onCancel={this.closeFiltersModal}
@@ -337,24 +505,6 @@ class Agencies extends Component {
           />
         </Modal>
         {/* end filter modal */}
-
-        {/* Notification Modal modal */}
-        <Modal
-          title="Share Agencies"
-          visible={showNotificationForm}
-          onCancel={this.closeNotificationForm}
-          footer={null}
-          destroyOnClose
-          maskClosable={false}
-          width="40%"
-        >
-          <NotificationForm
-            onCancel={this.closeNotificationForm}
-            selectedAgencies={selectedAgencies}
-            body={notificationBody}
-          />
-        </Modal>
-        {/* end Notification modal */}
 
         {/* create/edit form modal */}
         <Modal
@@ -375,7 +525,7 @@ class Agencies extends Component {
           />
         </Modal>
         {/* end create/edit form modal */}
-      </div>
+      </>
     );
   }
 }

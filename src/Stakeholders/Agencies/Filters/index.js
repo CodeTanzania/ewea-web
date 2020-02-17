@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* declarations */
-const { getPartyGroups } = httpActions;
+const { getAdministrativeAreas } = httpActions;
 
 /**
  * @class
@@ -108,17 +108,19 @@ class AgenciesFilters extends Component {
       <Form onSubmit={this.handleSubmit} autoComplete="off">
         {/* start agency group filters */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="By Group(s)">
-          {getFieldDecorator('group', {
-            initialValue: filter ? filter.group : [],
+        <Form.Item {...formItemLayout} label="By Area(s)">
+          {getFieldDecorator('area', {
+            initialValue: filter ? filter.area : [],
           })(
             <SearchableSelectInput
-              onSearch={getPartyGroups}
-              optionLabel="name"
+              onSearch={getAdministrativeAreas}
+              optionLabel={area => area.strings.name.en}
               optionValue="_id"
               mode="multiple"
-              onCache={groups => this.cacheFilters({ groups })}
-              initialValue={cached && cached.groups ? cached.groups : []}
+              onCache={areas => {
+                this.cacheFilters({ areas });
+              }}
+              initialValue={cached && cached.areas ? cached.areas : []}
             />
           )}
         </Form.Item>
@@ -153,7 +155,7 @@ AgenciesFilters.propTypes = {
   }).isRequired,
   onCancel: PropTypes.func.isRequired,
   cached: PropTypes.shape({
-    groups: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
+    areas: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
   }),
   onCache: PropTypes.func.isRequired,
   onClearCache: PropTypes.func.isRequired,
