@@ -294,6 +294,18 @@ class AdministrativeAreas extends Component {
     });
   };
 
+  /**
+   * @function
+   * @name handleAfterCloseNotificationForm
+   * @description Perform post close notification form cleanups
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleAfterCloseNotificationForm = () => {
+    this.setState({ notificationBody: undefined });
+  };
+
   render() {
     const {
       administrativeAreas,
