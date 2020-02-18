@@ -1,3 +1,4 @@
+import { httpActions } from '@codetanzania/ewea-api-client';
 import {
   Connect,
   searchEventFunctions,
@@ -5,15 +6,45 @@ import {
   getEventFunctions,
   openEventFunctionForm,
   closeEventFunctionForm,
+  paginateEventFunctions,
+  deleteEventFunction,
+  refreshEventFunctions,
 } from '@codetanzania/ewea-api-states';
-import { Modal } from 'antd';
+import isArray from 'lodash/isArray';
+import { Modal, Col } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+
+import NotificationForm from '../../components/NotificationForm';
+import ItemList from '../../components/List';
+import ListItem from '../../components/ListItem';
+import ListItemActions from '../../components/ListItemActions';
 import Topbar from '../../components/Topbar';
 import EventFunctionsFilters from './Filters';
 import FunctionForm from './Form';
-import FunctionsList from './List';
+import { notifyError, notifySuccess, truncateString } from '../../util';
 import './styles.css';
+
+/* constants */
+const nameSpan = { xxl: 5, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
+const typeSpan = { xxl: 4, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
+const codeSpan = { xxl: 3, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
+const descriptionSpan = { xxl: 10, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
+const headerLayout = [
+  { ...nameSpan, header: 'Name' },
+  { ...codeSpan, header: 'Code' },
+  { ...typeSpan, header: 'Type' },
+  { ...descriptionSpan, header: 'Description' },
+];
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getRoles,
+  getAgencies,
+  getEventFunctionsExportUrl,
+} = httpActions;
+const { confirm } = Modal;
 
 /**
  * @class
@@ -29,6 +60,8 @@ class EventFunctions extends Component {
     showFilters: false,
     isEditForm: false,
     cached: null,
+    notificationBody: undefined,
+    showNotificationForm: false,
   };
 
   componentDidMount() {
@@ -144,6 +177,96 @@ class EventFunctions extends Component {
     openEventFunctionForm();
   };
 
+  /**
+   * @function
+   * @name handleShare
+   * @description Handle share multiple event functions
+   *
+   * @param {object[]| object} eventFunctions event functions list to be shared
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleShare = eventFunctions => {
+    let message = '';
+    if (isArray(eventFunctions)) {
+      const eventFunctionsList = eventFunctions.map(
+        eventFunction =>
+          `Name: ${eventFunction.strings.name.en}\nDescription: ${
+            // eslint-disable-line
+            eventFunction.strings.description.en
+          }\n`
+      );
+
+      message = eventFunctionsList.join('\n\n\n');
+    } else {
+      message = `Name: ${eventFunctions.strings.name.en}\nDescription: ${
+        // eslint-disable-line
+        eventFunctions.strings.description.en
+      }\n`;
+    }
+
+    this.setState({ notificationBody: message, showNotificationForm: true });
+  };
+
+  /**
+   * @function
+   * @name closeNotificationForm
+   * @description Handle on notify event functions
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeNotificationForm = () => {
+    this.setState({ showNotificationForm: false });
+  };
+
+  /**
+   * @function
+   * @name showArchiveConfirm
+   * @description show confirm modal before archiving a focal person
+   * @param {object} item Resource item to be archived
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  showArchiveConfirm = item => {
+    confirm({
+      title: `Are you sure you want to archive this record ?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteEventFunction(
+          item._id, // eslint-disable-line
+          () => notifySuccess('Emergency Function was archived successfully'),
+          () =>
+            notifyError(
+              'An error occurred while archiving Emergency Function, Please contact your system Administrator'
+            )
+        );
+      },
+    });
+  };
+
+  /**
+   * @function
+   * @name handleRefreshEventFunctions
+   * @description Refresh Event Function list
+   *
+   * @returns {undefined}
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleRefreshEventFunctions = () =>
+    refreshEventFunctions(
+      () => notifySuccess('Emergency Functions refreshed successfully'),
+      () =>
+        notifyError(
+          'An Error occurred while refreshing Emergency Functions, please contact system administrator'
+        )
+    );
+
   render() {
     const {
       eventFunctions,
@@ -155,7 +278,13 @@ class EventFunctions extends Component {
       searchQuery,
       total,
     } = this.props;
-    const { showFilters, isEditForm, cached } = this.state;
+    const {
+      showFilters,
+      isEditForm,
+      cached,
+      notificationBody,
+      showNotificationForm,
+    } = this.state;
     return (
       <>
         {/* Topbar */}
@@ -178,61 +307,131 @@ class EventFunctions extends Component {
         />
         {/* end Topbar */}
 
-        <div className="FunctionsList">
-          {/* list starts */}
-          <FunctionsList
-            total={total}
-            page={page}
-            eventFunctions={eventFunctions}
-            loading={loading}
-            onEdit={this.handleEdit}
-            onFilter={this.openFiltersModal}
-          />
-          {/* end list */}
+        <ItemList
+          itemName="emergency functions"
+          items={eventFunctions}
+          page={page}
+          itemCount={total}
+          loading={loading}
+          onFilter={this.openFiltersModal}
+          onNotify={this.openNotificationForm}
+          onShare={this.handleShare}
+          onRefresh={this.handleRefreshEventFunctions}
+          generateExportUrl={getEventFunctionsExportUrl}
+          onPaginate={nextPage => paginateEventFunctions(nextPage)}
+          headerLayout={headerLayout}
+          renderListItem={({
+            item,
+            isSelected,
+            onSelectItem,
+            onDeselectItem,
+          }) => (
+            <ListItem
+              key={item._id} // eslint-disable-line
+              name={item.strings.name.en}
+              item={item}
+              isSelected={isSelected}
+              onSelectItem={onSelectItem}
+              onDeselectItem={onDeselectItem}
+              renderActions={() => (
+                <ListItemActions
+                  edit={{
+                    name: 'Edit Event Action',
+                    title: 'Update Event Action Details',
+                    onClick: () => this.handleEdit(item),
+                  }}
+                  share={{
+                    name: 'Share Event Action',
+                    title: 'Share Event Action details with others',
+                    onClick: () => this.handleShare(item),
+                  }}
+                  archive={{
+                    name: 'Archive Event Action',
+                    title:
+                      'Remove Event Action from list of active focal People',
+                    onClick: () => this.showArchiveConfirm(item),
+                  }}
+                />
+              )}
+            >
+              {/* eslint-disable react/jsx-props-no-spreading */}
+              <Col {...nameSpan}>{item.strings.name.en}</Col>
+              <Col {...codeSpan}>{item.strings.code}</Col>
+              <Col {...typeSpan}>{item.strings.code}</Col>
+              <Col {...descriptionSpan}>
+                <span title={item.strings.description.en}>
+                  {truncateString(item.strings.description.en, 120)}
+                </span>
+              </Col>
+              {/* eslint-enable react/jsx-props-no-spreading */}
+            </ListItem>
+          )}
+        />
 
-          {/* filter modal */}
-          <Modal
-            title="Filter Emergency Function"
-            visible={showFilters}
+        {/* filter modal */}
+        <Modal
+          title="Filter Emergency Function"
+          visible={showFilters}
+          onCancel={this.closeFiltersModal}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+        >
+          <EventFunctionsFilters
             onCancel={this.closeFiltersModal}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-          >
-            <EventFunctionsFilters
-              onCancel={this.closeFiltersModal}
-              cached={cached}
-              onCache={this.handleOnCachedValues}
-              onClearCache={this.handleClearCachedValues}
-            />
-          </Modal>
-          {/* end filter modal */}
+            cached={cached}
+            onCache={this.handleOnCachedValues}
+            onClearCache={this.handleClearCachedValues}
+          />
+        </Modal>
+        {/* end filter modal */}
 
-          {/* create/edit form modal */}
-          <Modal
-            title={
-              isEditForm
-                ? 'Edit Emergency Function'
-                : 'Add New Emergency Function'
-            }
-            visible={showForm}
-            className="FormModal"
-            footer={null}
+        {/* Notification Modal modal */}
+        <Modal
+          title="Notify Event Actions"
+          visible={showNotificationForm}
+          onCancel={this.closeNotificationForm}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+          afterClose={this.handleAfterCloseNotificationForm}
+        >
+          <NotificationForm
+            onSearchRecipients={getFocalPeople}
+            onSearchJurisdictions={getJurisdictions}
+            onSearchGroups={getPartyGroups}
+            onSearchAgencies={getAgencies}
+            onSearchRoles={getRoles}
+            body={notificationBody}
+            onCancel={this.closeNotificationForm}
+          />
+        </Modal>
+        {/* end Notification modal */}
+        {/* create/edit form modal */}
+        <Modal
+          title={
+            isEditForm
+              ? 'Edit Emergency Function'
+              : 'Add New Emergency Function'
+          }
+          visible={showForm}
+          className="FormModal"
+          footer={null}
+          onCancel={this.closeEventFunctionForm}
+          destroyOnClose
+          maskClosable={false}
+          afterClose={this.handleAfterCloseForm}
+        >
+          <FunctionForm
+            posting={posting}
+            isEditForm={isEditForm}
+            eventFunction={eventFunction}
             onCancel={this.closeEventFunctionForm}
-            destroyOnClose
-            maskClosable={false}
-            afterClose={this.handleAfterCloseForm}
-          >
-            <FunctionForm
-              posting={posting}
-              isEditForm={isEditForm}
-              eventFunction={eventFunction}
-              onCancel={this.closeEventFunctionForm}
-            />
-          </Modal>
-          {/* end create/edit form modal */}
-        </div>
+          />
+        </Modal>
+        {/* end create/edit form modal */}
       </>
     );
   }
