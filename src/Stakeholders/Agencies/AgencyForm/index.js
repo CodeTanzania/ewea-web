@@ -191,7 +191,7 @@ class AgencyForm extends Component {
                   })(
                     <SearchableSelectInput
                       onSearch={getPartyGroups}
-                      optionLabel="name"
+                      optionLabel={group => group.strings.name.en}
                       optionValue="_id"
                       initialValue={
                         isEditForm && agency.group ? agency.group : undefined
@@ -216,8 +216,10 @@ class AgencyForm extends Component {
                   })(
                     <SearchableSelectInput
                       onSearch={getFeatures}
-                      optionLabel={feature =>
-                        `${feature.name} (${upperFirst(feature.type)})`
+                      optionLabel={area =>
+                        `${area.strings.name.en} (${upperFirst(
+                          area.relations.type.strings.name.en
+                        )})`
                       }
                       optionValue="_id"
                       initialValue={
