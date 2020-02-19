@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
+import { getBaseUrl } from '@codetanzania/ewea-api-client';
 import {
   openChangelogForm,
   closeChangelogForm,
@@ -294,7 +295,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
               }
 
               if (feed.image) {
-                const baseUrl = 'http://localhost:5000/v1';
+                const baseUrl = getBaseUrl();
                 return (
                   <Timeline.Item
                     key={feed._id}
