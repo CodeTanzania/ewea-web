@@ -1,22 +1,21 @@
-.RoleList {
-  padding: 40px;
+.FormModal {
+  width: 50% !important;
 }
 
-.RoleList .searchBox {
-  width: 50%;
+@media screen and (max-width: 1024px) {
+  .FormModal {
+    width: 70% !important;
+  }
 }
 
 @media screen and (max-width: 768px) {
-  .RoleList {
-    padding: 30px;
+  .FormModal {
+    width: 80% !important;
   }
 }
- 
- @media screen and (max-width: 426px) {
-  .RoleList {
-    padding: 20px;
-  }
-  .SearchBox {
-    padding-bottom: 10px;
+
+@media screen and (max-width: 426px) {
+  .FormModal {
+    width: 90% !important;
   }
 }

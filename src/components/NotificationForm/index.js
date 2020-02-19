@@ -195,7 +195,7 @@ class NotificationForm extends Component {
             {getFieldDecorator('roles')(
               <SearchableSelectInput
                 onSearch={onSearchRoles}
-                optionLabel="name"
+                optionLabel={role => role.strings.name.en}
                 optionValue="_id"
                 mode="multiple"
               />
