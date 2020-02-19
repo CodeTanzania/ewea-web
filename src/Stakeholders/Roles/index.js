@@ -185,20 +185,20 @@ class Roles extends Component {
 
   /**
    * @function
-   * @name handleRefreshPartyRoles
+   * @name handleRefreshRoles
    * @description Handle list refresh action
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleRefreshPartyRoles = () => {
+  handleRefreshRoles = () => {
     refreshPartyRoles(
       () => {
-        notifySuccess('PartyRoles refreshed successfully');
+        notifySuccess('Roles refreshed successfully');
       },
       () => {
         notifyError(
-          'An Error occurred while refreshing PartyRoles please contact system administrator'
+          'An Error occurred while refreshing roles please contact system administrator'
         );
       }
     );
@@ -239,9 +239,9 @@ class Roles extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a partyrole
+   * @description show confirm modal before archiving a role
    *
-   * @param item {object} partyrole to archive
+   * @param item {object} role to archive
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -255,10 +255,10 @@ class Roles extends Component {
       onOk() {
         deletePartyRole(
           item._id, // eslint-disable-line
-          () => notifySuccess('PartyRole was archived successfully'),
+          () => notifySuccess('Role was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving PartyRole, Please contact your system Administrator'
+              'An error occurred while archiving role, Please contact your system Administrator'
             )
         );
       },
@@ -283,7 +283,7 @@ class Roles extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Partyroles here ...',
+            placeholder: 'Search for roles here ...',
             onChange: this.searchRoles,
             value: searchQuery,
           }}
@@ -310,7 +310,7 @@ class Roles extends Component {
           onNotify={this.openNotificationForm}
           generateExportUrl={getPartyRolesExportUrl}
           onShare={this.handleShare}
-          onRefresh={this.handleRefreshPartyRoles}
+          onRefresh={this.handleRefreshRoles}
           onPaginate={nextPage => paginatePartyRoles(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
@@ -329,18 +329,18 @@ class Roles extends Component {
               renderActions={() => (
                 <ListItemActions
                   edit={{
-                    name: 'Edit PartyRole',
-                    title: 'Update PartyRole Details',
+                    name: 'Edit role',
+                    title: 'Update role Details',
                     onClick: () => this.handleEdit(item),
                   }}
                   share={{
-                    name: 'Share PartyRole',
-                    title: 'Share PartyRole details with others',
+                    name: 'Share role',
+                    title: 'Share role details with others',
                     onClick: () => this.handleShare(item),
                   }}
                   archive={{
-                    name: 'Archive PartyRole',
-                    title: 'Remove PartyRole from list of active partyrole',
+                    name: 'Archive role',
+                    title: 'Remove role from list of active role',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                 />
