@@ -28,7 +28,7 @@ import './styles.css';
 
 /* constants */
 const {
-  getEvents: getEventsFromAPI,
+  getFocalPeople,
   getJurisdictions,
   getPartyGroups,
   getRoles,
@@ -65,7 +65,6 @@ class Events extends Component {
     showFilters: false,
     isEditForm: false,
     showNotificationForm: false,
-    selectedEvents: [],
     notificationBody: undefined,
     cached: null,
   };
@@ -247,14 +246,11 @@ class Events extends Component {
    * @name openNotificationForm
    * @description Handle on notify events
    *
-   * @param {object[]} events List of events selected to be notified
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openNotificationForm = events => {
+  openNotificationForm = () => {
     this.setState({
-      selectedEvents: events,
       showNotificationForm: true,
     });
   };
@@ -360,7 +356,6 @@ class Events extends Component {
       showFilters,
       isEditForm,
       showNotificationForm,
-      selectedEvents,
       notificationBody,
       cached,
     } = this.state;
@@ -396,7 +391,7 @@ class Events extends Component {
           // onFilter={this.openFiltersModal}
           onNotify={this.openNotificationForm}
           onShare={this.handleShare}
-          onRefresh={this.handleRefresh}
+          onRefresh={this.handleRefreshEvents}
           onPaginate={nextPage => paginateEvents(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
@@ -487,8 +482,7 @@ class Events extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={selectedEvents}
-            onSearchRecipients={getEventsFromAPI}
+            onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
