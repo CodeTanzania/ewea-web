@@ -441,7 +441,9 @@ class Events extends Component {
               <Col {...stageSpan}>
                 <Tag color="volcano">{item.stage}</Tag>
               </Col>
-              <Col {...typeSpan}>{item.type.strings.name.en}</Col>
+              <Col {...typeSpan}>
+                {item.type ? item.type.strings.name.en : 'N/A'}
+              </Col>
               <Col {...groupSpan}>
                 {item.group ? item.group.strings.name.en : 'N/A'}
               </Col>
