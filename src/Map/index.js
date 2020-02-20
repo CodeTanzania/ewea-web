@@ -10,7 +10,7 @@ export const dataLayer = {
   type: 'fill',
   paint: {
     'fill-color': '#088',
-    'fill-opacity': 0.1,
+    'fill-opacity': 0.2,
   },
 };
 
