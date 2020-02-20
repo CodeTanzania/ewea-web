@@ -5,7 +5,6 @@ import React from 'react';
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 import Signin from './Auth/components/Signin';
 import BaseLayout from './layouts/BaseLayout';
-import BaseMap from './Map';
 import SecureRoute from './Auth/SecureRoute';
 
 /* configure global spin indicator */
@@ -32,7 +31,6 @@ const App = () => {
       <HashRouter hashType="hashbang">
         <Switch>
           <SecureRoute path="/app" component={BaseLayout} />
-          <SecureRoute path="/map" component={BaseMap} />
           <Route path="/signin" component={Signin} />
           <Redirect to="/app" />
         </Switch>

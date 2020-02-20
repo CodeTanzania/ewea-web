@@ -23,7 +23,7 @@ import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
-import BaseMap from '../../Map';
+import MapPolygon from '../../Map/MapPolygon';
 
 /* constants */
 const nameSpan = { xxl: 5, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
@@ -515,7 +515,7 @@ class AdministrativeAreas extends Component {
           onClose={this.closeMapPreview}
           visible={showMap}
         >
-          <BaseMap geometry={geometry} />
+          <MapPolygon geometry={geometry} />
         </Drawer>
 
         {/* End Map preview drawer */}

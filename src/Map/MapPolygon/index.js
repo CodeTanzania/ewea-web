@@ -14,7 +14,7 @@ export const dataLayer = {
   },
 };
 
-class BaseMap extends Component {
+class MapPolygon extends Component {
   // eslint-disable-next-line react/static-property-placement
   static propTypes = {
     geometry: PropTypes.shape({
@@ -59,4 +59,4 @@ class BaseMap extends Component {
     );
   }
 }
-export default BaseMap;
+export default MapPolygon;

@@ -13,7 +13,7 @@ import {
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
-import { Modal, Col } from 'antd';
+import { Modal, Col, Drawer } from 'antd';
 import Topbar from '../../components/Topbar';
 import FeaturesForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
@@ -22,6 +22,7 @@ import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
+import MapPoint from '../../Map/MapPoint';
 
 /* constants */
 const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
@@ -61,6 +62,7 @@ class Features extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isEditForm: false,
+    showMap: false,
     notificationBody: undefined,
     showNotificationForm: false,
   };
@@ -242,6 +244,33 @@ class Features extends Component {
     this.setState({ notificationBody: undefined });
   };
 
+  /**
+   * @function
+   * @name closeMapPreview
+   * @description close event details drawer
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeMapPreview = () => {
+    this.setState({ showMap: false });
+  };
+
+  /**
+   * @function
+   * @name handleMapPreview
+   * @description Handle map preview
+   *
+   * @param {object} feature feature to be previewed
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleMapPreview = feature => {
+    selectFeature(feature);
+    this.setState({ showMap: true });
+  };
+
   render() {
     const {
       features,
@@ -253,7 +282,13 @@ class Features extends Component {
       searchQuery,
       total,
     } = this.props;
-    const { isEditForm, showNotificationForm, notificationBody } = this.state;
+    const {
+      isEditForm,
+      showNotificationForm,
+      notificationBody,
+      showMap,
+    } = this.state;
+    const geometry = feature?.geos?.geometry;
     return (
       <>
         {/* Topbar */}
@@ -307,6 +342,11 @@ class Features extends Component {
                     name: 'Edit Critical facility',
                     title: 'Update Critical facility Details',
                     onClick: () => this.handleEdit(item),
+                  }}
+                  onMapPreview={{
+                    name: 'Preview on Map',
+                    title: 'Preview on map',
+                    onClick: () => this.handleMapPreview(item),
                   }}
                   share={{
                     name: 'Share Critical facility',
@@ -389,6 +429,19 @@ class Features extends Component {
           />
         </Modal>
         {/* end create/edit form modal */}
+        {/* Map preview drawer */}
+        <Drawer
+          title="Map preview"
+          placement="right"
+          width="100%"
+          className="map-drawer"
+          onClose={this.closeMapPreview}
+          visible={showMap}
+        >
+          <MapPoint geometry={geometry} />
+        </Drawer>
+
+        {/* End Map preview drawer */}
       </>
     );
   }
