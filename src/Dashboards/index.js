@@ -19,6 +19,10 @@ import BuildingsIcon from '../assets/icons/dashboards/buildingsatrisk.svg';
 import HouseholdsIcon from '../assets/icons/dashboards/houseatrisk.svg';
 import HospitalsIcon from '../assets/icons/dashboards/hospitalsatrisk.svg';
 import RoadsIcons from '../assets/icons/dashboards/roadsatrisk.svg';
+import RecentlyIssuedIcon from '../assets/icons/dashboards/recentlyissued.svg';
+import RecentlyUpdatedIcon from '../assets/icons/dashboards/recentlyupdated.svg';
+import ActiveAlertsIcon from '../assets/icons/dashboards/activealerts.svg';
+import ProneAreasIcon from '../assets/icons/dashboards/proneareas.svg';
 import DarWards from '../assets/maps/dar.wards.json';
 import './styles.css';
 
@@ -209,7 +213,7 @@ const AlertDashboard = () => {
                 title="Recently Issued Alert"
                 header="Recently Issued"
                 duration="2 days ago"
-                icon={MenIcon}
+                icon={RecentlyIssuedIcon}
               />
             </Col>
             <Col span={6}>
@@ -219,7 +223,7 @@ const AlertDashboard = () => {
                 title="Recently Updated Alert"
                 header="Recently Updated"
                 duration="1 hour ago"
-                icon={MenIcon}
+                icon={RecentlyUpdatedIcon}
               />
             </Col>
             <Col span={6}>
@@ -227,7 +231,7 @@ const AlertDashboard = () => {
                 label="Active Alerts"
                 value={12}
                 title="Active Alerts"
-                icon={MenIcon}
+                icon={ActiveAlertsIcon}
               />
             </Col>
             <Col span={6}>
@@ -235,7 +239,7 @@ const AlertDashboard = () => {
                 label="Prone Areas"
                 value={12}
                 title="Prone Areas"
-                icon={MenIcon}
+                icon={ProneAreasIcon}
               />
             </Col>
           </Row>
