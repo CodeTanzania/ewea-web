@@ -10,7 +10,7 @@ import {
   deleteAdministrativeArea,
 } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { Modal, Col } from 'antd';
+import { Modal, Col, Drawer } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
@@ -23,6 +23,7 @@ import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
+import MapPolygon from '../../Map/MapPolygon';
 
 /* constants */
 const nameSpan = { xxl: 5, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
@@ -57,6 +58,7 @@ class AdministrativeAreas extends Component {
   state = {
     showFilters: false,
     isEditForm: false,
+    showMap: false,
     notificationBody: undefined,
     showNotificationForm: false,
     cached: null,
@@ -306,6 +308,33 @@ class AdministrativeAreas extends Component {
     this.setState({ notificationBody: undefined });
   };
 
+  /**
+   * @function
+   * @name closeMapPreview
+   * @description close event details drawer
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeMapPreview = () => {
+    this.setState({ showMap: false });
+  };
+
+  /**
+   * @function
+   * @name handleMapPreview
+   * @description Handle map preview
+   *
+   * @param {object} administrativeArea administrativeArea to be previewed
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleMapPreview = administrativeArea => {
+    selectAdministrativeArea(administrativeArea);
+    this.setState({ showMap: true });
+  };
+
   render() {
     const {
       administrativeAreas,
@@ -320,10 +349,12 @@ class AdministrativeAreas extends Component {
     const {
       showFilters,
       isEditForm,
+      showMap,
       cached,
       notificationBody,
       showNotificationForm,
     } = this.state;
+    const geometry = administrativeArea?.geos?.geometry;
     return (
       <>
         {/* Topbar */}
@@ -377,6 +408,11 @@ class AdministrativeAreas extends Component {
                     name: 'Edit Administrative Area',
                     title: 'Update Administrative Area Details',
                     onClick: () => this.handleEdit(item),
+                  }}
+                  onMapPreview={{
+                    name: 'Preview on Map',
+                    title: 'Preview on map',
+                    onClick: () => this.handleMapPreview(item),
                   }}
                   share={{
                     name: 'Share Administrative Area',
@@ -470,6 +506,19 @@ class AdministrativeAreas extends Component {
           />
         </Modal>
         {/* end create/edit form modal */}
+        {/* Map preview drawer */}
+        <Drawer
+          title="Map preview"
+          placement="right"
+          width="100%"
+          className="map-drawer"
+          onClose={this.closeMapPreview}
+          visible={showMap}
+        >
+          <MapPolygon geometry={geometry} />
+        </Drawer>
+
+        {/* End Map preview drawer */}
       </>
     );
   }
