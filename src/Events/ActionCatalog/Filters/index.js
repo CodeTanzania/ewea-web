@@ -10,7 +10,12 @@ import React, { Component } from 'react';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* declarations */
-const { getPartyGroups, getJurisdictions, getRoles, getAgencies } = httpActions;
+const {
+  getPartyGroups,
+  getAdministrativeAreas,
+  getPartyRoles,
+  getAgencies,
+} = httpActions;
 
 /**
  * @class
@@ -114,8 +119,8 @@ class FocalPeopleFilters extends Component {
             initialValue: filter ? filter.location : [],
           })(
             <SearchableSelectInput
-              onSearch={getJurisdictions}
-              optionLabel="name"
+              onSearch={getAdministrativeAreas}
+              optionLabel={location => location.strings.name.en}
               optionValue="_id"
               mode="multiple"
               onCache={locations => this.cacheFilters({ locations })}
@@ -133,7 +138,7 @@ class FocalPeopleFilters extends Component {
           })(
             <SearchableSelectInput
               onSearch={getPartyGroups}
-              optionLabel="name"
+              optionLabel={group => group.strings.name.en}
               optionValue="_id"
               mode="multiple"
               onCache={groups => this.cacheFilters({ groups })}
@@ -150,8 +155,8 @@ class FocalPeopleFilters extends Component {
             initialValue: filter ? filter.role : [],
           })(
             <SearchableSelectInput
-              onSearch={getRoles}
-              optionLabel="name"
+              onSearch={getPartyRoles}
+              optionLabel={role => role.strings.name.en}
               optionValue="_id"
               mode="multiple"
               onCache={roles => this.cacheFilters({ roles })}
@@ -169,7 +174,7 @@ class FocalPeopleFilters extends Component {
           })(
             <SearchableSelectInput
               onSearch={getAgencies}
-              optionLabel="name"
+              optionLabel={agency => agency.name}
               optionValue="_id"
               mode="multiple"
               onCache={agencies => this.cacheFilters({ agencies })}
