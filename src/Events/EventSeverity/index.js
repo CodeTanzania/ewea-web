@@ -296,7 +296,7 @@ class EventSeverities extends Component {
 
         {/* list starts */}
         <ItemList
-          itemName="event Severities"
+          itemName="event severity"
           items={eventSeverities}
           page={page}
           itemCount={total}

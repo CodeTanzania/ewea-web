@@ -331,7 +331,7 @@ class NotificationTemplates extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Notification Template here ...',
+            placeholder: 'Search for notification templates here ...',
             onChange: this.searchNotificationTemplates,
             value: searchQuery,
           }}
@@ -349,7 +349,7 @@ class NotificationTemplates extends Component {
 
         {/* list starts */}
         <ItemList
-          itemName="Notification Templates"
+          itemName="notification template"
           items={notificationTemplates}
           page={page}
           itemCount={total}

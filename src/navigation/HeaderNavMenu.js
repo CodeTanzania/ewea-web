@@ -53,13 +53,13 @@ const routes = [
     icon: agenciesIcon,
   },
   {
-    name: 'Critical facilities',
+    name: 'Critical Facilities',
     path: '/app/features',
     icon: criticalFacilitiesIcon,
   },
   {
     name: 'Administrative Areas',
-    path: '/app/administrativeAreas',
+    path: '/app/administrativeareas',
     icon: administrativeAreasIcon,
   },
   {

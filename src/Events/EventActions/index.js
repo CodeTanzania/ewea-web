@@ -26,7 +26,7 @@ import './styles.css';
 
 /* constants */
 const {
-  getEventActions: getEventActionsFromAPI,
+  getFocalPeople,
   getJurisdictions,
   getPartyGroups,
   getRoles,
@@ -53,7 +53,6 @@ class EventActions extends Component {
     showFilters: false,
     isEditForm: false,
     showNotificationForm: false,
-    selectedEventActions: [],
     notificationBody: undefined,
     cached: null,
   };
@@ -291,7 +290,6 @@ class EventActions extends Component {
       showFilters,
       isEditForm,
       showNotificationForm,
-      selectedEventActions,
       notificationBody,
       cached,
     } = this.state;
@@ -320,7 +318,7 @@ class EventActions extends Component {
 
         {/* list starts */}
         <ItemList
-          itemName="event Actions"
+          itemName="event actions"
           items={eventActions}
           page={page}
           itemCount={total}
@@ -402,8 +400,7 @@ class EventActions extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={selectedEventActions}
-            onSearchRecipients={getEventActionsFromAPI}
+            onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}

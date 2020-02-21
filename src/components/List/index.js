@@ -5,7 +5,6 @@ import map from 'lodash/map';
 import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
 import remove from 'lodash/remove';
-import intersectionBy from 'lodash/intersectionBy';
 
 import Toolbar from '../Toolbar';
 import ListHeader from '../ListHeader';
@@ -23,6 +22,7 @@ const ItemList = ({
   onPaginate,
   onRefresh,
   onShare,
+  generateExportUrl,
   renderListItem,
 }) => {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -91,19 +91,6 @@ const ItemList = ({
 
   /**
    * @function
-   * @name getSelectedItemCount
-   * @description Count selected items on the list
-   *
-   * @returns {number} Number of selected items
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  const getSelectedItemCount = () =>
-    intersectionBy(selectedItems, items, '_id').length;
-
-  /**
-   * @function
    * @name isSelected
    * @description Check if item is among selected items
    *
@@ -121,12 +108,19 @@ const ItemList = ({
         itemName={itemName}
         page={page}
         total={itemCount}
-        selectedItemsCount={getSelectedItemCount()}
+        selectedItemsCount={selectedItems.length}
         onFilter={onFilter}
         onNotify={onNotify ? () => onNotify(selectedItems) : null}
         onPaginate={nextPage => onPaginate(nextPage)}
         onRefresh={() => onRefresh()}
         onShare={() => onShare(selectedItems)}
+        exportUrl={
+          generateExportUrl
+            ? generateExportUrl({
+                filter: { _id: map(selectedItems, '_id') },
+              })
+            : null
+        }
       />
 
       <ListHeader
@@ -166,11 +160,13 @@ ItemList.propTypes = {
   onPaginate: PropTypes.func.isRequired,
   onRefresh: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,
+  generateExportUrl: PropTypes.func,
   renderListItem: PropTypes.func.isRequired,
 };
 
 ItemList.defaultProps = {
   onFilter: null,
+  generateExportUrl: null,
 };
 
 export default ItemList;

@@ -7,6 +7,8 @@ import eventGroupsIcon from '../assets/icons/settings/eventgroups.svg';
 import notificationTemplateIcon from '../assets/icons/settings/notificationtemplate.svg';
 import eventCertaintyIcon from '../assets/icons/settings/eventcertainty.svg';
 import eventSeverityIcon from '../assets/icons/settings/eventseverity.svg';
+import eventIndicatorIcon from '../assets/icons/settings/eventindicator.svg';
+import eventQuestionsIcon from '../assets/icons/settings/eventquestions.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
 
@@ -39,7 +41,7 @@ const routes = [
   {
     name: 'Event Questions',
     path: '/eventquestions',
-    icon: notificationIcon,
+    icon: eventQuestionsIcon,
     description: modules.eventQuestions,
   },
   {
@@ -51,7 +53,7 @@ const routes = [
   {
     name: 'Event Indicator',
     path: '/eventindicator',
-    icon: alertIcon,
+    icon: eventIndicatorIcon,
     description: modules.eventIndicator,
   },
   {

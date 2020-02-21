@@ -118,6 +118,7 @@ class EventForm extends Component {
         xxl: { span: 24 },
       },
     };
+
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
         {/* event event */}

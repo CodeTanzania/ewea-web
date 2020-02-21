@@ -64,7 +64,7 @@ const routes = [
   },
   {
     name: 'Administrative Areas',
-    path: '/app/administrativeAreas',
+    path: '/app/administrativeareas',
     icon: administrativeAreasIcon,
     description: modules.administrativeareas,
   },

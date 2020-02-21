@@ -1,108 +1,108 @@
-import { httpActions } from '@codetanzania/ewea-api-client';
 import {
   Connect,
-  getEventGroups,
-  openEventGroupForm,
-  searchEventGroups,
-  selectEventGroup,
-  closeEventGroupForm,
-  refreshEventGroups,
-  paginateEventGroups,
-  deleteEventGroup,
+  getEventTypes,
+  openEventTypeForm,
+  searchEventTypes,
+  selectEventType,
+  closeEventTypeForm,
+  deleteEventType,
+  refreshEventTypes,
+  paginateEventTypes,
 } from '@codetanzania/ewea-api-states';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import isArray from 'lodash/isArray';
 import { Modal, Col } from 'antd';
+import isArray from 'lodash/isArray';
+
 import Topbar from '../../components/Topbar';
-import EventGroupForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
-import ItemList from '../../components/List';
-import ListItem from '../../components/ListItem';
+import EventTypeForm from './Form';
 import ListItemActions from '../../components/ListItemActions';
-import { notifyError, notifySuccess, truncateString } from '../../util';
+import ListItem from '../../components/ListItem';
+import ItemList from '../../components/List';
+import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
 
 /* constants */
-const nameSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 14, xs: 14 };
-const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 5, xs: 5 };
-const descriptionSpan = { xxl: 14, xl: 14, lg: 15, md: 14, sm: 0, xs: 0 };
-
+const nameSpan = { xxl: 7, xl: 7, lg: 6, md: 7, sm: 10, xs: 10 };
+const groupSpan = { xxl: 7, xl: 7, lg: 7, md: 7, sm: 0, xs: 0 };
+const descriptionSpan = { xxl: 8, xl: 8, lg: 9, md: 7, sm: 9, xs: 9 };
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
-  { ...codeSpan, header: 'Code' },
+  { ...groupSpan, header: 'Group' },
   { ...descriptionSpan, header: 'Description' },
 ];
-
-const { confirm } = Modal;
-
 const {
-  getEventGroupsExportUrl,
   getFocalPeople,
   getJurisdictions,
   getPartyGroups,
   getRoles,
   getAgencies,
+  getEventTypesExportUrl,
 } = httpActions;
+
+const { confirm } = Modal;
 
 /**
  * @class
- * @name EventGroups
- * @description Render Event Groups list which have search box,
- * actions and event groups list
+ * @name EventTypes
+ * @description Render Event Types list which have search box,
+ * actions and event types list
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EventGroups extends Component {
+class EventTypes extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isEditForm: false,
     notificationBody: undefined,
     showNotificationForm: false,
+    selectedEventActions: [],
   };
 
   componentDidMount() {
-    getEventGroups();
+    getEventTypes();
   }
 
   /**
    * @function
-   * @name openEventGroupsForm
-   * @description Open event group form
+   * @name openEventTypesForm
+   * @description Open event type form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openEventGroupsForm = () => {
-    openEventGroupForm();
+  openEventTypesForm = () => {
+    openEventTypeForm();
   };
 
   /**
    * @function
-   * @name closeEventGroupsForm
-   * @description close event group form
+   * @name closeEventTypesForm
+   * @description close event type form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeEventGroupsForm = () => {
-    closeEventGroupForm();
+  closeEventTypesForm = () => {
+    closeEventTypeForm();
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
-   * @name searchEventGroups
-   * @description Search Event Groups List based on supplied filter word
+   * @name searchAlerts
+   * @description Search Event Types List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventGroups = event => {
-    searchEventGroups(event.target.value);
+  searchAlerts = event => {
+    searchEventTypes(event.target.value);
   };
 
   /**
@@ -110,15 +110,15 @@ class EventGroups extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} eventType event group to be edited
+   * @param {object} eventType event type to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
   handleEdit = eventType => {
-    selectEventGroup(eventType);
+    selectEventType(eventType);
     this.setState({ isEditForm: true });
-    openEventGroupForm();
+    openEventTypeForm();
   };
 
   /**
@@ -135,8 +135,40 @@ class EventGroups extends Component {
 
   /**
    * @function
+   * @name handleShare
+   * @description Handle share multiple event Types
+   *
+   * @param {object[]| object} eventTypes event Types list to be shared
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleShare = eventTypes => {
+    let message = '';
+    if (isArray(eventTypes)) {
+      const eventTypeList = eventTypes.map(
+        eventType =>
+          `Name: ${eventType.strings.name.en}\nDescription: ${
+            // eslint-disable-line
+            eventType.strings.description.en
+          }\n`
+      );
+
+      message = eventTypeList.join('\n\n\n');
+    } else {
+      message = `Name: ${eventTypes.strings.name.en}\nDescription: ${
+        // eslint-disable-line
+        eventTypes.strings.description.en
+      }\n`;
+    }
+
+    this.setState({ notificationBody: message, showNotificationForm: true });
+  };
+
+  /**
+   * @function
    * @name closeNotificationForm
-   * @description Handle on notify event groups
+   * @description Handle on share
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -159,58 +191,8 @@ class EventGroups extends Component {
 
   /**
    * @function
-   * @name handleShare
-   * @description Handle share multiple event groups
-   *
-   * @param {object[]| object} eventGroups event groups list to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleShare = eventGroups => {
-    let message = '';
-    if (isArray(eventGroups)) {
-      const eventGroupsList = eventGroups.map(
-        eventGroup =>
-          `Name: ${eventGroup.strings.name.en}\nDescription: ${
-            // eslint-disable-line
-            eventGroup.strings.description.en
-          }\n`
-      );
-
-      message = eventGroupsList.join('\n\n\n');
-    } else {
-      message = `Name: ${eventGroups.strings.name.en}\nDescription: ${
-        // eslint-disable-line
-        eventGroups.strings.description.en
-      }\n`;
-    }
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name handleRefreshEventGroups
-   * @description Refresh Event Groups list
-   *
-   * @returns {undefined}
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleRefreshEventGroups = () =>
-    refreshEventGroups(
-      () => notifySuccess('Event groups refreshed successfully'),
-      () =>
-        notifyError(
-          'An Error occurred while refreshing Event groups, please contact system administrator'
-        )
-    );
-
-  /**
-   * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a event group
+   * @description show confirm modal before archiving a focal person
    * @param {object} item Resource item to be archived
    *
    * @version 0.1.0
@@ -223,21 +205,30 @@ class EventGroups extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventGroup(
+        deleteEventType(
           item._id, // eslint-disable-line
-          () => notifySuccess('Event group was archived successfully'),
+          () => notifySuccess('Event Type was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving Event group, Please contact your system Administrator'
+              'An error occurred while archiving Event Type, Please contact your system Administrator'
             )
         );
       },
     });
   };
 
+  handleRefreshEventTypes = () =>
+    refreshEventTypes(
+      () => notifySuccess('Event Types refreshed successfully'),
+      () =>
+        notifyError(
+          'An Error occurred while refreshing Event Types, please contact system administrator'
+        )
+    );
+
   render() {
     const {
-      eventGroups,
+      eventTypes,
       loading,
       page,
       posting,
@@ -246,42 +237,46 @@ class EventGroups extends Component {
       searchQuery,
       total,
     } = this.props;
-    const { isEditForm, notificationBody, showNotificationForm } = this.state;
+    const {
+      isEditForm,
+      showNotificationForm,
+      selectedEventActions,
+      notificationBody,
+    } = this.state;
     return (
       <>
         {/* Topbar */}
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for event groups here ...',
-            onChange: this.searchEventGroups,
+            placeholder: 'Search for event types here ...',
+            onChange: this.searchAlerts,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Event Group',
+              label: 'New Event Type',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Event Group',
-              onClick: this.openEventGroupsForm,
+              title: 'Add New Event Type',
+              onClick: this.openEventTypesForm,
             },
           ]}
         />
         {/* end Topbar */}
 
+        {/* list starts */}
         <ItemList
-          itemName="Event Groups"
-          items={eventGroups}
+          itemName="event types"
+          items={eventTypes}
           page={page}
           itemCount={total}
           loading={loading}
-          // onFilter={this.openFiltersModal}
-          // onNotify={this.openNotificationForm}
           onShare={this.handleShare}
-          onRefresh={this.handleRefreshEventGroups}
-          generateExportUrl={getEventGroupsExportUrl}
-          onPaginate={nextPage => paginateEventGroups(nextPage)}
           headerLayout={headerLayout}
+          onRefresh={this.handleRefreshEventTypes}
+          onPaginate={nextPage => paginateEventTypes(nextPage)}
+          generateExportUrl={getEventTypesExportUrl}
           renderListItem={({
             item,
             isSelected,
@@ -298,19 +293,18 @@ class EventGroups extends Component {
               renderActions={() => (
                 <ListItemActions
                   edit={{
-                    name: 'Edit Event Group',
-                    title: 'Update Event Group Details',
+                    name: 'Edit Event Type',
+                    title: 'Update Event Type Details',
                     onClick: () => this.handleEdit(item),
                   }}
                   share={{
-                    name: 'Share Event Group',
-                    title: 'Share Event Group details with others',
+                    name: 'Share Event Type',
+                    title: 'Share Event Type details with others',
                     onClick: () => this.handleShare(item),
                   }}
                   archive={{
-                    name: 'Archive Event Group',
-                    title:
-                      'Remove Event Group from list of active event groups',
+                    name: 'Archive Event Type',
+                    title: 'Remove Event Type from list of active Event Types',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                 />
@@ -318,20 +312,23 @@ class EventGroups extends Component {
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>
-              <Col {...codeSpan}>{item.strings.code}</Col>
+              <Col {...groupSpan}>
+                {item.relations.group
+                  ? item.relations.group.strings.name.en
+                  : 'N/A'}
+              </Col>
               <Col {...descriptionSpan}>
-                <span title={item.strings.description.en}>
-                  {truncateString(item.strings.description.en, 120)}
-                </span>
+                {item.strings.description ? item.strings.description.en : 'N/A'}
               </Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
             </ListItem>
           )}
         />
+        {/* end list */}
 
         {/* Notification Modal modal */}
         <Modal
-          title="Notify Event Groups"
+          title="Notify Event Actions"
           visible={showNotificationForm}
           onCancel={this.closeNotificationForm}
           footer={null}
@@ -341,6 +338,7 @@ class EventGroups extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
+            recipients={selectedEventActions}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
@@ -354,20 +352,20 @@ class EventGroups extends Component {
 
         {/* create/edit form modal */}
         <Modal
-          title={isEditForm ? 'Edit Event Group' : 'Add New Event Group'}
+          title={isEditForm ? 'Edit Event Type' : 'Add New Event Type'}
           visible={showForm}
           className="FormModal"
           footer={null}
-          onCancel={this.closeEventGroupsForm}
+          onCancel={this.closeEventTypesForm}
           destroyOnClose
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <EventGroupForm
+          <EventTypeForm
             posting={posting}
             isEditForm={isEditForm}
             eventType={eventType}
-            onCancel={this.closeEventGroupsForm}
+            onCancel={this.closeEventTypesForm}
           />
         </Modal>
         {/* end create/edit form modal */}
@@ -376,9 +374,9 @@ class EventGroups extends Component {
   }
 }
 
-EventGroups.propTypes = {
+EventTypes.propTypes = {
   loading: PropTypes.bool.isRequired,
-  eventGroups: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+  eventTypes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
   eventType: PropTypes.shape({ name: PropTypes.string }),
   page: PropTypes.number.isRequired,
@@ -388,18 +386,18 @@ EventGroups.propTypes = {
   showForm: PropTypes.bool.isRequired,
 };
 
-EventGroups.defaultProps = {
+EventTypes.defaultProps = {
   eventType: null,
   searchQuery: undefined,
 };
 
-export default Connect(EventGroups, {
-  eventGroups: 'eventGroups.list',
-  eventType: 'eventGroups.selected',
-  loading: 'eventGroups.loading',
-  posting: 'eventGroups.posting',
-  page: 'eventGroups.page',
-  showForm: 'eventGroups.showForm',
-  total: 'eventGroups.total',
-  searchQuery: 'eventGroups.q',
+export default Connect(EventTypes, {
+  eventTypes: 'eventTypes.list',
+  eventType: 'eventTypes.selected',
+  loading: 'eventTypes.loading',
+  posting: 'eventTypes.posting',
+  page: 'eventTypes.page',
+  showForm: 'eventTypes.showForm',
+  total: 'eventTypes.total',
+  searchQuery: 'eventTypes.q',
 });

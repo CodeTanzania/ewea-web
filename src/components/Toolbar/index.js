@@ -1,5 +1,6 @@
 import { Button, Col, Pagination, Row } from 'antd';
 import { pluralize, singularize } from 'inflection';
+import startCase from 'lodash/startCase';
 import PropTypes from 'prop-types';
 import React from 'react';
 import './styles.css';
@@ -85,7 +86,7 @@ const Toolbar = ({
                 <Button
                   type="circle"
                   icon="cloud-download"
-                  title="Export selected "
+                  title="Export Data"
                   className="actionButton"
                   size="large"
                 />
@@ -140,7 +141,9 @@ const Toolbar = ({
             <span
               style={{ color: '#959595', fontSize: 15, fontWeight: 600 }}
             >{`${total} ${
-              total > 1 ? pluralize(itemName) : singularize(itemName)
+              total > 1
+                ? startCase(pluralize(itemName))
+                : startCase(singularize(itemName))
             }`}</span>
           </Col>
           {/* end selected and  number summary */}

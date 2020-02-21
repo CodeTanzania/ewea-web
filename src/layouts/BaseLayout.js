@@ -13,7 +13,7 @@ import StakeholdersFocalPeople from '../Stakeholders/FocalPeople';
 import NotificationTemplates from '../Stakeholders/NotificationTemplates';
 import Events from '../Events/Events';
 import EventFunctions from '../Events/EventFunctions';
-import EventTypes from '../Events/ActionCatalog/EventTypes';
+import EventTypes from '../Events/EventTypes';
 import EventSeverity from '../Events/EventSeverity';
 import EventCertainty from '../Events/EventCertainty';
 import EventQuestions from '../Events/EventQuestions';
@@ -79,11 +79,11 @@ const breadcrumbNameMap = {
   },
   '/app/geographicalfeatures/facilities': {
     name: 'Facilities',
-    title: 'Facilities available',
+    title: 'Facilities Available',
   },
   '/app/geographicalfeatures': {
     name: 'Geographical Features',
-    title: 'Geographical features module',
+    title: 'Geographical Features Module',
   },
   '/app/geographicalfeatures/infrastructure': {
     name: 'Critical Infrastructure',
@@ -106,7 +106,7 @@ const breadcrumbNameMap = {
     title: 'List of all wards',
   },
   '/app/features': {
-    name: 'Critical facilities',
+    name: 'Critical Facilities',
     title: 'List of all critical facilities',
   },
   /* Stakeholders Routes */
@@ -123,7 +123,7 @@ const breadcrumbNameMap = {
     title: 'Notify stakeholders',
   },
   '/app/functions': {
-    name: 'EmergencyFunctions',
+    name: 'Emergency Functions',
     title: 'Emergency functions module',
   },
   '/app/stakeholders': { name: 'Stakeholders', title: 'Stakeholders module' },
