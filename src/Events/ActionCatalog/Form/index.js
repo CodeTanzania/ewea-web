@@ -8,7 +8,12 @@ import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
-const { getAgencies, getFeatures, getRoles, getPartyGroups } = httpActions;
+const {
+  getAgencies,
+  getAdministrativeAreas,
+  getPartyRoles,
+  getPartyGroups,
+} = httpActions;
 const { TextArea } = Input;
 
 /**
@@ -174,7 +179,7 @@ class FocalPersonForm extends Component {
               })(
                 <SearchableSelectInput
                   onSearch={getAgencies}
-                  optionLabel="name"
+                  optionLabel={agency => agency.name}
                   optionValue="_id"
                   initialValue={
                     isEditForm && focalPerson.party
@@ -207,7 +212,7 @@ class FocalPersonForm extends Component {
                   })(
                     <SearchableSelectInput
                       onSearch={getPartyGroups}
-                      optionLabel="name"
+                      optionLabel={group => group.strings.name.en}
                       optionValue="_id"
                       initialValue={
                         isEditForm && focalPerson.group
@@ -236,9 +241,11 @@ class FocalPersonForm extends Component {
                     ],
                   })(
                     <SearchableSelectInput
-                      onSearch={getFeatures}
-                      optionLabel={feature =>
-                        `${feature.name} (${upperFirst(feature.type)})`
+                      onSearch={getAdministrativeAreas}
+                      optionLabel={area =>
+                        `${area.strings.name.en} (${upperFirst(
+                          area.relations.type.strings.name.en
+                        )})`
                       }
                       optionValue="_id"
                       initialValue={
@@ -272,8 +279,8 @@ class FocalPersonForm extends Component {
                 ],
               })(
                 <SearchableSelectInput
-                  onSearch={getRoles}
-                  optionLabel="name"
+                  onSearch={getPartyRoles}
+                  optionLabel={role => role.strings.name.en}
                   optionValue="_id"
                   initialValue={
                     isEditForm && focalPerson.role

@@ -1,4 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
+import isArray from 'lodash/isArray';
 import {
   closeFocalPersonForm,
   Connect,
@@ -6,18 +7,40 @@ import {
   openFocalPersonForm,
   searchFocalPeople,
   selectFocalPerson,
+  refreshFocalPeople,
+  paginateFocalPeople,
+  deleteFocalPerson,
 } from '@codetanzania/ewea-api-states';
-import { Modal } from 'antd';
+import { Modal, Col } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import FocalPersonFilters from './Filters';
 import FocalPersonForm from './Form';
-import FocalPeopleList from './List';
+import ItemList from '../../components/List';
+import ListItem from '../../components/ListItem';
+import ListItemActions from '../../components/ListItemActions';
+import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
 
 /* constants */
+const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
+const phoneSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
+const emailSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
+const roleSpan = { xxl: 8, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
+const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+
+const headerLayout = [
+  { ...nameSpan, header: 'Name' },
+  { ...roleSpan, header: 'Title & Organization' },
+  { ...phoneSpan, header: 'Phone Number' },
+  { ...emailSpan, header: 'Email' },
+  { ...areaSpan, header: 'Area' },
+];
+
+const { confirm } = Modal;
+
 const {
   getFocalPeople: getFocalPeopleFromAPI,
   getJurisdictions,
@@ -163,40 +186,29 @@ class ActionCatalog extends Component {
    * @name handleShare
    * @description Handle share single focalPerson action
    *
-   * @param {object} focalPerson focalPerson to be shared
+   * @param {object| object[]} focalPeople focalPerson to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = focalPerson => {
-    const message = `${focalPerson.name}\nMobile: ${
-      // eslint-disable-line
-      focalPerson.mobile
-    }\nEmail: ${focalPerson.email}`;
+  handleShare = focalPeople => {
+    let message = '';
+    if (isArray(focalPeople)) {
+      const focalPeopleList = focalPeople.map(
+        focalPerson =>
+          `Name: ${focalPerson.name}\nMobile: ${
+            // eslint-disable-line
+            focalPerson.mobile
+          }\nEmail: ${focalPerson.email}`
+      );
 
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name handleBulkShare
-   * @description Handle share multiple focal People
-   *
-   * @param {object[]} focalPeople focal People list to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleBulkShare = focalPeople => {
-    const focalPersonList = focalPeople.map(
-      focalPerson =>
-        `${focalPerson.name}\nMobile: ${focalPerson.mobile}\nEmail: ${
-          // eslint-disable-line
-          focalPerson.email
-        }`
-    );
-
-    const message = focalPersonList.join('\n\n\n');
+      message = focalPeopleList.join('\n\n\n');
+    } else {
+      message = `Name: ${focalPeople.name}\nMobile: ${
+        // eslint-disable-line
+        focalPeople.mobile
+      }\nEmail: ${focalPeople.email}`;
+    }
 
     this.setState({ notificationBody: message, showNotificationForm: true });
   };
@@ -254,6 +266,55 @@ class ActionCatalog extends Component {
     this.setState({ notificationBody: undefined });
   };
 
+  /**
+   * @function
+   * @name handleRefreshFocalPeople
+   * @description Handle list refresh action
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleRefreshFocalPeople = () => {
+    refreshFocalPeople(
+      () => {
+        notifySuccess('Focal People refreshed successfully');
+      },
+      () => {
+        notifyError(
+          'An error occurred while refreshing focal people please contact system administrator'
+        );
+      }
+    );
+  };
+
+  /**
+   * @function
+   * @name showArchiveConfirm
+   * @description show confirm modal before archiving a focal person
+   * @param {object} item Resource item to be archived
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  showArchiveConfirm = item => {
+    confirm({
+      title: `Are you sure you want to archive this record ?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteFocalPerson(
+          item._id, // eslint-disable-line
+          () => notifySuccess('Focal Person was archived successfully'),
+          () =>
+            notifyError(
+              'An error occurred while archiving Focal Person, Please contact your system Administrator'
+            )
+        );
+      },
+    });
+  };
+
   render() {
     const {
       focalPeople,
@@ -295,84 +356,137 @@ class ActionCatalog extends Component {
         />
         {/* end Topbar */}
 
-        <div className="FocalPeopleList">
-          {/* list starts */}
-          <FocalPeopleList
-            total={total}
-            page={page}
-            focalPeople={focalPeople}
-            loading={loading}
-            onEdit={this.handleEdit}
-            onFilter={this.openFiltersModal}
-            onNotify={this.openNotificationForm}
-            onShare={this.handleShare}
-            onBulkShare={this.handleBulkShare}
-          />
-          {/* end list */}
+        {/* list starts */}
+        <ItemList
+          itemName="action catalog"
+          items={focalPeople}
+          page={page}
+          itemCount={total}
+          loading={loading}
+          onFilter={this.openFiltersModal}
+          onNotify={this.openNotificationForm}
+          onShare={this.handleShare}
+          onRefresh={this.handleRefreshFocalPeople}
+          onPaginate={nextPage => paginateFocalPeople(nextPage)}
+          headerLayout={headerLayout}
+          renderListItem={({
+            item,
+            isSelected,
+            onSelectItem,
+            onDeselectItem,
+          }) => (
+            <ListItem
+              key={item._id} // eslint-disable-line
+              item={item}
+              isSelected={isSelected}
+              onSelectItem={onSelectItem}
+              onDeselectItem={onDeselectItem}
+              renderActions={() => (
+                <ListItemActions
+                  edit={{
+                    name: 'Edit Focal Person',
+                    title: 'Update Focal Person Details',
+                    onClick: () => this.handleEdit(item),
+                  }}
+                  share={{
+                    name: 'Share Focal Person',
+                    title: 'Share Focal Person details with others',
+                    onClick: () => this.handleShare(item),
+                  }}
+                  archive={{
+                    name: 'Archive Focal Person',
+                    title:
+                      'Remove focal person from list of active focal people',
+                    onClick: () => this.showArchiveConfirm(item),
+                  }}
+                />
+              )}
+            >
+              {/* eslint-disable react/jsx-props-no-spreading */}
+              <Col {...nameSpan}>{item.name}</Col>
+              <Col
+                {...roleSpan}
+                title={item.role ? item.role.strings.name.en : 'N/A'}
+              >
+                {item.role
+                  ? `${item.role.strings.name.en}, ${
+                      item.party ? item.party.abbreviation : 'N/A'
+                    }`
+                  : 'N/A'}
+              </Col>
+              <Col {...phoneSpan}>{item.mobile}</Col>
+              <Col {...emailSpan}>{item.email}</Col>
+              <Col {...areaSpan}>
+                {item.area ? item.area.strings.name.en : 'N/A'}
+              </Col>
+              {/* eslint-enable react/jsx-props-no-spreading */}
+            </ListItem>
+          )}
+        />
+        {/* end list */}
 
-          {/* filter modal */}
-          <Modal
-            title="Filter Focal People"
-            visible={showFilters}
+        {/* filter modal */}
+        <Modal
+          title="Filter Focal People"
+          visible={showFilters}
+          onCancel={this.closeFiltersModal}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+        >
+          <FocalPersonFilters
             onCancel={this.closeFiltersModal}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-          >
-            <FocalPersonFilters
-              onCancel={this.closeFiltersModal}
-              cached={cached}
-              onCache={this.handleOnCachedValues}
-              onClearCache={this.handleClearCachedValues}
-            />
-          </Modal>
-          {/* end filter modal */}
+            cached={cached}
+            onCache={this.handleOnCachedValues}
+            onClearCache={this.handleClearCachedValues}
+          />
+        </Modal>
+        {/* end filter modal */}
 
-          {/* Notification Modal modal */}
-          <Modal
-            title="Notify Focal People"
-            visible={showNotificationForm}
+        {/* Notification Modal modal */}
+        <Modal
+          title="Notify Focal People"
+          visible={showNotificationForm}
+          onCancel={this.closeNotificationForm}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+          afterClose={this.handleAfterCloseNotificationForm}
+        >
+          <NotificationForm
+            recipients={selectedFocalPeople}
+            onSearchRecipients={getFocalPeopleFromAPI}
+            onSearchJurisdictions={getJurisdictions}
+            onSearchGroups={getPartyGroups}
+            onSearchAgencies={getAgencies}
+            onSearchRoles={getRoles}
+            body={notificationBody}
             onCancel={this.closeNotificationForm}
-            footer={null}
-            destroyOnClose
-            maskClosable={false}
-            className="FormModal"
-            afterClose={this.handleAfterCloseNotificationForm}
-          >
-            <NotificationForm
-              recipients={selectedFocalPeople}
-              onSearchRecipients={getFocalPeopleFromAPI}
-              onSearchJurisdictions={getJurisdictions}
-              onSearchGroups={getPartyGroups}
-              onSearchAgencies={getAgencies}
-              onSearchRoles={getRoles}
-              body={notificationBody}
-              onCancel={this.closeNotificationForm}
-            />
-          </Modal>
-          {/* end Notification modal */}
+          />
+        </Modal>
+        {/* end Notification modal */}
 
-          {/* create/edit form modal */}
-          <Modal
-            title={isEditForm ? 'Edit Focal Person' : 'Add New Focal Person'}
-            visible={showForm}
-            className="FormModal"
-            footer={null}
+        {/* create/edit form modal */}
+        <Modal
+          title={isEditForm ? 'Edit Focal Person' : 'Add New Focal Person'}
+          visible={showForm}
+          className="FormModal"
+          footer={null}
+          onCancel={this.closeFocalPersonForm}
+          destroyOnClose
+          maskClosable={false}
+          afterClose={this.handleAfterCloseForm}
+        >
+          <FocalPersonForm
+            posting={posting}
+            isEditForm={isEditForm}
+            focalPerson={focalPerson}
             onCancel={this.closeFocalPersonForm}
-            destroyOnClose
-            maskClosable={false}
-            afterClose={this.handleAfterCloseForm}
-          >
-            <FocalPersonForm
-              posting={posting}
-              isEditForm={isEditForm}
-              focalPerson={focalPerson}
-              onCancel={this.closeFocalPersonForm}
-            />
-          </Modal>
-          {/* end create/edit form modal */}
-        </div>
+          />
+        </Modal>
+        {/* end create/edit form modal */}
       </>
     );
   }
