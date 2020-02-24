@@ -1,23 +1,23 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import isArray from 'lodash/isArray';
 import {
-  closeFocalPersonForm,
+  closeEventActionCatalogueForm,
   Connect,
-  getFocalPeople,
-  openFocalPersonForm,
-  searchFocalPeople,
-  selectFocalPerson,
-  refreshFocalPeople,
-  paginateFocalPeople,
-  deleteFocalPerson,
+  getEventActionCatalogues,
+  openEventActionCatalogueForm,
+  searchEventActionCatalogues,
+  selectEventActionCatalogue,
+  refreshEventActionCatalogues,
+  paginateEventActionCatalogues,
+  deleteEventActionCatalogue,
 } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
-import FocalPersonFilters from './Filters';
-import FocalPersonForm from './Form';
+import EventActionCatalogueFilters from './Filters';
+import EventActionCatalogueForm from './Form';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
@@ -25,24 +25,24 @@ import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
 
 /* constants */
-const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
-const phoneSpan = { xxl: 2, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
-const emailSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const roleSpan = { xxl: 8, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
-const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const eventTypeSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
+const actionSpan = { xxl: 5, xl: 7, lg: 7, md: 4, sm: 9, xs: 9 };
+const rolesSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
+const eventFunction = { xxl: 3, xl: 3, lg: 3, md: 0, sm: 0, xs: 0 };
+const groupsSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 
 const headerLayout = [
-  { ...nameSpan, header: 'Name' },
-  { ...roleSpan, header: 'Title & Organization' },
-  { ...phoneSpan, header: 'Phone Number' },
-  { ...emailSpan, header: 'Email' },
-  { ...areaSpan, header: 'Area' },
+  { ...eventTypeSpan, header: 'Event Type' },
+  { ...eventFunction, header: 'Function' },
+  { ...actionSpan, header: 'Action/Responsibility' },
+  { ...rolesSpan, header: 'Roles' },
+  { ...groupsSpan, header: 'Groups' },
 ];
 
 const { confirm } = Modal;
 
 const {
-  getFocalPeople: getFocalPeopleFromAPI,
+  getEventActionCatalogues: getEventActionCataloguesFromAPI,
   getJurisdictions,
   getPartyGroups,
   getRoles,
@@ -52,7 +52,7 @@ const {
 /**
  * @class
  * @name ActionCatalog
- * @description Render actions list which have search box, actions and focalPerson list
+ * @description Render actions list which have search box, actions and Event Action Catalogue list
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -63,13 +63,13 @@ class ActionCatalog extends Component {
     showFilters: false,
     isEditForm: false,
     showNotificationForm: false,
-    selectedFocalPeople: [],
+    selectedEventActionCatalogues: [],
     notificationBody: undefined,
     cached: null,
   };
 
   componentDidMount() {
-    getFocalPeople();
+    getEventActionCatalogues();
   }
 
   /**
@@ -128,41 +128,41 @@ class ActionCatalog extends Component {
 
   /**
    * @function
-   * @name openFocalPersonForm
-   * @description Open focalPerson form
+   * @name openEventActionCatalogueForm
+   * @description Open Event Action Catalogue form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openFocalPersonForm = () => {
-    openFocalPersonForm();
+  openEventActionCatalogueForm = () => {
+    openEventActionCatalogueForm();
   };
 
   /**
    * @function
-   * @name openFocalPersonForm
-   * @description close focalPerson form
+   * @name openEventActionCatalogueForm
+   * @description close Event Action Catalogue form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeFocalPersonForm = () => {
-    closeFocalPersonForm();
+  closeEventActionCatalogueForm = () => {
+    closeEventActionCatalogueForm();
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
-   * @name searchFocalPeople
-   * @description Search FocalPeople List based on supplied filter word
+   * @name searchEventActionCatalogues
+   * @description Search Event Action Catalogues List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchFocalPeople = event => {
-    searchFocalPeople(event.target.value);
+  searchEventActionCatalogues = event => {
+    searchEventActionCatalogues(event.target.value);
   };
 
   /**
@@ -170,44 +170,44 @@ class ActionCatalog extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} focalPerson focalPerson to be edited
+   * @param {object} eventActionCatalogue Event Action Catalogue to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = focalPerson => {
-    selectFocalPerson(focalPerson);
+  handleEdit = eventActionCatalogue => {
+    selectEventActionCatalogue(eventActionCatalogue);
     this.setState({ isEditForm: true });
-    openFocalPersonForm();
+    openEventActionCatalogueForm();
   };
 
   /**
    * @function
    * @name handleShare
-   * @description Handle share single focalPerson action
+   * @description Handle share single EventActionCatalogue action
    *
-   * @param {object| object[]} focalPeople focalPerson to be shared
+   * @param {object| object[]} eventActionCatalogues EventActionCatalogue to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = focalPeople => {
+  handleShare = eventActionCatalogues => {
     let message = '';
-    if (isArray(focalPeople)) {
-      const focalPeopleList = focalPeople.map(
-        focalPerson =>
-          `Name: ${focalPerson.name}\nMobile: ${
+    if (isArray(eventActionCatalogues)) {
+      const eventActionCataloguesList = eventActionCatalogues.map(
+        eventActionCatalogue =>
+          `Name: ${eventActionCatalogue.name}\nMobile: ${
             // eslint-disable-line
-            focalPerson.mobile
-          }\nEmail: ${focalPerson.email}`
+            eventActionCatalogue.mobile
+          }\nEmail: ${eventActionCatalogue.email}`
       );
 
-      message = focalPeopleList.join('\n\n\n');
+      message = eventActionCataloguesList.join('\n\n\n');
     } else {
-      message = `Name: ${focalPeople.name}\nMobile: ${
+      message = `Name: ${eventActionCatalogues.name}\nMobile: ${
         // eslint-disable-line
-        focalPeople.mobile
-      }\nEmail: ${focalPeople.email}`;
+        eventActionCatalogues.mobile
+      }\nEmail: ${eventActionCatalogues.email}`;
     }
 
     this.setState({ notificationBody: message, showNotificationForm: true });
@@ -216,16 +216,16 @@ class ActionCatalog extends Component {
   /**
    * @function
    * @name openNotificationForm
-   * @description Handle on notify focalPeople
+   * @description Handle on notify EventActionCatalogues
    *
-   * @param {object[]} focalPeople List of focalPeople selected to be notified
+   * @param {object[]} eventActionCatalogues List of Event Action Catalogues selected to be notified
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openNotificationForm = focalPeople => {
+  openNotificationForm = eventActionCatalogues => {
     this.setState({
-      selectedFocalPeople: focalPeople,
+      selectedEventActionCatalogues: eventActionCatalogues,
       showNotificationForm: true,
     });
   };
@@ -233,7 +233,7 @@ class ActionCatalog extends Component {
   /**
    * @function
    * @name closeNotificationForm
-   * @description Handle on notify focalPeople
+   * @description Handle on notify Event Action Catalogues
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -268,20 +268,20 @@ class ActionCatalog extends Component {
 
   /**
    * @function
-   * @name handleRefreshFocalPeople
+   * @name handleRefreshEventActionCatalogues
    * @description Handle list refresh action
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleRefreshFocalPeople = () => {
-    refreshFocalPeople(
+  handleRefreshEventActionCatalogues = () => {
+    refreshEventActionCatalogues(
       () => {
-        notifySuccess('Focal People refreshed successfully');
+        notifySuccess('Event Action Catalogues refreshed successfully');
       },
       () => {
         notifyError(
-          'An error occurred while refreshing focal people please contact system administrator'
+          'An error occurred while refreshing Event Action Catalogues please contact system administrator'
         );
       }
     );
@@ -290,7 +290,7 @@ class ActionCatalog extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a focal person
+   * @description show confirm modal before archiving a Event Action Catalogue
    * @param {object} item Resource item to be archived
    *
    * @version 0.1.0
@@ -303,12 +303,13 @@ class ActionCatalog extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteFocalPerson(
+        deleteEventActionCatalogue(
           item._id, // eslint-disable-line
-          () => notifySuccess('Focal Person was archived successfully'),
+          () =>
+            notifySuccess('Event Action Catalogue was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving Focal Person, Please contact your system Administrator'
+              'An error occurred while archiving Event Action Catalogue, Please contact your system Administrator'
             )
         );
       },
@@ -317,8 +318,8 @@ class ActionCatalog extends Component {
 
   render() {
     const {
-      focalPeople,
-      focalPerson,
+      eventActionCatalogues,
+      eventActionCatalogue,
       loading,
       posting,
       page,
@@ -330,7 +331,7 @@ class ActionCatalog extends Component {
       showFilters,
       isEditForm,
       showNotificationForm,
-      selectedFocalPeople,
+      selectedEventActionCatalogues,
       notificationBody,
       cached,
     } = this.state;
@@ -340,17 +341,17 @@ class ActionCatalog extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for focal people here ...',
-            onChange: this.searchFocalPeople,
+            placeholder: 'Search for Event Action Catalogues here ...',
+            onChange: this.searchEventActionCatalogues,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Focal Person',
+              label: 'New Event Action Catalogue',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Focal Person',
-              onClick: this.openFocalPersonForm,
+              title: 'Add New Event Action Catalogue',
+              onClick: this.openEventActionCatalogueForm,
             },
           ]}
         />
@@ -359,15 +360,15 @@ class ActionCatalog extends Component {
         {/* list starts */}
         <ItemList
           itemName="action catalog"
-          items={focalPeople}
+          items={eventActionCatalogues}
           page={page}
           itemCount={total}
           loading={loading}
           onFilter={this.openFiltersModal}
           onNotify={this.openNotificationForm}
           onShare={this.handleShare}
-          onRefresh={this.handleRefreshFocalPeople}
-          onPaginate={nextPage => paginateFocalPeople(nextPage)}
+          onRefresh={this.handleRefreshEventActionCatalogues}
+          onPaginate={nextPage => paginateEventActionCatalogues(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
             item,
@@ -377,6 +378,7 @@ class ActionCatalog extends Component {
           }) => (
             <ListItem
               key={item._id} // eslint-disable-line
+              name={item.strings.name.en}
               item={item}
               isSelected={isSelected}
               onSelectItem={onSelectItem}
@@ -384,40 +386,39 @@ class ActionCatalog extends Component {
               renderActions={() => (
                 <ListItemActions
                   edit={{
-                    name: 'Edit Focal Person',
-                    title: 'Update Focal Person Details',
+                    name: 'Edit Event Action Catalogue',
+                    title: 'Update Event Action Catalogue Details',
                     onClick: () => this.handleEdit(item),
                   }}
                   share={{
-                    name: 'Share Focal Person',
-                    title: 'Share Focal Person details with others',
+                    name: 'Share Event Action Catalogue',
+                    title: 'Share Event Action Catalogue details with others',
                     onClick: () => this.handleShare(item),
                   }}
                   archive={{
-                    name: 'Archive Focal Person',
+                    name: 'Archive Event Action Catalogue',
                     title:
-                      'Remove focal person from list of active focal people',
+                      'Remove Event Action Catalogue from list of active Event Action Catalogues',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                 />
               )}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
-              <Col {...nameSpan}>{item.name}</Col>
-              <Col
-                {...roleSpan}
-                title={item.role ? item.role.strings.name.en : 'N/A'}
-              >
-                {item.role
-                  ? `${item.role.strings.name.en}, ${
-                      item.party ? item.party.abbreviation : 'N/A'
-                    }`
-                  : 'N/A'}
+              <Col {...eventTypeSpan}>
+                {item.relations.type
+                  ? item.relations.type.strings.name.en
+                  : 'All'}
               </Col>
-              <Col {...phoneSpan}>{item.mobile}</Col>
-              <Col {...emailSpan}>{item.email}</Col>
-              <Col {...areaSpan}>
-                {item.area ? item.area.strings.name.en : 'N/A'}
+              <Col {...eventFunction}>
+                {item.relations.function.strings.name.en}
+              </Col>
+              <Col {...actionSpan}>{item.relations.action.strings.name.en}</Col>
+              <Col {...rolesSpan}>
+                {item.relations.roles.join(',') || 'N/A'}
+              </Col>
+              <Col {...groupsSpan}>
+                {item.relations.groups.join(',') || 'N/A'}
               </Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
             </ListItem>
@@ -427,7 +428,7 @@ class ActionCatalog extends Component {
 
         {/* filter modal */}
         <Modal
-          title="Filter Focal People"
+          title="Filter Event Action Catalogues"
           visible={showFilters}
           onCancel={this.closeFiltersModal}
           footer={null}
@@ -435,7 +436,7 @@ class ActionCatalog extends Component {
           maskClosable={false}
           className="FormModal"
         >
-          <FocalPersonFilters
+          <EventActionCatalogueFilters
             onCancel={this.closeFiltersModal}
             cached={cached}
             onCache={this.handleOnCachedValues}
@@ -446,7 +447,7 @@ class ActionCatalog extends Component {
 
         {/* Notification Modal modal */}
         <Modal
-          title="Notify Focal People"
+          title="Notify Event Action Catalogues"
           visible={showNotificationForm}
           onCancel={this.closeNotificationForm}
           footer={null}
@@ -456,8 +457,8 @@ class ActionCatalog extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={selectedFocalPeople}
-            onSearchRecipients={getFocalPeopleFromAPI}
+            recipients={selectedEventActionCatalogues}
+            onSearchRecipients={getEventActionCataloguesFromAPI}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
@@ -470,20 +471,24 @@ class ActionCatalog extends Component {
 
         {/* create/edit form modal */}
         <Modal
-          title={isEditForm ? 'Edit Focal Person' : 'Add New Focal Person'}
+          title={
+            isEditForm
+              ? 'Edit Event Action Catalogue'
+              : 'Add New Action Catalogue'
+          }
           visible={showForm}
           className="FormModal"
           footer={null}
-          onCancel={this.closeFocalPersonForm}
+          onCancel={this.closeEventActionCatalogueForm}
           destroyOnClose
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <FocalPersonForm
+          <EventActionCatalogueForm
             posting={posting}
             isEditForm={isEditForm}
-            focalPerson={focalPerson}
-            onCancel={this.closeFocalPersonForm}
+            EventActionCatalogue={eventActionCatalogue}
+            onCancel={this.closeEventActionCatalogueForm}
           />
         </Modal>
         {/* end create/edit form modal */}
@@ -495,9 +500,10 @@ class ActionCatalog extends Component {
 ActionCatalog.propTypes = {
   loading: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
-  focalPeople: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
-    .isRequired,
-  focalPerson: PropTypes.shape({ name: PropTypes.string }),
+  eventActionCatalogues: PropTypes.arrayOf(
+    PropTypes.shape({ name: PropTypes.string })
+  ).isRequired,
+  eventActionCatalogue: PropTypes.shape({ name: PropTypes.string }),
   page: PropTypes.number.isRequired,
   showForm: PropTypes.bool.isRequired,
   searchQuery: PropTypes.string,
@@ -505,17 +511,17 @@ ActionCatalog.propTypes = {
 };
 
 ActionCatalog.defaultProps = {
-  focalPerson: null,
+  eventActionCatalogue: null,
   searchQuery: undefined,
 };
 
 export default Connect(ActionCatalog, {
-  focalPeople: 'focalPeople.list',
-  focalPerson: 'focalPeople.selected',
-  loading: 'focalPeople.loading',
-  posting: 'focalPeople.posting',
-  page: 'focalPeople.page',
-  showForm: 'focalPeople.showForm',
-  total: 'focalPeople.total',
-  searchQuery: 'focalPeople.q',
+  eventActionCatalogues: 'eventActionCatalogues.list',
+  eventActionCatalogue: 'eventActionCatalogues.selected',
+  loading: 'eventActionCatalogues.loading',
+  posting: 'eventActionCatalogues.posting',
+  page: 'eventActionCatalogues.page',
+  showForm: 'eventActionCatalogues.showForm',
+  total: 'eventActionCatalogues.total',
+  searchQuery: 'eventActionCatalogues.q',
 });
