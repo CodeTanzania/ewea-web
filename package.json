@@ -24,7 +24,7 @@
     "risk"
   ],
   "dependencies": {
-    "@codetanzania/ewea-api-client": "^0.9.0",
+    "@codetanzania/ewea-api-client": "^0.10.0",
     "@codetanzania/ewea-api-states": "^0.12.0",
     "antd": "^3.26.11",
     "axios": "^0.19.2",
