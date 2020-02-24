@@ -19,6 +19,7 @@ import {
   Icon,
   Card,
   Empty,
+  Spin,
 } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
@@ -256,108 +257,128 @@ const EventToolbar = ({ event, openForm }) => {
  * @since 0.1.0
  */
 export const EventFeed = ({ feeds = [], loading, hasMore }) => {
+  console.log('Feeds', feeds.length, feeds);
   return (
     <>
       <EventDetailsSectionHeader title="EVENT FEED" />
 
-      {isEmpty(feeds) ? (
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-      ) : (
-        <>
-          <Timeline>
-            {/* eslint-disable no-underscore-dangle */}
-            {feeds.map(feed => {
-              if (feed.comment) {
-                return (
-                  <Timeline.Item key={feed._id} dot={<Icon type="message" />}>
-                    {feed.comment}
-                    <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-                  </Timeline.Item>
-                );
-              }
-
-              if (feed.focals) {
-                return feed.focals.map(focal => (
-                  <Timeline.Item key={feed._id} dot={<Icon type="user" />}>
-                    Focal: <Tag color="cyan">{focal.name}</Tag> was added on{' '}
-                    <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-                  </Timeline.Item>
-                ));
-              }
-
-              if (feed.agencies) {
-                return feed.agencies.map(focal => (
-                  <Timeline.Item key={feed._id} dot={<Icon type="apartment" />}>
-                    Agency: <Tag color="magenta">{focal.name}</Tag> was added on{' '}
-                    <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-                  </Timeline.Item>
-                ));
-              }
-
-              if (feed.image) {
-                const baseUrl = getBaseUrl();
-                return (
-                  <Timeline.Item
-                    key={feed._id}
-                    dot={<Icon type="file-image" />}
-                  >
-                    <Card
-                      hoverable
-                      style={{ width: 300 }}
-                      bodyStyle={{ display: 'none' }}
-                      actions={[
-                        <a
-                          key={`view-${feed._id}`}
-                          href={`${baseUrl}${feed.image.stream}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
+      <Spin spinning={loading}>
+        {isEmpty(feeds) ? (
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        ) : (
+          <>
+            {!loading && (
+              <Timeline>
+                {/* eslint-disable no-underscore-dangle */}
+                {feeds.map(feed => {
+                  return (
+                    <>
+                      {/* comments */}
+                      {feed.comment && (
+                        <Timeline.Item
+                          key={feed._id}
+                          dot={<Icon type="message" />}
                         >
-                          <Icon type="eye" key="eye" />
-                        </a>,
-                        <a
-                          key={`download-${feed._id}`}
-                          href={`${baseUrl}${feed.image.download}`}
+                          {feed.comment}{' '}
+                          <Tag>
+                            {formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}
+                          </Tag>{' '}
+                        </Timeline.Item>
+                      )}
+                      {/* end comments */}
+
+                      {/* images */}
+                      {feed.image && (
+                        <Timeline.Item
+                          key={feed._id}
+                          dot={<Icon type="file-image" />}
                         >
-                          <Icon type="download" key="download" />
-                        </a>,
-                      ]}
-                      cover={
-                        <img
-                          alt="example"
-                          src={`${baseUrl}${feed.image.stream}`}
-                        />
-                      }
-                    />
-                    <div style={{ marginTop: '12px' }}>
-                      <Tag>
-                        {formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}
-                      </Tag>
-                    </div>
-                  </Timeline.Item>
-                );
-              }
+                          <Card
+                            hoverable
+                            style={{ width: 300 }}
+                            bodyStyle={{ display: 'none' }}
+                            actions={[
+                              <a
+                                key={`view-${feed._id}`}
+                                href={`${getBaseUrl()}${feed.image.stream}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <Icon type="eye" key="eye" />
+                              </a>,
+                              <a
+                                key={`download-${feed._id}`}
+                                href={`${getBaseUrl()}${feed.image.download}`}
+                              >
+                                <Icon type="download" key="download" />
+                              </a>,
+                            ]}
+                            cover={
+                              <img
+                                alt="example"
+                                src={`${getBaseUrl()}${feed.image.stream}`}
+                              />
+                            }
+                          />
+                          <div style={{ marginTop: '12px' }}>
+                            <Tag>
+                              {formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}
+                            </Tag>
+                          </div>
+                        </Timeline.Item>
+                      )}
+                      {/* end images */}
 
-              return (
-                <Timeline.Item key={feed._id}>
-                  {feed.comment}{' '}
-                  <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-                </Timeline.Item>
-              );
-            })}
-            {/* eslint-enable no-underscore-dangle */}
-          </Timeline>
+                      {/* focal people */}
+                      {feed.focals &&
+                        feed.focals.map(focal => (
+                          <Timeline.Item
+                            key={feed._id}
+                            dot={<Icon type="user" />}
+                          >
+                            Focal: <Tag color="cyan">{focal.name}</Tag> was
+                            added on{' '}
+                            <Tag>
+                              {formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}
+                            </Tag>
+                          </Timeline.Item>
+                        ))}
+                      {/* end focal people */}
 
-          {hasMore && (
-            <Button
-              loading={loading}
-              onClick={() => loadMoreChangelogs()}
-              className="LoadMoreButton"
-            >
-              Load More ...
-            </Button>
-          )}
-        </>
-      )}
+                      {/* agencies */}
+                      {feed.agencies &&
+                        feed.agencies.map(focal => (
+                          <Timeline.Item
+                            key={feed._id}
+                            dot={<Icon type="apartment" />}
+                          >
+                            Agency: <Tag color="magenta">{focal.name}</Tag> was
+                            added on{' '}
+                            <Tag>
+                              {formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}
+                            </Tag>
+                          </Timeline.Item>
+                        ))}
+                      {/* end agencies */}
+                    </>
+                  );
+                })}
+                {/* eslint-enable no-underscore-dangle */}
+              </Timeline>
+            )}
+
+            {hasMore && (
+              <Button
+                loading={loading}
+                onClick={() => loadMoreChangelogs()}
+                className="LoadMoreButton"
+              >
+                Load More ...
+              </Button>
+            )}
+          </>
+        )}
+      </Spin>
     </>
   );
 };
