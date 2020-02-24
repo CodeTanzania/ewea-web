@@ -20,6 +20,7 @@ import EventQuestions from '../Events/EventQuestions';
 import EventGroups from '../Events/EventGroups';
 import EventIndicator from '../Events/EventIndicator';
 import Features from '../GeographicalFeatures/CriticalFacilities';
+import ActionCatalog from '../Events/ActionCatalog';
 // import StakeholdersNotifications from '../Stakeholders/Notifications';
 import StakeholdersRoles from '../Stakeholders/Roles';
 import OverviewDashboard from '../Dashboards';
@@ -274,6 +275,10 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/agencies`}
             component={StakeholdersAgencies}
+          />
+          <SecureRoute
+            path={`${baseUrl}/actioncatalog`}
+            component={ActionCatalog}
           />
           <SecureRoute
             path={`${baseUrl}/overview`}

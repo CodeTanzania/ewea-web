@@ -1,3 +1,4 @@
+import { httpActions } from '@codetanzania/ewea-api-client';
 import {
   Connect,
   getFeatures,
@@ -5,16 +6,48 @@ import {
   searchFeatures,
   selectFeature,
   closeFeatureForm,
+  paginateFeatures,
+  refreshFeatures,
+  deleteFeature,
 } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Modal } from 'antd';
+import isArray from 'lodash/isArray';
+import { Modal, Col, Drawer } from 'antd';
 import Topbar from '../../components/Topbar';
-import FeaturesList from './List';
 import FeaturesForm from './Form';
+import NotificationForm from '../../components/NotificationForm';
+import ListItemActions from '../../components/ListItemActions';
+import ListItem from '../../components/ListItem';
+import ItemList from '../../components/List';
+import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
+import MapPoint from '../../Map/MapPoint';
 
 /* constants */
+const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
+const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
+const amenitySpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
+const addressSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const descriptionSpan = { xxl: 7, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
+
+const headerLayout = [
+  { ...nameSpan, header: 'Name' },
+  { ...codeSpan, header: 'Code' },
+  { ...amenitySpan, header: 'Amenity' },
+  { ...addressSpan, header: 'Address' },
+  { ...descriptionSpan, header: 'Description' },
+];
+const {
+  getFeaturesExportUrl,
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getAgencies,
+  getRoles,
+} = httpActions;
+
+const { confirm } = Modal;
 
 /**
  * @class
@@ -29,6 +62,9 @@ class Features extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isEditForm: false,
+    showMap: false,
+    notificationBody: undefined,
+    showNotificationForm: false,
   };
 
   componentDidMount() {
@@ -102,6 +138,139 @@ class Features extends Component {
     this.setState({ isEditForm: false });
   };
 
+  /**
+   * @function
+   * @name handleRefreshFeatures
+   * @description Handle list refresh action
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleRefreshFeatures = () => {
+    refreshFeatures(
+      () => {
+        notifySuccess('Features refreshed successfully');
+      },
+      () => {
+        notifyError(
+          'An Error occurred while refreshing Features please contact system administrator'
+        );
+      }
+    );
+  };
+
+  /**
+   * @function
+   * @name handleShare
+   * @description Handle share multiple features
+   *
+   * @param {object[]| object} features features list to be shared
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleShare = features => {
+    let message = '';
+    if (isArray(features)) {
+      const featureList = features.map(
+        feature =>
+          `Name: ${feature.strings.name.en}\nDescription: ${
+            // eslint-disable-line
+            feature.strings.description.en
+          }\n`
+      );
+
+      message = featureList.join('\n\n\n');
+    } else {
+      message = `Name: ${features.strings.name.en}\nDescription: ${
+        // eslint-disable-line
+        features.strings.description.en
+      }\n`;
+    }
+
+    this.setState({ notificationBody: message, showNotificationForm: true });
+  };
+
+  /**
+   * @function
+   * @name showArchiveConfirm
+   * @description show confirm modal before archiving a critical facility
+   *
+   * @param item {object} criticalfacility to archive
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+
+  showArchiveConfirm = item => {
+    confirm({
+      title: `Are you sure you want to archive ${item.strings.name.en} ?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteFeature(
+          item._id, // eslint-disable-line
+          () => notifySuccess('Critical facility was archived successfully'),
+          () =>
+            notifyError(
+              'An error occurred while archiving Critical facility, Please contact your system Administrator'
+            )
+        );
+      },
+    });
+  };
+
+  /**
+   * @function
+   * @name closeNotificationForm
+   * @description Handle on notify features
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeNotificationForm = () => {
+    this.setState({ showNotificationForm: false });
+  };
+
+  /**
+   * @function
+   * @name handleAfterCloseNotificationForm
+   * @description Perform post close notification form cleanups
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleAfterCloseNotificationForm = () => {
+    this.setState({ notificationBody: undefined });
+  };
+
+  /**
+   * @function
+   * @name closeMapPreview
+   * @description close event details drawer
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeMapPreview = () => {
+    this.setState({ showMap: false });
+  };
+
+  /**
+   * @function
+   * @name handleMapPreview
+   * @description Handle map preview
+   *
+   * @param {object} feature feature to be previewed
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleMapPreview = feature => {
+    selectFeature(feature);
+    this.setState({ showMap: true });
+  };
+
   render() {
     const {
       features,
@@ -113,7 +282,13 @@ class Features extends Component {
       searchQuery,
       total,
     } = this.props;
-    const { isEditForm } = this.state;
+    const {
+      isEditForm,
+      showNotificationForm,
+      notificationBody,
+      showMap,
+    } = this.state;
+    const geometry = feature?.geos?.geometry;
     return (
       <>
         {/* Topbar */}
@@ -136,41 +311,137 @@ class Features extends Component {
         />
         {/* end Topbar */}
 
-        <div className="FeaturesList">
-          {/* list starts */}
-          <FeaturesList
-            total={total}
-            page={page}
-            features={features}
-            loading={loading}
-            onEdit={this.handleEdit}
-          />
-          {/* end list */}
+        {/* list starts */}
+        <ItemList
+          itemName="Critical facility"
+          items={features}
+          page={page}
+          itemCount={total}
+          loading={loading}
+          onShare={this.handleShare}
+          headerLayout={headerLayout}
+          onRefresh={this.handleRefreshFeatures}
+          onPaginate={nextPage => paginateFeatures(nextPage)}
+          generateExportUrl={getFeaturesExportUrl}
+          renderListItem={({
+            item,
+            isSelected,
+            onSelectItem,
+            onDeselectItem,
+          }) => (
+            <ListItem
+              key={item._id} // eslint-disable-line
+              name={item.strings.name.en}
+              item={item}
+              isSelected={isSelected}
+              onSelectItem={onSelectItem}
+              onDeselectItem={onDeselectItem}
+              renderActions={() => (
+                <ListItemActions
+                  edit={{
+                    name: 'Edit Critical facility',
+                    title: 'Update Critical facility Details',
+                    onClick: () => this.handleEdit(item),
+                  }}
+                  onMapPreview={{
+                    name: 'Preview on Map',
+                    title: 'Preview on map',
+                    onClick: () => this.handleMapPreview(item),
+                  }}
+                  share={{
+                    name: 'Share Critical facility',
+                    title: 'Share Critical facility details with others',
+                    onClick: () => this.handleShare(item),
+                  }}
+                  archive={{
+                    name: 'Archive Critical facility',
+                    title:
+                      'Remove Critical facility from list of active Critical facilities',
+                    onClick: () => this.showArchiveConfirm(item),
+                  }}
+                />
+              )}
+            >
+              {/* eslint-disable react/jsx-props-no-spreading */}
+              <Col {...nameSpan}>{item.strings.name.en}</Col>
+              <Col {...codeSpan}>
+                {item.strings.code ? item.strings.code : 'N/A'}
+              </Col>
+              <Col {...amenitySpan}>
+                {item.properties.amenity ? item.properties.amenity : 'N/A'}
+              </Col>
+              <Col {...addressSpan}>
+                {item.properties.address_city
+                  ? item.properties.address_city
+                  : 'N/A'}
+              </Col>
+              <Col {...descriptionSpan}>
+                {item.strings.description ? item.strings.description.en : 'N/A'}
+              </Col>
+              {/* eslint-enable react/jsx-props-no-spreading */}
+            </ListItem>
+          )}
+        />
+        {/* end list */}
 
-          {/* create/edit form modal */}
-          <Modal
-            title={
-              isEditForm
-                ? 'Edit Critical Facility'
-                : 'Add New Critical Facility'
-            }
-            visible={showForm}
-            className="FormModal"
-            footer={null}
+        {/* Notification Modal modal */}
+        <Modal
+          title="Notify Critical facility"
+          visible={showNotificationForm}
+          onCancel={this.closeNotificationForm}
+          footer={null}
+          destroyOnClose
+          maskClosable={false}
+          className="FormModal"
+          afterClose={this.handleAfterCloseNotificationForm}
+        >
+          <NotificationForm
+            recipients={getFocalPeople}
+            onSearchRecipients={getFocalPeople}
+            onSearchJurisdictions={getJurisdictions}
+            onSearchGroups={getPartyGroups}
+            onSearchAgencies={getAgencies}
+            onSearchRoles={getRoles}
+            body={notificationBody}
+            onCancel={this.closeNotificationForm}
+          />
+        </Modal>
+        {/* end Notification modal */}
+
+        {/* create/edit form modal */}
+        <Modal
+          title={
+            isEditForm ? 'Edit Critical Facility' : 'Add New Critical Facility'
+          }
+          visible={showForm}
+          className="FormModal"
+          footer={null}
+          onCancel={this.closeFeaturesForm}
+          destroyOnClose
+          maskClosable={false}
+          afterClose={this.handleAfterCloseForm}
+        >
+          <FeaturesForm
+            posting={posting}
+            isEditForm={isEditForm}
+            feature={feature}
             onCancel={this.closeFeaturesForm}
-            destroyOnClose
-            maskClosable={false}
-            afterClose={this.handleAfterCloseForm}
-          >
-            <FeaturesForm
-              posting={posting}
-              isEditForm={isEditForm}
-              feature={feature}
-              onCancel={this.closeFeaturesForm}
-            />
-          </Modal>
-          {/* end create/edit form modal */}
-        </div>
+          />
+        </Modal>
+        {/* end create/edit form modal */}
+        {/* Map preview drawer */}
+        <Drawer
+          title="Map preview"
+          placement="right"
+          width="100%"
+          className="map-drawer"
+          onClose={this.closeMapPreview}
+          visible={showMap}
+        >
+          <MapPoint geometry={geometry} />
+        </Drawer>
+
+        {/* End Map preview drawer */}
       </>
     );
   }
