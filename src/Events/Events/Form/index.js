@@ -1,13 +1,14 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { postEvent, putEvent } from '@codetanzania/ewea-api-states';
 import { Button, Col, Form, Row, Input } from 'antd';
+import map from 'lodash/map';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
-const { getEventTypes } = httpActions;
+const { getEventTypes, getAdministrativeAreas } = httpActions;
 const { TextArea } = Input;
 
 /**
@@ -169,31 +170,25 @@ class EventForm extends Component {
             </Form.Item>
             {/* end role description */}
 
-            {/* <Form.Item {...formItemLayout} label="Area"> */}
-            {/*   {getFieldDecorator('area', { */}
-            {/*     initialValue: */}
-            {/*       isEditForm && event */}
-            {/*         ? event._id // eslint-disable-line */}
-            {/*         : undefined, */}
-            {/*     rules: [ */}
-            {/*       { */}
-            {/*         required: true, */}
-            {/*         message: 'Event area is required', */}
-            {/*       }, */}
-            {/*     ], */}
-            {/*   })( */}
-            {/*     <SearchableSelectInput */}
-            {/*       onSearch={getAdministrativeAreas} */}
-            {/*       optionLabel={area => `${area.name} `} */}
-            {/*       optionValue="_id" */}
-            {/*       initialValue={ */}
-            {/*         isEditForm && event */}
-            {/*           ? event._id // eslint-disable-line */}
-            {/*           : undefined */}
-            {/*       } */}
-            {/*     /> */}
-            {/*   )} */}
-            {/* </Form.Item> */}
+            {/* event areas */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Form.Item {...formItemLayout} label="Area(s)">
+              {getFieldDecorator('areas', {
+                initialValue:
+                  isEditForm && event.areas
+                    ? map(event.areas, area => area._id) // eslint-disable-line
+                    : [],
+              })(
+                <SearchableSelectInput
+                  onSearch={getAdministrativeAreas}
+                  optionLabel={areas => areas.strings.name.en}
+                  mode="multiple"
+                  optionValue="_id"
+                  initialValue={isEditForm && event.areas ? event.areas : []}
+                />
+              )}
+            </Form.Item>
+            {/* end event areas */}
           </Col>
         </Row>
         {/* end event area */}
@@ -225,6 +220,7 @@ EventForm.propTypes = {
     urgency: PropTypes.string,
     color: PropTypes.string,
     severity: PropTypes.string,
+    areas: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func,
