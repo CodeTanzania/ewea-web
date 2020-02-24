@@ -196,18 +196,30 @@ class ActionCatalog extends Component {
     if (isArray(eventActionCatalogues)) {
       const eventActionCataloguesList = eventActionCatalogues.map(
         eventActionCatalogue =>
-          `Name: ${eventActionCatalogue.name}\nMobile: ${
+          `Event Type: ${
+            eventActionCatalogue.relations.type.strings.name.en
+          }\nFunction: ${
             // eslint-disable-line
-            eventActionCatalogue.mobile
-          }\nEmail: ${eventActionCatalogue.email}`
+            eventActionCatalogue.relations.function.strings.name.en
+          }\nAction/Responsibility: ${
+            eventActionCatalogue.relations.action.strings.name.en
+          }\nRoles: ${eventActionCatalogue.relations.roles.join(
+            ','
+          )}\nGroups: ${eventActionCatalogue.relations.groups.join(',')}`
       );
 
       message = eventActionCataloguesList.join('\n\n\n');
     } else {
-      message = `Name: ${eventActionCatalogues.name}\nMobile: ${
+      message = `Event Type: ${
+        eventActionCatalogues.relations.type.strings.name.en
+      }\nFunction: ${
         // eslint-disable-line
-        eventActionCatalogues.mobile
-      }\nEmail: ${eventActionCatalogues.email}`;
+        eventActionCatalogues.relations.function.strings.name.en
+      }\nAction/Responsibility: ${
+        eventActionCatalogues.relations.action.strings.name.en
+      }\nRoles: ${eventActionCatalogues.relations.roles.join(
+        ','
+      )}\nGroups: ${eventActionCatalogues.relations.groups.join(',')}`;
     }
 
     this.setState({ notificationBody: message, showNotificationForm: true });
@@ -365,7 +377,6 @@ class ActionCatalog extends Component {
           itemCount={total}
           loading={loading}
           onFilter={this.openFiltersModal}
-          onNotify={this.openNotificationForm}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventActionCatalogues}
           onPaginate={nextPage => paginateEventActionCatalogues(nextPage)}
