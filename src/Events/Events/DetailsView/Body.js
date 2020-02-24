@@ -31,13 +31,6 @@ import './styles.css';
 const { Text } = Typography;
 const ButtonGroup = Button.Group;
 
-const respondingAgencies = [
-  'District Authority',
-  'TANROADS & TARURA',
-  'DMDP',
-  'Hospitals',
-];
-
 const actionsTaken = [
   'Cleanup drains',
   'Ensure evacuation centers are in good condition',
@@ -129,13 +122,36 @@ export const EventActionsTaken = () => {
  * @version 0.1.0
  * @since 0.1.0
  */
-export const EventRespondingAgencies = () => {
+export const EventRespondingAgencies = ({ agencies = [] }) => {
   return (
     <div style={{ marginTop: '40px' }}>
       <EventDetailsSectionHeader title="AGENCIES RESPONDED" />
-      {respondingAgencies.map((agency, key) => (
+      {agencies.map((agency, key) => (
         <p key={agency} style={{ fontSize: '12px' }}>
-          {key + 1}. {agency}
+          {key + 1}. {`${agency.name} (${agency.abbreviation})`}
+        </p>
+      ))}
+    </div>
+  );
+};
+
+/**
+ * @function
+ * @name EventRespondingFocalPeople
+ * @description Section which show event responding agencies
+ *
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const EventRespondingFocalPeople = ({ focalPeople = [] }) => {
+  return (
+    <div style={{ marginTop: '40px' }}>
+      <EventDetailsSectionHeader title="FOCAL PEOPLE RESPONDED" />
+      {focalPeople.map((focalPerson, key) => (
+        // eslint-disable-next-line no-underscore-dangle
+        <p key={focalPerson._id} style={{ fontSize: '12px' }}>
+          {key + 1}. {`${focalPerson.name}`}
         </p>
       ))}
     </div>
@@ -257,7 +273,93 @@ const EventToolbar = ({ event, openForm }) => {
  * @since 0.1.0
  */
 export const EventFeed = ({ feeds = [], loading, hasMore }) => {
-  console.log('Feeds', feeds.length, feeds);
+  const feedItems = feeds.map(feed => {
+    if (feed.comment && feed.image) {
+      return (
+        <>
+          {/* comments */}
+          {/* eslint-disable-next-line no-underscore-dangle */}
+          <Timeline.Item key={feed._id} dot={<Icon type="message" />}>
+            {feed.comment}{' '}
+            <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
+          </Timeline.Item>
+          {/* comments */}
+          {/* image */}
+          {/* eslint-disable-next-line no-underscore-dangle */}
+          <Timeline.Item key={feed._id} dot={<Icon type="file-image" />}>
+            <Card
+              hoverable
+              style={{ width: 300 }}
+              bodyStyle={{ display: 'none' }}
+              actions={[
+                <a
+                  // eslint-disable-next-line no-underscore-dangle
+                  key={`view-${feed._id}`}
+                  href={`${getBaseUrl()}${feed.image.stream}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon type="eye" key="eye" />
+                </a>,
+                <a
+                  // eslint-disable-next-line no-underscore-dangle
+                  key={`download-${feed._id}`}
+                  href={`${getBaseUrl()}${feed.image.download}`}
+                >
+                  <Icon type="download" key="download" />
+                </a>,
+              ]}
+              cover={
+                <img
+                  alt="example"
+                  src={`${getBaseUrl()}${feed.image.stream}`}
+                />
+              }
+            />
+            <div style={{ marginTop: '12px' }}>
+              <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+            </div>
+          </Timeline.Item>
+          {/* end image */}
+        </>
+      );
+    }
+
+    /* comments */
+    if (feed.comment) {
+      return (
+        // eslint-disable-next-line no-underscore-dangle
+        <Timeline.Item key={feed._id} dot={<Icon type="message" />}>
+          {feed.comment}{' '}
+          <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
+        </Timeline.Item>
+      );
+      /* comments */
+    }
+
+    if (feed.focals) {
+      return feed.focals.map(focal => (
+        // eslint-disable-next-line no-underscore-dangle
+        <Timeline.Item key={feed._id} dot={<Icon type="user" />}>
+          Focal: <Tag color="cyan">{focal.name}</Tag> was added on{' '}
+          <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+        </Timeline.Item>
+      ));
+    }
+
+    if (feed.agencies) {
+      return feed.agencies.map(agency => (
+        // eslint-disable-next-line no-underscore-dangle
+        <Timeline.Item key={feed._id} dot={<Icon type="apartment" />}>
+          Agency: <Tag color="magenta">{agency.name}</Tag> was added on{' '}
+          <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+        </Timeline.Item>
+      ));
+    }
+
+    return null;
+  });
+
   return (
     <>
       <EventDetailsSectionHeader title="EVENT FEED" />
@@ -267,105 +369,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         ) : (
           <>
-            {!loading && (
-              <Timeline>
-                {/* eslint-disable no-underscore-dangle */}
-                {feeds.map(feed => {
-                  return (
-                    <>
-                      {/* comments */}
-                      {feed.comment && (
-                        <Timeline.Item
-                          key={feed._id}
-                          dot={<Icon type="message" />}
-                        >
-                          {feed.comment}{' '}
-                          <Tag>
-                            {formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}
-                          </Tag>{' '}
-                        </Timeline.Item>
-                      )}
-                      {/* end comments */}
-
-                      {/* images */}
-                      {feed.image && (
-                        <Timeline.Item
-                          key={feed._id}
-                          dot={<Icon type="file-image" />}
-                        >
-                          <Card
-                            hoverable
-                            style={{ width: 300 }}
-                            bodyStyle={{ display: 'none' }}
-                            actions={[
-                              <a
-                                key={`view-${feed._id}`}
-                                href={`${getBaseUrl()}${feed.image.stream}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <Icon type="eye" key="eye" />
-                              </a>,
-                              <a
-                                key={`download-${feed._id}`}
-                                href={`${getBaseUrl()}${feed.image.download}`}
-                              >
-                                <Icon type="download" key="download" />
-                              </a>,
-                            ]}
-                            cover={
-                              <img
-                                alt="example"
-                                src={`${getBaseUrl()}${feed.image.stream}`}
-                              />
-                            }
-                          />
-                          <div style={{ marginTop: '12px' }}>
-                            <Tag>
-                              {formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}
-                            </Tag>
-                          </div>
-                        </Timeline.Item>
-                      )}
-                      {/* end images */}
-
-                      {/* focal people */}
-                      {feed.focals &&
-                        feed.focals.map(focal => (
-                          <Timeline.Item
-                            key={feed._id}
-                            dot={<Icon type="user" />}
-                          >
-                            Focal: <Tag color="cyan">{focal.name}</Tag> was
-                            added on{' '}
-                            <Tag>
-                              {formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}
-                            </Tag>
-                          </Timeline.Item>
-                        ))}
-                      {/* end focal people */}
-
-                      {/* agencies */}
-                      {feed.agencies &&
-                        feed.agencies.map(focal => (
-                          <Timeline.Item
-                            key={feed._id}
-                            dot={<Icon type="apartment" />}
-                          >
-                            Agency: <Tag color="magenta">{focal.name}</Tag> was
-                            added on{' '}
-                            <Tag>
-                              {formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}
-                            </Tag>
-                          </Timeline.Item>
-                        ))}
-                      {/* end agencies */}
-                    </>
-                  );
-                })}
-                {/* eslint-enable no-underscore-dangle */}
-              </Timeline>
-            )}
+            {!loading && <Timeline>{feedItems}</Timeline>}
 
             {hasMore && (
               <Button
@@ -419,7 +423,8 @@ const EventDetailsViewBody = ({
         <Row>
           <Col span={16}>
             <EventLocation />
-            <EventRespondingAgencies />
+            <EventRespondingAgencies agencies={event.agencies} />
+            <EventRespondingFocalPeople focalPeople={event.focals} />
             <EventActionsTaken />
           </Col>
           <Col span={8}>
@@ -446,6 +451,14 @@ const EventDetailsViewBody = ({
       </Modal>
     </div>
   );
+};
+
+EventRespondingFocalPeople.propTypes = {
+  focalPeople: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+EventRespondingAgencies.propTypes = {
+  agencies: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 EventDetailsSectionHeader.propTypes = {
@@ -475,9 +488,12 @@ EventFeed.propTypes = {
 EventDetailsViewBody.propTypes = {
   event: PropTypes.shape({
     _id: PropTypes.string,
+    focals: PropTypes.arrayOf(PropTypes.object),
+    agencies: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
   changelogs: PropTypes.arrayOf(PropTypes.shape({ _id: PropTypes.string }))
     .isRequired,
+  focals: PropTypes.arrayOf(PropTypes.object).isRequired,
   showForm: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
