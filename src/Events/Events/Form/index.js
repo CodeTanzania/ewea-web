@@ -8,7 +8,7 @@ import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
-const { getEventTypes, getAdministrativeAreas } = httpActions;
+const { getEventTypes, getEventLevels, getAdministrativeAreas } = httpActions;
 const { TextArea } = Input;
 
 /**
@@ -51,7 +51,7 @@ class EventForm extends Component {
             },
             () => {
               notifyError(
-                'Something occurred while updating event, please try again!'
+                'An error occurred while updating event, please try again!'
               );
             }
           );
@@ -63,7 +63,7 @@ class EventForm extends Component {
             },
             () => {
               notifyError(
-                'Something occurred while saving event, please try again!'
+                'An errror occurred while saving event, please try again!'
               );
             }
           );
@@ -122,7 +122,7 @@ class EventForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* event event */}
+        {/* event type */}
         <Row type="flex" justify="space-between">
           <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
@@ -149,7 +149,30 @@ class EventForm extends Component {
             </Form.Item>
           </Col>
         </Row>
-        {/* end event event */}
+        {/* end event type */}
+
+        {/* event level */}
+        <Row type="flex" justify="space-between">
+          <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Form.Item {...formItemLayout} label="Event Level">
+              {getFieldDecorator('level', {
+                initialValue:
+                  isEditForm && event.level
+                    ? event.level._id // eslint-disable-line
+                    : undefined,
+              })(
+                <SearchableSelectInput
+                  onSearch={getEventLevels}
+                  optionLabel={level => level.strings.name.en}
+                  optionValue="_id"
+                  initialValue={isEditForm && event ? event.level : undefined}
+                />
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        {/* end event level */}
 
         {/* event area */}
         <Row type="flex" justify="space-between">
@@ -215,6 +238,7 @@ EventForm.propTypes = {
   isEditForm: PropTypes.bool.isRequired,
   event: PropTypes.shape({
     type: PropTypes.shape({ _id: PropTypes.string }),
+    level: PropTypes.shape({ _id: PropTypes.string }),
     description: PropTypes.string,
     certainty: PropTypes.string,
     urgency: PropTypes.string,
