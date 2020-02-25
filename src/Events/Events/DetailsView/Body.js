@@ -9,7 +9,6 @@ import {
   loadMoreChangelogs,
 } from '@codetanzania/ewea-api-states';
 import {
-  Typography,
   Tag,
   Timeline,
   Row,
@@ -28,15 +27,9 @@ import { formatDate, notifySuccess, notifyError } from '../../../util';
 import EventChangelogForm from '../ChangelogForm';
 import './styles.css';
 
-const { Text } = Typography;
 const ButtonGroup = Button.Group;
 
-const actionsTaken = [
-  'Cleanup drains',
-  'Ensure evacuation centers are in good condition',
-  'Ensure clean water is available',
-  'Ensure all important information have been disseminated to responsible personnel',
-];
+const actionsTaken = ['Test Action 1', 'Test Action 2'];
 
 /**
  * @function
@@ -64,30 +57,42 @@ export const EventDetailsSectionHeader = ({ title, actions }) => {
 
 /**
  * @function
- * @name EventLocation
+ * @name EventLocations
  * @description Section which show event location(s) in hierarchy
  *
  * @returns {object} React component
  * @version 0.1.0
  * @since 0.1.0
  */
-export const EventLocation = () => {
-  return (
+export const EventLocations = ({ areas = [] }) => {
+  return isEmpty(areas) ? null : (
     <>
-      <EventDetailsSectionHeader title="EVENT LOCATION" />
-      <h5>
-        <Text strong>Region:</Text> Mwanza
-      </h5>
-      <h5>
-        <Text strong>District:</Text> Mwanza
-      </h5>
-      <h5>
-        <Text strong>Ward:</Text> Mwanza
-      </h5>
-      <h5>
-        <Text strong>Village/Sub-ward:</Text> Mwanza
-      </h5>
+      <EventDetailsSectionHeader title="AFFECT AREAS" />
+
+      {areas.map(area => (
+        // eslint-disable-next-line
+        <span key={area._id}>{area.strings.name.en}, </span>
+      ))}
     </>
+  );
+};
+
+/**
+ * @function
+ * @name EventPlaces
+ * @description Section which show event affected place(s) in hierarchy
+ *
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const EventPlaces = ({ places = '' }) => {
+  return isEmpty(places) ? null : (
+    <div style={{ marginTop: '40px' }}>
+      <EventDetailsSectionHeader title="AFFECT PLACES" />
+
+      <span>{places}</span>
+    </div>
   );
 };
 
@@ -101,7 +106,7 @@ export const EventLocation = () => {
  * @since 0.1.0
  */
 export const EventActionsTaken = () => {
-  return (
+  return isEmpty(actionsTaken) ? null : (
     <div style={{ marginTop: '40px' }}>
       <EventDetailsSectionHeader title="ACTION TAKEN/ INTERVENTIONS" />
       {actionsTaken.map((action, key) => (
@@ -123,7 +128,7 @@ export const EventActionsTaken = () => {
  * @since 0.1.0
  */
 export const EventRespondingAgencies = ({ agencies = [] }) => {
-  return (
+  return isEmpty(agencies) ? null : (
     <div style={{ marginTop: '40px' }}>
       <EventDetailsSectionHeader title="AGENCIES RESPONDED" />
       {agencies.map((agency, key) => (
@@ -145,9 +150,10 @@ export const EventRespondingAgencies = ({ agencies = [] }) => {
  * @since 0.1.0
  */
 export const EventRespondingFocalPeople = ({ focalPeople = [] }) => {
-  return (
+  return isEmpty(focalPeople) ? null : (
     <div style={{ marginTop: '40px' }}>
       <EventDetailsSectionHeader title="FOCAL PEOPLE RESPONDED" />
+
       {focalPeople.map((focalPerson, key) => (
         // eslint-disable-next-line no-underscore-dangle
         <p key={focalPerson._id} style={{ fontSize: '12px' }}>
@@ -422,7 +428,8 @@ const EventDetailsViewBody = ({
       <div className="EventBodyContent">
         <Row>
           <Col span={16}>
-            <EventLocation />
+            <EventLocations areas={event.areas} />
+            {event.places && <EventPlaces places={event.places} />}
             <EventRespondingAgencies agencies={event.agencies} />
             <EventRespondingFocalPeople focalPeople={event.focals} />
             <EventActionsTaken />
@@ -466,6 +473,14 @@ EventDetailsSectionHeader.propTypes = {
   actions: PropTypes.node,
 };
 
+EventLocations.propTypes = {
+  areas: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+EventPlaces.propTypes = {
+  places: PropTypes.string.isRequired,
+};
+
 EventDetailsSectionHeader.defaultProps = {
   actions: null,
 };
@@ -490,6 +505,8 @@ EventDetailsViewBody.propTypes = {
     _id: PropTypes.string,
     focals: PropTypes.arrayOf(PropTypes.object),
     agencies: PropTypes.arrayOf(PropTypes.object),
+    areas: PropTypes.arrayOf(PropTypes.object),
+    places: PropTypes.string,
   }).isRequired,
   changelogs: PropTypes.arrayOf(PropTypes.shape({ _id: PropTypes.string }))
     .isRequired,
