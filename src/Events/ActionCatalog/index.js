@@ -359,7 +359,7 @@ class ActionCatalog extends Component {
           }}
           actions={[
             {
-              label: 'New Event Action Catalogue',
+              label: 'New Action Catalogue',
               icon: 'plus',
               size: 'large',
               title: 'Add New Event Action Catalogue',

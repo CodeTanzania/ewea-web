@@ -1,31 +1,37 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { postFocalPerson, putFocalPerson } from '@codetanzania/ewea-api-states';
+import {
+  postEventActionCatalogue,
+  putEventActionCatalogue,
+} from '@codetanzania/ewea-api-states';
 import { Button, Col, Form, Input, Row } from 'antd';
-import upperFirst from 'lodash/upperFirst';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import map from 'lodash/map';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
 const {
-  getAgencies,
   getAdministrativeAreas,
+  getEventTypes,
+  getEventFunctions,
   getPartyRoles,
   getPartyGroups,
+  getAgencies,
+  getParties,
+  getEventActions,
 } = httpActions;
 const { TextArea } = Input;
 
 /**
  * @class
- * @name FocalPersonForm
- * @description Render Focal Person form for creating and updating stakeholder
- * focalPerson details
+ * @name EventActionCatalogueForm
+ * @description Render Event Action Catalogue form for creating and updating action catalogue details
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class FocalPersonForm extends Component {
+class EventActionCatalogueForm extends Component {
   /**
    * @function
    * @name handleSubmit
@@ -41,34 +47,37 @@ class FocalPersonForm extends Component {
 
     const {
       form: { validateFieldsAndScroll },
-      focalPerson,
+      eventActionCatalogue,
       isEditForm,
     } = this.props;
 
     validateFieldsAndScroll((error, values) => {
       if (!error) {
         if (isEditForm) {
-          const updatedFocalPerson = { ...focalPerson, ...values };
-          putFocalPerson(
-            updatedFocalPerson,
+          const updatedEventActionCatalogue = {
+            ...eventActionCatalogue,
+            ...values,
+          };
+          putEventActionCatalogue(
+            updatedEventActionCatalogue,
             () => {
-              notifySuccess('Focal Person was updated successfully');
+              notifySuccess('Action Catalogue was updated successfully');
             },
             () => {
               notifyError(
-                'Something occurred while updating focal Person, please try again!'
+                'Something occurred while updating action catalogue, please try again!'
               );
             }
           );
         } else {
-          postFocalPerson(
+          postEventActionCatalogue(
             values,
             () => {
-              notifySuccess('Focal Person was created successfully');
+              notifySuccess('Action Catalogue was created successfully');
             },
             () => {
               notifyError(
-                'Something occurred while saving focal Person, please try again!'
+                'Something occurred while saving action catalogue, please try again!'
               );
             }
           );
@@ -80,7 +89,7 @@ class FocalPersonForm extends Component {
   render() {
     const {
       isEditForm,
-      focalPerson,
+      eventActionCatalogue,
       posting,
       onCancel,
       form: { getFieldDecorator },
@@ -107,175 +116,111 @@ class FocalPersonForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* focalPerson name, phone number and email section */}
+        {/* event action catalogue type */}
         <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson name */}
+          <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Form.Item {...formItemLayout} label="Name">
-              {getFieldDecorator('name', {
-                initialValue: isEditForm ? focalPerson.name : undefined,
+            <Form.Item {...formItemLayout} label="Type">
+              {getFieldDecorator('type', {
+                initialValue:
+                  isEditForm && eventActionCatalogue
+                    ? eventActionCatalogue.type._id // eslint-disable-line
+                    : undefined,
                 rules: [
                   {
                     required: true,
-                    message: 'Focal Person full name is required',
+                    message: 'Type is required',
                   },
                 ],
-              })(<Input />)}
-            </Form.Item>
-            {/* end focalPerson name */}
-          </Col>
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            <Row type="flex" justify="space-between">
-              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
-                {/* focalPerson mobile number */}
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Phone Number">
-                  {getFieldDecorator('mobile', {
-                    initialValue: isEditForm ? focalPerson.mobile : undefined,
-                    rules: [
-                      { required: true, message: 'Phone number is required' },
-                    ],
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson mobile number */}
-              </Col>
-              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24} span={12}>
-                {/* focalPerson email */}
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Email">
-                  {getFieldDecorator('email', {
-                    initialValue: isEditForm ? focalPerson.email : undefined,
-                    rules: [
-                      {
-                        type: 'email',
-                        message: 'The input is not valid E-mail!',
-                      },
-                      {
-                        required: true,
-                        message: 'E-mail address is required',
-                      },
-                    ],
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson email */}
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-        {/* end focalPerson name, phone number and email section */}
-
-        {/* focalPerson organization, group and area section */}
-        <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson organization */}
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Form.Item {...formItemLayout} label="Organization/Agency">
-              {getFieldDecorator('party', {
-                initialValue:
-                  isEditForm && focalPerson.party
-                    ? focalPerson.party._id // eslint-disable-line
-                    : undefined,
               })(
                 <SearchableSelectInput
-                  onSearch={getAgencies}
-                  optionLabel={agency => agency.name}
+                  onSearch={getEventTypes}
+                  optionLabel={type => type.strings.name.en}
                   optionValue="_id"
                   initialValue={
-                    isEditForm && focalPerson.party
-                      ? focalPerson.party
+                    isEditForm && eventActionCatalogue
+                      ? eventActionCatalogue.type
                       : undefined
                   }
                 />
               )}
             </Form.Item>
-            {/* end focalPerson organization */}
-          </Col>
-
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            <Row type="flex" justify="space-between">
-              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
-                {/* focalPerson group */}
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Group">
-                  {getFieldDecorator('group', {
-                    initialValue:
-                      isEditForm && focalPerson.group
-                        ? focalPerson.group._id // eslint-disable-line
-                        : undefined,
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Focal Person group is required',
-                      },
-                    ],
-                  })(
-                    <SearchableSelectInput
-                      onSearch={getPartyGroups}
-                      optionLabel={group => group.strings.name.en}
-                      optionValue="_id"
-                      initialValue={
-                        isEditForm && focalPerson.group
-                          ? focalPerson.group
-                          : undefined
-                      }
-                    />
-                  )}
-                </Form.Item>
-                {/* end focalPerson group */}
-              </Col>
-              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
-                {/* focalPerson location */}
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Area">
-                  {getFieldDecorator('location', {
-                    initialValue:
-                      isEditForm && focalPerson.location
-                        ? focalPerson.location._id // eslint-disable-line
-                        : undefined,
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Focal Person area is required',
-                      },
-                    ],
-                  })(
-                    <SearchableSelectInput
-                      onSearch={getAdministrativeAreas}
-                      optionLabel={area =>
-                        `${area.strings.name.en} (${upperFirst(
-                          area.relations.type.strings.name.en
-                        )})`
-                      }
-                      optionValue="_id"
-                      initialValue={
-                        isEditForm && focalPerson.location
-                          ? focalPerson.location
-                          : undefined
-                      }
-                    />
-                  )}
-                </Form.Item>
-                {/* end focalPerson location */}
-              </Col>
-            </Row>
           </Col>
         </Row>
-        {/* end focalPerson organization, group and area section */}
+        {/* end event action catalogue type */}
 
-        {/* focalPerson role, landline and fax section */}
+        {/* event action catalogue areas */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <Form.Item {...formItemLayout} label="Area(s)">
+          {getFieldDecorator('areas', {
+            initialValue:
+              isEditForm && eventActionCatalogue.areas
+                ? map(eventActionCatalogue.areas, area => area._id) // eslint-disable-line
+                : [],
+          })(
+            <SearchableSelectInput
+              onSearch={getAdministrativeAreas}
+              optionLabel={areas => areas.strings.name.en}
+              mode="multiple"
+              optionValue="_id"
+              initialValue={
+                isEditForm && eventActionCatalogue.areas
+                  ? eventActionCatalogue.areas
+                  : []
+              }
+            />
+          )}
+        </Form.Item>
+        {/* end event action catalogue areas */}
+
+        {/* event action catalogue function */}
         <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson role */}
+          <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Form.Item {...formItemLayout} label="Role">
-              {getFieldDecorator('role', {
+            <Form.Item {...formItemLayout} label="Function">
+              {getFieldDecorator('function', {
                 initialValue:
-                  isEditForm && focalPerson.role
-                    ? focalPerson.role._id // eslint-disable-line
+                  isEditForm && eventActionCatalogue
+                    ? eventActionCatalogue.function._id // eslint-disable-line
                     : undefined,
                 rules: [
-                  { required: true, message: 'Focal Person role is required' },
+                  {
+                    required: true,
+                    message: 'Function is required',
+                  },
+                ],
+              })(
+                <SearchableSelectInput
+                  onSearch={getEventFunctions}
+                  optionLabel={eventFunction => eventFunction.strings.name.en}
+                  optionValue="_id"
+                  initialValue={
+                    isEditForm && eventActionCatalogue
+                      ? eventActionCatalogue.function
+                      : undefined
+                  }
+                />
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        {/* end event action catalogue function */}
+
+        {/* event  action catalogue role */}
+        <Row type="flex" justify="space-between">
+          <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Form.Item {...formItemLayout} label="Role">
+              {getFieldDecorator('roles', {
+                initialValue:
+                  isEditForm && eventActionCatalogue.roles
+                    ? map(eventActionCatalogue.roles, role => role._id) // eslint-disable-line
+                    : [],
+                rules: [
+                  {
+                    required: true,
+                    message: 'Event Action Catalogue role is required',
+                  },
                 ],
               })(
                 <SearchableSelectInput
@@ -283,70 +228,190 @@ class FocalPersonForm extends Component {
                   optionLabel={role => role.strings.name.en}
                   optionValue="_id"
                   initialValue={
-                    isEditForm && focalPerson.role
-                      ? focalPerson.role
+                    isEditForm && eventActionCatalogue.roles
+                      ? eventActionCatalogue.roles
+                      : []
+                  }
+                />
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        {/* end event action catalogue role */}
+
+        {/* event  action catalogue groups */}
+        <Row type="flex" justify="space-between">
+          <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Form.Item {...formItemLayout} label="Groups">
+              {getFieldDecorator('groups', {
+                initialValue:
+                  isEditForm && eventActionCatalogue.groups
+                    ? eventActionCatalogue.group._id // eslint-disable-line
+                    : undefined,
+                rules: [
+                  {
+                    required: true,
+                    message: 'Event Action Catalogue group is required',
+                  },
+                ],
+              })(
+                <SearchableSelectInput
+                  onSearch={getPartyGroups}
+                  optionLabel={group => group.strings.name.en}
+                  optionValue="_id"
+                  initialValue={
+                    isEditForm && eventActionCatalogue.groups
+                      ? eventActionCatalogue.groups
                       : undefined
                   }
                 />
               )}
             </Form.Item>
-            {/* end focalPerson role */}
-          </Col>
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            <Row type="flex" justify="space-between">
-              <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
-                {/* focalPerson landline number */}
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Landline/Other Number">
-                  {getFieldDecorator('landline', {
-                    initialValue: isEditForm ? focalPerson.landline : undefined,
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson landline number */}
-              </Col>
-              <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
-                {/* focalPerson fax */}
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Fax">
-                  {getFieldDecorator('fax', {
-                    initialValue: isEditForm ? focalPerson.fax : undefined,
-                  })(<Input />)}
-                </Form.Item>
-                {/* end focalPerson fax */}
-              </Col>
-            </Row>
           </Col>
         </Row>
-        {/* end focalPerson role, landline and fax section */}
+        {/* end event action catalogue groups */}
 
-        {/* focalPerson Physical Address, Postal Address section */}
+        {/* event  action catalogue agencies */}
         <Row type="flex" justify="space-between">
-          <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
-            {/* focalPerson physical Address */}
+          <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Form.Item {...formItemLayout} label="Physical Address">
-              {getFieldDecorator('physicalAddress', {
-                initialValue: isEditForm
-                  ? focalPerson.physicalAddress
-                  : undefined,
-              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
+            <Form.Item {...formItemLayout} label="Agency">
+              {getFieldDecorator('agencies', {
+                initialValue:
+                  isEditForm && eventActionCatalogue.agencies
+                    ? eventActionCatalogue.agencies._id // eslint-disable-line
+                    : undefined,
+                rules: [
+                  {
+                    required: true,
+                    message: 'Event Action Catalogue agencies are required',
+                  },
+                ],
+              })(
+                <SearchableSelectInput
+                  onSearch={getAgencies}
+                  optionLabel="name"
+                  optionValue="_id"
+                  initialValue={
+                    isEditForm && eventActionCatalogue.agencies
+                      ? eventActionCatalogue.agencies
+                      : undefined
+                  }
+                />
+              )}
             </Form.Item>
-            {/* end focalPerson physical Address */}
-          </Col>
-          <Col xxl={13} xl={13} lg={13} md={13} sm={24} xs={24}>
-            {/* focalPerson postal address */}
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Form.Item {...formItemLayout} label="Postal Address">
-              {getFieldDecorator('postalAddress', {
-                initialValue: isEditForm
-                  ? focalPerson.postalAddress
-                  : undefined,
-              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
-            </Form.Item>
-            {/* end focalPerson postal address */}
           </Col>
         </Row>
-        {/* end focalPerson physical Address, Postal Address section */}
+        {/* end event action catalogue agencies */}
+
+        {/* event  action catalogue focals */}
+        <Row type="flex" justify="space-between">
+          <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Form.Item {...formItemLayout} label="Focals">
+              {getFieldDecorator('focals', {
+                initialValue:
+                  isEditForm && eventActionCatalogue.focals
+                    ? eventActionCatalogue.focals._id // eslint-disable-line
+                    : undefined,
+                rules: [
+                  {
+                    required: true,
+                    message: 'Event Action Catalogue focals are required',
+                  },
+                ],
+              })(
+                <SearchableSelectInput
+                  onSearch={getParties}
+                  optionLabel="name"
+                  optionValue="_id"
+                  initialValue={
+                    isEditForm && eventActionCatalogue.focals
+                      ? eventActionCatalogue.focals
+                      : undefined
+                  }
+                />
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        {/* end event action catalogue focals */}
+
+        {/* event  action catalogue actions */}
+        <Row type="flex" justify="space-between">
+          <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Form.Item {...formItemLayout} label="Action">
+              {getFieldDecorator('actions', {
+                initialValue:
+                  isEditForm && eventActionCatalogue.actions
+                    ? eventActionCatalogue.actions._id // eslint-disable-line
+                    : undefined,
+                rules: [
+                  {
+                    required: true,
+                    message: 'Event Action Catalogue actions are required',
+                  },
+                ],
+              })(
+                <SearchableSelectInput
+                  onSearch={getEventActions}
+                  optionLabel={action => action.strings.name.en}
+                  optionValue="_id"
+                  initialValue={
+                    isEditForm && eventActionCatalogue.actions
+                      ? eventActionCatalogue.actions
+                      : undefined
+                  }
+                />
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        {/* end event action catalogue actions */}
+
+        {/* event  action catalogue action name */}
+        <Row type="flex" justify="space-between">
+          <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Form.Item {...formItemLayout} label="Action Name">
+              {getFieldDecorator('name', {
+                initialValue: isEditForm
+                  ? eventActionCatalogue.name
+                  : undefined,
+                rules: [
+                  {
+                    required: true,
+                    message: 'Action  name is required',
+                  },
+                ],
+              })(<Input />)}
+            </Form.Item>
+          </Col>
+        </Row>
+        {/* end event action catalogue action name */}
+
+        {/* event  action catalogue action description */}
+        <Row type="flex" justify="space-between">
+          <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Form.Item {...formItemLayout} label="Action Description">
+              {getFieldDecorator('description', {
+                initialValue: isEditForm
+                  ? eventActionCatalogue.name
+                  : undefined,
+                rules: [
+                  {
+                    required: true,
+                    message: 'Action  description is required',
+                  },
+                ],
+              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
+            </Form.Item>
+          </Col>
+        </Row>
+        {/* end event action catalogue action name */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -366,25 +431,25 @@ class FocalPersonForm extends Component {
   }
 }
 
-FocalPersonForm.propTypes = {
+EventActionCatalogueForm.propTypes = {
   isEditForm: PropTypes.bool.isRequired,
-  focalPerson: PropTypes.shape({
+  eventActionCatalogue: PropTypes.shape({
+    areas: PropTypes.arrayOf(PropTypes.object),
+    roles: PropTypes.arrayOf(PropTypes.object),
+    groups: PropTypes.arrayOf(PropTypes.object),
+    actions: PropTypes.arrayOf(PropTypes.object),
+    focals: PropTypes.arrayOf(PropTypes.object),
+    agencies: PropTypes.arrayOf(PropTypes.object),
+    function: PropTypes.arrayOf(PropTypes.object),
     name: PropTypes.string,
-    title: PropTypes.string,
-    abbreviation: PropTypes.string,
-    mobile: PropTypes.string,
-    email: PropTypes.string,
-    party: PropTypes.shape({
-      name: PropTypes.string,
-      title: PropTypes.string,
-    }),
-    group: PropTypes.string,
-    location: PropTypes.string,
-    role: PropTypes.string,
-    landline: PropTypes.string,
-    fax: PropTypes.string,
-    physicalAddress: PropTypes.string,
-    postalAddress: PropTypes.string,
+    type: PropTypes.shape({
+      _id: PropTypes.string,
+    }).isRequired,
+    action: PropTypes.shape({
+      strings: PropTypes.shape({
+        name: PropTypes.string,
+      }),
+    }).isRequired,
   }).isRequired,
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func,
@@ -395,4 +460,4 @@ FocalPersonForm.propTypes = {
   posting: PropTypes.bool.isRequired,
 };
 
-export default Form.create()(FocalPersonForm);
+export default Form.create()(EventActionCatalogueForm);
