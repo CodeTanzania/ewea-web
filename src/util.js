@@ -154,7 +154,7 @@ export const truncateString = (str, num) => {
  * @since 0.1.0
  */
 export const generateEventTemplate = event => {
-  const subject = `${event.level.strings.name.en} Advisory: ${event.type.strings.name.en} ${event.stage} - #${event.number}`;
+  const subject = `${event.level.strings.name.en} Advisory: ${event.type.strings.name.en} ${event.stage} - No. ${event.number}`;
 
   const body = `${subject} \n\nDescription: ${
     // eslint-disable-line
