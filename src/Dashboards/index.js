@@ -22,6 +22,8 @@ import RoadsIcons from '../assets/icons/dashboards/roadsatrisk.svg';
 import RecentlyIssuedIcon from '../assets/icons/dashboards/recentlyissued.svg';
 import RecentlyUpdatedIcon from '../assets/icons/dashboards/recentlyupdated.svg';
 import ActiveAlertsIcon from '../assets/icons/dashboards/activealerts.svg';
+import PopulationIcon from '../assets/icons/dashboards/population.svg';
+import RespondersIcon from '../assets/icons/dashboards/responders.svg';
 import ProneAreasIcon from '../assets/icons/dashboards/proneareas.svg';
 import DarWards from '../assets/maps/dar.wards.json';
 import './styles.css';
@@ -253,7 +255,7 @@ const AlertDashboard = () => {
                 label="Population"
                 value={12}
                 title="Population"
-                icon={MenIcon}
+                icon={PopulationIcon}
               />
             </Col>
 
@@ -318,7 +320,7 @@ const AlertDashboard = () => {
                 label="Responders"
                 value="4"
                 title="Responders Population"
-                icon={MenIcon}
+                icon={RespondersIcon}
               />
             </Col>
             {/* End Responder Widget */}

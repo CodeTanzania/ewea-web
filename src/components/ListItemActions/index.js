@@ -27,6 +27,7 @@ const ListItemActions = ({
   archive,
   transfer,
   adjust,
+  whatsapp,
   reload,
 }) => (
   <Dropdown
@@ -95,6 +96,14 @@ const ListItemActions = ({
             <Icon type="diff" /> {adjust.name}
           </Menu.Item>
         )}
+
+        {whatsapp && (
+          <Menu.Item key="transfer" title={whatsapp.title}>
+            <a target="_blank" rel="noopener noreferrer" href={whatsapp.link}>
+              <Icon type="diff" /> {whatsapp.name}
+            </a>
+          </Menu.Item>
+        )}
       </Menu>
     }
     trigger={['click']}
@@ -151,6 +160,11 @@ ListItemActions.propTypes = {
     title: PropTypes.string,
     onClick: PropTypes.func,
   }),
+  whatsapp: PropTypes.shape({
+    name: PropTypes.string,
+    title: PropTypes.string,
+    link: PropTypes.string,
+  }),
 };
 
 ListItemActions.defaultProps = {
@@ -162,6 +176,7 @@ ListItemActions.defaultProps = {
   archive: null,
   transfer: null,
   adjust: null,
+  whatsapp: null,
 };
 
 export default ListItemActions;

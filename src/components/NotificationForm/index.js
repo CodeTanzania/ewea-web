@@ -64,9 +64,9 @@ class NotificationForm extends Component {
           };
         }
 
-        if (!isEmpty(values.features)) {
-          criteria.location = {
-            $in: compact([].concat(values.features)),
+        if (!isEmpty(values.area)) {
+          criteria.area = {
+            $in: compact([].concat(values.area)),
           };
         }
 
@@ -124,6 +124,7 @@ class NotificationForm extends Component {
     const {
       form: { getFieldDecorator },
       recipients,
+      subject,
       body,
       onCancel,
       onSearchAgencies,
@@ -160,10 +161,10 @@ class NotificationForm extends Component {
         {onSearchJurisdictions && moreFilters && (
           // eslint-disable-next-line react/jsx-props-no-spreading
           <Form.Item {...formItemLayout} label="Areas">
-            {getFieldDecorator('features')(
+            {getFieldDecorator('area')(
               <SearchableSelectInput
                 onSearch={onSearchJurisdictions}
-                optionLabel={feature => `${feature.name} (${feature.type})`}
+                optionLabel={area => `${area.strings.name.en}`}
                 optionValue="_id"
                 mode="multiple"
               />
@@ -252,7 +253,7 @@ class NotificationForm extends Component {
             </span>
           }
         >
-          {getFieldDecorator('subject')(<Input />)}
+          {getFieldDecorator('subject', { initialValue: subject })(<Input />)}
         </Form.Item>
         {/* notification subject */}
 
@@ -309,6 +310,7 @@ NotificationForm.propTypes = {
     validateFieldsAndScroll: PropTypes.func,
   }).isRequired,
   body: PropTypes.string,
+  subject: PropTypes.string,
   onCancel: PropTypes.func.isRequired,
   onSearchRecipients: PropTypes.func.isRequired,
   onSearchJurisdictions: PropTypes.func.isRequired,
@@ -319,6 +321,7 @@ NotificationForm.propTypes = {
 };
 
 NotificationForm.defaultProps = {
+  subject: undefined,
   body: undefined,
   recipients: [],
 };

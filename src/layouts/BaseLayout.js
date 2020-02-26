@@ -18,6 +18,7 @@ import EventSeverity from '../Events/EventSeverity';
 import EventCertainty from '../Events/EventCertainty';
 import EventQuestions from '../Events/EventQuestions';
 import EventGroups from '../Events/EventGroups';
+import EventLevels from '../Events/EventLevels';
 import EventIndicator from '../Events/EventIndicator';
 import Features from '../GeographicalFeatures/CriticalFacilities';
 import ActionCatalog from '../Events/ActionCatalog';
@@ -172,6 +173,10 @@ const breadcrumbNameMap = {
     name: 'Event Indicator',
     title: 'Event Indicator module',
   },
+  '/app/settings/eventlevels': {
+    name: 'Event Level',
+    title: 'Event Level module',
+  },
 };
 
 /**
@@ -321,6 +326,10 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/settings/eventindicator`}
             component={EventIndicator}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/eventlevels`}
+            component={EventLevels}
           />
           <SecureRoute component={PageNotFound} />
         </Switch>

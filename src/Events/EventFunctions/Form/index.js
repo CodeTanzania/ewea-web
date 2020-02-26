@@ -3,10 +3,9 @@ import {
   putEventFunction,
   Connect,
 } from '@codetanzania/ewea-api-states';
-import { Button, Form, Input, Select, Col, Row } from 'antd';
+import { Button, Form, Input, Select } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import ColorPicker from 'rc-color-picker';
 import { notifyError, notifySuccess } from '../../../util';
 import 'rc-color-picker/assets/index.css';
 
@@ -111,9 +110,9 @@ class FunctionForm extends Component {
     } = this.props;
 
     const {
-      strings: { name, description, code, color },
+      strings: { name, description, code },
     } = eventFunction || {
-      strings: { name: {}, code: '', description: {}, color: '' },
+      strings: { name: {}, code: '', description: {} },
     };
 
     const formItemLayout = {
@@ -187,26 +186,6 @@ class FunctionForm extends Component {
         </Form.Item>
         {/* end function code */}
 
-        <Row>
-          <Col span={19}>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Form.Item {...formItemLayout} label="Color Code">
-              {getFieldDecorator('color', {
-                initialValue: isEditForm ? color : undefined,
-              })(
-                <Input
-                  placeholder="e.g #36c"
-                  title="Click button to select color"
-                />
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={4} offset={1} className="EventFunctionFormColor">
-            <ColorPicker animation="slide-up" onChange={this.onChangeColor} />
-          </Col>
-        </Row>
-        {/* end function color code */}
-
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
           <Button onClick={onCancel}>Cancel</Button>
@@ -236,7 +215,6 @@ FunctionForm.propTypes = {
         en: PropTypes.string.isRequired,
       }),
       code: PropTypes.string.isRequired,
-      color: PropTypes.string.isRequired,
     }),
   }),
   form: PropTypes.shape({
