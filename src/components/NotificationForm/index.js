@@ -64,9 +64,9 @@ class NotificationForm extends Component {
           };
         }
 
-        if (!isEmpty(values.features)) {
-          criteria.location = {
-            $in: compact([].concat(values.features)),
+        if (!isEmpty(values.area)) {
+          criteria.area = {
+            $in: compact([].concat(values.area)),
           };
         }
 
@@ -160,10 +160,10 @@ class NotificationForm extends Component {
         {onSearchJurisdictions && moreFilters && (
           // eslint-disable-next-line react/jsx-props-no-spreading
           <Form.Item {...formItemLayout} label="Areas">
-            {getFieldDecorator('features')(
+            {getFieldDecorator('area')(
               <SearchableSelectInput
                 onSearch={onSearchJurisdictions}
-                optionLabel={feature => `${feature.name} (${feature.type})`}
+                optionLabel={area => `${area.strings.name.en}`}
                 optionValue="_id"
                 mode="multiple"
               />

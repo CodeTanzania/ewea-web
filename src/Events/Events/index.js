@@ -29,7 +29,7 @@ import './styles.css';
 /* constants */
 const {
   getFocalPeople,
-  getJurisdictions,
+  getAdministrativeAreas,
   getPartyGroups,
   getRoles,
   getAgencies,
@@ -511,7 +511,7 @@ class Events extends Component {
         >
           <NotificationForm
             onSearchRecipients={getFocalPeople}
-            onSearchJurisdictions={getJurisdictions}
+            onSearchJurisdictions={getAdministrativeAreas}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
             onSearchRoles={getRoles}
