@@ -426,10 +426,14 @@ class ActionCatalog extends Component {
               </Col>
               <Col {...actionSpan}>{item.relations.action.strings.name.en}</Col>
               <Col {...rolesSpan}>
-                {item.relations.roles.join(',') || 'N/A'}
+                {item.relations.roles
+                  .map(role => role.strings.name.en)
+                  .join(',') || 'N/A'}
               </Col>
               <Col {...groupsSpan}>
-                {item.relations.groups.join(',') || 'N/A'}
+                {item.relations.groups
+                  .map(group => group.strings.name.en)
+                  .join(',') || 'N/A'}
               </Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
             </ListItem>
