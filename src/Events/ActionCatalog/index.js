@@ -498,7 +498,7 @@ class ActionCatalog extends Component {
           <EventActionCatalogueForm
             posting={posting}
             isEditForm={isEditForm}
-            EventActionCatalogue={eventActionCatalogue}
+            eventActionCatalogue={eventActionCatalogue}
             onCancel={this.closeEventActionCatalogueForm}
           />
         </Modal>

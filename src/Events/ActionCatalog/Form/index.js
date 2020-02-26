@@ -53,10 +53,33 @@ class EventActionCatalogueForm extends Component {
 
     validateFieldsAndScroll((error, values) => {
       if (!error) {
+        const payload = {
+          strings: {
+            name: {
+              en: values.name,
+            },
+            abbreviation: {
+              en: values.name,
+            },
+            description: {
+              en: values.description,
+            },
+          },
+          relations: {
+            groups: values.groups,
+            type: values.type,
+            area: values.area,
+            agencies: values.agencies,
+            focals: values.focals,
+            roles: values.roles,
+            action: values.action,
+            function: values.function,
+          },
+        };
         if (isEditForm) {
           const updatedEventActionCatalogue = {
             ...eventActionCatalogue,
-            ...values,
+            ...payload,
           };
           putEventActionCatalogue(
             updatedEventActionCatalogue,
@@ -71,7 +94,7 @@ class EventActionCatalogueForm extends Component {
           );
         } else {
           postEventActionCatalogue(
-            values,
+            payload,
             () => {
               notifySuccess('Action Catalogue was created successfully');
             },
@@ -123,8 +146,10 @@ class EventActionCatalogueForm extends Component {
             <Form.Item {...formItemLayout} label="Type">
               {getFieldDecorator('type', {
                 initialValue:
-                  isEditForm && eventActionCatalogue
-                    ? eventActionCatalogue.type._id // eslint-disable-line
+                  isEditForm &&
+                  eventActionCatalogue &&
+                  eventActionCatalogue.relations.type
+                    ? eventActionCatalogue.relations.type._id // eslint-disable-line
                     : undefined,
                 rules: [
                   {
@@ -139,7 +164,7 @@ class EventActionCatalogueForm extends Component {
                   optionValue="_id"
                   initialValue={
                     isEditForm && eventActionCatalogue
-                      ? eventActionCatalogue.type
+                      ? eventActionCatalogue.relations.type
                       : undefined
                   }
                 />
@@ -151,22 +176,21 @@ class EventActionCatalogueForm extends Component {
 
         {/* event action catalogue areas */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Area(s)">
-          {getFieldDecorator('areas', {
+        <Form.Item {...formItemLayout} label="Area">
+          {getFieldDecorator('area', {
             initialValue:
-              isEditForm && eventActionCatalogue.areas
-                ? map(eventActionCatalogue.areas, area => area._id) // eslint-disable-line
-                : [],
+              isEditForm && eventActionCatalogue.relations.area
+                ? eventActionCatalogue.relations.area._id // eslint-disable-line
+                : undefined,
           })(
             <SearchableSelectInput
               onSearch={getAdministrativeAreas}
-              optionLabel={areas => areas.strings.name.en}
-              mode="multiple"
+              optionLabel={area => area.strings.name.en}
               optionValue="_id"
               initialValue={
-                isEditForm && eventActionCatalogue.areas
-                  ? eventActionCatalogue.areas
-                  : []
+                isEditForm && eventActionCatalogue.relations.area
+                  ? eventActionCatalogue.relations.area
+                  : undefined
               }
             />
           )}
@@ -181,7 +205,7 @@ class EventActionCatalogueForm extends Component {
               {getFieldDecorator('function', {
                 initialValue:
                   isEditForm && eventActionCatalogue
-                    ? eventActionCatalogue.function._id // eslint-disable-line
+                    ? eventActionCatalogue.relations.function._id // eslint-disable-line
                     : undefined,
                 rules: [
                   {
@@ -196,7 +220,7 @@ class EventActionCatalogueForm extends Component {
                   optionValue="_id"
                   initialValue={
                     isEditForm && eventActionCatalogue
-                      ? eventActionCatalogue.function
+                      ? eventActionCatalogue.relations.function
                       : undefined
                   }
                 />
@@ -213,8 +237,8 @@ class EventActionCatalogueForm extends Component {
             <Form.Item {...formItemLayout} label="Role">
               {getFieldDecorator('roles', {
                 initialValue:
-                  isEditForm && eventActionCatalogue.roles
-                    ? map(eventActionCatalogue.roles, role => role._id) // eslint-disable-line
+                  isEditForm && eventActionCatalogue.relations.roles
+                    ? map(eventActionCatalogue.relations.roles, role => role._id) // eslint-disable-line
                     : [],
                 rules: [
                   {
@@ -226,10 +250,11 @@ class EventActionCatalogueForm extends Component {
                 <SearchableSelectInput
                   onSearch={getPartyRoles}
                   optionLabel={role => role.strings.name.en}
+                  mode="multiple"
                   optionValue="_id"
                   initialValue={
-                    isEditForm && eventActionCatalogue.roles
-                      ? eventActionCatalogue.roles
+                    isEditForm && eventActionCatalogue.relations.roles
+                      ? eventActionCatalogue.relations.roles
                       : []
                   }
                 />
@@ -246,9 +271,9 @@ class EventActionCatalogueForm extends Component {
             <Form.Item {...formItemLayout} label="Groups">
               {getFieldDecorator('groups', {
                 initialValue:
-                  isEditForm && eventActionCatalogue.groups
-                    ? eventActionCatalogue.group._id // eslint-disable-line
-                    : undefined,
+                  isEditForm && eventActionCatalogue.relations.groups
+                    ? map(eventActionCatalogue.relations.groups, group => group._id) // eslint-disable-line
+                    : [],
                 rules: [
                   {
                     required: true,
@@ -259,11 +284,12 @@ class EventActionCatalogueForm extends Component {
                 <SearchableSelectInput
                   onSearch={getPartyGroups}
                   optionLabel={group => group.strings.name.en}
+                  mode="multiple"
                   optionValue="_id"
                   initialValue={
-                    isEditForm && eventActionCatalogue.groups
-                      ? eventActionCatalogue.groups
-                      : undefined
+                    isEditForm && eventActionCatalogue.relations.groups
+                      ? eventActionCatalogue.relations.groups
+                      : []
                   }
                 />
               )}
@@ -279,9 +305,9 @@ class EventActionCatalogueForm extends Component {
             <Form.Item {...formItemLayout} label="Agency">
               {getFieldDecorator('agencies', {
                 initialValue:
-                  isEditForm && eventActionCatalogue.agencies
-                    ? eventActionCatalogue.agencies._id // eslint-disable-line
-                    : undefined,
+                  isEditForm && eventActionCatalogue.relations.agencies
+                    ? map(eventActionCatalogue.relations.agencies, agency => agency._id) // eslint-disable-line
+                    : [],
                 rules: [
                   {
                     required: true,
@@ -292,11 +318,12 @@ class EventActionCatalogueForm extends Component {
                 <SearchableSelectInput
                   onSearch={getAgencies}
                   optionLabel="name"
+                  mode="multiple"
                   optionValue="_id"
                   initialValue={
-                    isEditForm && eventActionCatalogue.agencies
-                      ? eventActionCatalogue.agencies
-                      : undefined
+                    isEditForm && eventActionCatalogue.relations.agencies
+                      ? eventActionCatalogue.relations.agencies
+                      : []
                   }
                 />
               )}
@@ -312,9 +339,9 @@ class EventActionCatalogueForm extends Component {
             <Form.Item {...formItemLayout} label="Focals">
               {getFieldDecorator('focals', {
                 initialValue:
-                  isEditForm && eventActionCatalogue.focals
-                    ? eventActionCatalogue.focals._id // eslint-disable-line
-                    : undefined,
+                  isEditForm && eventActionCatalogue.relations.focals
+                    ? map(eventActionCatalogue.relations.focals, focal => focal._id) // eslint-disable-line
+                    : [],
                 rules: [
                   {
                     required: true,
@@ -325,11 +352,12 @@ class EventActionCatalogueForm extends Component {
                 <SearchableSelectInput
                   onSearch={getParties}
                   optionLabel="name"
+                  mode="multiple"
                   optionValue="_id"
                   initialValue={
-                    isEditForm && eventActionCatalogue.focals
-                      ? eventActionCatalogue.focals
-                      : undefined
+                    isEditForm && eventActionCatalogue.relations.focals
+                      ? eventActionCatalogue.relations.focals
+                      : []
                   }
                 />
               )}
@@ -343,15 +371,15 @@ class EventActionCatalogueForm extends Component {
           <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Action">
-              {getFieldDecorator('actions', {
+              {getFieldDecorator('action', {
                 initialValue:
-                  isEditForm && eventActionCatalogue.actions
-                    ? eventActionCatalogue.actions._id // eslint-disable-line
+                  isEditForm && eventActionCatalogue.relations.action
+                    ? eventActionCatalogue.relations.action._id // eslint-disable-line
                     : undefined,
                 rules: [
                   {
                     required: true,
-                    message: 'Event Action Catalogue actions are required',
+                    message: 'Event Action Catalogue action is required',
                   },
                 ],
               })(
@@ -360,8 +388,8 @@ class EventActionCatalogueForm extends Component {
                   optionLabel={action => action.strings.name.en}
                   optionValue="_id"
                   initialValue={
-                    isEditForm && eventActionCatalogue.actions
-                      ? eventActionCatalogue.actions
+                    isEditForm && eventActionCatalogue.relations.action
+                      ? eventActionCatalogue.relations.action
                       : undefined
                   }
                 />
@@ -378,7 +406,7 @@ class EventActionCatalogueForm extends Component {
             <Form.Item {...formItemLayout} label="Action Name">
               {getFieldDecorator('name', {
                 initialValue: isEditForm
-                  ? eventActionCatalogue.name
+                  ? eventActionCatalogue.strings.name.en
                   : undefined,
                 rules: [
                   {
@@ -399,7 +427,7 @@ class EventActionCatalogueForm extends Component {
             <Form.Item {...formItemLayout} label="Action Description">
               {getFieldDecorator('description', {
                 initialValue: isEditForm
-                  ? eventActionCatalogue.name
+                  ? eventActionCatalogue.strings.description.en
                   : undefined,
                 rules: [
                   {
@@ -434,20 +462,22 @@ class EventActionCatalogueForm extends Component {
 EventActionCatalogueForm.propTypes = {
   isEditForm: PropTypes.bool.isRequired,
   eventActionCatalogue: PropTypes.shape({
-    areas: PropTypes.arrayOf(PropTypes.object),
-    roles: PropTypes.arrayOf(PropTypes.object),
-    groups: PropTypes.arrayOf(PropTypes.object),
-    actions: PropTypes.arrayOf(PropTypes.object),
-    focals: PropTypes.arrayOf(PropTypes.object),
-    agencies: PropTypes.arrayOf(PropTypes.object),
-    function: PropTypes.arrayOf(PropTypes.object),
-    name: PropTypes.string,
-    type: PropTypes.shape({
-      _id: PropTypes.string,
-    }).isRequired,
-    action: PropTypes.shape({
-      strings: PropTypes.shape({
-        name: PropTypes.string,
+    strings: PropTypes.object,
+    relations: PropTypes.shape({
+      area: PropTypes.arrayOf(PropTypes.object),
+      roles: PropTypes.arrayOf(PropTypes.object),
+      groups: PropTypes.arrayOf(PropTypes.object),
+      actions: PropTypes.arrayOf(PropTypes.object),
+      focals: PropTypes.arrayOf(PropTypes.object),
+      agencies: PropTypes.arrayOf(PropTypes.object),
+      function: PropTypes.arrayOf(PropTypes.object),
+      type: PropTypes.shape({
+        _id: PropTypes.string,
+      }).isRequired,
+      action: PropTypes.shape({
+        strings: PropTypes.shape({
+          name: PropTypes.string,
+        }),
       }),
     }).isRequired,
   }).isRequired,
