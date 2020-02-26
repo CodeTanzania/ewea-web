@@ -65,14 +65,12 @@ export const EventDetailsSectionHeader = ({ title, actions }) => {
  * @since 0.1.0
  */
 export const EventLocations = ({ areas = [] }) => {
+  const locations = areas.map(area => area.strings.name.en).join(', ');
   return isEmpty(areas) ? null : (
     <>
       <EventDetailsSectionHeader title="AFFECT AREAS" />
 
-      {areas.map(area => (
-        // eslint-disable-next-line
-        <span key={area._id}>{area.strings.name.en}, </span>
-      ))}
+      {locations}
     </>
   );
 };
