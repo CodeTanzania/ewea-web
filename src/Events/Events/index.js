@@ -23,7 +23,7 @@ import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import EventDetailsViewHeader from './DetailsView/Header';
 import EventDetailsViewBody from './DetailsView/Body';
-import { notifyError, notifySuccess } from '../../util';
+import { notifyError, notifySuccess, generateEventTemplate } from '../../util';
 import './styles.css';
 
 /* constants */
@@ -67,6 +67,7 @@ class Events extends Component {
     showFilters: false,
     isEditForm: false,
     showNotificationForm: false,
+    notificationSubject: undefined,
     notificationBody: undefined,
     cached: null,
   };
@@ -223,24 +224,27 @@ class Events extends Component {
    */
   handleShare = events => {
     let message = '';
+    let subject;
     if (isArray(events)) {
-      const eventList = events.map(
-        event =>
-          `Type: ${event.type.strings.name.en}\ndescription: ${
-            // eslint-disable-line
-            event.description
-          }\nStage: ${event.stage}`
-      );
+      const eventList = events.map(event => {
+        const { body } = generateEventTemplate(event);
+
+        return body;
+      });
 
       message = eventList.join('\n\n\n');
+      subject = 'Status Update';
     } else {
-      message = `Type: ${events.type.strings.name.en}\ndescription: ${
-        // eslint-disable-line
-        events.description
-      }\nStage: ${events.stage}`;
+      const { subject: title, body } = generateEventTemplate(events);
+      subject = title;
+      message = body;
     }
 
-    this.setState({ notificationBody: message, showNotificationForm: true });
+    this.setState({
+      notificationSubject: subject,
+      notificationBody: message,
+      showNotificationForm: true,
+    });
   };
 
   /**
@@ -358,6 +362,7 @@ class Events extends Component {
       showFilters,
       isEditForm,
       showNotificationForm,
+      notificationSubject,
       notificationBody,
       cached,
     } = this.state;
@@ -515,6 +520,7 @@ class Events extends Component {
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
             onSearchRoles={getRoles}
+            subject={notificationSubject}
             body={notificationBody}
             onCancel={this.closeNotificationForm}
           />
