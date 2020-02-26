@@ -124,6 +124,7 @@ class NotificationForm extends Component {
     const {
       form: { getFieldDecorator },
       recipients,
+      subject,
       body,
       onCancel,
       onSearchAgencies,
@@ -252,7 +253,7 @@ class NotificationForm extends Component {
             </span>
           }
         >
-          {getFieldDecorator('subject')(<Input />)}
+          {getFieldDecorator('subject', { initialValue: subject })(<Input />)}
         </Form.Item>
         {/* notification subject */}
 
@@ -309,6 +310,7 @@ NotificationForm.propTypes = {
     validateFieldsAndScroll: PropTypes.func,
   }).isRequired,
   body: PropTypes.string,
+  subject: PropTypes.string,
   onCancel: PropTypes.func.isRequired,
   onSearchRecipients: PropTypes.func.isRequired,
   onSearchJurisdictions: PropTypes.func.isRequired,
@@ -319,6 +321,7 @@ NotificationForm.propTypes = {
 };
 
 NotificationForm.defaultProps = {
+  subject: undefined,
   body: undefined,
   recipients: [],
 };

@@ -1,5 +1,6 @@
 import { message } from 'antd';
 import moment from 'moment';
+import isEmpty from 'lodash';
 
 /**
  * @function
@@ -139,4 +140,34 @@ export const truncateString = (str, num) => {
   }
   // Return str truncated with '...' concatenated to the end of str.
   return `${str.slice(0, num)}...`;
+};
+
+/**
+ * @function
+ * @name generateEventTemplate
+ * @description Create event message for sharing
+ *
+ * @param {object} event Event object
+ *
+ * @returns {object} Event description for sharing
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const generateEventTemplate = event => {
+  const subject = `${event.level.strings.name.en} Advisory: ${event.type.strings.name.en} ${event.stage} - No. ${event.number}`;
+
+  const body = `${subject} \n\nDescription: ${
+    // eslint-disable-line
+    event.description
+  } \n\nInstructions: ${event.stage}${
+    !isEmpty(event.areas)
+      ? `\n\nAreas: ${
+          event.areas
+            ? event.areas.map(area => area.strings.name.en).join(', ')
+            : 'N/A'
+        }`
+      : ''
+  }${event.places ? `\n\nPlaces: ${event.places}` : ''}`;
+
+  return { subject, body };
 };
