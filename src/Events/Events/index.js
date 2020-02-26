@@ -10,7 +10,7 @@ import {
   paginateEvents,
   deleteEvent,
 } from '@codetanzania/ewea-api-states';
-import { Modal, Drawer, Col, Tag } from 'antd';
+import { Modal, Drawer, Col, Tag, Button } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
@@ -35,15 +35,17 @@ const {
   getAgencies,
 } = httpActions;
 const { confirm } = Modal;
-const referenceIDSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const referenceIDSpan = { xxl: 4, xl: 4, lg: 3, md: 4, sm: 0, xs: 0 };
 const typeSpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 0, xs: 0 };
-const stageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
-const groupSpan = { xxl: 4, xl: 4, lg: 5, md: 5, sm: 0, xs: 0 };
-const eventSpan = { xxl: 6, xl: 7, lg: 15, md: 0, sm: 19, xs: 19 };
+const stageSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
+const levelSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
+const groupSpan = { xxl: 3, xl: 3, lg: 4, md: 4, sm: 0, xs: 0 };
+const eventSpan = { xxl: 5, xl: 6, lg: 14, md: 0, sm: 19, xs: 19 };
 
 const headerLayout = [
   { ...eventSpan, header: 'Event' },
   { ...referenceIDSpan, header: 'Reference ID' },
+  { ...levelSpan, header: 'Event Level' },
   { ...stageSpan, header: 'Event Stage' },
   { ...typeSpan, header: 'Event Type' },
   { ...groupSpan, header: 'Event Group' },
@@ -434,10 +436,34 @@ class Events extends Component {
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...eventSpan} title={item.description}>
-                {item.description}
+                <Button
+                  type="link"
+                  onClick={() => this.handleView(item)}
+                  style={{ padding: 0, color: 'rgba(0, 0, 0, 0.65)' }}
+                >
+                  {item.description}
+                </Button>
               </Col>
               {/* <Col {...areaSpan}>{location}</Col> */}
               <Col {...referenceIDSpan}>{item.number}</Col>
+              <Col
+                {...levelSpan}
+                title={item.level ? item.level.strings.description : 'N/A'}
+              >
+                {item.level ? (
+                  <Tag
+                    color={
+                      item.level.strings.color === '#FFFFFF'
+                        ? undefined
+                        : item.level.strings.color
+                    }
+                  >
+                    {item.level.strings.name.en}
+                  </Tag>
+                ) : (
+                  'N/A'
+                )}
+              </Col>
               <Col {...stageSpan}>
                 <Tag color="volcano">{item.stage}</Tag>
               </Col>
