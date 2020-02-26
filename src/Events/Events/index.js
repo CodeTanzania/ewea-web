@@ -439,9 +439,9 @@ class Events extends Component {
                   whatsapp={{
                     name: 'Share on WhatsApp',
                     title: 'Share Event on Whatsapp',
-                    link: `https://wa.me/?text=${
+                    link: `https://wa.me/?text=${encodeURI(
                       generateEventTemplate(item).body
-                    }`,
+                    )}`,
                   }}
                 />
               )}
