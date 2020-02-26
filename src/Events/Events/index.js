@@ -436,6 +436,13 @@ class Events extends Component {
                     title: 'Remove Event from list of active Events',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
+                  whatsapp={{
+                    name: 'Share on WhatsApp',
+                    title: 'Share Event on Whatsapp',
+                    link: `https://wa.me/?text=${
+                      generateEventTemplate(item).body
+                    }`,
+                  }}
                 />
               )}
             >
