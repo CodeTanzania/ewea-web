@@ -9,14 +9,11 @@ import {
   refreshEventLevels,
   paginateEventLevels,
 } from '@codetanzania/ewea-api-states';
-import { httpActions } from '@codetanzania/ewea-api-client';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
-import isArray from 'lodash/isArray';
 
 import Topbar from '../../components/Topbar';
-import NotificationForm from '../../components/NotificationForm';
 import EventLevelForm from './Form';
 import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
@@ -35,15 +32,6 @@ const headerLayout = [
   { ...descriptionSpan, header: 'Description' },
 ];
 
-const {
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getRoles,
-  getAgencies,
-  getEventLevelsExportUrl,
-} = httpActions;
-
 const { confirm } = Modal;
 
 /**
@@ -59,9 +47,7 @@ class EventLevels extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isEditForm: false,
-    notificationBody: undefined,
     showNotificationForm: false,
-    selectedEventActions: [],
   };
 
   componentDidMount() {
@@ -70,13 +56,13 @@ class EventLevels extends Component {
 
   /**
    * @function
-   * @name openEventTypesForm
-   * @description Open event type form
+   * @name openEventLevelsForm
+   * @description Open event level form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openEventTypesForm = () => {
+  openEventLevelsForm = () => {
     openEventLevelForm();
   };
 
@@ -95,15 +81,15 @@ class EventLevels extends Component {
 
   /**
    * @function
-   * @name searchAlerts
-   * @description Search Event Types List based on supplied filter word
+   * @name searchEventLevels
+   * @description Search Event Level List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchAlerts = event => {
+  searchEventLevels = event => {
     searchEventLevels(event.target.value);
   };
 
@@ -112,13 +98,13 @@ class EventLevels extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} eventType event type to be edited
+   * @param {object} eventLevel event level to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventType => {
-    selectEventLevel(eventType);
+  handleEdit = eventLevel => {
+    selectEventLevel(eventLevel);
     this.setState({ isEditForm: true });
     openEventLevelForm();
   };
@@ -138,33 +124,14 @@ class EventLevels extends Component {
   /**
    * @function
    * @name handleShare
-   * @description Handle share multiple event Types
+   * @description Handle share multiple event levels
    *
-   * @param {object[]| object} eventTypes event Types list to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventTypes => {
-    let message = '';
-    if (isArray(eventTypes)) {
-      const eventTypeList = eventTypes.map(
-        eventType =>
-          `Name: ${eventType.strings.name.en}\nDescription: ${
-            // eslint-disable-line
-            eventType.strings.description.en
-          }\n`
-      );
-
-      message = eventTypeList.join('\n\n\n');
-    } else {
-      message = `Name: ${eventTypes.strings.name.en}\nDescription: ${
-        // eslint-disable-line
-        eventTypes.strings.description.en
-      }\n`;
-    }
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
+  handleShare = () => {
+    this.setState({ showNotificationForm: true });
   };
 
   /**
@@ -181,20 +148,8 @@ class EventLevels extends Component {
 
   /**
    * @function
-   * @name handleAfterCloseNotificationForm
-   * @description Perform post close notification form cleanups
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleAfterCloseNotificationForm = () => {
-    this.setState({ notificationBody: undefined });
-  };
-
-  /**
-   * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a focal person
+   * @description show confirm modal before archiving a event levels
    * @param {object} item Resource item to be archived
    *
    * @version 0.1.0
@@ -221,10 +176,10 @@ class EventLevels extends Component {
 
   handleRefreshEventLevels = () =>
     refreshEventLevels(
-      () => notifySuccess('Event Types refreshed successfully'),
+      () => notifySuccess('Event Levels refreshed successfully'),
       () =>
         notifyError(
-          'An Error occurred while refreshing Event Types, please contact system administrator'
+          'An Error occurred while refreshing Event Levels, please contact system administrator'
         )
     );
 
@@ -239,12 +194,7 @@ class EventLevels extends Component {
       searchQuery,
       total,
     } = this.props;
-    const {
-      isEditForm,
-      showNotificationForm,
-      selectedEventActions,
-      notificationBody,
-    } = this.state;
+    const { isEditForm, showNotificationForm } = this.state;
     return (
       <>
         {/* Topbar */}
@@ -252,7 +202,7 @@ class EventLevels extends Component {
           search={{
             size: 'large',
             placeholder: 'Search for event levels here ...',
-            onChange: this.searchAlerts,
+            onChange: this.searchEventLevels,
             value: searchQuery,
           }}
           actions={[
@@ -261,7 +211,7 @@ class EventLevels extends Component {
               icon: 'plus',
               size: 'large',
               title: 'Add New Event Level',
-              onClick: this.openEventTypesForm,
+              onClick: this.openEventLevelsForm,
             },
           ]}
         />
@@ -278,7 +228,6 @@ class EventLevels extends Component {
           headerLayout={headerLayout}
           onRefresh={this.handleRefreshEventLevels}
           onPaginate={nextPage => paginateEventLevels(nextPage)}
-          generateExportUrl={getEventLevelsExportUrl}
           renderListItem={({
             item,
             isSelected,
@@ -298,11 +247,6 @@ class EventLevels extends Component {
                     name: 'Edit Event Level',
                     title: 'Update Event Level Details',
                     onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Event Level',
-                    title: 'Share Event Level details with others',
-                    onClick: () => this.handleShare(item),
                   }}
                   archive={{
                     name: 'Archive Event Level',
@@ -326,7 +270,7 @@ class EventLevels extends Component {
 
         {/* Notification Modal modal */}
         <Modal
-          title="Notify Event Actions"
+          title="Notify Event Levels"
           visible={showNotificationForm}
           onCancel={this.closeNotificationForm}
           footer={null}
@@ -335,16 +279,7 @@ class EventLevels extends Component {
           className="FormModal"
           afterClose={this.handleAfterCloseNotificationForm}
         >
-          <NotificationForm
-            recipients={selectedEventActions}
-            onSearchRecipients={getFocalPeople}
-            onSearchJurisdictions={getJurisdictions}
-            onSearchGroups={getPartyGroups}
-            onSearchAgencies={getAgencies}
-            onSearchRoles={getRoles}
-            body={notificationBody}
-            onCancel={this.closeNotificationForm}
-          />
+          <></>
         </Modal>
         {/* end Notification modal */}
 
