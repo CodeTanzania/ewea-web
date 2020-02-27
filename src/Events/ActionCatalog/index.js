@@ -21,7 +21,12 @@ import EventActionCatalogueForm from './Form';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
-import { notifyError, notifySuccess } from '../../util';
+import {
+  generateEventActionCatalogueVCard,
+  joinArrayOfObjectToString,
+  notifyError,
+  notifySuccess,
+} from '../../util';
 import './styles.css';
 
 /* constants */
@@ -63,6 +68,7 @@ class ActionCatalog extends Component {
     showFilters: false,
     isEditForm: false,
     showNotificationForm: false,
+    notificationSubject: undefined,
     selectedEventActionCatalogues: [],
     notificationBody: undefined,
     cached: null,
@@ -192,37 +198,28 @@ class ActionCatalog extends Component {
    * @since 0.1.0
    */
   handleShare = eventActionCatalogues => {
-    let message = '';
+    let message;
+    let subject;
     if (isArray(eventActionCatalogues)) {
       const eventActionCataloguesList = eventActionCatalogues.map(
         eventActionCatalogue =>
-          `Event Type: ${
-            eventActionCatalogue.relations.type.strings.name.en
-          }\nFunction: ${
-            // eslint-disable-line
-            eventActionCatalogue.relations.function.strings.name.en
-          }\nAction/Responsibility: ${
-            eventActionCatalogue.relations.action.strings.name.en
-          }\nRoles: ${eventActionCatalogue.relations.roles.join(
-            ','
-          )}\nGroups: ${eventActionCatalogue.relations.groups.join(',')}`
+          generateEventActionCatalogueVCard(eventActionCatalogue)
       );
-
+      subject = 'Action Catalogue details';
       message = eventActionCataloguesList.join('\n\n\n');
     } else {
-      message = `Event Type: ${
-        eventActionCatalogues.relations.type.strings.name.en
-      }\nFunction: ${
-        // eslint-disable-line
-        eventActionCatalogues.relations.function.strings.name.en
-      }\nAction/Responsibility: ${
-        eventActionCatalogues.relations.action.strings.name.en
-      }\nRoles: ${eventActionCatalogues.relations.roles.join(
-        ','
-      )}\nGroups: ${eventActionCatalogues.relations.groups.join(',')}`;
+      const { body, subject: title } = generateEventActionCatalogueVCard(
+        eventActionCatalogues
+      );
+      subject = title;
+      message = body;
     }
 
-    this.setState({ notificationBody: message, showNotificationForm: true });
+    this.setState({
+      notificationSubject: subject,
+      notificationBody: message,
+      showNotificationForm: true,
+    });
   };
 
   /**
@@ -345,6 +342,7 @@ class ActionCatalog extends Component {
       showNotificationForm,
       selectedEventActionCatalogues,
       notificationBody,
+      notificationSubject,
       cached,
     } = this.state;
     return (
@@ -426,14 +424,10 @@ class ActionCatalog extends Component {
               </Col>
               <Col {...actionSpan}>{item.relations.action.strings.name.en}</Col>
               <Col {...rolesSpan}>
-                {item.relations.roles
-                  .map(role => role.strings.name.en)
-                  .join(',') || 'N/A'}
+                {joinArrayOfObjectToString(item.relations.roles) || 'N/A'}
               </Col>
               <Col {...groupsSpan}>
-                {item.relations.groups
-                  .map(group => group.strings.name.en)
-                  .join(',') || 'N/A'}
+                {joinArrayOfObjectToString(item.relations.groups) || 'N/A'}
               </Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
             </ListItem>
@@ -462,7 +456,7 @@ class ActionCatalog extends Component {
 
         {/* Notification Modal modal */}
         <Modal
-          title="Notify Event Action Catalogues"
+          title="Share Event Action Catalogues"
           visible={showNotificationForm}
           onCancel={this.closeNotificationForm}
           footer={null}
@@ -477,6 +471,7 @@ class ActionCatalog extends Component {
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
+            subject={notificationSubject}
             onSearchRoles={getRoles}
             body={notificationBody}
             onCancel={this.closeNotificationForm}
