@@ -47,7 +47,7 @@ const headerLayout = [
 const { confirm } = Modal;
 
 const {
-  getEventActionCatalogues: getEventActionCataloguesFromAPI,
+  getFocalPeople,
   getJurisdictions,
   getPartyGroups,
   getRoles,
@@ -466,15 +466,16 @@ class ActionCatalog extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={selectedEventActionCatalogues}
-            onSearchRecipients={getEventActionCataloguesFromAPI}
+            recipients={getFocalPeople}
+            onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
-            subject={notificationSubject}
             onSearchRoles={getRoles}
-            body={notificationBody}
             onCancel={this.closeNotificationForm}
+            selectedAgencies={selectedEventActionCatalogues}
+            subject={notificationSubject}
+            body={notificationBody}
           />
         </Modal>
         {/* end Notification modal */}
