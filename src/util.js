@@ -171,3 +171,27 @@ export const generateEventTemplate = event => {
 
   return { subject, body };
 };
+
+/**
+ * @function
+ * @name generateFocalPersonVCard
+ * @param {object} focalPerson Focal Person object for V-Card generation
+ * @returns {object} Formatted Focal person details to be shared
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const generateFocalPersonVCard = focalPerson => {
+  const subject = `Contact Details for ${focalPerson.name}`;
+
+  const body = `Name: ${focalPerson.name}\n${
+    focalPerson.role
+      ? `Title: ${focalPerson.role.strings.name.en} ${
+          focalPerson.party ? `(${focalPerson.party.abbreviation})` : ''
+        }`
+      : ''
+  }\nMobile: ${focalPerson.mobile}\n${
+    focalPerson.email ? `Email: ${focalPerson.email}` : ''
+  }`;
+
+  return { subject, body };
+};

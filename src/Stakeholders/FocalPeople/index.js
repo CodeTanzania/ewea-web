@@ -21,7 +21,11 @@ import FocalPersonForm from './Form';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
-import { notifyError, notifySuccess } from '../../util';
+import {
+  notifyError,
+  notifySuccess,
+  generateFocalPersonVCard,
+} from '../../util';
 import './styles.css';
 
 /* constants */
@@ -63,6 +67,7 @@ class FocalPeople extends Component {
     isEditForm: false,
     showNotificationForm: false,
     selectedFocalPeople: [],
+    notificationSubject: undefined,
     notificationBody: undefined,
     cached: null,
   };
@@ -192,24 +197,25 @@ class FocalPeople extends Component {
    */
   handleShare = focalPeople => {
     let message = '';
+    let subject = '';
     if (isArray(focalPeople)) {
+      subject = 'Contact Details for Focals';
       const focalPeopleList = focalPeople.map(
-        focalPerson =>
-          `Name: ${focalPerson.name}\nMobile: ${
-            // eslint-disable-line
-            focalPerson.mobile
-          }\nEmail: ${focalPerson.email}`
+        focalPerson => generateFocalPersonVCard(focalPerson).body
       );
 
       message = focalPeopleList.join('\n\n\n');
     } else {
-      message = `Name: ${focalPeople.name}\nMobile: ${
-        // eslint-disable-line
-        focalPeople.mobile
-      }\nEmail: ${focalPeople.email}`;
+      const { subject: title, body } = generateFocalPersonVCard(focalPeople);
+      subject = title;
+      message = body;
     }
 
-    this.setState({ notificationBody: message, showNotificationForm: true });
+    this.setState({
+      notificationSubject: subject,
+      notificationBody: message,
+      showNotificationForm: true,
+    });
   };
 
   /**
@@ -330,6 +336,7 @@ class FocalPeople extends Component {
       isEditForm,
       showNotificationForm,
       selectedFocalPeople,
+      notificationSubject,
       notificationBody,
       cached,
     } = this.state;
@@ -461,6 +468,7 @@ class FocalPeople extends Component {
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
             onSearchRoles={getRoles}
+            subject={notificationSubject}
             body={notificationBody}
             onCancel={this.closeNotificationForm}
           />
