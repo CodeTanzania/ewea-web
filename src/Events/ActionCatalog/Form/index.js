@@ -1,5 +1,7 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import {
+  Connect,
+  getEventAction,
   postEventActionCatalogue,
   putEventActionCatalogue,
 } from '@codetanzania/ewea-api-states';
@@ -32,6 +34,35 @@ const { TextArea } = Input;
  * @since 0.1.0
  */
 class EventActionCatalogueForm extends Component {
+  componentDidUpdate(prevProps) {
+    const { selectedEventAction: prevSelectedEventAction } = prevProps;
+    const { selectedEventAction } = this.props;
+    if (prevSelectedEventAction !== selectedEventAction) {
+      this.autoFillActionDetails(selectedEventAction);
+    }
+  }
+
+  /**
+   * @function
+   * @name autoFillActionDetails
+   * @description auto fills event action details
+   *
+   * @param {object} eventAction event action object
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  autoFillActionDetails = eventAction => {
+    const {
+      strings: { name, description },
+    } = eventAction;
+    const {
+      form: { setFieldsValue },
+    } = this.props;
+    setFieldsValue({ name: name.en });
+    setFieldsValue({ description: description.en });
+  };
+
   /**
    * @function
    * @name handleSubmit
@@ -238,7 +269,9 @@ class EventActionCatalogueForm extends Component {
               {getFieldDecorator('roles', {
                 initialValue:
                   isEditForm && eventActionCatalogue.relations.roles
-                    ? map(eventActionCatalogue.relations.roles, role => role._id) // eslint-disable-line
+                    ? map(
+                        eventActionCatalogue.relations.roles,
+                        role => role._id) // eslint-disable-line
                     : [],
                 rules: [
                   {
@@ -272,7 +305,9 @@ class EventActionCatalogueForm extends Component {
               {getFieldDecorator('groups', {
                 initialValue:
                   isEditForm && eventActionCatalogue.relations.groups
-                    ? map(eventActionCatalogue.relations.groups, group => group._id) // eslint-disable-line
+                    ? map(
+                        eventActionCatalogue.relations.groups,
+                        group => group._id ) // eslint-disable-line
                     : [],
                 rules: [
                   {
@@ -306,7 +341,9 @@ class EventActionCatalogueForm extends Component {
               {getFieldDecorator('agencies', {
                 initialValue:
                   isEditForm && eventActionCatalogue.relations.agencies
-                    ? map(eventActionCatalogue.relations.agencies, agency => agency._id) // eslint-disable-line
+                    ? map(
+                        eventActionCatalogue.relations.agencies,
+                        agency => agency._id ) // eslint-disable-line
                     : [],
                 rules: [
                   {
@@ -340,7 +377,9 @@ class EventActionCatalogueForm extends Component {
               {getFieldDecorator('focals', {
                 initialValue:
                   isEditForm && eventActionCatalogue.relations.focals
-                    ? map(eventActionCatalogue.relations.focals, focal => focal._id) // eslint-disable-line
+                    ? map(
+                        eventActionCatalogue.relations.focals,
+                        focal => focal._id ) // eslint-disable-line
                     : [],
                 rules: [
                   {
@@ -382,6 +421,7 @@ class EventActionCatalogueForm extends Component {
                     message: 'Event Action Catalogue action is required',
                   },
                 ],
+                onChange: e => getEventAction(e),
               })(
                 <SearchableSelectInput
                   onSearch={getEventActions}
@@ -435,7 +475,7 @@ class EventActionCatalogueForm extends Component {
                     message: 'Action  description is required',
                   },
                 ],
-              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
+              })(<TextArea autosize={{ minRows: 3, maxRows: 10 }} />)}
             </Form.Item>
           </Col>
         </Row>
@@ -460,6 +500,13 @@ class EventActionCatalogueForm extends Component {
 }
 
 EventActionCatalogueForm.propTypes = {
+  selectedEventAction: PropTypes.shape({
+    strings: PropTypes.shape({
+      name: PropTypes.shape({ en: PropTypes.string }),
+      abbreviation: PropTypes.shape({ en: PropTypes.string }),
+      description: PropTypes.shape({ en: PropTypes.string }),
+    }),
+  }),
   isEditForm: PropTypes.bool.isRequired,
   eventActionCatalogue: PropTypes.shape({
     strings: PropTypes.object,
@@ -484,10 +531,17 @@ EventActionCatalogueForm.propTypes = {
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func,
     validateFieldsAndScroll: PropTypes.func,
+    setFieldsValue: PropTypes.func,
   }).isRequired,
   groups: PropTypes.arrayOf(PropTypes.string).isRequired,
   onCancel: PropTypes.func.isRequired,
   posting: PropTypes.bool.isRequired,
 };
 
-export default Form.create()(EventActionCatalogueForm);
+EventActionCatalogueForm.defaultProps = {
+  selectedEventAction: null,
+};
+
+export default Connect(Form.create()(EventActionCatalogueForm), {
+  selectedEventAction: 'eventActions.selected',
+});
