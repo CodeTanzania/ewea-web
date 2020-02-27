@@ -195,3 +195,29 @@ export const generateFocalPersonVCard = focalPerson => {
 
   return { subject, body };
 };
+
+/**
+ * @function
+ * @name generateAgencyVCard
+ * @param {object} agency Focal Person object for V-Card generation
+ * @returns {object} Formatted Focal person details to be shared
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const generateAgencyVCard = agency => {
+  const subject = `Contact Details for ${agency.name}`;
+
+  const body = `Name: ${agency.name} (${agency.abbreviation})\nMobile: ${
+    agency.mobile
+  }\n${agency.email ? `Email: ${agency.email}` : ''}`;
+
+  return { subject, body };
+};
+
+// export const generateEventCatalogueActionDetails = action => {
+//   const subject = '';
+
+//   const body = '';
+
+//   return { subject, body };
+// };
