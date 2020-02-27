@@ -4,6 +4,19 @@ import isEmpty from 'lodash';
 
 /**
  * @function
+ * @name joinArrayOfObjectToString
+ * @description joins are of objects into comma separated string
+ * @param {Array} array array of objects
+ * @param {string} property property to join
+ * @returns {string} comma separated string
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const joinArrayOfObjectToString = (array, property = 'name') =>
+  array.map(obj => obj.strings[property].en).join(',');
+
+/**
+ * @function
  * @name notifyError
  * @description Show error message box
  *
@@ -210,6 +223,35 @@ export const generateAgencyVCard = agency => {
   const body = `Name: ${agency.name} (${agency.abbreviation})\nMobile: ${
     agency.mobile
   }\n${agency.email ? `Email: ${agency.email}` : ''}`;
+
+  return { subject, body };
+};
+
+/**
+ * @function
+ * @name generateEventActionCatalogueVCard
+ * @param {object} eventActionCatalogue Event Action Catalogue object for V-Card generation
+ * @returns {object} Formatted Focal person details to be shared
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const generateEventActionCatalogueVCard = eventActionCatalogue => {
+  const subject = `Action Catalogue details for ${eventActionCatalogue.strings.name.en}`;
+
+  const body = `Name: ${eventActionCatalogue.strings.name.en}\nType: ${
+    eventActionCatalogue.relations.type
+      ? eventActionCatalogue.relations.type.strings.name.en
+      : 'All'
+  }\nFunction: ${
+    eventActionCatalogue.relations.function.strings.name.en
+  }\nAction/Responsibility: ${
+    eventActionCatalogue.relations.action.strings.name.en
+  }\nRoles: ${joinArrayOfObjectToString(
+    eventActionCatalogue.relations.roles
+  )}\nGroups: ${joinArrayOfObjectToString(
+    eventActionCatalogue.relations.groups
+  )}\n
+  `;
 
   return { subject, body };
 };
