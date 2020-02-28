@@ -250,7 +250,7 @@ export const generateEventActionCatalogueVCard = eventActionCatalogue => {
     eventActionCatalogue.relations.roles
   )}\nGroups: ${joinArrayOfObjectToString(
     eventActionCatalogue.relations.groups
-  )}\n
+  )}\nArea: ${joinArrayOfObjectToString([eventActionCatalogue.relations.area])}
   `;
 
   return { subject, body };
