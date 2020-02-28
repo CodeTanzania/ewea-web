@@ -238,6 +238,9 @@ const EventToolbar = ({ event, openForm, onShare }) => {
             icon="environment"
             title="Update Affected Areas"
             className="actionButton"
+            onClick={() =>
+              openForm({ key: 'areas', label: 'Add affected Areas' })
+            }
           />
         </Col>
         <Col span={1}>
@@ -405,6 +408,16 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
         <Timeline.Item key={feed._id} dot={<Icon type="apartment" />}>
           Agency: <Tag color="magenta">{agency.name}</Tag> was added on{' '}
           <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+        </Timeline.Item>
+      ));
+    }
+
+    if (feed.areas) {
+      return feed.areas.map(area => (
+        // eslint-disable-next-line no-underscore-dangle
+        <Timeline.Item key={area._id} dot={<Icon type="environment" />}>
+          Area: <Tag color="geekblue">{area.strings.name.en}</Tag> was added on{' '}
+          <Tag>{formatDate(area.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
         </Timeline.Item>
       ));
     }
