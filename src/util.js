@@ -237,20 +237,23 @@ export const generateAgencyVCard = agency => {
  */
 export const generateEventActionCatalogueVCard = eventActionCatalogue => {
   const subject = `Action Catalogue details for ${eventActionCatalogue.strings.name.en}`;
-
-  const body = `Name: ${eventActionCatalogue.strings.name.en}\nType: ${
+  const body = `Name: ${eventActionCatalogue.strings.name.en}\nEvent: ${
     eventActionCatalogue.relations.type
       ? eventActionCatalogue.relations.type.strings.name.en
       : 'All'
   }\nFunction: ${
     eventActionCatalogue.relations.function.strings.name.en
-  }\nAction/Responsibility: ${
+  }\nAction: ${
     eventActionCatalogue.relations.action.strings.name.en
   }\nRoles: ${joinArrayOfObjectToString(
     eventActionCatalogue.relations.roles
   )}\nGroups: ${joinArrayOfObjectToString(
     eventActionCatalogue.relations.groups
-  )}\n
+  )}\n${
+    eventActionCatalogue.relations.area
+      ? `Area:${eventActionCatalogue.relations.area.strings.name.en}`
+      : ''
+  }
   `;
 
   return { subject, body };
