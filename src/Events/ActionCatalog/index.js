@@ -421,7 +421,7 @@ class ActionCatalog extends Component {
               <Col {...eventFunction}>
                 {item.relations.function.strings.name.en}
               </Col>
-              <Col {...actionSpan}>{item.relations.action.strings.name.en}</Col>
+              <Col {...actionSpan}>{item.strings.name.en}</Col>
               <Col {...rolesSpan}>
                 {joinArrayOfObjectToString(item.relations.roles) || 'N/A'}
               </Col>
