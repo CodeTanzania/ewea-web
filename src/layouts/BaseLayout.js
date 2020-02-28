@@ -47,7 +47,7 @@ const breadcrumbNameMap = {
   },
   '/app/eventgroups': { name: 'Event Groups', title: 'Event Groups module' },
   '/app/actioncatalog': {
-    name: 'Action Catalog',
+    name: 'Action Catalogue',
     title: 'List of all actions to be performed',
   },
   '/app/alerts/feedback': {
