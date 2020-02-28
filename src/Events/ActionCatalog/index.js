@@ -37,9 +37,9 @@ const eventFunction = { xxl: 3, xl: 3, lg: 3, md: 0, sm: 0, xs: 0 };
 const groupsSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 
 const headerLayout = [
-  { ...eventTypeSpan, header: 'Event Type' },
+  { ...eventTypeSpan, header: 'Event' },
   { ...eventFunction, header: 'Function' },
-  { ...actionSpan, header: 'Action/Responsibility' },
+  { ...actionSpan, header: 'Action' },
   { ...rolesSpan, header: 'Roles' },
   { ...groupsSpan, header: 'Groups' },
 ];
@@ -203,7 +203,7 @@ class ActionCatalog extends Component {
     if (isArray(eventActionCatalogues)) {
       const eventActionCataloguesList = eventActionCatalogues.map(
         eventActionCatalogue =>
-          generateEventActionCatalogueVCard(eventActionCatalogue)
+          generateEventActionCatalogueVCard(eventActionCatalogue).body
       );
       subject = 'Action Catalogue details';
       message = eventActionCataloguesList.join('\n\n\n');
@@ -314,11 +314,10 @@ class ActionCatalog extends Component {
       onOk() {
         deleteEventActionCatalogue(
           item._id, // eslint-disable-line
-          () =>
-            notifySuccess('Event Action Catalogue was archived successfully'),
+          () => notifySuccess(' Action Catalogue was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving Event Action Catalogue, Please contact your system Administrator'
+              'An error occurred while archiving Action Catalogue, Please contact your system Administrator'
             )
         );
       },
@@ -351,16 +350,16 @@ class ActionCatalog extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Event Action Catalogues here ...',
+            placeholder: 'Search for Action Catalogues here ...',
             onChange: this.searchEventActionCatalogues,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Action Catalogue',
+              label: 'New Action',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Event Action Catalogue',
+              title: 'Add New Action',
               onClick: this.openEventActionCatalogueForm,
             },
           ]}
@@ -369,7 +368,7 @@ class ActionCatalog extends Component {
 
         {/* list starts */}
         <ItemList
-          itemName="action catalog"
+          itemName="action catalogue"
           items={eventActionCatalogues}
           page={page}
           itemCount={total}
@@ -395,19 +394,19 @@ class ActionCatalog extends Component {
               renderActions={() => (
                 <ListItemActions
                   edit={{
-                    name: 'Edit Event Action Catalogue',
-                    title: 'Update Event Action Catalogue Details',
+                    name: 'Edit Action Catalogue',
+                    title: 'Update Action Catalogue Details',
                     onClick: () => this.handleEdit(item),
                   }}
                   share={{
-                    name: 'Share Event Action Catalogue',
-                    title: 'Share Event Action Catalogue details with others',
+                    name: 'Share Action Catalogue',
+                    title: 'Share Action Catalogue details with others',
                     onClick: () => this.handleShare(item),
                   }}
                   archive={{
-                    name: 'Archive Event Action Catalogue',
+                    name: 'Archive Action Catalogue',
                     title:
-                      'Remove Event Action Catalogue from list of active Event Action Catalogues',
+                      'Remove Action Catalogue from list of active Action Catalogues',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                 />
@@ -482,11 +481,7 @@ class ActionCatalog extends Component {
 
         {/* create/edit form modal */}
         <Modal
-          title={
-            isEditForm
-              ? 'Edit Event Action Catalogue'
-              : 'Add New Action Catalogue'
-          }
+          title={isEditForm ? 'Edit Action' : 'Add New Action'}
           visible={showForm}
           className="FormModal"
           footer={null}
