@@ -203,7 +203,7 @@ class ActionCatalog extends Component {
     if (isArray(eventActionCatalogues)) {
       const eventActionCataloguesList = eventActionCatalogues.map(
         eventActionCatalogue =>
-          generateEventActionCatalogueVCard(eventActionCatalogue)
+          generateEventActionCatalogueVCard(eventActionCatalogue).body
       );
       subject = 'Action Catalogue details';
       message = eventActionCataloguesList.join('\n\n\n');
