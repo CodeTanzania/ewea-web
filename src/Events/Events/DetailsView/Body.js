@@ -27,8 +27,6 @@ import { formatDate, notifySuccess, notifyError } from '../../../util';
 import EventChangelogForm from '../ChangelogForm';
 import './styles.css';
 
-const ButtonGroup = Button.Group;
-
 const actionsTaken = ['Test Action 1', 'Test Action 2'];
 
 /**
@@ -172,96 +170,146 @@ export const EventRespondingFocalPeople = ({ focalPeople = [] }) => {
  * @version 0.1.0
  * @since 0.1.0
  */
-const EventToolbar = ({ event, openForm }) => {
+const EventToolbar = ({ event, openForm, onShare }) => {
   return (
     <div className="EventToolbar">
-      <ButtonGroup>
-        <Button
-          type="link"
-          size="large"
-          icon="reload"
-          title="Refresh Event"
-          onClick={() =>
-            getEvent(
-              // eslint-disable-next-line
-              event._id,
-              () => notifySuccess('Event was refreshed successfully'),
-              () =>
-                notifyError(
-                  'An error occurred while refreshing event, please contact your system administrator'
-                )
-            )
-          }
-        />
-        <Button
-          type="link"
-          size="large"
-          icon="user-add"
-          title="Add Focal Person"
-          onClick={() =>
-            openForm({
-              key: 'focalPeople',
-              label: 'Add participated Focal People',
-            })
-          }
-        />
-        <Button
-          type="link"
-          size="large"
-          icon="usergroup-add"
-          title="Add Agency"
-          onClick={() =>
-            openForm({ key: 'agencies', label: 'Add participated Agencies' })
-          }
-        />
-        <Button
-          type="link"
-          size="large"
-          icon="environment"
-          title="Update Location"
-        />
-        <Button
-          type="link"
-          size="large"
-          icon="file-image"
-          title="Upload Image"
-          onClick={() => openForm({ key: 'file', label: 'Upload File' })}
-        />
-        <Button
-          type="link"
-          size="large"
-          icon="file-done"
-          title="Update Actions Taken"
-        />
-        <Button
-          type="link"
-          size="large"
-          icon="interaction"
-          title="Update Event Feed"
-        />
-        <Button
-          type="link"
-          size="large"
-          icon="audit"
-          title="Record Damage & Losses"
-          onClick={() =>
-            openForm({ key: 'damage', label: 'Record Damage and Losses' })
-          }
-        />
-        <Button
-          type="link"
-          size="large"
-          icon="wechat"
-          title="Add Comment"
-          onClick={() => openForm({ key: 'comment', label: 'Add a Comment' })}
-        />
-        <Button
-          type="link"
-          size="large"
-          icon="printer"
-          title="Print Event Details"
-        />
-      </ButtonGroup>
+      <Row>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon="reload"
+            title="Refresh Event"
+            className="actionButton"
+            onClick={() =>
+              getEvent(
+                // eslint-disable-next-line
+                event._id,
+                () => notifySuccess('Event was refreshed successfully'),
+                () =>
+                  notifyError(
+                    'An error occurred while refreshing event, please contact your system administrator'
+                  )
+              )
+            }
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon="share-alt"
+            title="Share Event"
+            className="actionButton"
+            onClick={() => onShare()}
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon="user-add"
+            title="Add Focal Person"
+            className="actionButton"
+            onClick={() =>
+              openForm({
+                key: 'focalPeople',
+                label: 'Add participated Focal People',
+              })
+            }
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon="usergroup-add"
+            title="Add Agency"
+            className="actionButton"
+            onClick={() =>
+              openForm({ key: 'agencies', label: 'Add participated Agencies' })
+            }
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon="environment"
+            title="Update Affected Areas"
+            className="actionButton"
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon="file-image"
+            title="Upload Image"
+            className="actionButton"
+            onClick={() => openForm({ key: 'file', label: 'Upload File' })}
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon="file-done"
+            title="Update Actions Taken"
+            className="actionButton"
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon="notification"
+            title="Disseminate Event"
+            className="actionButton"
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon="audit"
+            title="Record Damage & Losses"
+            className="actionButton"
+            onClick={() =>
+              openForm({ key: 'damage', label: 'Record Damage and Losses' })
+            }
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon="wechat"
+            title="Add Comment"
+            className="actionButton"
+            onClick={() => openForm({ key: 'comment', label: 'Add a Comment' })}
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon="swap"
+            title="Request for actions"
+            className="actionButton"
+          />
+        </Col>
+
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon="printer"
+            title="Print Event Details"
+            className="actionButton"
+          />
+        </Col>
+      </Row>
     </div>
   );
 };
@@ -408,6 +456,7 @@ const EventDetailsViewBody = ({
   changelogs,
   loading,
   hasMore,
+  onShare,
 }) => {
   const [action, setAction] = useState({ key: '', label: '' });
 
@@ -422,7 +471,7 @@ const EventDetailsViewBody = ({
 
   return (
     <div className="EventBody">
-      <EventToolbar event={event} openForm={openForm} />
+      <EventToolbar event={event} openForm={openForm} onShare={onShare} />
       <div className="EventBodyContent">
         <Row>
           <Col span={16}>
@@ -488,6 +537,7 @@ EventToolbar.propTypes = {
     _id: PropTypes.string,
   }).isRequired,
   openForm: PropTypes.func.isRequired,
+  onShare: PropTypes.func.isRequired,
 };
 
 EventFeed.propTypes = {
@@ -513,6 +563,7 @@ EventDetailsViewBody.propTypes = {
   posting: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   hasMore: PropTypes.bool.isRequired,
+  onShare: PropTypes.func.isRequired,
 };
 
 export default Connect(EventDetailsViewBody, {

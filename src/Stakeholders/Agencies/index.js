@@ -21,7 +21,7 @@ import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
 import NotificationForm from '../../components/NotificationForm';
-import { notifyError, notifySuccess } from '../../util';
+import { notifyError, notifySuccess, generateAgencyVCard } from '../../util';
 import './styles.css';
 
 /* constants */
@@ -49,19 +49,6 @@ const {
 const { confirm } = Modal;
 
 /**
- * @function
- * @name generateShareAgencyContent
- * @description generate agency content to share from agency object
- *
- * @param {object} agency  agency to be converted to string content
- * @returns {string} Message content to be shared
- * @version 0.1.0
- * @since 0.1.0
- */
-const generateShareAgencyContent = agency =>
-  `${agency.name}\nMobile: ${agency.mobile}\nEmail: ${agency.email}\nWebsite: ${agency.website}\nPhysical Address: ${agency.physicalAddress}\nPostal Address: ${agency.postalAddress}`;
-
-/**
  * @class
  * @name Agencies
  * @description Render agency list which have search box, actions and agency list
@@ -76,6 +63,7 @@ class Agencies extends Component {
     isEditForm: false,
     showNotificationForm: false,
     selectedAgencies: [],
+    notificationSubject: undefined,
     notificationBody: undefined,
     cached: null,
   };
@@ -210,40 +198,6 @@ class Agencies extends Component {
 
   /**
    * @function
-   * @name handleShare
-   * @description Handle share single agency action
-   *
-   * @param {object} agency  to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleShare = agency => {
-    const message = generateShareAgencyContent(agency);
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name handleBulkShare
-   * @description Handle share multiple agencies
-   *
-   * @param {object[]} agencies agencies list to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleBulkShare = agencies => {
-    const agencyList = agencies.map(generateShareAgencyContent);
-
-    const message = agencyList.join('\n\n\n');
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
    * @name closeNotificationForm
    * @description Handle on notify agencies
    *
@@ -298,25 +252,26 @@ class Agencies extends Component {
    * @since 0.1.0
    */
   handleShare = agencies => {
-    let message = '';
+    let message;
+    let subject;
     if (isArray(agencies)) {
       const agencyList = agencies.map(
-        agency =>
-          `Name: ${agency.name}\nDescription: ${
-            // eslint-disable-line
-            'N/A'
-          }\n`
+        agency => generateAgencyVCard(agency).body
       );
 
+      subject = 'Agencies Contact Details';
       message = agencyList.join('\n\n\n');
     } else {
-      message = `Name: ${agencies.name}\nDescription: ${
-        // eslint-disable-line
-        'N/A'
-      }\n`;
+      const { body, subject: title } = generateAgencyVCard(agencies);
+      subject = title;
+      message = body;
     }
 
-    this.setState({ notificationBody: message, showNotificationForm: true });
+    this.setState({
+      notificationSubject: subject,
+      notificationBody: message,
+      showNotificationForm: true,
+    });
   };
 
   /**
@@ -377,6 +332,7 @@ class Agencies extends Component {
       isEditForm,
       showNotificationForm,
       selectedAgencies,
+      notificationSubject,
       notificationBody,
       cached,
     } = this.state;
@@ -482,6 +438,7 @@ class Agencies extends Component {
             onSearchRoles={getRoles}
             onCancel={this.closeNotificationForm}
             selectedAgencies={selectedAgencies}
+            subject={notificationSubject}
             body={notificationBody}
           />
         </Modal>

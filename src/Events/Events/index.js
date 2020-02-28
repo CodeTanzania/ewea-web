@@ -569,9 +569,12 @@ class Events extends Component {
           onClose={this.closeEventDetails}
           visible={showEventDetails}
           drawerStyle={{ overflow: 'hidden' }}
-          bodyStyle={{ overflow: 'hidden', height: '100%' }}
+          bodyStyle={{ overflow: 'hidden', height: '100%', padding: '15px' }}
         >
-          <EventDetailsViewBody event={event} />
+          <EventDetailsViewBody
+            event={event}
+            onShare={() => this.handleShare(event)}
+          />
         </Drawer>
 
         {/* End Event details drawer */}

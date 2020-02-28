@@ -21,7 +21,12 @@ import EventActionCatalogueForm from './Form';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
-import { notifyError, notifySuccess } from '../../util';
+import {
+  generateEventActionCatalogueVCard,
+  joinArrayOfObjectToString,
+  notifyError,
+  notifySuccess,
+} from '../../util';
 import './styles.css';
 
 /* constants */
@@ -32,9 +37,9 @@ const eventFunction = { xxl: 3, xl: 3, lg: 3, md: 0, sm: 0, xs: 0 };
 const groupsSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
 
 const headerLayout = [
-  { ...eventTypeSpan, header: 'Event Type' },
+  { ...eventTypeSpan, header: 'Event' },
   { ...eventFunction, header: 'Function' },
-  { ...actionSpan, header: 'Action/Responsibility' },
+  { ...actionSpan, header: 'Action' },
   { ...rolesSpan, header: 'Roles' },
   { ...groupsSpan, header: 'Groups' },
 ];
@@ -42,7 +47,7 @@ const headerLayout = [
 const { confirm } = Modal;
 
 const {
-  getEventActionCatalogues: getEventActionCataloguesFromAPI,
+  getFocalPeople,
   getJurisdictions,
   getPartyGroups,
   getRoles,
@@ -63,6 +68,7 @@ class ActionCatalog extends Component {
     showFilters: false,
     isEditForm: false,
     showNotificationForm: false,
+    notificationSubject: undefined,
     selectedEventActionCatalogues: [],
     notificationBody: undefined,
     cached: null,
@@ -192,37 +198,28 @@ class ActionCatalog extends Component {
    * @since 0.1.0
    */
   handleShare = eventActionCatalogues => {
-    let message = '';
+    let message;
+    let subject;
     if (isArray(eventActionCatalogues)) {
       const eventActionCataloguesList = eventActionCatalogues.map(
         eventActionCatalogue =>
-          `Event Type: ${
-            eventActionCatalogue.relations.type.strings.name.en
-          }\nFunction: ${
-            // eslint-disable-line
-            eventActionCatalogue.relations.function.strings.name.en
-          }\nAction/Responsibility: ${
-            eventActionCatalogue.relations.action.strings.name.en
-          }\nRoles: ${eventActionCatalogue.relations.roles.join(
-            ','
-          )}\nGroups: ${eventActionCatalogue.relations.groups.join(',')}`
+          generateEventActionCatalogueVCard(eventActionCatalogue).body
       );
-
+      subject = 'Action Catalogue details';
       message = eventActionCataloguesList.join('\n\n\n');
     } else {
-      message = `Event Type: ${
-        eventActionCatalogues.relations.type.strings.name.en
-      }\nFunction: ${
-        // eslint-disable-line
-        eventActionCatalogues.relations.function.strings.name.en
-      }\nAction/Responsibility: ${
-        eventActionCatalogues.relations.action.strings.name.en
-      }\nRoles: ${eventActionCatalogues.relations.roles.join(
-        ','
-      )}\nGroups: ${eventActionCatalogues.relations.groups.join(',')}`;
+      const { body, subject: title } = generateEventActionCatalogueVCard(
+        eventActionCatalogues
+      );
+      subject = title;
+      message = body;
     }
 
-    this.setState({ notificationBody: message, showNotificationForm: true });
+    this.setState({
+      notificationSubject: subject,
+      notificationBody: message,
+      showNotificationForm: true,
+    });
   };
 
   /**
@@ -317,11 +314,10 @@ class ActionCatalog extends Component {
       onOk() {
         deleteEventActionCatalogue(
           item._id, // eslint-disable-line
-          () =>
-            notifySuccess('Event Action Catalogue was archived successfully'),
+          () => notifySuccess(' Action Catalogue was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving Event Action Catalogue, Please contact your system Administrator'
+              'An error occurred while archiving Action Catalogue, Please contact your system Administrator'
             )
         );
       },
@@ -345,6 +341,7 @@ class ActionCatalog extends Component {
       showNotificationForm,
       selectedEventActionCatalogues,
       notificationBody,
+      notificationSubject,
       cached,
     } = this.state;
     return (
@@ -353,16 +350,16 @@ class ActionCatalog extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for Event Action Catalogues here ...',
+            placeholder: 'Search for Action Catalogues here ...',
             onChange: this.searchEventActionCatalogues,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Event Action Catalogue',
+              label: 'New Action',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Event Action Catalogue',
+              title: 'Add New Action',
               onClick: this.openEventActionCatalogueForm,
             },
           ]}
@@ -371,7 +368,7 @@ class ActionCatalog extends Component {
 
         {/* list starts */}
         <ItemList
-          itemName="action catalog"
+          itemName="action catalogue"
           items={eventActionCatalogues}
           page={page}
           itemCount={total}
@@ -397,19 +394,19 @@ class ActionCatalog extends Component {
               renderActions={() => (
                 <ListItemActions
                   edit={{
-                    name: 'Edit Event Action Catalogue',
-                    title: 'Update Event Action Catalogue Details',
+                    name: 'Edit Action Catalogue',
+                    title: 'Update Action Catalogue Details',
                     onClick: () => this.handleEdit(item),
                   }}
                   share={{
-                    name: 'Share Event Action Catalogue',
-                    title: 'Share Event Action Catalogue details with others',
+                    name: 'Share Action Catalogue',
+                    title: 'Share Action Catalogue details with others',
                     onClick: () => this.handleShare(item),
                   }}
                   archive={{
-                    name: 'Archive Event Action Catalogue',
+                    name: 'Archive Action Catalogue',
                     title:
-                      'Remove Event Action Catalogue from list of active Event Action Catalogues',
+                      'Remove Action Catalogue from list of active Action Catalogues',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                 />
@@ -426,10 +423,10 @@ class ActionCatalog extends Component {
               </Col>
               <Col {...actionSpan}>{item.relations.action.strings.name.en}</Col>
               <Col {...rolesSpan}>
-                {item.relations.roles.join(',') || 'N/A'}
+                {joinArrayOfObjectToString(item.relations.roles) || 'N/A'}
               </Col>
               <Col {...groupsSpan}>
-                {item.relations.groups.join(',') || 'N/A'}
+                {joinArrayOfObjectToString(item.relations.groups) || 'N/A'}
               </Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
             </ListItem>
@@ -458,7 +455,7 @@ class ActionCatalog extends Component {
 
         {/* Notification Modal modal */}
         <Modal
-          title="Notify Event Action Catalogues"
+          title="Share Event Action Catalogues"
           visible={showNotificationForm}
           onCancel={this.closeNotificationForm}
           footer={null}
@@ -468,25 +465,23 @@ class ActionCatalog extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={selectedEventActionCatalogues}
-            onSearchRecipients={getEventActionCataloguesFromAPI}
+            recipients={getFocalPeople}
+            onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
             onSearchRoles={getRoles}
-            body={notificationBody}
             onCancel={this.closeNotificationForm}
+            selectedAgencies={selectedEventActionCatalogues}
+            subject={notificationSubject}
+            body={notificationBody}
           />
         </Modal>
         {/* end Notification modal */}
 
         {/* create/edit form modal */}
         <Modal
-          title={
-            isEditForm
-              ? 'Edit Event Action Catalogue'
-              : 'Add New Action Catalogue'
-          }
+          title={isEditForm ? 'Edit Action' : 'Add New Action'}
           visible={showForm}
           className="FormModal"
           footer={null}
@@ -498,7 +493,7 @@ class ActionCatalog extends Component {
           <EventActionCatalogueForm
             posting={posting}
             isEditForm={isEditForm}
-            EventActionCatalogue={eventActionCatalogue}
+            eventActionCatalogue={eventActionCatalogue}
             onCancel={this.closeEventActionCatalogueForm}
           />
         </Modal>
