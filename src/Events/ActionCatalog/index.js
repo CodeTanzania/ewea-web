@@ -357,10 +357,10 @@ class ActionCatalog extends Component {
           }}
           actions={[
             {
-              label: 'New Action Catalogue',
+              label: 'New Action',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Event Action Catalogue',
+              title: 'Add New Action',
               onClick: this.openEventActionCatalogueForm,
             },
           ]}
@@ -482,11 +482,7 @@ class ActionCatalog extends Component {
 
         {/* create/edit form modal */}
         <Modal
-          title={
-            isEditForm
-              ? 'Edit Event Action Catalogue'
-              : 'Add New Action Catalogue'
-          }
+          title={isEditForm ? 'Edit Action' : 'Add New Action'}
           visible={showForm}
           className="FormModal"
           footer={null}
