@@ -577,7 +577,9 @@ class Events extends Component {
         >
           <EventDetailsViewBody
             event={event}
-            onShare={() => this.handleShare(event)}
+            onShare={() => {
+              this.handleShare(event);
+            }}
           />
         </Drawer>
 
