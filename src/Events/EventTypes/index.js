@@ -21,13 +21,13 @@ import EventTypeForm from './Form';
 import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
-import { notifyError, notifySuccess } from '../../util';
+import { notifyError, notifySuccess, truncateString } from '../../util';
 import './styles.css';
 
 /* constants */
 const nameSpan = { xxl: 7, xl: 7, lg: 6, md: 7, sm: 10, xs: 10 };
-const groupSpan = { xxl: 7, xl: 7, lg: 7, md: 7, sm: 0, xs: 0 };
-const descriptionSpan = { xxl: 8, xl: 8, lg: 9, md: 7, sm: 9, xs: 9 };
+const groupSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 0 };
+const descriptionSpan = { xxl: 11, xl: 11, lg: 12, md: 10, sm: 9, xs: 9 };
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...groupSpan, header: 'Group' },
@@ -317,8 +317,10 @@ class EventTypes extends Component {
                   ? item.relations.group.strings.name.en
                   : 'N/A'}
               </Col>
-              <Col {...descriptionSpan}>
-                {item.strings.description ? item.strings.description.en : 'N/A'}
+              <Col {...descriptionSpan} title={item.strings.description.en}>
+                {item.strings.description
+                  ? truncateString(item.strings.description.en, 100)
+                  : 'N/A'}
               </Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
             </ListItem>
