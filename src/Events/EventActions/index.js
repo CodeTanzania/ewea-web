@@ -33,9 +33,13 @@ const {
   getAgencies,
 } = httpActions;
 
-const nameSpan = { xxl: 22, xl: 22, lg: 22, md: 21, sm: 19, xs: 19 };
+const functionSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 4, xs: 4 };
+const nameSpan = { xxl: 18, xl: 18, lg: 18, md: 17, sm: 15, xs: 15 };
 
-const headerLayout = [{ ...nameSpan, header: 'Name' }];
+const headerLayout = [
+  { ...functionSpan, header: 'Function' },
+  { ...nameSpan, header: 'Name' },
+];
 
 const { confirm } = Modal;
 
@@ -362,6 +366,13 @@ class EventActions extends Component {
                 />
               )}
             >
+              {/* eslint-disable-next-line */}
+              <Col {...functionSpan}>
+                {item.relations.function
+                  ? item.relations.function.strings.name.en
+                  : 'N/A'}{' '}
+              </Col>
+
               {/* eslint-disable-next-line */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>
             </ListItem>
