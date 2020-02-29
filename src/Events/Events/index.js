@@ -270,7 +270,11 @@ class Events extends Component {
    * @since 0.1.0
    */
   closeNotificationForm = () => {
-    this.setState({ showNotificationForm: false });
+    this.setState({
+      showNotificationForm: false,
+      notificationSubject: undefined,
+      notificationBody: undefined,
+    });
   };
 
   /**
