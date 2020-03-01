@@ -172,15 +172,15 @@ export const generateEventTemplate = event => {
   const body = `${subject} \n\nDescription: ${
     // eslint-disable-line
     event.description
-  } \n\nInstructions: ${event.stage}${
+  } \nInstructions: ${event.stage}${
     !isEmpty(event.areas)
-      ? `\n\nAreas: ${
+      ? `\nAreas: ${
           event.areas
             ? event.areas.map(area => area.strings.name.en).join(', ')
             : 'N/A'
         }`
       : ''
-  }${event.places ? `\n\nPlaces: ${event.places}` : ''}`;
+  }${event.places ? `\nPlaces: ${event.places}` : ''}`;
 
   return { subject, body };
 };

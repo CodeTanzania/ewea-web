@@ -270,7 +270,11 @@ class Events extends Component {
    * @since 0.1.0
    */
   closeNotificationForm = () => {
-    this.setState({ showNotificationForm: false });
+    this.setState({
+      showNotificationForm: false,
+      notificationSubject: undefined,
+      notificationBody: undefined,
+    });
   };
 
   /**
@@ -573,7 +577,9 @@ class Events extends Component {
         >
           <EventDetailsViewBody
             event={event}
-            onShare={() => this.handleShare(event)}
+            onShare={() => {
+              this.handleShare(event);
+            }}
           />
         </Drawer>
 

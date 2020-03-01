@@ -12,6 +12,7 @@ const {
   getAgencies,
   getEventIndicators,
   getEventQuestions,
+  getAdministrativeAreas,
 } = httpActions;
 const { TextArea } = Input;
 
@@ -119,6 +120,22 @@ class EventChangelogForm extends Component {
       <Form onSubmit={this.handleSubmit} autoComplete="off">
         <Row type="flex" justify="space-between">
           <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
+            {/* add areas */}
+            {action === 'areas' && (
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              <Form.Item {...formItemLayout} label="Areas">
+                {getFieldDecorator('areas')(
+                  <SearchableSelectInput
+                    onSearch={getAdministrativeAreas}
+                    optionLabel={area => `${area.strings.name.en}`}
+                    optionValue="_id"
+                    mode="multiple"
+                  />
+                )}
+              </Form.Item>
+            )}
+            {/* end areas */}
+
             {/*  focal people */}
             {action === 'focalPeople' && (
               // eslint-disable-next-line react/jsx-props-no-spreading
@@ -133,6 +150,7 @@ class EventChangelogForm extends Component {
                 )}
               </Form.Item>
             )}
+
             {action === 'agencies' && (
               // eslint-disable-next-line react/jsx-props-no-spreading
               <Form.Item {...formItemLayout} label="Agencies">
@@ -147,6 +165,7 @@ class EventChangelogForm extends Component {
               </Form.Item>
             )}
             {/* end focal people */}
+
             {action === 'damage' && (
               <>
                 {/* eslint-disable-next-line react/jsx-props-no-spreading */}
@@ -207,9 +226,9 @@ class EventChangelogForm extends Component {
               </>
             )}
             {/* file upload */}
+
             {action === 'file' && (
               // eslint-disable-next-line react/jsx-props-no-spreading
-
               <Form.Item label="Dragger">
                 {getFieldDecorator('file', {
                   valuePropName: 'fileList',

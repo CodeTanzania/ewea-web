@@ -9,7 +9,7 @@ import eventCertaintyIcon from '../assets/icons/settings/eventcertainty.svg';
 import eventSeverityIcon from '../assets/icons/settings/eventseverity.svg';
 import eventIndicatorIcon from '../assets/icons/settings/eventindicators.svg';
 import eventQuestionsIcon from '../assets/icons/settings/eventquestions.svg';
-import eventLevelsIcon from '../assets/icons/settings.svg';
+import eventLevelsIcon from '../assets/icons/settings/eventlevels.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
 

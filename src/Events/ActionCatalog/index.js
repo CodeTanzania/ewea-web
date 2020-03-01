@@ -26,6 +26,7 @@ import {
   joinArrayOfObjectToString,
   notifyError,
   notifySuccess,
+  truncateString,
 } from '../../util';
 import './styles.css';
 
@@ -421,7 +422,9 @@ class ActionCatalog extends Component {
               <Col {...eventFunction}>
                 {item.relations.function.strings.name.en}
               </Col>
-              <Col {...actionSpan}>{item.relations.action.strings.name.en}</Col>
+              <Col {...actionSpan} title={item.strings.name.en}>
+                {truncateString(item.strings.name.en, 50)}
+              </Col>
               <Col {...rolesSpan}>
                 {joinArrayOfObjectToString(item.relations.roles) || 'N/A'}
               </Col>

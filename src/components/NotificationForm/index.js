@@ -1,4 +1,4 @@
-import { Button, Form, Input, Icon, Tooltip } from 'antd';
+import { Button, Form, Input, Icon, Tooltip, Row, Col, Checkbox } from 'antd';
 import { Connect, postCampaign } from '@codetanzania/ewea-api-states';
 import compact from 'lodash/compact';
 import isEmpty from 'lodash/isEmpty';
@@ -86,6 +86,7 @@ class NotificationForm extends Component {
           },
           subject: values.subject,
           message: values.body,
+          channels: values.channels,
         };
 
         postCampaign(
@@ -271,6 +272,28 @@ class NotificationForm extends Component {
           })(<TextArea autosize={{ minRows: 6, maxRows: 10 }} />)}
         </Form.Item>
         {/* end notification body */}
+
+        {/* Channels */}
+        <Form.Item label="Notification Channels">
+          {getFieldDecorator('channels', {
+            initialValue: ['SMS', 'EMAIL'],
+          })(
+            <Checkbox.Group style={{ width: '100%' }}>
+              <Row>
+                <Col span={6}>
+                  <Checkbox value="SMS">SMS</Checkbox>
+                </Col>
+                <Col span={6}>
+                  <Checkbox value="EMAIL">Email</Checkbox>
+                </Col>
+                <Col span={6}>
+                  <Checkbox value="PUSH">Push Notification</Checkbox>
+                </Col>
+              </Row>
+            </Checkbox.Group>
+          )}
+        </Form.Item>
+        {/* Channels */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>

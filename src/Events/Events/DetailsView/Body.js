@@ -128,7 +128,8 @@ export const EventRespondingAgencies = ({ agencies = [] }) => {
     <div style={{ marginTop: '40px' }}>
       <EventDetailsSectionHeader title="AGENCIES RESPONDED" />
       {agencies.map((agency, key) => (
-        <p key={agency} style={{ fontSize: '12px' }}>
+        // eslint-disable-next-line
+        <p key={agency._id} style={{ fontSize: '12px' }}>
           {key + 1}. {`${agency.name} (${agency.abbreviation})`}
         </p>
       ))}
@@ -238,6 +239,9 @@ const EventToolbar = ({ event, openForm, onShare }) => {
             icon="environment"
             title="Update Affected Areas"
             className="actionButton"
+            onClick={() =>
+              openForm({ key: 'areas', label: 'Add affected Areas' })
+            }
           />
         </Col>
         <Col span={1}>
@@ -336,9 +340,12 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
             <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
           </Timeline.Item>
           {/* comments */}
+
           {/* image */}
-          {/* eslint-disable-next-line no-underscore-dangle */}
-          <Timeline.Item key={feed._id} dot={<Icon type="file-image" />}>
+          <Timeline.Item
+            key={`${feed._id}-${feed.filename}`} // eslint-disable-line no-underscore-dangle
+            dot={<Icon type="file-image" />}
+          >
             <Card
               hoverable
               style={{ width: 300 }}
@@ -386,8 +393,8 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
           <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
         </Timeline.Item>
       );
-      /* comments */
     }
+    /* comments */
 
     if (feed.focals) {
       return feed.focals.map(focal => (
@@ -405,6 +412,16 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
         <Timeline.Item key={feed._id} dot={<Icon type="apartment" />}>
           Agency: <Tag color="magenta">{agency.name}</Tag> was added on{' '}
           <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+        </Timeline.Item>
+      ));
+    }
+
+    if (feed.areas) {
+      return feed.areas.map(area => (
+        // eslint-disable-next-line no-underscore-dangle
+        <Timeline.Item key={area._id} dot={<Icon type="environment" />}>
+          Area: <Tag color="geekblue">{area.strings.name.en}</Tag> was added on{' '}
+          <Tag>{formatDate(area.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
         </Timeline.Item>
       ));
     }
@@ -558,7 +575,6 @@ EventDetailsViewBody.propTypes = {
   }).isRequired,
   changelogs: PropTypes.arrayOf(PropTypes.shape({ _id: PropTypes.string }))
     .isRequired,
-  focals: PropTypes.arrayOf(PropTypes.object).isRequired,
   showForm: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,

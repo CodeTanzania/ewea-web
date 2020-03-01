@@ -18,7 +18,7 @@ import EventLevelForm from './Form';
 import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
-import { notifyError, notifySuccess } from '../../util';
+import { notifyError, notifySuccess, truncateString } from '../../util';
 import './styles.css';
 
 /* constants */
@@ -259,8 +259,10 @@ class EventLevels extends Component {
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>
               <Col {...codeSpan}>{item.strings.code}</Col>
-              <Col {...descriptionSpan}>
-                {item.strings.description ? item.strings.description.en : 'N/A'}
+              <Col {...descriptionSpan} title={item.strings.description.en}>
+                {item.strings.description
+                  ? truncateString(item.strings.description.en, 100)
+                  : 'N/A'}
               </Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
             </ListItem>
