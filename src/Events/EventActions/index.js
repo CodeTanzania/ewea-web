@@ -33,8 +33,8 @@ const {
   getAgencies,
 } = httpActions;
 
-const functionSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 4, xs: 4 };
-const nameSpan = { xxl: 18, xl: 18, lg: 18, md: 17, sm: 15, xs: 15 };
+const functionSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
+const nameSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };
 
 const headerLayout = [
   { ...functionSpan, header: 'Function' },
