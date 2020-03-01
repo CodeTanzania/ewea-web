@@ -35,9 +35,9 @@ const {
   // getFocalPeople,
 } = httpActions;
 
-const nameSpan = { xxl: 7, xl: 8, lg: 6, md: 8, sm: 10, xs: 10 };
-const descriptionSpan = { xxl: 10, xl: 10, lg: 6, md: 8, sm: 0, xs: 0 };
-const codeSpan = { xxl: 4, xl: 3, lg: 6, md: 0, sm: 0, xs: 0 };
+const nameSpan = { xxl: 6, xl: 6, lg: 6, md: 7, sm: 7, xs: 7 };
+const descriptionSpan = { xxl: 12, xl: 12, lg: 12, md: 10, sm: 10, xs: 11 };
+const codeSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 3, xs: 0 };
 
 const headerLayout = [
   { ...nameSpan, header: 'Name' },

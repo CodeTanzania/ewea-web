@@ -25,9 +25,9 @@ import { notifyError, notifySuccess, truncateString } from '../../util';
 import './styles.css';
 
 /* constants */
-const nameSpan = { xxl: 7, xl: 7, lg: 6, md: 7, sm: 10, xs: 10 };
-const groupSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 0 };
-const descriptionSpan = { xxl: 11, xl: 11, lg: 12, md: 10, sm: 9, xs: 9 };
+const nameSpan = { xxl: 7, xl: 7, lg: 7, md: 7, sm: 10, xs: 9 };
+const groupSpan = { xxl: 4, xl: 4, lg: 4, md: 5, sm: 10, xs: 9 };
+const descriptionSpan = { xxl: 11, xl: 11, lg: 11, md: 9, sm: 0, xs: 0 };
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...groupSpan, header: 'Group' },
