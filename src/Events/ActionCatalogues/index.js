@@ -31,15 +31,15 @@ import {
 import './styles.css';
 
 /* constants */
-const eventTypeSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
-const actionSpan = { xxl: 5, xl: 7, lg: 7, md: 4, sm: 9, xs: 9 };
-const rolesSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const eventFunction = { xxl: 3, xl: 3, lg: 3, md: 0, sm: 0, xs: 0 };
-const groupsSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const eventTypeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 6 };
+const eventFunctionSpan = { xxl: 4, xl: 4, lg: 3, md: 0, sm: 0, xs: 0 };
+const actionSpan = { xxl: 6, xl: 6, lg: 7, md: 7, sm: 8, xs: 12 };
+const rolesSpan = { xxl: 5, xl: 5, lg: 5, md: 6, sm: 8, xs: 0 };
+const groupsSpan = { xxl: 4, xl: 4, lg: 4, md: 5, sm: 0, xs: 0 };
 
 const headerLayout = [
-  { ...eventTypeSpan, header: 'Event' },
-  { ...eventFunction, header: 'Function' },
+  { ...eventTypeSpan, header: 'Event Type' },
+  { ...eventFunctionSpan, header: 'Function' },
   { ...actionSpan, header: 'Action' },
   { ...rolesSpan, header: 'Roles' },
   { ...groupsSpan, header: 'Groups' },
@@ -57,13 +57,13 @@ const {
 
 /**
  * @class
- * @name ActionCatalog
+ * @name ActionCatalogue
  * @description Render actions list which have search box, actions and Event Action Catalogue list
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class ActionCatalog extends Component {
+class ActionCatalogue extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     showFilters: false,
@@ -419,7 +419,7 @@ class ActionCatalog extends Component {
                   ? item.relations.type.strings.name.en
                   : 'All'}
               </Col>
-              <Col {...eventFunction}>
+              <Col {...eventFunctionSpan}>
                 {item.relations.function.strings.name.en}
               </Col>
               <Col {...actionSpan} title={item.strings.name.en}>
@@ -506,7 +506,7 @@ class ActionCatalog extends Component {
   }
 }
 
-ActionCatalog.propTypes = {
+ActionCatalogue.propTypes = {
   loading: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
   eventActionCatalogues: PropTypes.arrayOf(
@@ -519,12 +519,12 @@ ActionCatalog.propTypes = {
   total: PropTypes.number.isRequired,
 };
 
-ActionCatalog.defaultProps = {
+ActionCatalogue.defaultProps = {
   eventActionCatalogue: null,
   searchQuery: undefined,
 };
 
-export default Connect(ActionCatalog, {
+export default Connect(ActionCatalogue, {
   eventActionCatalogues: 'eventActionCatalogues.list',
   eventActionCatalogue: 'eventActionCatalogues.selected',
   loading: 'eventActionCatalogues.loading',
