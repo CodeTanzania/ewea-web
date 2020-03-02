@@ -14,6 +14,7 @@ import { Modal, Col, Drawer } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import NotificationForm from '../../components/NotificationForm';
 import AdministrativeAreasFilters from './Filters';
@@ -431,12 +432,10 @@ class AdministrativeAreas extends Component {
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>
               <Col {...levelSpan}>
-                {item.relations.level
-                  ? item.relations.level.strings.name.en
-                  : 'N/A'}
+                {get(item, 'relations.level.strings.name.en', 'N/A')}
               </Col>
               <Col {...descriptionSpan}>
-                {item.strings.description ? item.strings.description.en : 'N/A'}
+                {get(item, 'strings.description.en', 'N/A')}
               </Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
             </ListItem>
