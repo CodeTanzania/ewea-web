@@ -40,77 +40,19 @@ const breadcrumbNameMap = {
     title: 'Early Warning, Early Action Menu',
   },
   /* Event Routes */
-  '/app/eventactions': { name: 'Event Actions', title: 'Event Actions Module' },
   '/app/actions': {
     name: 'Actions Taken',
     title: 'List of all performed actions',
   },
-  '/app/eventgroups': { name: 'Event Groups', title: 'Event Groups module' },
   '/app/actioncatalogue': {
     name: 'Action Catalogue',
     title: 'List of all actions to be performed',
-  },
-  '/app/alerts/feedback': {
-    name: 'Surveys & Feedback',
-    title: 'Alerts surveys and feedback',
-  },
-  '/app/alerts/feeds': {
-    name: 'Feeds',
-    title: 'Alerts feeds',
   },
   '/app/events': {
     name: 'Events',
     title: 'List of all Events(Alerts and Incidents)',
   },
-  /* Geographical Features Routes */
-  '/app/geographicalfeatures/administrativeboundaries': {
-    name: 'Administrative Boundaries',
-    title: 'List of administrative boundaries',
-  },
-  '/app/administrativeareas': {
-    name: 'Administrative Areas',
-    title: 'List of administrative areas',
-  },
-  '/app/geographicalfeatures/districts': {
-    name: 'Districts',
-    title: 'List of Districts',
-  },
-  '/app/geographicalfeatures/evacuationcenters': {
-    name: 'Evacuation Centers',
-    title: 'List of evacuation centers',
-  },
-  '/app/geographicalfeatures/facilities': {
-    name: 'Facilities',
-    title: 'Facilities Available',
-  },
-  '/app/geographicalfeatures': {
-    name: 'Geographical Features',
-    title: 'Geographical Features Module',
-  },
-  '/app/geographicalfeatures/infrastructure': {
-    name: 'Critical Infrastructure',
-    title: 'List of critical infrastructures ',
-  },
-  '/app/geographicalfeatures/regions': {
-    name: 'Regions',
-    title: 'List of Regions',
-  },
-  '/app/geographicalfeatures/subwards': {
-    name: 'Subwards',
-    title: 'List of subwards',
-  },
-  '/app/geographicalfeatures/warehouses': {
-    name: 'Warehouses',
-    title: 'List of available warehouses',
-  },
-  '/app/geographicalfeatures/wards': {
-    name: 'Wards',
-    title: 'List of all wards',
-  },
-  '/app/features': {
-    name: 'Critical Facilities',
-    title: 'List of all critical facilities',
-  },
+
   /* Stakeholders Routes */
   '/app/focalpeople': {
     name: 'Focal People',
@@ -120,37 +62,45 @@ const breadcrumbNameMap = {
     name: 'Agencies',
     title: 'List of all agencies',
   },
-  '/app/stakeholders/notifications': {
-    name: 'Notifications',
-    title: 'Notify stakeholders',
-  },
-  '/app/functions': {
-    name: 'Emergency Functions',
-    title: 'Emergency functions module',
-  },
   '/app/stakeholders': { name: 'Stakeholders', title: 'Stakeholders module' },
 
   /* Dashboards */
-
   '/app/overview': {
     name: 'Alert Dashboard',
     title: 'Alert Dashboard',
   },
+
   /* settings */
-  '/app/settings/roles': {
-    name: 'Roles',
-    title: 'Roles of Stakeholders',
-  },
   '/app/settings': {
     name: 'Settings',
     title: 'System Wide Settings',
+  },
+  '/app/settings/administrativeareas': {
+    name: 'Administrative Areas',
+    title: 'List of administrative areas',
+  },
+  '/app/settings/features': {
+    name: 'Critical Facilities',
+    title: 'List of all critical facilities',
+  },
+  '/app/settings/eventactions': {
+    name: 'Event Actions',
+    title: 'Event Actions Module',
+  },
+  '/app/settings/functions': {
+    name: 'Emergency Functions',
+    title: 'Emergency functions module',
+  },
+  '/app/settings/roles': {
+    name: 'Roles',
+    title: 'Roles of Stakeholders',
   },
   '/app/settings/eventtypes': {
     name: 'Event Types',
     title: 'Event Types module',
   },
   '/app/settings/eventcertainty': {
-    name: 'Event Certainty',
+    name: 'Event Certainties',
     title: 'Event Certainty module',
   },
   '/app/settings/eventquestions': {
@@ -158,7 +108,7 @@ const breadcrumbNameMap = {
     title: 'Event Questions module',
   },
   '/app/settings/eventseverity': {
-    name: 'Event Severity',
+    name: 'Event Severities',
     title: 'Event Severity module',
   },
   '/app/settings/notificationtemplates': {
@@ -170,11 +120,11 @@ const breadcrumbNameMap = {
     title: 'Event Groups module',
   },
   '/app/settings/eventindicator': {
-    name: 'Event Indicator',
+    name: 'Event Indicators',
     title: 'Event Indicator module',
   },
   '/app/settings/eventlevels': {
-    name: 'Event Level',
+    name: 'Event Levels',
     title: 'Event Level module',
   },
 };
@@ -260,19 +210,7 @@ const BaseLayout = props => {
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
           <SecureRoute path={`${baseUrl}/events`} component={Events} />
-          <SecureRoute
-            path={`${baseUrl}/eventactions`}
-            component={EventActions}
-          />
-          <SecureRoute
-            path={`${baseUrl}/administrativeareas`}
-            component={AdministrativeAreas}
-          />
-          <SecureRoute path={`${baseUrl}/features`} component={Features} />
-          <SecureRoute
-            path={`${baseUrl}/functions`}
-            component={EventFunctions}
-          />
+
           <SecureRoute
             path={`${baseUrl}/focalpeople`}
             component={StakeholdersFocalPeople}
@@ -294,6 +232,22 @@ const BaseLayout = props => {
             exact
             path={`${baseUrl}/settings`}
             component={Settings}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/functions`}
+            component={EventFunctions}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/eventactions`}
+            component={EventActions}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/administrativeareas`}
+            component={AdministrativeAreas}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/features`}
+            component={Features}
           />
           <SecureRoute
             path={`${baseUrl}/settings/roles`}
