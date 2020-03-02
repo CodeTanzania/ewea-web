@@ -204,7 +204,9 @@ class EventForm extends Component {
               })(
                 <SearchableSelectInput
                   onSearch={getAdministrativeAreas}
-                  optionLabel={areas => areas.strings.name.en}
+                  optionLabel={areas =>
+                    `${areas.strings.name.en} (${areas.relations.level.strings.name.en})`
+                  }
                   mode="multiple"
                   optionValue="_id"
                   initialValue={isEditForm && event.areas ? event.areas : []}
