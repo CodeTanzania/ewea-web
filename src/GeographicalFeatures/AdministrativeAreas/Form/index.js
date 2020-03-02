@@ -1,15 +1,17 @@
+import { httpActions } from '@codetanzania/ewea-api-client';
 import {
   postAdministrativeArea,
   putAdministrativeArea,
   Connect,
 } from '@codetanzania/ewea-api-states';
-import { Button, Form, Input, Col, Row } from 'antd';
+import { Button, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import ColorPicker from 'rc-color-picker';
 import { notifyError, notifySuccess } from '../../../util';
+import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import 'rc-color-picker/assets/index.css';
 
+const { getAdministrativeLevels, getAdministrativeAreas } = httpActions;
 /**
  * @class
  * @name AdministrativeAreaForm
@@ -60,8 +62,10 @@ class AdministrativeAreaForm extends Component {
           strings: {
             name: { en: values.name },
             description: { en: values.description },
-            code: values.code,
-            color: values.color,
+          },
+          relations: {
+            level: values.level,
+            parent: values.parent,
           },
         };
         if (isEditForm) {
@@ -108,7 +112,7 @@ class AdministrativeAreaForm extends Component {
     } = this.props;
 
     const {
-      strings: { name, description, code, color },
+      strings: { name, description },
     } = administrativeArea || {
       strings: { name: {}, code: '', description: {}, color: '' },
     };
@@ -134,6 +138,60 @@ class AdministrativeAreaForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
+        {/* adminstrativeArea Level */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <Form.Item {...formItemLayout} label="Administrative Level">
+          {getFieldDecorator('level', {
+            initialValue:
+              isEditForm && administrativeArea
+                ? administrativeArea.relations.level._id // eslint-disable-line
+                : undefined,
+            rules: [
+              {
+                required: true,
+                message: 'Administrative Level is required',
+              },
+            ],
+          })(
+            <SearchableSelectInput
+              onSearch={getAdministrativeLevels}
+              optionLabel={level => level.strings.name.en}
+              optionValue="_id"
+              initialValue={
+                isEditForm && administrativeArea
+                  ? administrativeArea.relations.level.strings.name.en
+                  : undefined
+              }
+            />
+          )}
+        </Form.Item>
+        {/* end adminstrativeArea Level */}
+
+        {/* administrativeArea Parent */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <Form.Item {...formItemLayout} label="Administrative Area Parent">
+          {getFieldDecorator('parent', {
+            initialValue:
+              isEditForm && administrativeArea
+                ? administrativeArea.relations.parent._id // eslint-disable-line
+                : undefined,
+          })(
+            <SearchableSelectInput
+              onSearch={getAdministrativeAreas}
+              optionLabel={area =>
+                `${area.strings.name.en} (${area.relations.level.strings.name.en})`
+              }
+              optionValue="_id"
+              initialValue={
+                isEditForm && administrativeArea
+                  ? administrativeArea.relations.parent.strings.name.en
+                  : undefined
+              }
+            />
+          )}
+        </Form.Item>
+        {/* end administrativeArea Parent */}
+
         {/* administrativeArea name */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Name ">
@@ -156,43 +214,13 @@ class AdministrativeAreaForm extends Component {
             initialValue: isEditForm ? description.en : undefined,
             rules: [
               {
-                required: true,
+                required: false,
                 message: 'AdministrativeArea description is required',
               },
             ],
           })(<Input placeholder="e.g Tandale " />)}
         </Form.Item>
         {/* end description */}
-
-        {/* administrative area code */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Code">
-          {getFieldDecorator('code', {
-            initialValue: isEditForm ? code : undefined,
-            rules: [{ required: true, message: 'Code is required' }],
-          })(<Input placeholder="e.g T" />)}
-        </Form.Item>
-        {/* end administrative area code */}
-
-        <Row>
-          <Col span={19}>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Form.Item {...formItemLayout} label="Color Code">
-              {getFieldDecorator('color', {
-                initialValue: isEditForm ? color : undefined,
-              })(
-                <Input
-                  placeholder="e.g #36c"
-                  title="Click button to select color"
-                />
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={4} offset={1} className="AdministrativeAreaFormColor">
-            <ColorPicker animation="slide-up" onChange={this.onChangeColor} />
-          </Col>
-        </Row>
-        {/* end function color code */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -224,6 +252,22 @@ AdministrativeAreaForm.propTypes = {
       }),
       code: PropTypes.string.isRequired,
       color: PropTypes.string.isRequired,
+    }),
+    relations: PropTypes.shape({
+      level: PropTypes.shape({
+        strings: PropTypes.shape({
+          name: PropTypes.shape({
+            en: PropTypes.string.isRequired,
+          }),
+        }),
+      }),
+      parent: PropTypes.shape({
+        strings: PropTypes.shape({
+          name: PropTypes.shape({
+            en: PropTypes.string.isRequired,
+          }),
+        }),
+      }),
     }),
   }),
   form: PropTypes.shape({
