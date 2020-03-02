@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
-const { getEventIndicators } = httpActions;
+const { getEventIndicators, getEventTopics } = httpActions;
 
 /**
  * @class
@@ -54,6 +54,7 @@ class EventQuestionForm extends Component {
           },
           relations: {
             indicator: { _id: values.indicator },
+            topic: { _id: values.topic },
           },
         };
         if (isEditForm) {
@@ -141,7 +142,7 @@ class EventQuestionForm extends Component {
               isEditForm && eventQuestion.relations.indicator // eslint-disable-line
                 ? eventQuestion.relations.indicator._id // eslint-disable-line
                 : undefined,
-            rules: [{ message: 'Event Indicator is required' }],
+            rules: [{ required: true, message: 'Event Indicator is required' }],
           })(
             <SearchableSelectInput
               onSearch={getEventIndicators}
@@ -157,6 +158,29 @@ class EventQuestionForm extends Component {
         </Form.Item>
         {/* end Event indicator */}
 
+        {/* Event Question Topic */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <Form.Item {...formItemLayout} label="Topic">
+          {getFieldDecorator('topic', {
+            initialValue:
+              isEditForm && eventQuestion.relations.topic // eslint-disable-line
+                ? eventQuestion.relations.topic._id // eslint-disable-line
+                : undefined,
+          })(
+            <SearchableSelectInput
+              onSearch={getEventTopics}
+              optionLabel={topic => topic.strings.name.en}
+              optionValue="_id"
+              initialValue={
+                isEditForm && eventQuestion.relations.topic
+                  ? eventQuestion.relations.topic
+                  : undefined
+              }
+            />
+          )}
+        </Form.Item>
+        {/* end Event Topic */}
+
         {/* Event Question Description */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Description">
@@ -164,12 +188,6 @@ class EventQuestionForm extends Component {
             initialValue: isEditForm
               ? eventQuestion.strings.description.en
               : undefined,
-            rules: [
-              {
-                required: true,
-                message: 'Event Question Description is required',
-              },
-            ],
           })(<Input />)}
         </Form.Item>
         {/* end Event Question */}
@@ -205,7 +223,8 @@ EventQuestionForm.propTypes = {
       _id: PropTypes.string,
     }),
     relations: PropTypes.shape({
-      indicator: PropTypes.string,
+      indicator: PropTypes.object,
+      topic: PropTypes.object,
     }),
   }).isRequired,
   isEditForm: PropTypes.bool.isRequired,
