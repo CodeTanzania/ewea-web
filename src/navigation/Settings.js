@@ -61,6 +61,12 @@ const routes = [
     description: modules.alerts,
   },
   {
+    name: 'Stakeholder Groups',
+    path: '/stakeholdergroups',
+    icon: eventGroupsIcon,
+    description: modules.stakeholderGroups,
+  },
+  {
     name: 'Event Questions',
     path: '/eventquestions',
     icon: eventQuestionsIcon,
