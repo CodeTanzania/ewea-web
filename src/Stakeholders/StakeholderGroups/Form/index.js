@@ -1,4 +1,4 @@
-import { putEventGroup, postEventGroup } from '@codetanzania/ewea-api-states';
+import { putPartyGroup, postPartyGroup } from '@codetanzania/ewea-api-states';
 import { Button, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -7,7 +7,7 @@ import { notifyError, notifySuccess } from '../../../util';
 /**
  * @class
  * @name StakeholderGroup
- * @description  Render form for creating a new event group
+ * @description  Render form for creating a new party group
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -18,7 +18,7 @@ class StakeholderGroup extends Component {
    * @name handleSubmit
    * @description  call back function to handle submit action
    *
-   * @param {object} e event object
+   * @param {object} e party object
    *
    * @returns {undefined} does not return anything
    *
@@ -29,7 +29,7 @@ class StakeholderGroup extends Component {
     e.preventDefault();
     const {
       form: { validateFieldsAndScroll },
-      eventType,
+      partyType,
       isEditForm,
     } = this.props;
 
@@ -47,27 +47,27 @@ class StakeholderGroup extends Component {
           },
         };
         if (isEditForm) {
-          const updatedContact = { ...eventType, ...payload };
-          putEventGroup(
+          const updatedContact = { ...partyType, ...payload };
+          putPartyGroup(
             updatedContact,
             () => {
-              notifySuccess('Event Group was updated successfully');
+              notifySuccess('Party Group was updated successfully');
             },
             () => {
               notifyError(
-                'Something occurred while updating Event Group, please try again!'
+                'Something occurred while updating Party Group, please try again!'
               );
             }
           );
         } else {
-          postEventGroup(
+          postPartyGroup(
             payload,
             () => {
-              notifySuccess('Event Group was created successfully');
+              notifySuccess('Party Group was created successfully');
             },
             () => {
               notifyError(
-                'Something occurred while saving Event Group, please try again!'
+                'Something occurred while saving Party Group, please try again!'
               );
             }
           );
@@ -81,7 +81,7 @@ class StakeholderGroup extends Component {
       posting,
       onCancel,
       isEditForm,
-      eventType,
+      partyType,
       form: { getFieldDecorator },
     } = this.props;
 
@@ -106,26 +106,26 @@ class StakeholderGroup extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* Event Group name */}
+        {/* Party Group name */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Name">
           {getFieldDecorator('name', {
-            initialValue: isEditForm ? eventType.strings.name.en : undefined,
+            initialValue: isEditForm ? partyType.strings.name.en : undefined,
             rules: [
               {
                 required: true,
-                message: ' Event Groups  name is required',
+                message: ' Party Groups  name is required',
               },
             ],
           })(<Input />)}
         </Form.Item>
-        {/* end Event Group name */}
+        {/* end Party Group name */}
 
-        {/* Event Group code */}
+        {/* Party Group code */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Event Group code">
+        <Form.Item {...formItemLayout} label="Party Group code">
           {getFieldDecorator('code', {
-            initialValue: isEditForm ? eventType.strings.code : undefined,
+            initialValue: isEditForm ? partyType.strings.code : undefined,
             rules: [
               {
                 required: false,
@@ -133,24 +133,24 @@ class StakeholderGroup extends Component {
             ],
           })(<Input />)}
         </Form.Item>
-        {/* end Event Group code */}
+        {/* end Party Group code */}
 
-        {/* Event Group Description */}
+        {/* Party Group Description */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Description">
           {getFieldDecorator('description', {
             initialValue: isEditForm
-              ? eventType.strings.description.en
+              ? partyType.strings.description.en
               : undefined,
             rules: [
               {
                 required: true,
-                message: 'Event Group Description is required',
+                message: 'Party Group Description is required',
               },
             ],
           })(<Input />)}
         </Form.Item>
-        {/* end Event Group */}
+        {/* end Party Group */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -171,7 +171,7 @@ class StakeholderGroup extends Component {
 }
 
 StakeholderGroup.propTypes = {
-  eventType: PropTypes.shape({
+  partyType: PropTypes.shape({
     strings: PropTypes.shape({
       code: PropTypes.string.isRequired,
       name: PropTypes.shape({

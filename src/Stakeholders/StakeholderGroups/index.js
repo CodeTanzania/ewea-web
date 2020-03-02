@@ -1,21 +1,21 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import {
   Connect,
-  getEventGroups,
-  openEventGroupForm,
-  searchEventGroups,
-  selectEventGroup,
-  closeEventGroupForm,
-  refreshEventGroups,
-  paginateEventGroups,
-  deleteEventGroup,
+  getPartyGroups,
+  openPartyGroupForm,
+  searchPartyGroups,
+  selectPartyGroup,
+  closePartyGroupForm,
+  refreshPartyGroups,
+  paginatePartyGroups,
+  deletePartyGroup,
 } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
 import { Modal, Col } from 'antd';
 import Topbar from '../../components/Topbar';
-import EventGroupForm from './Form';
+import PartyGroupForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
@@ -37,7 +37,7 @@ const headerLayout = [
 const { confirm } = Modal;
 
 const {
-  getEventGroupsExportUrl,
+  getPartyGroupsExportUrl,
   getFocalPeople,
   getJurisdictions,
   getRoles,
@@ -48,7 +48,7 @@ const {
  * @class
  * @name PartyGroups
  * @description Render Stakeholder Groups list which have search box,
- * actions and event groups list
+ * actions and party groups list
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -62,46 +62,46 @@ class PartyGroups extends Component {
   };
 
   componentDidMount() {
-    getEventGroups();
+    getPartyGroups();
   }
 
   /**
    * @function
-   * @name openEventGroupsForm
-   * @description Open event group form
+   * @name openPartyGroupsForm
+   * @description Open party group form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openEventGroupsForm = () => {
-    openEventGroupForm();
+  openPartyGroupsForm = () => {
+    openPartyGroupForm();
   };
 
   /**
    * @function
-   * @name closeEventGroupsForm
-   * @description close event group form
+   * @name closePartyGroupsForm
+   * @description close party group form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeEventGroupsForm = () => {
-    closeEventGroupForm();
+  closePartyGroupsForm = () => {
+    closePartyGroupForm();
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
-   * @name searchEventGroups
+   * @name searchPartyGroups
    * @description Search Stakeholder Groups List based on supplied filter word
    *
-   * @param {object} event - Event instance
+   * @param {object} party - Party instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventGroups = event => {
-    searchEventGroups(event.target.value);
+  searchPartyGroups = party => {
+    searchPartyGroups(party.target.value);
   };
 
   /**
@@ -109,15 +109,15 @@ class PartyGroups extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} eventType event group to be edited
+   * @param {object} partyType party group to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventType => {
-    selectEventGroup(eventType);
+  handleEdit = partyType => {
+    selectPartyGroup(partyType);
     this.setState({ isEditForm: true });
-    openEventGroupForm();
+    openPartyGroupForm();
   };
 
   /**
@@ -135,7 +135,7 @@ class PartyGroups extends Component {
   /**
    * @function
    * @name closeNotificationForm
-   * @description Handle on notify event groups
+   * @description Handle on notify party groups
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -159,29 +159,29 @@ class PartyGroups extends Component {
   /**
    * @function
    * @name handleShare
-   * @description Handle share multiple event groups
+   * @description Handle share multiple party groups
    *
-   * @param {object[]| object} eventGroups event groups list to be shared
+   * @param {object[]| object} partyGroups party groups list to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventGroups => {
+  handleShare = partyGroups => {
     let message = '';
-    if (isArray(eventGroups)) {
-      const eventGroupsList = eventGroups.map(
-        eventGroup =>
-          `Name: ${eventGroup.strings.name.en}\nDescription: ${
+    if (isArray(partyGroups)) {
+      const partyGroupsList = partyGroups.map(
+        partyGroup =>
+          `Name: ${partyGroup.strings.name.en}\nDescription: ${
             // eslint-disable-line
-            eventGroup.strings.description.en
+            partyGroup.strings.description.en
           }\n`
       );
 
-      message = eventGroupsList.join('\n\n\n');
+      message = partyGroupsList.join('\n\n\n');
     } else {
-      message = `Name: ${eventGroups.strings.name.en}\nDescription: ${
+      message = `Name: ${partyGroups.strings.name.en}\nDescription: ${
         // eslint-disable-line
-        eventGroups.strings.description.en
+        partyGroups.strings.description.en
       }\n`;
     }
 
@@ -190,26 +190,26 @@ class PartyGroups extends Component {
 
   /**
    * @function
-   * @name handleRefreshEventGroups
+   * @name handleRefreshPartyGroups
    * @description Refresh Stakeholder Groups list
    *
    * @returns {undefined}
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleRefreshEventGroups = () =>
-    refreshEventGroups(
-      () => notifySuccess('Event groups refreshed successfully'),
+  handleRefreshPartyGroups = () =>
+    refreshPartyGroups(
+      () => notifySuccess('Party groups refreshed successfully'),
       () =>
         notifyError(
-          'An Error occurred while refreshing Event groups, please contact system administrator'
+          'An Error occurred while refreshing Party groups, please contact system administrator'
         )
     );
 
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a event group
+   * @description show confirm modal before archiving a party group
    * @param {object} item Resource item to be archived
    *
    * @version 0.1.0
@@ -222,12 +222,12 @@ class PartyGroups extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventGroup(
+        deletePartyGroup(
           item._id, // eslint-disable-line
-          () => notifySuccess('Event group was archived successfully'),
+          () => notifySuccess('Party group was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving Event group, Please contact your system Administrator'
+              'An error occurred while archiving Party group, Please contact your system Administrator'
             )
         );
       },
@@ -236,11 +236,11 @@ class PartyGroups extends Component {
 
   render() {
     const {
-      eventGroups,
+      partyGroups,
       loading,
       page,
       posting,
-      eventType,
+      partyType,
       showForm,
       searchQuery,
       total,
@@ -253,7 +253,7 @@ class PartyGroups extends Component {
           search={{
             size: 'large',
             placeholder: 'Search for stakeholder groups here ...',
-            onChange: this.searchEventGroups,
+            onChange: this.searchPartyGroups,
             value: searchQuery,
           }}
           actions={[
@@ -262,7 +262,7 @@ class PartyGroups extends Component {
               icon: 'plus',
               size: 'large',
               title: 'Add New Stakeholder Group',
-              onClick: this.openEventGroupsForm,
+              onClick: this.openPartyGroupsForm,
             },
           ]}
         />
@@ -270,16 +270,16 @@ class PartyGroups extends Component {
 
         <ItemList
           itemName="Stakeholder Groups"
-          items={eventGroups}
+          items={partyGroups}
           page={page}
           itemCount={total}
           loading={loading}
           // onFilter={this.openFiltersModal}
           // onNotify={this.openNotificationForm}
           onShare={this.handleShare}
-          onRefresh={this.handleRefreshEventGroups}
-          generateExportUrl={getEventGroupsExportUrl}
-          onPaginate={nextPage => paginateEventGroups(nextPage)}
+          onRefresh={this.handleRefreshPartyGroups}
+          generateExportUrl={getPartyGroupsExportUrl}
+          onPaginate={nextPage => paginatePartyGroups(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
             item,
@@ -309,7 +309,7 @@ class PartyGroups extends Component {
                   archive={{
                     name: 'Archive Stakeholder Group',
                     title:
-                      'Remove Stakeholder Group from list of active event groups',
+                      'Remove Stakeholder Group from list of active party groups',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                 />
@@ -342,7 +342,7 @@ class PartyGroups extends Component {
           <NotificationForm
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
-            onSearchGroups={getEventGroups}
+            onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
             onSearchRoles={getRoles}
             body={notificationBody}
@@ -359,16 +359,16 @@ class PartyGroups extends Component {
           visible={showForm}
           className="FormModal"
           footer={null}
-          onCancel={this.closeEventGroupsForm}
+          onCancel={this.closePartyGroupsForm}
           destroyOnClose
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <EventGroupForm
+          <PartyGroupForm
             posting={posting}
             isEditForm={isEditForm}
-            eventType={eventType}
-            onCancel={this.closeEventGroupsForm}
+            partyType={partyType}
+            onCancel={this.closePartyGroupsForm}
           />
         </Modal>
         {/* end create/edit form modal */}
@@ -379,9 +379,9 @@ class PartyGroups extends Component {
 
 PartyGroups.propTypes = {
   loading: PropTypes.bool.isRequired,
-  eventGroups: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+  partyGroups: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
-  eventType: PropTypes.shape({ name: PropTypes.string }),
+  partyType: PropTypes.shape({ name: PropTypes.string }),
   page: PropTypes.number.isRequired,
   searchQuery: PropTypes.string,
   total: PropTypes.number.isRequired,
@@ -390,17 +390,17 @@ PartyGroups.propTypes = {
 };
 
 PartyGroups.defaultProps = {
-  eventType: null,
+  partyType: null,
   searchQuery: undefined,
 };
 
 export default Connect(PartyGroups, {
-  eventGroups: 'eventGroups.list',
-  eventType: 'eventGroups.selected',
-  loading: 'eventGroups.loading',
-  posting: 'eventGroups.posting',
-  page: 'eventGroups.page',
-  showForm: 'eventGroups.showForm',
-  total: 'eventGroups.total',
-  searchQuery: 'eventGroups.q',
+  partyGroups: 'partyGroups.list',
+  partyType: 'partyGroups.selected',
+  loading: 'partyGroups.loading',
+  posting: 'partyGroups.posting',
+  page: 'partyGroups.page',
+  showForm: 'partyGroups.showForm',
+  total: 'partyGroups.total',
+  searchQuery: 'partyGroups.q',
 });
