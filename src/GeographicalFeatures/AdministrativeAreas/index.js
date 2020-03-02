@@ -26,9 +26,9 @@ import './styles.css';
 import MapPolygon from '../../Map/MapPolygon';
 
 /* constants */
-const nameSpan = { xxl: 5, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
-const codeSpan = { xxl: 3, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
-const descriptionSpan = { xxl: 14, xl: 7, lg: 8, md: 11, sm: 0, xs: 0 };
+const nameSpan = { xxl: 8, xl: 8, lg: 8, md: 8, sm: 8, xs: 15 };
+const codeSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 4, xs: 4 };
+const descriptionSpan = { xxl: 10, xl: 10, lg: 10, md: 8, sm: 8, xs: 0 };
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...codeSpan, header: 'Code' },

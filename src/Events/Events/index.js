@@ -35,12 +35,12 @@ const {
   getAgencies,
 } = httpActions;
 const { confirm } = Modal;
-const referenceIDSpan = { xxl: 4, xl: 4, lg: 3, md: 4, sm: 0, xs: 0 };
-const typeSpan = { xxl: 3, xl: 3, lg: 4, md: 5, sm: 0, xs: 0 };
-const stageSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
-const levelSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
-const groupSpan = { xxl: 3, xl: 3, lg: 4, md: 4, sm: 0, xs: 0 };
-const eventSpan = { xxl: 5, xl: 6, lg: 14, md: 0, sm: 19, xs: 19 };
+const referenceIDSpan = { xxl: 4, xl: 4, lg: 4, md: 5, sm: 8, xs: 8 };
+const typeSpan = { xxl: 3, xl: 3, lg: 4, md: 3, sm: 0, xs: 0 };
+const stageSpan = { xxl: 3, xl: 3, lg: 2, md: 3, sm: 0, xs: 0 };
+const levelSpan = { xxl: 3, xl: 3, lg: 2, md: 3, sm: 0, xs: 0 };
+const groupSpan = { xxl: 3, xl: 3, lg: 4, md: 0, sm: 0, xs: 0 };
+const eventSpan = { xxl: 6, xl: 6, lg: 7, md: 7, sm: 12, xs: 12 };
 
 const headerLayout = [
   { ...eventSpan, header: 'Event' },
