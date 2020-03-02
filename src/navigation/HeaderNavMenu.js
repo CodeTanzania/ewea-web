@@ -4,12 +4,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import dashboardIcon from '../assets/icons/dashboards.svg';
 import settingsIcon from '../assets/icons/settings.svg';
-import eventActionsIcon from '../assets/icons/eventactions.svg';
-import criticalFacilitiesIcon from '../assets/icons/criticalfacilities.svg';
-import administrativeAreasIcon from '../assets/icons/administrativeareas.svg';
 import agenciesIcon from '../assets/icons/agencies.svg';
 import focalPeopleIcon from '../assets/icons/focalpeople.svg';
-import emergencyFunctionsIcon from '../assets/icons/emergencyfunctions.svg';
 import eventsIcon from '../assets/icons/events.svg';
 import actionsTakenIcon from '../assets/icons/actionstaken.svg';
 import actionCatalogueIcon from '../assets/icons/actioncatalog.svg';
@@ -23,19 +19,9 @@ const routes = [
     icon: eventsIcon,
   },
   {
-    name: 'Events Actions',
-    path: '/app/eventactions',
-    icon: eventActionsIcon,
-  },
-  {
     name: 'Actions Taken',
     path: '/app/actions',
     icon: actionsTakenIcon,
-  },
-  {
-    name: 'Emergency Functions',
-    path: '/app/functions',
-    icon: emergencyFunctionsIcon,
   },
   {
     name: 'Action Catalogue',
@@ -51,16 +37,6 @@ const routes = [
     name: 'Agencies',
     path: '/app/agencies',
     icon: agenciesIcon,
-  },
-  {
-    name: 'Critical Facilities',
-    path: '/app/features',
-    icon: criticalFacilitiesIcon,
-  },
-  {
-    name: 'Administrative Areas',
-    path: '/app/administrativeareas',
-    icon: administrativeAreasIcon,
   },
   {
     name: 'Dashboards',
