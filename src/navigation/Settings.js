@@ -55,6 +55,12 @@ const routes = [
     description: modules.alerts,
   },
   {
+    name: 'Event Topics',
+    path: '/eventtopics',
+    icon: eventGroupsIcon,
+    description: modules.eventTopics,
+  },
+  {
     name: 'Event Groups',
     path: '/eventgroups',
     icon: eventGroupsIcon,
