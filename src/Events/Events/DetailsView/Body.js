@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import { getBaseUrl } from '@codetanzania/ewea-api-client';
+import { getBaseUrl, getJwtToken } from '@codetanzania/ewea-api-client';
 import {
   openChangelogForm,
   closeChangelogForm,
@@ -28,6 +28,7 @@ import EventChangelogForm from '../ChangelogForm';
 import './styles.css';
 
 const actionsTaken = ['Test Action 1', 'Test Action 2'];
+const jwtToken = getJwtToken();
 
 /**
  * @function
@@ -277,10 +278,10 @@ const EventToolbar = ({ event, openForm, onShare }) => {
             shape="circle"
             size="large"
             icon="audit"
-            title="Record Damage & Losses"
+            title="Record Effect & Need"
             className="actionButton"
             onClick={() =>
-              openForm({ key: 'damage', label: 'Record Damage and Losses' })
+              openForm({ key: 'damage', label: 'Record Effect & Need' })
             }
           />
         </Col>
@@ -354,7 +355,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
                 <a
                   // eslint-disable-next-line no-underscore-dangle
                   key={`view-${feed._id}`}
-                  href={`${getBaseUrl()}${feed.image.stream}`}
+                  href={`${getBaseUrl()}${feed.image.stream}?token=${jwtToken}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -363,7 +364,9 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
                 <a
                   // eslint-disable-next-line no-underscore-dangle
                   key={`download-${feed._id}`}
-                  href={`${getBaseUrl()}${feed.image.download}`}
+                  href={`${getBaseUrl()}${
+                    feed.image.download
+                  }?token=${jwtToken}`}
                 >
                   <Icon type="download" key="download" />
                 </a>,
@@ -371,7 +374,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
               cover={
                 <img
                   alt="example"
-                  src={`${getBaseUrl()}${feed.image.stream}`}
+                  src={`${getBaseUrl()}${feed.image.stream}?token=${jwtToken}`}
                 />
               }
             />

@@ -13,6 +13,7 @@ const {
   getEventIndicators,
   getEventQuestions,
   getAdministrativeAreas,
+  getEventTopics,
 } = httpActions;
 const { TextArea } = Input;
 
@@ -185,6 +186,7 @@ class EventChangelogForm extends Component {
                     />
                   )}
                 </Form.Item>
+
                 {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <Form.Item {...formItemLayout} label="Question">
                   {getFieldDecorator('question', {
@@ -207,6 +209,24 @@ class EventChangelogForm extends Component {
                         })
                       }
                       optionLabel={question => question.strings.name.en}
+                      optionValue="_id"
+                    />
+                  )}
+                </Form.Item>
+
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                <Form.Item {...formItemLayout} label="Topic">
+                  {getFieldDecorator('topic')(
+                    <SearchableSelectInput
+                      onSearch={options =>
+                        getEventTopics({
+                          ...options,
+                          filter: {
+                            'relations.indicator': getFieldValue('indicator'),
+                          },
+                        })
+                      }
+                      optionLabel={topic => topic.strings.name.en}
                       optionValue="_id"
                     />
                   )}

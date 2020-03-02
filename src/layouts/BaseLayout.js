@@ -17,6 +17,7 @@ import EventTypes from '../Events/EventTypes';
 import EventSeverity from '../Events/EventSeverity';
 import EventCertainty from '../Events/EventCertainty';
 import EventQuestions from '../Events/EventQuestions';
+import EventTopics from '../Events/EventTopics';
 import EventGroups from '../Events/EventGroups';
 import StakeholderGroups from '../Stakeholders/StakeholderGroups';
 import EventLevels from '../Events/EventLevels';
@@ -116,6 +117,10 @@ const breadcrumbNameMap = {
   '/app/settings/notificationtemplates': {
     name: 'Notification Templates',
     title: 'Notification template module',
+  },
+  '/app/settings/eventtopics': {
+    name: 'Event Topics',
+    title: 'Event Topics module',
   },
   '/app/settings/eventgroups': {
     name: 'Event Groups',
@@ -267,6 +272,10 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/settings/notificationtemplates`}
             component={NotificationTemplates}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/eventtopics`}
+            component={EventTopics}
           />
           <SecureRoute
             path={`${baseUrl}/settings/eventgroups`}
