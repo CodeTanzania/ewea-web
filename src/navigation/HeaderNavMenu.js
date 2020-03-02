@@ -12,7 +12,7 @@ import focalPeopleIcon from '../assets/icons/focalpeople.svg';
 import emergencyFunctionsIcon from '../assets/icons/emergencyfunctions.svg';
 import eventsIcon from '../assets/icons/events.svg';
 import actionsTakenIcon from '../assets/icons/actionstaken.svg';
-import actionCatalogIcon from '../assets/icons/actioncatalog.svg';
+import actionCatalogueIcon from '../assets/icons/actioncatalog.svg';
 import './styles.css';
 
 /* constants */
@@ -38,9 +38,9 @@ const routes = [
     icon: emergencyFunctionsIcon,
   },
   {
-    name: 'Action Catalog',
-    path: '/app/actioncatalog',
-    icon: actionCatalogIcon,
+    name: 'Action Catalogue',
+    path: '/app/actioncatalogue',
+    icon: actionCatalogueIcon,
   },
   {
     name: 'Focal People',

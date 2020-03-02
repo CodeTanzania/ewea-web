@@ -26,10 +26,10 @@ import { notifyError, notifySuccess, truncateString } from '../../util';
 import './styles.css';
 
 /* constants */
-const nameSpan = { xxl: 5, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
-const typeSpan = { xxl: 4, xl: 3, lg: 3, md: 4, sm: 9, xs: 9 };
-const codeSpan = { xxl: 3, xl: 7, lg: 7, md: 0, sm: 0, xs: 0 };
-const descriptionSpan = { xxl: 10, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
+const nameSpan = { xxl: 5, xl: 5, lg: 6, md: 7, sm: 8, xs: 14 };
+const typeSpan = { xxl: 3, xl: 3, lg: 3, md: 2, sm: 0, xs: 0 };
+const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 2, sm: 2, xs: 5 };
+const descriptionSpan = { xxl: 11, xl: 11, lg: 10, md: 10, sm: 10, xs: 0 };
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...codeSpan, header: 'Code' },

@@ -21,7 +21,7 @@ import EventGroups from '../Events/EventGroups';
 import EventLevels from '../Events/EventLevels';
 import EventIndicator from '../Events/EventIndicator';
 import Features from '../GeographicalFeatures/CriticalFacilities';
-import ActionCatalog from '../Events/ActionCatalog';
+import ActionCatalogue from '../Events/ActionCatalogues';
 // import StakeholdersNotifications from '../Stakeholders/Notifications';
 import StakeholdersRoles from '../Stakeholders/Roles';
 import OverviewDashboard from '../Dashboards';
@@ -46,7 +46,7 @@ const breadcrumbNameMap = {
     title: 'List of all performed actions',
   },
   '/app/eventgroups': { name: 'Event Groups', title: 'Event Groups module' },
-  '/app/actioncatalog': {
+  '/app/actioncatalogue': {
     name: 'Action Catalogue',
     title: 'List of all actions to be performed',
   },
@@ -282,8 +282,8 @@ const BaseLayout = props => {
             component={StakeholdersAgencies}
           />
           <SecureRoute
-            path={`${baseUrl}/actioncatalog`}
-            component={ActionCatalog}
+            path={`${baseUrl}/actioncatalogue`}
+            component={ActionCatalogue}
           />
           <SecureRoute
             path={`${baseUrl}/overview`}
