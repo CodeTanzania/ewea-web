@@ -24,6 +24,7 @@ import EventLevels from '../Events/EventLevels';
 import EventIndicator from '../Events/EventIndicator';
 import Features from '../GeographicalFeatures/CriticalFacilities';
 import ActionCatalogue from '../Events/ActionCatalogues';
+import Units from '../Units';
 // import StakeholdersNotifications from '../Stakeholders/Notifications';
 import StakeholdersRoles from '../Stakeholders/Roles';
 import OverviewDashboard from '../Dashboards';
@@ -137,6 +138,10 @@ const breadcrumbNameMap = {
   '/app/settings/eventlevels': {
     name: 'Event Levels',
     title: 'Event Level module',
+  },
+  '/app/settings/units': {
+    name: 'Units',
+    title: 'Units module',
   },
 };
 
@@ -305,6 +310,8 @@ const BaseLayout = props => {
             path={`${baseUrl}/settings/eventlevels`}
             component={EventLevels}
           />
+
+          <SecureRoute path={`${baseUrl}/settings/units`} component={Units} />
           <SecureRoute component={PageNotFound} />
         </Switch>
       </Content>

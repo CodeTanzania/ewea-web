@@ -108,6 +108,12 @@ const routes = [
     icon: eventSeverityIcon,
     description: modules.eventSeverity,
   },
+  {
+    name: 'Units',
+    path: '/units',
+    icon: eventGroupsIcon,
+    description: modules.units,
+  },
 ];
 
 /**
