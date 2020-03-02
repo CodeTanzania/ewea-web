@@ -455,7 +455,13 @@ class Events extends Component {
                 <Button
                   type="link"
                   onClick={() => this.handleView(item)}
-                  style={{ padding: 0, color: 'rgba(0, 0, 0, 0.65)' }}
+                  style={{
+                    padding: 0,
+                    color: 'rgba(0, 0, 0, 0.65)',
+                    whiteSpace: 'normal',
+                    textAlign: 'left',
+                    wordWrap: 'break-word',
+                  }}
                 >
                   {item.description}
                 </Button>
