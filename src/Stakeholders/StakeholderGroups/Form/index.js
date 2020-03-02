@@ -1,31 +1,24 @@
-import {
-  putEventQuestion,
-  postEventQuestion,
-} from '@codetanzania/ewea-api-states';
-import { httpActions } from '@codetanzania/ewea-api-client';
+import { putPartyGroup, postPartyGroup } from '@codetanzania/ewea-api-states';
 import { Button, Form, Input } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
-
-const { getEventIndicators, getEventTopics } = httpActions;
 
 /**
  * @class
- * @name EventQuestionForm
- * @description  Render form for creating a new event question
+ * @name StakeholderGroup
+ * @description  Render form for creating a new party group
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EventQuestionForm extends Component {
+class StakeholderGroup extends Component {
   /**
    * @function
    * @name handleSubmit
    * @description  call back function to handle submit action
    *
-   * @param {object} e event object
+   * @param {object} e party object
    *
    * @returns {undefined} does not return anything
    *
@@ -36,7 +29,7 @@ class EventQuestionForm extends Component {
     e.preventDefault();
     const {
       form: { validateFieldsAndScroll },
-      eventQuestion,
+      partyType,
       isEditForm,
     } = this.props;
 
@@ -52,33 +45,29 @@ class EventQuestionForm extends Component {
               en: values.description,
             },
           },
-          relations: {
-            indicator: { _id: values.indicator },
-            topic: { _id: values.topic },
-          },
         };
         if (isEditForm) {
-          const updatedContact = { ...eventQuestion, ...payload };
-          putEventQuestion(
+          const updatedContact = { ...partyType, ...payload };
+          putPartyGroup(
             updatedContact,
             () => {
-              notifySuccess('Event Question was updated successfully');
+              notifySuccess('Party Group was updated successfully');
             },
             () => {
               notifyError(
-                'Something occurred while updating Event Question, please try again!'
+                'Something occurred while updating Party Group, please try again!'
               );
             }
           );
         } else {
-          postEventQuestion(
+          postPartyGroup(
             payload,
             () => {
-              notifySuccess('Event Question was created successfully');
+              notifySuccess('Party Group was created successfully');
             },
             () => {
               notifyError(
-                'Something occurred while saving Event Question, please try again!'
+                'Something occurred while saving Party Group, please try again!'
               );
             }
           );
@@ -92,7 +81,7 @@ class EventQuestionForm extends Component {
       posting,
       onCancel,
       isEditForm,
-      eventQuestion,
+      partyType,
       form: { getFieldDecorator },
     } = this.props;
 
@@ -117,80 +106,51 @@ class EventQuestionForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* Event Question name */}
+        {/* Party Group name */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Name">
           {getFieldDecorator('name', {
-            initialValue: isEditForm
-              ? eventQuestion.strings.name.en
-              : undefined,
+            initialValue: isEditForm ? partyType.strings.name.en : undefined,
             rules: [
               {
                 required: true,
-                message: ' Event Certainties  name is required',
+                message: ' Party Groups  name is required',
               },
             ],
           })(<Input />)}
         </Form.Item>
-        {/* end Event Question name */}
+        {/* end Party Group name */}
 
-        {/* Event Question Indicator */}
+        {/* Party Group code */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Indicator">
-          {getFieldDecorator('indicator', {
-            initialValue:
-              isEditForm && eventQuestion.relations.indicator // eslint-disable-line
-                ? eventQuestion.relations.indicator._id // eslint-disable-line
-                : undefined,
-            rules: [{ required: true, message: 'Event Indicator is required' }],
-          })(
-            <SearchableSelectInput
-              onSearch={getEventIndicators}
-              optionLabel={indicator => indicator.strings.name.en}
-              optionValue="_id"
-              initialValue={
-                isEditForm && eventQuestion.relations.indicator
-                  ? eventQuestion.relations.indicator
-                  : undefined
-              }
-            />
-          )}
+        <Form.Item {...formItemLayout} label="Party Group code">
+          {getFieldDecorator('code', {
+            initialValue: isEditForm ? partyType.strings.code : undefined,
+            rules: [
+              {
+                required: false,
+              },
+            ],
+          })(<Input />)}
         </Form.Item>
-        {/* end Event indicator */}
+        {/* end Party Group code */}
 
-        {/* Event Question Topic */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Topic">
-          {getFieldDecorator('topic', {
-            initialValue:
-              isEditForm && eventQuestion.relations.topic // eslint-disable-line
-                ? eventQuestion.relations.topic._id // eslint-disable-line
-                : undefined,
-          })(
-            <SearchableSelectInput
-              onSearch={getEventTopics}
-              optionLabel={topic => topic.strings.name.en}
-              optionValue="_id"
-              initialValue={
-                isEditForm && eventQuestion.relations.topic
-                  ? eventQuestion.relations.topic
-                  : undefined
-              }
-            />
-          )}
-        </Form.Item>
-        {/* end Event Topic */}
-
-        {/* Event Question Description */}
+        {/* Party Group Description */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Description">
           {getFieldDecorator('description', {
             initialValue: isEditForm
-              ? eventQuestion.strings.description.en
+              ? partyType.strings.description.en
               : undefined,
+            rules: [
+              {
+                required: true,
+                message: 'Party Group Description is required',
+              },
+            ],
           })(<Input />)}
         </Form.Item>
-        {/* end Event Question */}
+        {/* end Party Group */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -210,8 +170,8 @@ class EventQuestionForm extends Component {
   }
 }
 
-EventQuestionForm.propTypes = {
-  eventQuestion: PropTypes.shape({
+StakeholderGroup.propTypes = {
+  partyType: PropTypes.shape({
     strings: PropTypes.shape({
       code: PropTypes.string.isRequired,
       name: PropTypes.shape({
@@ -221,10 +181,6 @@ EventQuestionForm.propTypes = {
         en: PropTypes.string.isRequired,
       }),
       _id: PropTypes.string,
-    }),
-    relations: PropTypes.shape({
-      indicator: PropTypes.object,
-      topic: PropTypes.object,
     }),
   }).isRequired,
   isEditForm: PropTypes.bool.isRequired,
@@ -236,4 +192,4 @@ EventQuestionForm.propTypes = {
   }).isRequired,
 };
 
-export default Form.create()(EventQuestionForm);
+export default Form.create()(StakeholderGroup);

@@ -27,11 +27,11 @@ import MapPolygon from '../../Map/MapPolygon';
 
 /* constants */
 const nameSpan = { xxl: 8, xl: 8, lg: 8, md: 8, sm: 8, xs: 15 };
-const codeSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 4, xs: 4 };
+const levelSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 4, xs: 4 };
 const descriptionSpan = { xxl: 10, xl: 10, lg: 10, md: 8, sm: 8, xs: 0 };
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
-  { ...codeSpan, header: 'Code' },
+  { ...levelSpan, header: 'Level' },
   { ...descriptionSpan, header: 'Description' },
 ];
 
@@ -430,7 +430,11 @@ class AdministrativeAreas extends Component {
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>
-              <Col {...codeSpan}>{item.strings.code}</Col>
+              <Col {...levelSpan}>
+                {item.relations.level
+                  ? item.relations.level.strings.name.en
+                  : 'N/A'}
+              </Col>
               <Col {...descriptionSpan}>
                 {item.strings.description ? item.strings.description.en : 'N/A'}
               </Col>

@@ -19,6 +19,7 @@ import EventCertainty from '../Events/EventCertainty';
 import EventQuestions from '../Events/EventQuestions';
 import EventTopics from '../Events/EventTopics';
 import EventGroups from '../Events/EventGroups';
+import StakeholderGroups from '../Stakeholders/StakeholderGroups';
 import EventLevels from '../Events/EventLevels';
 import EventIndicator from '../Events/EventIndicator';
 import Features from '../GeographicalFeatures/CriticalFacilities';
@@ -123,6 +124,11 @@ const breadcrumbNameMap = {
   '/app/settings/eventgroups': {
     name: 'Event Groups',
     title: 'Event Groups module',
+  },
+
+  '/app/settings/stakeholdergroups': {
+    name: 'Stakeholders Groups',
+    title: 'Stakeholders Groups module',
   },
   '/app/settings/eventindicator': {
     name: 'Event Indicators',
@@ -269,6 +275,11 @@ const BaseLayout = props => {
           <SecureRoute
             path={`${baseUrl}/settings/eventgroups`}
             component={EventGroups}
+          />
+
+          <SecureRoute
+            path={`${baseUrl}/settings/stakeholdergroups`}
+            component={StakeholderGroups}
           />
           <SecureRoute
             path={`${baseUrl}/settings/eventtypes`}
