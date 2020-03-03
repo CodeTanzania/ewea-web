@@ -35,7 +35,7 @@ const Topbar = ({ search, actions }) => (
           const { label, ...props } = action;
 
           return (
-            <Col xxl={6} xl={7} lg={10} md={12} sm={24} xs={24} key={label}>
+            <Col xxl={6} xl={8} lg={10} md={12} sm={24} xs={24} key={label}>
               {/* eslint-disable-next-line react/jsx-props-no-spreading */}
               <Button {...props} type="primary" block>
                 {label}

@@ -53,7 +53,7 @@ const { confirm } = Modal;
  * @class
  * @name Features
  * @description Render Critical facilities list which have search box,
- * actions and critical facilities list
+ * actions and critical infrastructures list
  *
  * @version 0.1.0
  * @since 0.1.0
@@ -99,7 +99,7 @@ class Features extends Component {
   /**
    * @function
    * @name searchFeatures
-   * @description Search critical facility List based on supplied filter word
+   * @description Search critical infrastructure List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
@@ -115,7 +115,7 @@ class Features extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} feature critical facility to be edited
+   * @param {object} feature critical infrastructure to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -194,7 +194,7 @@ class Features extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a critical facility
+   * @description show confirm modal before archiving a critical infrastructure
    *
    * @param item {object} criticalfacility to archive
    * @version 0.1.0
@@ -210,10 +210,11 @@ class Features extends Component {
       onOk() {
         deleteFeature(
           item._id, // eslint-disable-line
-          () => notifySuccess('Critical facility was archived successfully'),
+          () =>
+            notifySuccess('Critical infrastructure was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving Critical facility, Please contact your system Administrator'
+              'An error occurred while archiving Critical infrastructure, Please contact your system Administrator'
             )
         );
       },
@@ -295,16 +296,16 @@ class Features extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for critical facilities here ...',
+            placeholder: 'Search for critical infrastructures here ...',
             onChange: this.searchFeatures,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Critical Facility',
+              label: 'New Infrastructure',
               icon: 'plus',
               size: 'large',
-              title: 'Add New Critical Facility',
+              title: 'Add New Critical Infrastructure',
               onClick: this.openFeaturesForm,
             },
           ]}
@@ -313,7 +314,7 @@ class Features extends Component {
 
         {/* list starts */}
         <ItemList
-          itemName="Critical facility"
+          itemName="Critical infrastructure"
           items={features}
           page={page}
           itemCount={total}
@@ -339,8 +340,8 @@ class Features extends Component {
               renderActions={() => (
                 <ListItemActions
                   edit={{
-                    name: 'Edit Critical facility',
-                    title: 'Update Critical facility Details',
+                    name: 'Edit Critical Infrastructure',
+                    title: 'Update Critical Infrastructure Details',
                     onClick: () => this.handleEdit(item),
                   }}
                   onMapPreview={{
@@ -349,14 +350,14 @@ class Features extends Component {
                     onClick: () => this.handleMapPreview(item),
                   }}
                   share={{
-                    name: 'Share Critical facility',
-                    title: 'Share Critical facility details with others',
+                    name: 'Share Critical Infrastructure',
+                    title: 'Share Critical Infrastructure details with others',
                     onClick: () => this.handleShare(item),
                   }}
                   archive={{
-                    name: 'Archive Critical facility',
+                    name: 'Archive Critical Infrastructure',
                     title:
-                      'Remove Critical facility from list of active Critical facilities',
+                      'Remove Critical infrastructure from list of active critical infrastructures',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                 />
@@ -386,7 +387,7 @@ class Features extends Component {
 
         {/* Notification Modal modal */}
         <Modal
-          title="Notify Critical facility"
+          title="Notify Critical Infrastructure"
           visible={showNotificationForm}
           onCancel={this.closeNotificationForm}
           footer={null}
@@ -411,7 +412,9 @@ class Features extends Component {
         {/* create/edit form modal */}
         <Modal
           title={
-            isEditForm ? 'Edit Critical Facility' : 'Add New Critical Facility'
+            isEditForm
+              ? 'Edit Critical Infrastructure'
+              : 'Add New Critical Infrastructure'
           }
           visible={showForm}
           className="FormModal"

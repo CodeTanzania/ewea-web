@@ -40,7 +40,7 @@ const routes = [
     description: modules.administrativeareas,
   },
   {
-    name: 'Critical facilities',
+    name: 'Critical Infrastructures',
     path: '/features',
     icon: criticalFacilitiesIcon,
     description: modules.criticalFacilities,
