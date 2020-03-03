@@ -14,6 +14,7 @@ import { Modal, Drawer, Col, Tag, Button } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import EventFilters from './Filters';
@@ -470,7 +471,7 @@ class Events extends Component {
               <Col {...referenceIDSpan}>{item.number}</Col>
               <Col
                 {...levelSpan}
-                title={item.level ? item.level.strings.description : 'N/A'}
+                title={get(item, 'item.level.strings.description', 'N/A')}
               >
                 {item.level ? (
                   <Tag
@@ -490,10 +491,10 @@ class Events extends Component {
                 <Tag color="volcano">{item.stage}</Tag>
               </Col>
               <Col {...typeSpan}>
-                {item.type ? item.type.strings.name.en : 'N/A'}
+                {get(item, 'type.strings.name.en', 'N/A')}
               </Col>
               <Col {...groupSpan}>
-                {item.group ? item.group.strings.name.en : 'N/A'}
+                {get(item, 'group.strings.name.en', 'N/A')}
               </Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
             </ListItem>

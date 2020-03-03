@@ -1,5 +1,6 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import {
   closeFocalPersonForm,
   Connect,
@@ -412,7 +413,7 @@ class FocalPeople extends Component {
               <Col {...nameSpan}>{item.name}</Col>
               <Col
                 {...roleSpan}
-                title={item.role ? item.role.strings.name.en : 'N/A'}
+                title={get(item, 'role.strings.name.en', 'N/A')}
               >
                 {item.role
                   ? `${item.role.strings.name.en}, ${
@@ -423,7 +424,7 @@ class FocalPeople extends Component {
               <Col {...phoneSpan}>{item.mobile}</Col>
               <Col {...emailSpan}>{item.email}</Col>
               <Col {...areaSpan}>
-                {item.area ? item.area.strings.name.en : 'N/A'}
+                {get(item, 'area.strings.name.en', 'N/A')}
               </Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
             </ListItem>

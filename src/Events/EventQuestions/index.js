@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import EventQuestionForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
@@ -326,7 +327,7 @@ class EventQuestions extends Component {
               <Col {...nameSpan}>{item.strings.name.en}</Col>
               <Col {...codeSpan}>{item.strings.code}</Col>
               <Col {...indicatorSpan}>
-                {item.relations.indicator.strings.name.en}
+                {get(item, 'item.relations.indicator.strings.name.en', 'N/A')}
               </Col>
               <Col {...descriptionSpan}>{item.strings.description.en}</Col>
               {/* eslint-enable react/jsx-props-no-spreading */}

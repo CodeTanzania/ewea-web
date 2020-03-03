@@ -12,6 +12,7 @@ import {
 } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import NotificationForm from '../../components/NotificationForm';
@@ -368,9 +369,7 @@ class EventActions extends Component {
             >
               {/* eslint-disable-next-line */}
               <Col {...functionSpan}>
-                {item.relations.function
-                  ? item.relations.function.strings.name.en
-                  : 'N/A'}{' '}
+                {get(item, 'relations.function.strings.name.en', 'N/A')}{' '}
               </Col>
 
               {/* eslint-disable-next-line */}

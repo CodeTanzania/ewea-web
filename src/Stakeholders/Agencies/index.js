@@ -14,6 +14,7 @@ import { Col, Modal } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import AgencyForm from './AgencyForm';
 import AgencyFilters from './Filters';
@@ -409,7 +410,7 @@ class Agencies extends Component {
               <Col {...nameSpan}>{item.name}</Col>
               <Col {...abbreviationSpan}>{item.abbreviation}</Col>
               <Col {...areaSpan}>
-                {item.area ? item.area.strings.name.en : 'N/A'}
+                {get(item, 'area.strings.name.en', 'N/A')}
               </Col>
               <Col {...phoneSpan}>{item.mobile}</Col>
               <Col {...emailSpan}>{item.email}</Col>
