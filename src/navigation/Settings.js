@@ -15,6 +15,9 @@ import eventQuestionsIcon from '../assets/icons/settings/eventquestions.svg';
 import eventLevelsIcon from '../assets/icons/settings/eventlevels.svg';
 import emergencyFunctionsIcon from '../assets/icons/emergencyfunctions.svg';
 import NavigationMenu from '../components/NavigationMenu';
+import unitsIcon from '../assets/icons/settings/units.svg';
+import stakeholderGroupsIcon from '../assets/icons/settings/stakeholdergroups.svg';
+import eventTopicsIcon from '../assets/icons/settings/eventtopics.svg';
 import modules from '../modules.json';
 
 /* constants */
@@ -57,7 +60,7 @@ const routes = [
   {
     name: 'Event Topics',
     path: '/eventtopics',
-    icon: eventGroupsIcon,
+    icon: eventTopicsIcon,
     description: modules.eventTopics,
   },
   {
@@ -69,7 +72,7 @@ const routes = [
   {
     name: 'Stakeholder Groups',
     path: '/stakeholdergroups',
-    icon: eventGroupsIcon,
+    icon: stakeholderGroupsIcon,
     description: modules.stakeholderGroups,
   },
   {
@@ -111,7 +114,7 @@ const routes = [
   {
     name: 'Units',
     path: '/units',
-    icon: eventGroupsIcon,
+    icon: unitsIcon,
     description: modules.units,
   },
 ];
