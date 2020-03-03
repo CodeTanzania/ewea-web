@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 
 import Topbar from '../../components/Topbar';
 import NotificationForm from '../../components/NotificationForm';
@@ -313,9 +314,7 @@ class EventTypes extends Component {
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>
               <Col {...groupSpan}>
-                {item.relations.group
-                  ? item.relations.group.strings.name.en
-                  : 'N/A'}
+                {get(item, 'relations.group.strings.name.en', 'N/A')}
               </Col>
               <Col {...descriptionSpan} title={item.strings.description.en}>
                 {item.strings.description
