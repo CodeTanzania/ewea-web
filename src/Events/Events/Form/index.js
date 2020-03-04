@@ -1,6 +1,8 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { postEvent, putEvent } from '@codetanzania/ewea-api-states';
-import { Button, Col, Form, Row, Input } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Row, Input } from 'antd';
 import map from 'lodash/map';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';

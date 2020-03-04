@@ -1,4 +1,5 @@
-import { Button, Dropdown, Icon, Menu, Modal } from 'antd';
+import { LockOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Dropdown, Menu, Modal } from 'antd';
 import { signout } from '@codetanzania/ewea-api-states';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -39,11 +40,11 @@ class UserMenu extends React.Component {
   menu = (
     <Menu className="UserProfileMenu">
       <Menu.Item key="1" onClick={this.showModal}>
-        <Icon type="lock" />
+        <LockOutlined />
         Change Password
       </Menu.Item>
       <Menu.Item key="2" onClick={() => this.signout()}>
-        <Icon type="logout" />
+        <LogoutOutlined />
         Sign Out
       </Menu.Item>
     </Menu>
@@ -84,7 +85,7 @@ class UserMenu extends React.Component {
           <ChangePasswordForm onCancel={this.handleCancel} />
         </Modal>
         <Dropdown overlay={this.menu}>
-          <Button className="UserButton" icon="user" />
+          <Button className="UserButton" icon={<UserOutlined />} />
         </Dropdown>
       </div>
     );

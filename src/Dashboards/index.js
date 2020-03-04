@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Tooltip, Row, Button, Col } from 'antd';
 import {
   ComposableMap,
@@ -54,7 +55,7 @@ const ZoomControl = ({ handleZoomIn, handleZoomOut }) => {
           <Button
             type="default"
             shape="round"
-            icon="plus"
+            icon={<PlusOutlined />}
             size="small"
             onClick={handleZoomIn}
           />
@@ -63,7 +64,7 @@ const ZoomControl = ({ handleZoomIn, handleZoomOut }) => {
           <Button
             type="default"
             shape="round"
-            icon="minus"
+            icon={<MinusOutlined />}
             size="small"
             onClick={handleZoomOut}
           />

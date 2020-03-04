@@ -1,4 +1,4 @@
-.Signin {
+.SignInForm {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -6,7 +6,7 @@
   height: 80vh;
 }
 
-.Signin img {
+.SignInForm img {
   margin: 10px;
 }
 
@@ -19,6 +19,6 @@
 }
 
 /* override antd css*/
-.Signin .ant-form {
+.SignInForm .ant-form {
   width: 300px;
 }

@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Icon, Input, Button } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Input, Button } from 'antd';
+import { Form } from '@ant-design/compatible';
 import { Connect, signin, initializeApp } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
 import logo from '../../../assets/icons/emislogo-blue.png';
+import '@ant-design/compatible/assets/index.css';
 import './styles.css';
 
 /**
  * @class
- * @name Signin
+ * @name SignInForm
  * @description Sign in component which shows sign in form
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class Signin extends Component {
+class SignInForm extends Component {
   /**
    * @function
    * @name handleSubmit
@@ -57,7 +60,7 @@ class Signin extends Component {
       loading,
     } = this.props;
     return (
-      <div className="Signin">
+      <div className="SignInForm">
         <img alt="EMIS" src={logo} height={60} width={60} />
         <Form onSubmit={this.handleSubmit} autoComplete="off">
           <Form.Item>
@@ -71,9 +74,7 @@ class Signin extends Component {
               ],
             })(
               <Input
-                prefix={
-                  <Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />
-                }
+                prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
                 placeholder="Username"
               />
             )}
@@ -85,9 +86,7 @@ class Signin extends Component {
               ],
             })(
               <Input
-                prefix={
-                  <Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />
-                }
+                prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
                 type="password"
                 placeholder="Password"
               />
@@ -110,7 +109,7 @@ class Signin extends Component {
   }
 }
 
-Signin.propTypes = {
+SignInForm.propTypes = {
   form: PropTypes.shape({
     validateFields: PropTypes.func.isRequired,
     getFieldDecorator: PropTypes.func.isRequired,
@@ -121,6 +120,6 @@ Signin.propTypes = {
   loading: PropTypes.bool.isRequired,
 };
 
-export default Connect(Form.create({ name: 'normal_login' })(Signin), {
+export default Connect(Form.create({ name: 'normal_login' })(SignInForm), {
   loading: 'app.signing',
 });

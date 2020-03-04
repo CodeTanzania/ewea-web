@@ -1,6 +1,7 @@
 import { StoreProvider, initializeApp } from '@codetanzania/ewea-api-states';
 import { isTokenValid } from '@codetanzania/ewea-api-client';
-import { Icon, Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 import React from 'react';
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 import Signin from './Auth/components/Signin';
@@ -8,7 +9,7 @@ import BaseLayout from './layouts/BaseLayout';
 import SecureRoute from './Auth/SecureRoute';
 
 /* configure global spin indicator */
-Spin.setDefaultIndicator(<Icon type="loading" style={{ fontSize: 24 }} spin />);
+Spin.setDefaultIndicator(<LoadingOutlined style={{ fontSize: 24 }} spin />);
 
 /**
  * @function

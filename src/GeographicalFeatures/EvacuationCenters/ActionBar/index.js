@@ -2,6 +2,7 @@ import {
   refreshFeatures,
   paginateFeatures,
 } from '@codetanzania/ewea-api-states';
+import { FilterOutlined, HddOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Col, Pagination, Row, Checkbox } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -35,7 +36,7 @@ const EvacuationCentersActionBar = ({ page, total, onFilter }) => (
       <Col span={1} xl={1}>
         <Button
           shape="circle"
-          icon="reload"
+          icon={<ReloadOutlined />}
           title="Refresh evacuation center"
           onClick={() =>
             refreshFeatures(
@@ -58,7 +59,7 @@ const EvacuationCentersActionBar = ({ page, total, onFilter }) => (
       <Col span={1} xl={1}>
         <Button
           type="circle"
-          icon="hdd"
+          icon={<HddOutlined />}
           title="Archive selected evacuation center"
           className="actionButton"
           size="large"
@@ -73,7 +74,7 @@ const EvacuationCentersActionBar = ({ page, total, onFilter }) => (
       >
         <Button
           type="circle"
-          icon="filter"
+          icon={<FilterOutlined />}
           title="Filter evacuation center"
           className="actionButton"
           size="large"

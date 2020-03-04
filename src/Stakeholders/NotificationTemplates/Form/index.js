@@ -3,7 +3,9 @@ import {
   postNotificationTemplate,
   putNotificationTemplate,
 } from '@codetanzania/ewea-api-states';
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Input, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { notifyError, notifySuccess } from '../../../util';

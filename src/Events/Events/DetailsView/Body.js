@@ -8,6 +8,27 @@ import {
   filterChangelogs,
   loadMoreChangelogs,
 } from '@codetanzania/ewea-api-states';
+
+import {
+  ApartmentOutlined,
+  AuditOutlined,
+  DownloadOutlined,
+  EnvironmentOutlined,
+  EyeOutlined,
+  FileDoneOutlined,
+  FileImageOutlined,
+  MessageOutlined,
+  NotificationOutlined,
+  PrinterOutlined,
+  ReloadOutlined,
+  ShareAltOutlined,
+  SwapOutlined,
+  UserAddOutlined,
+  UsergroupAddOutlined,
+  UserOutlined,
+  WechatOutlined,
+} from '@ant-design/icons';
+
 import {
   Tag,
   Timeline,
@@ -15,7 +36,6 @@ import {
   Col,
   Button,
   Modal,
-  Icon,
   Card,
   Empty,
   Spin,
@@ -180,7 +200,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
           <Button
             shape="circle"
             size="large"
-            icon="reload"
+            icon={<ReloadOutlined />}
             title="Refresh Event"
             className="actionButton"
             onClick={() =>
@@ -200,7 +220,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
           <Button
             shape="circle"
             size="large"
-            icon="share-alt"
+            icon={<ShareAltOutlined />}
             title="Share Event"
             className="actionButton"
             onClick={() => onShare()}
@@ -210,7 +230,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
           <Button
             shape="circle"
             size="large"
-            icon="user-add"
+            icon={<UserAddOutlined />}
             title="Add Focal Person"
             className="actionButton"
             onClick={() =>
@@ -225,7 +245,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
           <Button
             shape="circle"
             size="large"
-            icon="usergroup-add"
+            icon={<UsergroupAddOutlined />}
             title="Add Agency"
             className="actionButton"
             onClick={() =>
@@ -237,7 +257,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
           <Button
             shape="circle"
             size="large"
-            icon="environment"
+            icon={<EnvironmentOutlined />}
             title="Update Affected Areas"
             className="actionButton"
             onClick={() =>
@@ -249,7 +269,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
           <Button
             shape="circle"
             size="large"
-            icon="file-image"
+            icon={<FileImageOutlined />}
             title="Upload Image"
             className="actionButton"
             onClick={() => openForm({ key: 'file', label: 'Upload File' })}
@@ -259,7 +279,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
           <Button
             shape="circle"
             size="large"
-            icon="file-done"
+            icon={<FileDoneOutlined />}
             title="Update Actions Taken"
             className="actionButton"
           />
@@ -268,7 +288,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
           <Button
             shape="circle"
             size="large"
-            icon="notification"
+            icon={<NotificationOutlined />}
             title="Disseminate Event"
             className="actionButton"
           />
@@ -277,7 +297,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
           <Button
             shape="circle"
             size="large"
-            icon="audit"
+            icon={<AuditOutlined />}
             title="Record Effect & Need"
             className="actionButton"
             onClick={() =>
@@ -289,7 +309,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
           <Button
             shape="circle"
             size="large"
-            icon="wechat"
+            icon={<WechatOutlined />}
             title="Add Comment"
             className="actionButton"
             onClick={() => openForm({ key: 'comment', label: 'Add a Comment' })}
@@ -299,7 +319,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
           <Button
             shape="circle"
             size="large"
-            icon="swap"
+            icon={<SwapOutlined />}
             title="Request for actions"
             className="actionButton"
           />
@@ -309,7 +329,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
           <Button
             shape="circle"
             size="large"
-            icon="printer"
+            icon={<PrinterOutlined />}
             title="Print Event Details"
             className="actionButton"
           />
@@ -336,7 +356,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
         <>
           {/* comments */}
           {/* eslint-disable-next-line no-underscore-dangle */}
-          <Timeline.Item key={feed._id} dot={<Icon type="message" />}>
+          <Timeline.Item key={feed._id} dot={<MessageOutlined />}>
             {feed.comment}{' '}
             <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
           </Timeline.Item>
@@ -345,7 +365,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
           {/* image */}
           <Timeline.Item
             key={`${feed._id}-${feed.filename}`} // eslint-disable-line no-underscore-dangle
-            dot={<Icon type="file-image" />}
+            dot={<FileImageOutlined />}
           >
             <Card
               hoverable
@@ -359,7 +379,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Icon type="eye" key="eye" />
+                  <EyeOutlined key="eye" />
                 </a>,
                 <a
                   // eslint-disable-next-line no-underscore-dangle
@@ -368,7 +388,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
                     feed.image.download
                   }?token=${jwtToken}`}
                 >
-                  <Icon type="download" key="download" />
+                  <DownloadOutlined key="download" />
                 </a>,
               ]}
               cover={
@@ -391,7 +411,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
     if (feed.comment) {
       return (
         // eslint-disable-next-line no-underscore-dangle
-        <Timeline.Item key={feed._id} dot={<Icon type="message" />}>
+        <Timeline.Item key={feed._id} dot={<MessageOutlined />}>
           {feed.comment}{' '}
           <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
         </Timeline.Item>
@@ -402,7 +422,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
     if (feed.focals) {
       return feed.focals.map(focal => (
         // eslint-disable-next-line no-underscore-dangle
-        <Timeline.Item key={feed._id} dot={<Icon type="user" />}>
+        <Timeline.Item key={feed._id} dot={<UserOutlined />}>
           Focal: <Tag color="cyan">{focal.name}</Tag> was added on{' '}
           <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
         </Timeline.Item>
@@ -412,7 +432,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
     if (feed.agencies) {
       return feed.agencies.map(agency => (
         // eslint-disable-next-line no-underscore-dangle
-        <Timeline.Item key={feed._id} dot={<Icon type="apartment" />}>
+        <Timeline.Item key={feed._id} dot={<ApartmentOutlined />}>
           Agency: <Tag color="magenta">{agency.name}</Tag> was added on{' '}
           <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
         </Timeline.Item>
@@ -422,7 +442,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
     if (feed.areas) {
       return feed.areas.map(area => (
         // eslint-disable-next-line no-underscore-dangle
-        <Timeline.Item key={area._id} dot={<Icon type="environment" />}>
+        <Timeline.Item key={area._id} dot={<EnvironmentOutlined />}>
           Area: <Tag color="geekblue">{area.strings.name.en}</Tag> was added on{' '}
           <Tag>{formatDate(area.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
         </Timeline.Item>

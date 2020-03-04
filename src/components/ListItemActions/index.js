@@ -1,6 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, Button, Icon, Menu } from 'antd';
+
+import {
+  DeleteOutlined,
+  DiffOutlined,
+  EditOutlined,
+  EyeOutlined,
+  MoreOutlined,
+  ShareAltOutlined,
+  SwapOutlined,
+  SyncOutlined,
+} from '@ant-design/icons';
+
+import { Dropdown, Button, Menu } from 'antd';
 import './styles.css';
 
 /**
@@ -35,7 +47,7 @@ const ListItemActions = ({
       <Menu>
         {view && (
           <Menu.Item key="view" onClick={view.onClick} title={view.title}>
-            <Icon type="eye" /> {view.name}
+            <EyeOutlined /> {view.name}
           </Menu.Item>
         )}
 
@@ -45,25 +57,25 @@ const ListItemActions = ({
             onClick={onMapPreview.onClick}
             title={onMapPreview.title}
           >
-            <Icon type="eye" /> {onMapPreview.name}
+            <EyeOutlined /> {onMapPreview.name}
           </Menu.Item>
         )}
 
         {edit && (
           <Menu.Item key="edit" onClick={edit.onClick} title={edit.title}>
-            <Icon type="edit" /> {edit.name}
+            <EditOutlined /> {edit.name}
           </Menu.Item>
         )}
 
         {reload && (
           <Menu.Item key="reload" onClick={reload.onClick} title={reload.title}>
-            <Icon type="sync" /> {reload.name}
+            <SyncOutlined /> {reload.name}
           </Menu.Item>
         )}
 
         {share && (
           <Menu.Item key="share" onClick={share.onClick} title={share.title}>
-            <Icon type="share-alt" /> {share.name}
+            <ShareAltOutlined /> {share.name}
           </Menu.Item>
         )}
 
@@ -73,7 +85,7 @@ const ListItemActions = ({
             onClick={archive.onClick}
             title={archive.title}
           >
-            <Icon type="delete" /> {archive.name}
+            <DeleteOutlined /> {archive.name}
           </Menu.Item>
         )}
 
@@ -83,7 +95,7 @@ const ListItemActions = ({
             onClick={transfer.onClick}
             title={transfer.title}
           >
-            <Icon type="swap" /> {transfer.name}
+            <SwapOutlined /> {transfer.name}
           </Menu.Item>
         )}
 
@@ -93,14 +105,14 @@ const ListItemActions = ({
             onClick={adjust.onClick}
             title={adjust.title}
           >
-            <Icon type="diff" /> {adjust.name}
+            <DiffOutlined /> {adjust.name}
           </Menu.Item>
         )}
 
         {whatsapp && (
           <Menu.Item key="transfer" title={whatsapp.title}>
             <a target="_blank" rel="noopener noreferrer" href={whatsapp.link}>
-              <Icon type="diff" /> {whatsapp.name}
+              <DiffOutlined /> {whatsapp.name}
             </a>
           </Menu.Item>
         )}
@@ -111,7 +123,7 @@ const ListItemActions = ({
     <Button
       shape="circle"
       size="large"
-      icon="more"
+      icon={<MoreOutlined />}
       className="ListItemActionsButton"
       title="More actions"
     />

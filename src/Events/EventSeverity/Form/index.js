@@ -2,7 +2,9 @@ import {
   putEventSeverity,
   postEventSeverity,
 } from '@codetanzania/ewea-api-states';
-import { Button, Form, Input } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Input } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { notifyError, notifySuccess } from '../../../util';

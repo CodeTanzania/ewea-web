@@ -1,3 +1,12 @@
+import {
+  CloudDownloadOutlined,
+  FilterOutlined,
+  HddOutlined,
+  MailOutlined,
+  ReloadOutlined,
+  ShareAltOutlined,
+} from '@ant-design/icons';
+
 import { Button, Col, Pagination, Row } from 'antd';
 import { pluralize, singularize } from 'inflection';
 import startCase from 'lodash/startCase';
@@ -52,7 +61,7 @@ const Toolbar = ({
             <Col xxl={2} xl={2} lg={3} md={4} sm={6} xs={6}>
               <Button
                 shape="circle"
-                icon="reload"
+                icon={<ReloadOutlined />}
                 title="Refresh "
                 className="actionButton"
                 size="large"
@@ -67,7 +76,7 @@ const Toolbar = ({
             <Col xxl={2} xl={2} lg={3} md={4} sm={6} xs={6}>
               <Button
                 type="circle"
-                icon="mail"
+                icon={<MailOutlined />}
                 title={`Send Notification to${
                   selectedItemsCount > 0 ? 'selected' : ''
                 } `}
@@ -85,7 +94,7 @@ const Toolbar = ({
               <a href={exportUrl} download>
                 <Button
                   type="circle"
-                  icon="cloud-download"
+                  icon={<CloudDownloadOutlined />}
                   title="Export Data"
                   className="actionButton"
                   size="large"
@@ -100,7 +109,7 @@ const Toolbar = ({
             <Col xxl={2} xl={2} lg={3} md={4} sm={6} xs={6}>
               <Button
                 type="circle"
-                icon="share-alt"
+                icon={<ShareAltOutlined />}
                 title="Share selected "
                 className="actionButton"
                 size="large"
@@ -115,7 +124,7 @@ const Toolbar = ({
             <Col xxl={1} xl={1} lg={1} md={4} sm={6} xs={6}>
               <Button
                 type="circle"
-                icon="hdd"
+                icon={<HddOutlined />}
                 title="Archive selected "
                 className="actionButton"
                 size="large"
@@ -153,7 +162,7 @@ const Toolbar = ({
             <Col xxl={2} xl={2} lg={2} md={3} sm={0} xs={0}>
               <Button
                 type="circle"
-                icon="filter"
+                icon={<FilterOutlined />}
                 title="Filter"
                 className="actionButton"
                 size="large"

@@ -1,6 +1,9 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { postChangelog } from '@codetanzania/ewea-api-states';
-import { Button, Col, Form, Row, Input, Upload, Icon } from 'antd';
+import { InboxOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Row, Input, Upload } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
@@ -266,7 +269,7 @@ class EventChangelogForm extends Component {
                     }}
                   >
                     <p className="ant-upload-drag-icon">
-                      <Icon type="inbox" />
+                      <InboxOutlined />
                     </p>
                     <p className="ant-upload-text">
                       Click or drag file to this area to upload

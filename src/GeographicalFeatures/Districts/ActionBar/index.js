@@ -1,3 +1,9 @@
+import {
+  CloudDownloadOutlined,
+  FilterOutlined,
+  HddOutlined,
+  ReloadOutlined,
+} from '@ant-design/icons';
 import { Button, Checkbox, Col, Pagination, Row } from 'antd';
 import {
   refreshFeatures,
@@ -35,7 +41,7 @@ const DistrictsActionBar = ({ page, total, onFilter }) => (
       <Col span={1} xl={1}>
         <Button
           shape="circle"
-          icon="reload"
+          icon={<ReloadOutlined />}
           title="Refresh Districts"
           className="actionButton"
           size="large"
@@ -58,7 +64,7 @@ const DistrictsActionBar = ({ page, total, onFilter }) => (
       <Col span={1} xl={1}>
         <Button
           type="circle"
-          icon="cloud-download"
+          icon={<CloudDownloadOutlined />}
           title="Export selected Districts"
           className="actionButton"
           size="large"
@@ -68,7 +74,7 @@ const DistrictsActionBar = ({ page, total, onFilter }) => (
       <Col span={1} xl={1}>
         <Button
           type="circle"
-          icon="hdd"
+          icon={<HddOutlined />}
           title="Archive selected Districts"
           className="actionButton"
           size="large"
@@ -83,7 +89,7 @@ const DistrictsActionBar = ({ page, total, onFilter }) => (
       >
         <Button
           type="circle"
-          icon="filter"
+          icon={<FilterOutlined />}
           title="Filter Districts"
           className="actionButton"
           size="large"
