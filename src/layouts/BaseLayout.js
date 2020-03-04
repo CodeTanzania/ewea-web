@@ -83,8 +83,8 @@ const breadcrumbNameMap = {
     title: 'List of administrative areas',
   },
   '/app/settings/features': {
-    name: 'Critical Facilities',
-    title: 'List of all critical facilities',
+    name: 'Critical Infrastructures',
+    title: 'List of all critical infrastructures',
   },
   '/app/settings/eventactions': {
     name: 'Event Actions',
