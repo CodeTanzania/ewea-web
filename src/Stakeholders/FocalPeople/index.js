@@ -415,11 +415,11 @@ class FocalPeople extends Component {
                 {...roleSpan}
                 title={get(item, 'role.strings.name.en', 'N/A')}
               >
-                {item.role
-                  ? `${item.role.strings.name.en}, ${
-                      item.party ? item.party.abbreviation : 'N/A'
-                    }`
-                  : 'N/A'}
+                {`${get(item, 'role.strings.name.en', 'N/A')}, ${get(
+                  item,
+                  'party.abbreviation',
+                  'N/A'
+                )}`}
               </Col>
               <Col {...phoneSpan}>{item.mobile}</Col>
               <Col {...emailSpan}>{item.email}</Col>

@@ -340,7 +340,6 @@ class EventSeverities extends Component {
                 />
               )}
             >
-              {/* eslint-disable-next-line */}
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>
               <Col {...codeSpan}>{item.strings.code}</Col>
