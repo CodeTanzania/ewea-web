@@ -1,3 +1,4 @@
+import { getJwtToken } from '@codetanzania/ewea-api-client';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'antd';
@@ -118,6 +119,7 @@ const ItemList = ({
           generateExportUrl
             ? generateExportUrl({
                 filter: { _id: map(selectedItems, '_id') },
+                token: getJwtToken(),
               })
             : null
         }

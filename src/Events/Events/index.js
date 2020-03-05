@@ -34,6 +34,7 @@ const {
   getPartyGroups,
   getRoles,
   getAgencies,
+  getEventsExportUrl,
 } = httpActions;
 const { confirm } = Modal;
 const referenceIDSpan = { xxl: 4, xl: 4, lg: 4, md: 5, sm: 8, xs: 8 };
@@ -405,6 +406,7 @@ class Events extends Component {
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEvents}
           onPaginate={nextPage => paginateEvents(nextPage)}
+          generateExportUrl={getEventsExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
             item,
