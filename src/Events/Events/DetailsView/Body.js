@@ -412,7 +412,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
       return (
         // eslint-disable-next-line no-underscore-dangle
         <Timeline.Item key={feed._id} dot={<MessageOutlined />}>
-          {feed.comment}{' '}
+          <Tag>{feed.initiator.name}</Tag> commented: {feed.comment} on
           <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
         </Timeline.Item>
       );
@@ -423,7 +423,8 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
       return feed.focals.map(focal => (
         // eslint-disable-next-line no-underscore-dangle
         <Timeline.Item key={feed._id} dot={<UserOutlined />}>
-          Focal: <Tag color="cyan">{focal.name}</Tag> was added on{' '}
+          <Tag>{feed.initiator.name}</Tag> added focal:{' '}
+          <Tag color="cyan">{focal.name}</Tag> on{' '}
           <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
         </Timeline.Item>
       ));
@@ -433,7 +434,8 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
       return feed.agencies.map(agency => (
         // eslint-disable-next-line no-underscore-dangle
         <Timeline.Item key={feed._id} dot={<ApartmentOutlined />}>
-          Agency: <Tag color="magenta">{agency.name}</Tag> was added on{' '}
+          <Tag>{feed.initiator.name}</Tag> added agency:{' '}
+          <Tag color="magenta">{agency.name}</Tag> on{' '}
           <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
         </Timeline.Item>
       ));
@@ -443,7 +445,8 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
       return feed.areas.map(area => (
         // eslint-disable-next-line no-underscore-dangle
         <Timeline.Item key={area._id} dot={<EnvironmentOutlined />}>
-          Area: <Tag color="geekblue">{area.strings.name.en}</Tag> was added on{' '}
+          <Tag>{feed.initiator.name}</Tag> added affected area:{' '}
+          <Tag color="geekblue">{area.strings.name.en}</Tag> on{' '}
           <Tag>{formatDate(area.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
         </Timeline.Item>
       ));

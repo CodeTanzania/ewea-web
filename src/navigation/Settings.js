@@ -46,7 +46,7 @@ const routes = [
     description: modules.criticalFacilities,
   },
   {
-    name: 'Roles',
+    name: 'Stakeholder Roles',
     path: '/roles',
     icon: rolesIcon,
     description: modules.stakeholdersRoles,
