@@ -11,6 +11,7 @@ import {
   refreshNotificationTemplates,
 } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
@@ -338,7 +339,7 @@ class NotificationTemplates extends Component {
           actions={[
             {
               label: 'New Template',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Notification Template',
               onClick: this.openNotificationTemplateForm,

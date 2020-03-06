@@ -13,6 +13,7 @@ import {
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
 import Topbar from '../../components/Topbar';
 import EventIndicatorForm from './Form';
@@ -263,7 +264,7 @@ class EventIndicator extends Component {
           actions={[
             {
               label: 'New Event Indicator',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Event Indicator',
               onClick: this.openEventIndicatorsForm,

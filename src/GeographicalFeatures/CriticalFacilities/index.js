@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
 import { Modal, Col, Drawer } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import Topbar from '../../components/Topbar';
 import FeaturesForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
@@ -303,7 +304,7 @@ class Features extends Component {
           actions={[
             {
               label: 'New Infrastructure',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Critical Infrastructure',
               onClick: this.openFeaturesForm,

@@ -12,6 +12,7 @@ import {
 } from '@codetanzania/ewea-api-states';
 import isArray from 'lodash/isArray';
 import { Modal, Col } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
@@ -298,7 +299,7 @@ class EventFunctions extends Component {
           actions={[
             {
               label: 'New Function',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Emergency Function',
               onClick: this.openEventFunctionForm,

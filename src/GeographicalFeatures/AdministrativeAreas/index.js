@@ -11,6 +11,7 @@ import {
 } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Modal, Col, Drawer } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
@@ -369,7 +370,7 @@ class AdministrativeAreas extends Component {
           actions={[
             {
               label: 'New Area',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Administrative Area',
               onClick: this.openAdministrativeAreaForm,

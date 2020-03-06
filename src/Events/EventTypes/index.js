@@ -13,6 +13,7 @@ import { httpActions } from '@codetanzania/ewea-api-client';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
 import get from 'lodash/get';
 
@@ -257,7 +258,7 @@ class EventTypes extends Component {
           actions={[
             {
               label: 'New Event Type',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Event Type',
               onClick: this.openEventTypesForm,

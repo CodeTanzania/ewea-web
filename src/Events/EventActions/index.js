@@ -11,6 +11,7 @@ import {
   deleteEventAction,
 } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
 import get from 'lodash/get';
 import PropTypes from 'prop-types';
@@ -312,7 +313,7 @@ class EventActions extends Component {
           actions={[
             {
               label: 'New Event Action',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Event Action',
               onClick: this.openEventActionForm,
