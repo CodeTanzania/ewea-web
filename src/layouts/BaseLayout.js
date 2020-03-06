@@ -1,3 +1,4 @@
+import { AppstoreOutlined } from '@ant-design/icons';
 import { Breadcrumb, Button, Col, Layout, Popover, Row } from 'antd';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -211,7 +212,7 @@ const BaseLayout = props => {
                     content={<HeaderNavMenu />}
                     trigger="click"
                   >
-                    <Button icon="appstore" />
+                    <Button icon={<AppstoreOutlined />} />
                   </Popover>
                 </Col>
               )}

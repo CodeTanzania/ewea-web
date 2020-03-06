@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
 import { Modal, Col } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import Topbar from '../components/Topbar';
 import UnitForm from './Form';
 import NotificationForm from '../components/NotificationForm';
@@ -260,7 +261,7 @@ class Units extends Component {
           actions={[
             {
               label: 'New Unit',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Unit',
               onClick: this.openUnitsForm,

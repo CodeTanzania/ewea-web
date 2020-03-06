@@ -1,4 +1,5 @@
-import { Button, Icon } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Button } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import './styles.css';
@@ -20,7 +21,7 @@ import './styles.css';
  */
 const EmptyState = ({ icon, description, buttonLabel, onClick }) => (
   <div className="EmptyState">
-    <Icon type={icon} className="Icon" />
+    <LegacyIcon type={icon} className="Icon" />
     <p className="description">{description}</p>
     <Button onClick={onClick}>{buttonLabel}</Button>
   </div>

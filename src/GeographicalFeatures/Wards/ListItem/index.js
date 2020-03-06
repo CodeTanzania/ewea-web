@@ -1,4 +1,5 @@
-import { Avatar, Checkbox, Col, Icon, Row } from 'antd';
+import { DatabaseOutlined, EditOutlined } from '@ant-design/icons';
+import { Avatar, Checkbox, Col, Row } from 'antd';
 import PropTypes from 'prop-types';
 import randomColor from 'randomcolor';
 import React, { Component } from 'react';
@@ -55,17 +56,12 @@ class WardsListItem extends Component {
           <Col span={3}>
             {isHovered && (
               <>
-                <Icon
-                  type="edit"
+                <EditOutlined
                   title="Update Ward"
                   className="actionIcon"
                   onClick={onEdit}
                 />
-                <Icon
-                  type="database"
-                  title="Archive Ward"
-                  className="actionIcon"
-                />
+                <DatabaseOutlined title="Archive Ward" className="actionIcon" />
               </>
             )}
           </Col>

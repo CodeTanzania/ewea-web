@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Row,
-  Col,
-  Card,
-  Progress,
-  Statistic,
-  Icon,
-  Typography,
-  Popover,
-} from 'antd';
+  CheckOutlined,
+  ExclamationOutlined,
+  NotificationOutlined,
+} from '@ant-design/icons';
+import { Row, Col, Card, Progress, Statistic, Typography, Popover } from 'antd';
 import {
   ComposableMap,
   Geographies,
@@ -115,19 +111,19 @@ const ActionsTaken = () => (
                 title="Disseminated Actions"
                 value={ALL_ACTIONS}
                 valueStyle={{ color: '#1890ff' }}
-                prefix={<Icon type="notification" />}
+                prefix={<NotificationOutlined />}
               />
               <Statistic
                 title="Acted Upon Actions"
                 value={ACTED_UPON}
                 valueStyle={{ color: '#3f8600' }}
-                prefix={<Icon type="check" />}
+                prefix={<CheckOutlined />}
               />
               <Statistic
                 title="Not Acted Upon Actions"
                 value={NOT_ACTED_UPON}
                 valueStyle={{ color: '#CB904D' }}
-                prefix={<Icon type="exclamation" />}
+                prefix={<ExclamationOutlined />}
               />
             </Col>
           </Row>

@@ -1,7 +1,10 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { postEvent, putEvent } from '@codetanzania/ewea-api-states';
-import { Button, Col, Form, Row, Input } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Col, Row, Input } from 'antd';
 import map from 'lodash/map';
+import get from 'lodash/get';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
@@ -63,7 +66,7 @@ class EventForm extends Component {
             },
             () => {
               notifyError(
-                'An errror occurred while saving event, please try again!'
+                'An error occurred while saving event, please try again!'
               );
             }
           );
@@ -204,8 +207,12 @@ class EventForm extends Component {
               })(
                 <SearchableSelectInput
                   onSearch={getAdministrativeAreas}
-                  optionLabel={areas =>
-                    `${areas.strings.name.en} (${areas.relations.level.strings.name.en})`
+                  optionLabel={area =>
+                    `${area.strings.name.en} (${get(
+                      area,
+                      'relations.level.strings.name.en',
+                      'N/A'
+                    )})`
                   }
                   mode="multiple"
                   optionValue="_id"

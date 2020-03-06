@@ -3,7 +3,9 @@ import {
   Connect,
   filterFeatures,
 } from '@codetanzania/ewea-api-states';
-import { Button, Checkbox, Col, Form, Row } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Checkbox, Col, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 

@@ -13,6 +13,7 @@ import {
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
 import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
@@ -267,7 +268,7 @@ class EventQuestions extends Component {
           actions={[
             {
               label: 'New Event Question',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Event Question',
               onClick: this.openEventQuestionsForm,

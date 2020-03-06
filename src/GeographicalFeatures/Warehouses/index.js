@@ -6,6 +6,7 @@ import {
   closeFeatureForm,
   searchFeatures,
 } from '@codetanzania/ewea-api-states';
+import { PlusOutlined } from '@ant-design/icons';
 import { Input, Modal, Col, Row, Button } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -167,7 +168,7 @@ class Warehouses extends Component {
           <Col span={3} offset={9}>
             <Button
               type="primary"
-              icon="plus"
+              icon={<PlusOutlined />}
               size="large"
               title="Add New Warehouse"
               onClick={this.openForm}

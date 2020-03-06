@@ -1,4 +1,7 @@
-import { Button, Form, Input, Icon, Tooltip, Row, Col, Checkbox } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Input, Tooltip, Row, Col, Checkbox } from 'antd';
 import { Connect, postCampaign } from '@codetanzania/ewea-api-states';
 import compact from 'lodash/compact';
 import isEmpty from 'lodash/isEmpty';
@@ -249,7 +252,7 @@ class NotificationForm extends Component {
             <span>
               Subject&nbsp;
               <Tooltip title="Applicable for Email notification only">
-                <Icon type="question-circle-o" />
+                <QuestionCircleOutlined />
               </Tooltip>
             </span>
           }

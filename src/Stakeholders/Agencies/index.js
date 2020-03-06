@@ -11,6 +11,7 @@ import {
   deleteAgency,
 } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
@@ -351,7 +352,7 @@ class Agencies extends Component {
           actions={[
             {
               label: 'New Agency',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Agency',
               onClick: this.openAgencyForm,

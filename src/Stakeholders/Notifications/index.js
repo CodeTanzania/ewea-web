@@ -6,6 +6,7 @@ import {
 import { httpActions } from '@codetanzania/ewea-api-client';
 import PropTypes from 'prop-types';
 import { Modal } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import React, { Component } from 'react';
 import Topbar from '../../components/Topbar';
 import CampaignList from './List';
@@ -117,7 +118,7 @@ class Campaign extends Component {
           actions={[
             {
               label: 'New Notification',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Create Notification',
               onClick: () => this.openNotificationForm(),

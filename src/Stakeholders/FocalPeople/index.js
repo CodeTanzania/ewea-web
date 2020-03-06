@@ -13,6 +13,7 @@ import {
   deleteFocalPerson,
 } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import NotificationForm from '../../components/NotificationForm';
@@ -354,7 +355,7 @@ class FocalPeople extends Component {
           actions={[
             {
               label: 'New Focal Person',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Focal Person',
               onClick: this.openFocalPersonForm,

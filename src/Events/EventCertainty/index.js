@@ -11,6 +11,7 @@ import {
   deleteEventCertainty,
 } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -285,7 +286,7 @@ class EventCertainties extends Component {
           actions={[
             {
               label: 'New Event Certainty',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Event Certainty',
               onClick: this.openEventCertaintyForm,

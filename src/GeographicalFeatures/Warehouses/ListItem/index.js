@@ -1,4 +1,5 @@
-import { Icon, Avatar, Col, Row, Checkbox } from 'antd';
+import { DatabaseOutlined, EditOutlined } from '@ant-design/icons';
+import { Avatar, Col, Row, Checkbox } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './styles.css';
@@ -49,14 +50,12 @@ class WarehouseListItem extends Component {
           <Col span={3}>
             {isHovered && (
               <>
-                <Icon
-                  type="edit"
+                <EditOutlined
                   title="Update warehouse"
                   className="actionIcon"
                   onClick={onEdit}
                 />
-                <Icon
-                  type="database"
+                <DatabaseOutlined
                   title="Archive warehouse"
                   className="actionIcon"
                 />

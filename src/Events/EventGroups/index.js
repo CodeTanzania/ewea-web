@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
 import { Modal, Col } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import Topbar from '../../components/Topbar';
 import EventGroupForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
@@ -260,7 +261,7 @@ class EventGroups extends Component {
           actions={[
             {
               label: 'New Event Group',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Event Group',
               onClick: this.openEventGroupsForm,

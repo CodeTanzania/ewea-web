@@ -12,6 +12,7 @@ import {
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 import Topbar from '../../components/Topbar';
 import EventLevelForm from './Form';
@@ -208,7 +209,7 @@ class EventLevels extends Component {
           actions={[
             {
               label: 'New Event Level',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Event Level',
               onClick: this.openEventLevelsForm,

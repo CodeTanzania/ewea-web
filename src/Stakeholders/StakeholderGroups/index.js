@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
 import { Modal, Col } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import Topbar from '../../components/Topbar';
 import PartyGroupForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
@@ -259,7 +260,7 @@ class PartyGroups extends Component {
           actions={[
             {
               label: 'New Stakeholder Group',
-              icon: 'plus',
+              icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Stakeholder Group',
               onClick: this.openPartyGroupsForm,
