@@ -1,5 +1,5 @@
 {
-  "name": "emis-web",
+  "name": "ewea-web",
   "version": "0.0.0",
   "description": "A collaboration platform that facilitates communication, planning and actions for disaster management.",
   "main": "index.js",
@@ -15,7 +15,7 @@
   },
   "keywords": [
     "codetanzania",
-    "emis",
+    "ewea",
     "web",
     "disaster",
     "hazard",
@@ -78,7 +78,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/CodeTanzania/emis-web/issues"
+    "url": "https://github.com/CodeTanzania/ewea-web/issues"
   },
   "homepage": ".",
   "browserslist": [
