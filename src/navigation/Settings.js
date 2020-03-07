@@ -18,6 +18,7 @@ import NavigationMenu from '../components/NavigationMenu';
 import unitsIcon from '../assets/icons/settings/units.svg';
 import stakeholderGroupsIcon from '../assets/icons/settings/stakeholdergroups.svg';
 import eventTopicsIcon from '../assets/icons/settings/eventtopics.svg';
+import eventResponsesIcon from '../assets/icons/settings/eventresponses.svg';
 import modules from '../modules.json';
 
 /* constants */
@@ -110,6 +111,12 @@ const routes = [
     path: '/eventseverity',
     icon: eventSeverityIcon,
     description: modules.eventSeverity,
+  },
+  {
+    name: 'Event Responses',
+    path: '/eventresponses',
+    icon: eventResponsesIcon,
+    description: modules.eventResponses,
   },
   {
     name: 'Units',

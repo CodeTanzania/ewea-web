@@ -17,6 +17,7 @@ import EventFunctions from '../Events/EventFunctions';
 import EventTypes from '../Events/EventTypes';
 import EventSeverity from '../Events/EventSeverity';
 import EventCertainty from '../Events/EventCertainty';
+import EventResponses from '../Events/EventResponses';
 import EventQuestions from '../Events/EventQuestions';
 import EventTopics from '../Events/EventTopics';
 import EventGroups from '../Events/EventGroups';
@@ -139,6 +140,10 @@ const breadcrumbNameMap = {
   '/app/settings/eventlevels': {
     name: 'Event Levels',
     title: 'Event Level module',
+  },
+  '/app/settings/eventresponses': {
+    name: 'Event Responses',
+    title: 'Event Responses Module',
   },
   '/app/settings/units': {
     name: 'Units',
@@ -312,7 +317,13 @@ const BaseLayout = props => {
             component={EventLevels}
           />
 
+          <SecureRoute
+            path={`${baseUrl}/settings/eventresponses`}
+            component={EventResponses}
+          />
+
           <SecureRoute path={`${baseUrl}/settings/units`} component={Units} />
+
           <SecureRoute component={PageNotFound} />
         </Switch>
       </Content>

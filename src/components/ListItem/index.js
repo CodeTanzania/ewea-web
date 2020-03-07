@@ -20,6 +20,7 @@ const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 3 };
  */
 const ListItem = ({
   name,
+  avatarBackgroundColor,
   item,
   isSelected,
   onSelectItem,
@@ -28,7 +29,7 @@ const ListItem = ({
   children,
 }) => {
   const [isHovered, setHovered] = useState(false);
-  const avatarBackground = randomColor();
+  const avatarBackground = avatarBackgroundColor || randomColor();
 
   /**
    * @function
@@ -129,6 +130,7 @@ ListItem.propTypes = {
     }),
   }).isRequired,
   name: PropTypes.string,
+  avatarBackgroundColor: PropTypes.string,
   children: PropTypes.node.isRequired,
   renderActions: PropTypes.string.isRequired,
   isSelected: PropTypes.bool.isRequired,
@@ -138,6 +140,7 @@ ListItem.propTypes = {
 
 ListItem.defaultProps = {
   name: undefined,
+  avatarBackgroundColor: undefined,
 };
 
 export default ListItem;
