@@ -32,6 +32,7 @@ const {
   getPartyGroups,
   getRoles,
   getAgencies,
+  getEventResponsesExportUrl,
 } = httpActions;
 
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
@@ -299,6 +300,7 @@ class EventResponses extends Component {
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventResponses}
           onPaginate={nextPage => paginateEventResponses(nextPage)}
+          generateExportUrl={getEventResponsesExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
             item,
@@ -336,9 +338,7 @@ class EventResponses extends Component {
               )}
             >
               {/* eslint-disable-next-line */}
-              <Col {...nameSpan}>
-                {get(item, 'strings.name.en', 'N/A')}{' '}
-              </Col>
+              <Col {...nameSpan}>{get(item, 'strings.name.en', 'N/A')} </Col>
 
               {/* eslint-disable-next-line */}
               <Col {...descriptionSpan}>
