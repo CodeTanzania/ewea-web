@@ -1,14 +1,14 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import {
-  closeEventResponseForm,
+  closeEventUrgencyForm,
   Connect,
-  getEventResponses,
-  openEventResponseForm,
-  searchEventResponses,
-  selectEventResponse,
-  refreshEventResponses,
-  paginateEventResponses,
-  deleteEventResponse,
+  getEventUrgencies,
+  openEventUrgencyForm,
+  searchEventUrgencies,
+  selectEventUrgency,
+  refreshEventUrgencies,
+  paginateEventUrgencies,
+  deleteEventUrgency,
 } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
-import EventResponseForm from './Form';
+import EventUrgencyForm from './Form';
 import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
@@ -32,7 +32,7 @@ const {
   getPartyGroups,
   getRoles,
   getAgencies,
-  getEventResponsesExportUrl,
+  getEventUrgenciesExportUrl,
 } = httpActions;
 
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
@@ -47,13 +47,13 @@ const { confirm } = Modal;
 
 /**
  * @class
- * @name EventResponses
- * @description Render eventResponse list which have search box, actions and eventResponse list
+ * @name EventUrgency
+ * @description Render eventUrgency list which have search box, actions and eventUrgency list
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EventResponses extends Component {
+class EventUrgency extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isEditForm: false,
@@ -63,7 +63,7 @@ class EventResponses extends Component {
   };
 
   componentDidMount() {
-    getEventResponses();
+    getEventUrgencies();
   }
 
   /**
@@ -96,41 +96,41 @@ class EventResponses extends Component {
 
   /**
    * @function
-   * @name openEventResponseForm
-   * @description Open eventResponse form
+   * @name openEventUrgencyForm
+   * @description Open eventUrgency form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openEventResponseForm = () => {
-    openEventResponseForm();
+  openEventUrgencyForm = () => {
+    openEventUrgencyForm();
   };
 
   /**
    * @function
-   * @name openEventResponseForm
-   * @description close eventResponse form
+   * @name openEventUrgencyForm
+   * @description close eventUrgency form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeEventResponseForm = () => {
-    closeEventResponseForm();
+  closeEventUrgencyForm = () => {
+    closeEventUrgencyForm();
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
-   * @name searchEventResponses
-   * @description Search EventResponses List based on supplied filter word
+   * @name searchEventUrgency
+   * @description Search EventUrgency List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventResponses = event => {
-    searchEventResponses(event.target.value);
+  searchEventUrgencies = event => {
+    searchEventUrgencies(event.target.value);
   };
 
   /**
@@ -138,15 +138,15 @@ class EventResponses extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} eventResponse eventResponse to be edited
+   * @param {object} eventUrgency eventUrgency to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventResponse => {
-    selectEventResponse(eventResponse);
+  handleEdit = eventUrgency => {
+    selectEventUrgency(eventUrgency);
     this.setState({ isEditForm: true });
-    openEventResponseForm();
+    openEventUrgencyForm();
   };
 
   /**
@@ -154,27 +154,27 @@ class EventResponses extends Component {
    * @name handleShare
    * @description Handle share multiple event Actions
    *
-   * @param {object[]| object} eventResponses event Actions list to be shared
+   * @param {object[]| object} eventUrgencies event Urgencies list to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventResponses => {
+  handleShare = eventUrgencies => {
     let message = '';
-    if (isArray(eventResponses)) {
-      const eventResponseList = eventResponses.map(
-        eventResponse =>
-          `Name: ${eventResponse.strings.name.en}\nDescription: ${
+    if (isArray(eventUrgencies)) {
+      const eventUrgencyList = eventUrgencies.map(
+        eventUrgency =>
+          `Name: ${eventUrgency.strings.name.en}\nDescription: ${
             // eslint-disable-line
-            eventResponse.strings.description.en
+            eventUrgency.strings.description.en
           }\n`
       );
 
-      message = eventResponseList.join('\n\n\n');
+      message = eventUrgencyList.join('\n\n\n');
     } else {
-      message = `Name: ${eventResponses.strings.name.en}\nDescription: ${
+      message = `Name: ${eventUrgencies.strings.name.en}\nDescription: ${
         // eslint-disable-line
-        eventResponses.strings.description.en
+        eventUrgencies.strings.description.en
       }\n`;
     }
 
@@ -184,7 +184,7 @@ class EventResponses extends Component {
   /**
    * @function
    * @name closeNotificationForm
-   * @description Handle on notify eventResponses
+   * @description Handle on notify eventUrgencies
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -202,7 +202,6 @@ class EventResponses extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
-    selectEventResponse(null);
     this.setState({ isEditForm: false });
   };
 
@@ -221,7 +220,7 @@ class EventResponses extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a focal person
+   * @description show confirm modal before archiving a event urgency
    * @param {object} item Resource item to be archived
    *
    * @version 0.1.0
@@ -234,31 +233,31 @@ class EventResponses extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventResponse(
+        deleteEventUrgency(
           item._id, // eslint-disable-line
-          () => notifySuccess('Event Response was archived successfully'),
+          () => notifySuccess('Event Urgency was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving Event Response, Please contact your system Administrator'
+              'An error occurred while archiving Event Urgency, Please contact your system Administrator'
             )
         );
       },
     });
   };
 
-  handleRefreshEventResponses = () =>
-    refreshEventResponses(
-      () => notifySuccess('Event Responses refreshed successfully'),
+  handleRefreshEventUrgencies = () =>
+    refreshEventUrgencies(
+      () => notifySuccess('Event Urgency refreshed successfully'),
       () =>
         notifyError(
-          'An Error occurred while refreshing Event Responses, please contact system administrator'
+          'An Error occurred while refreshing Event Urgency, please contact system administrator'
         )
     );
 
   render() {
     const {
-      eventResponses,
-      eventResponse,
+      eventUrgencies,
+      eventUrgency,
       loading,
       posting,
       page,
@@ -274,17 +273,17 @@ class EventResponses extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for event responses here ...',
-            onChange: this.searchEventResponses,
+            placeholder: 'Search for event urgency here ...',
+            onChange: this.searchEventUrgencies,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Event Response',
+              label: 'New Event Urgency',
               icon: <PlusOutlined />,
               size: 'large',
-              title: 'Add New Event Response',
-              onClick: this.openEventResponseForm,
+              title: 'Add New Event Urgency',
+              onClick: this.openEventUrgencyForm,
             },
           ]}
         />
@@ -292,16 +291,16 @@ class EventResponses extends Component {
 
         {/* list starts */}
         <ItemList
-          itemName="event responses"
-          items={eventResponses}
+          itemName="event urgencies"
+          items={eventUrgencies}
           page={page}
           itemCount={total}
           loading={loading}
           // onFilter={this.openFiltersModal}
           onShare={this.handleShare}
-          onRefresh={this.handleRefreshEventResponses}
-          onPaginate={nextPage => paginateEventResponses(nextPage)}
-          generateExportUrl={getEventResponsesExportUrl}
+          onRefresh={this.handleRefreshEventUrgencies}
+          onPaginate={nextPage => paginateEventUrgencies(nextPage)}
+          generateExportUrl={getEventUrgenciesExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
             item,
@@ -320,19 +319,19 @@ class EventResponses extends Component {
               renderActions={() => (
                 <ListItemActions
                   edit={{
-                    name: 'Edit Event Response',
-                    title: 'Update Event Response Details',
+                    name: 'Edit Event Urgency',
+                    title: 'Update Event Urgency Details',
                     onClick: () => this.handleEdit(item),
                   }}
                   share={{
-                    name: 'Share Event Response',
-                    title: 'Share Event Response details with others',
+                    name: 'Share Event Urgency',
+                    title: 'Share Event Urgency details with others',
                     onClick: () => this.handleShare(item),
                   }}
                   archive={{
-                    name: 'Archive Event Response',
+                    name: 'Archive Event Urgency',
                     title:
-                      'Remove Event Response from list of active focal People',
+                      'Remove Event Urgency from list of active focal People',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                 />
@@ -352,7 +351,7 @@ class EventResponses extends Component {
 
         {/* Notification Modal modal */}
         <Modal
-          title="Notify Event Responses"
+          title="Notify Event Urgency"
           visible={showNotificationForm}
           onCancel={this.closeNotificationForm}
           footer={null}
@@ -375,20 +374,20 @@ class EventResponses extends Component {
 
         {/* create/edit form modal */}
         <Modal
-          title={isEditForm ? 'Edit Event Response' : 'Add New Event Response'}
+          title={isEditForm ? 'Edit Event Urgency' : 'Add New Event Urgency'}
           visible={showForm}
           className="FormModal"
           footer={null}
-          onCancel={this.closeEventResponseForm}
+          onCancel={this.closeEventUrgencyForm}
           destroyOnClose
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <EventResponseForm
+          <EventUrgencyForm
             posting={posting}
             isEditForm={isEditForm}
-            eventResponse={eventResponse}
-            onCancel={this.closeEventResponseForm}
+            eventUrgency={eventUrgency}
+            onCancel={this.closeEventUrgencyForm}
           />
         </Modal>
         {/* end create/edit form modal */}
@@ -397,30 +396,30 @@ class EventResponses extends Component {
   }
 }
 
-EventResponses.propTypes = {
+EventUrgency.propTypes = {
   loading: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
-  eventResponses: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+  eventUrgencies: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
-  eventResponse: PropTypes.shape({ name: PropTypes.string }),
+  eventUrgency: PropTypes.shape({ name: PropTypes.string }),
   page: PropTypes.number.isRequired,
   showForm: PropTypes.bool.isRequired,
   searchQuery: PropTypes.string,
   total: PropTypes.number.isRequired,
 };
 
-EventResponses.defaultProps = {
-  eventResponse: null,
+EventUrgency.defaultProps = {
+  eventUrgency: null,
   searchQuery: undefined,
 };
 
-export default Connect(EventResponses, {
-  eventResponses: 'eventResponses.list',
-  eventResponse: 'eventResponses.selected',
-  loading: 'eventResponses.loading',
-  posting: 'eventResponses.posting',
-  page: 'eventResponses.page',
-  showForm: 'eventResponses.showForm',
-  total: 'eventResponses.total',
-  searchQuery: 'eventResponses.q',
+export default Connect(EventUrgency, {
+  eventUrgencies: 'eventUrgencies.list',
+  eventUrgency: 'eventUrgencies.selected',
+  loading: 'eventUrgencies.loading',
+  posting: 'eventUrgencies.posting',
+  page: 'eventUrgencies.page',
+  showForm: 'eventUrgencies.showForm',
+  total: 'eventUrgencies.total',
+  searchQuery: 'eventUrgencies.q',
 });
