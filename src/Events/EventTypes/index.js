@@ -61,7 +61,6 @@ class EventTypes extends Component {
     isEditForm: false,
     notificationBody: undefined,
     showNotificationForm: false,
-    selectedEventActions: [],
   };
 
   componentDidMount() {
@@ -239,12 +238,7 @@ class EventTypes extends Component {
       searchQuery,
       total,
     } = this.props;
-    const {
-      isEditForm,
-      showNotificationForm,
-      selectedEventActions,
-      notificationBody,
-    } = this.state;
+    const { isEditForm, showNotificationForm, notificationBody } = this.state;
     return (
       <>
         {/* Topbar */}
@@ -340,7 +334,6 @@ class EventTypes extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={selectedEventActions}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
