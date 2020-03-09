@@ -19,6 +19,7 @@ import unitsIcon from '../assets/icons/settings/units.svg';
 import stakeholderGroupsIcon from '../assets/icons/settings/stakeholdergroups.svg';
 import eventTopicsIcon from '../assets/icons/settings/eventtopics.svg';
 import eventResponsesIcon from '../assets/icons/settings/eventresponses.svg';
+import eventUrgenciesIcon from '../assets/icons/settings/eventurgencies.svg';
 import modules from '../modules.json';
 
 /* constants */
@@ -111,6 +112,12 @@ const routes = [
     path: '/eventseverity',
     icon: eventSeverityIcon,
     description: modules.eventSeverity,
+  },
+  {
+    name: 'Event Urgencies',
+    path: '/eventurgencies',
+    icon: eventUrgenciesIcon,
+    description: modules.eventUrgencies,
   },
   {
     name: 'Event Responses',
