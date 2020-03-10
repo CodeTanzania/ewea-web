@@ -12,6 +12,7 @@ import { notifyError, notifySuccess } from '../../../util';
 import 'rc-color-picker/assets/index.css';
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 /**
  * @class
@@ -144,7 +145,7 @@ class FunctionForm extends Component {
           {getFieldDecorator('name', {
             initialValue: isEditForm ? name.en : undefined,
             rules: [{ required: true, message: 'Function name is required' }],
-          })(<Input placeholder="e.g Direction and Control" />)}
+          })(<Input />)}
         </Form.Item>
         {/* end function  name */}
 
@@ -155,7 +156,7 @@ class FunctionForm extends Component {
             initialValue: isEditForm ? name.en : undefined,
             rules: [{ required: false, message: 'Function type is required' }],
           })(
-            <Select placeholder="e.g Flood">
+            <Select>
               {types.map(nature => (
                 <Option key={nature} value={nature}>
                   {nature}
@@ -174,7 +175,7 @@ class FunctionForm extends Component {
             rules: [
               { required: true, message: 'Function description is required' },
             ],
-          })(<Input placeholder="e.g Direction and Control" />)}
+          })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
         </Form.Item>
         {/* end description */}
 
@@ -184,7 +185,7 @@ class FunctionForm extends Component {
           {getFieldDecorator('code', {
             initialValue: isEditForm ? code : undefined,
             rules: [{ required: true, message: 'Code is required' }],
-          })(<Input placeholder="e.g NMS" />)}
+          })(<Input />)}
         </Form.Item>
         {/* end function code */}
 

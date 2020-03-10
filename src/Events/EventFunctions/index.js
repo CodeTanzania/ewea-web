@@ -361,7 +361,7 @@ class EventFunctions extends Component {
               <Col {...typeSpan}>{item.strings.code}</Col>
               <Col {...descriptionSpan}>
                 <span title={item.strings.description.en}>
-                  {truncateString(item.strings.description.en, 120)}
+                  {truncateString(item.strings.description.en, 100)}
                 </span>
               </Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
