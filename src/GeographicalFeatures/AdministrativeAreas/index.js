@@ -402,6 +402,7 @@ class AdministrativeAreas extends Component {
               name={item.strings.name.en}
               item={item}
               isSelected={isSelected}
+              avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
               renderActions={() => (

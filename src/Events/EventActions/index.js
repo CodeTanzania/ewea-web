@@ -345,6 +345,7 @@ class EventActions extends Component {
             <ListItem
               key={item._id} // eslint-disable-line
               name={item.strings.name.en}
+              avatarBackgroundColor={item.strings.color}
               item={item}
               isSelected={isSelected}
               onSelectItem={onSelectItem}

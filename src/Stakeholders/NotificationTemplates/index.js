@@ -371,6 +371,7 @@ class NotificationTemplates extends Component {
               key={item._id} // eslint-disable-line
               item={item}
               name={item.strings.name.en}
+              avatarBackgroundColor={item.strings.color}
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}

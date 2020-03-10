@@ -297,6 +297,7 @@ class EventIndicator extends Component {
               item={item}
               name={item.strings.name.en}
               isSelected={isSelected}
+              avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
               renderActions={() => (
