@@ -26,11 +26,12 @@ import './styles.css';
 
 /* constants */
 const {
-  getEventCertainties: getEventCertaintiesFromAPI,
+  getFocalPeople,
   getJurisdictions,
   getPartyGroups,
   getRoles,
   getAgencies,
+  getEventCertaintiesExportUrl,
 } = httpActions;
 
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 8, xs: 14 };
@@ -58,7 +59,6 @@ class EventCertainties extends Component {
   state = {
     isEditForm: false,
     showNotificationForm: false,
-    selectedEventCertainties: [],
     notificationBody: undefined,
     cached: null,
   };
@@ -266,12 +266,7 @@ class EventCertainties extends Component {
       searchQuery,
       total,
     } = this.props;
-    const {
-      isEditForm,
-      showNotificationForm,
-      selectedEventCertainties,
-      notificationBody,
-    } = this.state;
+    const { isEditForm, showNotificationForm, notificationBody } = this.state;
 
     return (
       <>
@@ -306,6 +301,7 @@ class EventCertainties extends Component {
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventCertainties}
           onPaginate={nextPage => paginateEventCertainties(nextPage)}
+          generateExportUrl={getEventCertaintiesExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
             item,
@@ -366,8 +362,7 @@ class EventCertainties extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={selectedEventCertainties}
-            onSearchRecipients={getEventCertaintiesFromAPI}
+            onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}

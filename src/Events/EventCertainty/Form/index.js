@@ -9,6 +9,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { notifyError, notifySuccess } from '../../../util';
 
+/* constants */
+const { TextArea } = Input;
+
 /**
  * @class
  * @name EventCertaintyForm
@@ -155,7 +158,7 @@ class EventCertaintyForm extends Component {
                 message: 'Event Certainty Description is required',
               },
             ],
-          })(<Input />)}
+          })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
         </Form.Item>
         {/* end Event Certainty */}
 
