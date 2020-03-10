@@ -33,6 +33,7 @@ const {
   getPartyGroups,
   getRoles,
   getAgencies,
+  getEventActionsExportUrl,
 } = httpActions;
 
 const functionSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
@@ -333,6 +334,7 @@ class EventActions extends Component {
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventActions}
           onPaginate={nextPage => paginateEventActions(nextPage)}
+          generateExportUrl={getEventActionsExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
             item,
