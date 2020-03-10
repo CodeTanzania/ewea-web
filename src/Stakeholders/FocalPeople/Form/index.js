@@ -320,7 +320,7 @@ class FocalPersonForm extends Component {
                 initialValue: isEditForm
                   ? focalPerson.physicalAddress
                   : undefined,
-              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
+              })(<TextArea autoSize={{ minRows: 1, maxRows: 10 }} />)}
             </Form.Item>
             {/* end focalPerson physical Address */}
           </Col>
@@ -332,7 +332,7 @@ class FocalPersonForm extends Component {
                 initialValue: isEditForm
                   ? focalPerson.postalAddress
                   : undefined,
-              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
+              })(<TextArea autoSize={{ minRows: 1, maxRows: 10 }} />)}
             </Form.Item>
             {/* end focalPerson postal address */}
           </Col>

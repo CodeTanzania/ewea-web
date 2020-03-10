@@ -481,7 +481,7 @@ class EventActionCatalogueForm extends Component {
                     message: 'Action  description is required',
                   },
                 ],
-              })(<TextArea autosize={{ minRows: 3, maxRows: 10 }} />)}
+              })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
             </Form.Item>
           </Col>
         </Row>

@@ -118,7 +118,7 @@ class EventStatusForm extends Component {
             initialValue: isEditForm
               ? eventStatus.strings.description.en
               : undefined,
-          })(<TextArea autosize={{ minRows: 3, maxRows: 10 }} />)}
+          })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
         </Form.Item>
         {/* end event status description */}
 

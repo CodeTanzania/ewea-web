@@ -287,7 +287,7 @@ class AgencyForm extends Component {
             <Form.Item {...formItemLayout} label="Physical Address">
               {getFieldDecorator('physicalAddress', {
                 initialValue: isEditForm ? agency.physicalAddress : undefined,
-              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
+              })(<TextArea autoSize={{ minRows: 1, maxRows: 10 }} />)}
             </Form.Item>
             {/* end agency physical Address */}
           </Col>
@@ -297,7 +297,7 @@ class AgencyForm extends Component {
             <Form.Item {...formItemLayout} label="Postal Address">
               {getFieldDecorator('postalAddress', {
                 initialValue: isEditForm ? agency.postalAddress : undefined,
-              })(<TextArea autosize={{ minRows: 1, maxRows: 10 }} />)}
+              })(<TextArea autoSize={{ minRows: 1, maxRows: 10 }} />)}
             </Form.Item>
             {/* end agency postal address */}
           </Col>

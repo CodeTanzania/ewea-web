@@ -121,7 +121,7 @@ class EventUrgencyForm extends Component {
             initialValue: isEditForm
               ? eventUrgency.strings.description.en
               : undefined,
-          })(<TextArea autosize={{ minRows: 3, maxRows: 10 }} />)}
+          })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
         </Form.Item>
         {/* end event urgency description */}
 
