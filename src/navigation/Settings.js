@@ -37,22 +37,16 @@ const routes = [
     icon: emergencyFunctionsIcon,
   },
   {
-    name: 'Administrative Areas',
-    path: '/administrativeareas',
-    icon: administrativeAreasIcon,
-    description: modules.administrativeareas,
-  },
-  {
     name: 'Critical Infrastructures',
     path: '/features',
     icon: criticalFacilitiesIcon,
     description: modules.criticalFacilities,
   },
   {
-    name: 'Stakeholder Roles',
-    path: '/roles',
-    icon: rolesIcon,
-    description: modules.stakeholdersRoles,
+    name: 'Administrative Areas',
+    path: '/administrativeareas',
+    icon: administrativeAreasIcon,
+    description: modules.administrativeareas,
   },
   {
     name: 'Event Types',
@@ -61,16 +55,16 @@ const routes = [
     description: modules.alerts,
   },
   {
-    name: 'Event Topics',
-    path: '/eventtopics',
-    icon: eventTopicsIcon,
-    description: modules.eventTopics,
-  },
-  {
     name: 'Event Groups',
     path: '/eventgroups',
     icon: eventGroupsIcon,
     description: modules.alerts,
+  },
+  {
+    name: 'Stakeholder Roles',
+    path: '/roles',
+    icon: rolesIcon,
+    description: modules.stakeholdersRoles,
   },
   {
     name: 'Stakeholder Groups',
@@ -85,16 +79,16 @@ const routes = [
     description: modules.eventQuestions,
   },
   {
+    name: 'Event Topics',
+    path: '/eventtopics',
+    icon: eventTopicsIcon,
+    description: modules.eventTopics,
+  },
+  {
     name: 'Event Indicators',
     path: '/eventindicator',
     icon: eventIndicatorIcon,
     description: modules.eventIndicator,
-  },
-  {
-    name: 'Notification Templates',
-    path: '/notificationtemplates',
-    icon: notificationTemplateIcon,
-    description: modules.notificationTemplate,
   },
   {
     name: 'Event Levels',
@@ -103,16 +97,16 @@ const routes = [
     description: modules.eventLevels,
   },
   {
-    name: 'Event Certainties',
-    path: '/eventcertainty',
-    icon: eventCertaintyIcon,
-    description: modules.eventCertainty,
-  },
-  {
     name: 'Event Severities',
     path: '/eventseverity',
     icon: eventSeverityIcon,
     description: modules.eventSeverity,
+  },
+  {
+    name: 'Event Certainties',
+    path: '/eventcertainty',
+    icon: eventCertaintyIcon,
+    description: modules.eventCertainty,
   },
   {
     name: 'Event Statuses',
@@ -137,6 +131,12 @@ const routes = [
     path: '/units',
     icon: unitsIcon,
     description: modules.units,
+  },
+  {
+    name: 'Notification Templates',
+    path: '/notificationtemplates',
+    icon: notificationTemplateIcon,
+    description: modules.notificationTemplate,
   },
 ];
 
