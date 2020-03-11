@@ -34,13 +34,11 @@ const {
   getEventCertaintiesExportUrl,
 } = httpActions;
 
-const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 8, xs: 14 };
-const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 5, xs: 4 };
-const descriptionSpan = { xxl: 15, xl: 15, lg: 15, md: 14, sm: 9, xs: 0 };
+const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
+const descriptionSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };
 
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
-  { ...codeSpan, header: 'Code' },
   { ...descriptionSpan, header: 'Description' },
 ];
 
@@ -341,7 +339,6 @@ class EventCertainties extends Component {
               {/* eslint-disable-next-line */}
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>
-              <Col {...codeSpan}>{item.strings.code}</Col>
               <Col {...descriptionSpan} title={item.strings.description.en}>
                 {item.strings.description.en}
               </Col>
