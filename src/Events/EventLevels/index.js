@@ -1,3 +1,4 @@
+import { httpActions } from '@codetanzania/ewea-api-client';
 import {
   Connect,
   getEventLevels,
@@ -12,10 +13,12 @@ import {
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
+import isArray from 'lodash/isArray';
 import { PlusOutlined } from '@ant-design/icons';
 
 import Topbar from '../../components/Topbar';
 import EventLevelForm from './Form';
+import NotificationForm from '../../components/NotificationForm';
 import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
@@ -33,6 +36,15 @@ const headerLayout = [
   { ...descriptionSpan, header: 'Description' },
 ];
 
+const {
+  getEventLevelsExportUrl,
+  getFocalPeople,
+  getJurisdictions,
+  getPartyTopics,
+  getRoles,
+  getAgencies,
+} = httpActions;
+
 const { confirm } = Modal;
 
 /**
@@ -48,6 +60,7 @@ class EventLevels extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isEditForm: false,
+    notificationBody: undefined,
     showNotificationForm: false,
   };
 
@@ -96,6 +109,18 @@ class EventLevels extends Component {
 
   /**
    * @function
+   * @name handleAfterCloseNotificationForm
+   * @description Perform post close notification form cleanups
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleAfterCloseNotificationForm = () => {
+    this.setState({ notificationBody: undefined });
+  };
+
+  /**
+   * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
@@ -127,12 +152,29 @@ class EventLevels extends Component {
    * @name handleShare
    * @description Handle share multiple event levels
    *
-   *
+   * @param {object[]| object} eventLevels event levels list to be shared
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = () => {
-    this.setState({ showNotificationForm: true });
+  handleShare = eventLevels => {
+    let message = '';
+    if (isArray(eventLevels)) {
+      const eventLevelsList = eventLevels.map(
+        eventLevel =>
+          `Name: ${eventLevel.strings.name.en}\nDescription: ${
+            // eslint-disable-line
+            eventLevel.strings.description.en
+          }\n`
+      );
+
+      message = eventLevelsList.join('\n\n\n');
+    } else {
+      message = `Name: ${eventLevels.strings.name.en}\nDescription: ${
+        // eslint-disable-line
+        eventLevels.strings.description.en
+      }\n`;
+    }
+    this.setState({ notificationBody: message, showNotificationForm: true });
   };
 
   /**
@@ -195,7 +237,7 @@ class EventLevels extends Component {
       searchQuery,
       total,
     } = this.props;
-    const { isEditForm, showNotificationForm } = this.state;
+    const { isEditForm, showNotificationForm, notificationBody } = this.state;
     return (
       <>
         {/* Topbar */}
@@ -226,6 +268,7 @@ class EventLevels extends Component {
           itemCount={total}
           loading={loading}
           onShare={this.handleShare}
+          generateExportUrl={getEventLevelsExportUrl}
           headerLayout={headerLayout}
           onRefresh={this.handleRefreshEventLevels}
           onPaginate={nextPage => paginateEventLevels(nextPage)}
@@ -283,7 +326,15 @@ class EventLevels extends Component {
           className="FormModal"
           afterClose={this.handleAfterCloseNotificationForm}
         >
-          <></>
+          <NotificationForm
+            onSearchRecipients={getFocalPeople}
+            onSearchJurisdictions={getJurisdictions}
+            onSearchTopics={getPartyTopics}
+            onSearchAgencies={getAgencies}
+            onSearchRoles={getRoles}
+            body={notificationBody}
+            onCancel={this.closeNotificationForm}
+          />
         </Modal>
         {/* end Notification modal */}
 

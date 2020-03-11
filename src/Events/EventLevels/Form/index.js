@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { notifyError, notifySuccess } from '../../../util';
 
+const { TextArea } = Input;
+
 /**
  * @class
  * @name EventLevelForm
@@ -130,7 +132,7 @@ class EventLevelForm extends Component {
               ? eventLevel.strings.description.en
               : undefined,
             rules: [{ required: true, message: 'Description is required' }],
-          })(<Input />)}
+          })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
         </Form.Item>
         {/* end Event Level */}
 
