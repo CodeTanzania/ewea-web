@@ -26,11 +26,12 @@ import './styles.css';
 
 /* constants */
 const {
-  getEventSeverities: getEventSeveritiesFromAPI,
+  getFocalPeople,
   getJurisdictions,
   getPartyGroups,
   getRoles,
   getAgencies,
+  getEventSeveritiesExportUrl,
 } = httpActions;
 
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 6, xs: 14 };
@@ -58,7 +59,6 @@ class EventSeverities extends Component {
   state = {
     isEditForm: false,
     showNotificationForm: false,
-    selectedEventSeverities: [],
     notificationBody: undefined,
     cached: null,
   };
@@ -266,12 +266,7 @@ class EventSeverities extends Component {
       searchQuery,
       total,
     } = this.props;
-    const {
-      isEditForm,
-      showNotificationForm,
-      selectedEventSeverities,
-      notificationBody,
-    } = this.state;
+    const { isEditForm, showNotificationForm, notificationBody } = this.state;
 
     return (
       <>
@@ -306,6 +301,7 @@ class EventSeverities extends Component {
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventSeverities}
           onPaginate={nextPage => paginateEventSeverities(nextPage)}
+          generateExportUrl={getEventSeveritiesExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
             item,
@@ -366,8 +362,7 @@ class EventSeverities extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={selectedEventSeverities}
-            onSearchRecipients={getEventSeveritiesFromAPI}
+            onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
