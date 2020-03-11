@@ -41,12 +41,12 @@ const headerLayout = [
 ];
 
 const {
-  // getEventQuestions: getEventQuestionFromAPI,
   getFocalPeople,
   getJurisdictions,
   getPartyGroups,
   getAgencies,
   getRoles,
+  getEventQuestionsExportUrl,
 } = httpActions;
 
 /**
@@ -289,6 +289,7 @@ class EventQuestions extends Component {
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventQuestions}
           onPaginate={nextPage => paginateEventQuestions(nextPage)}
+          generateExportUrl={getEventQuestionsExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
             item,
@@ -350,7 +351,6 @@ class EventQuestions extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}

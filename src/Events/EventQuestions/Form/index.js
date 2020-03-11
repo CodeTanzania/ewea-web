@@ -12,6 +12,7 @@ import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
 const { getEventIndicators, getEventTopics } = httpActions;
+const { TextArea } = Input;
 
 /**
  * @class
@@ -190,7 +191,7 @@ class EventQuestionForm extends Component {
             initialValue: isEditForm
               ? eventQuestion.strings.description.en
               : undefined,
-          })(<Input />)}
+          })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
         </Form.Item>
         {/* end Event Question */}
 
