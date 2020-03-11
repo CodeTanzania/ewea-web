@@ -48,7 +48,6 @@ import EventChangelogForm from '../ChangelogForm';
 import './styles.css';
 
 const actionsTaken = ['Test Action 1', 'Test Action 2'];
-const jwtToken = getJwtToken();
 
 /**
  * @function
@@ -375,7 +374,9 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
                 <a
                   // eslint-disable-next-line no-underscore-dangle
                   key={`view-${feed._id}`}
-                  href={`${getBaseUrl()}${feed.image.stream}?token=${jwtToken}`}
+                  href={`${getBaseUrl()}${
+                    feed.image.stream
+                  }?token=${getJwtToken()}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -386,7 +387,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
                   key={`download-${feed._id}`}
                   href={`${getBaseUrl()}${
                     feed.image.download
-                  }?token=${jwtToken}`}
+                  }?token=${getJwtToken()}`}
                 >
                   <DownloadOutlined key="download" />
                 </a>,
@@ -394,7 +395,9 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
               cover={
                 <img
                   alt="example"
-                  src={`${getBaseUrl()}${feed.image.stream}?token=${jwtToken}`}
+                  src={`${getBaseUrl()}${
+                    feed.image.stream
+                  }?token=${getJwtToken()}`}
                 />
               }
             />
