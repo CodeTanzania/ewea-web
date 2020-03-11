@@ -34,13 +34,11 @@ const {
   getEventSeveritiesExportUrl,
 } = httpActions;
 
-const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 6, xs: 14 };
-const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 4 };
-const descriptionSpan = { xxl: 14, xl: 14, lg: 14, md: 13, sm: 10, xs: 0 };
+const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
+const descriptionSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };
 
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
-  { ...codeSpan, header: 'Code' },
   { ...descriptionSpan, header: 'Description' },
 ];
 
@@ -340,7 +338,6 @@ class EventSeverities extends Component {
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>
-              <Col {...codeSpan}>{item.strings.code}</Col>
               <Col {...descriptionSpan} title={item.strings.description.en}>
                 {item.strings.description.en}
               </Col>
