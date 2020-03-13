@@ -42,6 +42,30 @@ const SELECTED_WARDS = [
   'Mburahati',
 ];
 
+const agenciesSummary = { xxl: 24, xl: 24, lg: 24, md: 24, sm: 24, xs: 24 };
+const actionsDissemination = {
+  xxl: 24,
+  xl: 24,
+  lg: 24,
+  md: 24,
+  sm: 24,
+  xs: 24,
+};
+const actionsSummaryGraph = { xxl: 8, xl: 8, lg: 10, md: 12, sm: 24, xs: 24 };
+const actionsSummaryText = { xxl: 16, xl: 16, lg: 14, md: 12, sm: 24, xs: 24 };
+const summaryColSpan = { xxl: 8, xl: 8, lg: 8, md: 8, sm: 8, xs: 8 };
+
+const wardsSummary = { xxl: 24, xl: 24, lg: 24, md: 24, sm: 24, xs: 24 };
+const agencySpan = { xxl: 6, xl: 6, lg: 6, md: 7, sm: 7, xs: 7 };
+const wardSpan = { xxl: 6, xl: 6, lg: 6, md: 7, sm: 7, xs: 7 };
+
+const disseminatedSpan = { xxl: 4, xl: 4, lg: 4, md: 0, sm: 0, xs: 0 };
+const actedUponSpan = { xxl: 4, xl: 4, lg: 4, md: 5, sm: 5, xs: 5 };
+const notActedUponSpan = { xxl: 4, xl: 4, lg: 4, md: 5, sm: 5, xs: 5 };
+const progressSpan = { xxl: 6, xl: 6, lg: 6, md: 7, sm: 7, xs: 7 };
+
+const mapSpan = { xxl: 24, xl: 24, lg: 24, md: 24, sm: 0, xs: 0 };
+
 /**
  * @function
  * @name WardSummary
@@ -95,67 +119,96 @@ WardSummary.propTypes = {
  */
 const ActionsTaken = () => (
   <div style={{ padding: '10px' }}>
-    <Row gutter={8}>
-      <Col span={8}>
+    <Row>
+      {/* eslint-disable react/jsx-props-no-spreading */}
+      <Col {...actionsDissemination}>
         <Card title="Actions Dissemination Summary">
           <Row>
-            <Col span={12}>
+            <Col {...actionsSummaryGraph}>
               <Progress
                 type="circle"
                 percent={(ACTED_UPON / ALL_ACTIONS) * 100}
                 width={300}
               />
             </Col>
-            <Col span={12}>
-              <Statistic
-                title="Disseminated Actions"
-                value={ALL_ACTIONS}
-                valueStyle={{ color: '#1890ff' }}
-                prefix={<NotificationOutlined />}
-              />
-              <Statistic
-                title="Acted Upon Actions"
-                value={ACTED_UPON}
-                valueStyle={{ color: '#3f8600' }}
-                prefix={<CheckOutlined />}
-              />
-              <Statistic
-                title="Not Acted Upon Actions"
-                value={NOT_ACTED_UPON}
-                valueStyle={{ color: '#CB904D' }}
-                prefix={<ExclamationOutlined />}
-              />
+            <Col {...actionsSummaryText}>
+              <Row>
+                <Col {...summaryColSpan}>
+                  <Statistic
+                    title="Disseminated Actions"
+                    value={ALL_ACTIONS}
+                    valueStyle={{ color: '#1890ff' }}
+                    prefix={<NotificationOutlined />}
+                  />
+                  <Statistic
+                    title="Acted Upon Actions"
+                    value={ACTED_UPON}
+                    valueStyle={{ color: '#3f8600' }}
+                    prefix={<CheckOutlined />}
+                  />
+                </Col>
+                <Col {...summaryColSpan}>
+                  <Statistic
+                    title="Not Acted Upon Actions"
+                    value={NOT_ACTED_UPON}
+                    valueStyle={{ color: '#CB904D' }}
+                    prefix={<ExclamationOutlined />}
+                  />
+                  <Statistic
+                    title="Agencies Involved"
+                    value={ALL_ACTIONS}
+                    valueStyle={{ color: '#1890ff' }}
+                    prefix={<NotificationOutlined />}
+                  />
+                </Col>
+                <Col {...summaryColSpan}>
+                  <Statistic
+                    title="wards Involved"
+                    value={ACTED_UPON}
+                    valueStyle={{ color: '#3f8600' }}
+                    prefix={<CheckOutlined />}
+                  />
+                  <Statistic
+                    title="Responding Focal People "
+                    value={NOT_ACTED_UPON}
+                    valueStyle={{ color: '#CB904D' }}
+                    prefix={<ExclamationOutlined />}
+                  />
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Card>
       </Col>
-      <Col span={16}>
-        <Card title="Agencies Summary">
+    </Row>
+    <Row gutter={8}>
+      <Col {...agenciesSummary}>
+        <Card title="Actions Summary for Agencies ">
           <Row>
-            <Col span={4}>
+            <Col {...agencySpan}>
               <Text strong>Agency Name</Text>
             </Col>
-            <Col span={4}>
-              <Text strong>Total Actions Disseminated</Text>
+            <Col {...disseminatedSpan}>
+              <Text strong>Disseminated</Text>
             </Col>
-            <Col span={4}>
-              <Text strong>Action Acted Upon</Text>
+            <Col {...actedUponSpan}>
+              <Text strong>Acted Upon</Text>
             </Col>
-            <Col span={4}>
-              <Text strong>Action Not Acted Upon</Text>
+            <Col {...notActedUponSpan}>
+              <Text strong>Not Acted Upon</Text>
             </Col>
-            <Col span={8}>
+            <Col {...progressSpan}>
               <Text strong>Progress</Text>
             </Col>
           </Row>
 
           {AGENCIES.map(agency => (
             <Row key={agency.name} style={{ marginTop: '20px' }}>
-              <Col span={4}>{agency.name} </Col>
-              <Col span={4}>{agency.count} </Col>
-              <Col span={4}>{agency.acted} </Col>
-              <Col span={4}>{agency.notActed} </Col>
-              <Col span={8}>
+              <Col {...agencySpan}>{agency.name} </Col>
+              <Col {...disseminatedSpan}>{agency.count} </Col>
+              <Col {...actedUponSpan}>{agency.acted} </Col>
+              <Col {...notActedUponSpan}>{agency.notActed} </Col>
+              <Col {...progressSpan}>
                 <Progress
                   percent={(agency.acted / agency.count) * 100}
                   status="active"
@@ -167,33 +220,33 @@ const ActionsTaken = () => (
       </Col>
     </Row>
 
-    <Card title="Wards Summary" style={{ marginTop: '30px' }}>
+    <Card title="Actions Summary for Wards" style={{ marginTop: '30px' }}>
       <Row>
-        <Col span={12}>
+        <Col {...wardsSummary}>
           <Row>
-            <Col span={4}>
+            <Col {...wardSpan}>
               <Text strong>Ward Name</Text>
             </Col>
-            <Col span={4}>
-              <Text strong>Total Actions Disseminated</Text>
+            <Col {...disseminatedSpan}>
+              <Text strong>Disseminated</Text>
             </Col>
-            <Col span={4}>
-              <Text strong>Action Acted Upon</Text>
+            <Col {...actedUponSpan}>
+              <Text strong>Acted Upon</Text>
             </Col>
-            <Col span={4}>
-              <Text strong>Action Not Acted Upon</Text>
+            <Col {...notActedUponSpan}>
+              <Text strong>Not Acted Upon</Text>
             </Col>
-            <Col span={8}>
+            <Col {...progressSpan}>
               <Text strong>Progress</Text>
             </Col>
           </Row>
           {WARDS.map(ward => (
             <Row key={ward.name} style={{ marginTop: '20px' }}>
-              <Col span={4}>{ward.name} </Col>
-              <Col span={4}>{ward.count} </Col>
-              <Col span={4}>{ward.acted} </Col>
-              <Col span={4}>{ward.notActed} </Col>
-              <Col span={8}>
+              <Col {...wardSpan}>{ward.name} </Col>
+              <Col {...disseminatedSpan}>{ward.count} </Col>
+              <Col {...actedUponSpan}>{ward.acted} </Col>
+              <Col {...notActedUponSpan}>{ward.notActed} </Col>
+              <Col {...progressSpan}>
                 <Progress
                   percent={(ward.acted / ward.count) * 100}
                   status="active"
@@ -202,8 +255,9 @@ const ActionsTaken = () => (
             </Row>
           ))}
         </Col>
-        <Col span={12}>
+        <Col {...mapSpan}>
           {/* ward svg map */}
+          {/* eslint-disable react/jsx-props-no-spreading */}
           <ComposableMap
             projectionConfig={{
               scale: 80000,
