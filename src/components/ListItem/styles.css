@@ -2,7 +2,7 @@
   width: 100%;
   border-bottom: 1px solid #e8e8e8;
   padding: 15px 0;
-  height: auto;
+  height: 70px;
 }
 
 .ListItem .Checkbox {
@@ -39,4 +39,10 @@
 .ListItem .actionIcon:hover {
   color: #008efa;
   background-color: #e8e8e8;
+}
+
+@media screen and (max-width: 1000px ) {
+  .ListItem {
+    height: auto;
+  }
 }
