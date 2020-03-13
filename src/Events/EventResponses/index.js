@@ -202,6 +202,7 @@ class EventResponses extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
+    selectEventResponse(null);
     this.setState({ isEditForm: false });
   };
 

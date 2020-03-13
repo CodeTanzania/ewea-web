@@ -8,7 +8,10 @@ import React, { Component } from 'react';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
+/* contants */
 const { getEventGroups } = httpActions;
+const { TextArea } = Input;
+
 /**
  * @class
  * @name EventTypeForm
@@ -160,7 +163,7 @@ class EventTypeForm extends Component {
               ? eventType.strings.description.en
               : undefined,
             rules: [{ required: true, message: 'Description is required' }],
-          })(<Input />)}
+          })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
         </Form.Item>
         {/* end Event Type */}
 

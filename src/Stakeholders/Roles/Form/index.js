@@ -133,7 +133,7 @@ class RoleForm extends Component {
         <Form.Item {...formItemLayout} label="Description">
           {getFieldDecorator('strings.description.en', {
             initialValue: isEditForm ? role.strings.description.en : undefined,
-          })(<TextArea autosize={{ minRows: 3, maxRows: 10 }} />)}
+          })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
         </Form.Item>
         {/* end role description */}
 

@@ -158,7 +158,7 @@ class EventSeverityForm extends Component {
                 message: 'Event Severity Description is required',
               },
             ],
-          })(<TextArea autosize={{ minRows: 3, maxRows: 10 }} />)}
+          })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
         </Form.Item>
         {/* end Event Severity */}
 

@@ -1,4 +1,7 @@
-import { putEventLevel, postEventLevel } from '@codetanzania/ewea-api-states';
+import {
+  postEventUrgency,
+  putEventUrgency,
+} from '@codetanzania/ewea-api-states';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Input } from 'antd';
@@ -6,71 +9,61 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { notifyError, notifySuccess } from '../../../util';
 
+/* constants */
 const { TextArea } = Input;
 
 /**
  * @class
- * @name EventLevelForm
- * @description  Render form for creating a new event level
+ * @name EventUrgencyForm
+ * @description Render React Form
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EventLevelForm extends Component {
+class EventUrgencyForm extends Component {
   /**
    * @function
    * @name handleSubmit
-   * @description  call back function to handle submit action
+   * @description Handle form submit action
    *
-   * @param {object} e event object
-   *
-   * @returns {undefined} does not return anything
+   * @param {object} event onSubmit event
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = e => {
-    e.preventDefault();
+  handleSubmit = event => {
+    event.preventDefault();
+
     const {
       form: { validateFieldsAndScroll },
-      eventLevel,
+      eventUrgency,
       isEditForm,
     } = this.props;
 
     validateFieldsAndScroll((error, values) => {
       if (!error) {
-        const payload = {
-          strings: {
-            name: {
-              en: values.name,
-            },
-            description: {
-              en: values.description,
-            },
-          },
-        };
         if (isEditForm) {
-          const updatedContact = { ...eventLevel, ...payload };
-          putEventLevel(
-            updatedContact,
+          const updatedEventUrgency = { ...eventUrgency, ...values };
+          putEventUrgency(
+            updatedEventUrgency,
             () => {
-              notifySuccess('Event Level was updated successfully');
+              notifySuccess('Event urgency was updated successfully');
             },
             () => {
               notifyError(
-                'Something occurred while updating Event Level, please try again!'
+                'Something occurred while updating event urgency, please try again!'
               );
             }
           );
         } else {
-          postEventLevel(
-            payload,
+          postEventUrgency(
+            values,
             () => {
-              notifySuccess('Event Level was created successfully');
+              notifySuccess('Event urgency was created successfully');
             },
             () => {
               notifyError(
-                'Something occurred while saving Event Level, please try again!'
+                'Something occurred while saving event urgency, please try again!'
               );
             }
           );
@@ -81,10 +74,10 @@ class EventLevelForm extends Component {
 
   render() {
     const {
+      isEditForm,
+      eventUrgency,
       posting,
       onCancel,
-      isEditForm,
-      eventLevel,
       form: { getFieldDecorator },
     } = this.props;
 
@@ -109,32 +102,28 @@ class EventLevelForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* Event Level name */}
+        {/* event urgency name */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Name">
-          {getFieldDecorator('name', {
-            initialValue: isEditForm ? eventLevel.strings.name.en : undefined,
+          {getFieldDecorator('strings.name.en', {
+            initialValue: isEditForm ? eventUrgency.strings.name.en : undefined,
             rules: [
-              {
-                required: true,
-                message: ' Event Level name is required',
-              },
+              { required: true, message: 'Event Urgency name is required' },
             ],
           })(<Input />)}
         </Form.Item>
-        {/* end Event level name */}
+        {/* end event urgency name */}
 
-        {/* Event Level */}
+        {/* event urgency description */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Description">
-          {getFieldDecorator('description', {
+          {getFieldDecorator('strings.description.en', {
             initialValue: isEditForm
-              ? eventLevel.strings.description.en
+              ? eventUrgency.strings.description.en
               : undefined,
-            rules: [{ required: true, message: 'Description is required' }],
           })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
         </Form.Item>
-        {/* end Event Level */}
+        {/* end event urgency description */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -154,25 +143,25 @@ class EventLevelForm extends Component {
   }
 }
 
-EventLevelForm.propTypes = {
-  eventLevel: PropTypes.shape({
-    strings: PropTypes.shape({
-      name: PropTypes.shape({
-        en: PropTypes.string.isRequired,
-      }),
-      description: PropTypes.shape({
-        en: PropTypes.string.isRequired,
-      }),
-      _id: PropTypes.string,
-    }),
-  }).isRequired,
+EventUrgencyForm.propTypes = {
   isEditForm: PropTypes.bool.isRequired,
-  posting: PropTypes.bool.isRequired,
-  onCancel: PropTypes.func.isRequired,
+  eventUrgency: PropTypes.shape({
+    strings: PropTypes.shape({
+      name: PropTypes.shape({ en: PropTypes.string }),
+      abbreviation: PropTypes.shape({ en: PropTypes.string }),
+      description: PropTypes.shape({ en: PropTypes.string }),
+    }),
+  }),
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func,
     validateFieldsAndScroll: PropTypes.func,
   }).isRequired,
+  onCancel: PropTypes.func.isRequired,
+  posting: PropTypes.bool.isRequired,
 };
 
-export default Form.create()(EventLevelForm);
+EventUrgencyForm.defaultProps = {
+  eventUrgency: null,
+};
+
+export default Form.create()(EventUrgencyForm);

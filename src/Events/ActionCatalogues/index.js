@@ -54,6 +54,7 @@ const {
   getPartyGroups,
   getRoles,
   getAgencies,
+  getEventActionCataloguesExportUrl,
 } = httpActions;
 
 /**
@@ -71,7 +72,6 @@ class ActionCatalogue extends Component {
     isEditForm: false,
     showNotificationForm: false,
     notificationSubject: undefined,
-    selectedEventActionCatalogues: [],
     notificationBody: undefined,
     cached: null,
   };
@@ -379,6 +379,7 @@ class ActionCatalogue extends Component {
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventActionCatalogues}
           onPaginate={nextPage => paginateEventActionCatalogues(nextPage)}
+          generateExportUrl={getEventActionCataloguesExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
             item,
@@ -469,7 +470,6 @@ class ActionCatalogue extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}

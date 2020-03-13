@@ -27,12 +27,12 @@ import './styles.css';
 const { confirm } = Modal;
 
 const {
-  // getEventIndicators: getEventIndicatorsFromAPI,
   getFocalPeople,
   getJurisdictions,
   getPartyGroups,
   getAgencies,
   getRoles,
+  getEventIndicatorsExportUrl,
 } = httpActions;
 
 /* constants */
@@ -285,6 +285,7 @@ class EventIndicator extends Component {
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventIndicator}
           onPaginate={nextPage => paginateEventIndicators(nextPage)}
+          generateExportUrl={getEventIndicatorsExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
             item,
@@ -297,6 +298,7 @@ class EventIndicator extends Component {
               item={item}
               name={item.strings.name.en}
               isSelected={isSelected}
+              avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
               renderActions={() => (

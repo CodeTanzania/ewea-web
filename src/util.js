@@ -1,6 +1,7 @@
 import { message } from 'antd';
 import moment from 'moment';
-import isEmpty from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import get from 'lodash/get';
 
 /**
  * @function
@@ -237,32 +238,28 @@ export const generateAgencyVCard = agency => {
  */
 export const generateEventActionCatalogueVCard = eventActionCatalogue => {
   const subject = `Action Catalogue details for ${eventActionCatalogue.strings.name.en}`;
-  const body = `Name: ${eventActionCatalogue.strings.name.en}\nEvent: ${
-    eventActionCatalogue.relations.type
-      ? eventActionCatalogue.relations.type.strings.name.en
-      : 'All'
-  }\nFunction: ${
-    eventActionCatalogue.relations.function.strings.name.en
-  }\nAction: ${
-    eventActionCatalogue.relations.action.strings.name.en
-  }\nRoles: ${joinArrayOfObjectToString(
+  const body = `Name: ${eventActionCatalogue.strings.name.en}\nEvent: ${get(
+    eventActionCatalogue,
+    'relations.type.strings.name.en',
+    'All'
+  )}\nFunction: ${get(
+    eventActionCatalogue,
+    'relations.function.strings.name.en',
+    'N/A'
+  )}\nAction: ${get(
+    eventActionCatalogue,
+    'relations.action.strings.name.en',
+    'All'
+  )}\nRoles: ${joinArrayOfObjectToString(
     eventActionCatalogue.relations.roles
   )}\nGroups: ${joinArrayOfObjectToString(
     eventActionCatalogue.relations.groups
-  )}\n${
-    eventActionCatalogue.relations.area
-      ? `Area:${eventActionCatalogue.relations.area.strings.name.en}`
-      : ''
-  }
+  )}\nArea: ${get(
+    eventActionCatalogue,
+    'relations.area.strings.name.en',
+    'N/A'
+  )}
   `;
 
   return { subject, body };
 };
-
-// export const generateEventCatalogueActionDetails = action => {
-//   const subject = '';
-
-//   const body = '';
-
-//   return { subject, body };
-// };

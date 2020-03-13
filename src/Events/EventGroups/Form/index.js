@@ -6,6 +6,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { notifyError, notifySuccess } from '../../../util';
 
+/* constants */
+const { TextArea } = Input;
+
 /**
  * @class
  * @name EventGroupForm
@@ -150,7 +153,7 @@ class EventGroupForm extends Component {
                 message: 'Event Group Description is required',
               },
             ],
-          })(<Input />)}
+          })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
         </Form.Item>
         {/* end Event Group */}
 

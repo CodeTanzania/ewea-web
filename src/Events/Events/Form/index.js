@@ -192,7 +192,7 @@ class EventForm extends Component {
                     message: 'Event event is required',
                   },
                 ],
-              })(<TextArea autosize={{ minRows: 3, maxRows: 10 }} />)}
+              })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
             </Form.Item>
             {/* end role description */}
 

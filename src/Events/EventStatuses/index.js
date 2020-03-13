@@ -1,23 +1,24 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import {
-  closeEventSeverityForm,
+  closeEventStatusForm,
   Connect,
-  getEventSeverities,
-  openEventSeverityForm,
-  searchEventSeverities,
-  selectEventSeverity,
-  refreshEventSeverities,
-  paginateEventSeverities,
-  deleteEventSeverity,
+  getEventStatuses,
+  openEventStatusForm,
+  searchEventStatuses,
+  selectEventStatus,
+  refreshEventStatuses,
+  paginateEventStatuses,
+  deleteEventStatus,
 } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
-import EventSeverityForm from './Form';
+import EventStatusForm from './Form';
 import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
@@ -31,7 +32,7 @@ const {
   getPartyGroups,
   getRoles,
   getAgencies,
-  getEventSeveritiesExportUrl,
+  getEventStatusesExportUrl,
 } = httpActions;
 
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
@@ -46,13 +47,13 @@ const { confirm } = Modal;
 
 /**
  * @class
- * @name EventSeverities
- * @description Render eventSeverity list which have search box, severities and eventSeverity list
+ * @name EventStatuses
+ * @description Render eventStatus list which have search box, actions and eventStatus list
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class EventSeverities extends Component {
+class EventStatuses extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isEditForm: false,
@@ -62,7 +63,7 @@ class EventSeverities extends Component {
   };
 
   componentDidMount() {
-    getEventSeverities();
+    getEventStatuses();
   }
 
   /**
@@ -95,85 +96,85 @@ class EventSeverities extends Component {
 
   /**
    * @function
-   * @name openEventSeverityForm
-   * @description Open eventSeverity form
+   * @name openEventStatusForm
+   * @description Open eventStatus form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openEventSeverityForm = () => {
-    openEventSeverityForm();
+  openEventStatusForm = () => {
+    openEventStatusForm();
   };
 
   /**
    * @function
-   * @name openEventSeverityForm
-   * @description close eventSeverity form
+   * @name openEventStatusForm
+   * @description close eventStatus form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeEventSeverityForm = () => {
-    closeEventSeverityForm();
+  closeEventStatusForm = () => {
+    closeEventStatusForm();
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
-   * @name searchEventSeverities
-   * @description Search EventSeverities List based on supplied filter word
+   * @name searchEventStatuses
+   * @description Search EventStatuses List based on supplied filter word
    *
    * @param {object} event - Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventSeverities = event => {
-    searchEventSeverities(event.target.value);
+  searchEventStatuses = event => {
+    searchEventStatuses(event.target.value);
   };
 
   /**
    * @function
    * @name handleEdit
-   * @description Handle on Edit severity for list item
+   * @description Handle on Edit action for list item
    *
-   * @param {object} eventSeverity Event Severity to be edited
+   * @param {object} eventStatus eventStatus to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventSeverity => {
-    selectEventSeverity(eventSeverity);
+  handleEdit = eventStatus => {
+    selectEventStatus(eventStatus);
     this.setState({ isEditForm: true });
-    openEventSeverityForm();
+    openEventStatusForm();
   };
 
   /**
    * @function
    * @name handleShare
-   * @description Handle share multiple event Severities
+   * @description Handle share multiple event Actions
    *
-   * @param {object[]| object} eventSeverities event Severities list to be shared
+   * @param {object[]| object} eventStatuses event Actions list to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventSeverities => {
+  handleShare = eventStatuses => {
     let message = '';
-    if (isArray(eventSeverities)) {
-      const eventSeverityList = eventSeverities.map(
-        eventSeverity =>
-          `Name: ${eventSeverity.strings.name.en}\nDescription: ${
+    if (isArray(eventStatuses)) {
+      const eventStatusList = eventStatuses.map(
+        eventStatus =>
+          `Name: ${eventStatus.strings.name.en}\nDescription: ${
             // eslint-disable-line
-            eventSeverity.strings.description.en
+            eventStatus.strings.description.en
           }\n`
       );
 
-      message = eventSeverityList.join('\n\n\n');
+      message = eventStatusList.join('\n\n\n');
     } else {
-      message = `Name: ${eventSeverities.strings.name.en}\nDescription: ${
+      message = `Name: ${eventStatuses.strings.name.en}\nDescription: ${
         // eslint-disable-line
-        eventSeverities.strings.description.en
+        eventStatuses.strings.description.en
       }\n`;
     }
 
@@ -183,7 +184,7 @@ class EventSeverities extends Component {
   /**
    * @function
    * @name closeNotificationForm
-   * @description Handle on notify eventSeverities
+   * @description Handle on notify eventStatus
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -219,7 +220,7 @@ class EventSeverities extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a focal person
+   * @description show confirm modal before archiving an event status
    * @param {object} item Resource item to be archived
    *
    * @version 0.1.0
@@ -232,31 +233,31 @@ class EventSeverities extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventSeverity(
+        deleteEventStatus(
           item._id, // eslint-disable-line
-          () => notifySuccess('Event Severity was archived successfully'),
+          () => notifySuccess('Event Status was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving Event Severity, Please contact your system Administrator'
+              'An error occurred while archiving Event Status, Please contact your system Administrator'
             )
         );
       },
     });
   };
 
-  handleRefreshEventSeverities = () =>
-    refreshEventSeverities(
-      () => notifySuccess('Event Severities refreshed successfully'),
+  handleRefreshEventStatuses = () =>
+    refreshEventStatuses(
+      () => notifySuccess('Event Statuses refreshed successfully'),
       () =>
         notifyError(
-          'An Error occurred while refreshing Event Severities, please contact system administrator'
+          'An Error occurred while refreshing Event Statuses, please contact system administrator'
         )
     );
 
   render() {
     const {
-      eventSeverities,
-      eventSeverity,
+      eventStatuses,
+      eventStatus,
       loading,
       posting,
       page,
@@ -272,17 +273,17 @@ class EventSeverities extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for event severities here ...',
-            onChange: this.searchEventSeverities,
+            placeholder: 'Search for event status here ...',
+            onChange: this.searchEventStatuses,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Event Severity',
+              label: 'New Event Status',
               icon: <PlusOutlined />,
               size: 'large',
-              title: 'Add New Event Severity',
-              onClick: this.openEventSeverityForm,
+              title: 'Add New Event Status',
+              onClick: this.openEventStatusForm,
             },
           ]}
         />
@@ -290,16 +291,16 @@ class EventSeverities extends Component {
 
         {/* list starts */}
         <ItemList
-          itemName="event severity"
-          items={eventSeverities}
+          itemName="event statuses"
+          items={eventStatuses}
           page={page}
           itemCount={total}
           loading={loading}
           // onFilter={this.openFiltersModal}
           onShare={this.handleShare}
-          onRefresh={this.handleRefreshEventSeverities}
-          onPaginate={nextPage => paginateEventSeverities(nextPage)}
-          generateExportUrl={getEventSeveritiesExportUrl}
+          onRefresh={this.handleRefreshEventStatuses}
+          onPaginate={nextPage => paginateEventStatuses(nextPage)}
+          generateExportUrl={getEventStatusesExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
             item,
@@ -310,38 +311,39 @@ class EventSeverities extends Component {
             <ListItem
               key={item._id} // eslint-disable-line
               name={item.strings.name.en}
+              avatarBackgroundColor={item.strings.color}
               item={item}
               isSelected={isSelected}
-              avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
               renderActions={() => (
                 <ListItemActions
                   edit={{
-                    name: 'Edit Event Severity',
-                    title: 'Update Event Severity Details',
+                    name: 'Edit Event Status',
+                    title: 'Update Event Status Details',
                     onClick: () => this.handleEdit(item),
                   }}
                   share={{
-                    name: 'Share Event Severity',
-                    title: 'Share Event Severity details with others',
+                    name: 'Share Event Status',
+                    title: 'Share Event Status details with others',
                     onClick: () => this.handleShare(item),
                   }}
                   archive={{
-                    name: 'Archive Event Severity',
+                    name: 'Archive Event Status',
                     title:
-                      'Remove Event Severity from list of active focal People',
+                      'Remove Event Status from list of active event statuses',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                 />
               )}
             >
-              {/* eslint-disable react/jsx-props-no-spreading */}
-              <Col {...nameSpan}>{item.strings.name.en}</Col>
-              <Col {...descriptionSpan} title={item.strings.description.en}>
-                {item.strings.description.en}
+              {/* eslint-disable-next-line */}
+              <Col {...nameSpan}>{get(item, 'strings.name.en', 'N/A')} </Col>
+
+              {/* eslint-disable-next-line */}
+              <Col {...descriptionSpan}>
+                {get(item, 'strings.description.en', 'N/A')}{' '}
               </Col>
-              {/* eslint-enable react/jsx-props-no-spreading */}
             </ListItem>
           )}
         />
@@ -349,7 +351,7 @@ class EventSeverities extends Component {
 
         {/* Notification Modal modal */}
         <Modal
-          title="Notify Event Severities"
+          title="Notify Event Statuses"
           visible={showNotificationForm}
           onCancel={this.closeNotificationForm}
           footer={null}
@@ -372,20 +374,20 @@ class EventSeverities extends Component {
 
         {/* create/edit form modal */}
         <Modal
-          title={isEditForm ? 'Edit Event Severity' : 'Add New Event Severity'}
+          title={isEditForm ? 'Edit Event Status' : 'Add New Event Status'}
           visible={showForm}
           className="FormModal"
           footer={null}
-          onCancel={this.closeEventSeverityForm}
+          onCancel={this.closeEventStatusForm}
           destroyOnClose
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <EventSeverityForm
+          <EventStatusForm
             posting={posting}
             isEditForm={isEditForm}
-            eventSeverity={eventSeverity}
-            onCancel={this.closeEventSeverityForm}
+            eventStatus={eventStatus}
+            onCancel={this.closeEventStatusForm}
           />
         </Modal>
         {/* end create/edit form modal */}
@@ -394,31 +396,30 @@ class EventSeverities extends Component {
   }
 }
 
-EventSeverities.propTypes = {
+EventStatuses.propTypes = {
   loading: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
-  eventSeverities: PropTypes.arrayOf(
-    PropTypes.shape({ name: PropTypes.string })
-  ).isRequired,
-  eventSeverity: PropTypes.shape({ name: PropTypes.string }),
+  eventStatuses: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+    .isRequired,
+  eventStatus: PropTypes.shape({ name: PropTypes.string }),
   page: PropTypes.number.isRequired,
   showForm: PropTypes.bool.isRequired,
   searchQuery: PropTypes.string,
   total: PropTypes.number.isRequired,
 };
 
-EventSeverities.defaultProps = {
-  eventSeverity: null,
+EventStatuses.defaultProps = {
+  eventStatus: null,
   searchQuery: undefined,
 };
 
-export default Connect(EventSeverities, {
-  eventSeverities: 'eventSeverities.list',
-  eventSeverity: 'eventSeverities.selected',
-  loading: 'eventSeverities.loading',
-  posting: 'eventSeverities.posting',
-  page: 'eventSeverities.page',
-  showForm: 'eventSeverities.showForm',
-  total: 'eventSeverities.total',
-  searchQuery: 'eventSeverities.q',
+export default Connect(EventStatuses, {
+  eventStatuses: 'eventStatuses.list',
+  eventStatus: 'eventStatuses.selected',
+  loading: 'eventStatuses.loading',
+  posting: 'eventStatuses.posting',
+  page: 'eventStatuses.page',
+  showForm: 'eventStatuses.showForm',
+  total: 'eventStatuses.total',
+  searchQuery: 'eventStatuses.q',
 });

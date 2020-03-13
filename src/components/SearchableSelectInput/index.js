@@ -1,6 +1,7 @@
 import { Select, Spin } from 'antd';
 import isArray from 'lodash/isArray';
 import uniqBy from 'lodash/uniqBy';
+import unionBy from 'lodash/unionBy';
 import isEmpty from 'lodash/isEmpty';
 import isFunction from 'lodash/isFunction';
 import filter from 'lodash/filter';
@@ -56,8 +57,12 @@ class SearchableSelectInput extends Component {
    */
   handleSearch = value => {
     const { onSearch } = this.props;
+    const { data } = this.state;
     onSearch({ q: value }).then(response => {
-      this.setState({ data: response.data, loading: false });
+      this.setState({
+        data: unionBy(response.data, data, '_id'),
+        loading: false,
+      });
     });
   };
 
@@ -106,7 +111,10 @@ class SearchableSelectInput extends Component {
       this.setState({ loading: true });
       onSearch()
         .then(response => {
-          this.setState({ data: [...response.data], loading: false });
+          this.setState({
+            data: unionBy(response.data, data, '_id'),
+            loading: false,
+          });
         })
         .catch(() => {
           // TODO handle error here
@@ -138,7 +146,7 @@ class SearchableSelectInput extends Component {
   render() {
     const { data, loading, value } = this.state;
     const { optionValue, optionLabel, isFilter, ...otherProps } = this.props;
-
+    console.log('select box', data);
     const options = data.map(option => (
       <Option key={this.getOptionProp(optionValue, option)}>
         {this.getOptionProp(optionLabel, option)}

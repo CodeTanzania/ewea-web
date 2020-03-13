@@ -112,7 +112,7 @@ class EventActionForm extends Component {
                 rules: [
                   { required: true, message: 'Event Action  name is required' },
                 ],
-              })(<TextArea autosize={{ minRows: 3, maxRows: 10 }} />)}
+              })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
             </Form.Item>
             {/* end event action name */}
           </Col>
@@ -126,7 +126,7 @@ class EventActionForm extends Component {
             initialValue: isEditForm
               ? eventAction.strings.description.en
               : undefined,
-          })(<TextArea autosize={{ minRows: 3, maxRows: 10 }} />)}
+          })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
         </Form.Item>
         {/* end eventAction description */}
 

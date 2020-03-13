@@ -293,7 +293,7 @@ class EventChangelogForm extends Component {
                       message: 'comment is required',
                     },
                   ],
-                })(<TextArea autosize={{ minRows: 3, maxRows: 10 }} />)}
+                })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
               </Form.Item>
             )}
           </Col>
