@@ -33,6 +33,12 @@ import './styles.css';
 const DAR_POPULATION = 4365000;
 const BASE_COLOR = '#ff0000';
 
+const horizontalWidgetSpan = { xxl: 6, xl: 6, lg: 12, md: 12, sm: 12, xs: 12 };
+const verticalWidgetSpan = { xxl: 12, xl: 12, lg: 12, md: 12, sm: 12, xs: 12 };
+const mapRowSpan = { xxl: 24, xl: 24, lg: 0, md: 0, sm: 0, xs: 0 };
+const mapColSpan = { xxl: 16, xl: 16, lg: 24, md: 24, sm: 24, xs: 24 };
+const populationColSpan = { xxl: 8, xl: 8, lg: 24, md: 24, sm: 24, xs: 24 };
+
 /**
  * @function
  * @name ZoomControl
@@ -134,82 +140,83 @@ const AlertDashboard = () => {
   return (
     <div>
       <Row>
-        <Col span={16}>
+        {/* eslint-disable react/jsx-props-no-spreading */}
+        <Col {...mapColSpan}>
           <Row>
-            <Col span={24}>
+            <Col {...mapRowSpan}>
               <ZoomControl
                 handleZoomOut={handleZoomOut}
                 handleZoomIn={handleZoomIn}
               />
               {/* ward svg map */}
-            </Col>
-
-            <ComposableMap
-              projectionConfig={{
-                scale: 50000,
-              }}
-              className="map-widget"
-            >
-              <ZoomableGroup
-                center={[39.6067144, -6.9699698]}
-                zoom={zoom}
-                onZoomEnd={handleZoomEnd}
+              <ComposableMap
+                projectionConfig={{
+                  scale: 50000,
+                }}
+                className="map-widget"
               >
-                <Geographies geography={DarWards} disableOptimization>
-                  {({ geographies, projection }) =>
-                    geographies.map(geography => {
-                      const defaultColor = getRGBAColor(
-                        BASE_COLOR,
-                        (geography.properties.Ward_Pop / DAR_POPULATION) * 10
-                      );
+                <ZoomableGroup
+                  center={[39.3067144, -6.8699698]}
+                  zoom={zoom}
+                  onZoomEnd={handleZoomEnd}
+                >
+                  <Geographies geography={DarWards} disableOptimization>
+                    {({ geographies, projection }) =>
+                      geographies.map(geography => {
+                        const defaultColor = getRGBAColor(
+                          BASE_COLOR,
+                          (geography.properties.Ward_Pop / DAR_POPULATION) * 10
+                        );
 
-                      const hoverColor = getRGBAColor(BASE_COLOR, 0.55);
-                      const pressedColor = getRGBAColor(BASE_COLOR, 0.75);
+                        const hoverColor = getRGBAColor(BASE_COLOR, 0.55);
+                        const pressedColor = getRGBAColor(BASE_COLOR, 0.75);
 
-                      return (
-                        <Tooltip
-                          key={geography.properties.fid}
-                          trigger="hover"
-                          title={geography.properties.Ward_Name}
-                        >
-                          <Geography
+                        return (
+                          <Tooltip
                             key={geography.properties.fid}
-                            geography={geography}
-                            projection={projection}
-                            onClick={() => setWard(geography.properties)}
-                            style={{
-                              default: {
-                                fill:
-                                  ward && geography.properties.fid === ward.fid
-                                    ? pressedColor
-                                    : defaultColor,
-                                stroke: '#607D8B',
-                                strokeWidth: 0.75,
-                                outline: 'none',
-                              },
-                              hover: {
-                                fill: hoverColor,
-                                stroke: '#607D8B',
-                                strokeWidth: 0.75,
-                                outline: 'none',
-                              },
-                              pressed: {
-                                fill: pressedColor,
-                                stroke: '#607D8B',
-                                strokeWidth: 0.75,
-                                outline: 'none',
-                              },
-                            }}
-                          />
-                        </Tooltip>
-                      );
-                    })
-                  }
-                </Geographies>
-              </ZoomableGroup>
-            </ComposableMap>
+                            trigger="hover"
+                            title={geography.properties.Ward_Name}
+                          >
+                            <Geography
+                              key={geography.properties.fid}
+                              geography={geography}
+                              projection={projection}
+                              onClick={() => setWard(geography.properties)}
+                              style={{
+                                default: {
+                                  fill:
+                                    ward &&
+                                    geography.properties.fid === ward.fid
+                                      ? pressedColor
+                                      : defaultColor,
+                                  stroke: '#607D8B',
+                                  strokeWidth: 0.75,
+                                  outline: 'none',
+                                },
+                                hover: {
+                                  fill: hoverColor,
+                                  stroke: '#607D8B',
+                                  strokeWidth: 0.75,
+                                  outline: 'none',
+                                },
+                                pressed: {
+                                  fill: pressedColor,
+                                  stroke: '#607D8B',
+                                  strokeWidth: 0.75,
+                                  outline: 'none',
+                                },
+                              }}
+                            />
+                          </Tooltip>
+                        );
+                      })
+                    }
+                  </Geographies>
+                </ZoomableGroup>
+              </ComposableMap>
+            </Col>
             {/* end ward svg map */}
-            <Col span={6}>
+            <Col {...horizontalWidgetSpan}>
               <DataWidget
                 label="Strong Winds"
                 value={12}
@@ -219,7 +226,7 @@ const AlertDashboard = () => {
                 icon={RecentlyIssuedIcon}
               />
             </Col>
-            <Col span={6}>
+            <Col {...horizontalWidgetSpan}>
               <DataWidget
                 label="Heavy Rainfall"
                 value={12}
@@ -229,7 +236,7 @@ const AlertDashboard = () => {
                 icon={RecentlyUpdatedIcon}
               />
             </Col>
-            <Col span={6}>
+            <Col {...horizontalWidgetSpan}>
               <DataWidget
                 label="Active Alerts"
                 value={12}
@@ -237,7 +244,7 @@ const AlertDashboard = () => {
                 icon={ActiveAlertsIcon}
               />
             </Col>
-            <Col span={6}>
+            <Col {...horizontalWidgetSpan}>
               <DataWidget
                 label="Prone Areas"
                 value={12}
@@ -249,7 +256,7 @@ const AlertDashboard = () => {
         </Col>
 
         {/* Ward summary card */}
-        <Col span={8}>
+        <Col {...populationColSpan}>
           <Row type="flex">
             <Col span={24}>
               <DataWidget
@@ -261,7 +268,7 @@ const AlertDashboard = () => {
             </Col>
 
             {/* Men data Widget */}
-            <Col span={12}>
+            <Col {...verticalWidgetSpan}>
               <DataWidget
                 label="Men"
                 value="2M"
@@ -272,7 +279,7 @@ const AlertDashboard = () => {
             {/* Men data Widget */}
 
             {/* Women Data Widget */}
-            <Col span={12}>
+            <Col {...verticalWidgetSpan}>
               <DataWidget
                 label="Women"
                 value="1.9M"
@@ -283,7 +290,7 @@ const AlertDashboard = () => {
             {/* End Women Data Widget */}
 
             {/* Children Widget */}
-            <Col span={12}>
+            <Col {...verticalWidgetSpan}>
               <DataWidget
                 label="Children"
                 value="500K"
@@ -294,7 +301,7 @@ const AlertDashboard = () => {
             {/* end Children Widget */}
 
             {/* Disabled Widget */}
-            <Col span={12}>
+            <Col {...verticalWidgetSpan}>
               <DataWidget
                 label="Disabled"
                 value="120"
@@ -305,7 +312,7 @@ const AlertDashboard = () => {
             {/* End Disabled Widget */}
 
             {/* Elders Widget */}
-            <Col span={12}>
+            <Col {...verticalWidgetSpan}>
               <DataWidget
                 label="Elders"
                 value="200"
@@ -316,7 +323,7 @@ const AlertDashboard = () => {
             {/* end Elders Widget */}
 
             {/* Responders Widget */}
-            <Col span={12}>
+            <Col {...verticalWidgetSpan}>
               <DataWidget
                 label="Responders"
                 value="4"
@@ -327,7 +334,7 @@ const AlertDashboard = () => {
             {/* End Responder Widget */}
 
             {/* Buildings At Risks */}
-            <Col span={12}>
+            <Col {...verticalWidgetSpan}>
               <DataWidget
                 label="Buildings At Risks"
                 value="4"
@@ -338,7 +345,7 @@ const AlertDashboard = () => {
             {/* End Building At Risks */}
 
             {/* Households at Risk */}
-            <Col span={12}>
+            <Col {...verticalWidgetSpan}>
               <DataWidget
                 label="Households At Risks"
                 value="4"
@@ -349,7 +356,7 @@ const AlertDashboard = () => {
             {/* End Households at Risks */}
 
             {/* Hospitals At Risks */}
-            <Col span={12}>
+            <Col {...verticalWidgetSpan}>
               <DataWidget
                 label="Hospitals At Risks"
                 value="4"
@@ -360,7 +367,7 @@ const AlertDashboard = () => {
             {/* Hospital At Risk */}
 
             {/* Roads At Risks */}
-            <Col span={12}>
+            <Col {...verticalWidgetSpan}>
               <DataWidget
                 label="Roads At Risks"
                 value="4"
