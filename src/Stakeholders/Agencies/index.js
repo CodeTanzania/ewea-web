@@ -46,6 +46,7 @@ const {
   getJurisdictions,
   getPartyGroups,
   getRoles,
+  getAgenciesExportUrl,
 } = httpActions;
 
 const { confirm } = Modal;
@@ -374,6 +375,7 @@ class Agencies extends Component {
           onRefresh={this.handleRefreshAgencies}
           onPaginate={nextPage => paginateAgencies(nextPage)}
           headerLayout={headerLayout}
+          generateExportUrl={getAgenciesExportUrl}
           renderListItem={({
             item,
             isSelected,
