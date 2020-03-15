@@ -37,6 +37,7 @@ const {
   getPartyGroups,
   getRoles,
   getAgencies,
+  getFocalPeopleExportUrl,
 } = httpActions;
 const { confirm } = Modal;
 
@@ -376,6 +377,7 @@ class FocalPeople extends Component {
           onShare={this.handleShare}
           onRefresh={this.handleRefreshFocalPeople}
           onPaginate={nextPage => paginateFocalPeople(nextPage)}
+          generateExportUrl={getFocalPeopleExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
             item,
