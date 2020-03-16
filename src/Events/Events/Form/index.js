@@ -180,8 +180,7 @@ class EventForm extends Component {
         {/* event area */}
         <Row type="flex" justify="space-between">
           <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-
+            {/* event description */}
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Description">
               {getFieldDecorator('description', {
@@ -194,7 +193,16 @@ class EventForm extends Component {
                 ],
               })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
             </Form.Item>
-            {/* end role description */}
+            {/* end event description */}
+
+            {/* event instructions */}
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Form.Item {...formItemLayout} label="Instructions">
+              {getFieldDecorator('instructions', {
+                initialValue: isEditForm ? event.description : undefined,
+              })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
+            </Form.Item>
+            {/* end event instructions */}
 
             {/* event areas */}
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}

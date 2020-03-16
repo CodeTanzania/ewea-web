@@ -173,7 +173,7 @@ export const generateEventTemplate = event => {
   const body = `${subject} \n\nDescription: ${
     // eslint-disable-line
     event.description
-  } \nInstructions: ${event.stage}${
+  } \nInstructions: ${event.instructions}${
     !isEmpty(event.areas)
       ? `\nAreas: ${
           event.areas
