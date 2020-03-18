@@ -252,7 +252,7 @@ class EventChangelogForm extends Component {
 
             {action === 'file' && (
               // eslint-disable-next-line react/jsx-props-no-spreading
-              <Form.Item label="Dragger">
+              <Form.Item label="Image">
                 {getFieldDecorator('file', {
                   valuePropName: 'fileList',
                   getValueFromEvent: event => {
