@@ -8,6 +8,7 @@ import {
   filterChangelogs,
   loadMoreChangelogs,
 } from '@codetanzania/ewea-api-states';
+import { PrintProvider, NoPrint } from 'react-easy-print';
 
 import {
   ApartmentOutlined,
@@ -331,6 +332,9 @@ const EventToolbar = ({ event, openForm, onShare }) => {
             icon={<PrinterOutlined />}
             title="Print Event Details"
             className="actionButton"
+            onClick={() => {
+              window.print(); // eslint-disable-line
+            }}
           />
         </Col>
       </Row>
@@ -516,40 +520,50 @@ const EventDetailsViewBody = ({
   }, []);
 
   return (
-    <div className="EventBody">
-      <EventToolbar event={event} openForm={openForm} onShare={onShare} />
-      <div className="EventBodyContent">
-        <Row>
-          <Col span={16}>
-            <EventLocations areas={event.areas} />
-            {event.places && <EventPlaces places={event.places} />}
-            <EventRespondingAgencies agencies={event.agencies} />
-            <EventRespondingFocalPeople focalPeople={event.focals} />
-            <EventActionsTaken />
-          </Col>
-          <Col span={8}>
-            <EventFeed feeds={changelogs} loading={loading} hasMore={hasMore} />
-          </Col>
-        </Row>
-      </div>
+    <PrintProvider>
+      <div className="EventBody">
+        <NoPrint force>
+          <EventToolbar event={event} openForm={openForm} onShare={onShare} />
+        </NoPrint>
+        <div className="EventBodyContent">
+          <Row>
+            <Col span={16}>
+              <EventLocations areas={event.areas} />
+              {event.places && <EventPlaces places={event.places} />}
+              <EventRespondingAgencies agencies={event.agencies} />
+              <EventRespondingFocalPeople focalPeople={event.focals} />
+              <EventActionsTaken />
+            </Col>
+            <Col span={8}>
+              <NoPrint force>
+                <EventFeed
+                  feeds={changelogs}
+                  loading={loading}
+                  hasMore={hasMore}
+                />
+              </NoPrint>
+            </Col>
+          </Row>
+        </div>
 
-      <Modal
-        title={action.label}
-        visible={showForm}
-        className="FormModal"
-        footer={null}
-        onCancel={() => closeChangelogForm()}
-        destroyOnClose
-        maskClosable={false}
-      >
-        <EventChangelogForm
-          action={action.key}
-          event={event}
-          posting={posting}
+        <Modal
+          title={action.label}
+          visible={showForm}
+          className="FormModal"
+          footer={null}
           onCancel={() => closeChangelogForm()}
-        />
-      </Modal>
-    </div>
+          destroyOnClose
+          maskClosable={false}
+        >
+          <EventChangelogForm
+            action={action.key}
+            event={event}
+            posting={posting}
+            onCancel={() => closeChangelogForm()}
+          />
+        </Modal>
+      </div>
+    </PrintProvider>
   );
 };
 

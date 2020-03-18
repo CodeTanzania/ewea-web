@@ -38,6 +38,7 @@
     "rc-color-picker": "^1.2.6",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
+    "react-easy-print": "^0.6.0",
     "react-map-gl": "^5.2.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",

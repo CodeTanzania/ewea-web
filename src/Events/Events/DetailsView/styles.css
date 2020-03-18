@@ -26,3 +26,9 @@
   display: block;
   margin: 0 auto 50px;
 }
+
+@media print {
+  .ant-drawer-close {
+    display: none;
+  }
+}
