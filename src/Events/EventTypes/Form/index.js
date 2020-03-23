@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
-/* contants */
+/* constants */
 const { getEventGroups } = httpActions;
 const { TextArea } = Input;
 
