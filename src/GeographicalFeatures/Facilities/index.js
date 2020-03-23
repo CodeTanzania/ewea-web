@@ -115,7 +115,7 @@ class Facilities extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  search = event => {
+  search = (event) => {
     searchFeatures({ q: event.target.value });
   };
 
@@ -130,7 +130,7 @@ class Facilities extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = facility => {
+  handleEdit = (facility) => {
     selectFeature(facility);
     this.setState({ isEditForm: true });
     openFeatureForm();

@@ -25,7 +25,7 @@ const FacilityList = ({ facilities, loading, onEdit }) => (
     <List
       loading={loading}
       dataSource={facilities}
-      renderItem={facility => (
+      renderItem={(facility) => (
         <FacilityListItem
           key={facility.name}
           name={facility.name}

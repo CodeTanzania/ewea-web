@@ -89,7 +89,7 @@ class FocalPeople extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnCachedValues = cached => {
+  handleOnCachedValues = (cached) => {
     const { cached: previousCached } = this.state;
     const values = { ...previousCached, ...cached };
     this.setState({ cached: values });
@@ -168,7 +168,7 @@ class FocalPeople extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchFocalPeople = event => {
+  searchFocalPeople = (event) => {
     searchFocalPeople(event.target.value);
   };
 
@@ -182,7 +182,7 @@ class FocalPeople extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = focalPerson => {
+  handleEdit = (focalPerson) => {
     selectFocalPerson(focalPerson);
     this.setState({ isEditForm: true });
     openFocalPersonForm();
@@ -198,13 +198,13 @@ class FocalPeople extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = focalPeople => {
+  handleShare = (focalPeople) => {
     let message = '';
     let subject = '';
     if (isArray(focalPeople)) {
       subject = 'Contact Details for Focals';
       const focalPeopleList = focalPeople.map(
-        focalPerson => generateFocalPersonVCard(focalPerson).body
+        (focalPerson) => generateFocalPersonVCard(focalPerson).body
       );
 
       message = focalPeopleList.join('\n\n\n');
@@ -231,7 +231,7 @@ class FocalPeople extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  openNotificationForm = focalPeople => {
+  openNotificationForm = (focalPeople) => {
     this.setState({
       selectedFocalPeople: focalPeople,
       showNotificationForm: true,
@@ -304,7 +304,7 @@ class FocalPeople extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
@@ -376,7 +376,7 @@ class FocalPeople extends Component {
           onNotify={this.openNotificationForm}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshFocalPeople}
-          onPaginate={nextPage => paginateFocalPeople(nextPage)}
+          onPaginate={(nextPage) => paginateFocalPeople(nextPage)}
           generateExportUrl={getFocalPeopleExportUrl}
           headerLayout={headerLayout}
           renderListItem={({

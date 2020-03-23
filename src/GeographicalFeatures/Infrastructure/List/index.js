@@ -29,7 +29,7 @@ const CriticalInfrastructureList = ({
     <List
       loading={loading}
       dataSource={criticalInfrastructures}
-      renderItem={criticalInfrastructure => (
+      renderItem={(criticalInfrastructure) => (
         <CriticalInfrastructureListItem
           key={criticalInfrastructure.name}
           name={criticalInfrastructure.name}

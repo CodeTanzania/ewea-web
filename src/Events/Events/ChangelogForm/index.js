@@ -40,7 +40,7 @@ class EventChangelogForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
 
     const {
@@ -87,8 +87,8 @@ class EventChangelogForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  renderSelectOptions = options =>
-    options.map(option => (
+  renderSelectOptions = (options) =>
+    options.map((option) => (
       <option key={option} value={option}>
         {option}
       </option>
@@ -131,7 +131,7 @@ class EventChangelogForm extends Component {
                 {getFieldDecorator('areas')(
                   <SearchableSelectInput
                     onSearch={getAdministrativeAreas}
-                    optionLabel={area => `${area.strings.name.en}`}
+                    optionLabel={(area) => `${area.strings.name.en}`}
                     optionValue="_id"
                     mode="multiple"
                   />
@@ -184,7 +184,7 @@ class EventChangelogForm extends Component {
                   })(
                     <SearchableSelectInput
                       onSearch={getEventIndicators}
-                      optionLabel={indicator => indicator.strings.name.en}
+                      optionLabel={(indicator) => indicator.strings.name.en}
                       optionValue="_id"
                     />
                   )}
@@ -201,7 +201,7 @@ class EventChangelogForm extends Component {
                     ],
                   })(
                     <SearchableSelectInput
-                      onSearch={options =>
+                      onSearch={(options) =>
                         getEventQuestions({
                           ...options,
                           filter: {
@@ -211,7 +211,7 @@ class EventChangelogForm extends Component {
                           },
                         })
                       }
-                      optionLabel={question => question.strings.name.en}
+                      optionLabel={(question) => question.strings.name.en}
                       optionValue="_id"
                     />
                   )}
@@ -221,7 +221,7 @@ class EventChangelogForm extends Component {
                 <Form.Item {...formItemLayout} label="Topic">
                   {getFieldDecorator('topic')(
                     <SearchableSelectInput
-                      onSearch={options =>
+                      onSearch={(options) =>
                         getEventTopics({
                           ...options,
                           filter: {
@@ -229,7 +229,7 @@ class EventChangelogForm extends Component {
                           },
                         })
                       }
-                      optionLabel={topic => topic.strings.name.en}
+                      optionLabel={(topic) => topic.strings.name.en}
                       optionValue="_id"
                     />
                   )}
@@ -255,7 +255,7 @@ class EventChangelogForm extends Component {
               <Form.Item label="Image">
                 {getFieldDecorator('file', {
                   valuePropName: 'fileList',
-                  getValueFromEvent: event => {
+                  getValueFromEvent: (event) => {
                     if (Array.isArray(event)) {
                       return event;
                     }

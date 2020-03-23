@@ -14,7 +14,7 @@ import get from 'lodash/get';
  * @since 0.1.0
  */
 export const joinArrayOfObjectToString = (array, property = 'name') =>
-  array.map(obj => obj.strings[property].en).join(',');
+  array.map((obj) => obj.strings[property].en).join(',');
 
 /**
  * @function
@@ -27,7 +27,7 @@ export const joinArrayOfObjectToString = (array, property = 'name') =>
  * @version 0.1.0
  * @since 0.1.0
  */
-export const notifyError = error => {
+export const notifyError = (error) => {
   // eslint-disable-next-line
   if (!navigator.onLine) {
     return message.error(
@@ -48,7 +48,7 @@ export const notifyError = error => {
  * @version 0.1.0
  * @since 0.1.0
  */
-export const notifySuccess = details => {
+export const notifySuccess = (details) => {
   message.success(details);
 };
 
@@ -62,7 +62,7 @@ export const notifySuccess = details => {
  * @version 0.1.0
  * @since 0.1.0
  */
-export const notifyInfo = info => {
+export const notifyInfo = (info) => {
   message.info(info);
 };
 
@@ -92,7 +92,7 @@ export const formatDate = (date, format = 'ddd, MMM DD YYYY hA') =>
  * @version 0.1.0
  * @since 0.1.0
  */
-export const timeAgo = date => moment(date).fromNow();
+export const timeAgo = (date) => moment(date).fromNow();
 
 /**
  * @function
@@ -106,7 +106,7 @@ export const timeAgo = date => moment(date).fromNow();
  * @version 0.1.0
  * @since 0.1.0
  */
-export const formatNumber = number =>
+export const formatNumber = (number) =>
   new Intl.NumberFormat('en-US').format(number);
 
 /**
@@ -167,7 +167,7 @@ export const truncateString = (str, num) => {
  * @version 0.1.0
  * @since 0.1.0
  */
-export const generateEventTemplate = event => {
+export const generateEventTemplate = (event) => {
   const subject = `${event.level.strings.name.en} Advisory: ${event.type.strings.name.en} ${event.stage} - No. ${event.number}`;
 
   const body = `${subject} \n\nDescription: ${
@@ -177,7 +177,7 @@ export const generateEventTemplate = event => {
     !isEmpty(event.areas)
       ? `\nAreas: ${
           event.areas
-            ? event.areas.map(area => area.strings.name.en).join(', ')
+            ? event.areas.map((area) => area.strings.name.en).join(', ')
             : 'N/A'
         }`
       : ''
@@ -194,7 +194,7 @@ export const generateEventTemplate = event => {
  * @version 0.1.0
  * @since 0.1.0
  */
-export const generateFocalPersonVCard = focalPerson => {
+export const generateFocalPersonVCard = (focalPerson) => {
   const subject = `Contact Details for ${focalPerson.name}`;
 
   const body = `Name: ${focalPerson.name}\n${
@@ -218,7 +218,7 @@ export const generateFocalPersonVCard = focalPerson => {
  * @version 0.1.0
  * @since 0.1.0
  */
-export const generateAgencyVCard = agency => {
+export const generateAgencyVCard = (agency) => {
   const subject = `Contact Details for ${agency.name}`;
 
   const body = `Name: ${agency.name} (${agency.abbreviation})\nMobile: ${
@@ -236,7 +236,7 @@ export const generateAgencyVCard = agency => {
  * @version 0.1.0
  * @since 0.1.0
  */
-export const generateEventActionCatalogueVCard = eventActionCatalogue => {
+export const generateEventActionCatalogueVCard = (eventActionCatalogue) => {
   const subject = `Action Catalogue details for ${eventActionCatalogue.strings.name.en}`;
   const body = `Name: ${eventActionCatalogue.strings.name.en}\nEvent: ${get(
     eventActionCatalogue,

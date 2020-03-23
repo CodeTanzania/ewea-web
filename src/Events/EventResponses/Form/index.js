@@ -34,7 +34,7 @@ const EventResponseForm = ({
   posting,
   onCancel,
 }) => {
-  const onFinish = values => {
+  const onFinish = (values) => {
     if (isEditForm) {
       const updatedEventResponse = { ...eventResponse, ...values };
       putEventResponse(

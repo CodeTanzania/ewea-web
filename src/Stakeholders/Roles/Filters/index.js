@@ -28,7 +28,7 @@ class RolesFilters extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
     const {
       form: { validateFields },
@@ -94,7 +94,7 @@ class RolesFilters extends Component {
           })(
             <Checkbox.Group style={{ width: '100%' }}>
               <Row>
-                {properties.map(type => (
+                {properties.map((type) => (
                   <Col span={6} style={{ margin: '10px 0' }} key={type}>
                     <Checkbox value={type}>{type}</Checkbox>
                   </Col>

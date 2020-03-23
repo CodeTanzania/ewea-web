@@ -30,7 +30,7 @@ const ListHeader = ({
       <Checkbox
         className="checkbox"
         checked={isBulkSelected}
-        onChange={event => {
+        onChange={(event) => {
           if (event.target.checked) {
             onSelectAll();
           } else {
@@ -40,7 +40,7 @@ const ListHeader = ({
       />
     </Col>
 
-    {headerLayout.map(item => (
+    {headerLayout.map((item) => (
       // eslint-disable-next-line react/jsx-props-no-spreading
       <Col key={item.header} {...item}>
         <h4 className="title">{item.header}</h4>

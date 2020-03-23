@@ -103,7 +103,7 @@ const DistrictsActionBar = ({ page, total, onFilter }) => (
           defaultCurrent={page}
           total={total}
           className="pagination"
-          onChange={nextPage => paginateFeatures(nextPage)}
+          onChange={(nextPage) => paginateFeatures(nextPage)}
         />
       </Col>
     </Row>

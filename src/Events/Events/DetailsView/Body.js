@@ -84,7 +84,7 @@ export const EventDetailsSectionHeader = ({ title, actions }) => {
  * @since 0.1.0
  */
 export const EventLocations = ({ areas = [] }) => {
-  const locations = areas.map(area => area.strings.name.en).join(', ');
+  const locations = areas.map((area) => area.strings.name.en).join(', ');
   return isEmpty(areas) ? null : (
     <>
       <EventDetailsSectionHeader title="AFFECT AREAS" />
@@ -353,7 +353,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
  * @since 0.1.0
  */
 export const EventFeed = ({ feeds = [], loading, hasMore }) => {
-  const feedItems = feeds.map(feed => {
+  const feedItems = feeds.map((feed) => {
     if (feed.comment && feed.image) {
       return (
         <>
@@ -427,7 +427,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
     /* comments */
 
     if (feed.focals) {
-      return feed.focals.map(focal => (
+      return feed.focals.map((focal) => (
         // eslint-disable-next-line no-underscore-dangle
         <Timeline.Item key={feed._id} dot={<UserOutlined />}>
           <Tag>{feed.initiator.name}</Tag> added focal:{' '}
@@ -438,7 +438,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
     }
 
     if (feed.agencies) {
-      return feed.agencies.map(agency => (
+      return feed.agencies.map((agency) => (
         // eslint-disable-next-line no-underscore-dangle
         <Timeline.Item key={feed._id} dot={<ApartmentOutlined />}>
           <Tag>{feed.initiator.name}</Tag> added agency:{' '}
@@ -449,7 +449,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
     }
 
     if (feed.areas) {
-      return feed.areas.map(area => (
+      return feed.areas.map((area) => (
         // eslint-disable-next-line no-underscore-dangle
         <Timeline.Item key={area._id} dot={<EnvironmentOutlined />}>
           <Tag>{feed.initiator.name}</Tag> added affected area:{' '}
@@ -514,7 +514,7 @@ const EventDetailsViewBody = ({
     filterChangelogs({ event: event._id }); // eslint-disable-line
   }, [event]);
 
-  const openForm = useCallback(type => {
+  const openForm = useCallback((type) => {
     setAction(type);
     openChangelogForm();
   }, []);

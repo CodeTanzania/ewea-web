@@ -49,7 +49,7 @@ class AdministrativeAreaForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
 
     const {
@@ -157,7 +157,7 @@ class AdministrativeAreaForm extends Component {
           })(
             <SearchableSelectInput
               onSearch={getAdministrativeLevels}
-              optionLabel={level => level.strings.name.en}
+              optionLabel={(level) => level.strings.name.en}
               optionValue="_id"
               initialValue={
                 isEditForm && administrativeArea
@@ -180,7 +180,7 @@ class AdministrativeAreaForm extends Component {
           })(
             <SearchableSelectInput
               onSearch={getAdministrativeAreas}
-              optionLabel={area =>
+              optionLabel={(area) =>
                 `${area.strings.name.en} (${area.relations.level.strings.name.en})`
               }
               optionValue="_id"

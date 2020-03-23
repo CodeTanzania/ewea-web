@@ -31,7 +31,7 @@ const Topbar = ({ search, actions }) => (
     {/* primary actions */}
     <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
       <Row type="flex" justify="end">
-        {actions.map(action => {
+        {actions.map((action) => {
           const { label, ...props } = action;
 
           return (

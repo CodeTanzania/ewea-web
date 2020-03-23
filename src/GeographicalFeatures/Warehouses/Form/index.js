@@ -22,7 +22,7 @@ class WarehouseForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
 
     const {
@@ -69,8 +69,8 @@ class WarehouseForm extends Component {
     });
   };
 
-  renderSelectOptions = options =>
-    options.map(option => (
+  renderSelectOptions = (options) =>
+    options.map((option) => (
       <Option key={option} value={option}>
         {option}
       </Option>

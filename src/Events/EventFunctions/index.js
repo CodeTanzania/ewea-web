@@ -79,7 +79,7 @@ class EventFunctions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnCachedValues = cached => {
+  handleOnCachedValues = (cached) => {
     const { cached: previousCached } = this.state;
     const values = { ...previousCached, ...cached };
     this.setState({ cached: values });
@@ -158,7 +158,7 @@ class EventFunctions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventFunctions = event => {
+  searchEventFunctions = (event) => {
     searchEventFunctions(event.target.value);
   };
 
@@ -172,7 +172,7 @@ class EventFunctions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventFunction => {
+  handleEdit = (eventFunction) => {
     selectEventFunction(eventFunction);
     this.setState({ isEditForm: true });
     openEventFunctionForm();
@@ -188,11 +188,11 @@ class EventFunctions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventFunctions => {
+  handleShare = (eventFunctions) => {
     let message = '';
     if (isArray(eventFunctions)) {
       const eventFunctionsList = eventFunctions.map(
-        eventFunction =>
+        (eventFunction) =>
           `Name: ${eventFunction.strings.name.en}\nDescription: ${
             // eslint-disable-line
             eventFunction.strings.description.en
@@ -231,7 +231,7 @@ class EventFunctions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
@@ -319,7 +319,7 @@ class EventFunctions extends Component {
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventFunctions}
           generateExportUrl={getEventFunctionsExportUrl}
-          onPaginate={nextPage => paginateEventFunctions(nextPage)}
+          onPaginate={(nextPage) => paginateEventFunctions(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
             item,

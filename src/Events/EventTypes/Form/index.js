@@ -33,7 +33,7 @@ class EventTypeForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const {
       form: { validateFieldsAndScroll },
@@ -143,7 +143,7 @@ class EventTypeForm extends Component {
           })(
             <SearchableSelectInput
               onSearch={getEventGroups}
-              optionLabel={group => group.strings.name.en}
+              optionLabel={(group) => group.strings.name.en}
               optionValue="_id"
               initialValue={
                 isEditForm && eventType.relations.group

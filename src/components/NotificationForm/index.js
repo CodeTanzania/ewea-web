@@ -60,7 +60,7 @@ const NotificationForm = ({
    * @version 0.2.0
    * @since 0.1.0
    */
-  const onFinish = values => {
+  const onFinish = (values) => {
     const criteria = {};
 
     if (!isEmpty(values.agencies)) {
@@ -139,7 +139,7 @@ const NotificationForm = ({
         <Form.Item name="area" label="Areas">
           <SearchableSelectInput
             onSearch={onSearchJurisdictions}
-            optionLabel={area => `${area.strings.name.en}`}
+            optionLabel={(area) => `${area.strings.name.en}`}
             optionValue="_id"
             mode="multiple"
           />
@@ -153,7 +153,7 @@ const NotificationForm = ({
         <Form.Item name="groups" label="Group(s)">
           <SearchableSelectInput
             onSearch={onSearchGroups}
-            optionLabel={group => group.strings.name.en}
+            optionLabel={(group) => group.strings.name.en}
             optionValue="_id"
             mode="multiple"
           />
@@ -167,7 +167,7 @@ const NotificationForm = ({
         <Form.Item name="roles" label="Role(s)">
           <SearchableSelectInput
             onSearch={onSearchRoles}
-            optionLabel={role => role.strings.name.en}
+            optionLabel={(role) => role.strings.name.en}
             optionValue="_id"
             mode="multiple"
           />

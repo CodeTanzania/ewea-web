@@ -18,7 +18,7 @@ import './styles.css';
  * @since 0.1.0
  */
 const SignInForm = ({ loading, history }) => {
-  const onFinish = values => {
+  const onFinish = (values) => {
     signin(
       values,
       () => {

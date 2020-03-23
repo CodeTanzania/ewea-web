@@ -80,7 +80,7 @@ class AdministrativeAreas extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnCachedValues = cached => {
+  handleOnCachedValues = (cached) => {
     const { cached: previousCached } = this.state;
     const values = { ...previousCached, ...cached };
     this.setState({ cached: values });
@@ -159,7 +159,7 @@ class AdministrativeAreas extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchAdministrativeAreas = event => {
+  searchAdministrativeAreas = (event) => {
     searchAdministrativeAreas(event.target.value);
   };
 
@@ -173,7 +173,7 @@ class AdministrativeAreas extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = administrativeArea => {
+  handleEdit = (administrativeArea) => {
     selectAdministrativeArea(administrativeArea);
     this.setState({ isEditForm: true });
     openAdministrativeAreaForm();
@@ -210,11 +210,11 @@ class AdministrativeAreas extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = administrativeAreas => {
+  handleShare = (administrativeAreas) => {
     let message = '';
     if (isArray(administrativeAreas)) {
       const administrativeAreaList = administrativeAreas.map(
-        administrativeArea =>
+        (administrativeArea) =>
           `Name: ${administrativeArea.strings.name.en}\nDescription: ${
             // eslint-disable-line
             administrativeArea.strings.description.en
@@ -279,7 +279,7 @@ class AdministrativeAreas extends Component {
    * @since 0.1.0
    */
 
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive ${item.strings.name.en} ?`,
       okText: 'Yes',
@@ -332,7 +332,7 @@ class AdministrativeAreas extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleMapPreview = administrativeArea => {
+  handleMapPreview = (administrativeArea) => {
     selectAdministrativeArea(administrativeArea);
     this.setState({ showMap: true });
   };
@@ -389,7 +389,7 @@ class AdministrativeAreas extends Component {
           onShare={this.handleShare}
           headerLayout={headerLayout}
           onRefresh={this.handleRefreshAdmistrativeAreas}
-          onPaginate={nextPage => paginateAdministrativeAreas(nextPage)}
+          onPaginate={(nextPage) => paginateAdministrativeAreas(nextPage)}
           // generateExportUrl={getAdministrativeAreasFromAPI}
           renderListItem={({
             item,

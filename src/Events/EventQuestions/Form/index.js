@@ -35,7 +35,7 @@ class EventQuestionForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const {
       form: { validateFieldsAndScroll },
@@ -149,7 +149,7 @@ class EventQuestionForm extends Component {
           })(
             <SearchableSelectInput
               onSearch={getEventIndicators}
-              optionLabel={indicator => indicator.strings.name.en}
+              optionLabel={(indicator) => indicator.strings.name.en}
               optionValue="_id"
               initialValue={
                 isEditForm && eventQuestion.relations.indicator
@@ -172,7 +172,7 @@ class EventQuestionForm extends Component {
           })(
             <SearchableSelectInput
               onSearch={getEventTopics}
-              optionLabel={topic => topic.strings.name.en}
+              optionLabel={(topic) => topic.strings.name.en}
               optionValue="_id"
               initialValue={
                 isEditForm && eventQuestion.relations.topic

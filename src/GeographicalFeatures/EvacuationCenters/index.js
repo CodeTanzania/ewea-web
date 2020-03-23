@@ -113,7 +113,7 @@ class EvacuationCenters extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  search = event => {
+  search = (event) => {
     searchFeatures({ q: event.target.value });
   };
 
@@ -128,7 +128,7 @@ class EvacuationCenters extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = evacuationCenter => {
+  handleEdit = (evacuationCenter) => {
     selectFeature(evacuationCenter);
     this.setState({ isEditForm: true });
     openFeatureForm();

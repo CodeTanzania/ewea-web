@@ -101,7 +101,7 @@ class EventLevels extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventLevels = event => {
+  searchEventLevels = (event) => {
     searchEventLevels(event.target.value);
   };
 
@@ -127,7 +127,7 @@ class EventLevels extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventLevel => {
+  handleEdit = (eventLevel) => {
     selectEventLevel(eventLevel);
     this.setState({ isEditForm: true });
     openEventLevelForm();
@@ -154,11 +154,11 @@ class EventLevels extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventLevels => {
+  handleShare = (eventLevels) => {
     let message = '';
     if (isArray(eventLevels)) {
       const eventLevelsList = eventLevels.map(
-        eventLevel =>
+        (eventLevel) =>
           `Name: ${eventLevel.strings.name.en}\nDescription: ${
             // eslint-disable-line
             eventLevel.strings.description.en
@@ -196,7 +196,7 @@ class EventLevels extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
@@ -269,7 +269,7 @@ class EventLevels extends Component {
           generateExportUrl={getEventLevelsExportUrl}
           headerLayout={headerLayout}
           onRefresh={this.handleRefreshEventLevels}
-          onPaginate={nextPage => paginateEventLevels(nextPage)}
+          onPaginate={(nextPage) => paginateEventLevels(nextPage)}
           renderListItem={({
             item,
             isSelected,

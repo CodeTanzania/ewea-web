@@ -94,7 +94,7 @@ class Campaign extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchCampaigns = event => {
+  searchCampaigns = (event) => {
     searchCampaigns(event.target.value);
   };
 

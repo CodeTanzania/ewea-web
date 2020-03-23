@@ -172,13 +172,13 @@ const breadcrumbNameMap = {
  * @version 0.1.0
  * @since 0.1.0
  */
-const BaseLayout = props => {
+const BaseLayout = (props) => {
   const {
     location,
     match: { url: baseUrl },
   } = props;
 
-  const pathSnippets = location.pathname.split('/').filter(i => i);
+  const pathSnippets = location.pathname.split('/').filter((i) => i);
   const lastPath = pathSnippets[pathSnippets.length - 1];
 
   // generate dynamic breadcrumb items

@@ -133,7 +133,7 @@ const AlertDashboard = () => {
    * @since 0.1.0
    * @param {object} position handle position
    */
-  const handleZoomEnd = position => {
+  const handleZoomEnd = (position) => {
     setZoom(position.zoom);
   };
 
@@ -162,7 +162,7 @@ const AlertDashboard = () => {
                 >
                   <Geographies geography={DarWards} disableOptimization>
                     {({ geographies, projection }) =>
-                      geographies.map(geography => {
+                      geographies.map((geography) => {
                         const defaultColor = getRGBAColor(
                           BASE_COLOR,
                           (geography.properties.Ward_Pop / DAR_POPULATION) * 10

@@ -75,7 +75,7 @@ class EventSeverities extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnCachedValues = cached => {
+  handleOnCachedValues = (cached) => {
     const { cached: previousCached } = this.state;
     const values = { ...previousCached, ...cached };
     this.setState({ cached: values });
@@ -128,7 +128,7 @@ class EventSeverities extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventSeverities = event => {
+  searchEventSeverities = (event) => {
     searchEventSeverities(event.target.value);
   };
 
@@ -142,7 +142,7 @@ class EventSeverities extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventSeverity => {
+  handleEdit = (eventSeverity) => {
     selectEventSeverity(eventSeverity);
     this.setState({ isEditForm: true });
     openEventSeverityForm();
@@ -158,11 +158,11 @@ class EventSeverities extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventSeverities => {
+  handleShare = (eventSeverities) => {
     let message = '';
     if (isArray(eventSeverities)) {
       const eventSeverityList = eventSeverities.map(
-        eventSeverity =>
+        (eventSeverity) =>
           `Name: ${eventSeverity.strings.name.en}\nDescription: ${
             // eslint-disable-line
             eventSeverity.strings.description.en
@@ -225,7 +225,7 @@ class EventSeverities extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
@@ -298,7 +298,7 @@ class EventSeverities extends Component {
           // onFilter={this.openFiltersModal}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventSeverities}
-          onPaginate={nextPage => paginateEventSeverities(nextPage)}
+          onPaginate={(nextPage) => paginateEventSeverities(nextPage)}
           generateExportUrl={getEventSeveritiesExportUrl}
           headerLayout={headerLayout}
           renderListItem={({

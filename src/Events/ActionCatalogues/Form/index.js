@@ -54,7 +54,7 @@ class EventActionCatalogueForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  autoFillActionDetails = eventAction => {
+  autoFillActionDetails = (eventAction) => {
     const {
       strings: { name, description },
     } = eventAction;
@@ -75,7 +75,7 @@ class EventActionCatalogueForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
 
     const {
@@ -193,7 +193,7 @@ class EventActionCatalogueForm extends Component {
               })(
                 <SearchableSelectInput
                   onSearch={getEventTypes}
-                  optionLabel={type => type.strings.name.en}
+                  optionLabel={(type) => type.strings.name.en}
                   optionValue="_id"
                   initialValue={
                     isEditForm && eventActionCatalogue
@@ -218,7 +218,7 @@ class EventActionCatalogueForm extends Component {
           })(
             <SearchableSelectInput
               onSearch={getAdministrativeAreas}
-              optionLabel={area => area.strings.name.en}
+              optionLabel={(area) => area.strings.name.en}
               optionValue="_id"
               initialValue={
                 isEditForm && eventActionCatalogue.relations.area
@@ -249,7 +249,7 @@ class EventActionCatalogueForm extends Component {
               })(
                 <SearchableSelectInput
                   onSearch={getEventFunctions}
-                  optionLabel={eventFunction => eventFunction.strings.name.en}
+                  optionLabel={(eventFunction) => eventFunction.strings.name.en}
                   optionValue="_id"
                   initialValue={
                     isEditForm && eventActionCatalogue
@@ -285,7 +285,7 @@ class EventActionCatalogueForm extends Component {
               })(
                 <SearchableSelectInput
                   onSearch={getPartyRoles}
-                  optionLabel={role => role.strings.name.en}
+                  optionLabel={(role) => role.strings.name.en}
                   mode="multiple"
                   optionValue="_id"
                   initialValue={
@@ -322,7 +322,7 @@ class EventActionCatalogueForm extends Component {
               })(
                 <SearchableSelectInput
                   onSearch={getPartyGroups}
-                  optionLabel={group => group.strings.name.en}
+                  optionLabel={(group) => group.strings.name.en}
                   mode="multiple"
                   optionValue="_id"
                   initialValue={
@@ -427,11 +427,11 @@ class EventActionCatalogueForm extends Component {
                     message: 'Event Action Catalogue action is required',
                   },
                 ],
-                onChange: e => getEventAction(e),
+                onChange: (e) => getEventAction(e),
               })(
                 <SearchableSelectInput
                   onSearch={getEventActions}
-                  optionLabel={action => action.strings.name.en}
+                  optionLabel={(action) => action.strings.name.en}
                   optionValue="_id"
                   initialValue={
                     isEditForm && eventActionCatalogue.relations.action

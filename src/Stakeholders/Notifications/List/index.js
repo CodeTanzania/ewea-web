@@ -53,7 +53,7 @@ class CampaignList extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnselectCampaign = campaign => {
+  handleOnselectCampaign = (campaign) => {
     const { selectedCampaign } = this.state;
     this.setState({
       selectedCampaign: concat([], selectedCampaign, campaign),
@@ -95,9 +95,9 @@ class CampaignList extends Component {
     const selectedList = uniqBy([...selectedCampaign], '_id');
     const pages = uniq([...selectedPages]);
 
-    remove(pages, item => item === page);
+    remove(pages, (item) => item === page);
 
-    campaigns.forEach(campaign => {
+    campaigns.forEach((campaign) => {
       remove(
         selectedList,
         item => item._id === campaign._id // eslint-disable-line
@@ -121,7 +121,7 @@ class CampaignList extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnDeselectCampaign = campaign => {
+  handleOnDeselectCampaign = (campaign) => {
     const { selectedCampaign } = this.state;
     const selectedList = [...selectedCampaign];
 
@@ -154,7 +154,7 @@ class CampaignList extends Component {
             filter: { _id: map(selectedCampaign, '_id') },
           })}
           onFilter={onFilter}
-          onPaginate={nextPage => {
+          onPaginate={(nextPage) => {
             paginateCampaigns(nextPage);
           }}
           onRefresh={() =>
@@ -185,7 +185,7 @@ class CampaignList extends Component {
         <List
           loading={loading}
           dataSource={campaigns}
-          renderItem={campaign => {
+          renderItem={(campaign) => {
             return (
               <CampaignListItem
                 key={campaign._id} // eslint-disable-line

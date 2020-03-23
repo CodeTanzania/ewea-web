@@ -35,7 +35,7 @@ class EventFilters extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
     const {
       form: { validateFields },
@@ -76,7 +76,7 @@ class EventFilters extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  cacheFilters = values => {
+  cacheFilters = (values) => {
     const { onCache } = this.props;
     onCache(values);
   };
@@ -92,8 +92,8 @@ class EventFilters extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  renderSelectOptions = options =>
-    options.map(option => (
+  renderSelectOptions = (options) =>
+    options.map((option) => (
       <option key={option} value={option}>
         {option}
       </option>
@@ -141,7 +141,7 @@ class EventFilters extends Component {
               optionLabel="name"
               optionValue="_id"
               mode="multiple"
-              onCache={events => this.cacheFilters({ events })}
+              onCache={(events) => this.cacheFilters({ events })}
               initialValue={cached && cached.events ? cached.events : []}
             />
           )}
@@ -159,7 +159,7 @@ class EventFilters extends Component {
               optionLabel="name"
               optionValue="_id"
               mode="multiple"
-              onCache={locations => this.cacheFilters({ locations })}
+              onCache={(locations) => this.cacheFilters({ locations })}
               initialValue={cached && cached.locations ? cached.locations : []}
             />
           )}

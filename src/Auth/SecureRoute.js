@@ -25,7 +25,7 @@ const SecureRoute = ({ component: Component, ...rest }) => {
     <Route
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
-      render={props =>
+      render={(props) =>
         isAuthenticated ? (
           // eslint-disable-next-line react/jsx-props-no-spreading
           <Component {...props} />

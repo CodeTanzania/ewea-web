@@ -33,7 +33,7 @@ class RegionForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
 
     const {
@@ -125,7 +125,7 @@ class RegionForm extends Component {
             rules: [{ required: true, message: 'Nature is required' }],
           })(
             <Select placeholder="e.g Building">
-              {natures.map(nature => (
+              {natures.map((nature) => (
                 <Option key={nature} value={nature}>
                   {nature}
                 </Option>
@@ -143,7 +143,7 @@ class RegionForm extends Component {
             rules: [{ required: true, message: 'Type is required' }],
           })(
             <Select placeholder="e.g Region">
-              {types.map(type => (
+              {types.map((type) => (
                 <Option key={type} value={type}>
                   {type}
                 </Option>
@@ -161,7 +161,7 @@ class RegionForm extends Component {
             rules: [{ required: true, message: 'Family is required' }],
           })(
             <Select placeholder="e.g Hospital">
-              {families.map(family => (
+              {families.map((family) => (
                 <Option key={family} value={family}>
                   {family}
                 </Option>

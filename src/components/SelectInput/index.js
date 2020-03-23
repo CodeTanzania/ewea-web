@@ -21,7 +21,7 @@ const { Option } = Select;
 const SelectInput = ({ options, ...props }) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <Select {...props}>
-    {options.map(option => (
+    {options.map((option) => (
       <Option key={option} value={option}>
         {option}
       </Option>

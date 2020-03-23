@@ -75,7 +75,7 @@ class EventCertainties extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnCachedValues = cached => {
+  handleOnCachedValues = (cached) => {
     const { cached: previousCached } = this.state;
     const values = { ...previousCached, ...cached };
     this.setState({ cached: values });
@@ -128,7 +128,7 @@ class EventCertainties extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventCertainties = event => {
+  searchEventCertainties = (event) => {
     searchEventCertainties(event.target.value);
   };
 
@@ -142,7 +142,7 @@ class EventCertainties extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventCertainty => {
+  handleEdit = (eventCertainty) => {
     selectEventCertainty(eventCertainty);
     this.setState({ isEditForm: true });
     openEventCertaintyForm();
@@ -158,11 +158,11 @@ class EventCertainties extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventCertainties => {
+  handleShare = (eventCertainties) => {
     let message = '';
     if (isArray(eventCertainties)) {
       const eventCertaintyList = eventCertainties.map(
-        eventCertainty =>
+        (eventCertainty) =>
           `Name: ${eventCertainty.strings.name.en}\nDescription: ${
             // eslint-disable-line
             eventCertainty.strings.description.en
@@ -225,7 +225,7 @@ class EventCertainties extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
@@ -298,7 +298,7 @@ class EventCertainties extends Component {
           // onFilter={this.openFiltersModal}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventCertainties}
-          onPaginate={nextPage => paginateEventCertainties(nextPage)}
+          onPaginate={(nextPage) => paginateEventCertainties(nextPage)}
           generateExportUrl={getEventCertaintiesExportUrl}
           headerLayout={headerLayout}
           renderListItem={({

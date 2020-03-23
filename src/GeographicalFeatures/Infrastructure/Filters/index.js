@@ -30,7 +30,7 @@ class CriticalInfrastructuresFilters extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const {
       form: { validateFields },
@@ -97,7 +97,7 @@ class CriticalInfrastructuresFilters extends Component {
           })(
             <Checkbox.Group style={{ width: '100%' }}>
               <Row>
-                {nature.map(natureItem => (
+                {nature.map((natureItem) => (
                   <Col span={6} style={{ margin: '10px 0' }} key={natureItem}>
                     <Checkbox value={natureItem}>{natureItem}</Checkbox>
                   </Col>

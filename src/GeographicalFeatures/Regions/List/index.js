@@ -26,7 +26,7 @@ const RegionsList = ({ regions, loading, onEdit }) => (
     <List
       loading={loading}
       dataSource={regions}
-      renderItem={region => (
+      renderItem={(region) => (
         <RegionsListItem
           key={region.name}
           name={region.name}

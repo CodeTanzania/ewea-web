@@ -85,7 +85,7 @@ class Agencies extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnCachedValues = cached => {
+  handleOnCachedValues = (cached) => {
     const { cached: previousCached } = this.state;
     const values = { ...previousCached, ...cached };
     this.setState({ cached: values });
@@ -162,7 +162,7 @@ class Agencies extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchAgencies = event => {
+  searchAgencies = (event) => {
     searchAgencies(event.target.value);
   };
 
@@ -176,7 +176,7 @@ class Agencies extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = agency => {
+  handleEdit = (agency) => {
     selectAgency(agency);
     this.setState({ isEditForm: true });
     openAgencyForm();
@@ -192,7 +192,7 @@ class Agencies extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  openNotificationForm = agencies => {
+  openNotificationForm = (agencies) => {
     this.setState({
       selectedAgencies: agencies,
       showNotificationForm: true,
@@ -254,12 +254,12 @@ class Agencies extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = agencies => {
+  handleShare = (agencies) => {
     let message;
     let subject;
     if (isArray(agencies)) {
       const agencyList = agencies.map(
-        agency => generateAgencyVCard(agency).body
+        (agency) => generateAgencyVCard(agency).body
       );
 
       subject = 'Agencies Contact Details';
@@ -300,7 +300,7 @@ class Agencies extends Component {
    * @since 0.1.0
    */
 
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive ${item.name} ?`,
       okText: 'Yes',
@@ -373,7 +373,7 @@ class Agencies extends Component {
           onNotify={this.openNotificationForm}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshAgencies}
-          onPaginate={nextPage => paginateAgencies(nextPage)}
+          onPaginate={(nextPage) => paginateAgencies(nextPage)}
           headerLayout={headerLayout}
           generateExportUrl={getAgenciesExportUrl}
           renderListItem={({

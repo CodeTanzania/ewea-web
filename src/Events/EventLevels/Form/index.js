@@ -29,7 +29,7 @@ class EventLevelForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const {
       form: { validateFieldsAndScroll },

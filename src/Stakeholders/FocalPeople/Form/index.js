@@ -37,7 +37,7 @@ class FocalPersonForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
 
     const {
@@ -213,7 +213,7 @@ class FocalPersonForm extends Component {
                   })(
                     <SearchableSelectInput
                       onSearch={getPartyGroups}
-                      optionLabel={group => group.strings.name.en}
+                      optionLabel={(group) => group.strings.name.en}
                       optionValue="_id"
                       initialValue={
                         isEditForm && focalPerson.group
@@ -237,7 +237,7 @@ class FocalPersonForm extends Component {
                   })(
                     <SearchableSelectInput
                       onSearch={getAdministrativeAreas}
-                      optionLabel={area => area.strings.name.en}
+                      optionLabel={(area) => area.strings.name.en}
                       optionValue="_id"
                       initialValue={
                         isEditForm && focalPerson.area
@@ -271,7 +271,7 @@ class FocalPersonForm extends Component {
               })(
                 <SearchableSelectInput
                   onSearch={getPartyRoles}
-                  optionLabel={role => role.strings.name.en}
+                  optionLabel={(role) => role.strings.name.en}
                   optionValue="_id"
                   initialValue={
                     isEditForm && focalPerson.role

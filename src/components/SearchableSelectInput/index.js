@@ -55,10 +55,10 @@ class SearchableSelectInput extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSearch = value => {
+  handleSearch = (value) => {
     const { onSearch } = this.props;
     const { data } = this.state;
-    onSearch({ q: value }).then(response => {
+    onSearch({ q: value }).then((response) => {
       this.setState({
         data: unionBy(response.data, data, '_id'),
         loading: false,
@@ -76,7 +76,7 @@ class SearchableSelectInput extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleChange = value => {
+  handleChange = (value) => {
     const { onChange, onCache } = this.props;
     const { data, cached } = this.state;
     this.setState({
@@ -103,14 +103,14 @@ class SearchableSelectInput extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnDropdownVisibleChange = open => {
+  handleOnDropdownVisibleChange = (open) => {
     const { onSearch } = this.props;
     const { data } = this.state;
 
     if (open && data.length < 9) {
       this.setState({ loading: true });
       onSearch()
-        .then(response => {
+        .then((response) => {
           this.setState({
             data: unionBy(response.data, data, '_id'),
             loading: false,
@@ -147,7 +147,7 @@ class SearchableSelectInput extends Component {
     const { data, loading, value } = this.state;
     const { optionValue, optionLabel, isFilter, ...otherProps } = this.props;
     console.log('select box', data);
-    const options = data.map(option => (
+    const options = data.map((option) => (
       <Option key={this.getOptionProp(optionValue, option)}>
         {this.getOptionProp(optionLabel, option)}
       </Option>

@@ -25,7 +25,7 @@ const EvacuationCenterList = ({ evacuationCenters, loading, onEdit }) => (
     <List
       loading={loading}
       dataSource={evacuationCenters}
-      renderItem={evacuationCenter => (
+      renderItem={(evacuationCenter) => (
         <EvacuationCenterListItem
           key={evacuationCenter.name}
           name={evacuationCenter.name}

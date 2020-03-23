@@ -22,7 +22,7 @@ const WarehouseList = ({ warehouses, loading, onEdit }) => (
     <List
       loading={loading}
       dataSource={warehouses}
-      renderItem={warehouse => (
+      renderItem={(warehouse) => (
         <WarehouseListItem
           key={warehouse.name}
           name={warehouse.name}

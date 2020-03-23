@@ -102,7 +102,7 @@ class EventTypes extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchAlerts = event => {
+  searchAlerts = (event) => {
     searchEventTypes(event.target.value);
   };
 
@@ -116,7 +116,7 @@ class EventTypes extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventType => {
+  handleEdit = (eventType) => {
     selectEventType(eventType);
     this.setState({ isEditForm: true });
     openEventTypeForm();
@@ -144,11 +144,11 @@ class EventTypes extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventTypes => {
+  handleShare = (eventTypes) => {
     let message = '';
     if (isArray(eventTypes)) {
       const eventTypeList = eventTypes.map(
-        eventType =>
+        (eventType) =>
           `Name: ${eventType.strings.name.en}\nDescription: ${
             // eslint-disable-line
             eventType.strings.description.en
@@ -199,7 +199,7 @@ class EventTypes extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
@@ -271,7 +271,7 @@ class EventTypes extends Component {
           onShare={this.handleShare}
           headerLayout={headerLayout}
           onRefresh={this.handleRefreshEventTypes}
-          onPaginate={nextPage => paginateEventTypes(nextPage)}
+          onPaginate={(nextPage) => paginateEventTypes(nextPage)}
           generateExportUrl={getEventTypesExportUrl}
           renderListItem={({
             item,

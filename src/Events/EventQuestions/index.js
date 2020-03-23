@@ -105,7 +105,7 @@ class EventQuestions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventQuestions = event => {
+  searchEventQuestions = (event) => {
     searchEventQuestions(event.target.value);
   };
 
@@ -119,7 +119,7 @@ class EventQuestions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventQuestion => {
+  handleEdit = (eventQuestion) => {
     selectEventQuestion(eventQuestion);
     this.setState({ isEditForm: true });
     openEventQuestionForm();
@@ -192,11 +192,11 @@ class EventQuestions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventQuestions => {
+  handleShare = (eventQuestions) => {
     let message = '';
     if (isArray(eventQuestions)) {
       const eventQuestionList = eventQuestions.map(
-        eventQuestion =>
+        (eventQuestion) =>
           `Name: ${eventQuestion.strings.name.en}\nDescription: ${
             // eslint-disable-line
             eventQuestion.strings.description.en
@@ -224,7 +224,7 @@ class EventQuestions extends Component {
    * @since 0.1.0
    */
 
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive ${item.strings.name.en} ?`,
       okText: 'Yes',
@@ -288,7 +288,7 @@ class EventQuestions extends Component {
           onNotify={this.openNotificationForm}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventQuestions}
-          onPaginate={nextPage => paginateEventQuestions(nextPage)}
+          onPaginate={(nextPage) => paginateEventQuestions(nextPage)}
           generateExportUrl={getEventQuestionsExportUrl}
           headerLayout={headerLayout}
           renderListItem={({

@@ -107,7 +107,7 @@ class Features extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchFeatures = event => {
+  searchFeatures = (event) => {
     searchFeatures(event.target.value);
   };
 
@@ -121,7 +121,7 @@ class Features extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = feature => {
+  handleEdit = (feature) => {
     selectFeature(feature);
     this.setState({ isEditForm: true });
     openFeatureForm();
@@ -170,11 +170,11 @@ class Features extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = features => {
+  handleShare = (features) => {
     let message = '';
     if (isArray(features)) {
       const featureList = features.map(
-        feature =>
+        (feature) =>
           `Name: ${feature.strings.name.en}\nDescription: ${
             // eslint-disable-line
             feature.strings.description.en
@@ -202,7 +202,7 @@ class Features extends Component {
    * @since 0.1.0
    */
 
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive ${item.strings.name.en} ?`,
       okText: 'Yes',
@@ -268,7 +268,7 @@ class Features extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleMapPreview = feature => {
+  handleMapPreview = (feature) => {
     selectFeature(feature);
     this.setState({ showMap: true });
   };
@@ -323,7 +323,7 @@ class Features extends Component {
           onShare={this.handleShare}
           headerLayout={headerLayout}
           onRefresh={this.handleRefreshFeatures}
-          onPaginate={nextPage => paginateFeatures(nextPage)}
+          onPaginate={(nextPage) => paginateFeatures(nextPage)}
           generateExportUrl={getFeaturesExportUrl}
           renderListItem={({
             item,

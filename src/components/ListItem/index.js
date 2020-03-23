@@ -65,7 +65,7 @@ const ListItem = ({
    * @version 0.1.0
    * @since 0.1.0
    */
-  const handleToggleSelect = event => {
+  const handleToggleSelect = (event) => {
     if (event.target.checked) {
       onSelectItem();
     } else {

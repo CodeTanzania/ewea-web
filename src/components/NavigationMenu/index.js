@@ -98,7 +98,7 @@ const NavigationMenu = ({ routes, match }) => {
   return (
     <div className="NavigationMenu">
       <Row type="flex" align="middle">
-        {routes.map(route => (
+        {routes.map((route) => (
           // eslint-disable-next-line react/jsx-props-no-spreading
           <Col key={route.path} {...colSpan}>
             <NavigationMenuItem

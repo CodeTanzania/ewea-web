@@ -25,7 +25,7 @@ const DistrictsList = ({ districts, loading, onEdit }) => (
     <List
       loading={loading}
       dataSource={districts}
-      renderItem={district => (
+      renderItem={(district) => (
         <DistrictsListItem
           key={district.name}
           name={district.name}

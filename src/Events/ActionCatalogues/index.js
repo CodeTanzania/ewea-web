@@ -90,7 +90,7 @@ class ActionCatalogue extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnCachedValues = cached => {
+  handleOnCachedValues = (cached) => {
     const { cached: previousCached } = this.state;
     const values = { ...previousCached, ...cached };
     this.setState({ cached: values });
@@ -169,7 +169,7 @@ class ActionCatalogue extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventActionCatalogues = event => {
+  searchEventActionCatalogues = (event) => {
     searchEventActionCatalogues(event.target.value);
   };
 
@@ -183,7 +183,7 @@ class ActionCatalogue extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventActionCatalogue => {
+  handleEdit = (eventActionCatalogue) => {
     selectEventActionCatalogue(eventActionCatalogue);
     this.setState({ isEditForm: true });
     openEventActionCatalogueForm();
@@ -199,12 +199,12 @@ class ActionCatalogue extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventActionCatalogues => {
+  handleShare = (eventActionCatalogues) => {
     let message;
     let subject;
     if (isArray(eventActionCatalogues)) {
       const eventActionCataloguesList = eventActionCatalogues.map(
-        eventActionCatalogue =>
+        (eventActionCatalogue) =>
           generateEventActionCatalogueVCard(eventActionCatalogue).body
       );
       subject = 'Action Catalogue details';
@@ -234,7 +234,7 @@ class ActionCatalogue extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  openNotificationForm = eventActionCatalogues => {
+  openNotificationForm = (eventActionCatalogues) => {
     this.setState({
       selectedEventActionCatalogues: eventActionCatalogues,
       showNotificationForm: true,
@@ -307,7 +307,7 @@ class ActionCatalogue extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
@@ -378,7 +378,7 @@ class ActionCatalogue extends Component {
           onFilter={this.openFiltersModal}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventActionCatalogues}
-          onPaginate={nextPage => paginateEventActionCatalogues(nextPage)}
+          onPaginate={(nextPage) => paginateEventActionCatalogues(nextPage)}
           generateExportUrl={getEventActionCataloguesExportUrl}
           headerLayout={headerLayout}
           renderListItem={({

@@ -101,7 +101,7 @@ class PartyGroups extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchPartyGroups = party => {
+  searchPartyGroups = (party) => {
     searchPartyGroups(party.target.value);
   };
 
@@ -115,7 +115,7 @@ class PartyGroups extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = partyType => {
+  handleEdit = (partyType) => {
     selectPartyGroup(partyType);
     this.setState({ isEditForm: true });
     openPartyGroupForm();
@@ -167,11 +167,11 @@ class PartyGroups extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = partyGroups => {
+  handleShare = (partyGroups) => {
     let message = '';
     if (isArray(partyGroups)) {
       const partyGroupsList = partyGroups.map(
-        partyGroup =>
+        (partyGroup) =>
           `Name: ${partyGroup.strings.name.en}\nDescription: ${
             // eslint-disable-line
             partyGroup.strings.description.en
@@ -216,7 +216,7 @@ class PartyGroups extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
@@ -280,7 +280,7 @@ class PartyGroups extends Component {
           onShare={this.handleShare}
           onRefresh={this.handleRefreshPartyGroups}
           generateExportUrl={getPartyGroupsExportUrl}
-          onPaginate={nextPage => paginatePartyGroups(nextPage)}
+          onPaginate={(nextPage) => paginatePartyGroups(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
             item,

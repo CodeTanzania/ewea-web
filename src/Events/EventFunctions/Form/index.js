@@ -49,7 +49,7 @@ class FunctionForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
 
     const {
@@ -157,7 +157,7 @@ class FunctionForm extends Component {
             rules: [{ required: false, message: 'Function type is required' }],
           })(
             <Select>
-              {types.map(nature => (
+              {types.map((nature) => (
                 <Option key={nature} value={nature}>
                   {nature}
                 </Option>

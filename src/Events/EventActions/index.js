@@ -78,7 +78,7 @@ class EventActions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnCachedValues = cached => {
+  handleOnCachedValues = (cached) => {
     const { cached: previousCached } = this.state;
     const values = { ...previousCached, ...cached };
     this.setState({ cached: values });
@@ -157,7 +157,7 @@ class EventActions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventActions = event => {
+  searchEventActions = (event) => {
     searchEventActions(event.target.value);
   };
 
@@ -171,7 +171,7 @@ class EventActions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventAction => {
+  handleEdit = (eventAction) => {
     selectEventAction(eventAction);
     this.setState({ isEditForm: true });
     openEventActionForm();
@@ -187,11 +187,11 @@ class EventActions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventActions => {
+  handleShare = (eventActions) => {
     let message = '';
     if (isArray(eventActions)) {
       const eventActionList = eventActions.map(
-        eventAction =>
+        (eventAction) =>
           `Name: ${eventAction.strings.name.en}\nDescription: ${
             // eslint-disable-line
             eventAction.strings.description.en
@@ -254,7 +254,7 @@ class EventActions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
@@ -333,7 +333,7 @@ class EventActions extends Component {
           // onFilter={this.openFiltersModal}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventActions}
-          onPaginate={nextPage => paginateEventActions(nextPage)}
+          onPaginate={(nextPage) => paginateEventActions(nextPage)}
           generateExportUrl={getEventActionsExportUrl}
           headerLayout={headerLayout}
           renderListItem={({

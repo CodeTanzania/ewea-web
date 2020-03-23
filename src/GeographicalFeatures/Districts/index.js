@@ -83,7 +83,7 @@ class Districts extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchDistricts = event => {
+  searchDistricts = (event) => {
     searchFeatures(event.target.value);
   };
 
@@ -129,7 +129,7 @@ class Districts extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = district => {
+  handleEdit = (district) => {
     selectFeature(district);
     this.setState({ isEditForm: true });
     openFeatureForm();

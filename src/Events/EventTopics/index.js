@@ -102,7 +102,7 @@ class EventTopics extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventTopics = event => {
+  searchEventTopics = (event) => {
     searchEventTopics(event.target.value);
   };
 
@@ -116,7 +116,7 @@ class EventTopics extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventType => {
+  handleEdit = (eventType) => {
     selectEventTopic(eventType);
     this.setState({ isEditForm: true });
     openEventTopicForm();
@@ -168,11 +168,11 @@ class EventTopics extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventTopics => {
+  handleShare = (eventTopics) => {
     let message = '';
     if (isArray(eventTopics)) {
       const eventTopicsList = eventTopics.map(
-        eventTopic =>
+        (eventTopic) =>
           `Name: ${eventTopic.strings.name.en}\nDescription: ${
             // eslint-disable-line
             eventTopic.strings.description.en
@@ -217,7 +217,7 @@ class EventTopics extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
@@ -281,7 +281,7 @@ class EventTopics extends Component {
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventTopics}
           generateExportUrl={getEventTopicsExportUrl}
-          onPaginate={nextPage => paginateEventTopics(nextPage)}
+          onPaginate={(nextPage) => paginateEventTopics(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
             item,

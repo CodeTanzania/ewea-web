@@ -43,7 +43,7 @@ class MapPolygon extends Component {
         height="94vh"
         /* eslint-disable-next-line react/jsx-props-no-spreading,react/destructuring-assignment */
         {...viewport}
-        onViewportChange={updatedViewPort => {
+        onViewportChange={(updatedViewPort) => {
           const { latitude, longitude, zoom } = updatedViewPort;
           this.setState({ viewport: { latitude, longitude, zoom } });
         }}

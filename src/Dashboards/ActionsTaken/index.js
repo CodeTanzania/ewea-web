@@ -202,7 +202,7 @@ const ActionsTaken = () => (
             </Col>
           </Row>
 
-          {AGENCIES.map(agency => (
+          {AGENCIES.map((agency) => (
             <Row key={agency.name} style={{ marginTop: '20px' }}>
               <Col {...agencySpan}>{agency.name} </Col>
               <Col {...disseminatedSpan}>{agency.count} </Col>
@@ -240,7 +240,7 @@ const ActionsTaken = () => (
               <Text strong>Progress</Text>
             </Col>
           </Row>
-          {WARDS.map(ward => (
+          {WARDS.map((ward) => (
             <Row key={ward.name} style={{ marginTop: '20px' }}>
               <Col {...wardSpan}>{ward.name} </Col>
               <Col {...disseminatedSpan}>{ward.count} </Col>
@@ -273,7 +273,7 @@ const ActionsTaken = () => (
             <ZoomableGroup center={[39.1037144, -6.7923668]}>
               <Geographies geography={DarWards} disableOptimization>
                 {({ geographies, projection }) =>
-                  geographies.map(geography => {
+                  geographies.map((geography) => {
                     const fillColor = SELECTED_WARDS.includes(
                       geography.properties.Ward_Name
                     )

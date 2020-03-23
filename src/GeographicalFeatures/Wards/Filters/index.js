@@ -29,7 +29,7 @@ class WardsFilters extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const {
       form: { validateFields },
@@ -98,7 +98,7 @@ class WardsFilters extends Component {
           })(
             <Checkbox.Group style={{ width: '100%' }}>
               <Row>
-                {natures.map(nature => (
+                {natures.map((nature) => (
                   <Col span={6} style={{ margin: '10px 0' }} key={nature}>
                     <Checkbox value={nature}>{nature}</Checkbox>
                   </Col>
@@ -117,7 +117,7 @@ class WardsFilters extends Component {
           })(
             <Checkbox.Group style={{ width: '100%' }}>
               <Row>
-                {types.map(type => (
+                {types.map((type) => (
                   <Col span={6} style={{ margin: '10px 0' }} key={type}>
                     <Checkbox value={type}>{type}</Checkbox>
                   </Col>
@@ -136,7 +136,7 @@ class WardsFilters extends Component {
           })(
             <Checkbox.Group style={{ width: '100%' }}>
               <Row>
-                {families.map(family => (
+                {families.map((family) => (
                   <Col span={6} style={{ margin: '10px 0' }} key={family}>
                     <Checkbox value={family}>{family}</Checkbox>
                   </Col>

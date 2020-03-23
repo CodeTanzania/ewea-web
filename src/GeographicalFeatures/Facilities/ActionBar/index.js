@@ -87,7 +87,7 @@ const FacilitiesActionBar = ({ page, total, onFilter }) => (
           simple
           defaultCurrent={page}
           total={total}
-          onChange={nextPage => paginateFeatures(nextPage)}
+          onChange={(nextPage) => paginateFeatures(nextPage)}
           className="pagination"
         />
       </Col>

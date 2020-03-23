@@ -34,7 +34,7 @@ class AdministrativeAreaFilters extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
     const {
       form: { validateFields },
@@ -75,7 +75,7 @@ class AdministrativeAreaFilters extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  cacheFilters = values => {
+  cacheFilters = (values) => {
     const { onCache } = this.props;
     onCache(values);
   };
@@ -117,10 +117,10 @@ class AdministrativeAreaFilters extends Component {
           })(
             <SearchableSelectInput
               onSearch={getAdministrativeLevels}
-              optionLabel={type => type.strings.name.en}
+              optionLabel={(type) => type.strings.name.en}
               optionValue="_id"
               mode="multiple"
-              onCache={types => this.cacheFilters({ types })}
+              onCache={(types) => this.cacheFilters({ types })}
               initialValue={cached && cached.types ? cached.types : []}
             />
           )}

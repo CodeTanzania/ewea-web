@@ -25,7 +25,7 @@ const WardsList = ({ wards, loading, onEdit }) => (
     <List
       loading={loading}
       dataSource={wards}
-      renderItem={ward => (
+      renderItem={(ward) => (
         <WardsListItem
           key={ward.name}
           name={ward.name}

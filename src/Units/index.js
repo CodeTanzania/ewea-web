@@ -102,7 +102,7 @@ class Units extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchUnits = event => {
+  searchUnits = (event) => {
     searchUnits(event.target.value);
   };
 
@@ -116,7 +116,7 @@ class Units extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventType => {
+  handleEdit = (eventType) => {
     selectUnit(eventType);
     this.setState({ isEditForm: true });
     openUnitForm();
@@ -168,11 +168,11 @@ class Units extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = units => {
+  handleShare = (units) => {
     let message = '';
     if (isArray(units)) {
       const unitsList = units.map(
-        unit =>
+        (unit) =>
           `Name: ${unit.strings.name.en}\nDescription: ${
             // eslint-disable-line
             unit.strings.description.en
@@ -217,7 +217,7 @@ class Units extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
@@ -281,7 +281,7 @@ class Units extends Component {
           onShare={this.handleShare}
           onRefresh={this.handleRefreshUnits}
           generateExportUrl={getUnitsExportUrl}
-          onPaginate={nextPage => paginateUnits(nextPage)}
+          onPaginate={(nextPage) => paginateUnits(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
             item,

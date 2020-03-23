@@ -76,7 +76,7 @@ class EventUrgency extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnCachedValues = cached => {
+  handleOnCachedValues = (cached) => {
     const { cached: previousCached } = this.state;
     const values = { ...previousCached, ...cached };
     this.setState({ cached: values });
@@ -129,7 +129,7 @@ class EventUrgency extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventUrgencies = event => {
+  searchEventUrgencies = (event) => {
     searchEventUrgencies(event.target.value);
   };
 
@@ -143,7 +143,7 @@ class EventUrgency extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventUrgency => {
+  handleEdit = (eventUrgency) => {
     selectEventUrgency(eventUrgency);
     this.setState({ isEditForm: true });
     openEventUrgencyForm();
@@ -159,11 +159,11 @@ class EventUrgency extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventUrgencies => {
+  handleShare = (eventUrgencies) => {
     let message = '';
     if (isArray(eventUrgencies)) {
       const eventUrgencyList = eventUrgencies.map(
-        eventUrgency =>
+        (eventUrgency) =>
           `Name: ${eventUrgency.strings.name.en}\nDescription: ${
             // eslint-disable-line
             eventUrgency.strings.description.en
@@ -226,7 +226,7 @@ class EventUrgency extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
@@ -299,7 +299,7 @@ class EventUrgency extends Component {
           // onFilter={this.openFiltersModal}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventUrgencies}
-          onPaginate={nextPage => paginateEventUrgencies(nextPage)}
+          onPaginate={(nextPage) => paginateEventUrgencies(nextPage)}
           generateExportUrl={getEventUrgenciesExportUrl}
           headerLayout={headerLayout}
           renderListItem={({

@@ -48,7 +48,7 @@ const EventForm = ({
   posting,
   onCancel,
 }) => {
-  const onFinish = values => {
+  const onFinish = (values) => {
     if (isEditForm) {
       const updatedEvent = { ...event, ...values };
       putEvent(
@@ -105,7 +105,7 @@ const EventForm = ({
           >
             <SearchableSelectInput
               onSearch={getEventTypes}
-              optionLabel={type => type.strings.name.en}
+              optionLabel={(type) => type.strings.name.en}
               optionValue="_id"
               initialValue={isEditForm && event ? event.type : undefined}
             />
@@ -120,7 +120,7 @@ const EventForm = ({
           <Form.Item name="level" label="Event Level">
             <SearchableSelectInput
               onSearch={getEventLevels}
-              optionLabel={level => level.strings.name.en}
+              optionLabel={(level) => level.strings.name.en}
               optionValue="_id"
               initialValue={isEditForm && event ? event.level : undefined}
             />
@@ -157,7 +157,7 @@ const EventForm = ({
           <Form.Item name="areas" label="Area(s)">
             <SearchableSelectInput
               onSearch={getAdministrativeAreas}
-              optionLabel={area =>
+              optionLabel={(area) =>
                 `${area.strings.name.en} (${get(
                   area,
                   'relations.level.strings.name.en',
@@ -177,7 +177,7 @@ const EventForm = ({
       {/* event stage */}
       <Form.Item name="stage" label="Event Stage">
         <Radio.Group>
-          {map(stages, stage => (
+          {map(stages, (stage) => (
             <Radio key={stage} value={stage}>
               {stage}
             </Radio>

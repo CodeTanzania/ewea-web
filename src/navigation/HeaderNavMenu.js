@@ -94,7 +94,7 @@ const NavItem = ({ name, icon, path, disabled }) => (
 const ModuleNavMenu = () => (
   <div className="ModuleNavMenu">
     <Row type="flex" align="middle">
-      {routes.map(route => (
+      {routes.map((route) => (
         <Col key={route.path} span={12}>
           <NavItem
             name={route.name}

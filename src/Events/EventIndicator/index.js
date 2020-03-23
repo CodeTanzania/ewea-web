@@ -101,7 +101,7 @@ class EventIndicator extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventIndicators = event => {
+  searchEventIndicators = (event) => {
     searchEventIndicators(event.target.value);
   };
 
@@ -115,7 +115,7 @@ class EventIndicator extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventIndicator => {
+  handleEdit = (eventIndicator) => {
     selectEventIndicator(eventIndicator);
     this.setState({ isEditForm: true });
     openEventIndicatorForm();
@@ -164,7 +164,7 @@ class EventIndicator extends Component {
    * @since 0.1.0
    */
 
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive ${item.strings.name.en} ?`,
       okText: 'Yes',
@@ -193,11 +193,11 @@ class EventIndicator extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventIndicators => {
+  handleShare = (eventIndicators) => {
     let message = '';
     if (isArray(eventIndicators)) {
       const eventIndicatorList = eventIndicators.map(
-        eventIndicator =>
+        (eventIndicator) =>
           `Name: ${eventIndicator.strings.name.en}\nDescription: ${
             // eslint-disable-line
             eventIndicator.strings.description.en
@@ -284,7 +284,7 @@ class EventIndicator extends Component {
           onNotify={this.openNotificationForm}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventIndicator}
-          onPaginate={nextPage => paginateEventIndicators(nextPage)}
+          onPaginate={(nextPage) => paginateEventIndicators(nextPage)}
           generateExportUrl={getEventIndicatorsExportUrl}
           headerLayout={headerLayout}
           renderListItem={({

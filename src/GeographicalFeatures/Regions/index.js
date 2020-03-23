@@ -51,7 +51,7 @@ class Regions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchRegions = event => {
+  searchRegions = (event) => {
     searchFeatures(event.target.value);
   };
 
@@ -129,7 +129,7 @@ class Regions extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = region => {
+  handleEdit = (region) => {
     selectFeature(region);
     this.setState({ isEditForm: true });
     openFeatureForm();

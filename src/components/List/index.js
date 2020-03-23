@@ -39,11 +39,11 @@ const ItemList = ({
    * @version 0.1.0
    * @since 0.1.0
    */
-  const handleSelectItem = item => {
+  const handleSelectItem = (item) => {
     setSelectedItems([...selectedItems, item]);
   };
 
-  const handleDeselectItem = item => {
+  const handleDeselectItem = (item) => {
     const selectedList = [...selectedItems];
 
     // eslint-disable-next-line
@@ -79,9 +79,9 @@ const ItemList = ({
     const uniqueSelectedList = uniqBy([...selectedItems], '_id');
     const uniquePages = uniq([...selectedPages]);
 
-    remove(uniquePages, item => item === page);
+    remove(uniquePages, (item) => item === page);
 
-    items.forEach(item => {
+    items.forEach((item) => {
       // eslint-disable-next-line
       remove(uniqueSelectedList, listItem => listItem._id === item._id);
     });
@@ -112,7 +112,7 @@ const ItemList = ({
         selectedItemsCount={selectedItems.length}
         onFilter={onFilter}
         onNotify={onNotify ? () => onNotify(selectedItems) : null}
-        onPaginate={nextPage => onPaginate(nextPage)}
+        onPaginate={(nextPage) => onPaginate(nextPage)}
         onRefresh={() => onRefresh()}
         onShare={() => onShare(selectedItems)}
         exportUrl={
@@ -135,7 +135,7 @@ const ItemList = ({
       <List
         loading={loading}
         dataSource={items}
-        renderItem={item =>
+        renderItem={(item) =>
           renderListItem({
             item,
             isSelected: isSelected(item),

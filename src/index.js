@@ -4,7 +4,7 @@ import App from './App';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 
-const render = Component => {
+const render = (Component) => {
   ReactDOM.render(<Component />, document.getElementById('root')); // eslint-disable-line
 };
 

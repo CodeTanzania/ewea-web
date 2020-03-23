@@ -76,7 +76,7 @@ class EventStatuses extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnCachedValues = cached => {
+  handleOnCachedValues = (cached) => {
     const { cached: previousCached } = this.state;
     const values = { ...previousCached, ...cached };
     this.setState({ cached: values });
@@ -129,7 +129,7 @@ class EventStatuses extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventStatuses = event => {
+  searchEventStatuses = (event) => {
     searchEventStatuses(event.target.value);
   };
 
@@ -143,7 +143,7 @@ class EventStatuses extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventStatus => {
+  handleEdit = (eventStatus) => {
     selectEventStatus(eventStatus);
     this.setState({ isEditForm: true });
     openEventStatusForm();
@@ -159,11 +159,11 @@ class EventStatuses extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventStatuses => {
+  handleShare = (eventStatuses) => {
     let message = '';
     if (isArray(eventStatuses)) {
       const eventStatusList = eventStatuses.map(
-        eventStatus =>
+        (eventStatus) =>
           `Name: ${eventStatus.strings.name.en}\nDescription: ${
             // eslint-disable-line
             eventStatus.strings.description.en
@@ -226,7 +226,7 @@ class EventStatuses extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
@@ -299,7 +299,7 @@ class EventStatuses extends Component {
           // onFilter={this.openFiltersModal}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventStatuses}
-          onPaginate={nextPage => paginateEventStatuses(nextPage)}
+          onPaginate={(nextPage) => paginateEventStatuses(nextPage)}
           generateExportUrl={getEventStatusesExportUrl}
           headerLayout={headerLayout}
           renderListItem={({

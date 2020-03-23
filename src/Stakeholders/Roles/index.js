@@ -114,7 +114,7 @@ class Roles extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchRoles = event => {
+  searchRoles = (event) => {
     getPartyRoles({ q: event.target.value });
   };
 
@@ -128,7 +128,7 @@ class Roles extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = role => {
+  handleEdit = (role) => {
     selectPartyRole(role);
     this.setState({ isEditForm: true });
     openPartyRoleForm();
@@ -215,11 +215,11 @@ class Roles extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = partyroles => {
+  handleShare = (partyroles) => {
     let message = '';
     if (isArray(partyroles)) {
       const partyroleList = partyroles.map(
-        partyrole =>
+        (partyrole) =>
           `Name: ${partyrole.strings.name.en}\nDescription: ${
             // eslint-disable-line
             partyrole.strings.description.en
@@ -247,7 +247,7 @@ class Roles extends Component {
    * @since 0.1.0
    */
 
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive ${item.strings.name.en} ?`,
       okText: 'Yes',
@@ -312,7 +312,7 @@ class Roles extends Component {
           generateExportUrl={getPartyRolesExportUrl}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshRoles}
-          onPaginate={nextPage => paginatePartyRoles(nextPage)}
+          onPaginate={(nextPage) => paginatePartyRoles(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
             item,

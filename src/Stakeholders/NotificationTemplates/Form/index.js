@@ -29,7 +29,7 @@ class NotificationTemplateForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
 
     const {

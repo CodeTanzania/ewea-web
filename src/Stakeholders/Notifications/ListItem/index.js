@@ -57,7 +57,7 @@ class CampaignListItem extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleToggleSelect = event => {
+  handleToggleSelect = (event) => {
     const { isSelected } = this.state;
     const { onSelectItem, onDeselectItem } = this.props;
 

@@ -39,7 +39,7 @@ class FocalPeopleFilters extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
     const {
       form: { validateFields },
@@ -80,7 +80,7 @@ class FocalPeopleFilters extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  cacheFilters = values => {
+  cacheFilters = (values) => {
     const { onCache } = this.props;
     onCache(values);
   };
@@ -122,10 +122,10 @@ class FocalPeopleFilters extends Component {
           })(
             <SearchableSelectInput
               onSearch={getAdministrativeAreas}
-              optionLabel={area => area.strings.name.en}
+              optionLabel={(area) => area.strings.name.en}
               optionValue="_id"
               mode="multiple"
-              onCache={areas => {
+              onCache={(areas) => {
                 this.cacheFilters({ areas });
               }}
               initialValue={cached && cached.areas ? cached.areas : []}
@@ -142,10 +142,10 @@ class FocalPeopleFilters extends Component {
           })(
             <SearchableSelectInput
               onSearch={getPartyGroups}
-              optionLabel={group => group.strings.name.en}
+              optionLabel={(group) => group.strings.name.en}
               optionValue="_id"
               mode="multiple"
-              onCache={groups => this.cacheFilters({ groups })}
+              onCache={(groups) => this.cacheFilters({ groups })}
               initialValue={cached && cached.groups ? cached.groups : []}
             />
           )}
@@ -160,10 +160,10 @@ class FocalPeopleFilters extends Component {
           })(
             <SearchableSelectInput
               onSearch={getPartyRoles}
-              optionLabel={role => role.strings.name.en}
+              optionLabel={(role) => role.strings.name.en}
               optionValue="_id"
               mode="multiple"
-              onCache={roles => this.cacheFilters({ roles })}
+              onCache={(roles) => this.cacheFilters({ roles })}
               initialValue={cached && cached.roles ? cached.roles : []}
             />
           )}
@@ -181,7 +181,7 @@ class FocalPeopleFilters extends Component {
               optionLabel="name"
               optionValue="_id"
               mode="multiple"
-              onCache={agencies => this.cacheFilters({ agencies })}
+              onCache={(agencies) => this.cacheFilters({ agencies })}
               initialValue={cached && cached.agencies ? cached.agencies : []}
             />
           )}

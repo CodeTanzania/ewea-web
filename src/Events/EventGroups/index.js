@@ -102,7 +102,7 @@ class EventGroups extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventGroups = event => {
+  searchEventGroups = (event) => {
     searchEventGroups(event.target.value);
   };
 
@@ -116,7 +116,7 @@ class EventGroups extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = eventType => {
+  handleEdit = (eventType) => {
     selectEventGroup(eventType);
     this.setState({ isEditForm: true });
     openEventGroupForm();
@@ -168,11 +168,11 @@ class EventGroups extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = eventGroups => {
+  handleShare = (eventGroups) => {
     let message = '';
     if (isArray(eventGroups)) {
       const eventGroupsList = eventGroups.map(
-        eventGroup =>
+        (eventGroup) =>
           `Name: ${eventGroup.strings.name.en}\nDescription: ${
             // eslint-disable-line
             eventGroup.strings.description.en
@@ -217,7 +217,7 @@ class EventGroups extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
@@ -281,7 +281,7 @@ class EventGroups extends Component {
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventGroups}
           generateExportUrl={getEventGroupsExportUrl}
-          onPaginate={nextPage => paginateEventGroups(nextPage)}
+          onPaginate={(nextPage) => paginateEventGroups(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
             item,

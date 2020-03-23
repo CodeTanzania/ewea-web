@@ -82,7 +82,7 @@ class Wards extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchWards = event => {
+  searchWards = (event) => {
     searchFeatures(event.target.value);
   };
 
@@ -128,7 +128,7 @@ class Wards extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = ward => {
+  handleEdit = (ward) => {
     selectFeature(ward);
     this.setState({ isEditForm: true });
     openFeatureForm();

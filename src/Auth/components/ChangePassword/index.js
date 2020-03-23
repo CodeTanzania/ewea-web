@@ -31,7 +31,7 @@ class ChangePasswordForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
 
     const {
@@ -70,9 +70,9 @@ class ChangePasswordForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleConfirmBlur = event => {
+  handleConfirmBlur = (event) => {
     const { value } = event.target;
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       confirmDirty: prevState || !!value,
     }));
   };

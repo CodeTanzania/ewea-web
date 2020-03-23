@@ -78,7 +78,7 @@ class NotificationTemplates extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnCachedValues = cached => {
+  handleOnCachedValues = (cached) => {
     const { cached: previousCached } = this.state;
     const values = { ...previousCached, ...cached };
     this.setState({ cached: values });
@@ -157,7 +157,7 @@ class NotificationTemplates extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchNotificationTemplates = event => {
+  searchNotificationTemplates = (event) => {
     searchNotificationTemplates(event.target.value);
   };
 
@@ -171,7 +171,7 @@ class NotificationTemplates extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = notificationTemplate => {
+  handleEdit = (notificationTemplate) => {
     selectNotificationTemplate(notificationTemplate);
     this.setState({ isEditForm: true });
     openNotificationTemplateForm();
@@ -235,11 +235,11 @@ class NotificationTemplates extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = notificationTemplate => {
+  handleShare = (notificationTemplate) => {
     let message = '';
     if (isArray(notificationTemplate)) {
       const notificationTemplatesList = notificationTemplate.map(
-        notificationTemplates =>
+        (notificationTemplates) =>
           `Name: ${notificationTemplates.strings.name.en}\nDescription: ${
             // eslint-disable-line
             notificationTemplates.strings.description.en
@@ -288,7 +288,7 @@ class NotificationTemplates extends Component {
    * @since 0.1.0
    */
 
-  showArchiveConfirm = item => {
+  showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive ${item.strings.name.en} ?`,
       okText: 'Yes',
@@ -359,7 +359,7 @@ class NotificationTemplates extends Component {
           // onNotify={this.openNotificationForm}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshNotificationTemplate}
-          onPaginate={nextPage => paginateNotificationTemplates(nextPage)}
+          onPaginate={(nextPage) => paginateNotificationTemplates(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
             item,

@@ -23,7 +23,7 @@ class EvacuationCenterForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
 
     const {
@@ -70,8 +70,8 @@ class EvacuationCenterForm extends Component {
     });
   };
 
-  renderSelectOptions = options =>
-    options.map(option => (
+  renderSelectOptions = (options) =>
+    options.map((option) => (
       <Option key={option} value={option}>
         {option}
       </Option>
