@@ -7,7 +7,6 @@
     "plugin:jest/recommended",
     "plugin:jest/style",
     "prettier/react",
-    "prettier"
   ],
   "plugins": [
     "jest",
