@@ -142,6 +142,7 @@ class Events extends Component {
    * @since 0.1.0
    */
   openEventForm = () => {
+    selectEvent(null);
     openEventForm();
   };
 
@@ -585,6 +586,7 @@ class Events extends Component {
           visible={showEventDetails}
           drawerStyle={{ overflow: 'hidden' }}
           bodyStyle={{ overflow: 'hidden', height: '100%', padding: '15px' }}
+          destroyOnClose
         >
           <EventDetailsViewBody
             event={event}
