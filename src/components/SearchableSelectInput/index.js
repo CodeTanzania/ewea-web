@@ -84,7 +84,7 @@ class SearchableSelectInput extends Component {
     });
 
     if (isFunction(onCache)) {
-      const state = filter(data, entry => value.includes(entry._id)); // eslint-disable-line
+      const state = filter(data, (entry) => value.includes(entry._id)); // eslint-disable-line
       const cachedValues = uniqBy([...cached, ...state], '_id');
       onCache(cachedValues);
       this.setState({ cached: cachedValues });
@@ -146,7 +146,7 @@ class SearchableSelectInput extends Component {
   render() {
     const { data, loading, value } = this.state;
     const { optionValue, optionLabel, isFilter, ...otherProps } = this.props;
-    console.log('select box', data);
+
     const options = data.map((option) => (
       <Option key={this.getOptionProp(optionValue, option)}>
         {this.getOptionProp(optionLabel, option)}

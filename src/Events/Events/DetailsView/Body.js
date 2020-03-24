@@ -44,6 +44,7 @@ import {
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 
+import get from 'lodash/get';
 import { formatDate, notifySuccess, notifyError } from '../../../util';
 import EventChangelogForm from '../ChangelogForm';
 import './styles.css';
@@ -86,11 +87,11 @@ export const EventDetailsSectionHeader = ({ title, actions }) => {
 export const EventLocations = ({ areas = [] }) => {
   const locations = areas.map((area) => area.strings.name.en).join(', ');
   return isEmpty(areas) ? null : (
-    <>
+    <div style={{ marginTop: '40px' }}>
       <EventDetailsSectionHeader title="AFFECT AREAS" />
 
       {locations}
-    </>
+    </div>
   );
 };
 
@@ -491,6 +492,25 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
 
 /**
  * @function
+ * @name EventCause
+ * @description Display Event Cause
+ * @param {object} props React props
+ *
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const EventCause = ({ cause }) => {
+  return (
+    <>
+      <EventDetailsSectionHeader title="CAUSE" />
+      {cause}
+    </>
+  );
+};
+
+/**
+ * @function
  * @name  EventDetailsViewBody
  * @description Event Details body view
  *
@@ -528,6 +548,7 @@ const EventDetailsViewBody = ({
         <div className="EventBodyContent">
           <Row>
             <Col span={16}>
+              <EventCause cause={get(event, 'causes', 'N/A')} />
               <EventLocations areas={event.areas} />
               {event.places && <EventPlaces places={event.places} />}
               <EventRespondingAgencies agencies={event.agencies} />
@@ -606,6 +627,10 @@ EventFeed.propTypes = {
   ).isRequired,
   loading: PropTypes.bool.isRequired,
   hasMore: PropTypes.bool.isRequired,
+};
+
+EventCause.propTypes = {
+  cause: PropTypes.string.isRequired,
 };
 
 EventDetailsViewBody.propTypes = {

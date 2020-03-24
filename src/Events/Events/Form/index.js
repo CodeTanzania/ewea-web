@@ -148,6 +148,12 @@ const EventForm = ({
           {/* end event description */}
 
           {/* event instructions */}
+          <Form.Item name="causes" label="Causes">
+            <TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
+          </Form.Item>
+          {/* end event instructions */}
+
+          {/* event instructions */}
           <Form.Item name="instructions" label="Instructions">
             <TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
           </Form.Item>

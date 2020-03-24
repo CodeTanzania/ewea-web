@@ -1,5 +1,9 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { postChangelog } from '@codetanzania/ewea-api-states';
+import {
+  postChangelog,
+  getEvent,
+  getEvents,
+} from '@codetanzania/ewea-api-states';
 import { InboxOutlined } from '@ant-design/icons';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
@@ -64,6 +68,8 @@ class EventChangelogForm extends Component {
           data,
           () => {
             notifySuccess('Event Feed was created successfully');
+            getEvent(event._id); // eslint-disable-line
+            getEvents();
           },
           () => {
             notifyError(
