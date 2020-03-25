@@ -462,6 +462,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
     return null;
   });
 
+  console.log('Event Feed', feedItems);
   return (
     <div className="not-printable">
       <EventDetailsSectionHeader title="EVENT FEED" />
