@@ -8,7 +8,6 @@ import {
   filterChangelogs,
   loadMoreChangelogs,
 } from '@codetanzania/ewea-api-states';
-import { PrintProvider, NoPrint } from 'react-easy-print';
 
 import {
   ApartmentOutlined,
@@ -195,7 +194,7 @@ export const EventRespondingFocalPeople = ({ focalPeople = [] }) => {
  */
 const EventToolbar = ({ event, openForm, onShare }) => {
   return (
-    <div className="EventToolbar">
+    <div className="EventToolbar not-printable">
       <Row>
         <Col span={1}>
           <Button
@@ -464,7 +463,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
   });
 
   return (
-    <>
+    <div className="not-printable">
       <EventDetailsSectionHeader title="EVENT FEED" />
 
       <Spin spinning={loading}>
@@ -486,7 +485,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
           </>
         )}
       </Spin>
-    </>
+    </div>
   );
 };
 
@@ -540,51 +539,51 @@ const EventDetailsViewBody = ({
   }, []);
 
   return (
-    <PrintProvider>
-      <div className="EventBody">
-        <NoPrint force>
-          <EventToolbar event={event} openForm={openForm} onShare={onShare} />
-        </NoPrint>
-        <div className="EventBodyContent">
-          <Row>
-            <Col span={16}>
-              <EventCause cause={get(event, 'causes', 'N/A')} />
-              <EventLocations areas={event.areas} />
-              {event.places && <EventPlaces places={event.places} />}
-              <EventRespondingAgencies agencies={event.agencies} />
-              <EventRespondingFocalPeople focalPeople={event.focals} />
-              <EventActionsTaken />
-            </Col>
-            <Col span={8}>
-              <NoPrint force>
-                <EventFeed
-                  feeds={changelogs}
-                  loading={loading}
-                  hasMore={hasMore}
-                />
-              </NoPrint>
-            </Col>
-          </Row>
-        </div>
-
-        <Modal
-          title={action.label}
-          visible={showForm}
-          className="FormModal"
-          footer={null}
-          onCancel={() => closeChangelogForm()}
-          destroyOnClose
-          maskClosable={false}
-        >
-          <EventChangelogForm
-            action={action.key}
-            event={event}
-            posting={posting}
-            onCancel={() => closeChangelogForm()}
-          />
-        </Modal>
+    <div className="EventBody">
+      <EventToolbar
+        event={event}
+        openForm={openForm}
+        onShare={onShare}
+        className="printable"
+      />
+      <div className="EventBodyContent">
+        <Row>
+          <Col span={16}>
+            <EventCause cause={get(event, 'causes', 'N/A')} />
+            <EventLocations areas={event.areas} />
+            {event.places && <EventPlaces places={event.places} />}
+            <EventRespondingAgencies agencies={event.agencies} />
+            <EventRespondingFocalPeople focalPeople={event.focals} />
+            <EventActionsTaken />
+          </Col>
+          <Col span={8}>
+            <EventFeed
+              feeds={changelogs}
+              loading={loading}
+              hasMore={hasMore}
+              className="not-printable"
+            />
+          </Col>
+        </Row>
       </div>
-    </PrintProvider>
+
+      <Modal
+        title={action.label}
+        visible={showForm}
+        className="FormModal"
+        footer={null}
+        onCancel={() => closeChangelogForm()}
+        destroyOnClose
+        maskClosable={false}
+      >
+        <EventChangelogForm
+          action={action.key}
+          event={event}
+          posting={posting}
+          onCancel={() => closeChangelogForm()}
+        />
+      </Modal>
+    </div>
   );
 };
 

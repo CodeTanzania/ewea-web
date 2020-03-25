@@ -124,3 +124,17 @@ code {
   border-radius: 50%;
   cursor: pointer;
 }
+
+.print-only {
+  display: none;
+}
+
+@media print {
+  .print-only {
+    display: visible;
+  }
+
+  .not-printable {
+    display: none;
+  }
+}
