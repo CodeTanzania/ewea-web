@@ -44,6 +44,7 @@ import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 
 import get from 'lodash/get';
+import map from 'lodash/map';
 import { formatDate, notifySuccess, notifyError } from '../../../util';
 import EventChangelogForm from '../ChangelogForm';
 import './styles.css';
@@ -354,7 +355,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
  */
 export const EventFeed = ({ feeds = [], loading, hasMore }) => {
   console.log('Feed before Mapping', feeds);
-  const feedItems = feeds.map((feed) => {
+  const feedItems = map(feeds, (feed) => {
     console.log('Feed', feed);
     if (feed.comment && feed.image) {
       return (
