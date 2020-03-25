@@ -418,6 +418,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
 
     /* comments */
     if (feed.comment) {
+      console.log('Should render comment here', feed.comment);
       return (
         // eslint-disable-next-line no-underscore-dangle
         <Timeline.Item key={feed._id} dot={<MessageOutlined />}>
