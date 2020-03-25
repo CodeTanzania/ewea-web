@@ -355,6 +355,7 @@ const EventToolbar = ({ event, openForm, onShare }) => {
 export const EventFeed = ({ feeds = [], loading, hasMore }) => {
   console.log('Feed before Mapping', feeds);
   const feedItems = feeds.map((feed) => {
+    console.log('Feed', feed);
     if (feed.comment && feed.image) {
       return (
         <>
