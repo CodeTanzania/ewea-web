@@ -45,6 +45,8 @@ import PropTypes from 'prop-types';
 
 import get from 'lodash/get';
 import map from 'lodash/map';
+import concat from 'lodash/concat';
+import flatten from 'lodash/flatten';
 import { formatDate, notifySuccess, notifyError } from '../../../util';
 import EventChangelogForm from '../ChangelogForm';
 import './styles.css';
@@ -343,6 +345,112 @@ const EventToolbar = ({ event, openForm, onShare }) => {
   );
 };
 
+const renderComment = (feed) => (
+  // eslint-disable-next-line no-underscore-dangle
+  <Timeline.Item key={feed._id} dot={<MessageOutlined />}>
+    {feed.comment} <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
+  </Timeline.Item>
+);
+
+const renderImage = (feed) => (
+  <Timeline.Item
+    key={`${feed._id}-${feed.filename}`} // eslint-disable-line no-underscore-dangle
+    dot={<FileImageOutlined />}
+  >
+    <Card
+      hoverable
+      style={{ width: 300 }}
+      bodyStyle={{ display: 'none' }}
+      actions={[
+        <a
+          // eslint-disable-next-line no-underscore-dangle
+          key={`view-${feed._id}`}
+          href={`${getBaseUrl()}${feed.image.stream}?token=${getJwtToken()}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <EyeOutlined key="eye" />
+        </a>,
+        <a
+          // eslint-disable-next-line no-underscore-dangle
+          key={`download-${feed._id}`}
+          href={`${getBaseUrl()}${feed.image.download}?token=${getJwtToken()}`}
+        >
+          <DownloadOutlined key="download" />
+        </a>,
+      ]}
+      cover={
+        <img
+          alt="example"
+          src={`${getBaseUrl()}${feed.image.stream}?token=${getJwtToken()}`}
+        />
+      }
+    />
+    <div style={{ marginTop: '12px' }}>
+      <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+    </div>
+  </Timeline.Item>
+);
+
+const renderFocals = (feed) => {
+  return map(feed.focals, (focal) => (
+    // eslint-disable-next-line no-underscore-dangle
+    <Timeline.Item key={feed._id} dot={<UserOutlined />}>
+      <Tag>{feed.initiator.name}</Tag> added focal:{' '}
+      <Tag color="cyan">{focal.name}</Tag> on{' '}
+      <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+    </Timeline.Item>
+  ));
+};
+
+const renderAgencies = (feed) => {
+  return map(feed.agencies, (agency) => (
+    // eslint-disable-next-line no-underscore-dangle
+    <Timeline.Item key={feed._id} dot={<ApartmentOutlined />}>
+      <Tag>{feed.initiator.name}</Tag> added agency:{' '}
+      <Tag color="magenta">{agency.name}</Tag> on{' '}
+      <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+    </Timeline.Item>
+  ));
+};
+
+const renderAreas = (feed) => {
+  return map(feed.areas, (area) => (
+    // eslint-disable-next-line no-underscore-dangle
+    <Timeline.Item key={area._id} dot={<EnvironmentOutlined />}>
+      <Tag>{feed.initiator.name}</Tag> added affected area:{' '}
+      <Tag color="geekblue">{area.strings.name.en}</Tag> on{' '}
+      <Tag>{formatDate(area.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+    </Timeline.Item>
+  ));
+};
+
+const renderFeed = (feed) => {
+  let feedItems = [];
+
+  if (feed.comment) {
+    feedItems = concat(feedItems, renderComment(feed));
+  }
+
+  if (feed.image) {
+    feedItems = concat(feedItems, renderImage(feed));
+  }
+
+  if (feed.focals) {
+    feedItems = concat(feedItems, ...renderFocals(feed));
+  }
+
+  if (feed.agencies) {
+    feedItems = concat(feedItems, ...renderAgencies(feed));
+  }
+
+  if (feed.areas) {
+    feedItems = concat(feedItems, ...renderAreas(feed));
+  }
+
+  return feedItems;
+};
+
 /**
  * @function
  * @name EventFeed
@@ -355,118 +463,126 @@ const EventToolbar = ({ event, openForm, onShare }) => {
  */
 export const EventFeed = ({ feeds = [], loading, hasMore }) => {
   console.log('Feed before Mapping', feeds);
-  const feedItems = map(feeds, (feed) => {
-    console.log('Feed', feed);
-    if (feed.comment && feed.image) {
-      return (
-        <>
-          {/* comments */}
-          {/* eslint-disable-next-line no-underscore-dangle */}
-          <Timeline.Item key={feed._id} dot={<MessageOutlined />}>
-            {feed.comment}{' '}
-            <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
-          </Timeline.Item>
-          {/* comments */}
+  const feedComponents = flatten(
+    map(feeds, (feed) => {
+      const a = renderFeed(feed);
+      console.log('Rendered feed', feed, a);
+      return a;
+    })
+  );
 
-          {/* image */}
-          <Timeline.Item
-            key={`${feed._id}-${feed.filename}`} // eslint-disable-line no-underscore-dangle
-            dot={<FileImageOutlined />}
-          >
-            <Card
-              hoverable
-              style={{ width: 300 }}
-              bodyStyle={{ display: 'none' }}
-              actions={[
-                <a
-                  // eslint-disable-next-line no-underscore-dangle
-                  key={`view-${feed._id}`}
-                  href={`${getBaseUrl()}${
-                    feed.image.stream
-                  }?token=${getJwtToken()}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <EyeOutlined key="eye" />
-                </a>,
-                <a
-                  // eslint-disable-next-line no-underscore-dangle
-                  key={`download-${feed._id}`}
-                  href={`${getBaseUrl()}${
-                    feed.image.download
-                  }?token=${getJwtToken()}`}
-                >
-                  <DownloadOutlined key="download" />
-                </a>,
-              ]}
-              cover={
-                <img
-                  alt="example"
-                  src={`${getBaseUrl()}${
-                    feed.image.stream
-                  }?token=${getJwtToken()}`}
-                />
-              }
-            />
-            <div style={{ marginTop: '12px' }}>
-              <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-            </div>
-          </Timeline.Item>
-          {/* end image */}
-        </>
-      );
-    }
+  // const feedItems = map(feeds, (feed) => {
+  //   console.log('Feed', feed);
+  //   if (feed.comment && feed.image) {
+  //     return (
+  //       <>
+  //         {/* comments */}
+  //         {/* eslint-disable-next-line no-underscore-dangle */}
+  //         <Timeline.Item key={feed._id} dot={<MessageOutlined />}>
+  //           {feed.comment}{' '}
+  //           <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
+  //         </Timeline.Item>
+  //         {/* comments */}
 
-    /* comments */
-    if (feed.comment) {
-      console.log('Should render comment here', feed.comment);
-      return (
-        // eslint-disable-next-line no-underscore-dangle
-        <Timeline.Item key={feed._id} dot={<MessageOutlined />}>
-          <Tag>{feed.initiator.name}</Tag> commented: {feed.comment} on
-          <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
-        </Timeline.Item>
-      );
-    }
-    /* comments */
+  //         {/* image */}
+  //         <Timeline.Item
+  //           key={`${feed._id}-${feed.filename}`} // eslint-disable-line no-underscore-dangle
+  //           dot={<FileImageOutlined />}
+  //         >
+  //           <Card
+  //             hoverable
+  //             style={{ width: 300 }}
+  //             bodyStyle={{ display: 'none' }}
+  //             actions={[
+  //               <a
+  //                 // eslint-disable-next-line no-underscore-dangle
+  //                 key={`view-${feed._id}`}
+  //                 href={`${getBaseUrl()}${
+  //                   feed.image.stream
+  //                 }?token=${getJwtToken()}`}
+  //                 target="_blank"
+  //                 rel="noopener noreferrer"
+  //               >
+  //                 <EyeOutlined key="eye" />
+  //               </a>,
+  //               <a
+  //                 // eslint-disable-next-line no-underscore-dangle
+  //                 key={`download-${feed._id}`}
+  //                 href={`${getBaseUrl()}${
+  //                   feed.image.download
+  //                 }?token=${getJwtToken()}`}
+  //               >
+  //                 <DownloadOutlined key="download" />
+  //               </a>,
+  //             ]}
+  //             cover={
+  //               <img
+  //                 alt="example"
+  //                 src={`${getBaseUrl()}${
+  //                   feed.image.stream
+  //                 }?token=${getJwtToken()}`}
+  //               />
+  //             }
+  //           />
+  //           <div style={{ marginTop: '12px' }}>
+  //             <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+  //           </div>
+  //         </Timeline.Item>
+  //         {/* end image */}
+  //       </>
+  //     );
+  //   }
 
-    if (feed.focals) {
-      return feed.focals.map((focal) => (
-        // eslint-disable-next-line no-underscore-dangle
-        <Timeline.Item key={feed._id} dot={<UserOutlined />}>
-          <Tag>{feed.initiator.name}</Tag> added focal:{' '}
-          <Tag color="cyan">{focal.name}</Tag> on{' '}
-          <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-        </Timeline.Item>
-      ));
-    }
+  //   /* comments */
+  //   if (feed.comment) {
+  //     console.log('Should render comment here', feed.comment);
+  //     return (
+  //       // eslint-disable-next-line no-underscore-dangle
+  //       <Timeline.Item key={feed._id} dot={<MessageOutlined />}>
+  //         <Tag>{feed.initiator.name}</Tag> commented: {feed.comment} on
+  //         <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
+  //       </Timeline.Item>
+  //     );
+  //   }
+  //   /* comments */
 
-    if (feed.agencies) {
-      return feed.agencies.map((agency) => (
-        // eslint-disable-next-line no-underscore-dangle
-        <Timeline.Item key={feed._id} dot={<ApartmentOutlined />}>
-          <Tag>{feed.initiator.name}</Tag> added agency:{' '}
-          <Tag color="magenta">{agency.name}</Tag> on{' '}
-          <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-        </Timeline.Item>
-      ));
-    }
+  //   if (feed.focals) {
+  //     return feed.focals.map((focal) => (
+  //       // eslint-disable-next-line no-underscore-dangle
+  //       <Timeline.Item key={feed._id} dot={<UserOutlined />}>
+  //         <Tag>{feed.initiator.name}</Tag> added focal:{' '}
+  //         <Tag color="cyan">{focal.name}</Tag> on{' '}
+  //         <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+  //       </Timeline.Item>
+  //     ));
+  //   }
 
-    if (feed.areas) {
-      return feed.areas.map((area) => (
-        // eslint-disable-next-line no-underscore-dangle
-        <Timeline.Item key={area._id} dot={<EnvironmentOutlined />}>
-          <Tag>{feed.initiator.name}</Tag> added affected area:{' '}
-          <Tag color="geekblue">{area.strings.name.en}</Tag> on{' '}
-          <Tag>{formatDate(area.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-        </Timeline.Item>
-      ));
-    }
+  //   if (feed.agencies) {
+  //     return feed.agencies.map((agency) => (
+  //       // eslint-disable-next-line no-underscore-dangle
+  //       <Timeline.Item key={feed._id} dot={<ApartmentOutlined />}>
+  //         <Tag>{feed.initiator.name}</Tag> added agency:{' '}
+  //         <Tag color="magenta">{agency.name}</Tag> on{' '}
+  //         <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+  //       </Timeline.Item>
+  //     ));
+  //   }
 
-    return null;
-  });
+  //   if (feed.areas) {
+  //     return feed.areas.map((area) => (
+  //       // eslint-disable-next-line no-underscore-dangle
+  //       <Timeline.Item key={area._id} dot={<EnvironmentOutlined />}>
+  //         <Tag>{feed.initiator.name}</Tag> added affected area:{' '}
+  //         <Tag color="geekblue">{area.strings.name.en}</Tag> on{' '}
+  //         <Tag>{formatDate(area.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+  //       </Timeline.Item>
+  //     ));
+  //   }
 
-  console.log('Event Feed', feedItems);
+  //   return null;
+  // });
+
+  console.log('Event Feed', feedComponents);
   return (
     <div className="not-printable">
       <EventDetailsSectionHeader title="EVENT FEED" />
@@ -476,7 +592,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         ) : (
           <>
-            {!loading && <Timeline>{feedItems}</Timeline>}
+            {!loading && <Timeline>{feedComponents}</Timeline>}
 
             {hasMore && (
               <Button
