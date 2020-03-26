@@ -31,4 +31,8 @@
   .ant-drawer-close {
     display: none;
   }
+
+  .EventBodyContent {
+    overflow: hidden;
+  }
 }
