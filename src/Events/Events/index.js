@@ -424,6 +424,7 @@ class Events extends Component {
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
+              avatarBackgroundColor={get(item, 'type.strings.color', undefined)}
               renderActions={() => (
                 <ListItemActions
                   view={{
