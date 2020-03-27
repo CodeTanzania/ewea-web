@@ -86,7 +86,7 @@ const EventForm = ({
         ...event,
         type: get(event, 'type._id', undefined),
         level: get(event, 'level._id', undefined),
-        areas: map(get(event, 'areas', []), area => area._id), // eslint-disable-line
+        areas: map(get(event, 'areas', []), (area) => area._id), // eslint-disable-line
       }}
       autoComplete="off"
     >
@@ -129,6 +129,12 @@ const EventForm = ({
       </Row>
       {/* end event level */}
 
+      {/* event instructions */}
+      <Form.Item name="causes" label="Cause(s)">
+        <TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
+      </Form.Item>
+      {/* end event instructions */}
+
       {/* event area */}
       <Row type="flex" justify="space-between">
         <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
@@ -146,12 +152,6 @@ const EventForm = ({
             <TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
           </Form.Item>
           {/* end event description */}
-
-          {/* event instructions */}
-          <Form.Item name="causes" label="Causes">
-            <TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
-          </Form.Item>
-          {/* end event instructions */}
 
           {/* event instructions */}
           <Form.Item name="instructions" label="Instructions">
