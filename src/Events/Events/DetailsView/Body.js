@@ -358,7 +358,8 @@ const EventToolbar = ({ event, openForm, onShare }) => {
 const renderComment = (feed) => (
   // eslint-disable-next-line no-underscore-dangle
   <Timeline.Item key={feed._id} dot={<MessageOutlined />}>
-    {feed.comment} <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
+    <Tag>{feed.initiator.name}</Tag> commented: {feed.comment}{' '}
+    <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
   </Timeline.Item>
 );
 
