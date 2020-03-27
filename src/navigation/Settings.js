@@ -26,7 +26,7 @@ import modules from '../modules.json';
 /* constants */
 const routes = [
   {
-    name: 'Events Actions',
+    name: 'Event Actions',
     path: '/eventactions',
     icon: eventActionsIcon,
     description: modules.eventActions,
