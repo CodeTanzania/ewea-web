@@ -135,7 +135,6 @@ const EventForm = ({
       </Form.Item>
       {/* end event instructions */}
 
-      {/* event area */}
       <Row type="flex" justify="space-between">
         <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
           {/* event description */}
@@ -145,7 +144,7 @@ const EventForm = ({
             rules={[
               {
                 required: true,
-                message: 'Event event is required',
+                message: 'Event description is required',
               },
             ]}
           >
@@ -178,10 +177,18 @@ const EventForm = ({
           {/* end event areas */}
         </Col>
       </Row>
-      {/* end event area */}
 
       {/* event stage */}
-      <Form.Item name="stage" label="Event Stage">
+      <Form.Item
+        name="stage"
+        label="Event Stage"
+        rules={[
+          {
+            required: true,
+            message: 'Event stage is required',
+          },
+        ]}
+      >
         <Radio.Group>
           {map(stages, (stage) => (
             <Radio key={stage} value={stage}>
