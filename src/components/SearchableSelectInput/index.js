@@ -166,6 +166,7 @@ class SearchableSelectInput extends Component {
           value={value}
           onDropdownVisibleChange={this.handleOnDropdownVisibleChange}
           filterOption={false}
+          loading={loading}
           notFoundContent={
             loading ? <Spin size="small" /> : 'Results Not Found'
           }
@@ -179,12 +180,14 @@ class SearchableSelectInput extends Component {
       <Select
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...otherProps}
+        dropdownStyle={{ zIndex: 10000 }}
         showSearch
         onSearch={this.handleSearch}
         onChange={this.handleChange}
         allowClear
         onDropdownVisibleChange={this.handleOnDropdownVisibleChange}
         filterOption={false}
+        loading={loading}
         notFoundContent={loading ? <Spin size="small" /> : 'Results Not Found'}
       >
         {options}
