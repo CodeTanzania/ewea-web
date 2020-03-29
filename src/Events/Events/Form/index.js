@@ -229,7 +229,7 @@ EventForm.propTypes = {
     color: PropTypes.string,
     severity: PropTypes.string,
     areas: PropTypes.arrayOf(PropTypes.object),
-  }).isRequired,
+  }),
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func,
     validateFieldsAndScroll: PropTypes.func,
@@ -238,6 +238,8 @@ EventForm.propTypes = {
   onCancel: PropTypes.func.isRequired,
   posting: PropTypes.bool.isRequired,
 };
+
+EventForm.defaultProps = { event: null };
 
 export default Connect(EventForm, {
   stages: 'events.schema.properties.stage.enum',

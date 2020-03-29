@@ -290,7 +290,10 @@ class Events extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
-    selectEvent(null);
+    const { showEventDetails } = this.state;
+    if (!showEventDetails) {
+      selectEvent(null);
+    }
     this.setState({ isEditForm: false });
   };
 
@@ -537,6 +540,7 @@ class Events extends Component {
           maskClosable={false}
           className="FormModal"
           afterClose={this.handleAfterCloseNotificationForm}
+          zIndex={10000}
         >
           <NotificationForm
             onSearchRecipients={getFocalPeople}
@@ -561,6 +565,7 @@ class Events extends Component {
           destroyOnClose
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
+          zIndex={10000}
         >
           <EventForm
             posting={posting}
@@ -593,6 +598,9 @@ class Events extends Component {
             event={event}
             onShare={() => {
               this.handleShare(event);
+            }}
+            onEdit={() => {
+              this.handleEdit(event);
             }}
           />
         </Drawer>

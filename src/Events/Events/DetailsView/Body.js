@@ -13,6 +13,7 @@ import {
   ApartmentOutlined,
   AuditOutlined,
   DownloadOutlined,
+  EditOutlined,
   EnvironmentOutlined,
   EyeOutlined,
   FileDoneOutlined,
@@ -195,7 +196,7 @@ export const EventRespondingFocalPeople = ({ focalPeople = [] }) => {
  * @version 0.1.0
  * @since 0.1.0
  */
-const EventToolbar = ({ event, openForm, onShare }) => {
+const EventToolbar = ({ event, openForm, onEdit, onShare }) => {
   return (
     <div className="EventToolbar not-printable">
       <Row>
@@ -217,6 +218,17 @@ const EventToolbar = ({ event, openForm, onShare }) => {
                   )
               )
             }
+          />
+        </Col>
+
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<EditOutlined />}
+            title="Edit Event"
+            className="actionButton"
+            onClick={() => onEdit()}
           />
         </Col>
         <Col span={1}>
@@ -592,13 +604,14 @@ const EventDetailsViewBody = ({
   changelogs,
   loading,
   hasMore,
+  onEdit,
   onShare,
 }) => {
   const [action, setAction] = useState({ key: '', label: '' });
 
   useEffect(() => {
     filterChangelogs({ event: event._id }); // eslint-disable-line
-  }, [event]);
+  }, [event]); // eslint-disable-line
 
   const openForm = useCallback((type) => {
     setAction(type);
@@ -610,6 +623,7 @@ const EventDetailsViewBody = ({
       <EventToolbar
         event={event}
         openForm={openForm}
+        onEdit={onEdit}
         onShare={onShare}
         className="printable"
       />
@@ -684,6 +698,7 @@ EventToolbar.propTypes = {
     _id: PropTypes.string,
   }).isRequired,
   openForm: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,
 };
 
@@ -713,6 +728,7 @@ EventDetailsViewBody.propTypes = {
   posting: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   hasMore: PropTypes.bool.isRequired,
+  onEdit: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,
 };
 
