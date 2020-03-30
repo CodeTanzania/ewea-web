@@ -4,7 +4,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
 import React from 'react';
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
-import Signin from './Auth/components/Signin';
+import SignIn from './Auth/components/SignIn';
 import BaseLayout from './layouts/BaseLayout';
 import SecureRoute from './Auth/SecureRoute';
 
@@ -32,7 +32,7 @@ const App = () => {
       <HashRouter hashType="hashbang">
         <Switch>
           <SecureRoute path="/app" component={BaseLayout} />
-          <Route path="/signin" component={Signin} />
+          <Route path="/signin" component={SignIn} />
           <Redirect to="/app" />
         </Switch>
       </HashRouter>
