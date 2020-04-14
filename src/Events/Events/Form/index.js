@@ -10,7 +10,12 @@ import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
-const { getEventTypes, getEventLevels, getAdministrativeAreas } = httpActions;
+const {
+  getEventTypes,
+  getEventLevels,
+  getEventStatuses,
+  getAdministrativeAreas,
+} = httpActions;
 const { TextArea } = Input;
 const formItemLayout = {
   labelCol: {
@@ -86,6 +91,7 @@ const EventForm = ({
         ...event,
         type: get(event, 'type._id', undefined),
         level: get(event, 'level._id', undefined),
+        status: get(event, 'status._id', undefined),
         areas: map(get(event, 'areas', []), (area) => area._id), // eslint-disable-line
       }}
       autoComplete="off"
@@ -199,6 +205,31 @@ const EventForm = ({
       </Form.Item>
 
       {/* end event stage */}
+
+      {/* event status */}
+      <Row type="flex" justify="space-between">
+        <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
+          <Form.Item
+            name="status"
+            label="Event Status"
+            rules={[
+              {
+                required: true,
+                message: 'Event Status is required',
+              },
+            ]}
+          >
+            <SearchableSelectInput
+              onSearch={getEventStatuses}
+              optionLabel={(status) => status.strings.name.en}
+              optionValue="_id"
+              initialValue={isEditForm && event ? event.status : undefined}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      {/* end event status */}
+
       {/* form actions */}
       <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
         <Button onClick={onCancel}>Cancel</Button>
@@ -223,6 +254,7 @@ EventForm.propTypes = {
   event: PropTypes.shape({
     type: PropTypes.shape({ _id: PropTypes.string }),
     level: PropTypes.shape({ _id: PropTypes.string }),
+    status: PropTypes.shape({ _id: PropTypes.string }),
     description: PropTypes.string,
     certainty: PropTypes.string,
     urgency: PropTypes.string,
