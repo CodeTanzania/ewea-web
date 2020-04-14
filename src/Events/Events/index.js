@@ -25,7 +25,12 @@ import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import EventDetailsViewHeader from './DetailsView/Header';
 import EventDetailsViewBody from './DetailsView/Body';
-import { notifyError, notifySuccess, generateEventTemplate } from '../../util';
+import {
+  notifyError,
+  notifySuccess,
+  truncateString,
+  generateEventTemplate,
+} from '../../util';
 import './styles.css';
 
 /* constants */
@@ -473,7 +478,7 @@ class Events extends Component {
                     wordWrap: 'break-word',
                   }}
                 >
-                  {item.description}
+                  {truncateString(item.description, 50)}
                 </Button>
               </Col>
               {/* <Col {...areaSpan}>{location}</Col> */}
