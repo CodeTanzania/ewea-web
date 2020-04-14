@@ -7,6 +7,7 @@ import {
   Connect,
   filterChangelogs,
   loadMoreChangelogs,
+  postChangelog,
 } from '@codetanzania/ewea-api-states';
 
 import {
@@ -18,6 +19,7 @@ import {
   EyeOutlined,
   FileDoneOutlined,
   FileImageOutlined,
+  IssuesCloseOutlined,
   MessageOutlined,
   NotificationOutlined,
   PrinterOutlined,
@@ -337,6 +339,27 @@ const EventToolbar = ({ event, openForm, onEdit, onShare }) => {
             icon={<SwapOutlined />}
             title="Request for actions"
             className="actionButton"
+          />
+        </Col>
+
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<IssuesCloseOutlined />}
+            title="Mark Event as Ended"
+            className="actionButton"
+            onClick={() => {
+              postChangelog(
+                { event: event._id, endedAt: new Date() }, // eslint-disable-line
+                () => notifySuccess('Event closed successfully'),
+                () =>
+                  notifyError(
+                    'An Error occurred while closing event, please contact system administrator'
+                  ),
+                { filters: { event: event._id } } // eslint-disable-line
+              );
+            }}
           />
         </Col>
 
