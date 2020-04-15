@@ -161,7 +161,7 @@ class AdministrativeAreaForm extends Component {
               optionValue="_id"
               initialValue={
                 isEditForm && administrativeArea
-                  ? administrativeArea.relations.level.strings.name.en
+                  ? administrativeArea.relations.level
                   : undefined
               }
             />
@@ -180,13 +180,11 @@ class AdministrativeAreaForm extends Component {
           })(
             <SearchableSelectInput
               onSearch={getAdministrativeAreas}
-              optionLabel={(area) =>
-                `${area.strings.name.en} (${area.relations.level.strings.name.en})`
-              }
+              optionLabel={(area) => area.strings.name.en}
               optionValue="_id"
               initialValue={
                 isEditForm && administrativeArea
-                  ? administrativeArea.relations.parent.strings.name.en
+                  ? administrativeArea.relations.parent
                   : undefined
               }
             />
