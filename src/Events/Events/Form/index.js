@@ -209,16 +209,7 @@ const EventForm = ({
       {/* event status */}
       <Row type="flex" justify="space-between">
         <Col xxl={24} xl={24} lg={24} md={24} sm={24} xs={24}>
-          <Form.Item
-            name="status"
-            label="Event Status"
-            rules={[
-              {
-                required: true,
-                message: 'Event Status is required',
-              },
-            ]}
-          >
+          <Form.Item name="status" label="Event Status">
             <SearchableSelectInput
               onSearch={getEventStatuses}
               optionLabel={(status) => status.strings.name.en}
