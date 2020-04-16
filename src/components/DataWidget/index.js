@@ -24,9 +24,6 @@ const DataWidget = ({ label, icon, value, title, header, duration }) => {
           <Col span={18}>
             <span className="header">{header}</span>
           </Col>
-          <Col span={6}>
-            <span className="text-muted">{duration}</span>
-          </Col>
         </Row>
       )}
       <Row>
@@ -37,6 +34,7 @@ const DataWidget = ({ label, icon, value, title, header, duration }) => {
           <span className="value" title={title}>
             {value}
           </span>
+          <span className="duration">{duration}</span>
           <br />
           <Text className="label">{label}</Text>
         </Col>
