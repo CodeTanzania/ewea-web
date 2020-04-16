@@ -28,8 +28,8 @@ import './styles.css';
 import MapPolygon from '../../Map/MapPolygon';
 
 /* constants */
-const nameSpan = { xxl: 8, xl: 8, lg: 8, md: 8, sm: 8, xs: 15 };
-const levelSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 4, xs: 4 };
+const nameSpan = { xxl: 8, xl: 8, lg: 8, md: 8, sm: 7, xs: 12 };
+const levelSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 5, xs: 6 };
 const descriptionSpan = { xxl: 10, xl: 10, lg: 10, md: 8, sm: 8, xs: 0 };
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
