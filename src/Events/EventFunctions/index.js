@@ -29,7 +29,7 @@ import './styles.css';
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 6, md: 7, sm: 8, xs: 14 };
 const typeSpan = { xxl: 3, xl: 3, lg: 3, md: 2, sm: 0, xs: 0 };
-const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 2, sm: 2, xs: 5 };
+const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 2, sm: 2, xs: 4 };
 const descriptionSpan = { xxl: 11, xl: 11, lg: 10, md: 10, sm: 10, xs: 0 };
 const headerLayout = [
   { ...nameSpan, header: 'Name' },

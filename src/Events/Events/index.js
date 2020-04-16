@@ -44,13 +44,13 @@ const {
   getEventsExportUrl,
 } = httpActions;
 const { confirm } = Modal;
-const eventSpan = { xxl: 6, xl: 7, lg: 7, md: 7, sm: 12, xs: 12 };
-const referenceIDSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 8, xs: 8 };
-const typeSpan = { xxl: 3, xl: 3, lg: 4, md: 3, sm: 0, xs: 0 };
+const eventSpan = { xxl: 6, xl: 7, lg: 7, md: 8, sm: 10, xs: 11 };
+const referenceIDSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 6, xs: 7 };
+const typeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
 const stageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
-const levelSpan = { xxl: 3, xl: 2, lg: 2, md: 3, sm: 0, xs: 0 };
+const levelSpan = { xxl: 3, xl: 2, lg: 0, md: 0, sm: 0, xs: 0 };
 const groupSpan = { xxl: 2, xl: 2, lg: 4, md: 0, sm: 0, xs: 0 };
-const lastUpdatedSpan = { xxl: 2, xl: 2, lg: 1, md: 1, sm: 0, xs: 0 };
+const lastUpdatedSpan = { xxl: 2, xl: 2, lg: 3, md: 3, sm: 4, xs: 0 };
 
 const headerLayout = [
   { ...eventSpan, header: 'Event' },

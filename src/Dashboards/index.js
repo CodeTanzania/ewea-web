@@ -33,6 +33,7 @@ import './styles.css';
 const DAR_POPULATION = 4365000;
 const BASE_COLOR = '#ff0000';
 
+const updatesWidgetSpan = { xxl: 6, xl: 6, lg: 12, md: 12, sm: 24, xs: 24 };
 const horizontalWidgetSpan = { xxl: 6, xl: 6, lg: 12, md: 12, sm: 12, xs: 12 };
 const verticalWidgetSpan = { xxl: 12, xl: 12, lg: 12, md: 12, sm: 12, xs: 12 };
 const mapRowSpan = { xxl: 24, xl: 24, lg: 0, md: 0, sm: 0, xs: 0 };
@@ -216,20 +217,18 @@ const AlertDashboard = () => {
               </ComposableMap>
             </Col>
             {/* end ward svg map */}
-            <Col {...horizontalWidgetSpan}>
+            <Col {...updatesWidgetSpan}>
               <DataWidget
                 label="Strong Winds"
-                value={12}
                 title="Recently Issued Alert"
                 header="Recently Issued"
                 duration="2 days ago"
                 icon={RecentlyIssuedIcon}
               />
             </Col>
-            <Col {...horizontalWidgetSpan}>
+            <Col {...updatesWidgetSpan}>
               <DataWidget
                 label="Heavy Rainfall"
-                value={12}
                 title="Recently Updated Alert"
                 header="Recently Updated"
                 duration="1 hour ago"
