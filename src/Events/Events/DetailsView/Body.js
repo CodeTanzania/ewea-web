@@ -30,6 +30,7 @@ import {
   UsergroupAddOutlined,
   UserOutlined,
   WechatOutlined,
+  DashboardOutlined,
 } from '@ant-design/icons';
 
 import {
@@ -42,6 +43,7 @@ import {
   Card,
   Empty,
   Spin,
+  Drawer,
 } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
@@ -53,6 +55,8 @@ import flatten from 'lodash/flatten';
 import { formatDate, notifySuccess, notifyError } from '../../../util';
 import EventChangelogForm from '../ChangelogForm';
 import './styles.css';
+import IndicatorDashboard from '../../../Dashboards/Indicators';
+import EventDetailsViewHeader from './Header';
 
 const actionsTaken = ['Test Action 1', 'Test Action 2'];
 
@@ -198,7 +202,13 @@ export const EventRespondingFocalPeople = ({ focalPeople = [] }) => {
  * @version 0.1.0
  * @since 0.1.0
  */
-const EventToolbar = ({ event, openForm, onEdit, onShare }) => {
+const EventToolbar = ({
+  event,
+  openForm,
+  onEdit,
+  onShare,
+  openIndicatorDashboard,
+}) => {
   return (
     <div className="EventToolbar not-printable">
       <Row>
@@ -332,6 +342,7 @@ const EventToolbar = ({ event, openForm, onEdit, onShare }) => {
             onClick={() => openForm({ key: 'comment', label: 'Add a Comment' })}
           />
         </Col>
+
         <Col span={1}>
           <Button
             shape="circle"
@@ -342,6 +353,16 @@ const EventToolbar = ({ event, openForm, onEdit, onShare }) => {
           />
         </Col>
 
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<DashboardOutlined />}
+            title="View Indicator Dashboard"
+            className="actionButton"
+            onClick={() => openIndicatorDashboard()}
+          />
+        </Col>
         <Col span={1}>
           <Button
             shape="circle"
@@ -631,6 +652,7 @@ const EventDetailsViewBody = ({
   onShare,
 }) => {
   const [action, setAction] = useState({ key: '', label: '' });
+  const [showIndicatorDashboard, setShowIndicatorDashboard] = useState(false);
 
   useEffect(() => {
     filterChangelogs({ event: event._id }); // eslint-disable-line
@@ -648,6 +670,7 @@ const EventDetailsViewBody = ({
         openForm={openForm}
         onEdit={onEdit}
         onShare={onShare}
+        openIndicatorDashboard={() => setShowIndicatorDashboard(true)}
         className="printable"
       />
       <div className="EventBodyContent">
@@ -687,6 +710,26 @@ const EventDetailsViewBody = ({
           onCancel={() => closeChangelogForm()}
         />
       </Modal>
+
+      <Drawer
+        title={
+          <EventDetailsViewHeader
+            number={event ? event.number : 'N/A'}
+            description="INDICATORS DASHBOARD"
+            type={event ? event.type.strings.name.en : 'N/A'}
+            stage={event ? event.stage : 'N/A'}
+          />
+        }
+        placement="right"
+        width="100%"
+        onClose={() => setShowIndicatorDashboard(false)}
+        visible={showIndicatorDashboard}
+        drawerStyle={{ overflow: 'hidden' }}
+        bodyStyle={{ overflow: 'hidden', height: '100%', padding: '15px' }}
+        destroyOnClose
+      >
+        <IndicatorDashboard />
+      </Drawer>
     </div>
   );
 };
@@ -723,6 +766,7 @@ EventToolbar.propTypes = {
   openForm: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,
+  openIndicatorDashboard: PropTypes.func.isRequired,
 };
 
 EventFeed.propTypes = {
@@ -740,6 +784,13 @@ EventCause.propTypes = {
 EventDetailsViewBody.propTypes = {
   event: PropTypes.shape({
     _id: PropTypes.string,
+    number: PropTypes.string,
+    type: PropTypes.shape({
+      strings: {
+        name: { en: PropTypes.string },
+      },
+    }),
+    stage: PropTypes.string,
     focals: PropTypes.arrayOf(PropTypes.object),
     agencies: PropTypes.arrayOf(PropTypes.object),
     areas: PropTypes.arrayOf(PropTypes.object),

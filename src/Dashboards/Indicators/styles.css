@@ -1,0 +1,25 @@
+.indicators-wrapper {
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+}
+
+.indicator-section {
+  min-width: 300px;
+  margin: 0 5px;
+}
+
+.indicator-section-header {
+  background: #1890ff;
+  color: #fff;
+  font-size: 1.1em;
+  font-weight: 600;
+  line-height: 2em;
+  padding-left: 10px;
+  border: 1px solid #1890ff;
+}
+
+.indicator-section-body {
+  margin: 20px 0;
+  height: 100%;
+}
