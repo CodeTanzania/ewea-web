@@ -6,7 +6,7 @@ import agenciesIcon from '../assets/icons/agencies.svg';
 import focalPeopleIcon from '../assets/icons/focalpeople.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import eventsIcon from '../assets/icons/events.svg';
-import actionsTakenIcon from '../assets/icons/actionstaken.svg';
+// import actionsTakenIcon from '../assets/icons/actionstaken.svg';
 import actionCatalogueIcon from '../assets/icons/actioncatalog.svg';
 import modules from '../modules.json';
 
@@ -18,12 +18,12 @@ const routes = [
     icon: eventsIcon,
     description: modules.alertsIssued,
   },
-  {
-    name: 'Actions Taken',
-    path: '/app/actions',
-    icon: actionsTakenIcon,
-    description: modules.alertsActions,
-  },
+  // {
+  //   name: 'Actions Taken',
+  //   path: '/app/actions',
+  //   icon: actionsTakenIcon,
+  //   description: modules.alertsActions,
+  // },
   {
     name: 'Action Catalogue',
     path: '/app/actioncatalogue',
