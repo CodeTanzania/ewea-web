@@ -15,12 +15,10 @@ class UserMenu extends React.Component {
   };
 
   /* eslint-disable react/sort-comp */
-  showModal = ({ key }) => {
-    // open modal when change password item is clicked
-    if (key === '1')
-      this.setState({
-        visible: true,
-      });
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
   };
 
   /**
