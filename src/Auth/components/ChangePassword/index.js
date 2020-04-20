@@ -1,62 +1,45 @@
-import React, { Component } from 'react';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Input, Button } from 'antd';
+import React, { useState } from 'react';
+import { Input, Button, Form } from 'antd';
 import PropTypes from 'prop-types';
 import { Connect, putFocalPerson } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
 
-/**
- * @class
- * @name ChangePasswordForm
- * @description ChangePassword component which shows change password form
- *
- * @version 0.1.0
- * @since 0.1.0
- */
-class ChangePasswordForm extends Component {
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    confirmDirty: false,
-  };
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 24 },
+    md: { span: 24 },
+    lg: { span: 24 },
+    xl: { span: 24 },
+    xxl: { span: 24 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 24 },
+    md: { span: 24 },
+    lg: { span: 24 },
+    xl: { span: 24 },
+    xxl: { span: 24 },
+  },
+};
 
-  /**
-   * @function
-   * @name handleSubmit
-   * @description Handle submit action for change password
-   *
-   * @param {object} event submit event
-   * @returns {undefined}
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleSubmit = (event) => {
-    event.preventDefault();
-
-    const {
-      form: { validateFieldsAndScroll },
-    } = this.props;
-
-    validateFieldsAndScroll((err, values) => {
-      const { user, onCancel } = this.props;
-      if (!err) {
-        const updatedUser = { ...user, password: values.password };
-
-        putFocalPerson(
-          updatedUser,
-          () => {
-            notifySuccess('Password was changed successfully');
-            onCancel();
-          },
-          () => {
-            notifyError(
-              'Something occurred while changing your password, please try again!'
-            );
-          }
+const ChangePasswordForm = ({ user, posting, onCancel }) => {
+  const [isConfirmDirty, setConfirmDirty] = useState(false);
+  const [form] = Form.useForm();
+  const onFinish = (values) => {
+    const updatedUser = { ...user, password: values.password };
+    putFocalPerson(
+      updatedUser,
+      () => {
+        notifySuccess('Password was changed successfully');
+        onCancel();
+      },
+      () => {
+        notifyError(
+          'Something occurred while changing your password, please try again!'
         );
       }
-    });
+    );
   };
 
   /**
@@ -70,11 +53,9 @@ class ChangePasswordForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleConfirmBlur = (event) => {
+  const handleConfirmBlur = (event) => {
     const { value } = event.target;
-    this.setState((prevState) => ({
-      confirmDirty: prevState || !!value,
-    }));
+    setConfirmDirty(isConfirmDirty || !!value);
   };
 
   /**
@@ -90,10 +71,9 @@ class ChangePasswordForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  compareToFirstPassword = (rule, value, callback) => {
-    const { form } = this.props;
+  const compareToFirstPassword = (rule, value, callback) => {
     if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
+      callback('Two passwords that you enter are not the same!');
     } else {
       callback();
     }
@@ -112,92 +92,66 @@ class ChangePasswordForm extends Component {
    * @version 0.1.0
    * @since 0.1.0
    */
-  validateToNextPassword = (rule, value, callback) => {
-    const { confirmDirty } = this.state;
-    const { form } = this.props;
-    if (value && confirmDirty) {
-      form.validateFields(['confirm'], { force: true });
+  const validateToNextPassword = (rule, value, callback) => {
+    if (value && isConfirmDirty) {
+      form.validateFields(['confirmPassword'], { force: true });
     }
     callback();
   };
 
-  render() {
-    const {
-      form: { getFieldDecorator },
-      onCancel,
-      posting,
-    } = this.props;
+  return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <Form form={form} {...formItemLayout} onFinish={onFinish}>
+      {/* New Password input */}
+      <Form.Item
+        label="New Password"
+        name="password"
+        rules={[
+          {
+            required: true,
+            message: 'Please input your new password!',
+          },
+          { validator: validateToNextPassword },
+        ]}
+        hasFeedback
+      >
+        <Input.Password />
+      </Form.Item>
+      {/* end new password input */}
 
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-    };
-    return (
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-        {/* New Password input */}
-        <Form.Item label="New Password" hasFeedback>
-          {getFieldDecorator('password', {
-            rules: [
-              {
-                required: true,
-                message: 'Please input your new password!',
-              },
-              {
-                validator: this.validateToNextPassword,
-              },
-            ],
-          })(<Input.Password />)}
-        </Form.Item>
-        {/* end new password input */}
+      {/* confirm password input */}
+      <Form.Item
+        label="Confirm Password"
+        name="confirmPassword"
+        rules={[
+          {
+            required: true,
+            message: 'Please confirm your password!',
+          },
+          { validator: compareToFirstPassword },
+        ]}
+        hasFeedback
+      >
+        <Input.Password onBlur={handleConfirmBlur} />
+      </Form.Item>
+      {/* end confirm password input */}
 
-        {/* confirm password input */}
-        <Form.Item label="Confirm Password" hasFeedback>
-          {getFieldDecorator('confirm', {
-            rules: [
-              {
-                required: true,
-                message: 'Please confirm your password!',
-              },
-              {
-                validator: this.compareToFirstPassword,
-              },
-            ],
-          })(<Input.Password onBlur={this.handleConfirmBlur} />)}
-        </Form.Item>
-        {/* end confirm password input */}
-
-        {/* form actions */}
-        <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
-          <Button onClick={onCancel}>Cancel</Button>
-          <Button
-            style={{ marginLeft: 8 }}
-            type="primary"
-            htmlType="submit"
-            loading={posting}
-          >
-            Change Password
-          </Button>
-        </Form.Item>
-        {/* end form actions */}
-      </Form>
-    );
-  }
-}
+      {/* form actions */}
+      <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
+        <Button onClick={onCancel}>Cancel</Button>
+        <Button
+          style={{ marginLeft: 8 }}
+          type="primary"
+          htmlType="submit"
+          loading={posting}
+        >
+          Change Password
+        </Button>
+      </Form.Item>
+      {/* end form actions */}
+    </Form>
+  );
+};
 
 ChangePasswordForm.propTypes = {
   form: PropTypes.shape({
@@ -214,10 +168,7 @@ ChangePasswordForm.propTypes = {
   posting: PropTypes.bool.isRequired,
 };
 
-export default Connect(
-  Form.create({ name: 'changepassword' })(ChangePasswordForm),
-  {
-    user: 'app.party',
-    posting: 'focalPeople.posting',
-  }
-);
+export default Connect(ChangePasswordForm, {
+  user: 'app.party',
+  posting: 'focalPeople.posting',
+});
