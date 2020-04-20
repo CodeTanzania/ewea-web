@@ -7,7 +7,7 @@ const { Text } = Typography;
 /**
  * @function
  * @name EventDetailsViewHeader
- * @description Event Detaills header for drawer
+ * @description Event Details header for drawer
  *
  * @param {object} props React props
  *
