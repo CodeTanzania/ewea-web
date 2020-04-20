@@ -23,42 +23,16 @@ class UserMenu extends React.Component {
 
   /**
    * @function
-   * @name signout
-   * @description signout user from emis system
+   * @name signOut
+   * @description signOut user from EWEA system
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  signout = () => {
+  signOut = () => {
     const { history } = this.props;
     signout();
     history.push('/signin');
-  };
-
-  menu = (
-    <Menu className="UserProfileMenu">
-      <Menu.Item key="1" onClick={this.showModal}>
-        <LockOutlined />
-        Change Password
-      </Menu.Item>
-      <Menu.Item key="2" onClick={() => this.signout()}>
-        <LogoutOutlined />
-        Sign Out
-      </Menu.Item>
-    </Menu>
-  );
-
-  handleOk = () => {
-    this.setState({
-      confirmLoading: true,
-    });
-
-    setTimeout(() => {
-      this.setState({
-        visible: false,
-        confirmLoading: false,
-      });
-    }, 2000);
   };
 
   handleCancel = () => {
@@ -69,6 +43,19 @@ class UserMenu extends React.Component {
 
   render() {
     const { visible, confirmLoading } = this.state;
+    const menu = (
+      <Menu className="UserProfileMenu">
+        <Menu.Item key="1" onClick={this.showModal}>
+          <LockOutlined />
+          Change Password
+        </Menu.Item>
+        <Menu.Item key="2" onClick={() => this.signOut()}>
+          <LogoutOutlined />
+          Sign Out
+        </Menu.Item>
+      </Menu>
+    );
+
     return (
       <div>
         <Modal
@@ -82,7 +69,7 @@ class UserMenu extends React.Component {
         >
           <ChangePasswordForm onCancel={this.handleCancel} />
         </Modal>
-        <Dropdown overlay={this.menu}>
+        <Dropdown overlay={menu}>
           <Button className="UserButton" icon={<UserOutlined />} />
         </Dropdown>
       </div>
