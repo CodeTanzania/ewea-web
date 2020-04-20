@@ -1,6 +1,7 @@
-import { putFeatureType, postFeatureType } from '@codetanzania/ewea-api-states';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
+import {
+  putAdministrativeLevel,
+  postAdministrativeLevel,
+} from '@codetanzania/ewea-api-states';
 import { Button, Input, Form } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -29,37 +30,42 @@ const formItemLayout = {
 
 /**
  * @function
- * @name FeatureTypeForm
- * @description Feature Type Form
+ * @name AdministrativeLevelForm
+ * @description Administrative Level Form
  * @param {object} props React props
  * @returns {object} React Component
  * @version 0.1.0
  * @since 0.1.0
  */
-const FeatureTypeForm = ({ featureType, isEditForm, posting, onCancel }) => {
+const AdministrativeLevelForm = ({
+  administrativeLevel,
+  isEditForm,
+  posting,
+  onCancel,
+}) => {
   const onFinish = (values) => {
     if (isEditForm) {
-      const updatedEventStatus = { ...featureType, ...values };
-      putFeatureType(
+      const updatedEventStatus = { ...administrativeLevel, ...values };
+      putAdministrativeLevel(
         updatedEventStatus,
         () => {
-          notifySuccess('Feature type was updated successfully');
+          notifySuccess('Administrative level was updated successfully');
         },
         () => {
           notifyError(
-            'Something occurred while updating feature type, please try again!'
+            'Something occurred while updating administrative level, please try again!'
           );
         }
       );
     } else {
-      postFeatureType(
+      postAdministrativeLevel(
         values,
         () => {
-          notifySuccess('Feature type was created successfully');
+          notifySuccess('Administrative level was created successfully');
         },
         () => {
           notifyError(
-            'Something occurred while saving feature type, please try again!'
+            'Something occurred while saving administrative level, please try again!'
           );
         }
       );
@@ -71,21 +77,23 @@ const FeatureTypeForm = ({ featureType, isEditForm, posting, onCancel }) => {
       onFinish={onFinish}
       {...formItemLayout} // eslint-disable-line
       initialValues={{
-        ...featureType,
+        ...administrativeLevel,
       }}
       autoComplete="off"
     >
-      {/* feature type name */}
+      {/* administrative level name */}
       <Form.Item
         label="Name"
         name={['strings', 'name', 'en']}
-        rules={[{ required: true, message: 'Feature type name is required' }]}
+        rules={[
+          { required: true, message: 'Administrative level name is required' },
+        ]}
       >
         <Input />
       </Form.Item>
-      {/* end feature type name */}
+      {/* end administrative level name */}
 
-      {/* feature type description */}
+      {/* administrative level description */}
       <Form.Item
         {...formItemLayout} // eslint-disable-line
         label="Description"
@@ -93,7 +101,7 @@ const FeatureTypeForm = ({ featureType, isEditForm, posting, onCancel }) => {
       >
         <TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
       </Form.Item>
-      {/* end feature type description */}
+      {/* end administrative level description */}
 
       {/* form actions */}
       <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -112,9 +120,9 @@ const FeatureTypeForm = ({ featureType, isEditForm, posting, onCancel }) => {
   );
 };
 
-FeatureTypeForm.propTypes = {
+AdministrativeLevelForm.propTypes = {
   isEditForm: PropTypes.bool.isRequired,
-  featureType: PropTypes.shape({
+  administrativeLevel: PropTypes.shape({
     strings: PropTypes.shape({
       name: PropTypes.shape({ en: PropTypes.string }),
       abbreviation: PropTypes.shape({ en: PropTypes.string }),
@@ -125,8 +133,8 @@ FeatureTypeForm.propTypes = {
   posting: PropTypes.bool.isRequired,
 };
 
-FeatureTypeForm.defaultProps = {
-  featureType: null,
+AdministrativeLevelForm.defaultProps = {
+  administrativeLevel: null,
 };
 
-export default FeatureTypeForm;
+export default AdministrativeLevelForm;
