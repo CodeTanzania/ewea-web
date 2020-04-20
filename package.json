@@ -1,7 +1,7 @@
 {
   "name": "ewea-web",
   "version": "0.0.0",
-  "description": "A collaboration platform that facilitates communication, planning and actions for disaster management.",
+  "description": "An early warning, early action tool that facilitates the disseminationn of warnings, communication and actions associated with the warnings.",
   "main": "index.js",
   "scripts": {
     "start": "react-app-rewired start",
