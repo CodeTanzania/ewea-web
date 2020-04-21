@@ -197,6 +197,31 @@ class EventChangelogForm extends Component {
                 </Form.Item>
 
                 {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                <Form.Item {...formItemLayout} label="Topic">
+                  {getFieldDecorator('topic', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please select indicator',
+                      },
+                    ],
+                  })(
+                    <SearchableSelectInput
+                      onSearch={(options) =>
+                        getEventTopics({
+                          ...options,
+                          filter: {
+                            'relations.indicator': getFieldValue('indicator'),
+                          },
+                        })
+                      }
+                      optionLabel={(topic) => topic.strings.name.en}
+                      optionValue="_id"
+                    />
+                  )}
+                </Form.Item>
+
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <Form.Item {...formItemLayout} label="Question">
                   {getFieldDecorator('question', {
                     rules: [
@@ -218,24 +243,6 @@ class EventChangelogForm extends Component {
                         })
                       }
                       optionLabel={(question) => question.strings.name.en}
-                      optionValue="_id"
-                    />
-                  )}
-                </Form.Item>
-
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Topic">
-                  {getFieldDecorator('topic')(
-                    <SearchableSelectInput
-                      onSearch={(options) =>
-                        getEventTopics({
-                          ...options,
-                          filter: {
-                            'relations.indicator': getFieldValue('indicator'),
-                          },
-                        })
-                      }
-                      optionLabel={(topic) => topic.strings.name.en}
                       optionValue="_id"
                     />
                   )}

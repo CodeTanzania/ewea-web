@@ -36,6 +36,7 @@ import {
 import {
   Tag,
   Timeline,
+  Table,
   Row,
   Col,
   Button,
@@ -633,6 +634,35 @@ const EventCause = ({ cause }) => {
 
 /**
  * @function
+ * @name EventImpact
+ * @description Display Event impact based on indicators
+ *
+ * @returns {object} Event Impact Component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const EventImpact = () => {
+  const columns = [
+    { title: 'Damage and Losses', dataIndex: 'name', key: 'name' },
+    { title: 'Number', dataIndex: 'value', key: 'value' },
+  ];
+
+  const data = [
+    { name: 'Deaths', value: 10 },
+    { name: 'Affected', value: 254 },
+    { name: 'Recovered', value: 11 },
+  ];
+
+  return (
+    <div style={{ marginTop: '40px' }}>
+      <EventDetailsSectionHeader title="IMPACT" />
+      <Table columns={columns} dataSource={data} pagination={false} />
+    </div>
+  );
+};
+
+/**
+ * @function
  * @name  EventDetailsViewBody
  * @description Event Details body view
  *
@@ -682,6 +712,7 @@ const EventDetailsViewBody = ({
             <EventRespondingAgencies agencies={event.agencies} />
             <EventRespondingFocalPeople focalPeople={event.focals} />
             <EventActionsTaken />
+            <EventImpact />
           </Col>
           <Col span={8}>
             <EventFeed
