@@ -200,10 +200,10 @@ class PartyGroups extends Component {
    */
   handleRefreshPartyGroups = () =>
     refreshPartyGroups(
-      () => notifySuccess('Party groups refreshed successfully'),
+      () => notifySuccess('Stakeholder groups refreshed successfully'),
       () =>
         notifyError(
-          'An Error occurred while refreshing Party groups, please contact system administrator'
+          'An Error occurred while refreshing Stakeholder groups, please contact system administrator'
         )
     );
 
@@ -225,10 +225,10 @@ class PartyGroups extends Component {
       onOk() {
         deletePartyGroup(
           item._id, // eslint-disable-line
-          () => notifySuccess('Party group was archived successfully'),
+          () => notifySuccess('Stakeholder group was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving Party group, Please contact your system Administrator'
+              'An error occurred while archiving Stakeholder group, Please contact your system Administrator'
             )
         );
       },
