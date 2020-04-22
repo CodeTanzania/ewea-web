@@ -7,7 +7,7 @@ import settingsIcon from '../assets/icons/settings.svg';
 import agenciesIcon from '../assets/icons/agencies.svg';
 import focalPeopleIcon from '../assets/icons/focalpeople.svg';
 import eventsIcon from '../assets/icons/events.svg';
-import actionsTakenIcon from '../assets/icons/actionstaken.svg';
+// import actionsTakenIcon from '../assets/icons/actionstaken.svg';
 import actionCatalogueIcon from '../assets/icons/actioncatalog.svg';
 import './styles.css';
 
@@ -18,11 +18,11 @@ const routes = [
     path: '/app/events',
     icon: eventsIcon,
   },
-  {
-    name: 'Actions Taken',
-    path: '/app/actions',
-    icon: actionsTakenIcon,
-  },
+  // {
+  //   name: 'Actions Taken',
+  //   path: '/app/actions',
+  //   icon: actionsTakenIcon,
+  // },
   {
     name: 'Action Catalogue',
     path: '/app/actioncatalogue',

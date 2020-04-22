@@ -1,7 +1,7 @@
-import { AppstoreOutlined } from '@ant-design/icons';
-import { Breadcrumb, Button, Col, Layout, Popover, Row } from 'antd';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { AppstoreOutlined } from '@ant-design/icons';
+import { Breadcrumb, Button, Col, Layout, Popover, Row } from 'antd';
 import { Link, Switch } from 'react-router-dom';
 import UserMenu from '../navigation/UserMenu';
 
@@ -9,6 +9,7 @@ import EventActions from '../Events/EventActions';
 import PageNotFound from '../components/UIState/PageNotFound';
 import Home from '../navigation/Home';
 import AdministrativeAreas from '../GeographicalFeatures/AdministrativeAreas';
+import AdministrativeLevels from '../GeographicalFeatures/AdministrativeLevels';
 import StakeholdersAgencies from '../Stakeholders/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/FocalPeople';
 import NotificationTemplates from '../Stakeholders/NotificationTemplates';
@@ -28,6 +29,7 @@ import EventIndicator from '../Events/EventIndicator';
 import Features from '../GeographicalFeatures/CriticalFacilities';
 import ActionCatalogue from '../Events/ActionCatalogues';
 import EventStatuses from '../Events/EventStatuses';
+import FeatureTypes from '../GeographicalFeatures/FeatureTypes';
 import Units from '../Units';
 // import StakeholdersNotifications from '../Stakeholders/Notifications';
 import StakeholdersRoles from '../Stakeholders/Roles';
@@ -86,9 +88,17 @@ const breadcrumbNameMap = {
     name: 'Administrative Areas',
     title: 'List of administrative areas',
   },
+  '/app/settings/administrativelevels': {
+    name: 'Administrative Levels',
+    title: 'List of administrative levels',
+  },
   '/app/settings/features': {
     name: 'Critical Infrastructures',
     title: 'List of all critical infrastructures',
+  },
+  '/app/settings/featuretypes': {
+    name: 'Feature Types',
+    title: 'List of all feature types',
   },
   '/app/settings/eventactions': {
     name: 'Event Actions',
@@ -278,8 +288,16 @@ const BaseLayout = (props) => {
             component={AdministrativeAreas}
           />
           <SecureRoute
+            path={`${baseUrl}/settings/administrativelevels`}
+            component={AdministrativeLevels}
+          />
+          <SecureRoute
             path={`${baseUrl}/settings/features`}
             component={Features}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/featuretypes`}
+            component={FeatureTypes}
           />
           <SecureRoute
             path={`${baseUrl}/settings/roles`}

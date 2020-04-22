@@ -27,7 +27,7 @@ import MapPoint from '../../Map/MapPoint';
 
 /* constants */
 const nameSpan = { xxl: 5, xl: 6, lg: 6, md: 10, sm: 12, xs: 10 };
-const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 3, xs: 4 };
+const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 3, xs: 3 };
 const amenitySpan = { xxl: 4, xl: 4, lg: 3, md: 4, sm: 5, xs: 5 };
 const addressSpan = { xxl: 3, xl: 3, lg: 4, md: 4, sm: 0, xs: 0 };
 const descriptionSpan = { xxl: 7, xl: 6, lg: 6, md: 0, sm: 0, xs: 0 };

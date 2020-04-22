@@ -127,6 +127,18 @@ const routes = [
     description: modules.eventResponses,
   },
   {
+    name: 'Administrative Levels',
+    path: '/administrativelevels',
+    icon: eventResponsesIcon,
+    description: modules.eventResponses,
+  },
+  {
+    name: 'Feature Types',
+    path: '/featuretypes',
+    icon: eventResponsesIcon,
+    description: modules.eventResponses,
+  },
+  {
     name: 'Units',
     path: '/units',
     icon: unitsIcon,

@@ -16,9 +16,16 @@
   color: #039be5;
 }
 
-.data-widget .label {
+.data-widget .duration {
   display: inline-block;
+  width: 100%;
+  font-size: 1.5vh;
+  font-weight: 400;
+  color: #039be5;
   text-align: center;
+}
+
+.data-widget .label {
   width: 100%;
   font-size: 1.5vh;
   display: inline-block;
@@ -37,4 +44,8 @@
   float: inline-end;
   font-size: 14px;
   color: #8d898d;
+}
+
+@media screen and (max-width: 768px){
+  
 }
