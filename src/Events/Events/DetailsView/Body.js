@@ -17,7 +17,6 @@ import {
   EditOutlined,
   EnvironmentOutlined,
   EyeOutlined,
-  FileDoneOutlined,
   FileImageOutlined,
   IssuesCloseOutlined,
   MessageOutlined,
@@ -26,11 +25,10 @@ import {
   ReloadOutlined,
   ShareAltOutlined,
   SwapOutlined,
-  UserAddOutlined,
-  UsergroupAddOutlined,
   UserOutlined,
   WechatOutlined,
   DashboardOutlined,
+  PlusCircleOutlined,
 } from '@ant-design/icons';
 
 import {
@@ -75,12 +73,9 @@ const actionsTaken = ['Test Action 1', 'Test Action 2'];
 export const EventDetailsSectionHeader = ({ title, actions }) => {
   return (
     <div className="EventDetailsSectionHeader">
-      <Row>
-        <Col span={16}>
-          <h4>{title}</h4>
-        </Col>
-        <Col span={8}>{actions}</Col>
-      </Row>
+      <h4>
+        {title} {actions}
+      </h4>
     </div>
   );
 };
@@ -94,11 +89,24 @@ export const EventDetailsSectionHeader = ({ title, actions }) => {
  * @version 0.1.0
  * @since 0.1.0
  */
-export const EventLocations = ({ areas = [] }) => {
+export const EventLocations = ({ areas = [], openForm }) => {
   const locations = areas.map((area) => area.strings.name.en).join(', ');
   return isEmpty(areas) ? null : (
     <div style={{ marginTop: '40px' }}>
-      <EventDetailsSectionHeader title="AFFECT AREAS" />
+      <EventDetailsSectionHeader
+        title="AFFECT AREAS"
+        actions={
+          <Button
+            shape="circle"
+            icon={<PlusCircleOutlined />}
+            title="Update Affected Areas"
+            className="actionButton not-printable"
+            onClick={() =>
+              openForm({ key: 'areas', label: 'Add affected Areas' })
+            }
+          />
+        }
+      />
 
       {locations}
     </div>
@@ -136,7 +144,18 @@ export const EventPlaces = ({ places = '' }) => {
 export const EventActionsTaken = () => {
   return isEmpty(actionsTaken) ? null : (
     <div style={{ marginTop: '40px' }}>
-      <EventDetailsSectionHeader title="ACTION TAKEN/ INTERVENTIONS" />
+      <EventDetailsSectionHeader
+        title="ACTION TAKEN/ INTERVENTIONS"
+        actions={
+          <Button
+            shape="circle"
+            size="large"
+            icon={<PlusCircleOutlined />}
+            title="Update Actions Taken"
+            className="actionButton not-printable"
+          />
+        }
+      />
       {actionsTaken.map((action, key) => (
         <p key={action} style={{ fontSize: '12px' }}>
           {key + 1}. {action}
@@ -155,10 +174,24 @@ export const EventActionsTaken = () => {
  * @version 0.1.0
  * @since 0.1.0
  */
-export const EventRespondingAgencies = ({ agencies = [] }) => {
+export const EventRespondingAgencies = ({ agencies = [], openForm }) => {
   return isEmpty(agencies) ? null : (
     <div style={{ marginTop: '40px' }}>
-      <EventDetailsSectionHeader title="AGENCIES RESPONDED" />
+      <EventDetailsSectionHeader
+        title="AGENCIES RESPONDED"
+        actions={
+          <Button
+            shape="circle"
+            size="large"
+            icon={<PlusCircleOutlined />}
+            title="Add Agency"
+            className="actionButton not-printable"
+            onClick={() =>
+              openForm({ key: 'agencies', label: 'Add participated Agencies' })
+            }
+          />
+        }
+      />
       {agencies.map((agency, key) => (
         // eslint-disable-next-line
         <p key={agency._id} style={{ fontSize: '12px' }}>
@@ -178,10 +211,27 @@ export const EventRespondingAgencies = ({ agencies = [] }) => {
  * @version 0.1.0
  * @since 0.1.0
  */
-export const EventRespondingFocalPeople = ({ focalPeople = [] }) => {
+export const EventRespondingFocalPeople = ({ focalPeople = [], openForm }) => {
   return isEmpty(focalPeople) ? null : (
     <div style={{ marginTop: '40px' }}>
-      <EventDetailsSectionHeader title="FOCAL PEOPLE RESPONDED" />
+      <EventDetailsSectionHeader
+        title="FOCAL PEOPLE RESPONDED"
+        actions={
+          <Button
+            shape="circle"
+            size="large"
+            icon={<PlusCircleOutlined />}
+            title="Add Focal Person"
+            className="actionButton not-printable"
+            onClick={() =>
+              openForm({
+                key: 'focalPeople',
+                label: 'Add participated Focal People',
+              })
+            }
+          />
+        }
+      />
 
       {focalPeople.map((focalPerson, key) => (
         // eslint-disable-next-line no-underscore-dangle
@@ -254,7 +304,7 @@ const EventToolbar = ({
             onClick={() => onShare()}
           />
         </Col>
-        <Col span={1}>
+        {/* <Col span={1}>
           <Button
             shape="circle"
             size="large"
@@ -311,7 +361,7 @@ const EventToolbar = ({
             title="Update Actions Taken"
             className="actionButton"
           />
-        </Col>
+        </Col> */}
         <Col span={1}>
           <Button
             shape="circle"
@@ -641,7 +691,7 @@ const EventCause = ({ cause }) => {
  * @version 0.1.0
  * @since 0.1.0
  */
-const EventImpact = () => {
+const EventImpact = ({ openForm }) => {
   const columns = [
     { title: 'Damage and Losses', dataIndex: 'name', key: 'name' },
     { title: 'Number', dataIndex: 'value', key: 'value' },
@@ -655,7 +705,21 @@ const EventImpact = () => {
 
   return (
     <div style={{ marginTop: '40px' }}>
-      <EventDetailsSectionHeader title="IMPACT" />
+      <EventDetailsSectionHeader
+        title="IMPACT"
+        actions={
+          <Button
+            shape="circle"
+            size="large"
+            icon={<PlusCircleOutlined />}
+            title="Record Effect & Need"
+            className="actionButton not-printable"
+            onClick={() =>
+              openForm({ key: 'damage', label: 'Record Effect & Need' })
+            }
+          />
+        }
+      />
       <Table columns={columns} dataSource={data} pagination={false} />
     </div>
   );
@@ -707,12 +771,18 @@ const EventDetailsViewBody = ({
         <Row>
           <Col span={16}>
             <EventCause cause={get(event, 'causes', 'N/A')} />
-            <EventLocations areas={event.areas} />
+            <EventLocations areas={event.areas} openForm={openForm} />
             {event.places && <EventPlaces places={event.places} />}
-            <EventRespondingAgencies agencies={event.agencies} />
-            <EventRespondingFocalPeople focalPeople={event.focals} />
+            <EventRespondingAgencies
+              agencies={event.agencies}
+              openForm={openForm}
+            />
+            <EventRespondingFocalPeople
+              focalPeople={event.focals}
+              openForm={openForm}
+            />
             <EventActionsTaken />
-            <EventImpact />
+            <EventImpact openForm={openForm} />
           </Col>
           <Col span={8}>
             <EventFeed
@@ -767,10 +837,12 @@ const EventDetailsViewBody = ({
 
 EventRespondingFocalPeople.propTypes = {
   focalPeople: PropTypes.arrayOf(PropTypes.object).isRequired,
+  openForm: PropTypes.func.isRequired,
 };
 
 EventRespondingAgencies.propTypes = {
   agencies: PropTypes.arrayOf(PropTypes.object).isRequired,
+  openForm: PropTypes.func.isRequired,
 };
 
 EventDetailsSectionHeader.propTypes = {
@@ -780,7 +852,10 @@ EventDetailsSectionHeader.propTypes = {
 
 EventLocations.propTypes = {
   areas: PropTypes.arrayOf(PropTypes.object).isRequired,
+  openForm: PropTypes.func.isRequired,
 };
+
+EventImpact.propTypes = { openForm: PropTypes.func.isRequired };
 
 EventPlaces.propTypes = {
   places: PropTypes.string.isRequired,
