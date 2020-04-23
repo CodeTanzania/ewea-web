@@ -4,6 +4,8 @@ import {
   getEvent,
   getEvents,
 } from '@codetanzania/ewea-api-states';
+import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import { InboxOutlined } from '@ant-design/icons';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
@@ -30,7 +32,7 @@ const { TextArea } = Input;
  * @description Render Event form for creating and updating stakeholder
  * event details
  *
- * @version 0.1.0
+ * @version 0.2.0
  * @since 0.1.0
  */
 class EventChangelogForm extends Component {
@@ -55,6 +57,12 @@ class EventChangelogForm extends Component {
 
     validateFieldsAndScroll((error, values) => {
       let data = { ...values, event };
+
+      // ensure areas key is an array
+      if (data.areas) {
+        data.areas = isArray(data.areas) ? data.areas : [data.areas];
+      }
+
       if (action === 'file') {
         data = new FormData(); // eslint-disable-line
 
@@ -104,7 +112,7 @@ class EventChangelogForm extends Component {
     const {
       posting,
       onCancel,
-      form: { getFieldDecorator, getFieldValue },
+      form: { getFieldDecorator },
       action,
     } = this.props;
 
@@ -134,10 +142,23 @@ class EventChangelogForm extends Component {
             {action === 'areas' && (
               // eslint-disable-next-line react/jsx-props-no-spreading
               <Form.Item {...formItemLayout} label="Areas">
-                {getFieldDecorator('areas')(
+                {getFieldDecorator('areas', {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Please select one or more affected areas',
+                    },
+                  ],
+                })(
                   <SearchableSelectInput
                     onSearch={getAdministrativeAreas}
-                    optionLabel={(area) => `${area.strings.name.en}`}
+                    optionLabel={(area) =>
+                      `${area.strings.name.en} (${get(
+                        area,
+                        'relations.level.strings.name.en',
+                        'N/A'
+                      )})`
+                    }
                     optionValue="_id"
                     mode="multiple"
                   />
@@ -150,7 +171,14 @@ class EventChangelogForm extends Component {
             {action === 'focalPeople' && (
               // eslint-disable-next-line react/jsx-props-no-spreading
               <Form.Item {...formItemLayout} label="Focal People">
-                {getFieldDecorator('focals')(
+                {getFieldDecorator('focals', {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Please select one or more focal people',
+                    },
+                  ],
+                })(
                   <SearchableSelectInput
                     onSearch={getFocalPeople}
                     optionLabel="name"
@@ -164,7 +192,14 @@ class EventChangelogForm extends Component {
             {action === 'agencies' && (
               // eslint-disable-next-line react/jsx-props-no-spreading
               <Form.Item {...formItemLayout} label="Agencies">
-                {getFieldDecorator('agencies')(
+                {getFieldDecorator('agencies', {
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Please select one or more agencies',
+                    },
+                  ],
+                })(
                   <SearchableSelectInput
                     onSearch={getAgencies}
                     optionLabel="name"
@@ -178,6 +213,30 @@ class EventChangelogForm extends Component {
 
             {action === 'damage' && (
               <>
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                <Form.Item {...formItemLayout} label="Area">
+                  {getFieldDecorator('areas', {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Please select area',
+                      },
+                    ],
+                  })(
+                    <SearchableSelectInput
+                      onSearch={getAdministrativeAreas}
+                      optionLabel={(area) =>
+                        `${area.strings.name.en} (${get(
+                          area,
+                          'relations.level.strings.name.en',
+                          'N/A'
+                        )})`
+                      }
+                      optionValue="_id"
+                    />
+                  )}
+                </Form.Item>
+
                 {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <Form.Item {...formItemLayout} label="Indicator">
                   {getFieldDecorator('indicator', {
@@ -210,9 +269,9 @@ class EventChangelogForm extends Component {
                       onSearch={(options) =>
                         getEventTopics({
                           ...options,
-                          filter: {
-                            'relations.indicator': getFieldValue('indicator'),
-                          },
+                          // filter: {
+                          //   'relations.indicator': getFieldValue('indicator'),
+                          // },
                         })
                       }
                       optionLabel={(topic) => topic.strings.name.en}
@@ -235,11 +294,11 @@ class EventChangelogForm extends Component {
                       onSearch={(options) =>
                         getEventQuestions({
                           ...options,
-                          filter: {
-                            relations: {
-                              indicator: getFieldValue('indicator'),
-                            },
-                          },
+                          // filter: {
+                          //   relations: {
+                          //     indicator: getFieldValue('indicator'),
+                          //   },
+                          // },
                         })
                       }
                       optionLabel={(question) => question.strings.name.en}
