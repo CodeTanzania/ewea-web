@@ -149,7 +149,6 @@ export const EventActionsTaken = () => {
         actions={
           <Button
             shape="circle"
-            size="large"
             icon={<PlusCircleOutlined />}
             title="Update Actions Taken"
             className="actionButton not-printable"
@@ -182,7 +181,6 @@ export const EventRespondingAgencies = ({ agencies = [], openForm }) => {
         actions={
           <Button
             shape="circle"
-            size="large"
             icon={<PlusCircleOutlined />}
             title="Add Agency"
             className="actionButton not-printable"
@@ -219,7 +217,6 @@ export const EventRespondingFocalPeople = ({ focalPeople = [], openForm }) => {
         actions={
           <Button
             shape="circle"
-            size="large"
             icon={<PlusCircleOutlined />}
             title="Add Focal Person"
             className="actionButton not-printable"
@@ -710,7 +707,6 @@ const EventImpact = ({ openForm }) => {
         actions={
           <Button
             shape="circle"
-            size="large"
             icon={<PlusCircleOutlined />}
             title="Record Effect & Need"
             className="actionButton not-printable"
