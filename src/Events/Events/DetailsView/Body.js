@@ -451,6 +451,24 @@ const EventToolbar = ({
 
 /**
  * @function
+ * @name EventFeedItemHeader
+ * @description Render Event feed item header
+ * @param {object} props Component props
+ * @returns {object} EventFeedItemHeader component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const EventFeedItemHeader = ({ initiator, date }) => {
+  return (
+    <div style={{ marginBottom: '10px' }}>
+      <Tag color="orange">Update</Tag> by <Tag>{initiator.name}</Tag> on{' '}
+      <Tag color="blue">{formatDate(date, 'YYYY-MM-DD HH:mm')}</Tag>
+    </div>
+  );
+};
+
+/**
+ * @function
  * @name renderComment
  * @description Render added comment in an event changelog entry
  * @param {object} feed A single changelog entry
@@ -462,8 +480,8 @@ const EventToolbar = ({
 const renderComment = (feed) => (
   // eslint-disable-next-line no-underscore-dangle
   <Timeline.Item key={feed._id} dot={<MessageOutlined />}>
-    <Tag>{feed.initiator.name}</Tag> commented: {feed.comment}{' '}
-    <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
+    <EventFeedItemHeader initiator={feed.initiator} date={feed.createdAt} />
+    <p>{feed.comment}</p>
   </Timeline.Item>
 );
 
@@ -482,6 +500,7 @@ const renderImage = (feed) => (
     key={`${feed._id}-${feed.filename}`} // eslint-disable-line no-underscore-dangle
     dot={<FileImageOutlined />}
   >
+    <EventFeedItemHeader initiator={feed.initiator} date={feed.createdAt} />
     <Card
       hoverable
       style={{ width: 300 }}
@@ -511,9 +530,6 @@ const renderImage = (feed) => (
         />
       }
     />
-    <div style={{ marginTop: '12px' }}>
-      <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-    </div>
   </Timeline.Item>
 );
 
@@ -869,6 +885,11 @@ EventToolbar.propTypes = {
   onEdit: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,
   openIndicatorDashboard: PropTypes.func.isRequired,
+};
+
+EventFeedItemHeader.propTypes = {
+  initiator: PropTypes.shape({ name: PropTypes.string }).isRequired,
+  date: PropTypes.string.isRequired,
 };
 
 EventFeed.propTypes = {
