@@ -21,6 +21,8 @@ import eventTopicsIcon from '../assets/icons/settings/eventtopics.svg';
 import eventStatusesIcon from '../assets/icons/settings/eventstatuses.svg';
 import eventResponsesIcon from '../assets/icons/settings/eventresponses.svg';
 import eventUrgenciesIcon from '../assets/icons/settings/eventurgencies.svg';
+import administrativeLevelsIcon from '../assets/icons/settings/administrativelevels.svg';
+import featureTypesIcon from '../assets/icons/settings/featuretypes.svg';
 import modules from '../modules.json';
 
 /* constants */
@@ -129,13 +131,13 @@ const routes = [
   {
     name: 'Administrative Levels',
     path: '/administrativelevels',
-    icon: eventResponsesIcon,
+    icon: administrativeLevelsIcon,
     description: modules.eventResponses,
   },
   {
     name: 'Feature Types',
     path: '/featuretypes',
-    icon: eventResponsesIcon,
+    icon: featureTypesIcon,
     description: modules.eventResponses,
   },
   {
