@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { getBaseUrl, getJwtToken } from '@codetanzania/ewea-api-client';
 import {
   openChangelogForm,
@@ -9,6 +9,7 @@ import {
   loadMoreChangelogs,
   postChangelog,
 } from '@codetanzania/ewea-api-states';
+import ReactToPrint from 'react-to-print';
 
 import {
   ApartmentOutlined,
@@ -43,21 +44,257 @@ import {
   Empty,
   Spin,
   Drawer,
+  Typography,
 } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
-
 import get from 'lodash/get';
 import map from 'lodash/map';
 import concat from 'lodash/concat';
 import flatten from 'lodash/flatten';
+
 import { formatDate, notifySuccess, notifyError } from '../../../util';
 import EventChangelogForm from '../ChangelogForm';
 import './styles.css';
 import IndicatorDashboard from '../../../Dashboards/Indicators';
 import EventDetailsViewHeader from './Header';
 
-const actionsTaken = ['Test Action 1', 'Test Action 2'];
+const { Paragraph } = Typography;
+
+/**
+ * @function
+ * @name EventToolbar
+ * @description List of actions user can perform on a particular event
+ *
+ * @param {object} props React props
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const EventToolbar = ({
+  event,
+  openForm,
+  onEdit,
+  onShare,
+  openIndicatorDashboard,
+  onContent,
+}) => {
+  return (
+    <div className="EventToolbar not-printable">
+      <Row>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<ReloadOutlined />}
+            title="Refresh Event"
+            className="actionButton"
+            onClick={() =>
+              getEvent(
+                // eslint-disable-next-line
+                event._id,
+                () => notifySuccess('Event was refreshed successfully'),
+                () =>
+                  notifyError(
+                    'An error occurred while refreshing event, please contact your system administrator'
+                  )
+              )
+            }
+          />
+        </Col>
+
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<EditOutlined />}
+            title="Edit Event"
+            className="actionButton"
+            onClick={() => onEdit()}
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<ShareAltOutlined />}
+            title="Share Event"
+            className="actionButton"
+            onClick={() => onShare()}
+          />
+        </Col>
+
+        {/* <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<UserAddOutlined />}
+            title="Add Focal Person"
+            className="actionButton"
+            onClick={() =>
+              openForm({
+                key: 'focalPeople',
+                label: 'Add participated Focal People',
+              })
+            }
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<UsergroupAddOutlined />}
+            title="Add Agency"
+            className="actionButton"
+            onClick={() =>
+              openForm({ key: 'agencies', label: 'Add participated Agencies' })
+            }
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<EnvironmentOutlined />}
+            title="Update Affected Areas"
+            className="actionButton"
+            onClick={() =>
+              openForm({ key: 'areas', label: 'Add affected Areas' })
+            }
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<FileDoneOutlined />}
+            title="Update Actions Taken"
+            className="actionButton"
+          />
+        </Col> */}
+
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<NotificationOutlined />}
+            title="Disseminate Event"
+            className="actionButton"
+          />
+        </Col>
+
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<FileImageOutlined />}
+            title="Upload Image"
+            className="actionButton"
+            onClick={() => openForm({ key: 'file', label: 'Upload File' })}
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<AuditOutlined />}
+            title="Record Effect & Need"
+            className="actionButton"
+            onClick={() =>
+              openForm({ key: 'damage', label: 'Record Effect & Need' })
+            }
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<WechatOutlined />}
+            title="Add Comment"
+            className="actionButton"
+            onClick={() => openForm({ key: 'comment', label: 'Add a Comment' })}
+          />
+        </Col>
+
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<SwapOutlined />}
+            title="Request for actions"
+            className="actionButton"
+          />
+        </Col>
+
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<DashboardOutlined />}
+            title="View Indicator Dashboard"
+            className="actionButton"
+            onClick={() => openIndicatorDashboard()}
+          />
+        </Col>
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<IssuesCloseOutlined />}
+            title="Mark Event as Ended"
+            className="actionButton"
+            onClick={() => {
+              postChangelog(
+                { event: event._id, endedAt: new Date() }, // eslint-disable-line
+                () => notifySuccess('Event closed successfully'),
+                () =>
+                  notifyError(
+                    'An Error occurred while closing event, please contact system administrator'
+                  ),
+                { filters: { event: event._id } } // eslint-disable-line
+              );
+            }}
+          />
+        </Col>
+
+        <Col span={1}>
+          <ReactToPrint
+            trigger={() => (
+              <Button
+                shape="circle"
+                size="large"
+                icon={<PrinterOutlined />}
+                title="Print Event Details"
+                className="actionButton"
+              />
+            )}
+            content={onContent}
+            pageStyle={{ margin: '30px' }}
+          />
+        </Col>
+      </Row>
+    </div>
+  );
+};
+
+/**
+ * @function
+ * @name EventCause
+ * @description Display Event Cause
+ * @param {object} props React props
+ *
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const EventCause = ({ cause }) => {
+  return (
+    <>
+      <EventDetailsSectionHeader title="CAUSE" />
+      {cause}
+    </>
+  );
+};
 
 /**
  * @function
@@ -136,13 +373,13 @@ export const EventPlaces = ({ places = '' }) => {
  * @function
  * @name EventActionsTaken
  * @description Section which show actions taken per event
- *
+ * @param {object} props Event action taken props
  * @returns {object} React component
  * @version 0.1.0
  * @since 0.1.0
  */
-export const EventActionsTaken = () => {
-  return isEmpty(actionsTaken) ? null : (
+export const EventActionsTaken = ({ actions = [], openForm }) => {
+  return isEmpty(actions) ? null : (
     <div style={{ marginTop: '40px' }}>
       <EventDetailsSectionHeader
         title="ACTION TAKEN/ INTERVENTIONS"
@@ -152,10 +389,16 @@ export const EventActionsTaken = () => {
             icon={<PlusCircleOutlined />}
             title="Update Actions Taken"
             className="actionButton not-printable"
+            onClick={() =>
+              openForm({
+                key: 'interventions',
+                label: 'Record Interventions/Actions Taken',
+              })
+            }
           />
         }
       />
-      {actionsTaken.map((action, key) => (
+      {actions.map((action, key) => (
         <p key={action} style={{ fontSize: '12px' }}>
           {key + 1}. {action}
         </p>
@@ -242,215 +485,6 @@ export const EventRespondingFocalPeople = ({ focalPeople = [], openForm }) => {
 
 /**
  * @function
- * @name EventToolbar
- * @description List of actions user can perform on a particular event
- *
- * @param {object} props React props
- * @returns {object} React component
- * @version 0.1.0
- * @since 0.1.0
- */
-const EventToolbar = ({
-  event,
-  openForm,
-  onEdit,
-  onShare,
-  openIndicatorDashboard,
-}) => {
-  return (
-    <div className="EventToolbar not-printable">
-      <Row>
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<ReloadOutlined />}
-            title="Refresh Event"
-            className="actionButton"
-            onClick={() =>
-              getEvent(
-                // eslint-disable-next-line
-                event._id,
-                () => notifySuccess('Event was refreshed successfully'),
-                () =>
-                  notifyError(
-                    'An error occurred while refreshing event, please contact your system administrator'
-                  )
-              )
-            }
-          />
-        </Col>
-
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<EditOutlined />}
-            title="Edit Event"
-            className="actionButton"
-            onClick={() => onEdit()}
-          />
-        </Col>
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<ShareAltOutlined />}
-            title="Share Event"
-            className="actionButton"
-            onClick={() => onShare()}
-          />
-        </Col>
-        {/* <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<UserAddOutlined />}
-            title="Add Focal Person"
-            className="actionButton"
-            onClick={() =>
-              openForm({
-                key: 'focalPeople',
-                label: 'Add participated Focal People',
-              })
-            }
-          />
-        </Col>
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<UsergroupAddOutlined />}
-            title="Add Agency"
-            className="actionButton"
-            onClick={() =>
-              openForm({ key: 'agencies', label: 'Add participated Agencies' })
-            }
-          />
-        </Col>
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<EnvironmentOutlined />}
-            title="Update Affected Areas"
-            className="actionButton"
-            onClick={() =>
-              openForm({ key: 'areas', label: 'Add affected Areas' })
-            }
-          />
-        </Col>
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<FileImageOutlined />}
-            title="Upload Image"
-            className="actionButton"
-            onClick={() => openForm({ key: 'file', label: 'Upload File' })}
-          />
-        </Col>
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<FileDoneOutlined />}
-            title="Update Actions Taken"
-            className="actionButton"
-          />
-        </Col> */}
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<NotificationOutlined />}
-            title="Disseminate Event"
-            className="actionButton"
-          />
-        </Col>
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<AuditOutlined />}
-            title="Record Effect & Need"
-            className="actionButton"
-            onClick={() =>
-              openForm({ key: 'damage', label: 'Record Effect & Need' })
-            }
-          />
-        </Col>
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<WechatOutlined />}
-            title="Add Comment"
-            className="actionButton"
-            onClick={() => openForm({ key: 'comment', label: 'Add a Comment' })}
-          />
-        </Col>
-
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<SwapOutlined />}
-            title="Request for actions"
-            className="actionButton"
-          />
-        </Col>
-
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<DashboardOutlined />}
-            title="View Indicator Dashboard"
-            className="actionButton"
-            onClick={() => openIndicatorDashboard()}
-          />
-        </Col>
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<IssuesCloseOutlined />}
-            title="Mark Event as Ended"
-            className="actionButton"
-            onClick={() => {
-              postChangelog(
-                { event: event._id, endedAt: new Date() }, // eslint-disable-line
-                () => notifySuccess('Event closed successfully'),
-                () =>
-                  notifyError(
-                    'An Error occurred while closing event, please contact system administrator'
-                  ),
-                { filters: { event: event._id } } // eslint-disable-line
-              );
-            }}
-          />
-        </Col>
-
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<PrinterOutlined />}
-            title="Print Event Details"
-            className="actionButton"
-            onClick={() => {
-              window.print(); // eslint-disable-line
-            }}
-          />
-        </Col>
-      </Row>
-    </div>
-  );
-};
-
-/**
- * @function
  * @name EventFeedItemHeader
  * @description Render Event feed item header
  * @param {object} props Component props
@@ -463,6 +497,106 @@ const EventFeedItemHeader = ({ initiator, date }) => {
     <div style={{ marginBottom: '10px' }}>
       <Tag color="orange">Update</Tag> by <Tag>{initiator.name}</Tag> on{' '}
       <Tag color="blue">{formatDate(date, 'YYYY-MM-DD HH:mm')}</Tag>
+    </div>
+  );
+};
+
+/**
+ * @function
+ * @name EventImpact
+ * @description Display Event impact based on indicators
+ *
+ * @returns {object} Event Impact Component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const EventImpact = ({ openForm }) => {
+  const columns = [
+    { title: 'Damage and Losses', dataIndex: 'name', key: 'name' },
+    { title: 'Number', dataIndex: 'value', key: 'value' },
+  ];
+
+  const data = [
+    { name: 'Deaths', value: 10 },
+    { name: 'Affected', value: 254 },
+    { name: 'Recovered', value: 11 },
+  ];
+
+  return (
+    <div style={{ marginTop: '40px' }}>
+      <EventDetailsSectionHeader
+        title="IMPACT"
+        actions={
+          <Button
+            shape="circle"
+            icon={<PlusCircleOutlined />}
+            title="Record Effect & Need"
+            className="actionButton not-printable"
+            onClick={() =>
+              openForm({ key: 'damage', label: 'Record Effect & Need' })
+            }
+          />
+        }
+      />
+      <Table columns={columns} dataSource={data} pagination={false} />
+    </div>
+  );
+};
+
+const EventGaps = ({ gaps = [], openForm }) => {
+  // const gaps = ['test 1', 'test 2'];
+  return (
+    <div style={{ marginTop: '40px' }}>
+      <EventDetailsSectionHeader
+        title="GAPS & CONSTRAINTS"
+        actions={
+          <Button
+            shape="circle"
+            icon={<PlusCircleOutlined />}
+            title="Record Effect & Need"
+            className="actionButton not-printable"
+            onClick={() =>
+              openForm({
+                key: 'constraints',
+                label: 'Record Gaps or Constraints',
+              })
+            }
+          />
+        }
+      />
+      {gaps.map((gap, index) => (
+        <Paragraph key={gap}>{`${index + 1}. ${gap}`}</Paragraph>
+      ))}
+    </div>
+  );
+};
+
+const EventRecommendations = ({ recommendations = [], openForm }) => {
+  // const recommendations = ['test 1', 'test 2'];
+  return (
+    <div style={{ marginTop: '40px' }}>
+      <EventDetailsSectionHeader
+        title="COMMENTS AND RECOMMENDATIONS"
+        actions={
+          <Button
+            shape="circle"
+            icon={<PlusCircleOutlined />}
+            title="Record Effect & Need"
+            className="actionButton not-printable"
+            onClick={() =>
+              openForm({
+                key: 'remarks',
+                label: 'Record Remarks or Recommendations',
+              })
+            }
+          />
+        }
+      />
+      {recommendations.map((recommendation, index) => (
+        <Paragraph key={recommendation}>{`${
+          index + 1
+        }. ${recommendation}`}</Paragraph>
+      ))}
     </div>
   );
 };
@@ -678,67 +812,6 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
 
 /**
  * @function
- * @name EventCause
- * @description Display Event Cause
- * @param {object} props React props
- *
- * @returns {object} React component
- * @version 0.1.0
- * @since 0.1.0
- */
-const EventCause = ({ cause }) => {
-  return (
-    <>
-      <EventDetailsSectionHeader title="CAUSE" />
-      {cause}
-    </>
-  );
-};
-
-/**
- * @function
- * @name EventImpact
- * @description Display Event impact based on indicators
- *
- * @returns {object} Event Impact Component
- * @version 0.1.0
- * @since 0.1.0
- */
-const EventImpact = ({ openForm }) => {
-  const columns = [
-    { title: 'Damage and Losses', dataIndex: 'name', key: 'name' },
-    { title: 'Number', dataIndex: 'value', key: 'value' },
-  ];
-
-  const data = [
-    { name: 'Deaths', value: 10 },
-    { name: 'Affected', value: 254 },
-    { name: 'Recovered', value: 11 },
-  ];
-
-  return (
-    <div style={{ marginTop: '40px' }}>
-      <EventDetailsSectionHeader
-        title="IMPACT"
-        actions={
-          <Button
-            shape="circle"
-            icon={<PlusCircleOutlined />}
-            title="Record Effect & Need"
-            className="actionButton not-printable"
-            onClick={() =>
-              openForm({ key: 'damage', label: 'Record Effect & Need' })
-            }
-          />
-        }
-      />
-      <Table columns={columns} dataSource={data} pagination={false} />
-    </div>
-  );
-};
-
-/**
- * @function
  * @name  EventDetailsViewBody
  * @description Event Details body view
  *
@@ -756,9 +829,11 @@ const EventDetailsViewBody = ({
   hasMore,
   onEdit,
   onShare,
+  eventPosting,
 }) => {
   const [action, setAction] = useState({ key: '', label: '' });
   const [showIndicatorDashboard, setShowIndicatorDashboard] = useState(false);
+  const componentRef = useRef();
 
   useEffect(() => {
     filterChangelogs({ event: event._id }); // eslint-disable-line
@@ -776,11 +851,11 @@ const EventDetailsViewBody = ({
         openForm={openForm}
         onEdit={onEdit}
         onShare={onShare}
+        onContent={() => componentRef.current}
         openIndicatorDashboard={() => setShowIndicatorDashboard(true)}
-        className="printable"
       />
       <div className="EventBodyContent">
-        <Row>
+        <Row ref={componentRef}>
           <Col span={16}>
             <EventCause cause={get(event, 'causes', 'N/A')} />
             <EventLocations areas={event.areas} openForm={openForm} />
@@ -793,8 +868,16 @@ const EventDetailsViewBody = ({
               focalPeople={event.focals}
               openForm={openForm}
             />
-            <EventActionsTaken />
+            <EventActionsTaken
+              actions={event.interventions}
+              openForm={openForm}
+            />
             <EventImpact openForm={openForm} />
+            <EventGaps gaps={event.constraints} openForm={openForm} />
+            <EventRecommendations
+              recommendations={event.remarks}
+              openForm={openForm}
+            />
           </Col>
           <Col span={8}>
             <EventFeed
@@ -819,7 +902,7 @@ const EventDetailsViewBody = ({
         <EventChangelogForm
           action={action.key}
           event={event}
-          posting={posting}
+          posting={posting || eventPosting}
           onCancel={() => closeChangelogForm()}
         />
       </Modal>
@@ -838,7 +921,11 @@ const EventDetailsViewBody = ({
         onClose={() => setShowIndicatorDashboard(false)}
         visible={showIndicatorDashboard}
         drawerStyle={{ overflow: 'hidden' }}
-        bodyStyle={{ overflow: 'hidden', height: '100%', padding: '15px' }}
+        bodyStyle={{
+          overflow: 'hidden',
+          height: '100%',
+          padding: '15px',
+        }}
         destroyOnClose
       >
         <IndicatorDashboard />
@@ -884,12 +971,28 @@ EventToolbar.propTypes = {
   openForm: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,
+  onContent: PropTypes.func.isRequired,
   openIndicatorDashboard: PropTypes.func.isRequired,
+};
+
+EventActionsTaken.propTypes = {
+  actions: PropTypes.arrayOf(PropTypes.string).isRequired,
+  openForm: PropTypes.func.isRequired,
 };
 
 EventFeedItemHeader.propTypes = {
   initiator: PropTypes.shape({ name: PropTypes.string }).isRequired,
   date: PropTypes.string.isRequired,
+};
+
+EventGaps.propTypes = {
+  gaps: PropTypes.arrayOf(PropTypes.string).isRequired,
+  openForm: PropTypes.func.isRequired,
+};
+
+EventRecommendations.propTypes = {
+  recommendations: PropTypes.arrayOf(PropTypes.string).isRequired,
+  openForm: PropTypes.func.isRequired,
 };
 
 EventFeed.propTypes = {
@@ -917,6 +1020,10 @@ EventDetailsViewBody.propTypes = {
     focals: PropTypes.arrayOf(PropTypes.object),
     agencies: PropTypes.arrayOf(PropTypes.object),
     areas: PropTypes.arrayOf(PropTypes.object),
+    gaps: PropTypes.arrayOf(PropTypes.string),
+    constraints: PropTypes.arrayOf(PropTypes.string),
+    interventions: PropTypes.arrayOf(PropTypes.string),
+    remarks: PropTypes.arrayOf(PropTypes.string),
     places: PropTypes.string,
   }).isRequired,
   changelogs: PropTypes.arrayOf(PropTypes.shape({ _id: PropTypes.string }))
@@ -927,6 +1034,7 @@ EventDetailsViewBody.propTypes = {
   hasMore: PropTypes.bool.isRequired,
   onEdit: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,
+  eventPosting: PropTypes.bool.isRequired,
 };
 
 export default Connect(EventDetailsViewBody, {
@@ -935,4 +1043,5 @@ export default Connect(EventDetailsViewBody, {
   posting: 'changelogs.posting',
   loading: 'changelogs.loading',
   hasMore: 'changelogs.hasMore',
+  eventPosting: 'events.posting',
 });
