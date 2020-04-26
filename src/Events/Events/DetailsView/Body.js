@@ -543,8 +543,16 @@ const EventImpact = ({ openForm }) => {
   );
 };
 
+/**
+ * @function
+ * @name EventGaps
+ * @description Event Gaps and Constraints
+ * @param {object} props React components props
+ * @returns {object} EventGaps
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 const EventGaps = ({ gaps = [], openForm }) => {
-  // const gaps = ['test 1', 'test 2'];
   return (
     <div style={{ marginTop: '40px' }}>
       <EventDetailsSectionHeader
@@ -571,8 +579,16 @@ const EventGaps = ({ gaps = [], openForm }) => {
   );
 };
 
+/**
+ * @function
+ * @name EventRecommendations
+ * @description Event Recommendations and Remarks
+ * @param {object} props React components props
+ * @returns {object} EventRecommendations
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 const EventRecommendations = ({ recommendations = [], openForm }) => {
-  // const recommendations = ['test 1', 'test 2'];
   return (
     <div style={{ marginTop: '40px' }}>
       <EventDetailsSectionHeader
