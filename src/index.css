@@ -119,8 +119,10 @@ code {
 .actionButton:hover,
 .actionButton:active,
 .actionButton:focus {
-  background-color: #e8e8e8;
-  color: #949494;
+  /* background-color: #e8e8e8; */
+  /* color: #949494; */
+  background-color: #1890ff20;
+  color: #1890ff;
   border-radius: 50%;
   cursor: pointer;
 }
