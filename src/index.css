@@ -1,4 +1,14 @@
-/*Utils styles*/
+@font-face {
+  font-family: 'Lato';
+  src: url('./assets/fonts/Lato/Lato-Regular.ttf') format('truetype'),
+    url('./assets/fonts/Lato/Lato-Bold.ttf') format('truetype'),
+    url('./assets/fonts/Lato/Lato-BoldItalic.ttf') format('truetype'),
+    url('./assets/fonts/Lato/Lato-BlackItalic.ttf') format('truetype'),
+    url('./assets/fonts/Lato/Lato-Black.ttf') format('truetype'),
+    url('./assets/fonts/Lato/Lato-Italic.ttf') format('truetype');
+}
+
+/* Utils styles*/
 html,
 body,
 div,
