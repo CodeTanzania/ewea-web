@@ -543,8 +543,16 @@ const EventImpact = ({ openForm }) => {
   );
 };
 
+/**
+ * @function
+ * @name EventGaps
+ * @description Event Gaps and Constraints
+ * @param {object} props React components props
+ * @returns {object} EventGaps
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 const EventGaps = ({ gaps = [], openForm }) => {
-  // const gaps = ['test 1', 'test 2'];
   return (
     <div style={{ marginTop: '40px' }}>
       <EventDetailsSectionHeader
@@ -571,8 +579,16 @@ const EventGaps = ({ gaps = [], openForm }) => {
   );
 };
 
+/**
+ * @function
+ * @name EventRecommendations
+ * @description Event Recommendations and Remarks
+ * @param {object} props React components props
+ * @returns {object} EventRecommendations
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 const EventRecommendations = ({ recommendations = [], openForm }) => {
-  // const recommendations = ['test 1', 'test 2'];
   return (
     <div style={{ marginTop: '40px' }}>
       <EventDetailsSectionHeader
@@ -615,7 +631,7 @@ const renderComment = (feed) => (
   // eslint-disable-next-line no-underscore-dangle
   <Timeline.Item key={feed._id} dot={<MessageOutlined />}>
     <EventFeedItemHeader initiator={feed.initiator} date={feed.createdAt} />
-    <p>{feed.comment}</p>
+    <p>commented: {feed.comment}</p>
   </Timeline.Item>
 );
 
@@ -681,9 +697,8 @@ const renderFocals = (feed) => {
   return map(feed.focals, (focal) => (
     // eslint-disable-next-line no-underscore-dangle
     <Timeline.Item key={feed._id} dot={<UserOutlined />}>
-      <Tag>{feed.initiator.name}</Tag> added focal:{' '}
-      <Tag color="cyan">{focal.name}</Tag> on{' '}
-      <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+      <EventFeedItemHeader initiator={feed.initiator} date={feed.createdAt} />
+      added: <Tag color="cyan">{focal.name}</Tag>
     </Timeline.Item>
   ));
 };
@@ -702,9 +717,8 @@ const renderAgencies = (feed) => {
   return map(feed.agencies, (agency) => (
     // eslint-disable-next-line no-underscore-dangle
     <Timeline.Item key={feed._id} dot={<ApartmentOutlined />}>
-      <Tag>{feed.initiator.name}</Tag> added agency:{' '}
-      <Tag color="magenta">{agency.name}</Tag> on{' '}
-      <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+      <EventFeedItemHeader initiator={feed.initiator} date={feed.createdAt} />
+      added Agency: <Tag color="magenta">{agency.name}</Tag>
     </Timeline.Item>
   ));
 };
@@ -723,9 +737,10 @@ const renderAreas = (feed) => {
   return map(feed.areas, (area) => (
     // eslint-disable-next-line no-underscore-dangle
     <Timeline.Item key={area._id} dot={<EnvironmentOutlined />}>
-      <Tag>{feed.initiator.name}</Tag> added affected area:{' '}
-      <Tag color="geekblue">{area.strings.name.en}</Tag> on{' '}
-      <Tag>{formatDate(area.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+      <EventFeedItemHeader initiator={feed.initiator} date={feed.createdAt} />
+      added affected area: <Tag color="geekblue">
+        {area.strings.name.en}
+      </Tag>{' '}
     </Timeline.Item>
   ));
 };
