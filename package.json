@@ -41,7 +41,8 @@
     "react-map-gl": "^5.2.5",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "react-simple-maps": "^2.0.0"
+    "react-simple-maps": "^2.0.0",
+    "react-to-print": "^2.6.3"
   },
   "eslintConfig": {
     "extends": "react-app"

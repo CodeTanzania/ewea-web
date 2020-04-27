@@ -34,6 +34,7 @@ import Units from '../Units';
 // import StakeholdersNotifications from '../Stakeholders/Notifications';
 import StakeholdersRoles from '../Stakeholders/Roles';
 import OverviewDashboard from '../Dashboards';
+import Dashboards from '../navigation/Dashboards';
 import Settings from '../navigation/Settings';
 import ActionsTaken from '../Dashboards/ActionsTaken';
 import SecureRoute from '../Auth/SecureRoute';
@@ -74,9 +75,25 @@ const breadcrumbNameMap = {
   '/app/stakeholders': { name: 'Stakeholders', title: 'Stakeholders module' },
 
   /* Dashboards */
-  '/app/overview': {
-    name: 'Alert Dashboard',
-    title: 'Alert Dashboard',
+  '/app/dashboards': {
+    name: 'Dashboards',
+    title: 'Dashboards',
+  },
+  '/app/dashboards/overview': {
+    name: 'Overview Dashboard',
+    title: 'Overview Dashboard',
+  },
+  '/app/dashboards/indicators': {
+    name: 'Indicators Dashboard',
+    title: 'Indicators Dashboard',
+  },
+  '/app/dashboards/needs': {
+    name: 'Needs Dashboard',
+    title: 'Needs Dashboard',
+  },
+  '/app/dashboards/effects': {
+    name: 'Effects Dashboard',
+    title: 'Effects Dashboard',
   },
 
   /* settings */
@@ -265,8 +282,14 @@ const BaseLayout = (props) => {
             path={`${baseUrl}/actioncatalogue`}
             component={ActionCatalogue}
           />
+
           <SecureRoute
-            path={`${baseUrl}/overview`}
+            exact
+            path={`${baseUrl}/dashboards`}
+            component={Dashboards}
+          />
+          <SecureRoute
+            path={`${baseUrl}/dashboards/overview`}
             component={OverviewDashboard}
           />
           <SecureRoute path={`${baseUrl}/actions`} component={ActionsTaken} />

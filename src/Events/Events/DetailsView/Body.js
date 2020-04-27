@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { getBaseUrl, getJwtToken } from '@codetanzania/ewea-api-client';
 import {
   openChangelogForm,
@@ -9,6 +9,7 @@ import {
   loadMoreChangelogs,
   postChangelog,
 } from '@codetanzania/ewea-api-states';
+import ReactToPrint from 'react-to-print';
 
 import {
   ApartmentOutlined,
@@ -17,7 +18,6 @@ import {
   EditOutlined,
   EnvironmentOutlined,
   EyeOutlined,
-  FileDoneOutlined,
   FileImageOutlined,
   IssuesCloseOutlined,
   MessageOutlined,
@@ -26,11 +26,10 @@ import {
   ReloadOutlined,
   ShareAltOutlined,
   SwapOutlined,
-  UserAddOutlined,
-  UsergroupAddOutlined,
   UserOutlined,
   WechatOutlined,
   DashboardOutlined,
+  PlusCircleOutlined,
 } from '@ant-design/icons';
 
 import {
@@ -45,153 +44,22 @@ import {
   Empty,
   Spin,
   Drawer,
+  Typography,
 } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
-
 import get from 'lodash/get';
 import map from 'lodash/map';
 import concat from 'lodash/concat';
 import flatten from 'lodash/flatten';
+
 import { formatDate, notifySuccess, notifyError } from '../../../util';
 import EventChangelogForm from '../ChangelogForm';
 import './styles.css';
 import IndicatorDashboard from '../../../Dashboards/Indicators';
 import EventDetailsViewHeader from './Header';
 
-const actionsTaken = ['Test Action 1', 'Test Action 2'];
-
-/**
- * @function
- * @name EventDetailsSectionHeader
- * @description Header section for event details drawer
- *
- * @param {object} props React props
- * @returns {object} React component
- *
- * @version 0.1.0
- * @since 0.1.0
- */
-export const EventDetailsSectionHeader = ({ title, actions }) => {
-  return (
-    <div className="EventDetailsSectionHeader">
-      <Row>
-        <Col span={16}>
-          <h4>{title}</h4>
-        </Col>
-        <Col span={8}>{actions}</Col>
-      </Row>
-    </div>
-  );
-};
-
-/**
- * @function
- * @name EventLocations
- * @description Section which show event location(s) in hierarchy
- *
- * @returns {object} React component
- * @version 0.1.0
- * @since 0.1.0
- */
-export const EventLocations = ({ areas = [] }) => {
-  const locations = areas.map((area) => area.strings.name.en).join(', ');
-  return isEmpty(areas) ? null : (
-    <div style={{ marginTop: '40px' }}>
-      <EventDetailsSectionHeader title="AFFECT AREAS" />
-
-      {locations}
-    </div>
-  );
-};
-
-/**
- * @function
- * @name EventPlaces
- * @description Section which show event affected place(s) in hierarchy
- *
- * @returns {object} React component
- * @version 0.1.0
- * @since 0.1.0
- */
-export const EventPlaces = ({ places = '' }) => {
-  return isEmpty(places) ? null : (
-    <div style={{ marginTop: '40px' }}>
-      <EventDetailsSectionHeader title="AFFECT PLACES" />
-
-      <span>{places}</span>
-    </div>
-  );
-};
-
-/**
- * @function
- * @name EventActionsTaken
- * @description Section which show actions taken per event
- *
- * @returns {object} React component
- * @version 0.1.0
- * @since 0.1.0
- */
-export const EventActionsTaken = () => {
-  return isEmpty(actionsTaken) ? null : (
-    <div style={{ marginTop: '40px' }}>
-      <EventDetailsSectionHeader title="ACTION TAKEN/ INTERVENTIONS" />
-      {actionsTaken.map((action, key) => (
-        <p key={action} style={{ fontSize: '12px' }}>
-          {key + 1}. {action}
-        </p>
-      ))}
-    </div>
-  );
-};
-
-/**
- * @function
- * @name EventRespondingAgencies
- * @description Section which show event responding agencies
- *
- * @returns {object} React component
- * @version 0.1.0
- * @since 0.1.0
- */
-export const EventRespondingAgencies = ({ agencies = [] }) => {
-  return isEmpty(agencies) ? null : (
-    <div style={{ marginTop: '40px' }}>
-      <EventDetailsSectionHeader title="AGENCIES RESPONDED" />
-      {agencies.map((agency, key) => (
-        // eslint-disable-next-line
-        <p key={agency._id} style={{ fontSize: '12px' }}>
-          {key + 1}. {`${agency.name} (${agency.abbreviation})`}
-        </p>
-      ))}
-    </div>
-  );
-};
-
-/**
- * @function
- * @name EventRespondingFocalPeople
- * @description Section which show event responding agencies
- *
- * @returns {object} React component
- * @version 0.1.0
- * @since 0.1.0
- */
-export const EventRespondingFocalPeople = ({ focalPeople = [] }) => {
-  return isEmpty(focalPeople) ? null : (
-    <div style={{ marginTop: '40px' }}>
-      <EventDetailsSectionHeader title="FOCAL PEOPLE RESPONDED" />
-
-      {focalPeople.map((focalPerson, key) => (
-        // eslint-disable-next-line no-underscore-dangle
-        <p key={focalPerson._id} style={{ fontSize: '12px' }}>
-          {key + 1}. {`${focalPerson.name}`}
-        </p>
-      ))}
-    </div>
-  );
-};
+const { Paragraph } = Typography;
 
 /**
  * @function
@@ -209,6 +77,7 @@ const EventToolbar = ({
   onEdit,
   onShare,
   openIndicatorDashboard,
+  onContent,
 }) => {
   return (
     <div className="EventToolbar not-printable">
@@ -254,7 +123,8 @@ const EventToolbar = ({
             onClick={() => onShare()}
           />
         </Col>
-        <Col span={1}>
+
+        {/* <Col span={1}>
           <Button
             shape="circle"
             size="large"
@@ -297,21 +167,12 @@ const EventToolbar = ({
           <Button
             shape="circle"
             size="large"
-            icon={<FileImageOutlined />}
-            title="Upload Image"
-            className="actionButton"
-            onClick={() => openForm({ key: 'file', label: 'Upload File' })}
-          />
-        </Col>
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
             icon={<FileDoneOutlined />}
             title="Update Actions Taken"
             className="actionButton"
           />
-        </Col>
+        </Col> */}
+
         <Col span={1}>
           <Button
             shape="circle"
@@ -319,6 +180,17 @@ const EventToolbar = ({
             icon={<NotificationOutlined />}
             title="Disseminate Event"
             className="actionButton"
+          />
+        </Col>
+
+        <Col span={1}>
+          <Button
+            shape="circle"
+            size="large"
+            icon={<FileImageOutlined />}
+            title="Upload Image"
+            className="actionButton"
+            onClick={() => openForm({ key: 'file', label: 'Upload File' })}
           />
         </Col>
         <Col span={1}>
@@ -386,18 +258,361 @@ const EventToolbar = ({
         </Col>
 
         <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<PrinterOutlined />}
-            title="Print Event Details"
-            className="actionButton"
-            onClick={() => {
-              window.print(); // eslint-disable-line
-            }}
+          <ReactToPrint
+            trigger={() => (
+              <Button
+                shape="circle"
+                size="large"
+                icon={<PrinterOutlined />}
+                title="Print Event Details"
+                className="actionButton"
+              />
+            )}
+            content={onContent}
+            pageStyle={{ margin: '30px' }}
           />
         </Col>
       </Row>
+    </div>
+  );
+};
+
+/**
+ * @function
+ * @name EventCause
+ * @description Display Event Cause
+ * @param {object} props React props
+ *
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const EventCause = ({ cause }) => {
+  return (
+    <>
+      <EventDetailsSectionHeader title="CAUSE" />
+      {cause}
+    </>
+  );
+};
+
+/**
+ * @function
+ * @name EventDetailsSectionHeader
+ * @description Header section for event details drawer
+ *
+ * @param {object} props React props
+ * @returns {object} React component
+ *
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const EventDetailsSectionHeader = ({ title, actions }) => {
+  return (
+    <div className="EventDetailsSectionHeader">
+      <h4>
+        {title} {actions}
+      </h4>
+    </div>
+  );
+};
+
+/**
+ * @function
+ * @name EventLocations
+ * @description Section which show event location(s) in hierarchy
+ *
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const EventLocations = ({ areas = [], openForm }) => {
+  const locations = areas.map((area) => area.strings.name.en).join(', ');
+  return isEmpty(areas) ? null : (
+    <div style={{ marginTop: '40px' }}>
+      <EventDetailsSectionHeader
+        title="AFFECT AREAS"
+        actions={
+          <Button
+            shape="circle"
+            icon={<PlusCircleOutlined />}
+            title="Update Affected Areas"
+            className="actionButton not-printable"
+            onClick={() =>
+              openForm({ key: 'areas', label: 'Add affected Areas' })
+            }
+          />
+        }
+      />
+
+      {locations}
+    </div>
+  );
+};
+
+/**
+ * @function
+ * @name EventPlaces
+ * @description Section which show event affected place(s) in hierarchy
+ *
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const EventPlaces = ({ places = '' }) => {
+  return isEmpty(places) ? null : (
+    <div style={{ marginTop: '40px' }}>
+      <EventDetailsSectionHeader title="AFFECT PLACES" />
+
+      <span>{places}</span>
+    </div>
+  );
+};
+
+/**
+ * @function
+ * @name EventActionsTaken
+ * @description Section which show actions taken per event
+ * @param {object} props Event action taken props
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const EventActionsTaken = ({ actions = [], openForm }) => {
+  return isEmpty(actions) ? null : (
+    <div style={{ marginTop: '40px' }}>
+      <EventDetailsSectionHeader
+        title="ACTION TAKEN/ INTERVENTIONS"
+        actions={
+          <Button
+            shape="circle"
+            icon={<PlusCircleOutlined />}
+            title="Update Actions Taken"
+            className="actionButton not-printable"
+            onClick={() =>
+              openForm({
+                key: 'interventions',
+                label: 'Record Interventions/Actions Taken',
+              })
+            }
+          />
+        }
+      />
+      {actions.map((action, key) => (
+        <p key={action} style={{ fontSize: '12px' }}>
+          {key + 1}. {action}
+        </p>
+      ))}
+    </div>
+  );
+};
+
+/**
+ * @function
+ * @name EventRespondingAgencies
+ * @description Section which show event responding agencies
+ *
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const EventRespondingAgencies = ({ agencies = [], openForm }) => {
+  return isEmpty(agencies) ? null : (
+    <div style={{ marginTop: '40px' }}>
+      <EventDetailsSectionHeader
+        title="AGENCIES RESPONDED"
+        actions={
+          <Button
+            shape="circle"
+            icon={<PlusCircleOutlined />}
+            title="Add Agency"
+            className="actionButton not-printable"
+            onClick={() =>
+              openForm({ key: 'agencies', label: 'Add participated Agencies' })
+            }
+          />
+        }
+      />
+      {agencies.map((agency, key) => (
+        // eslint-disable-next-line
+        <p key={agency._id} style={{ fontSize: '12px' }}>
+          {key + 1}. {`${agency.name} (${agency.abbreviation})`}
+        </p>
+      ))}
+    </div>
+  );
+};
+
+/**
+ * @function
+ * @name EventRespondingFocalPeople
+ * @description Section which show event responding agencies
+ *
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const EventRespondingFocalPeople = ({ focalPeople = [], openForm }) => {
+  return isEmpty(focalPeople) ? null : (
+    <div style={{ marginTop: '40px' }}>
+      <EventDetailsSectionHeader
+        title="FOCAL PEOPLE RESPONDED"
+        actions={
+          <Button
+            shape="circle"
+            icon={<PlusCircleOutlined />}
+            title="Add Focal Person"
+            className="actionButton not-printable"
+            onClick={() =>
+              openForm({
+                key: 'focalPeople',
+                label: 'Add participated Focal People',
+              })
+            }
+          />
+        }
+      />
+
+      {focalPeople.map((focalPerson, key) => (
+        // eslint-disable-next-line no-underscore-dangle
+        <p key={focalPerson._id} style={{ fontSize: '12px' }}>
+          {key + 1}. {`${focalPerson.name}`}
+        </p>
+      ))}
+    </div>
+  );
+};
+
+/**
+ * @function
+ * @name EventFeedItemHeader
+ * @description Render Event feed item header
+ * @param {object} props Component props
+ * @returns {object} EventFeedItemHeader component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const EventFeedItemHeader = ({ initiator, date }) => {
+  return (
+    <div style={{ marginBottom: '10px' }}>
+      <Tag color="orange">Update</Tag> by <Tag>{initiator.name}</Tag> on{' '}
+      <Tag color="blue">{formatDate(date, 'YYYY-MM-DD HH:mm')}</Tag>
+    </div>
+  );
+};
+
+/**
+ * @function
+ * @name EventImpact
+ * @description Display Event impact based on indicators
+ *
+ * @returns {object} Event Impact Component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const EventImpact = ({ openForm }) => {
+  const columns = [
+    { title: 'Damage and Losses', dataIndex: 'name', key: 'name' },
+    { title: 'Number', dataIndex: 'value', key: 'value' },
+  ];
+
+  const data = [
+    { name: 'Deaths', value: 10 },
+    { name: 'Affected', value: 254 },
+    { name: 'Recovered', value: 11 },
+  ];
+
+  return (
+    <div style={{ marginTop: '40px' }}>
+      <EventDetailsSectionHeader
+        title="IMPACT"
+        actions={
+          <Button
+            shape="circle"
+            icon={<PlusCircleOutlined />}
+            title="Record Effect & Need"
+            className="actionButton not-printable"
+            onClick={() =>
+              openForm({ key: 'damage', label: 'Record Effect & Need' })
+            }
+          />
+        }
+      />
+      <Table columns={columns} dataSource={data} pagination={false} />
+    </div>
+  );
+};
+
+/**
+ * @function
+ * @name EventGaps
+ * @description Event Gaps and Constraints
+ * @param {object} props React components props
+ * @returns {object} EventGaps
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const EventGaps = ({ gaps = [], openForm }) => {
+  return (
+    <div style={{ marginTop: '40px' }}>
+      <EventDetailsSectionHeader
+        title="GAPS & CONSTRAINTS"
+        actions={
+          <Button
+            shape="circle"
+            icon={<PlusCircleOutlined />}
+            title="Record Effect & Need"
+            className="actionButton not-printable"
+            onClick={() =>
+              openForm({
+                key: 'constraints',
+                label: 'Record Gaps or Constraints',
+              })
+            }
+          />
+        }
+      />
+      {gaps.map((gap, index) => (
+        <Paragraph key={gap}>{`${index + 1}. ${gap}`}</Paragraph>
+      ))}
+    </div>
+  );
+};
+
+/**
+ * @function
+ * @name EventRecommendations
+ * @description Event Recommendations and Remarks
+ * @param {object} props React components props
+ * @returns {object} EventRecommendations
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const EventRecommendations = ({ recommendations = [], openForm }) => {
+  return (
+    <div style={{ marginTop: '40px' }}>
+      <EventDetailsSectionHeader
+        title="COMMENTS AND RECOMMENDATIONS"
+        actions={
+          <Button
+            shape="circle"
+            icon={<PlusCircleOutlined />}
+            title="Record Effect & Need"
+            className="actionButton not-printable"
+            onClick={() =>
+              openForm({
+                key: 'remarks',
+                label: 'Record Remarks or Recommendations',
+              })
+            }
+          />
+        }
+      />
+      {recommendations.map((recommendation, index) => (
+        <Paragraph key={recommendation}>{`${
+          index + 1
+        }. ${recommendation}`}</Paragraph>
+      ))}
     </div>
   );
 };
@@ -415,8 +630,8 @@ const EventToolbar = ({
 const renderComment = (feed) => (
   // eslint-disable-next-line no-underscore-dangle
   <Timeline.Item key={feed._id} dot={<MessageOutlined />}>
-    <Tag>{feed.initiator.name}</Tag> commented: {feed.comment}{' '}
-    <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>{' '}
+    <EventFeedItemHeader initiator={feed.initiator} date={feed.createdAt} />
+    <p>commented: {feed.comment}</p>
   </Timeline.Item>
 );
 
@@ -435,6 +650,7 @@ const renderImage = (feed) => (
     key={`${feed._id}-${feed.filename}`} // eslint-disable-line no-underscore-dangle
     dot={<FileImageOutlined />}
   >
+    <EventFeedItemHeader initiator={feed.initiator} date={feed.createdAt} />
     <Card
       hoverable
       style={{ width: 300 }}
@@ -464,9 +680,6 @@ const renderImage = (feed) => (
         />
       }
     />
-    <div style={{ marginTop: '12px' }}>
-      <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
-    </div>
   </Timeline.Item>
 );
 
@@ -484,9 +697,8 @@ const renderFocals = (feed) => {
   return map(feed.focals, (focal) => (
     // eslint-disable-next-line no-underscore-dangle
     <Timeline.Item key={feed._id} dot={<UserOutlined />}>
-      <Tag>{feed.initiator.name}</Tag> added focal:{' '}
-      <Tag color="cyan">{focal.name}</Tag> on{' '}
-      <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+      <EventFeedItemHeader initiator={feed.initiator} date={feed.createdAt} />
+      added: <Tag color="cyan">{focal.name}</Tag>
     </Timeline.Item>
   ));
 };
@@ -505,9 +717,8 @@ const renderAgencies = (feed) => {
   return map(feed.agencies, (agency) => (
     // eslint-disable-next-line no-underscore-dangle
     <Timeline.Item key={feed._id} dot={<ApartmentOutlined />}>
-      <Tag>{feed.initiator.name}</Tag> added agency:{' '}
-      <Tag color="magenta">{agency.name}</Tag> on{' '}
-      <Tag>{formatDate(feed.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+      <EventFeedItemHeader initiator={feed.initiator} date={feed.createdAt} />
+      added Agency: <Tag color="magenta">{agency.name}</Tag>
     </Timeline.Item>
   ));
 };
@@ -526,9 +737,10 @@ const renderAreas = (feed) => {
   return map(feed.areas, (area) => (
     // eslint-disable-next-line no-underscore-dangle
     <Timeline.Item key={area._id} dot={<EnvironmentOutlined />}>
-      <Tag>{feed.initiator.name}</Tag> added affected area:{' '}
-      <Tag color="geekblue">{area.strings.name.en}</Tag> on{' '}
-      <Tag>{formatDate(area.createdAt, 'YYYY-MM-DD HH:mm')}</Tag>
+      <EventFeedItemHeader initiator={feed.initiator} date={feed.createdAt} />
+      added affected area: <Tag color="geekblue">
+        {area.strings.name.en}
+      </Tag>{' '}
     </Timeline.Item>
   ));
 };
@@ -615,54 +827,6 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
 
 /**
  * @function
- * @name EventCause
- * @description Display Event Cause
- * @param {object} props React props
- *
- * @returns {object} React component
- * @version 0.1.0
- * @since 0.1.0
- */
-const EventCause = ({ cause }) => {
-  return (
-    <>
-      <EventDetailsSectionHeader title="CAUSE" />
-      {cause}
-    </>
-  );
-};
-
-/**
- * @function
- * @name EventImpact
- * @description Display Event impact based on indicators
- *
- * @returns {object} Event Impact Component
- * @version 0.1.0
- * @since 0.1.0
- */
-const EventImpact = () => {
-  const columns = [
-    { title: 'Damage and Losses', dataIndex: 'name', key: 'name' },
-    { title: 'Number', dataIndex: 'value', key: 'value' },
-  ];
-
-  const data = [
-    { name: 'Deaths', value: 10 },
-    { name: 'Affected', value: 254 },
-    { name: 'Recovered', value: 11 },
-  ];
-
-  return (
-    <div style={{ marginTop: '40px' }}>
-      <EventDetailsSectionHeader title="IMPACT" />
-      <Table columns={columns} dataSource={data} pagination={false} />
-    </div>
-  );
-};
-
-/**
- * @function
  * @name  EventDetailsViewBody
  * @description Event Details body view
  *
@@ -680,9 +844,11 @@ const EventDetailsViewBody = ({
   hasMore,
   onEdit,
   onShare,
+  eventPosting,
 }) => {
   const [action, setAction] = useState({ key: '', label: '' });
   const [showIndicatorDashboard, setShowIndicatorDashboard] = useState(false);
+  const componentRef = useRef();
 
   useEffect(() => {
     filterChangelogs({ event: event._id }); // eslint-disable-line
@@ -700,19 +866,33 @@ const EventDetailsViewBody = ({
         openForm={openForm}
         onEdit={onEdit}
         onShare={onShare}
+        onContent={() => componentRef.current}
         openIndicatorDashboard={() => setShowIndicatorDashboard(true)}
-        className="printable"
       />
       <div className="EventBodyContent">
-        <Row>
+        <Row ref={componentRef}>
           <Col span={16}>
             <EventCause cause={get(event, 'causes', 'N/A')} />
-            <EventLocations areas={event.areas} />
+            <EventLocations areas={event.areas} openForm={openForm} />
             {event.places && <EventPlaces places={event.places} />}
-            <EventRespondingAgencies agencies={event.agencies} />
-            <EventRespondingFocalPeople focalPeople={event.focals} />
-            <EventActionsTaken />
-            <EventImpact />
+            <EventRespondingAgencies
+              agencies={event.agencies}
+              openForm={openForm}
+            />
+            <EventRespondingFocalPeople
+              focalPeople={event.focals}
+              openForm={openForm}
+            />
+            <EventActionsTaken
+              actions={event.interventions}
+              openForm={openForm}
+            />
+            <EventImpact openForm={openForm} />
+            <EventGaps gaps={event.constraints} openForm={openForm} />
+            <EventRecommendations
+              recommendations={event.remarks}
+              openForm={openForm}
+            />
           </Col>
           <Col span={8}>
             <EventFeed
@@ -737,7 +917,7 @@ const EventDetailsViewBody = ({
         <EventChangelogForm
           action={action.key}
           event={event}
-          posting={posting}
+          posting={posting || eventPosting}
           onCancel={() => closeChangelogForm()}
         />
       </Modal>
@@ -756,7 +936,11 @@ const EventDetailsViewBody = ({
         onClose={() => setShowIndicatorDashboard(false)}
         visible={showIndicatorDashboard}
         drawerStyle={{ overflow: 'hidden' }}
-        bodyStyle={{ overflow: 'hidden', height: '100%', padding: '15px' }}
+        bodyStyle={{
+          overflow: 'hidden',
+          height: '100%',
+          padding: '15px',
+        }}
         destroyOnClose
       >
         <IndicatorDashboard />
@@ -767,10 +951,12 @@ const EventDetailsViewBody = ({
 
 EventRespondingFocalPeople.propTypes = {
   focalPeople: PropTypes.arrayOf(PropTypes.object).isRequired,
+  openForm: PropTypes.func.isRequired,
 };
 
 EventRespondingAgencies.propTypes = {
   agencies: PropTypes.arrayOf(PropTypes.object).isRequired,
+  openForm: PropTypes.func.isRequired,
 };
 
 EventDetailsSectionHeader.propTypes = {
@@ -780,7 +966,10 @@ EventDetailsSectionHeader.propTypes = {
 
 EventLocations.propTypes = {
   areas: PropTypes.arrayOf(PropTypes.object).isRequired,
+  openForm: PropTypes.func.isRequired,
 };
+
+EventImpact.propTypes = { openForm: PropTypes.func.isRequired };
 
 EventPlaces.propTypes = {
   places: PropTypes.string.isRequired,
@@ -797,7 +986,28 @@ EventToolbar.propTypes = {
   openForm: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,
+  onContent: PropTypes.func.isRequired,
   openIndicatorDashboard: PropTypes.func.isRequired,
+};
+
+EventActionsTaken.propTypes = {
+  actions: PropTypes.arrayOf(PropTypes.string).isRequired,
+  openForm: PropTypes.func.isRequired,
+};
+
+EventFeedItemHeader.propTypes = {
+  initiator: PropTypes.shape({ name: PropTypes.string }).isRequired,
+  date: PropTypes.string.isRequired,
+};
+
+EventGaps.propTypes = {
+  gaps: PropTypes.arrayOf(PropTypes.string).isRequired,
+  openForm: PropTypes.func.isRequired,
+};
+
+EventRecommendations.propTypes = {
+  recommendations: PropTypes.arrayOf(PropTypes.string).isRequired,
+  openForm: PropTypes.func.isRequired,
 };
 
 EventFeed.propTypes = {
@@ -825,6 +1035,10 @@ EventDetailsViewBody.propTypes = {
     focals: PropTypes.arrayOf(PropTypes.object),
     agencies: PropTypes.arrayOf(PropTypes.object),
     areas: PropTypes.arrayOf(PropTypes.object),
+    gaps: PropTypes.arrayOf(PropTypes.string),
+    constraints: PropTypes.arrayOf(PropTypes.string),
+    interventions: PropTypes.arrayOf(PropTypes.string),
+    remarks: PropTypes.arrayOf(PropTypes.string),
     places: PropTypes.string,
   }).isRequired,
   changelogs: PropTypes.arrayOf(PropTypes.shape({ _id: PropTypes.string }))
@@ -835,6 +1049,7 @@ EventDetailsViewBody.propTypes = {
   hasMore: PropTypes.bool.isRequired,
   onEdit: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,
+  eventPosting: PropTypes.bool.isRequired,
 };
 
 export default Connect(EventDetailsViewBody, {
@@ -843,4 +1058,5 @@ export default Connect(EventDetailsViewBody, {
   posting: 'changelogs.posting',
   loading: 'changelogs.loading',
   hasMore: 'changelogs.hasMore',
+  eventPosting: 'events.posting',
 });
