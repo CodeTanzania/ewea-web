@@ -1,6 +1,8 @@
 import React from 'react';
 
 import dashboardIcon from '../assets/icons/dashboards.svg';
+import indicatorDashboardIcon from '../assets/icons/dashboards/indicator-dashboard.svg';
+import overviewDashboardIcon from '../assets/icons/dashboards/overview-dashboard.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
 
@@ -9,13 +11,13 @@ const routes = [
   {
     name: 'Overview Dashboard',
     path: '/app/dashboards/overview',
-    icon: dashboardIcon,
+    icon: overviewDashboardIcon,
     description: modules.alertsIssued,
   },
   {
     name: 'Indicators Dashboard',
     path: '/app/dashboards/needs',
-    icon: dashboardIcon,
+    icon: indicatorDashboardIcon,
     description: modules.alertsIssued,
   },
 
