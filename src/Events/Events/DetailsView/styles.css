@@ -3,9 +3,14 @@
   border-bottom: 1px solid #ededed;
 }
 
+.EventDetailsSectionHeaderText {
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 1em;
+  font-weight: 600;
+}
+
 .EventBody {
-  /* display: flex;
-  direction: column; */
   height: 100%;
   overflow: hidden;
 }

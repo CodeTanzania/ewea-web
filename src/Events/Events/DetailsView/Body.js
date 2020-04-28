@@ -13,7 +13,6 @@ import ReactToPrint from 'react-to-print';
 
 import {
   ApartmentOutlined,
-  AuditOutlined,
   DownloadOutlined,
   EditOutlined,
   EnvironmentOutlined,
@@ -59,7 +58,7 @@ import './styles.css';
 import IndicatorDashboard from '../../../Dashboards/Indicators';
 import EventDetailsViewHeader from './Header';
 
-const { Paragraph } = Typography;
+const { Paragraph, Text } = Typography;
 
 /**
  * @function
@@ -124,55 +123,6 @@ const EventToolbar = ({
           />
         </Col>
 
-        {/* <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<UserAddOutlined />}
-            title="Add Focal Person"
-            className="actionButton"
-            onClick={() =>
-              openForm({
-                key: 'focalPeople',
-                label: 'Add participated Focal People',
-              })
-            }
-          />
-        </Col>
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<UsergroupAddOutlined />}
-            title="Add Agency"
-            className="actionButton"
-            onClick={() =>
-              openForm({ key: 'agencies', label: 'Add participated Agencies' })
-            }
-          />
-        </Col>
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<EnvironmentOutlined />}
-            title="Update Affected Areas"
-            className="actionButton"
-            onClick={() =>
-              openForm({ key: 'areas', label: 'Add affected Areas' })
-            }
-          />
-        </Col>
-        <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<FileDoneOutlined />}
-            title="Update Actions Taken"
-            className="actionButton"
-          />
-        </Col> */}
-
         <Col span={1}>
           <Button
             shape="circle"
@@ -193,7 +143,7 @@ const EventToolbar = ({
             onClick={() => openForm({ key: 'file', label: 'Upload File' })}
           />
         </Col>
-        <Col span={1}>
+        {/* <Col span={1}>
           <Button
             shape="circle"
             size="large"
@@ -204,7 +154,7 @@ const EventToolbar = ({
               openForm({ key: 'damage', label: 'Record Effect & Need' })
             }
           />
-        </Col>
+        </Col> */}
         <Col span={1}>
           <Button
             shape="circle"
@@ -310,9 +260,8 @@ const EventCause = ({ cause }) => {
 export const EventDetailsSectionHeader = ({ title, actions }) => {
   return (
     <div className="EventDetailsSectionHeader">
-      <h4>
-        {title} {actions}
-      </h4>
+      <span className="EventDetailsSectionHeaderText">{title}</span>
+      {actions}
     </div>
   );
 };
@@ -827,6 +776,35 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
 
 /**
  * @function
+ * @name PrintedEventDetails
+ * @description This is event details section which will be visible on printed
+ * report only
+ * @param {object} props PrintEventDetails Props
+ * @returns {object} PrintedEventDetails Component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const PrintedEventDetails = ({ type, description, number, reportedDate }) => {
+  return (
+    <>
+      <p>
+        <Text strong>Event: </Text> {type}
+      </p>
+      <p>
+        <Text strong>Event Number: </Text> {number} <br />
+      </p>
+      <p>
+        <Text strong>Event Description:</Text>: {description} <br />
+      </p>
+      <p>
+        <Text strong>Reported Date: </Text> {reportedDate} <br />
+      </p>
+    </>
+  );
+};
+
+/**
+ * @function
  * @name  EventDetailsViewBody
  * @description Event Details body view
  *
@@ -871,6 +849,14 @@ const EventDetailsViewBody = ({
       />
       <div className="EventBodyContent">
         <Row ref={componentRef}>
+          <Col span={16} className="print-only">
+            <PrintedEventDetails
+              number={get(event, 'number', 'N/A')}
+              type={get(event, 'type.strings.name.en', 'N/A')}
+              description={get(event, 'description', 'N/A')}
+              reportedDate={formatDate(event.createdAt, 'DD/MM/YYYY')}
+            />
+          </Col>
           <Col span={16}>
             <EventCause cause={get(event, 'causes', 'N/A')} />
             <EventLocations areas={event.areas} openForm={openForm} />
@@ -1022,6 +1008,13 @@ EventCause.propTypes = {
   cause: PropTypes.string.isRequired,
 };
 
+PrintedEventDetails.propTypes = {
+  type: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  number: PropTypes.string.isRequired,
+  reportedDate: PropTypes.string.isRequired,
+};
+
 EventDetailsViewBody.propTypes = {
   event: PropTypes.shape({
     _id: PropTypes.string,
@@ -1040,6 +1033,7 @@ EventDetailsViewBody.propTypes = {
     interventions: PropTypes.arrayOf(PropTypes.string),
     remarks: PropTypes.arrayOf(PropTypes.string),
     places: PropTypes.string,
+    createdAt: PropTypes.string,
   }).isRequired,
   changelogs: PropTypes.arrayOf(PropTypes.shape({ _id: PropTypes.string }))
     .isRequired,

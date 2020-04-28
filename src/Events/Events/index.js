@@ -589,10 +589,10 @@ class Events extends Component {
         <Drawer
           title={
             <EventDetailsViewHeader
-              number={event ? event.number : 'N/A'}
-              description={event ? event.description : 'N/A'}
-              type={event ? event.type.strings.name.en : 'N/A'}
-              stage={event ? event.stage : 'N/A'}
+              number={get(event, 'number', 'N/A')}
+              description={get(event, 'description', 'N/A')}
+              type={get(event, 'type.strings.name.en', 'N/A')}
+              stage={get(event, 'stage', 'N/A')}
             />
           }
           placement="right"
