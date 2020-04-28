@@ -6,6 +6,8 @@ import overviewDashboardIcon from '../assets/icons/dashboards/overview-dashboard
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
 
+// TODO update module descriptions to point to right descriptions
+
 /* constants */
 const routes = [
   {
@@ -15,22 +17,32 @@ const routes = [
     description: modules.alertsIssued,
   },
   {
+    name: 'Events Dashboard',
+    path: '/app/dashboards/events',
+    icon: dashboardIcon,
+    description: modules.alertsIssued,
+  },
+  {
     name: 'Indicators Dashboard',
-    path: '/app/dashboards/needs',
+    path: '/app/dashboards/indicators',
     icon: indicatorDashboardIcon,
     description: modules.alertsIssued,
   },
-
   {
     name: 'Effects Dashboard',
     path: '/app/dashboards/effects',
     icon: dashboardIcon,
     description: modules.alertsIssued,
   },
-
   {
     name: 'Needs Dashboard',
     path: '/app/dashboards/needs',
+    icon: dashboardIcon,
+    description: modules.alertsIssued,
+  },
+  {
+    name: 'Stakeholders Dashboard',
+    path: '/app/dashboards/stakeholders',
     icon: dashboardIcon,
     description: modules.alertsIssued,
   },

@@ -33,12 +33,15 @@ import FeatureTypes from '../GeographicalFeatures/FeatureTypes';
 import Units from '../Units';
 // import StakeholdersNotifications from '../Stakeholders/Notifications';
 import StakeholdersRoles from '../Stakeholders/Roles';
-import OverviewDashboard from '../Dashboards';
-import Dashboards from '../navigation/Dashboards';
 import Settings from '../navigation/Settings';
 import ActionsTaken from '../Dashboards/ActionsTaken';
 import SecureRoute from '../Auth/SecureRoute';
 import HeaderNavMenu from '../navigation/HeaderNavMenu';
+// Dashboards
+import Dashboards from '../navigation/Dashboards';
+import OverviewDashboard from '../Dashboards';
+import EventsOverviewDashboard from '../Dashboards/EventsOverview';
+import StakeholdersDashboard from '../Dashboards/Stakeholders';
 
 import './styles.css';
 
@@ -94,6 +97,14 @@ const breadcrumbNameMap = {
   '/app/dashboards/effects': {
     name: 'Effects Dashboard',
     title: 'Effects Dashboard',
+  },
+  '/app/dashboards/stakeholders': {
+    name: 'Stakeholders Dashboard',
+    title: 'Stakeholders Dashboard',
+  },
+  '/app/dashboards/events': {
+    name: 'Events Dashboard',
+    title: 'Events Dashboard',
   },
 
   /* settings */
@@ -283,6 +294,7 @@ const BaseLayout = (props) => {
             component={ActionCatalogue}
           />
 
+          {/* Dashboard routes */}
           <SecureRoute
             exact
             path={`${baseUrl}/dashboards`}
@@ -292,6 +304,15 @@ const BaseLayout = (props) => {
             path={`${baseUrl}/dashboards/overview`}
             component={OverviewDashboard}
           />
+          <SecureRoute
+            path={`${baseUrl}/dashboards/stakeholders`}
+            component={StakeholdersDashboard}
+          />
+          <SecureRoute
+            path={`${baseUrl}/dashboards/events`}
+            component={EventsOverviewDashboard}
+          />
+          {/* end dashboard routes */}
           <SecureRoute path={`${baseUrl}/actions`} component={ActionsTaken} />
           <SecureRoute
             exact
