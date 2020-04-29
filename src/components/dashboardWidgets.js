@@ -5,12 +5,19 @@ import { Card, Typography, Col, Row } from 'antd';
 
 const { Text } = Typography;
 
+export const PRIMARY_COLOR = '#1890FF';
+export const WARNING_COLOR = '#FAAD14';
+export const DANGER_COLOR = '#FF4D4F';
+export const SECONDARY_COLOR = '#979797';
+export const SUCCESS_COLOR = '#52C41A';
+export const PURPLE_COLOR = '#3F51B5';
+
 export const NumberWidget = ({
   title,
   secondaryText,
   value,
   icon,
-  bottomBorderColor = '#979797',
+  bottomBorderColor = SECONDARY_COLOR,
 }) => {
   return (
     <Card
@@ -22,7 +29,9 @@ export const NumberWidget = ({
     >
       <Row>
         <Col span={22}>
-          <Text style={{ color: '#979797' }}>{toUpper(title)}</Text>
+          <Text style={{ color: '#8c8c8c', fontWeight: '600' }}>
+            {toUpper(title)}
+          </Text>
         </Col>
         <Col span={2}>{icon}</Col>
       </Row>
