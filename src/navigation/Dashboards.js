@@ -3,6 +3,9 @@ import React from 'react';
 import dashboardIcon from '../assets/icons/dashboards.svg';
 import indicatorDashboardIcon from '../assets/icons/dashboards/indicator-dashboard.svg';
 import overviewDashboardIcon from '../assets/icons/dashboards/overview-dashboard.svg';
+import caseManagementIcon from '../assets/icons/dashboards/case-management.svg';
+import resourceManagementIcon from '../assets/icons/dashboards/resource-management.svg';
+import vehicleDispatchIcon from '../assets/icons/dashboards/vehicle-dispatch.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
 
@@ -44,6 +47,24 @@ const routes = [
     name: 'Stakeholders Dashboard',
     path: '/app/dashboards/stakeholders',
     icon: dashboardIcon,
+    description: modules.alertsIssued,
+  },
+  {
+    name: 'Case Management',
+    path: '/app/dashboards/casemanagement',
+    icon: caseManagementIcon,
+    description: modules.alertsIssued,
+  },
+  {
+    name: 'Resource Management',
+    path: '/app/dashboards/resourcemanagement',
+    icon: resourceManagementIcon,
+    description: modules.alertsIssued,
+  },
+  {
+    name: 'Vehicle Dispatch',
+    path: '/app/dashboards/vehicledispatch',
+    icon: vehicleDispatchIcon,
     description: modules.alertsIssued,
   },
 ];
