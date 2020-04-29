@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Input, Button, Form } from 'antd';
-import { Connect, signin, initializeApp } from '@codetanzania/ewea-api-states';
+import { Connect, signIn, initializeApp } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
 import logo from '../../../assets/icons/emislogo-blue.png';
 import './styles.css';
@@ -19,7 +19,7 @@ import './styles.css';
  */
 const SignInForm = ({ loading, history }) => {
   const onFinish = (values) => {
-    signin(
+    signIn(
       values,
       () => {
         history.push('/app');
@@ -74,7 +74,7 @@ const SignInForm = ({ loading, history }) => {
           <Button
             type="primary"
             htmlType="submit"
-            className="signin-form-button"
+            className="signIn-form-button"
             loading={loading}
           >
             Sign In

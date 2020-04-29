@@ -1,6 +1,6 @@
 import { LockOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Menu, Modal } from 'antd';
-import { signout } from '@codetanzania/ewea-api-states';
+import { signOut as logout } from '@codetanzania/ewea-api-states';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
@@ -18,7 +18,7 @@ const UserMenu = ({ history: { push } }) => {
    * @since 0.1.0
    */
   const signOut = () => {
-    signout();
+    logout();
     push('/signin');
   };
 
