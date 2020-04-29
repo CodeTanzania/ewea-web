@@ -3,9 +3,9 @@ import React from 'react';
 import dashboardIcon from '../assets/icons/dashboards.svg';
 import indicatorDashboardIcon from '../assets/icons/dashboards/indicator-dashboard.svg';
 import overviewDashboardIcon from '../assets/icons/dashboards/overview-dashboard.svg';
-import caseManagementIcon from '../assets/icons/dashboards/case-management.svg';
-import resourceManagementIcon from '../assets/icons/dashboards/resource-management.svg';
-import vehicleDispatchIcon from '../assets/icons/dashboards/vehicle-dispatch.svg';
+import caseManagementIcon from '../assets/icons/dashboards/case-management-disabled.svg';
+import resourceManagementIcon from '../assets/icons/dashboards/resource-management-disabled.svg';
+import vehicleDispatchIcon from '../assets/icons/dashboards/vehicle-dispatch-disabled.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
 
