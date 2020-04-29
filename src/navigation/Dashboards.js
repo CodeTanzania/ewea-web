@@ -1,6 +1,7 @@
 import React from 'react';
 
-import dashboardIcon from '../assets/icons/dashboards.svg';
+import eventsIcon from '../assets/icons/events.svg';
+import stakeholdersIcon from '../assets/icons/dashboards/stakeholders.svg';
 import indicatorDashboardIcon from '../assets/icons/dashboards/indicator-dashboard.svg';
 import overviewDashboardIcon from '../assets/icons/dashboards/overview-dashboard.svg';
 import caseManagementIcon from '../assets/icons/dashboards/case-management-disabled.svg';
@@ -22,7 +23,7 @@ const routes = [
   {
     name: 'Events Dashboard',
     path: '/app/dashboards/events',
-    icon: dashboardIcon,
+    icon: eventsIcon,
     description: modules.alertsIssued,
   },
   {
@@ -30,42 +31,34 @@ const routes = [
     path: '/app/dashboards/indicators',
     icon: indicatorDashboardIcon,
     description: modules.alertsIssued,
-  },
-  {
-    name: 'Effects Dashboard',
-    path: '/app/dashboards/effects',
-    icon: dashboardIcon,
-    description: modules.alertsIssued,
-  },
-  {
-    name: 'Needs Dashboard',
-    path: '/app/dashboards/needs',
-    icon: dashboardIcon,
-    description: modules.alertsIssued,
+    disabled: true,
   },
   {
     name: 'Stakeholders Dashboard',
     path: '/app/dashboards/stakeholders',
-    icon: dashboardIcon,
+    icon: stakeholdersIcon,
     description: modules.alertsIssued,
   },
   {
-    name: 'Case Management',
+    name: 'Cases',
     path: '/app/dashboards/casemanagement',
     icon: caseManagementIcon,
     description: modules.alertsIssued,
+    disabled: true,
   },
   {
-    name: 'Resource Management',
+    name: 'Resources',
     path: '/app/dashboards/resourcemanagement',
     icon: resourceManagementIcon,
     description: modules.alertsIssued,
+    disabled: true,
   },
   {
-    name: 'Vehicle Dispatch',
+    name: 'Vehicle Dispatches',
     path: '/app/dashboards/vehicledispatch',
     icon: vehicleDispatchIcon,
     description: modules.alertsIssued,
+    disabled: true,
   },
 ];
 

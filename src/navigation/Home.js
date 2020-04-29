@@ -8,6 +8,9 @@ import NavigationMenu from '../components/NavigationMenu';
 import eventsIcon from '../assets/icons/events.svg';
 // import actionsTakenIcon from '../assets/icons/actionstaken.svg';
 import actionCatalogueIcon from '../assets/icons/actioncatalog.svg';
+import caseManagementIcon from '../assets/icons/dashboards/case-management-disabled.svg';
+import resourceManagementIcon from '../assets/icons/dashboards/resource-management-disabled.svg';
+import vehicleDispatchIcon from '../assets/icons/dashboards/vehicle-dispatch-disabled.svg';
 import modules from '../modules.json';
 
 /* constants */
@@ -17,6 +20,27 @@ const routes = [
     path: '/app/events',
     icon: eventsIcon,
     description: modules.alertsIssued,
+  },
+  {
+    name: 'Cases',
+    path: '/app/dashboards/casemanagement',
+    icon: caseManagementIcon,
+    description: modules.alertsIssued,
+    disabled: true,
+  },
+  {
+    name: 'Vehicle Dispatches',
+    path: '/app/dashboards/vehicledispatch',
+    icon: vehicleDispatchIcon,
+    description: modules.alertsIssued,
+    disabled: true,
+  },
+  {
+    name: 'Resources',
+    path: '/app/dashboards/resourcemanagement',
+    icon: resourceManagementIcon,
+    description: modules.alertsIssued,
+    disabled: true,
   },
   // {
   //   name: 'Actions Taken',

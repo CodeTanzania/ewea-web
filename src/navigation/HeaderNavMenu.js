@@ -9,6 +9,9 @@ import focalPeopleIcon from '../assets/icons/focalpeople.svg';
 import eventsIcon from '../assets/icons/events.svg';
 // import actionsTakenIcon from '../assets/icons/actionstaken.svg';
 import actionCatalogueIcon from '../assets/icons/actioncatalog.svg';
+import caseManagementIcon from '../assets/icons/dashboards/case-management-disabled.svg';
+import resourceManagementIcon from '../assets/icons/dashboards/resource-management-disabled.svg';
+import vehicleDispatchIcon from '../assets/icons/dashboards/vehicle-dispatch-disabled.svg';
 import './styles.css';
 
 /* constants */
@@ -18,11 +21,24 @@ const routes = [
     path: '/app/events',
     icon: eventsIcon,
   },
-  // {
-  //   name: 'Actions Taken',
-  //   path: '/app/actions',
-  //   icon: actionsTakenIcon,
-  // },
+  {
+    name: 'Cases',
+    path: '/app/dashboards/casemanagement',
+    icon: caseManagementIcon,
+    disabled: true,
+  },
+  {
+    name: 'Vehicle Dispatches',
+    path: '/app/dashboards/vehicledispatch',
+    icon: vehicleDispatchIcon,
+    disabled: true,
+  },
+  {
+    name: 'Resources',
+    path: '/app/dashboards/resourcemanagement',
+    icon: resourceManagementIcon,
+    disabled: true,
+  },
   {
     name: 'Action Catalogue',
     path: '/app/actioncatalogue',
