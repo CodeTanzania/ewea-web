@@ -35,13 +35,6 @@ const routes = [
     description: modules.alertsIssued,
     disabled: true,
   },
-  {
-    name: 'Resources',
-    path: '/app/dashboards/resourcemanagement',
-    icon: resourceManagementIcon,
-    description: modules.alertsIssued,
-    disabled: true,
-  },
   // {
   //   name: 'Actions Taken',
   //   path: '/app/actions',
@@ -53,6 +46,13 @@ const routes = [
     path: '/app/actioncatalogue',
     icon: actionCatalogueIcon,
     description: modules.alertsActions,
+  },
+  {
+    name: 'Resources',
+    path: '/app/dashboards/resourcemanagement',
+    icon: resourceManagementIcon,
+    description: modules.alertsIssued,
+    disabled: true,
   },
   {
     name: 'Focal People',
