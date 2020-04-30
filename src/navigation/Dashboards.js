@@ -2,7 +2,7 @@ import React from 'react';
 
 import eventsIcon from '../assets/icons/events.svg';
 import stakeholdersIcon from '../assets/icons/dashboards/stakeholders.svg';
-import indicatorDashboardIcon from '../assets/icons/dashboards/indicator-dashboard.svg';
+import indicatorDashboardIcon from '../assets/icons/dashboards/indicator-dashboard-disabled.svg';
 import overviewDashboardIcon from '../assets/icons/dashboards/overview-dashboard.svg';
 import caseManagementIcon from '../assets/icons/dashboards/case-management-disabled.svg';
 import resourceManagementIcon from '../assets/icons/dashboards/resource-management-disabled.svg';
