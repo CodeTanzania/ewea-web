@@ -7,6 +7,7 @@ import overviewDashboardIcon from '../assets/icons/dashboards/overview-dashboard
 import caseManagementIcon from '../assets/icons/dashboards/case-management-disabled.svg';
 import resourceManagementIcon from '../assets/icons/dashboards/resource-management-disabled.svg';
 import vehicleDispatchIcon from '../assets/icons/dashboards/vehicle-dispatch-disabled.svg';
+import criticalInfrastructuresIcon from '../assets/icons/dashboards/infrastructure-disabled.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
 
@@ -15,26 +16,26 @@ import modules from '../modules.json';
 /* constants */
 const routes = [
   {
-    name: 'Overview Dashboard',
+    name: 'Overview',
     path: '/app/dashboards/overview',
     icon: overviewDashboardIcon,
     description: modules.alertsIssued,
   },
   {
-    name: 'Events Dashboard',
+    name: 'Events',
     path: '/app/dashboards/events',
     icon: eventsIcon,
     description: modules.alertsIssued,
   },
   {
-    name: 'Indicators Dashboard',
+    name: 'Indicators',
     path: '/app/dashboards/indicators',
     icon: indicatorDashboardIcon,
     description: modules.alertsIssued,
     disabled: true,
   },
   {
-    name: 'Stakeholders Dashboard',
+    name: 'Stakeholders',
     path: '/app/dashboards/stakeholders',
     icon: stakeholdersIcon,
     description: modules.alertsIssued,
@@ -57,6 +58,13 @@ const routes = [
     name: 'Vehicle Dispatches',
     path: '/app/dashboards/vehicledispatch',
     icon: vehicleDispatchIcon,
+    description: modules.alertsIssued,
+    disabled: true,
+  },
+  {
+    name: 'Critical Infrastructures',
+    path: '/app/dashboards/features',
+    icon: criticalInfrastructuresIcon,
     description: modules.alertsIssued,
     disabled: true,
   },
