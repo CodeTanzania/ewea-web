@@ -39,7 +39,7 @@ import SecureRoute from '../Auth/SecureRoute';
 import HeaderNavMenu from '../navigation/HeaderNavMenu';
 // Dashboards
 import Dashboards from '../navigation/Dashboards';
-import OverviewDashboard from '../Dashboards';
+import OverviewDashboard from '../Dashboards/Overview';
 import EventsOverviewDashboard from '../Dashboards/EventsOverview';
 import StakeholdersDashboard from '../Dashboards/Stakeholders';
 
