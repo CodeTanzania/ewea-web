@@ -19,55 +19,33 @@ import {
   WARNING_COLOR,
 } from '../components/dashboardWidgets';
 
-const levelDataSource = [
-  { level: 'Region', agencies: 10, focals: 30 },
-  { level: 'Districts', agencies: 10, focals: 30 },
-  { level: 'Ward', agencies: 10, focals: 30 },
-];
-const levelColumns = [
-  {
-    title: 'Level',
-    dataIndex: 'level',
-    key: 'level',
-  },
-  {
-    title: 'Agencies',
-    dataIndex: 'agencies',
-    key: 'agencies',
-  },
-  {
-    title: 'Focal People',
-    dataIndex: 'focals',
-    key: 'focals',
-  },
-];
+const titleMap = {
+  groups: 'Group',
+  levels: 'Level',
+  areas: 'Area',
+  roles: 'Role',
+};
 
-const groupDataSource = [
-  { group: 'Defense & Security', agencies: 10, focals: 30 },
-  { group: 'Faith Based Organization', agencies: 10, focals: 30 },
-  { group: 'Hospitals', agencies: 10, focals: 30 },
-  { group: 'Ambulance Services', agencies: 10, focals: 30 },
-  { group: 'Scout', agencies: 10, focals: 30 },
-  { group: 'Private Sector', agencies: 10, focals: 30 },
-];
-
-const groupColumns = [
-  {
-    title: 'Group',
-    dataIndex: 'group',
-    key: 'level',
-  },
-  {
-    title: 'Agencies',
-    dataIndex: 'agencies',
-    key: 'agencies',
-  },
-  {
-    title: 'Focal People',
-    dataIndex: 'focals',
-    key: 'focals',
-  },
-];
+const generateColumnsFor = (name, titles) => {
+  return [
+    {
+      title: titles[name],
+      dataIndex: ['name', 'en'],
+    },
+    {
+      title: 'Total',
+      dataIndex: 'total',
+    },
+    {
+      title: 'Agencies',
+      dataIndex: 'agency',
+    },
+    {
+      title: 'Focal People',
+      dataIndex: 'focal',
+    },
+  ];
+};
 
 const StakeholdersDashboard = ({ report, loading }) => {
   useEffect(() => {
@@ -75,7 +53,7 @@ const StakeholdersDashboard = ({ report, loading }) => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#f5f5f547', height: '100%' }}>
+    <div>
       <Spin spinning={loading}>
         <Row>
           <Col span={6}>
@@ -119,28 +97,19 @@ const StakeholdersDashboard = ({ report, loading }) => {
           <Col span={12}>
             <Row>
               <Col span={24}>
-                <SectionCard title="Overview-Working Level Breakdown">
+                <SectionCard title="Overall - Working Level Breakdown">
                   <Table
-                    dataSource={levelDataSource}
-                    columns={levelColumns}
+                    dataSource={get(report, 'overall.levels', [])}
+                    columns={generateColumnsFor('levels', titleMap)}
                     pagination={false}
                   />
                 </SectionCard>
               </Col>
               <Col span={24}>
-                <SectionCard title="Overview-Working Level Breakdown">
+                <SectionCard title="Overall - Designated Groups Breakdown">
                   <Table
-                    dataSource={levelDataSource}
-                    columns={levelColumns}
-                    pagination={false}
-                  />
-                </SectionCard>
-              </Col>
-              <Col span={24}>
-                <SectionCard title="Overview-Designated Groups Breakdown">
-                  <Table
-                    dataSource={groupDataSource}
-                    columns={groupColumns}
+                    dataSource={get(report, 'overall.groups', [])}
+                    columns={generateColumnsFor('groups', titleMap)}
                     pagination={false}
                   />
                 </SectionCard>
@@ -150,19 +119,10 @@ const StakeholdersDashboard = ({ report, loading }) => {
           <Col span={12}>
             <Row>
               <Col span={24}>
-                <SectionCard title="Overview-Designated Groups Breakdown">
+                <SectionCard title="Overall - Performing Roles Breakdown">
                   <Table
-                    dataSource={groupDataSource}
-                    columns={groupColumns}
-                    pagination={false}
-                  />
-                </SectionCard>
-              </Col>
-              <Col span={24}>
-                <SectionCard title="Overview-Designated Groups Breakdown">
-                  <Table
-                    dataSource={groupDataSource}
-                    columns={groupColumns}
+                    dataSource={get(report, 'overall.roles', [])}
+                    columns={generateColumnsFor('roles', titleMap)}
                     pagination={false}
                   />
                 </SectionCard>
