@@ -557,10 +557,19 @@ EventChangelogForm.propTypes = {
   event: PropTypes.shape({
     type: PropTypes.shape({ _id: PropTypes.string }),
     description: PropTypes.string,
-    certainty: PropTypes.string,
-    urgency: PropTypes.string,
     color: PropTypes.string,
-    severity: PropTypes.string,
+    certainty: PropTypes.shape({
+      _id: PropTypes.string,
+      strings: PropTypes.object,
+    }),
+    urgency: PropTypes.shape({
+      _id: PropTypes.string,
+      strings: PropTypes.object,
+    }),
+    severity: PropTypes.shape({
+      _id: PropTypes.string,
+      strings: PropTypes.object,
+    }),
   }).isRequired,
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func,

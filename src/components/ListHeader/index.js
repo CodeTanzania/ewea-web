@@ -53,7 +53,6 @@ const ListHeader = ({
 ListHeader.propTypes = {
   headerLayout: PropTypes.arrayOf(
     PropTypes.shape({
-      span: PropTypes.number.isRequired,
       header: PropTypes.string.isRequired,
     })
   ).isRequired,

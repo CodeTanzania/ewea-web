@@ -13,7 +13,6 @@ import {
 } from '@ant-design/icons';
 
 import { Dropdown, Button, Menu } from 'antd';
-import './styles.css';
 
 /**
  * @function
@@ -124,7 +123,7 @@ const ListItemActions = ({
       shape="circle"
       size="large"
       icon={<MoreOutlined />}
-      className="ListItemActionsButton"
+      className="actionButton"
       title="More actions"
     />
   </Dropdown>

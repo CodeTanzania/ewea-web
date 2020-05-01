@@ -11,7 +11,16 @@ import Toolbar from '../Toolbar';
 import ListHeader from '../ListHeader';
 import './styles.css';
 
-const ItemList = ({
+/**
+ * @function
+ * @name CustomList
+ * @description List UI with tool bar , list header and list items
+ * @param {object} props CustomList props
+ * @returns {object} CustomList component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const CustomList = ({
   itemName,
   items,
   page,
@@ -47,7 +56,7 @@ const ItemList = ({
     const selectedList = [...selectedItems];
 
     // eslint-disable-next-line
-    remove(selectedList, listItem => listItem._id === item._id);
+    remove(selectedList, (listItem) => listItem._id === item._id);
     setSelectedItems(selectedList);
   };
 
@@ -83,7 +92,7 @@ const ItemList = ({
 
     items.forEach((item) => {
       // eslint-disable-next-line
-      remove(uniqueSelectedList, listItem => listItem._id === item._id);
+      remove(uniqueSelectedList, (listItem) => listItem._id === item._id);
     });
 
     setSelectedItems(uniqueSelectedList);
@@ -101,7 +110,7 @@ const ItemList = ({
    * @version 0.1.0
    * @since 0.1.0
    */
-  const isSelected = item => map(selectedItems, '_id').includes(item._id); // eslint-disable-line
+  const isSelected = (item) => map(selectedItems, '_id').includes(item._id); // eslint-disable-line
 
   return (
     <div className="List">
@@ -148,7 +157,7 @@ const ItemList = ({
   );
 };
 
-ItemList.propTypes = {
+CustomList.propTypes = {
   loading: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.shape({ _id: PropTypes.string }))
     .isRequired,
@@ -158,7 +167,7 @@ ItemList.propTypes = {
   page: PropTypes.number.isRequired,
   itemCount: PropTypes.number.isRequired,
   onFilter: PropTypes.func,
-  onNotify: PropTypes.func.isRequired,
+  onNotify: PropTypes.func,
   onPaginate: PropTypes.func.isRequired,
   onRefresh: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,
@@ -166,9 +175,10 @@ ItemList.propTypes = {
   renderListItem: PropTypes.func.isRequired,
 };
 
-ItemList.defaultProps = {
+CustomList.defaultProps = {
   onFilter: null,
+  onNotify: null,
   generateExportUrl: null,
 };
 
-export default ItemList;
+export default CustomList;

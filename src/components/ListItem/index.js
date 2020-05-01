@@ -11,7 +11,7 @@ const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 3 };
 /**
  * @function
  * @name ListItem
- * @description Generic list item for list component
+ * @description Generic list item(row) for list component
  *
  *
  * @returns {object} React Component
@@ -109,7 +109,7 @@ const ListItem = ({
         {children}
         <Col {...isHoveredSpan}>
           {/* eslint-enable react/jsx-props-no-spreading */}
-          {isHovered && renderActions()}
+          {renderActions()}
         </Col>
       </Row>
     </div>

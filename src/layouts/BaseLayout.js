@@ -412,7 +412,7 @@ const BaseLayout = (props) => {
 };
 
 BaseLayout.propTypes = {
-  location: PropTypes.string.isRequired,
+  location: PropTypes.shape({ pathname: PropTypes.string }).isRequired,
   match: PropTypes.shape({ url: PropTypes.string, path: PropTypes.string })
     .isRequired,
 };
