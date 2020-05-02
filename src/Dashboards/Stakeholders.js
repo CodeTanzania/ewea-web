@@ -12,12 +12,14 @@ import {
 
 import {
   NumberWidget,
+  MapWidget,
   SectionCard,
   PRIMARY_COLOR,
   PURPLE_COLOR,
   SUCCESS_COLOR,
   WARNING_COLOR,
 } from '../components/dashboardWidgets';
+import DarDistricts from '../assets/maps/dar.districts.json';
 
 const titleMap = {
   groups: 'Group',
@@ -126,6 +128,14 @@ const StakeholdersDashboard = ({ report, loading }) => {
                     pagination={false}
                   />
                 </SectionCard>
+              </Col>
+              <Col span={24}>
+                <MapWidget
+                  title="Overall - Area District breakdown"
+                  shape={DarDistricts}
+                  center={[39.3067144, -6.8699698]}
+                  scale={50000}
+                />
               </Col>
             </Row>
           </Col>

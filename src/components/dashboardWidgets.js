@@ -1,7 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import toUpper from 'lodash/toUpper';
-import { Card, Typography, Col, Row } from 'antd';
+import { Card, Typography, Col, Row, Tooltip } from 'antd';
+import {
+  ComposableMap,
+  ZoomableGroup,
+  Geographies,
+  Geography,
+} from 'react-simple-maps';
 
 const { Text } = Typography;
 
@@ -71,4 +77,55 @@ export const SectionCard = ({ title, children }) => {
 SectionCard.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.instanceOf(PropTypes.node).isRequired,
+};
+
+export const MapWidget = ({ title, shape, center, scale }) => {
+  return (
+    <SectionCard title={title}>
+      <ComposableMap
+        projectionConfig={{
+          scale,
+        }}
+      >
+        <ZoomableGroup center={center}>
+          <Geographies geography={shape} disableOptimization>
+            {({ geographies }) =>
+              geographies.map((geography) => (
+                <Tooltip trigger="hover" title="Area" key={geography.rsmKey}>
+                  <Geography
+                    key={geography.rsmKey}
+                    geography={geography}
+                    style={{
+                      default: {
+                        fill: '#ddd',
+                        stroke: '#fff',
+                        outline: 'none',
+                      },
+                      hover: {
+                        fill: DARK_GREEN,
+                        stroke: '#fff',
+                        outline: 'none',
+                      },
+                      pressed: {
+                        fill: SUCCESS_COLOR,
+                        stroke: '#fff',
+                        outline: 'none',
+                      },
+                    }}
+                  />
+                </Tooltip>
+              ))
+            }
+          </Geographies>
+        </ZoomableGroup>
+      </ComposableMap>
+    </SectionCard>
+  );
+};
+
+MapWidget.propTypes = {
+  scale: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  shape: PropTypes.string.isRequired,
+  center: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
