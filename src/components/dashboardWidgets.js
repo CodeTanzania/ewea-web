@@ -67,7 +67,7 @@ export const SectionCard = ({ title, children }) => {
   return (
     <Card
       title={title}
-      style={{ margin: '10px', boxShadow: '2px 2px 5px #e9e9e9' }}
+      style={{ margin: '10px', boxShadow: '0 0 10px #e9e9e9' }}
     >
       {children}
     </Card>
