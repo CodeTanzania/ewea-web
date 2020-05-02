@@ -19,8 +19,19 @@ import {
   PURPLE_COLOR,
   SUCCESS_COLOR,
   WARNING_COLOR,
+  DANGER_COLOR,
 } from '../components/dashboardWidgets';
 
+/**
+ * @function
+ * @name OverviewDashboard
+ * @description Dashboard which renders overviews reports from different dashboards
+ * i.e stakeholders, events
+ * @param {object} props Overview Dashbaord props
+ * @returns {object} Overview Dashboard component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 const OverviewDashboard = ({ report, loading }) => {
   useEffect(() => {
     getOverviewsReport();
@@ -32,11 +43,11 @@ const OverviewDashboard = ({ report, loading }) => {
           <Col span={8}>
             <NumberWidget
               title="Total Events"
-              value="100"
-              bottomBorderColor="#faad14"
+              value={get(report, 'events.total', 0)}
+              bottomBorderColor={WARNING_COLOR}
               icon={
                 <WarningOutlined
-                  style={{ fontSize: '1.5em', color: '#faad14' }}
+                  style={{ fontSize: '1.5em', color: WARNING_COLOR }}
                 />
               }
             />
@@ -44,11 +55,11 @@ const OverviewDashboard = ({ report, loading }) => {
           <Col span={8}>
             <NumberWidget
               title="Active Events"
-              bottomBorderColor="#ff4d4f"
-              value="10"
+              bottomBorderColor={DANGER_COLOR}
+              value={get(report, 'events.active', 0)}
               icon={
                 <AlertOutlined
-                  style={{ fontSize: '1.5em', color: '#ff4d4f' }}
+                  style={{ fontSize: '1.5em', color: DANGER_COLOR }}
                 />
               }
             />
@@ -56,10 +67,12 @@ const OverviewDashboard = ({ report, loading }) => {
           <Col span={8}>
             <NumberWidget
               title="Ended Events"
-              value="90"
-              bottomBorderColor="#388E3C"
+              value={get(report, 'events.ended', 0)}
+              bottomBorderColor={SUCCESS_COLOR}
               icon={
-                <StopOutlined style={{ fontSize: '1.5em', color: '#388E3C' }} />
+                <StopOutlined
+                  style={{ fontSize: '1.5em', color: SUCCESS_COLOR }}
+                />
               }
             />
           </Col>

@@ -19,6 +19,15 @@ export const SUCCESS_COLOR = '#52C41A';
 export const PURPLE_COLOR = '#3F51B5';
 export const DARK_GREEN = '#388E3C';
 
+/**
+ * @function
+ * @name NumberWidget
+ * @description Number widget for dashboards
+ * @param {object} props Number widget props
+ * @returns {object} Render Number widget component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 export const NumberWidget = ({
   title,
   secondaryText,
@@ -31,7 +40,7 @@ export const NumberWidget = ({
       style={{
         borderBottom: `3px solid  ${bottomBorderColor}`,
         margin: '10px',
-        boxShadow: '2px 2px 5px #e9e9e9',
+        boxShadow: '0 0 10px #e9e9e9',
       }}
     >
       <Row>
@@ -63,6 +72,15 @@ NumberWidget.defaultProps = {
   bottomBorderColor: undefined,
 };
 
+/**
+ * @function
+ * @name SectionCard
+ * @description Card component for different sections in dashboard
+ * @param {object} props Section Card component props
+ * @returns {object} Section Card component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 export const SectionCard = ({ title, children }) => {
   return (
     <Card
@@ -79,6 +97,15 @@ SectionCard.propTypes = {
   children: PropTypes.instanceOf(PropTypes.node).isRequired,
 };
 
+/**
+ * @function
+ * @name MapWidget
+ * @description Render SVG map inside sectionCard component
+ * @param {object} props Map Widget component props
+ * @returns {object} Map Widget component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 export const MapWidget = ({ title, shape, center, scale }) => {
   return (
     <SectionCard title={title}>
