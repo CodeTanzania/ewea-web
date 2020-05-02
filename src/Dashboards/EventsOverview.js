@@ -1,157 +1,198 @@
-import React from 'react';
-import { Row, Col, Table } from 'antd';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import get from 'lodash/get';
+import { Connect, getEventsReport } from '@codetanzania/ewea-api-states';
+import { Row, Col, Table, Spin } from 'antd';
 import {
   WarningOutlined,
   AlertOutlined,
   StopOutlined,
 } from '@ant-design/icons';
 
-import { NumberWidget, SectionCard } from '../components/dashboardWidgets';
+import {
+  NumberWidget,
+  SectionCard,
+  WARNING_COLOR,
+  DANGER_COLOR,
+  DARK_GREEN,
+} from '../components/dashboardWidgets';
 
-const levelDataSource = [
-  { level: 'Region', agencies: 10, focals: 30 },
-  { level: 'Districts', agencies: 10, focals: 30 },
-  { level: 'Ward', agencies: 10, focals: 30 },
-];
-const levelColumns = [
-  {
-    title: 'Level',
-    dataIndex: 'level',
-    key: 'level',
-  },
-  {
-    title: 'Agencies',
-    dataIndex: 'agencies',
-    key: 'agencies',
-  },
-  {
-    title: 'Focal People',
-    dataIndex: 'focals',
-    key: 'focals',
-  },
-];
+const titleMap = {
+  areas: 'Area',
+  certainties: 'Certainty',
+  groups: 'Group',
+  levels: 'Level',
+  response: 'Response',
+  roles: 'Role',
+  severities: 'Severity',
+  statuses: 'Status',
+  types: 'Type',
+  urgencies: 'Urgency',
+};
 
-const groupDataSource = [
-  { group: 'Defense & Security', agencies: 10, focals: 30 },
-  { group: 'Faith Based Organization', agencies: 10, focals: 30 },
-  { group: 'Hospitals', agencies: 10, focals: 30 },
-  { group: 'Ambulance Services', agencies: 10, focals: 30 },
-  { group: 'Scout', agencies: 10, focals: 30 },
-  { group: 'Private Sector', agencies: 10, focals: 30 },
-];
+const generateColumnsFor = (name, titles) => {
+  return [
+    {
+      title: titles[name],
+      dataIndex: ['name', 'en'],
+    },
+    {
+      title: 'Total',
+      dataIndex: 'total',
+    },
+    {
+      title: 'Active',
+      dataIndex: 'active',
+    },
+    {
+      title: 'Ended',
+      dataIndex: 'ended',
+    },
+  ];
+};
 
-const groupColumns = [
-  {
-    title: 'Group',
-    dataIndex: 'group',
-    key: 'level',
-  },
-  {
-    title: 'Agencies',
-    dataIndex: 'agencies',
-    key: 'agencies',
-  },
-  {
-    title: 'Focal People',
-    dataIndex: 'focals',
-    key: 'focals',
-  },
-];
-
-const EventsOverviewDashboard = () => {
+/**
+ * @function
+ * @name EventsOverviewDashboard
+ * @description Events Overview Dashboard
+ * @param {object} props Event Overview dashboard props
+ * @returns {object} Event Overview React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const EventsOverviewDashboard = ({ report, loading }) => {
+  useEffect(() => {
+    getEventsReport();
+  }, []);
   return (
-    <div style={{ backgroundColor: '#f5f5f547', height: '100%' }}>
-      <Row>
-        <Col span={8}>
-          <NumberWidget
-            title="Total Events"
-            value="100"
-            bottomBorderColor="#faad14"
-            icon={
-              <WarningOutlined
-                style={{ fontSize: '1.5em', color: '#faad14' }}
-              />
-            }
-          />
-        </Col>
-        <Col span={8}>
-          <NumberWidget
-            title="Active Events"
-            bottomBorderColor="#ff4d4f"
-            value="10"
-            icon={
-              <AlertOutlined style={{ fontSize: '1.5em', color: '#ff4d4f' }} />
-            }
-          />
-        </Col>
-        <Col span={8}>
-          <NumberWidget
-            title="Ended Events"
-            value="90"
-            bottomBorderColor="#388E3C"
-            icon={
-              <StopOutlined style={{ fontSize: '1.5em', color: '#388E3C' }} />
-            }
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col span={12}>
-          <Row>
-            <Col span={24}>
-              <SectionCard title="Overview-Working Level Breakdown">
-                <Table
-                  dataSource={levelDataSource}
-                  columns={levelColumns}
-                  pagination={false}
+    <div>
+      <Spin spinning={loading}>
+        <Row>
+          <Col span={8}>
+            <NumberWidget
+              title="Total Events"
+              value={get(report, 'overview.total', 0)}
+              bottomBorderColor={WARNING_COLOR}
+              icon={
+                <WarningOutlined
+                  style={{ fontSize: '1.5em', color: WARNING_COLOR }}
                 />
-              </SectionCard>
-            </Col>
-            <Col span={24}>
-              <SectionCard title="Overview-Working Level Breakdown">
-                <Table
-                  dataSource={levelDataSource}
-                  columns={levelColumns}
-                  pagination={false}
+              }
+            />
+          </Col>
+          <Col span={8}>
+            <NumberWidget
+              title="Active Events"
+              bottomBorderColor={DANGER_COLOR}
+              value={get(report, 'overview.active', 0)}
+              icon={
+                <AlertOutlined
+                  style={{ fontSize: '1.5em', color: DANGER_COLOR }}
                 />
-              </SectionCard>
-            </Col>
-            <Col span={24}>
-              <SectionCard title="Overview-Designated Groups Breakdown">
-                <Table
-                  dataSource={groupDataSource}
-                  columns={groupColumns}
-                  pagination={false}
+              }
+            />
+          </Col>
+          <Col span={8}>
+            <NumberWidget
+              title="Ended Events"
+              value={get(report, 'overview.ended', 0)}
+              bottomBorderColor={DARK_GREEN}
+              icon={
+                <StopOutlined
+                  style={{ fontSize: '1.5em', color: DARK_GREEN }}
                 />
-              </SectionCard>
-            </Col>
-          </Row>
-        </Col>
-        <Col span={12}>
-          <Row>
-            <Col span={24}>
-              <SectionCard title="Overview-Designated Groups Breakdown">
-                <Table
-                  dataSource={groupDataSource}
-                  columns={groupColumns}
-                  pagination={false}
-                />
-              </SectionCard>
-            </Col>
-            <Col span={24}>
-              <SectionCard title="Overview-Designated Groups Breakdown">
-                <Table
-                  dataSource={groupDataSource}
-                  columns={groupColumns}
-                  pagination={false}
-                />
-              </SectionCard>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+              }
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12}>
+            <Row>
+              <Col span={24}>
+                <SectionCard title="Overall - Event Types Breakdown">
+                  <Table
+                    dataSource={get(report, 'overall.types', [])}
+                    columns={generateColumnsFor('types', titleMap)}
+                    pagination={false}
+                  />
+                </SectionCard>
+              </Col>
+              <Col span={24}>
+                <SectionCard title="Overall - Event Levels Breakdown">
+                  <Table
+                    dataSource={get(report, 'overall.levels', [])}
+                    columns={generateColumnsFor('levels', titleMap)}
+                    pagination={false}
+                  />
+                </SectionCard>
+              </Col>
+              <Col span={24}>
+                <SectionCard title="Overall - Event Urgencies Breakdown">
+                  <Table
+                    dataSource={get(report, 'overall.urgencies', [])}
+                    columns={generateColumnsFor('urgencies', titleMap)}
+                    pagination={false}
+                  />
+                </SectionCard>
+              </Col>
+            </Row>
+          </Col>
+          <Col span={12}>
+            <Row>
+              <Col span={24}>
+                <SectionCard title="Overall - Event Groups Breakdown">
+                  <Table
+                    dataSource={get(report, 'overall.groups', [])}
+                    columns={generateColumnsFor('groups', titleMap)}
+                    pagination={false}
+                  />
+                </SectionCard>
+              </Col>
+              <Col span={24}>
+                <SectionCard title="Overall - Event Severities Breakdown">
+                  <Table
+                    dataSource={get(report, 'overall.severities', [])}
+                    columns={generateColumnsFor('severities', titleMap)}
+                    pagination={false}
+                  />
+                </SectionCard>
+              </Col>
+              <Col span={24}>
+                <SectionCard title="Overall - Event Certainty Breakdown">
+                  <Table
+                    dataSource={get(report, 'overall.certainties', [])}
+                    columns={generateColumnsFor('certainties', titleMap)}
+                    pagination={false}
+                  />
+                </SectionCard>
+              </Col>
+              <Col span={24}>
+                <SectionCard title="Overall - Event Responses Breakdown">
+                  <Table
+                    dataSource={get(report, 'overall.responses', [])}
+                    columns={generateColumnsFor('responses', titleMap)}
+                    pagination={false}
+                  />
+                </SectionCard>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Spin>
     </div>
   );
 };
 
-export default EventsOverviewDashboard;
+EventsOverviewDashboard.propTypes = {
+  report: PropTypes.shape({ overview: PropTypes.object }),
+  loading: PropTypes.bool.isRequired,
+};
+
+EventsOverviewDashboard.defaultProps = {
+  report: null,
+};
+
+export default Connect(EventsOverviewDashboard, {
+  report: 'eventsReport.data',
+  loading: 'eventsReport.loading',
+});

@@ -11,6 +11,7 @@ export const DANGER_COLOR = '#FF4D4F';
 export const SECONDARY_COLOR = '#979797';
 export const SUCCESS_COLOR = '#52C41A';
 export const PURPLE_COLOR = '#3F51B5';
+export const DARK_GREEN = '#388E3C';
 
 export const NumberWidget = ({
   title,
