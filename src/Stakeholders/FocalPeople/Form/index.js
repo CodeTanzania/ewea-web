@@ -1,5 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { postFocalPerson, putFocalPerson } from '@codetanzania/ewea-api-states';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Col, Input, Row } from 'antd';
@@ -15,6 +15,7 @@ const {
   getPartyRoles,
   getPartyGroups,
 } = httpActions;
+const { postFocalPerson, putFocalPerson } = reduxActions;
 const { TextArea } = Input;
 
 /**

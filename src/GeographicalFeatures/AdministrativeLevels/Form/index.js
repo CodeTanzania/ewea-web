@@ -1,13 +1,11 @@
-import {
-  putAdministrativeLevel,
-  postAdministrativeLevel,
-} from '@codetanzania/ewea-api-states';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { Button, Input, Form } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
+const { putAdministrativeLevel, postAdministrativeLevel } = reduxActions;
 const { TextArea } = Input;
 const formItemLayout = {
   labelCol: {

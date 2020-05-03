@@ -1,15 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  Connect,
-  getFeatures,
-  openFeatureForm,
-  searchFeatures,
-  selectFeature,
-  closeFeatureForm,
-  paginateFeatures,
-  refreshFeatures,
-  deleteFeature,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
@@ -26,6 +16,24 @@ import './styles.css';
 import MapPoint from '../../Map/MapPoint';
 
 /* constants */
+const {
+  getFeaturesExportUrl,
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getAgencies,
+  getRoles,
+} = httpActions;
+const {
+  getFeatures,
+  openFeatureForm,
+  searchFeatures,
+  selectFeature,
+  closeFeatureForm,
+  paginateFeatures,
+  refreshFeatures,
+  deleteFeature,
+} = reduxActions;
 const nameSpan = { xxl: 5, xl: 6, lg: 6, md: 10, sm: 12, xs: 10 };
 const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 3, xs: 3 };
 const amenitySpan = { xxl: 4, xl: 4, lg: 3, md: 4, sm: 5, xs: 5 };
@@ -39,14 +47,6 @@ const headerLayout = [
   { ...addressSpan, header: 'Address' },
   { ...descriptionSpan, header: 'Description' },
 ];
-const {
-  getFeaturesExportUrl,
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getAgencies,
-  getRoles,
-} = httpActions;
 
 const { confirm } = Modal;
 

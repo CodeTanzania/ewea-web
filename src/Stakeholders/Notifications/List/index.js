@@ -1,9 +1,7 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  paginateCampaigns,
-  refreshCampaigns,
-  deleteCampaign,
-} from '@codetanzania/ewea-api-states';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { List } from 'antd';
 import concat from 'lodash/concat';
 import map from 'lodash/map';
@@ -11,14 +9,13 @@ import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
 import remove from 'lodash/remove';
 import intersectionBy from 'lodash/intersectionBy';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import ListHeader from '../../../components/ListHeader';
 import { notifyError, notifySuccess } from '../../../util';
 import Toolbar from '../../../components/Toolbar';
 import CampaignListItem from '../ListItem';
 
 const { getCampaignsExportUrl } = httpActions;
+const { paginateCampaigns, refreshCampaigns, deleteCampaign } = reduxActions;
 
 /* constants */
 const headerLayout = [
@@ -100,7 +97,7 @@ class CampaignList extends Component {
     campaigns.forEach((campaign) => {
       remove(
         selectedList,
-        item => item._id === campaign._id // eslint-disable-line
+        (item) => item._id === campaign._id // eslint-disable-line
       );
     });
 
@@ -127,7 +124,7 @@ class CampaignList extends Component {
 
     remove(
       selectedList,
-      item => item._id === campaign._id // eslint-disable-line
+      (item) => item._id === campaign._id // eslint-disable-line
     );
 
     this.setState({ selectedCampaign: selectedList });
@@ -195,7 +192,7 @@ class CampaignList extends Component {
                 sentAt={campaign.createdAt}
                 isSelected={
                   // eslint-disable-next-line
-                  map(selectedCampaign, item => item._id).includes(
+                  map(selectedCampaign, (item) => item._id).includes(
                     // eslint-disable-next-line
                     campaign._id
                   )

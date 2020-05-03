@@ -1,19 +1,9 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  closeNotificationTemplateForm,
-  Connect,
-  getNotificationTemplates,
-  openNotificationTemplateForm,
-  searchNotificationTemplates,
-  selectNotificationTemplate,
-  paginateNotificationTemplates,
-  deleteNotificationTemplate,
-  refreshNotificationTemplates,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
@@ -35,6 +25,16 @@ const {
   getAgencies,
   // getFocalPeople,
 } = httpActions;
+const {
+  closeNotificationTemplateForm,
+  getNotificationTemplates,
+  openNotificationTemplateForm,
+  searchNotificationTemplates,
+  selectNotificationTemplate,
+  paginateNotificationTemplates,
+  deleteNotificationTemplate,
+  refreshNotificationTemplates,
+} = reduxActions;
 
 const nameSpan = { xxl: 6, xl: 6, lg: 6, md: 7, sm: 7, xs: 7 };
 const descriptionSpan = { xxl: 12, xl: 12, lg: 12, md: 10, sm: 10, xs: 11 };

@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  postEventResponse,
-  putEventResponse,
-} from '@codetanzania/ewea-api-states';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { Button, Input, Form } from 'antd';
 import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
+const { postEventResponse, putEventResponse } = reduxActions;
 const { TextArea } = Input;
 const formItemLayout = {
   labelCol: {

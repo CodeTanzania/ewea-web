@@ -1,11 +1,4 @@
-import {
-  Connect,
-  getFeatures,
-  openFeatureForm,
-  selectFeature,
-  closeFeatureForm,
-  searchFeatures,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { PlusOutlined } from '@ant-design/icons';
 import { Input, Modal, Col, Row, Button } from 'antd';
 import PropTypes from 'prop-types';
@@ -16,6 +9,13 @@ import EvacuationCenterFilters from './Filters';
 import EvacuationCentersActionBar from './ActionBar';
 import './styles.css';
 
+const {
+  getFeatures,
+  openFeatureForm,
+  selectFeature,
+  closeFeatureForm,
+  searchFeatures,
+} = reduxActions;
 const { Search } = Input;
 
 /**

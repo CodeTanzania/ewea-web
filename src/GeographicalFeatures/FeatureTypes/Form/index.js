@@ -1,10 +1,10 @@
-import { putFeatureType, postFeatureType } from '@codetanzania/ewea-api-states';
-// import { Form } from '@ant-design/compatible';
-// import '@ant-design/compatible/assets/index.css';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { Button, Input, Form } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { notifyError, notifySuccess } from '../../../util';
+
+const { putFeatureType, postFeatureType } = reduxActions;
 
 /* constants */
 const { TextArea } = Input;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Connect, postCampaign } from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Input, Tooltip, Row, Col, Checkbox, Form } from 'antd';
 
@@ -12,7 +12,7 @@ import { notifySuccess, notifyError } from '../../util';
 
 /* constants */
 const { TextArea } = Input;
-
+const { postCampaign } = reduxActions;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -128,7 +128,7 @@ const NotificationForm = ({
       initialValues={{
         subject,
         body,
-        recipients: map(recipients, contact => contact._id), // eslint-disable-line
+        recipients: map(recipients, (contact) => contact._id), // eslint-disable-line
         channels: ['SMS', 'EMAIL'],
       }}
       onFinish={onFinish}

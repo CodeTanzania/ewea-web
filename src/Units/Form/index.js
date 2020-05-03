@@ -1,10 +1,12 @@
-import { putUnit, postUnit } from '@codetanzania/ewea-api-states';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Input } from 'antd';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import { notifyError, notifySuccess } from '../../util';
+
+const { putUnit, postUnit } = reduxActions;
 
 /**
  * @class

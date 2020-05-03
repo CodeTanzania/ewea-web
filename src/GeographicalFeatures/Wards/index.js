@@ -1,21 +1,22 @@
-import {
-  Connect,
-  searchFeatures,
-  filterFeatures,
-  openFeatureForm,
-  closeFeatureForm,
-  selectFeature,
-} from '@codetanzania/ewea-api-states';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Col, Input, Row, Modal } from 'antd';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+
 import WardsActionBar from './ActionBar';
 import WardsList from './List';
 import WardsFilters from './Filters';
 import WardForm from './Form';
 import './styles.css';
 
+const {
+  searchFeatures,
+  filterFeatures,
+  openFeatureForm,
+  closeFeatureForm,
+  selectFeature,
+} = reduxActions;
 const { Search } = Input;
 
 /**

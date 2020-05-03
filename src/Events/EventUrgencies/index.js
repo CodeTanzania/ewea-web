@@ -1,15 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  closeEventUrgencyForm,
-  Connect,
-  getEventUrgencies,
-  openEventUrgencyForm,
-  searchEventUrgencies,
-  selectEventUrgency,
-  refreshEventUrgencies,
-  paginateEventUrgencies,
-  deleteEventUrgency,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
@@ -34,6 +24,16 @@ const {
   getAgencies,
   getEventUrgenciesExportUrl,
 } = httpActions;
+const {
+  closeEventUrgencyForm,
+  getEventUrgencies,
+  openEventUrgencyForm,
+  searchEventUrgencies,
+  selectEventUrgency,
+  refreshEventUrgencies,
+  paginateEventUrgencies,
+  deleteEventUrgency,
+} = reduxActions;
 
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
 const descriptionSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };

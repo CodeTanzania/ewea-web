@@ -1,4 +1,4 @@
-import { putEventTopic, postEventTopic } from '@codetanzania/ewea-api-states';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Input } from 'antd';
@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
+const { putEventTopic, postEventTopic } = reduxActions;
 const { TextArea } = Input;
 
 /**

@@ -1,8 +1,4 @@
-import {
-  clearEventFilters,
-  Connect,
-  filterEvents,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
@@ -14,6 +10,7 @@ import SelectInput from '../../../components/SelectInput';
 
 /* declarations */
 const { getIncidentTypes, getJurisdictions } = httpActions;
+const { clearEventFilters, filterEvents } = reduxActions;
 
 /**
  * @class

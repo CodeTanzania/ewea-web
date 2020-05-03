@@ -26,13 +26,14 @@
   "dependencies": {
     "@ant-design/compatible": "^1.0.2",
     "@ant-design/icons": "^4.1.0",
-    "@codetanzania/ewea-api-client": "^0.13.0",
-    "@codetanzania/ewea-api-states": "^0.20.1",
+    "@codetanzania/ewea-api-client": "^0.14.2",
+    "@codetanzania/ewea-api-states": "^0.21.0",
+    "@lykmapipo/common": "^0.33.0",
     "antd": "^4.1.5",
     "axios": "^0.19.2",
     "inflection": "^1.12.0",
     "lodash": "^4.17.15",
-    "moment": "^2.24.0",
+    "moment": "2.24.0",
     "prop-types": "^15.7.2",
     "randomcolor": "^0.5.4",
     "rc-color-picker": "^1.2.6",
@@ -42,7 +43,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-simple-maps": "^2.0.0",
-    "react-to-print": "^2.6.3"
+    "react-to-print": "^2.7.0"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -59,7 +60,7 @@
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-import": "2.20.2",
     "eslint-plugin-jest": "23.8.2",
-    "eslint-plugin-jsdoc": "24.0.1",
+    "eslint-plugin-jsdoc": "24.0.2",
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-prettier": "3.1.3",
     "eslint-plugin-react": "7.19.0",

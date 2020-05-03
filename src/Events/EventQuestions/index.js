@@ -1,15 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  Connect,
-  getEventQuestions,
-  openEventQuestionForm,
-  searchEventQuestions,
-  selectEventQuestion,
-  closeEventQuestionForm,
-  paginateEventQuestions,
-  refreshEventQuestions,
-  deleteEventQuestion,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
@@ -25,6 +15,16 @@ import ListItemActions from '../../components/ListItemActions';
 import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
 
+const {
+  getEventQuestions,
+  openEventQuestionForm,
+  searchEventQuestions,
+  selectEventQuestion,
+  closeEventQuestionForm,
+  paginateEventQuestions,
+  refreshEventQuestions,
+  deleteEventQuestion,
+} = reduxActions;
 const { confirm } = Modal;
 
 /* constants */

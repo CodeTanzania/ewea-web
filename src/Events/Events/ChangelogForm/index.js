@@ -1,11 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  postChangelog,
-  getEvent,
-  getEvents,
-  putEvent,
-  closeChangelogForm,
-} from '@codetanzania/ewea-api-states';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import isArray from 'lodash/isArray';
 import get from 'lodash/get';
 import {
@@ -20,6 +14,13 @@ import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
+const {
+  postChangelog,
+  getEvent,
+  getEvents,
+  putEvent,
+  closeChangelogForm,
+} = reduxActions;
 const {
   getFocalPeople,
   getAgencies,

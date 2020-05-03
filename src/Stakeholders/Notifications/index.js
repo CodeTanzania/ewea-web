@@ -1,18 +1,14 @@
-import {
-  Connect,
-  getCampaigns,
-  searchCampaigns,
-} from '@codetanzania/ewea-api-states';
-import { httpActions } from '@codetanzania/ewea-api-client';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import { Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import React, { Component } from 'react';
 import Topbar from '../../components/Topbar';
 import CampaignList from './List';
 
-import './styles.css';
 import NotificationForm from '../../components/NotificationForm';
+import './styles.css';
 
 /* constants */
 const {
@@ -22,6 +18,7 @@ const {
   getRoles,
   getAgencies,
 } = httpActions;
+const { getCampaigns, searchCampaigns } = reduxActions;
 
 /**
  * @class

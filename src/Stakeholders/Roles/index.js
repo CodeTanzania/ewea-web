@@ -1,14 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  Connect,
-  getPartyRoles,
-  openPartyRoleForm,
-  selectPartyRole,
-  closePartyRoleForm,
-  refreshPartyRoles,
-  paginatePartyRoles,
-  deletePartyRole,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
@@ -22,6 +13,24 @@ import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess } from '../../util';
 import RoleForm from './Form';
 import './styles.css';
+
+const {
+  getPartyRolesExportUrl,
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getPartyRoles: getPartyRolesFromAPI,
+  getAgencies,
+} = httpActions;
+const {
+  getPartyRoles,
+  openPartyRoleForm,
+  selectPartyRole,
+  closePartyRoleForm,
+  refreshPartyRoles,
+  paginatePartyRoles,
+  deletePartyRole,
+} = reduxActions;
 
 /* constants */
 const nameSpan = { xxl: 7, xl: 7, lg: 7, md: 7, sm: 16, xs: 15 };
@@ -44,16 +53,6 @@ const headerLayout = [
     title: 'Explanation of roles',
   },
 ];
-
-const {
-  getPartyRolesExportUrl,
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getPartyRoles: getPartyRolesFromAPI,
-  getAgencies,
-} = httpActions;
-
 const { confirm } = Modal;
 
 /**

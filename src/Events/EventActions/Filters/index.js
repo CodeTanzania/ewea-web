@@ -1,8 +1,4 @@
-import {
-  clearFocalPersonFilters,
-  Connect,
-  filterFocalPeople,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
@@ -12,6 +8,7 @@ import React, { Component } from 'react';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* declarations */
+const { filterFocalPeople, clearFocalPersonFilters } = reduxActions;
 const {
   getPartyGroups,
   getAdministrativeAreas,
@@ -19,6 +16,7 @@ const {
   getAgencies,
 } = httpActions;
 
+// FIXME filters here are not correct
 /**
  * @class
  * @name EventActionsFilters

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import { Row, Col, Table, Spin } from 'antd';
-import { getPartiesReport, Connect } from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import {
   ApartmentOutlined,
   UserOutlined,
@@ -21,6 +21,7 @@ import {
 } from '../components/dashboardWidgets';
 import DarDistricts from '../assets/maps/dar.districts.json';
 
+const { getPartiesReport } = reduxActions;
 const titleMap = {
   groups: 'Group',
   levels: 'Level',

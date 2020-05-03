@@ -1,9 +1,11 @@
 import React from 'react';
 import { Input, Button, Form } from 'antd';
 import PropTypes from 'prop-types';
-import { Connect, putFocalPerson } from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
 
+/* declarations */
+const { putFocalPerson } = reduxActions;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },

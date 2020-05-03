@@ -1,16 +1,6 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import isArray from 'lodash/isArray';
-import {
-  closeEventActionCatalogueForm,
-  Connect,
-  getEventActionCatalogues,
-  openEventActionCatalogueForm,
-  searchEventActionCatalogues,
-  selectEventActionCatalogue,
-  refreshEventActionCatalogues,
-  paginateEventActionCatalogues,
-  deleteEventActionCatalogue,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
@@ -32,6 +22,16 @@ import {
 import './styles.css';
 
 /* constants */
+const {
+  closeEventActionCatalogueForm,
+  getEventActionCatalogues,
+  openEventActionCatalogueForm,
+  searchEventActionCatalogues,
+  selectEventActionCatalogue,
+  refreshEventActionCatalogues,
+  paginateEventActionCatalogues,
+  deleteEventActionCatalogue,
+} = reduxActions;
 const eventTypeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 6 };
 const eventFunctionSpan = { xxl: 4, xl: 4, lg: 3, md: 0, sm: 0, xs: 0 };
 const actionSpan = { xxl: 6, xl: 6, lg: 7, md: 7, sm: 8, xs: 12 };

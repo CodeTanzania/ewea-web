@@ -1,8 +1,4 @@
-import {
-  clearFocalPersonFilters,
-  Connect,
-  filterFocalPeople,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
@@ -18,6 +14,7 @@ const {
   getPartyRoles,
   getAgencies,
 } = httpActions;
+const { clearFocalPersonFilters, filterFocalPeople } = reduxActions;
 
 /**
  * @class

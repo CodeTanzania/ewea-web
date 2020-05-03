@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
-import { Connect, getEventsReport } from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Row, Col, Table, Spin } from 'antd';
 import {
   WarningOutlined,
@@ -17,6 +17,7 @@ import {
   DARK_GREEN,
 } from '../components/dashboardWidgets';
 
+const { getEventsReport } = reduxActions;
 const titleMap = {
   areas: 'Area',
   certainties: 'Certainty',

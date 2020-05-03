@@ -1,21 +1,12 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import isArray from 'lodash/isArray';
-import get from 'lodash/get';
-import {
-  closeFocalPersonForm,
-  Connect,
-  getFocalPeople,
-  openFocalPersonForm,
-  searchFocalPeople,
-  selectFocalPerson,
-  refreshFocalPeople,
-  paginateFocalPeople,
-  deleteFocalPerson,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import isArray from 'lodash/isArray';
+import get from 'lodash/get';
+
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import FocalPersonFilters from './Filters';
@@ -39,6 +30,16 @@ const {
   getAgencies,
   getFocalPeopleExportUrl,
 } = httpActions;
+const {
+  closeFocalPersonForm,
+  getFocalPeople,
+  openFocalPersonForm,
+  searchFocalPeople,
+  selectFocalPerson,
+  refreshFocalPeople,
+  paginateFocalPeople,
+  deleteFocalPerson,
+} = reduxActions;
 const { confirm } = Modal;
 
 const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };

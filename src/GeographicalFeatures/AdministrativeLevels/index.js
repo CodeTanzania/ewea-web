@@ -1,15 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  closeAdministrativeLevelForm,
-  Connect,
-  getAdministrativeLevels,
-  openAdministrativeLevelForm,
-  searchAdministrativeLevels,
-  selectAdministrativeLevel,
-  refreshAdministrativeLevels,
-  paginateAdministrativeLevels,
-  deleteAdministrativeLevel,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
@@ -34,6 +24,16 @@ const {
   getAgencies,
   getAdministrativeLevelsExportUrl,
 } = httpActions;
+const {
+  closeAdministrativeLevelForm,
+  getAdministrativeLevels,
+  openAdministrativeLevelForm,
+  searchAdministrativeLevels,
+  selectAdministrativeLevel,
+  refreshAdministrativeLevels,
+  paginateAdministrativeLevels,
+  deleteAdministrativeLevel,
+} = reduxActions;
 
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
 const descriptionSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };

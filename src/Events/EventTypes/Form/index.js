@@ -1,4 +1,4 @@
-import { putEventType, postEventType } from '@codetanzania/ewea-api-states';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
@@ -10,6 +10,7 @@ import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
 const { getEventGroups } = httpActions;
+const { putEventType, postEventType } = reduxActions;
 const { TextArea } = Input;
 
 /**

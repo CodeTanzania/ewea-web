@@ -1,14 +1,4 @@
-import {
-  Connect,
-  getEventTypes,
-  openEventTypeForm,
-  searchEventTypes,
-  selectEventType,
-  closeEventTypeForm,
-  deleteEventType,
-  refreshEventTypes,
-  paginateEventTypes,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -27,6 +17,16 @@ import { notifyError, notifySuccess, truncateString } from '../../util';
 import './styles.css';
 
 /* constants */
+const {
+  getEventTypes,
+  openEventTypeForm,
+  searchEventTypes,
+  selectEventType,
+  closeEventTypeForm,
+  deleteEventType,
+  refreshEventTypes,
+  paginateEventTypes,
+} = reduxActions;
 const nameSpan = { xxl: 7, xl: 7, lg: 7, md: 7, sm: 10, xs: 9 };
 const groupSpan = { xxl: 4, xl: 4, lg: 4, md: 5, sm: 10, xs: 9 };
 const descriptionSpan = { xxl: 11, xl: 11, lg: 11, md: 9, sm: 0, xs: 0 };

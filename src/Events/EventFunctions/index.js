@@ -1,15 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  Connect,
-  searchEventFunctions,
-  selectEventFunction,
-  getEventFunctions,
-  openEventFunctionForm,
-  closeEventFunctionForm,
-  paginateEventFunctions,
-  deleteEventFunction,
-  refreshEventFunctions,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import isArray from 'lodash/isArray';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -27,6 +17,16 @@ import { notifyError, notifySuccess, truncateString } from '../../util';
 import './styles.css';
 
 /* constants */
+const {
+  searchEventFunctions,
+  selectEventFunction,
+  getEventFunctions,
+  openEventFunctionForm,
+  closeEventFunctionForm,
+  paginateEventFunctions,
+  deleteEventFunction,
+  refreshEventFunctions,
+} = reduxActions;
 const nameSpan = { xxl: 5, xl: 5, lg: 6, md: 7, sm: 8, xs: 14 };
 const typeSpan = { xxl: 3, xl: 3, lg: 3, md: 2, sm: 0, xs: 0 };
 const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 2, sm: 2, xs: 4 };

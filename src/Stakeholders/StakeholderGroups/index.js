@@ -1,17 +1,7 @@
-import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  Connect,
-  getPartyGroups,
-  openPartyGroupForm,
-  searchPartyGroups,
-  selectPartyGroup,
-  closePartyGroupForm,
-  refreshPartyGroups,
-  paginatePartyGroups,
-  deletePartyGroup,
-} from '@codetanzania/ewea-api-states';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { httpActions } from '@codetanzania/ewea-api-client';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import isArray from 'lodash/isArray';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -44,6 +34,16 @@ const {
   getRoles,
   getAgencies,
 } = httpActions;
+const {
+  getPartyGroups,
+  openPartyGroupForm,
+  searchPartyGroups,
+  selectPartyGroup,
+  closePartyGroupForm,
+  refreshPartyGroups,
+  paginatePartyGroups,
+  deletePartyGroup,
+} = reduxActions;
 
 /**
  * @class

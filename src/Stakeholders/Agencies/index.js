@@ -1,21 +1,12 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  closeAgencyForm,
-  Connect,
-  getAgencies,
-  openAgencyForm,
-  searchAgencies,
-  selectAgency,
-  refreshAgencies,
-  paginateAgencies,
-  deleteAgency,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
 import get from 'lodash/get';
+
 import Topbar from '../../components/Topbar';
 import AgencyForm from './AgencyForm';
 import AgencyFilters from './Filters';
@@ -25,6 +16,24 @@ import ListItemActions from '../../components/ListItemActions';
 import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess, generateAgencyVCard } from '../../util';
 import './styles.css';
+
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getRoles,
+  getAgenciesExportUrl,
+} = httpActions;
+const {
+  closeAgencyForm,
+  getAgencies,
+  openAgencyForm,
+  searchAgencies,
+  selectAgency,
+  refreshAgencies,
+  paginateAgencies,
+  deleteAgency,
+} = reduxActions;
 
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 7, sm: 14, xs: 12 };
@@ -40,15 +49,6 @@ const headerLayout = [
   { ...phoneSpan, header: 'Phone Number' },
   { ...emailSpan, header: 'Email' },
 ];
-
-const {
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getRoles,
-  getAgenciesExportUrl,
-} = httpActions;
-
 const { confirm } = Modal;
 
 /**

@@ -1,9 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  postAdministrativeArea,
-  putAdministrativeArea,
-  Connect,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Input } from 'antd';
@@ -14,6 +10,8 @@ import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import 'rc-color-picker/assets/index.css';
 
 const { getAdministrativeLevels, getAdministrativeAreas } = httpActions;
+const { postAdministrativeArea, putAdministrativeArea } = reduxActions;
+
 /**
  * @class
  * @name AdministrativeAreaForm
@@ -22,7 +20,6 @@ const { getAdministrativeLevels, getAdministrativeAreas } = httpActions;
  * @version 0.1.0
  * @since 0.1.0
  */
-
 class AdministrativeAreaForm extends Component {
   /**
    * @function

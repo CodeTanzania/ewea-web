@@ -1,17 +1,7 @@
-import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  Connect,
-  getUnits,
-  openUnitForm,
-  searchUnits,
-  selectUnit,
-  closeUnitForm,
-  refreshUnits,
-  paginateUnits,
-  deleteUnit,
-} from '@codetanzania/ewea-api-states';
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { httpActions } from '@codetanzania/ewea-api-client';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import isArray from 'lodash/isArray';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -23,6 +13,25 @@ import ListItem from '../components/ListItem';
 import ListItemActions from '../components/ListItemActions';
 import { notifyError, notifySuccess, truncateString } from '../util';
 import './styles.css';
+
+const {
+  getUnitsExportUrl,
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getRoles,
+  getAgencies,
+} = httpActions;
+const {
+  getUnits,
+  openUnitForm,
+  searchUnits,
+  selectUnit,
+  closeUnitForm,
+  refreshUnits,
+  paginateUnits,
+  deleteUnit,
+} = reduxActions;
 
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 6, xs: 14 };
@@ -36,15 +45,6 @@ const headerLayout = [
 ];
 
 const { confirm } = Modal;
-
-const {
-  getUnitsExportUrl,
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getRoles,
-  getAgencies,
-} = httpActions;
 
 /**
  * @class

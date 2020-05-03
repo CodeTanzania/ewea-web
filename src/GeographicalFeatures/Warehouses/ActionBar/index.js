@@ -1,13 +1,12 @@
-import {
-  refreshFeatures,
-  paginateFeatures,
-} from '@codetanzania/ewea-api-states';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { FilterOutlined, HddOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Col, Pagination, Row, Checkbox } from 'antd';
-import PropTypes from 'prop-types';
-import React from 'react';
 import { notifyError, notifySuccess } from '../../../util';
 import './styles.css';
+
+const { refreshFeatures, paginateFeatures } = reduxActions;
 
 /**
  *

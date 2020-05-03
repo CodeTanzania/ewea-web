@@ -1,15 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  Connect,
-  getEventLevels,
-  openEventLevelForm,
-  searchEventLevels,
-  selectEventLevel,
-  closeEventLevelForm,
-  deleteEventLevel,
-  refreshEventLevels,
-  paginateEventLevels,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
@@ -26,6 +16,16 @@ import { notifyError, notifySuccess, truncateString } from '../../util';
 import './styles.css';
 
 /* constants */
+const {
+  getEventLevels,
+  openEventLevelForm,
+  searchEventLevels,
+  selectEventLevel,
+  closeEventLevelForm,
+  deleteEventLevel,
+  refreshEventLevels,
+  paginateEventLevels,
+} = reduxActions;
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
 const descriptionSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };
 

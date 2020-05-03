@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Connect, getEventIndicators } from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Card, Typography, Space } from 'antd';
 
 import './styles.css';
 
+const { getEventIndicators } = reduxActions;
 const { Text } = Typography;
 const Section = ({ name }) => {
   return (

@@ -1,15 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  Connect,
-  getEventIndicators,
-  openEventIndicatorForm,
-  searchEventIndicators,
-  selectEventIndicator,
-  closeEventIndicatorForm,
-  paginateEventIndicators,
-  refreshEventIndicators,
-  deleteEventIndicator,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
@@ -24,6 +14,16 @@ import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
 import './styles.css';
 
+const {
+  getEventIndicators,
+  openEventIndicatorForm,
+  searchEventIndicators,
+  selectEventIndicator,
+  closeEventIndicatorForm,
+  paginateEventIndicators,
+  refreshEventIndicators,
+  deleteEventIndicator,
+} = reduxActions;
 const { confirm } = Modal;
 
 const {

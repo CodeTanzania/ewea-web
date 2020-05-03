@@ -1,14 +1,10 @@
-import {
-  clearFocalPersonFilters,
-  Connect,
-  filterFocalPeople,
-} from '@codetanzania/ewea-api-states';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
 import { Button } from 'antd';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import '@ant-design/compatible/assets/index.css';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* declarations */
@@ -18,6 +14,7 @@ const {
   getPartyRoles,
   getAgencies,
 } = httpActions;
+const { clearFocalPersonFilters, filterFocalPeople } = reduxActions;
 
 /**
  * @class

@@ -1,7 +1,4 @@
-import {
-  postEventUrgency,
-  putEventUrgency,
-} from '@codetanzania/ewea-api-states';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Input } from 'antd';
@@ -11,6 +8,7 @@ import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
 const { TextArea } = Input;
+const { postEventUrgency, putEventUrgency } = reduxActions;
 
 /**
  * @class

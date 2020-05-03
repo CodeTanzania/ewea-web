@@ -1,8 +1,4 @@
-import {
-  postEventFunction,
-  putEventFunction,
-  Connect,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Input, Select } from 'antd';
@@ -11,6 +7,7 @@ import React, { Component } from 'react';
 import { notifyError, notifySuccess } from '../../../util';
 import 'rc-color-picker/assets/index.css';
 
+const { postEventFunction, putEventFunction } = reduxActions;
 const { Option } = Select;
 const { TextArea } = Input;
 

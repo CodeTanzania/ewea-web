@@ -1,18 +1,15 @@
-import {
-  clearAgencyFilters,
-  Connect,
-  filterAgencies,
-} from '@codetanzania/ewea-api-states';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button } from 'antd';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* declarations */
 const { getAdministrativeAreas } = httpActions;
+const { clearAgencyFilters, filterAgencies } = reduxActions;
 
 /**
  * @class

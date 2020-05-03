@@ -1,11 +1,4 @@
-import {
-  Connect,
-  filterFeatures,
-  searchFeatures,
-  closeFeatureForm,
-  openFeatureForm,
-  selectFeature,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Col, Input, Row, Modal } from 'antd';
 import PropTypes from 'prop-types';
@@ -16,6 +9,13 @@ import DistrictsFilters from './Filters';
 import DistrictForm from './Form';
 import './styles.css';
 
+const {
+  filterFeatures,
+  searchFeatures,
+  closeFeatureForm,
+  openFeatureForm,
+  selectFeature,
+} = reduxActions;
 const { Search } = Input;
 
 /**

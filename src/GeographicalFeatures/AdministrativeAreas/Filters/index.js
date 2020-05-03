@@ -1,8 +1,4 @@
-import {
-  clearAdministrativeAreaFilters,
-  Connect,
-  filterAdministrativeAreas,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
@@ -13,6 +9,10 @@ import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* declarations */
 const { getAdministrativeLevels } = httpActions;
+const {
+  clearAdministrativeAreaFilters,
+  filterAdministrativeAreas,
+} = reduxActions;
 
 /**
  * @class

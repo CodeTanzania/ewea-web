@@ -1,15 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  closeEventForm,
-  Connect,
-  getEvents,
-  openEventForm,
-  searchEvents,
-  selectEvent,
-  refreshEvents,
-  paginateEvents,
-  deleteEvent,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Drawer, Col, Tag, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
@@ -35,6 +25,16 @@ import {
 import './styles.css';
 
 /* constants */
+const {
+  closeEventForm,
+  getEvents,
+  openEventForm,
+  searchEvents,
+  selectEvent,
+  refreshEvents,
+  paginateEvents,
+  deleteEvent,
+} = reduxActions;
 const {
   getFocalPeople,
   getAdministrativeAreas,

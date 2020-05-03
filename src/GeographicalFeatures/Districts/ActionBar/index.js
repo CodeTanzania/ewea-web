@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import {
   CloudDownloadOutlined,
   FilterOutlined,
@@ -5,15 +8,10 @@ import {
   ReloadOutlined,
 } from '@ant-design/icons';
 import { Button, Checkbox, Col, Pagination, Row } from 'antd';
-import {
-  refreshFeatures,
-  paginateFeatures,
-} from '@codetanzania/ewea-api-states';
-import PropTypes from 'prop-types';
-import React from 'react';
 import { notifyError, notifySuccess } from '../../../util';
 import './styles.css';
 
+const { refreshFeatures, paginateFeatures } = reduxActions;
 /**
  *
  * @function

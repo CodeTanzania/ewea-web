@@ -1,16 +1,17 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { postAgency, putAgency } from '@codetanzania/ewea-api-states';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Col, Input, Row } from 'antd';
 import upperFirst from 'lodash/upperFirst';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
 const { getFeatures, getPartyGroups } = httpActions;
+const { postAgency, putAgency } = reduxActions;
 const { TextArea } = Input;
 
 /**

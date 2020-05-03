@@ -1,5 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { postEvent, putEvent, Connect } from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Button, Col, Row, Input, Form, Radio } from 'antd';
@@ -16,6 +16,7 @@ const {
   getEventStatuses,
   getAdministrativeAreas,
 } = httpActions;
+const { postEvent, putEvent } = reduxActions;
 const { TextArea } = Input;
 const formItemLayout = {
   labelCol: {

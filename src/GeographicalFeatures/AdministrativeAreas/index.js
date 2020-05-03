@@ -1,14 +1,4 @@
-import {
-  Connect,
-  searchAdministrativeAreas,
-  selectAdministrativeArea,
-  getAdministrativeAreas,
-  openAdministrativeAreaForm,
-  closeAdministrativeAreaForm,
-  paginateAdministrativeAreas,
-  refreshAdministrativeAreas,
-  deleteAdministrativeArea,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Modal, Col, Drawer } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -28,6 +18,24 @@ import './styles.css';
 import MapPolygon from '../../Map/MapPolygon';
 
 /* constants */
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getRoles,
+  getAgencies,
+} = httpActions;
+const {
+  searchAdministrativeAreas,
+  selectAdministrativeArea,
+  getAdministrativeAreas,
+  openAdministrativeAreaForm,
+  closeAdministrativeAreaForm,
+  paginateAdministrativeAreas,
+  refreshAdministrativeAreas,
+  deleteAdministrativeArea,
+} = reduxActions;
+const { confirm } = Modal;
 const nameSpan = { xxl: 8, xl: 8, lg: 8, md: 8, sm: 7, xs: 12 };
 const levelSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 5, xs: 6 };
 const descriptionSpan = { xxl: 10, xl: 10, lg: 10, md: 8, sm: 8, xs: 0 };
@@ -36,16 +44,6 @@ const headerLayout = [
   { ...levelSpan, header: 'Level' },
   { ...descriptionSpan, header: 'Description' },
 ];
-
-const {
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getRoles,
-  getAgencies,
-} = httpActions;
-
-const { confirm } = Modal;
 
 /**
  * @class

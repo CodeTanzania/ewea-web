@@ -1,15 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  closeEventCertaintyForm,
-  Connect,
-  getEventCertainties,
-  openEventCertaintyForm,
-  searchEventCertainties,
-  selectEventCertainty,
-  refreshEventCertainties,
-  paginateEventCertainties,
-  deleteEventCertainty,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
@@ -25,6 +15,16 @@ import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
 
 /* constants */
+const {
+  closeEventCertaintyForm,
+  getEventCertainties,
+  openEventCertaintyForm,
+  searchEventCertainties,
+  selectEventCertainty,
+  refreshEventCertainties,
+  paginateEventCertainties,
+  deleteEventCertainty,
+} = reduxActions;
 const {
   getFocalPeople,
   getJurisdictions,

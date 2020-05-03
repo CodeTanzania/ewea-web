@@ -1,13 +1,11 @@
-import {
-  clearFeatureFilters,
-  Connect,
-  filterFeatures,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Checkbox, Col, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+
+const { clearFeatureFilters, filterFeatures } = reduxActions;
 
 /**
  *

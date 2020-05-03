@@ -1,10 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  Connect,
-  getEventAction,
-  postEventActionCatalogue,
-  putEventActionCatalogue,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Col, Input, Row } from 'antd';
@@ -15,6 +10,11 @@ import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
+const {
+  getEventAction,
+  postEventActionCatalogue,
+  putEventActionCatalogue,
+} = reduxActions;
 const {
   getAdministrativeAreas,
   getEventTypes,
@@ -273,7 +273,7 @@ class EventActionCatalogueForm extends Component {
                   isEditForm && eventActionCatalogue.relations.roles
                     ? map(
                         eventActionCatalogue.relations.roles,
-                        role => role._id // eslint-disable-line
+                        (role) => role._id // eslint-disable-line
                       )
                     : [],
                 rules: [
@@ -310,7 +310,7 @@ class EventActionCatalogueForm extends Component {
                   isEditForm && eventActionCatalogue.relations.groups
                     ? map(
                         eventActionCatalogue.relations.groups,
-                        group => group._id // eslint-disable-line
+                        (group) => group._id // eslint-disable-line
                       )
                     : [],
                 rules: [
@@ -347,7 +347,7 @@ class EventActionCatalogueForm extends Component {
                   isEditForm && eventActionCatalogue.relations.agencies
                     ? map(
                         eventActionCatalogue.relations.agencies,
-                        agency => agency._id // eslint-disable-line
+                        (agency) => agency._id // eslint-disable-line
                       )
                     : [],
                 rules: [
@@ -384,7 +384,7 @@ class EventActionCatalogueForm extends Component {
                   isEditForm && eventActionCatalogue.relations.focals
                     ? map(
                         eventActionCatalogue.relations.focals,
-                        focal => focal._id // eslint-disable-line
+                        (focal) => focal._id // eslint-disable-line
                       )
                     : [],
                 rules: [

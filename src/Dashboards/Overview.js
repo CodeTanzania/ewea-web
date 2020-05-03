@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Connect, getOverviewsReport } from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import get from 'lodash/get';
 import { Row, Col, Spin } from 'antd';
 import {
@@ -22,12 +22,14 @@ import {
   DANGER_COLOR,
 } from '../components/dashboardWidgets';
 
+const { getOverviewsReport } = reduxActions;
+
 /**
  * @function
  * @name OverviewDashboard
  * @description Dashboard which renders overviews reports from different dashboards
  * i.e stakeholders, events
- * @param {object} props Overview Dashbaord props
+ * @param {object} props Overview Dashboard props
  * @returns {object} Overview Dashboard component
  * @version 0.1.0
  * @since 0.1.0

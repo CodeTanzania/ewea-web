@@ -1,14 +1,6 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { getBaseUrl, getJwtToken } from '@codetanzania/ewea-api-client';
-import {
-  openChangelogForm,
-  closeChangelogForm,
-  getEvent,
-  Connect,
-  filterChangelogs,
-  loadMoreChangelogs,
-  postChangelog,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import ReactToPrint from 'react-to-print';
 
 import {
@@ -58,6 +50,14 @@ import './styles.css';
 import IndicatorDashboard from '../../../Dashboards/Indicators';
 import EventDetailsViewHeader from './Header';
 
+const {
+  openChangelogForm,
+  closeChangelogForm,
+  getEvent,
+  filterChangelogs,
+  loadMoreChangelogs,
+  postChangelog,
+} = reduxActions;
 const { Paragraph, Text } = Typography;
 
 /**

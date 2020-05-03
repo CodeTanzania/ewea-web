@@ -1,15 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  Connect,
-  getEventGroups,
-  openEventGroupForm,
-  searchEventGroups,
-  selectEventGroup,
-  closeEventGroupForm,
-  refreshEventGroups,
-  paginateEventGroups,
-  deleteEventGroup,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
@@ -25,6 +15,16 @@ import { notifyError, notifySuccess, truncateString } from '../../util';
 import './styles.css';
 
 /* constants */
+const {
+  getEventGroups,
+  openEventGroupForm,
+  searchEventGroups,
+  selectEventGroup,
+  closeEventGroupForm,
+  refreshEventGroups,
+  paginateEventGroups,
+  deleteEventGroup,
+} = reduxActions;
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 6, xs: 14 };
 const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 5, xs: 4 };
 const descriptionSpan = { xxl: 15, xl: 15, lg: 15, md: 14, sm: 9, xs: 0 };

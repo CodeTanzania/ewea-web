@@ -1,15 +1,5 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
-import {
-  closeFeatureTypeForm,
-  Connect,
-  getFeatureTypes,
-  openFeatureTypeForm,
-  searchFeatureTypes,
-  selectFeatureType,
-  refreshFeatureTypes,
-  paginateFeatureTypes,
-  deleteFeatureType,
-} from '@codetanzania/ewea-api-states';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
@@ -34,6 +24,16 @@ const {
   getAgencies,
   getFeatureTypesExportUrl,
 } = httpActions;
+const {
+  closeFeatureTypeForm,
+  getFeatureTypes,
+  openFeatureTypeForm,
+  searchFeatureTypes,
+  selectFeatureType,
+  refreshFeatureTypes,
+  paginateFeatureTypes,
+  deleteFeatureType,
+} = reduxActions;
 
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
 const descriptionSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };
