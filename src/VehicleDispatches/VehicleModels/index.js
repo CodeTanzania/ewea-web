@@ -68,7 +68,7 @@ class VehicleModel extends Component {
   /**
    * @function
    * @name openVehicleModelsForm
-   * @description Open party ownership form
+   * @description Open vehicle model form
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -80,7 +80,7 @@ class VehicleModel extends Component {
   /**
    * @function
    * @name closeVehicleModelForm
-   * @description close party ownership form
+   * @description close vehicle model form
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -109,7 +109,7 @@ class VehicleModel extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} vehicleModel party ownership to be edited
+   * @param {object} vehicleModel vehicle model to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -157,7 +157,7 @@ class VehicleModel extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a party ownership
+   * @description show confirm modal before archiving a vehicle model
    *
    * @param item {object} vehicleModel to archive
    * @version 0.1.0
