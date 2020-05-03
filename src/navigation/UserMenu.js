@@ -7,6 +7,15 @@ import React, { useState } from 'react';
 import ChangePasswordForm from '../Auth/components/ChangePassword';
 import './styles.css';
 
+/**
+ * @function
+ * @name UserMenu
+ * @description Menu for shown when user click user icon at the top bar
+ * @param {object} props User menu props
+ * @returns {object} User Menu component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 const UserMenu = ({ history: { push } }) => {
   const [showChangePasswordForm, setShowChangePassword] = useState(false);
   /**

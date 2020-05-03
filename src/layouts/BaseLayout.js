@@ -52,7 +52,7 @@ const breadcrumbNameMap = {
     name: 'Home',
     title: 'Early Warning, Early Action Menu',
   },
-  /* Event Routes */
+  /* event routes */
   '/app/actions': {
     name: 'Actions Taken',
     title: 'List of all performed actions',
@@ -66,7 +66,7 @@ const breadcrumbNameMap = {
     title: 'List of all Events(Alerts and Incidents)',
   },
 
-  /* Stakeholders Routes */
+  /* stakeholders routes */
   '/app/focalpeople': {
     name: 'Focal People',
     title: 'List of all focal persons',
@@ -77,7 +77,7 @@ const breadcrumbNameMap = {
   },
   '/app/stakeholders': { name: 'Stakeholders', title: 'Stakeholders module' },
 
-  /* Dashboards */
+  /* dashboards routes */
   '/app/dashboards': {
     name: 'Dashboards',
     title: 'Dashboards',
@@ -107,7 +107,7 @@ const breadcrumbNameMap = {
     title: 'Events Dashboard',
   },
 
-  /* settings */
+  /* settings routes */
   '/app/settings': {
     name: 'Settings',
     title: 'System Wide Settings',
@@ -202,7 +202,7 @@ const breadcrumbNameMap = {
 /**
  * @function
  * @name BaseLayout
- * @description Render base layout for EMIS dashboard
+ * @description Render base layout for EWEA app
  *
  * @param {object} props Properties inject by router
  *
@@ -210,12 +210,7 @@ const breadcrumbNameMap = {
  * @version 0.1.0
  * @since 0.1.0
  */
-const BaseLayout = (props) => {
-  const {
-    location,
-    match: { url: baseUrl },
-  } = props;
-
+const BaseLayout = ({ location, match: { url: baseUrl } }) => {
   const pathSnippets = location.pathname.split('/').filter((i) => i);
   const lastPath = pathSnippets[pathSnippets.length - 1];
 
