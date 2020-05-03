@@ -27,7 +27,7 @@
     "@ant-design/compatible": "^1.0.2",
     "@ant-design/icons": "^4.1.0",
     "@codetanzania/ewea-api-client": "^0.14.0",
-    "@codetanzania/ewea-api-states": "^0.20.1",
+    "@codetanzania/ewea-api-states": "^0.21.0",
     "antd": "^4.1.5",
     "axios": "^0.19.2",
     "inflection": "^1.12.0",
