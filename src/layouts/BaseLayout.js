@@ -12,6 +12,7 @@ import AdministrativeAreas from '../GeographicalFeatures/AdministrativeAreas';
 import AdministrativeLevels from '../GeographicalFeatures/AdministrativeLevels';
 import StakeholdersAgencies from '../Stakeholders/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/FocalPeople';
+import AgenciesOwnerships from '../Stakeholders/AgenciesOwnerships';
 import NotificationTemplates from '../Stakeholders/NotificationTemplates';
 import Events from '../Events/Events';
 import EventFunctions from '../Events/EventFunctions';
@@ -172,6 +173,10 @@ const breadcrumbNameMap = {
   '/app/settings/stakeholdergroups': {
     name: 'Stakeholders Groups',
     title: 'Stakeholders Groups module',
+  },
+  '/app/settings/agenciesownerships': {
+    name: 'Agencies Ownerships',
+    title: 'List of Agencies Ownerships',
   },
   '/app/settings/eventindicator': {
     name: 'Event Indicators',
@@ -358,6 +363,10 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
           <SecureRoute
             path={`${baseUrl}/settings/stakeholdergroups`}
             component={StakeholderGroups}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/agenciesownerships`}
+            component={AgenciesOwnerships}
           />
           <SecureRoute
             path={`${baseUrl}/settings/eventtypes`}

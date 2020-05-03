@@ -75,6 +75,12 @@ const routes = [
     description: modules.stakeholderGroups,
   },
   {
+    name: 'Agencies Ownerships',
+    path: '/agenciesownerships',
+    icon: stakeholderGroupsIcon,
+    description: modules.stakeholderGroups,
+  },
+  {
     name: 'Event Questions',
     path: '/eventquestions',
     icon: eventQuestionsIcon,
