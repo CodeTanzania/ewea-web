@@ -35,6 +35,7 @@ import Units from '../Units';
 // import StakeholdersNotifications from '../Stakeholders/Notifications';
 import StakeholdersRoles from '../Stakeholders/Roles';
 import VehicleModels from '../VehicleDispatches/VehicleModels';
+import VehicleTypes from '../VehicleDispatches/VehicleTypes';
 import Settings from '../navigation/Settings';
 import ActionsTaken from '../Dashboards/ActionsTaken';
 import SecureRoute from '../Auth/SecureRoute';
@@ -206,6 +207,10 @@ const breadcrumbNameMap = {
   '/app/settings/vehiclemodels': {
     name: 'Vehicle Models',
     title: 'Vehicle Models Module',
+  },
+  '/app/settings/vehicletypes': {
+    name: 'Vehicle Types',
+    title: 'Vehicle Types Module',
   },
 };
 
@@ -413,8 +418,12 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
 
           <SecureRoute path={`${baseUrl}/settings/units`} component={Units} />
           <SecureRoute
-            path={`${baseUrl}/settings/vehicleModels`}
+            path={`${baseUrl}/settings/vehiclemodels`}
             component={VehicleModels}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/vehicletypes`}
+            component={VehicleTypes}
           />
 
           <SecureRoute component={PageNotFound} />
