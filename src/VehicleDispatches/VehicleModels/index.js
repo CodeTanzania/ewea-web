@@ -294,18 +294,18 @@ class VehicleModel extends Component {
                 <ListItemActions
                   edit={{
                     name: 'Edit Vehicle Model',
-                    title: 'Update Vehicle Model Details',
+                    title: 'Update vehicle model details',
                     onClick: () => this.handleEdit(item),
                   }}
                   share={{
                     name: 'Share Vehicle Model',
-                    title: 'Share Vehicle Model details with others',
+                    title: 'Share vehicle model details with others',
                     onClick: () => this.handleShare(item),
                   }}
                   archive={{
                     name: 'Archive Vehicle Model',
                     title:
-                      'Remove Vehicle Model from list of active agency ownerships',
+                      'Remove vehicle model from list of active vehicle models',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                 />

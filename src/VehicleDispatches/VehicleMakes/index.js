@@ -6,7 +6,7 @@ import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
 import Topbar from '../../components/Topbar';
-import VehicleTypeForm from './Form';
+import VehicleMakeForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
@@ -15,14 +15,14 @@ import ListItemActions from '../../components/ListItemActions';
 import './styles.css';
 
 const {
-  getVehicleTypes,
-  openVehicleTypeForm,
-  searchVehicleTypes,
-  selectVehicleType,
-  closeVehicleTypeForm,
-  paginateVehicleTypes,
-  refreshVehicleTypes,
-  deleteVehicleType,
+  getVehicleMakes,
+  openVehicleMakeForm,
+  searchVehicleMakes,
+  selectVehicleMake,
+  closeVehicleMakeForm,
+  paginateVehicleMakes,
+  refreshVehicleMakes,
+  deleteVehicleMake,
 } = reduxActions;
 const { confirm } = Modal;
 
@@ -32,7 +32,7 @@ const {
   getPartyGroups,
   getAgencies,
   getRoles,
-  getVehicleTypesExportUrl,
+  getVehicleMakesExportUrl,
 } = httpActions;
 
 /* constants */
@@ -47,13 +47,13 @@ const headerLayout = [
 
 /**
  * @class
- * @name VehicleType
+ * @name VehicleMake
  * @description Render Party(Agency) Ownership types list which have search box,
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-class VehicleType extends Component {
+class VehicleMake extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
     isEditForm: false,
@@ -62,46 +62,46 @@ class VehicleType extends Component {
   };
 
   componentDidMount() {
-    getVehicleTypes();
+    getVehicleMakes();
   }
 
   /**
    * @function
-   * @name openVehicleTypesForm
-   * @description Open vehicle type form
+   * @name openVehicleMakesForm
+   * @description Open vehicle make form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openVehicleTypesForm = () => {
-    openVehicleTypeForm();
+  openVehicleMakesForm = () => {
+    openVehicleMakeForm();
   };
 
   /**
    * @function
-   * @name closeVehicleTypeForm
-   * @description close vehicle type form
+   * @name closeVehicleMakeForm
+   * @description close vehicle make form
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeVehicleTypeForm = () => {
-    closeVehicleTypeForm();
+  closeVehicleMakeForm = () => {
+    closeVehicleMakeForm();
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
-   * @name searchVehicleTypes
-   * @description Search Vehicle types List based on supplied filter word
+   * @name searchVehicleMakes
+   * @description Search Vehicle makes List based on supplied filter word
    *
    * @param {object} event Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchVehicleTypes = (event) => {
-    searchVehicleTypes(event.target.value);
+  searchVehicleMakes = (event) => {
+    searchVehicleMakes(event.target.value);
   };
 
   /**
@@ -109,15 +109,15 @@ class VehicleType extends Component {
    * @name handleEdit
    * @description Handle on Edit action for list item
    *
-   * @param {object} vehicleType vehicle type to be edited
+   * @param {object} vehicleMake vehicle make to be edited
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = (vehicleType) => {
-    selectVehicleType(vehicleType);
+  handleEdit = (vehicleMake) => {
+    selectVehicleMake(vehicleMake);
     this.setState({ isEditForm: true });
-    openVehicleTypeForm();
+    openVehicleMakeForm();
   };
 
   /**
@@ -129,26 +129,26 @@ class VehicleType extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
-    selectVehicleType(null);
+    selectVehicleMake(null);
     this.setState({ isEditForm: false });
   };
 
   /**
    * @function
-   * @name handleRefreshVehicleType
+   * @name handleRefreshVehicleMake
    * @description Handle list refresh action
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleRefreshVehicleType = () => {
-    refreshVehicleTypes(
+  handleRefreshVehicleMake = () => {
+    refreshVehicleMakes(
       () => {
-        notifySuccess('Vehicle types were refreshed successfully');
+        notifySuccess('Vehicle makes were refreshed successfully');
       },
       () => {
         notifyError(
-          'An Error occurred while refreshing Vehicle types please contact system administrator'
+          'An Error occurred while refreshing Vehicle makes please contact system administrator'
         );
       }
     );
@@ -157,9 +157,9 @@ class VehicleType extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a vehicle type
+   * @description show confirm modal before archiving a vehicle make
    *
-   * @param item {object} vehicleType to archive
+   * @param item {object} vehicleMake to archive
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -171,12 +171,12 @@ class VehicleType extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteVehicleType(
+        deleteVehicleMake(
           item._id, // eslint-disable-line
-          () => notifySuccess('Vehicle Type was archived successfully'),
+          () => notifySuccess('Vehicle Make was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving Vehicle Type, Please contact your system Administrator'
+              'An error occurred while archiving Vehicle Make, Please contact your system Administrator'
             )
         );
       },
@@ -188,27 +188,27 @@ class VehicleType extends Component {
    * @name handleShare
    * @description Handle share multiple event Indicators
    *
-   * @param {object[]| object} vehicleTypes event Indicators list to be shared
+   * @param {object[]| object} vehicleMakes event Indicators list to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = (vehicleTypes) => {
+  handleShare = (vehicleMakes) => {
     let message = '';
-    if (isArray(vehicleTypes)) {
-      const vehicleTypeList = vehicleTypes.map(
-        (vehicleType) =>
-          `Name: ${vehicleType.strings.name.en}\nDescription: ${
+    if (isArray(vehicleMakes)) {
+      const vehicleMakeList = vehicleMakes.map(
+        (vehicleMake) =>
+          `Name: ${vehicleMake.strings.name.en}\nDescription: ${
             // eslint-disable-line
-            vehicleType.strings.description.en
+            vehicleMake.strings.description.en
           }\n`
       );
 
-      message = vehicleTypeList.join('\n\n\n');
+      message = vehicleMakeList.join('\n\n\n');
     } else {
-      message = `Name: ${vehicleTypes.strings.name.en}\nDescription: ${
+      message = `Name: ${vehicleMakes.strings.name.en}\nDescription: ${
         // eslint-disable-line
-        vehicleTypes.strings.description.en
+        vehicleMakes.strings.description.en
       }\n`;
     }
 
@@ -218,7 +218,7 @@ class VehicleType extends Component {
   /**
    * @function
    * @name closeNotificationForm
-   * @description Handle on notify vehicleTypes
+   * @description Handle on notify vehicleMakes
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -229,11 +229,11 @@ class VehicleType extends Component {
 
   render() {
     const {
-      vehicleTypes,
+      vehicleMakes,
       loading,
       page,
       posting,
-      vehicleType,
+      vehicleMake,
       showForm,
       searchQuery,
       total,
@@ -246,17 +246,17 @@ class VehicleType extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for vehicle types here ...',
-            onChange: this.searchVehicleTypes,
+            placeholder: 'Search for vehicle makes here ...',
+            onChange: this.searchVehicleMakes,
             value: searchQuery,
           }}
           actions={[
             {
-              label: 'New Type',
+              label: 'New Make',
               icon: <PlusOutlined />,
               size: 'large',
-              title: 'Add New Vehicle Type',
-              onClick: this.openVehicleTypesForm,
+              title: 'Add New Vehicle Make',
+              onClick: this.openVehicleMakesForm,
             },
           ]}
         />
@@ -264,17 +264,17 @@ class VehicleType extends Component {
 
         {/* list starts */}
         <ItemList
-          itemName="Vehicle Type"
-          items={vehicleTypes}
+          itemName="Vehicle Make"
+          items={vehicleMakes}
           page={page}
           itemCount={total}
           loading={loading}
           // onFilter={this.openFiltersModal}
           onNotify={this.openNotificationForm}
           onShare={this.handleShare}
-          onRefresh={this.handleRefreshVehicleType}
-          onPaginate={(nextPage) => paginateVehicleTypes(nextPage)}
-          generateExportUrl={getVehicleTypesExportUrl}
+          onRefresh={this.handleRefreshVehicleMake}
+          onPaginate={(nextPage) => paginateVehicleMakes(nextPage)}
+          generateExportUrl={getVehicleMakesExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
             item,
@@ -293,19 +293,19 @@ class VehicleType extends Component {
               renderActions={() => (
                 <ListItemActions
                   edit={{
-                    name: 'Edit Vehicle Type',
-                    title: 'Update vehicle type Details',
+                    name: 'Edit Vehicle Make',
+                    title: 'Update vehicle make Details',
                     onClick: () => this.handleEdit(item),
                   }}
                   share={{
-                    name: 'Share Vehicle Type',
-                    title: 'Share vehicle type details with others',
+                    name: 'Share Vehicle Make',
+                    title: 'Share vehicle make details with others',
                     onClick: () => this.handleShare(item),
                   }}
                   archive={{
-                    name: 'Archive Vehicle Type',
+                    name: 'Archive Vehicle Make',
                     title:
-                      'Remove vehicle type from list of active vehicle types',
+                      'Remove vehicle make from list of active vehicle makes',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                 />
@@ -321,9 +321,9 @@ class VehicleType extends Component {
         />
         {/* end list */}
 
-        {/* Vehicle Type modal */}
+        {/* Vehicle Make modal */}
         <Modal
-          title="Notify Vehicle Type"
+          title="Notify Vehicle Make"
           visible={showNotificationForm}
           onCancel={this.closeNotificationForm}
           footer={null}
@@ -343,24 +343,24 @@ class VehicleType extends Component {
             onCancel={this.closeNotificationForm}
           />
         </Modal>
-        {/* end Vehicle Type modal */}
+        {/* end Vehicle Make modal */}
 
         {/* create/edit form modal */}
         <Modal
-          title={isEditForm ? 'Edit Vehicle Type' : 'Add New Vehicle Type'}
+          title={isEditForm ? 'Edit Vehicle Make' : 'Add New Vehicle Make'}
           visible={showForm}
           className="FormModal"
           footer={null}
-          onCancel={this.closeVehicleTypeForm}
+          onCancel={this.closeVehicleMakeForm}
           afterClose={this.handleAfterCloseForm}
           maskClosable={false}
           destroyOnClose
         >
-          <VehicleTypeForm
+          <VehicleMakeForm
             posting={posting}
             isEditForm={isEditForm}
-            vehicleType={vehicleType}
-            onCancel={this.closeVehicleTypeForm}
+            vehicleMake={vehicleMake}
+            onCancel={this.closeVehicleMakeForm}
           />
         </Modal>
         {/* end create/edit form modal */}
@@ -369,11 +369,11 @@ class VehicleType extends Component {
   }
 }
 
-VehicleType.propTypes = {
+VehicleMake.propTypes = {
   loading: PropTypes.bool.isRequired,
-  vehicleTypes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
+  vehicleMakes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
-  vehicleType: PropTypes.shape({ name: PropTypes.string }),
+  vehicleMake: PropTypes.shape({ name: PropTypes.string }),
   page: PropTypes.number.isRequired,
   searchQuery: PropTypes.string,
   total: PropTypes.number.isRequired,
@@ -381,18 +381,18 @@ VehicleType.propTypes = {
   showForm: PropTypes.bool.isRequired,
 };
 
-VehicleType.defaultProps = {
-  vehicleType: null,
+VehicleMake.defaultProps = {
+  vehicleMake: null,
   searchQuery: undefined,
 };
 
-export default Connect(VehicleType, {
-  vehicleTypes: 'vehicleTypes.list',
-  vehicleType: 'vehicleTypes.selected',
-  loading: 'vehicleTypes.loading',
-  posting: 'vehicleTypes.posting',
-  page: 'vehicleTypes.page',
-  showForm: 'vehicleTypes.showForm',
-  total: 'vehicleTypes.total',
-  searchQuery: 'vehicleTypes.q',
+export default Connect(VehicleMake, {
+  vehicleMakes: 'vehicleMakes.list',
+  vehicleMake: 'vehicleMakes.selected',
+  loading: 'vehicleMakes.loading',
+  posting: 'vehicleMakes.posting',
+  page: 'vehicleMakes.page',
+  showForm: 'vehicleMakes.showForm',
+  total: 'vehicleMakes.total',
+  searchQuery: 'vehicleMakes.q',
 });

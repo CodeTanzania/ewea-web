@@ -153,6 +153,12 @@ const routes = [
     description: modules.units,
   },
   {
+    name: 'Vehicle Makes',
+    path: '/vehiclemakes',
+    icon: unitsIcon,
+    description: modules.units,
+  },
+  {
     name: 'Vehicle Models',
     path: '/vehiclemodels',
     icon: unitsIcon,
