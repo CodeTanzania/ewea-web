@@ -6,11 +6,12 @@ import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Col, Input, Row } from 'antd';
 import upperFirst from 'lodash/upperFirst';
+import get from 'lodash/get';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
-const { getFeatures, getPartyGroups } = httpActions;
+const { getAdministrativeAreas, getPartyGroups } = httpActions;
 const { postAgency, putAgency } = reduxActions;
 const { TextArea } = Input;
 
@@ -208,27 +209,25 @@ class AgencyForm extends Component {
                 {/* agency location */}
                 {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <Form.Item {...formItemLayout} label="Area">
-                  {getFieldDecorator('location', {
+                  {getFieldDecorator('area', {
                     initialValue:
-                      isEditForm && agency.location
-                        ? agency.location._id // eslint-disable-line
+                      isEditForm && agency.area
+                        ? agency.area._id // eslint-disable-line
                         : undefined,
                     rules: [
                       { required: true, message: 'Agency area is required' },
                     ],
                   })(
                     <SearchableSelectInput
-                      onSearch={getFeatures}
+                      onSearch={getAdministrativeAreas}
                       optionLabel={(area) =>
                         `${area.strings.name.en} (${upperFirst(
-                          area.relations.type.strings.name.en
+                          get(area, 'relations.level.strings.name.en', 'N/A')
                         )})`
                       }
                       optionValue="_id"
                       initialValue={
-                        isEditForm && agency.location
-                          ? agency.location
-                          : undefined
+                        isEditForm && agency.area ? agency.area : undefined
                       }
                     />
                   )}
@@ -332,7 +331,7 @@ AgencyForm.propTypes = {
     mobile: PropTypes.string,
     email: PropTypes.string,
     group: PropTypes.string,
-    location: PropTypes.string,
+    area: PropTypes.object,
     landline: PropTypes.string,
     fax: PropTypes.string,
     physicalAddress: PropTypes.string,
