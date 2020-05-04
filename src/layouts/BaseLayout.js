@@ -34,6 +34,7 @@ import FeatureTypes from '../GeographicalFeatures/FeatureTypes';
 import Units from '../Units';
 // import StakeholdersNotifications from '../Stakeholders/Notifications';
 import StakeholdersRoles from '../Stakeholders/Roles';
+import Vehicles from '../VehicleDispatches/Vehicles';
 import VehicleMakes from '../VehicleDispatches/VehicleMakes';
 import VehicleModels from '../VehicleDispatches/VehicleModels';
 import VehicleTypes from '../VehicleDispatches/VehicleTypes';
@@ -204,6 +205,10 @@ const breadcrumbNameMap = {
   '/app/settings/units': {
     name: 'Units',
     title: 'Units module',
+  },
+  '/app/settings/vehicles': {
+    name: 'Vehicles',
+    title: 'Vehicles Module',
   },
   '/app/settings/vehiclemakes': {
     name: 'Vehicle Makes',
@@ -422,6 +427,11 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
           />
 
           <SecureRoute path={`${baseUrl}/settings/units`} component={Units} />
+          <SecureRoute
+            exact
+            path={`${baseUrl}/settings/vehicles`}
+            component={Vehicles}
+          />
           <SecureRoute
             path={`${baseUrl}/settings/vehiclemakes`}
             component={VehicleMakes}
