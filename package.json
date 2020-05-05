@@ -26,10 +26,10 @@
   "dependencies": {
     "@ant-design/compatible": "^1.0.2",
     "@ant-design/icons": "^4.1.0",
-    "@codetanzania/ewea-api-client": "^0.15.0",
-    "@codetanzania/ewea-api-states": "^0.22.0",
+    "@codetanzania/ewea-api-client": "^0.16.0",
+    "@codetanzania/ewea-api-states": "^0.23.0",
     "@lykmapipo/common": "^0.33.1",
-    "antd": "^4.1.5",
+    "antd": "^4.2.0",
     "axios": "^0.19.2",
     "inflection": "^1.12.0",
     "lodash": "^4.17.15",
