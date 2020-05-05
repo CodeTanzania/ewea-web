@@ -16,6 +16,7 @@ const {
   getVehicleTypes,
   getVehicleModels,
   getVehicleMakes,
+  getVehicleStatuses,
 } = httpActions;
 const { putVehicle, postVehicle } = reduxActions;
 const { TextArea } = Input;
@@ -175,17 +176,14 @@ const VehicleForm = ({ vehicle, isEditForm, posting, onCancel }) => {
         <Col span={11}>
           <Form.Item
             label="Status"
-            name={['relations', 'ownership', '_id']}
-            rules={[
-              { required: true, message: 'Vehicle Ownership is required' },
-            ]}
+            name={['relations', 'status', '_id']}
+            rules={[{ required: true, message: 'Vehicle status is required' }]}
           >
             <SearchableSelectInput
-              onSearch={getPartyOwnerships}
-              optionLabel={(ownership) => ownership.strings.name.en}
+              onSearch={getVehicleStatuses}
+              optionLabel={(status) => status.strings.name.en}
               optionValue="_id"
-              initialValue={get(vehicle, 'relations.ownership', undefined)}
-              disabled
+              initialValue={get(vehicle, 'relations.status', undefined)}
             />
           </Form.Item>
         </Col>
