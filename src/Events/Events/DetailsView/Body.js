@@ -2,7 +2,6 @@ import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { getBaseUrl, getJwtToken } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import ReactToPrint from 'react-to-print';
-
 import {
   ApartmentOutlined,
   DownloadOutlined,
@@ -22,7 +21,6 @@ import {
   DashboardOutlined,
   PlusCircleOutlined,
 } from '@ant-design/icons';
-
 import {
   Tag,
   Timeline,
@@ -112,6 +110,7 @@ const EventToolbar = ({
             onClick={() => onEdit()}
           />
         </Col>
+
         <Col span={1}>
           <Button
             shape="circle"
@@ -143,18 +142,7 @@ const EventToolbar = ({
             onClick={() => openForm({ key: 'file', label: 'Upload File' })}
           />
         </Col>
-        {/* <Col span={1}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<AuditOutlined />}
-            title="Record Effect & Need"
-            className="actionButton"
-            onClick={() =>
-              openForm({ key: 'damage', label: 'Record Effect & Need' })
-            }
-          />
-        </Col> */}
+
         <Col span={1}>
           <Button
             shape="circle"
@@ -186,6 +174,7 @@ const EventToolbar = ({
             onClick={() => openIndicatorDashboard()}
           />
         </Col>
+
         <Col span={1}>
           <Button
             shape="circle"
@@ -293,7 +282,6 @@ export const EventLocations = ({ areas = [], openForm }) => {
           />
         }
       />
-
       {locations}
     </div>
   );
@@ -366,7 +354,7 @@ export const EventActionsTaken = ({ actions = [], openForm }) => {
  * @since 0.1.0
  */
 export const EventRespondingAgencies = ({ agencies = [], openForm }) => {
-  return isEmpty(agencies) ? null : (
+  return (
     <div style={{ marginTop: '40px' }}>
       <EventDetailsSectionHeader
         title="AGENCIES RESPONDED"
