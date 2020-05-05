@@ -171,6 +171,12 @@ const routes = [
     description: modules.units,
   },
   {
+    name: 'Vehicle Statuses',
+    path: '/vehiclestatuses',
+    icon: unitsIcon,
+    description: modules.units,
+  },
+  {
     name: 'Vehicle Types',
     path: '/vehicletypes',
     icon: unitsIcon,

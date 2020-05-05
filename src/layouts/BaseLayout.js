@@ -38,6 +38,7 @@ import Vehicles from '../VehicleDispatches/Vehicles';
 import VehicleMakes from '../VehicleDispatches/VehicleMakes';
 import VehicleModels from '../VehicleDispatches/VehicleModels';
 import VehicleTypes from '../VehicleDispatches/VehicleTypes';
+import VehicleStatuses from '../VehicleDispatches/VehicleStatuses';
 import Settings from '../navigation/Settings';
 import ActionsTaken from '../Dashboards/ActionsTaken';
 import SecureRoute from '../Auth/SecureRoute';
@@ -217,6 +218,10 @@ const breadcrumbNameMap = {
   '/app/settings/vehiclemodels': {
     name: 'Vehicle Models',
     title: 'Vehicle Models Module',
+  },
+  '/app/settings/vehiclestatuses': {
+    name: 'Vehicle Statuses',
+    title: 'Vehicle Statuses Module',
   },
   '/app/settings/vehicletypes': {
     name: 'Vehicle Types',
@@ -439,6 +444,10 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
           <SecureRoute
             path={`${baseUrl}/settings/vehiclemodels`}
             component={VehicleModels}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/vehiclestatuses`}
+            component={VehicleStatuses}
           />
           <SecureRoute
             path={`${baseUrl}/settings/vehicletypes`}
