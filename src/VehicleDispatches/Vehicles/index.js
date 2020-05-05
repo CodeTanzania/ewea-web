@@ -37,14 +37,16 @@ const {
 } = httpActions;
 
 /* constants */
-const typeSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 8, xs: 7 };
-const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 8, xs: 7 };
+const typeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 8, xs: 7 };
+const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 8, xs: 7 };
+const statusSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 0 };
 const ownershipSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
 const ownerSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 4 };
 const descriptionSpan = { xxl: 6, xl: 6, lg: 6, md: 4, sm: 0, xs: 0 };
 const headerLayout = [
   { ...typeSpan, header: 'Type' },
   { ...nameSpan, header: 'Plate No.' },
+  { ...statusSpan, header: 'Status' },
   { ...ownershipSpan, header: 'Ownership' },
   { ...ownerSpan, header: 'Owner' },
   { ...descriptionSpan, header: 'Description' },
@@ -320,6 +322,9 @@ class Vehicle extends Component {
                 {get(item, 'relations.type.strings.name.en', 'N/A')}
               </Col>
               <Col {...nameSpan}>{item.strings.name.en}</Col>
+              <Col {...statusSpan}>
+                {get(item, 'relations.status.strings.name.en', 'N/A')}
+              </Col>
               <Col {...ownershipSpan}>
                 {get(item, 'relations.ownership.strings.name.en', 'N/A')}
               </Col>
