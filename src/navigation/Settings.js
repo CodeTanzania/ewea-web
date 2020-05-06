@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import rolesIcon from '../assets/icons/settings/roles.svg';
-import administrativeAreasIcon from '../assets/icons/administrativeareas.svg';
+import administrativeAreasIcon from '../assets/icons/settings/administrativeareas.svg';
 import criticalFacilitiesIcon from '../assets/icons/criticalfacilities.svg';
 import eventTypesIcon from '../assets/icons/settings/eventtypes.svg';
 import eventGroupsIcon from '../assets/icons/settings/eventgroups.svg';
