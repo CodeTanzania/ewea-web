@@ -35,6 +35,7 @@ import Units from '../Units';
 // import StakeholdersNotifications from '../Stakeholders/Notifications';
 import StakeholdersRoles from '../Stakeholders/Roles';
 import Vehicles from '../VehicleDispatches/Vehicles';
+import VehicleDispatches from '../VehicleDispatches/Dispatches';
 import VehicleMakes from '../VehicleDispatches/VehicleMakes';
 import VehicleModels from '../VehicleDispatches/VehicleModels';
 import VehicleTypes from '../VehicleDispatches/VehicleTypes';
@@ -82,6 +83,12 @@ const breadcrumbNameMap = {
     title: 'List of all agencies',
   },
   '/app/stakeholders': { name: 'Stakeholders', title: 'Stakeholders module' },
+
+  /* vehicle dispatch routes */
+  '/app/dispatches': {
+    name: 'Vehicle Dispatches',
+    title: 'Vehicle Dispatches Module',
+  },
 
   /* dashboards routes */
   '/app/dashboards': {
@@ -318,6 +325,11 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
             path={`${baseUrl}/actioncatalogue`}
             component={ActionCatalogue}
           />
+          <SecureRoute
+            exact
+            path={`${baseUrl}/dispatches`}
+            component={VehicleDispatches}
+          />
 
           {/* Dashboard routes */}
           <SecureRoute
@@ -432,6 +444,7 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
           />
 
           <SecureRoute path={`${baseUrl}/settings/units`} component={Units} />
+
           <SecureRoute
             exact
             path={`${baseUrl}/settings/vehicles`}
