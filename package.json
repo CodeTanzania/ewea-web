@@ -4,6 +4,7 @@
   "description": "An early warning, early action tool that facilitates the disseminationn of warnings, communication and actions associated with the warnings.",
   "main": "index.js",
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
@@ -26,8 +27,8 @@
   "dependencies": {
     "@ant-design/compatible": "^1.0.2",
     "@ant-design/icons": "^4.1.0",
-    "@codetanzania/ewea-api-client": "^0.16.0",
-    "@codetanzania/ewea-api-states": "^0.23.0",
+    "@codetanzania/ewea-api-client": "^0.17.0",
+    "@codetanzania/ewea-api-states": "^0.24.0",
     "@lykmapipo/common": "^0.33.1",
     "antd": "^4.2.0",
     "axios": "^0.19.2",
@@ -119,6 +120,9 @@
       "pre-commit": "lint-staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "resolutions": {
+    "moment": "2.25.3"
   },
   "heroku-run-build-script": true
 }
