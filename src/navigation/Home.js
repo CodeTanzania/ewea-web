@@ -10,7 +10,7 @@ import eventsIcon from '../assets/icons/events.svg';
 import actionCatalogueIcon from '../assets/icons/actioncatalog.svg';
 import caseManagementIcon from '../assets/icons/dashboards/case-management-disabled.svg';
 import resourceManagementIcon from '../assets/icons/dashboards/resource-management-disabled.svg';
-import vehicleDispatchIcon from '../assets/icons/dashboards/vehicle-dispatch-disabled.svg';
+import vehicleDispatchIcon from '../assets/icons/dashboards/vehicle-dispatch.svg';
 import modules from '../modules.json';
 
 /* constants */
@@ -30,10 +30,9 @@ const routes = [
   },
   {
     name: 'Vehicle Dispatches',
-    path: '/app/dashboards/vehicledispatch',
+    path: '/app/dispatches',
     icon: vehicleDispatchIcon,
     description: modules.alertsIssued,
-    disabled: true,
   },
   // {
   //   name: 'Actions Taken',
