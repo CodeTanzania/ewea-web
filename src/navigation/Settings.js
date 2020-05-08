@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import rolesIcon from '../assets/icons/settings/roles.svg';
-import administrativeAreasIcon from '../assets/icons/administrativeareas.svg';
+import administrativeAreasIcon from '../assets/icons/settings/administrativeareas.svg';
 import criticalFacilitiesIcon from '../assets/icons/criticalfacilities.svg';
 import eventTypesIcon from '../assets/icons/settings/eventtypes.svg';
 import eventGroupsIcon from '../assets/icons/settings/eventgroups.svg';
@@ -16,6 +16,7 @@ import eventLevelsIcon from '../assets/icons/settings/eventlevels.svg';
 import emergencyFunctionsIcon from '../assets/icons/emergencyfunctions.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import unitsIcon from '../assets/icons/settings/units.svg';
+import agenciesOwnersIcon from '../assets/icons/settings/agenciesownership.svg';
 import stakeholderGroupsIcon from '../assets/icons/settings/stakeholdergroups.svg';
 import eventTopicsIcon from '../assets/icons/settings/eventtopics.svg';
 import eventStatusesIcon from '../assets/icons/settings/eventstatuses.svg';
@@ -23,6 +24,11 @@ import eventResponsesIcon from '../assets/icons/settings/eventresponses.svg';
 import eventUrgenciesIcon from '../assets/icons/settings/eventurgencies.svg';
 import administrativeLevelsIcon from '../assets/icons/settings/administrativelevels.svg';
 import featureTypesIcon from '../assets/icons/settings/featuretypes.svg';
+import vehiclesIcon from '../assets/icons/settings/vehicles.svg';
+import vehicleMakesIcon from '../assets/icons/settings/vehiclemakes.svg';
+import vehicleModelsIcon from '../assets/icons/settings/vehiclemodels.svg';
+import vehicleStatusesIcon from '../assets/icons/settings/vehiclestatuses.svg';
+import vehicleTypesIcon from '../assets/icons/settings/vehicletypes.svg';
 import modules from '../modules.json';
 
 /* constants */
@@ -77,7 +83,7 @@ const routes = [
   {
     name: 'Agencies Ownerships',
     path: '/agenciesownerships',
-    icon: stakeholderGroupsIcon,
+    icon: agenciesOwnersIcon,
     description: modules.stakeholderGroups,
   },
   {
@@ -155,31 +161,31 @@ const routes = [
   {
     name: 'Vehicles',
     path: '/vehicles',
-    icon: unitsIcon,
+    icon: vehiclesIcon,
     description: modules.units,
   },
   {
     name: 'Vehicle Makes',
     path: '/vehiclemakes',
-    icon: unitsIcon,
+    icon: vehicleMakesIcon,
     description: modules.units,
   },
   {
     name: 'Vehicle Models',
     path: '/vehiclemodels',
-    icon: unitsIcon,
+    icon: vehicleModelsIcon,
     description: modules.units,
   },
   {
     name: 'Vehicle Statuses',
     path: '/vehiclestatuses',
-    icon: unitsIcon,
+    icon: vehicleStatusesIcon,
     description: modules.units,
   },
   {
     name: 'Vehicle Types',
     path: '/vehicletypes',
-    icon: unitsIcon,
+    icon: vehicleTypesIcon,
     description: modules.units,
   },
   {
