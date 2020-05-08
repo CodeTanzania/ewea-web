@@ -49,6 +49,8 @@ const formItemLayout = {
 };
 const { Step } = Steps;
 
+// TODO fix on filling multiple section without saving
+
 /**
  * @function
  * @name VehicleDispatchForm
@@ -59,6 +61,7 @@ const { Step } = Steps;
  * @since 0.1.0
  */
 const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
+  const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
   // const [selectedVehicle, selectVehicle] = useState(null);
   const onStepChange = (step) => setCurrentStep(step);
@@ -90,17 +93,43 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
       <Steps type="navigation" current={currentStep} onChange={onStepChange}>
         <Step title="Request/Call Details" status="wait" />
         <Step title="Patient/Victim" status="wait" />
-        <Step title="Pickup Location" status="wait" />
-        <Step title="Pickup Location" status="wait" />
+        <Step title="Pick-Up Location" status="wait" />
+        <Step title="Drop-Off Location" status="wait" />
         <Step title="Vehicle Details" status="wait" />
       </Steps>
       <Form
+        form={form}
         onFinish={onFinish}
         {...formItemLayout} // eslint-disable-line
         style={{ marginTop: '30px' }}
         initialValues={{
           ...dispatch,
+          type: get(dispatch, 'type._id', undefined),
           crew: map(get(dispatch, 'crew', []), '_id'),
+          requester: {
+            ...get(dispatch, 'requester', null),
+            facility: get(dispatch, 'requester.facility._id', undefined),
+            area: get(dispatch, 'requester.area._id', undefined),
+          },
+          victim: {
+            ...get(dispatch, 'victim', null),
+            gender: get(dispatch, 'victim.gender._id', undefined),
+            area: get(dispatch, 'victim.area._id', undefined),
+          },
+          pickup: {
+            ...get(dispatch, 'pickup', null),
+            facility: get(dispatch, 'pickup.facility._id', undefined),
+            area: get(dispatch, 'pickup.area._id', undefined),
+          },
+          dropoff: {
+            ...get(dispatch, 'dropoff', null),
+            facility: get(dispatch, 'dropoff.facility._id', undefined),
+            area: get(dispatch, 'dropoff.area._id', undefined),
+          },
+          carrier: {
+            ...get(dispatch, 'carrier', null),
+            vehicle: get(dispatch, 'carrier.vehicle._id', undefined),
+          },
         }}
       >
         {currentStep === 0 && (
@@ -145,10 +174,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
 
             <Row justify="space-between">
               <Col span={11}>
-                <Form.Item
-                  name={['requester', 'facility', '_id']}
-                  label="Facility"
-                >
+                <Form.Item name={['requester', 'facility']} label="Facility">
                   <SearchableSelectInput
                     onSearch={getFeatures}
                     optionLabel={(facility) => facility.strings.name.en}
@@ -163,7 +189,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
               </Col>
               <Col span={11}>
                 <Form.Item
-                  name={['requester', 'area', '_id']}
+                  name={['requester', 'area']}
                   label="Area"
                   rules={[
                     { required: true, message: 'This field is required' },
@@ -211,7 +237,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
               </Col>
               <Col span={11}>
                 <Form.Item
-                  name={['type', '_id']}
+                  name={['type']}
                   label="Event/Diagnosis"
                   rules={[
                     { required: true, message: 'This field is required' },
@@ -234,7 +260,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                 </Form.Item>
               </Col>
               <Col span={11}>
-                <Form.Item name={['victim', 'gender', '_id']} label="Gender">
+                <Form.Item name={['victim', 'gender']} label="Gender">
                   <SearchableSelectInput
                     onSearch={getPartyGenders}
                     optionLabel={(gender) => `${gender.strings.name.en} `}
@@ -272,7 +298,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
             </Row>
 
             <Form.Item
-              name={['victim', 'area', '_id']}
+              name={['victim', 'area']}
               label="Area"
               rules={[{ required: true, message: 'This field is required' }]}
             >
@@ -304,10 +330,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
           <>
             <Row justify="space-between">
               <Col span={11}>
-                <Form.Item
-                  name={['pickup', 'facility', '_id']}
-                  label="Facility"
-                >
+                <Form.Item name={['pickup', 'facility']} label="Facility">
                   <SearchableSelectInput
                     onSearch={getFeatures}
                     optionLabel={(facility) => facility.strings.name.en}
@@ -317,7 +340,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                 </Form.Item>
               </Col>
               <Col span={11}>
-                <Form.Item name={['pickup', 'area', '_id']} label="Area">
+                <Form.Item name={['pickup', 'area']} label="Area">
                   <SearchableSelectInput
                     onSearch={getAdministrativeAreas}
                     optionLabel={(area) =>
@@ -384,10 +407,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
           <>
             <Row justify="space-between">
               <Col span={11}>
-                <Form.Item
-                  name={['dropoff', 'facility', '_id']}
-                  label="Facility"
-                >
+                <Form.Item name={['dropoff', 'facility']} label="Facility">
                   <SearchableSelectInput
                     onSearch={getFeatures}
                     optionLabel={(facility) => facility.strings.name.en}
@@ -397,7 +417,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                 </Form.Item>
               </Col>
               <Col span={11}>
-                <Form.Item name={['dropoff', 'area', '_id']} label="Area">
+                <Form.Item name={['dropoff', 'area']} label="Area">
                   <SearchableSelectInput
                     onSearch={getAdministrativeAreas}
                     optionLabel={(area) =>
@@ -462,7 +482,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
 
         {currentStep === 4 && (
           <>
-            <Form.Item name={['carrier', 'vehicle', '_id']} label="Vehicle">
+            <Form.Item name={['carrier', 'vehicle']} label="Vehicle">
               <SearchableSelectInput
                 onSearch={getVehicles}
                 optionLabel={(vehicle) =>
@@ -493,24 +513,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                 </Form.Item>
               </Col>
             </Row> */}
-            <Form.Item
-              name={['requester', 'area', '_id']}
-              label="Area"
-              rules={[{ required: true, message: 'This field is required' }]}
-            >
-              <SearchableSelectInput
-                onSearch={getAdministrativeAreas}
-                optionLabel={(area) =>
-                  `${area.strings.name.en} (${get(
-                    area,
-                    'relations.level.strings.name.en',
-                    'N/A'
-                  )})`
-                }
-                optionValue="_id"
-                initialValue={get(dispatch, 'requester.area', undefined)}
-              />
-            </Form.Item>
+
             <Form.Item name="crew" label="Crew">
               <SearchableSelectInput
                 onSearch={getFocalPeople}
