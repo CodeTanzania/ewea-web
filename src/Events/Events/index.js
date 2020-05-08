@@ -22,7 +22,6 @@ import {
   generateEventTemplate,
   timeAgo,
 } from '../../util';
-import './styles.css';
 
 /* constants */
 const {
