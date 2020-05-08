@@ -19,7 +19,6 @@ import {
   notifySuccess,
   generateFocalPersonVCard,
 } from '../../util';
-import './styles.css';
 
 /* constants */
 const {
@@ -484,7 +483,7 @@ class FocalPeople extends Component {
         <Modal
           title={isEditForm ? 'Edit Focal Person' : 'Add New Focal Person'}
           visible={showForm}
-          className="FormModal"
+          className="FormModal-80"
           footer={null}
           onCancel={this.closeFocalPersonForm}
           destroyOnClose

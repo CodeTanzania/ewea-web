@@ -9,7 +9,6 @@ import get from 'lodash/get';
 
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
-import FocalPersonFilters from './Filters';
 import DispatchForm from './Form';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
@@ -35,18 +34,17 @@ const {
   getDispatches,
   openDispatchForm,
   searchDispatches,
-  selectFocalPerson,
+  selectDispatch,
   refreshDispatches,
   paginateDispatches,
   deleteFocalPerson,
 } = reduxActions;
 const { confirm } = Modal;
 
-const numberSpan = { xxl: 4, xl: 4, lg: 4, md: 6, sm: 10, xs: 10 };
-const vehicleSpan = { xxl: 6, xl: 5, lg: 5, md: 0, sm: 0, xs: 0 };
-const eventSpan = { xxl: 4, xl: 5, lg: 5, md: 4, sm: 9, xs: 8 };
-const statusSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
-const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
+const numberSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 10, xs: 10 };
+const vehicleSpan = { xxl: 6, xl: 6, lg: 6, md: 6, sm: 0, xs: 0 };
+const eventSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 9, xs: 8 };
+const statusSpan = { xxl: 6, xl: 6, lg: 6, md: 6, sm: 0, xs: 0 };
 
 const headerLayout = [
   { ...numberSpan, header: 'Number' },
@@ -66,7 +64,6 @@ const headerLayout = [
 class Dispatches extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
-    showFilters: false,
     isEditForm: false,
     showNotificationForm: false,
     selectedDispatches: [],
@@ -105,32 +102,6 @@ class Dispatches extends Component {
    */
   handleClearCachedValues = () => {
     this.setState({ cached: null });
-  };
-
-  /**
-   * @function
-   * @name openFiltersModal
-   * @description open filters modal by setting it's visible property
-   * to false via state
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  openFiltersModal = () => {
-    this.setState({ showFilters: true });
-  };
-
-  /**
-   * @function
-   * @name closeFiltersModal
-   * @description Close filters modal by setting it's visible property
-   * to false via state
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closeFiltersModal = () => {
-    this.setState({ showFilters: false });
   };
 
   /**
@@ -183,7 +154,7 @@ class Dispatches extends Component {
    * @since 0.1.0
    */
   handleEdit = (dispatch) => {
-    selectFocalPerson(dispatch);
+    selectDispatch(dispatch);
     this.setState({ isEditForm: true });
     openDispatchForm();
   };
@@ -259,6 +230,7 @@ class Dispatches extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
+    selectDispatch(null);
     this.setState({ isEditForm: false });
   };
 
@@ -326,7 +298,7 @@ class Dispatches extends Component {
   render() {
     const {
       dispatches,
-      dispatch,
+      selectedDispatch,
       loading,
       posting,
       page,
@@ -334,14 +306,13 @@ class Dispatches extends Component {
       searchQuery,
       total,
     } = this.props;
+
     const {
-      showFilters,
       isEditForm,
       showNotificationForm,
       selectedDispatches,
       notificationSubject,
       notificationBody,
-      cached,
     } = this.state;
     return (
       <>
@@ -372,8 +343,6 @@ class Dispatches extends Component {
           page={page}
           itemCount={total}
           loading={loading}
-          onFilter={this.openFiltersModal}
-          onNotify={this.openNotificationForm}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshDispatches}
           onPaginate={(nextPage) => paginateDispatches(nextPage)}
@@ -387,6 +356,8 @@ class Dispatches extends Component {
           }) => (
             <ListItem
               key={item._id} // eslint-disable-line
+              name={get(item, 'type.strings.name.en', 'A')}
+              avatarBackgroundColor={get(item, 'type.strings.color', '#d16666')}
               item={item}
               isSelected={isSelected}
               onSelectItem={onSelectItem}
@@ -413,46 +384,26 @@ class Dispatches extends Component {
               )}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
-              <Col {...numberSpan}>{item.name}</Col>
+              <Col {...numberSpan}>{item.number}</Col>
               <Col
                 {...vehicleSpan}
                 title={get(item, 'role.strings.name.en', 'N/A')}
               >
-                {`${get(item, 'role.strings.name.en', 'N/A')}, ${get(
-                  item,
-                  'party.abbreviation',
-                  'N/A'
-                )}`}
+                {`${get(item, 'carrier.vehicle.strings.name.en', 'N/A')}`}
               </Col>
-              <Col {...eventSpan}>{item.mobile}</Col>
-              <Col {...statusSpan}>{item.email}</Col>
-              <Col {...areaSpan}>
-                {get(item, 'area.strings.name.en', 'N/A')}
+              <Col {...eventSpan}>
+                {get(item, 'type.strings.name.en', 'N/A')}
               </Col>
+              <Col {...statusSpan}>{`${get(
+                item,
+                'vehicle.relations.status.strings.name.en',
+                'N/A'
+              )}`}</Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
             </ListItem>
           )}
         />
         {/* end list */}
-
-        {/* filter modal */}
-        <Modal
-          title="Filter Vehicle Dispatches"
-          visible={showFilters}
-          onCancel={this.closeFiltersModal}
-          footer={null}
-          destroyOnClose
-          maskClosable={false}
-          className="FormModal"
-        >
-          <FocalPersonFilters
-            onCancel={this.closeFiltersModal}
-            cached={cached}
-            onCache={this.handleOnCachedValues}
-            onClearCache={this.handleClearCachedValues}
-          />
-        </Modal>
-        {/* end filter modal */}
 
         {/* Notification Modal modal */}
         <Modal
@@ -495,7 +446,7 @@ class Dispatches extends Component {
           <DispatchForm
             posting={posting}
             isEditForm={isEditForm}
-            dispatch={dispatch}
+            dispatch={selectedDispatch}
             onCancel={this.closeDispatchForm}
           />
         </Modal>
@@ -510,7 +461,7 @@ Dispatches.propTypes = {
   posting: PropTypes.bool.isRequired,
   dispatches: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
-  dispatch: PropTypes.shape({ name: PropTypes.string }),
+  selectedDispatch: PropTypes.shape({ name: PropTypes.string }),
   page: PropTypes.number.isRequired,
   showForm: PropTypes.bool.isRequired,
   searchQuery: PropTypes.string,
@@ -518,13 +469,13 @@ Dispatches.propTypes = {
 };
 
 Dispatches.defaultProps = {
-  dispatch: null,
+  selectedDispatch: null,
   searchQuery: undefined,
 };
 
 export default Connect(Dispatches, {
   dispatches: 'dispatches.list',
-  dispatch: 'dispatches.selected',
+  selectedDispatch: 'dispatches.selected',
   loading: 'dispatches.loading',
   posting: 'dispatches.posting',
   page: 'dispatches.page',
