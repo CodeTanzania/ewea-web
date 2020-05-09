@@ -67,8 +67,8 @@ const { Step } = Steps;
 const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
+  const [formValues, setFormValues] = useState({});
   // const [selectedVehicle, selectVehicle] = useState(null);
-  const onStepChange = (step) => setCurrentStep(step);
   const pickupDispatchedTime = get(dispatch, 'pickup.dispatchedAt', undefined)
     ? moment(get(dispatch, 'pickup.dispatchedAt'))
     : undefined;
@@ -82,7 +82,13 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
     ? moment(get(dispatch, 'dropoff.dispatchedAt'))
     : undefined;
 
-  const onFinish = (values) => {
+  const onStepChange = (step) => {
+    setFormValues({ ...formValues, ...form.getFieldsValue() });
+    setCurrentStep(step);
+  };
+
+  const onFinish = (sectionValues) => {
+    const values = { ...formValues, ...sectionValues };
     if (isEditForm) {
       const updatedDispatch = { ...dispatch, ...values };
       putDispatch(
