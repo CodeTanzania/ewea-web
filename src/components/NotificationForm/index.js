@@ -33,11 +33,21 @@ const formItemLayout = {
 };
 
 /**
+ * @param root0
+ * @param root0.recipients
+ * @param root0.subject
+ * @param root0.body
+ * @param root0.onCancel
+ * @param root0.onSearchAgencies
+ * @param root0.onSearchRecipients
+ * @param root0.onSearchJurisdictions
+ * @param root0.onSearchGroups
+ * @param root0.onSearchRoles
+ * @param root0.posting
  * @function
  * @name NotificationForm
  * @description Notification Form component for notify parties based on areas,
  * roles, groups and e.t.c
- *
  * @returns {object} React component
  */
 const NotificationForm = ({

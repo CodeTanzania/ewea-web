@@ -9,9 +9,10 @@ import './styles.css';
 
 /**
  * @function
+ * @param props.loading
+ * @param props.history
  * @name SignInForm
  * @description Sign In form  component
- *
  * @param {object} props React props
  * @returns {object} Sign In Form
  * @version 0.1.0

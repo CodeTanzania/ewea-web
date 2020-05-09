@@ -197,10 +197,11 @@ const routes = [
 ];
 
 /**
+ * @param root0
+ * @param root0.match
  * @function
  * @name Settings
  * @description Settings module to bundle all configs UIs
- *
  * @returns {object} React component
  * @version 0.1.0
  * @since 0.1.0

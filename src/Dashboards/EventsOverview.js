@@ -54,6 +54,8 @@ const generateColumnsFor = (name, titles) => {
 
 /**
  * @function
+ * @param props.report
+ * @param props.loading
  * @name EventsOverviewDashboard
  * @description Events Overview Dashboard
  * @param {object} props Event Overview dashboard props

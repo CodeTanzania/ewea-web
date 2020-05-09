@@ -238,11 +238,12 @@ const breadcrumbNameMap = {
 
 /**
  * @function
+ * @param props.location
+ * @param props.match
+ * @param props.match.url
  * @name BaseLayout
  * @description Render base layout for EWEA app
- *
  * @param {object} props Properties inject by router
- *
  * @returns {object} BaseLayout component
  * @version 0.1.0
  * @since 0.1.0

@@ -28,6 +28,10 @@ const formItemLayout = {
 
 /**
  * @function
+ * @param props.vehicleMake
+ * @param props.isEditForm
+ * @param props.posting
+ * @param props.onCancel
  * @name VehicleMakeForm
  * @description Render form for creating and editing vehicle makes
  * @param {object} props VehicleMakeForm props

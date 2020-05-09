@@ -13,6 +13,19 @@ import './styles.css';
 
 /**
  * @function
+ * @param props.itemName
+ * @param props.items
+ * @param props.page
+ * @param props.loading
+ * @param props.itemCount
+ * @param props.headerLayout
+ * @param props.onFilter
+ * @param props.onNotify
+ * @param props.onPaginate
+ * @param props.onRefresh
+ * @param props.onShare
+ * @param props.generateExportUrl
+ * @param props.renderListItem
  * @name CustomList
  * @description List UI with tool bar , list header and list items
  * @param {object} props CustomList props

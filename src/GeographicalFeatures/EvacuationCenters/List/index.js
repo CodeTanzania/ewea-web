@@ -8,14 +8,12 @@ import EvacuationCenterListItem from '../ListItem';
  * @function
  * @name EvacuationCenterList
  * @description Render Evacuation Center list
- *
  * @param {object} props props object
+ * @param props.evacuationCenters
  * @param {boolean} props.loading preload list of Evacuation Center
  * @param {Array} props.districts array list of Evacuation Center
  * @param {Function} props.onEdit function for editing Evacuation Center
- *
  * @returns {object} React component
- *
  * @version 0.1.0
  * @since 0.1.0
  */

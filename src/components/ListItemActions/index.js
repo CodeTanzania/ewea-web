@@ -18,15 +18,17 @@ import { Dropdown, Button, Menu } from 'antd';
  * @function
  * @name ListItemActions
  * @description Render Dropdown component with has actions for list items
- *
  * @param {object} props props object
  * @param {object} props.edit on edit action callback
  * @param {object} props.share on share action callback
+ * @param props.onMapPreview
+ * @param props.view
+ * @param props.whatsapp
+ * @param props.reload
  * @param {object} props.archive on archive action callback
  * @param {object} props.transfer on transfer action callback
  * @param {object} props.adjust on adjust action callback
  * @returns {object} react element
- *
  * @version 0.1.0
  * @since 0.1.0
  */

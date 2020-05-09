@@ -51,6 +51,10 @@ const formItemLayout = {
 
 /**
  * @function
+ * @param props.event
+ * @param props.posting
+ * @param props.onCancel
+ * @param props.action
  * @name EventChangelogForm
  * @description Render Event form for creating and updating stakeholder
  * event details

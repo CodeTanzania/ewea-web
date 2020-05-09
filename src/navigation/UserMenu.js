@@ -9,6 +9,8 @@ import './styles.css';
 
 /**
  * @function
+ * @param props.history
+ * @param props.history.push
  * @name UserMenu
  * @description Menu for shown when user click user icon at the top bar
  * @param {object} props User menu props

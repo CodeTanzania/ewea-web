@@ -7,12 +7,16 @@ const { Text } = Typography;
 
 /**
  * @function
+ * @param props.label
+ * @param props.icon
+ * @param props.value
+ * @param props.title
+ * @param props.header
+ * @param props.duration
  * @name DataWidget
  * @description Data widget for action taken dashboard
- *
  * @param {object} props React props
  * @returns {object} React Component
- *
  * @version 0.1.0
  * @since 0.1.0
  */

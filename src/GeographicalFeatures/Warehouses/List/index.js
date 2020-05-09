@@ -6,13 +6,13 @@ import WarehouseListItem from '../ListItem';
 
 /**
  * @function
+ * @param props.warehouses
+ * @param props.loading
+ * @param props.onEdit
  * @name WarehouseList
  * @description Render warehouse list which have search box and actions
- *
  * @param {object} props props object
- *
  * @returns {object} React Compnent
- *
  * @version 0.1.0
  * @since 0.1.0
  */

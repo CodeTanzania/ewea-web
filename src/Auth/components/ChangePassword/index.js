@@ -27,6 +27,9 @@ const formItemLayout = {
 
 /**
  * @function
+ * @param props.user
+ * @param props.posting
+ * @param props.onCancel
  * @name ChangePasswordForm
  * @description Change password form to allow current logged in  user to update password
  * @param {object} props Change Password form props

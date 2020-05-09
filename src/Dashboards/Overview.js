@@ -26,6 +26,8 @@ const { getOverviewsReport } = reduxActions;
 
 /**
  * @function
+ * @param props.report
+ * @param props.loading
  * @name OverviewDashboard
  * @description Dashboard which renders overviews reports from different dashboards
  * i.e stakeholders, events

@@ -39,6 +39,12 @@ const formItemLayout = {
 
 /**
  * @function
+ * @param props.isEditForm
+ * @param props.defaultStage
+ * @param props.stages
+ * @param props.event
+ * @param props.posting
+ * @param props.onCancel
  * @name EventForm
  * @description Event Form component for creating and editing event
  * @param {object} props React props

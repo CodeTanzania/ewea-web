@@ -21,6 +21,11 @@ export const DARK_GREEN = '#388E3C';
 
 /**
  * @function
+ * @param props.title
+ * @param props.secondaryText
+ * @param props.value
+ * @param props.icon
+ * @param props.bottomBorderColor
  * @name NumberWidget
  * @description Number widget for dashboards
  * @param {object} props Number widget props
@@ -74,6 +79,8 @@ NumberWidget.defaultProps = {
 
 /**
  * @function
+ * @param props.title
+ * @param props.children
  * @name SectionCard
  * @description Card component for different sections in dashboard
  * @param {object} props Section Card component props
@@ -99,6 +106,10 @@ SectionCard.propTypes = {
 
 /**
  * @function
+ * @param props.title
+ * @param props.shape
+ * @param props.center
+ * @param props.scale
  * @name MapWidget
  * @description Render SVG map inside sectionCard component
  * @param {object} props Map Widget component props

@@ -9,11 +9,18 @@ const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 2, xs: 3 };
 const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 3 };
 
 /**
+ * @param root0
+ * @param root0.name
+ * @param root0.avatarBackgroundColor
+ * @param root0.item
+ * @param root0.isSelected
+ * @param root0.onSelectItem
+ * @param root0.onDeselectItem
+ * @param root0.renderActions
+ * @param root0.children
  * @function
  * @name ListItem
  * @description Generic list item(row) for list component
- *
- *
  * @returns {object} React Component
  * @version 0.1.0
  * @since 0.1.0
