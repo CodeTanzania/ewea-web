@@ -49,13 +49,17 @@ const formItemLayout = {
 };
 const { Step } = Steps;
 
-// TODO fix on filling multiple section without saving
+// FIXME fix on filling multiple section without saving
 
 /**
  * @function
  * @name VehicleDispatchForm
  * @description Vehicle Dispatch form for ambulances and fire
  * @param {object} props Dispatch Form props
+ * @param {object} props.dispatch Dispatch instance
+ * @param {boolean} props.isEditForm Flag for edit form (true) if editing dispatch
+ * @param {boolean} props.posting Flag from the store marking posting data to the api
+ * @param {Function} props.onCancel Function to be invoked on cancelling the form
  * @returns {object} Render Vehicle Dispatch Form
  * @version 0.1.0
  * @since 0.1.0
@@ -65,6 +69,19 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
   const [currentStep, setCurrentStep] = useState(0);
   // const [selectedVehicle, selectVehicle] = useState(null);
   const onStepChange = (step) => setCurrentStep(step);
+  const pickupDispatchedTime = get(dispatch, 'pickup.dispatchedAt', undefined)
+    ? moment(get(dispatch, 'pickup.dispatchedAt'))
+    : undefined;
+  const pickupArrivedTime = get(dispatch, 'pickup.arrivedAt', undefined)
+    ? moment(get(dispatch, 'pickup.dispatchedAt'))
+    : undefined;
+  const dropOffDispatchedTime = get(dispatch, 'dropoff.dispatchedAt', undefined)
+    ? moment(get(dispatch, 'dropoff.dispatchedAt'))
+    : undefined;
+  const dropOffArrivedTime = get(dispatch, 'dropoff.arrivedAt', undefined)
+    ? moment(get(dispatch, 'dropoff.dispatchedAt'))
+    : undefined;
+
   const onFinish = (values) => {
     if (isEditForm) {
       const updatedDispatch = { ...dispatch, ...values };
@@ -104,6 +121,9 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
         style={{ marginTop: '30px' }}
         initialValues={{
           ...dispatch,
+          reportedAt: moment(get(dispatch, 'reportedAt', undefined)).format(
+            'YYYY-MM-DD HH:mm:ss'
+          ),
           type: get(dispatch, 'type._id', undefined),
           crew: map(get(dispatch, 'crew', []), '_id'),
           requester: {
@@ -120,11 +140,15 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
             ...get(dispatch, 'pickup', null),
             facility: get(dispatch, 'pickup.facility._id', undefined),
             area: get(dispatch, 'pickup.area._id', undefined),
+            dispatchedAt: pickupDispatchedTime,
+            arrivedAt: pickupArrivedTime,
           },
           dropoff: {
             ...get(dispatch, 'dropoff', null),
             facility: get(dispatch, 'dropoff.facility._id', undefined),
             area: get(dispatch, 'dropoff.area._id', undefined),
+            dispatchedAt: dropOffDispatchedTime,
+            arrivedAt: dropOffArrivedTime,
           },
           carrier: {
             ...get(dispatch, 'carrier', null),
@@ -134,18 +158,20 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
       >
         {currentStep === 0 && (
           <>
-            <Row justify="space-between">
-              <Col span={11}>
-                <Form.Item name="number" label="Dispatch Number">
-                  <Input disabled />
-                </Form.Item>
-              </Col>
-              <Col span={11}>
-                <Form.Item name="reportedAt" label="Request Time">
-                  <Input disabled />
-                </Form.Item>
-              </Col>
-            </Row>
+            {dispatch && (
+              <Row justify="space-between">
+                <Col span={11}>
+                  <Form.Item name="number" label="Dispatch Number">
+                    <Input disabled />
+                  </Form.Item>
+                </Col>
+                <Col span={11}>
+                  <Form.Item name="reportedAt" label="Request Time">
+                    <Input disabled />
+                  </Form.Item>
+                </Col>
+              </Row>
+            )}
 
             <Row justify="space-between">
               <Col span={11}>
@@ -380,18 +406,18 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                   label="Dispatched Time"
                 >
                   <DatePicker
-                    format="YYYY-MM-DD HH:mm:ss"
-                    showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                    showTime
                     style={{ width: '100%' }}
+                    placeholder="Select vehicle dispatched time"
                   />
                 </Form.Item>
               </Col>
               <Col span={11}>
                 <Form.Item name={['pickup', 'arrivedAt']} label="Arrived Time">
                   <DatePicker
-                    format="YYYY-MM-DD HH:mm:ss"
-                    showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                    showTime
                     style={{ width: '100%' }}
+                    placeholder="Select vehicle arrival time"
                   />
                 </Form.Item>
               </Col>
@@ -457,18 +483,18 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                   label="Dispatched Time"
                 >
                   <DatePicker
-                    format="YYYY-MM-DD HH:mm:ss"
-                    showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                    showTime
                     style={{ width: '100%' }}
+                    placeholder="Select vehicle dispatched time"
                   />
                 </Form.Item>
               </Col>
               <Col span={11}>
                 <Form.Item name={['dropoff', 'arrivedAt']} label="Arrived Time">
                   <DatePicker
-                    format="YYYY-MM-DD HH:mm:ss"
-                    showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
+                    showTime
                     style={{ width: '100%' }}
+                    placeholder="Select vehicle arrival time"
                   />
                 </Form.Item>
               </Col>
