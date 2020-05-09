@@ -68,7 +68,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
   const [formValues, setFormValues] = useState({});
-  // const [selectedVehicle, selectVehicle] = useState(null);
+  const [cached, setCache] = useState({}); // for caching lazy component values
   const pickupDispatchedTime = get(dispatch, 'pickup.dispatchedAt', undefined)
     ? moment(get(dispatch, 'pickup.dispatchedAt'))
     : undefined;
@@ -211,11 +211,13 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                     onSearch={getFeatures}
                     optionLabel={(facility) => facility.strings.name.en}
                     optionValue="_id"
-                    initialValue={get(
-                      dispatch,
-                      'requester.facility',
-                      undefined
-                    )}
+                    initialValue={
+                      get(dispatch, 'requester.facility', undefined) ||
+                      get(cached, 'requesterFacility', undefined)
+                    }
+                    onCache={(values) =>
+                      setCache({ ...cached, requesterFacility: values[0] })
+                    }
                   />
                 </Form.Item>
               </Col>
@@ -237,7 +239,13 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                       )})`
                     }
                     optionValue="_id"
-                    initialValue={get(dispatch, 'requester.area', undefined)}
+                    initialValue={
+                      get(dispatch, 'requester.area', undefined) ||
+                      get(cached, 'requesterArea', undefined)
+                    }
+                    onCache={(values) =>
+                      setCache({ ...cached, requesterArea: values[0] })
+                    }
                   />
                 </Form.Item>
               </Col>
@@ -279,7 +287,13 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                     onSearch={getEventTypes}
                     optionLabel={(type) => `${type.strings.name.en} `}
                     optionValue="_id"
-                    initialValue={get(dispatch, 'type', undefined)}
+                    initialValue={
+                      get(dispatch, 'type', undefined) ||
+                      get(cached, 'type', undefined)
+                    }
+                    onCache={(values) =>
+                      setCache({ ...cached, type: values[0] })
+                    }
                   />
                 </Form.Item>
               </Col>
@@ -297,7 +311,13 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                     onSearch={getPartyGenders}
                     optionLabel={(gender) => `${gender.strings.name.en} `}
                     optionValue="_id"
-                    initialValue={get(dispatch, 'victim.gender', undefined)}
+                    initialValue={
+                      get(dispatch, 'victim.gender', undefined) ||
+                      get(cached, 'victimGender', undefined)
+                    }
+                    onCache={(values) =>
+                      setCache({ ...cached, victimGender: values[0] })
+                    }
                   />
                 </Form.Item>
               </Col>
@@ -344,7 +364,12 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                   )})`
                 }
                 optionValue="_id"
-                initialValue={get(dispatch, 'victim.area', undefined)}
+                initialValue={
+                  get(dispatch, 'victim.area') || get(cached, 'victimArea')
+                }
+                onCache={(values) =>
+                  setCache({ ...cached, victimArea: values[0] })
+                }
               />
             </Form.Item>
 
@@ -367,7 +392,13 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                     onSearch={getFeatures}
                     optionLabel={(facility) => facility.strings.name.en}
                     optionValue="_id"
-                    initialValue={get(dispatch, 'pickup.facility', undefined)}
+                    initialValue={
+                      get(dispatch, 'pickup.facility') ||
+                      get(cached, 'pickupFacility')
+                    }
+                    onCache={(values) =>
+                      setCache({ ...cached, pickupFacility: values[0] })
+                    }
                   />
                 </Form.Item>
               </Col>
@@ -383,7 +414,12 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                       )})`
                     }
                     optionValue="_id"
-                    initialValue={get(dispatch, 'pickup.area', undefined)}
+                    initialValue={
+                      get(dispatch, 'pickup.area') || get(cached, 'pickupArea')
+                    }
+                    onCache={(values) =>
+                      setCache({ ...cached, pickupArea: values[0] })
+                    }
                   />
                 </Form.Item>
               </Col>
@@ -444,7 +480,13 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                     onSearch={getFeatures}
                     optionLabel={(facility) => facility.strings.name.en}
                     optionValue="_id"
-                    initialValue={get(dispatch, 'dropoff.facility', undefined)}
+                    initialValue={
+                      get(dispatch, 'dropoff.facility') ||
+                      get(cached, 'dropOffFacility')
+                    }
+                    onCache={(values) =>
+                      setCache({ ...cached, dropOffFacility: values[0] })
+                    }
                   />
                 </Form.Item>
               </Col>
@@ -460,7 +502,13 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                       )})`
                     }
                     optionValue="_id"
-                    initialValue={get(dispatch, 'dropoff.area', undefined)}
+                    initialValue={
+                      get(dispatch, 'dropoff.area') ||
+                      get(cached, 'dropOffArea')
+                    }
+                    onCache={(values) =>
+                      setCache({ ...cached, dropOffArea: values[0] })
+                    }
                   />
                 </Form.Item>
               </Col>
@@ -514,7 +562,16 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
 
         {currentStep === 4 && (
           <>
-            <Form.Item name={['carrier', 'vehicle']} label="Vehicle">
+            <Form.Item
+              name={['carrier', 'vehicle']}
+              label="Vehicle"
+              rules={[
+                {
+                  required: true,
+                  message: 'This field is required',
+                },
+              ]}
+            >
               <SearchableSelectInput
                 onSearch={getVehicles}
                 optionLabel={(vehicle) =>
@@ -529,7 +586,13 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                   )}`
                 }
                 optionValue="_id"
-                initialValue={get(dispatch, 'carrier.vehicle', undefined)}
+                initialValue={
+                  get(dispatch, 'carrier.vehicle') ||
+                  get(cached, 'carrierVehicle')
+                }
+                onCache={(values) =>
+                  setCache({ ...cached, carrierVehicle: values[0] })
+                }
               />
             </Form.Item>
 
@@ -546,7 +609,16 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
               </Col>
             </Row> */}
 
-            <Form.Item name="crew" label="Crew">
+            <Form.Item
+              name="crew"
+              label="Crew"
+              rules={[
+                {
+                  required: true,
+                  message: 'There should be at least one crew member',
+                },
+              ]}
+            >
               <SearchableSelectInput
                 onSearch={getFocalPeople}
                 optionLabel={(person) =>
@@ -558,7 +630,8 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                 }
                 optionValue="_id"
                 mode="multiple"
-                initialValue={get(dispatch, 'crew', [])}
+                initialValue={get(dispatch, 'crew', get(cached, 'crew', []))}
+                onCache={(values) => setCache({ ...cached, crew: values })}
               />
             </Form.Item>
 
