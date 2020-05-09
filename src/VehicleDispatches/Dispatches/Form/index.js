@@ -69,16 +69,16 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formValues, setFormValues] = useState({});
   const [cached, setCache] = useState({}); // for caching lazy component values
-  const pickupDispatchedTime = get(dispatch, 'pickup.dispatchedAt', undefined)
+  const pickupDispatchedTime = get(dispatch, 'pickup.dispatchedAt')
     ? moment(get(dispatch, 'pickup.dispatchedAt'))
     : undefined;
-  const pickupArrivedTime = get(dispatch, 'pickup.arrivedAt', undefined)
+  const pickupArrivedTime = get(dispatch, 'pickup.arrivedAt')
     ? moment(get(dispatch, 'pickup.dispatchedAt'))
     : undefined;
-  const dropOffDispatchedTime = get(dispatch, 'dropoff.dispatchedAt', undefined)
+  const dropOffDispatchedTime = get(dispatch, 'dropoff.dispatchedAt')
     ? moment(get(dispatch, 'dropoff.dispatchedAt'))
     : undefined;
-  const dropOffArrivedTime = get(dispatch, 'dropoff.arrivedAt', undefined)
+  const dropOffArrivedTime = get(dispatch, 'dropoff.arrivedAt')
     ? moment(get(dispatch, 'dropoff.dispatchedAt'))
     : undefined;
 
@@ -127,38 +127,38 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
         style={{ marginTop: '30px' }}
         initialValues={{
           ...dispatch,
-          reportedAt: moment(get(dispatch, 'reportedAt', undefined)).format(
+          reportedAt: moment(get(dispatch, 'reportedAt')).format(
             'YYYY-MM-DD HH:mm:ss'
           ),
-          type: get(dispatch, 'type._id', undefined),
+          type: get(dispatch, 'type._id'),
           crew: map(get(dispatch, 'crew', []), '_id'),
           requester: {
             ...get(dispatch, 'requester', null),
-            facility: get(dispatch, 'requester.facility._id', undefined),
-            area: get(dispatch, 'requester.area._id', undefined),
+            facility: get(dispatch, 'requester.facility._id'),
+            area: get(dispatch, 'requester.area._id'),
           },
           victim: {
             ...get(dispatch, 'victim', null),
-            gender: get(dispatch, 'victim.gender._id', undefined),
-            area: get(dispatch, 'victim.area._id', undefined),
+            gender: get(dispatch, 'victim.gender._id'),
+            area: get(dispatch, 'victim.area._id'),
           },
           pickup: {
             ...get(dispatch, 'pickup', null),
-            facility: get(dispatch, 'pickup.facility._id', undefined),
-            area: get(dispatch, 'pickup.area._id', undefined),
+            facility: get(dispatch, 'pickup.facility._id'),
+            area: get(dispatch, 'pickup.area._id'),
             dispatchedAt: pickupDispatchedTime,
             arrivedAt: pickupArrivedTime,
           },
           dropoff: {
             ...get(dispatch, 'dropoff', null),
-            facility: get(dispatch, 'dropoff.facility._id', undefined),
-            area: get(dispatch, 'dropoff.area._id', undefined),
+            facility: get(dispatch, 'dropoff.facility._id'),
+            area: get(dispatch, 'dropoff.area._id'),
             dispatchedAt: dropOffDispatchedTime,
             arrivedAt: dropOffArrivedTime,
           },
           carrier: {
             ...get(dispatch, 'carrier', null),
-            vehicle: get(dispatch, 'carrier.vehicle._id', undefined),
+            vehicle: get(dispatch, 'carrier.vehicle._id'),
           },
         }}
       >
