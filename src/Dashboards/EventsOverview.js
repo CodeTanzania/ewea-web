@@ -23,7 +23,7 @@ const titleMap = {
   certainties: 'Certainty',
   groups: 'Group',
   levels: 'Level',
-  response: 'Response',
+  responses: 'Response',
   roles: 'Role',
   severities: 'Severity',
   statuses: 'Status',
@@ -54,11 +54,11 @@ const generateColumnsFor = (name, titles) => {
 
 /**
  * @function
- * @param props.report
- * @param props.loading
  * @name EventsOverviewDashboard
  * @description Events Overview Dashboard
  * @param {object} props Event Overview dashboard props
+ * @param {object} props.report Events Report data from the API
+ * @param {boolean} props.loading Flag for showing spinner while loading report
  * @returns {object} Event Overview React component
  * @version 0.1.0
  * @since 0.1.0
