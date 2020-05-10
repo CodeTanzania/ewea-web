@@ -6,7 +6,7 @@ import indicatorDashboardIcon from '../assets/icons/dashboards/indicator-dashboa
 import overviewDashboardIcon from '../assets/icons/dashboards/overview-dashboard.svg';
 import caseManagementIcon from '../assets/icons/dashboards/case-management-disabled.svg';
 import resourceManagementIcon from '../assets/icons/dashboards/resource-management-disabled.svg';
-import vehicleDispatchIcon from '../assets/icons/dashboards/vehicle-dispatch-disabled.svg';
+import vehicleDispatchIcon from '../assets/icons/dashboards/vehicle-dispatch.svg';
 import criticalInfrastructuresIcon from '../assets/icons/dashboards/infrastructure-disabled.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
@@ -56,10 +56,9 @@ const routes = [
   },
   {
     name: 'Vehicle Dispatches',
-    path: '/app/dashboards/vehicledispatch',
+    path: '/app/dashboards/dispatches',
     icon: vehicleDispatchIcon,
     description: modules.alertsIssued,
-    disabled: true,
   },
   {
     name: 'Critical Infrastructures',

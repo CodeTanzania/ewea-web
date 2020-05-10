@@ -49,6 +49,7 @@ import Dashboards from '../navigation/Dashboards';
 import OverviewDashboard from '../Dashboards/Overview';
 import EventsOverviewDashboard from '../Dashboards/EventsOverview';
 import StakeholdersDashboard from '../Dashboards/Stakeholders';
+import VehicleDispatchesDashboard from '../Dashboards/VehicleDispatches';
 
 import './styles.css';
 
@@ -118,6 +119,10 @@ const breadcrumbNameMap = {
   '/app/dashboards/events': {
     name: 'Events Dashboard',
     title: 'Events Dashboard',
+  },
+  '/app/dashboards/dispatches': {
+    name: 'Vehicle Dispatches',
+    title: 'Vehicle Dispatches Dashboard',
   },
 
   /* settings routes */
@@ -238,12 +243,12 @@ const breadcrumbNameMap = {
 
 /**
  * @function
- * @param props.location
- * @param props.match
- * @param props.match.url
  * @name BaseLayout
  * @description Render base layout for EWEA app
  * @param {object} props Properties inject by router
+ * @param {object} props.location Location object from react router
+ * @param {object} props.match Match prop from react router
+ * @param {string} props.match.url Current Url
  * @returns {object} BaseLayout component
  * @version 0.1.0
  * @since 0.1.0
@@ -350,7 +355,13 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
             path={`${baseUrl}/dashboards/events`}
             component={EventsOverviewDashboard}
           />
+
+          <SecureRoute
+            path={`${baseUrl}/dashboards/dispatches`}
+            component={VehicleDispatchesDashboard}
+          />
           {/* end dashboard routes */}
+
           <SecureRoute path={`${baseUrl}/actions`} component={ActionsTaken} />
           <SecureRoute
             exact
