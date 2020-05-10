@@ -10,6 +10,7 @@ import {
   ShareAltOutlined,
   SwapOutlined,
   SyncOutlined,
+  UserSwitchOutlined,
 } from '@ant-design/icons';
 
 import { Dropdown, Button, Menu } from 'antd';
@@ -20,11 +21,12 @@ import { Dropdown, Button, Menu } from 'antd';
  * @description Render Dropdown component with has actions for list items
  * @param {object} props props object
  * @param {object} props.edit on edit action callback
+ * @param {object} props.assignPermissions on assign role permissions
  * @param {object} props.share on share action callback
- * @param props.onMapPreview
- * @param props.view
- * @param props.whatsapp
- * @param props.reload
+ * @param {object} props.onMapPreview on map preview action
+ * @param {object} props.view on view action
+ * @param {object} props.whatsapp on share via whatsapp action
+ * @param {object} props.reload on reload action
  * @param {object} props.archive on archive action callback
  * @param {object} props.transfer on transfer action callback
  * @param {object} props.adjust on adjust action callback
@@ -42,6 +44,7 @@ const ListItemActions = ({
   adjust,
   whatsapp,
   reload,
+  assignPermissions,
 }) => (
   <Dropdown
     overlay={
@@ -49,6 +52,16 @@ const ListItemActions = ({
         {view && (
           <Menu.Item key="view" onClick={view.onClick} title={view.title}>
             <EyeOutlined /> {view.name}
+          </Menu.Item>
+        )}
+
+        {assignPermissions && (
+          <Menu.Item
+            key="share"
+            onClick={assignPermissions.onClick}
+            title={assignPermissions.title}
+          >
+            <UserSwitchOutlined /> {assignPermissions.name}
           </Menu.Item>
         )}
 
@@ -173,6 +186,11 @@ ListItemActions.propTypes = {
     title: PropTypes.string,
     onClick: PropTypes.func,
   }),
+  assignPermissions: PropTypes.shape({
+    name: PropTypes.string,
+    title: PropTypes.string,
+    onClick: PropTypes.func,
+  }),
   whatsapp: PropTypes.shape({
     name: PropTypes.string,
     title: PropTypes.string,
@@ -190,6 +208,7 @@ ListItemActions.defaultProps = {
   transfer: null,
   adjust: null,
   whatsapp: null,
+  assignPermissions: null,
 };
 
 export default ListItemActions;

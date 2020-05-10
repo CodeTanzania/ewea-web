@@ -12,6 +12,7 @@ import ListItemActions from '../../components/ListItemActions';
 import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess } from '../../util';
 import RoleForm from './Form';
+import AssignPermissionForm from './AssignPermissionsForm';
 import './styles.css';
 
 const {
@@ -69,6 +70,7 @@ class Roles extends Component {
     isEditForm: false,
     showNotificationForm: false,
     notificationBody: undefined,
+    showAssignPermissionsForm: false,
   };
 
   // eslint-disable-next-line react/no-deprecated
@@ -207,7 +209,7 @@ class Roles extends Component {
   /**
    * @function
    * @name handleShare
-   * @description Handle share multiple partyroles
+   * @description Handle share multiple Party Roles
    *
    * @param {object[]| object} partyroles partyroles list to be shared
    *
@@ -234,6 +236,31 @@ class Roles extends Component {
     }
 
     this.setState({ notificationBody: message, showNotificationForm: true });
+  };
+
+  /**
+   * @function
+   * @name handleEditPermissions
+   * @description Open Modal window for assigning and revoking permissions
+   * @param {object} role Active role to be used
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleAssignPermissions = (role) => {
+    selectPartyRole(role);
+    this.setState({ showAssignPermissionsForm: true });
+  };
+
+  /**
+   * @function
+   * @name closeEditPermissions
+   * @description close Modal window for assigning and revoking permissions
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeAssignPermissionsForm = () => {
+    this.setState({ showAssignPermissionsForm: false });
   };
 
   /**
@@ -276,7 +303,12 @@ class Roles extends Component {
       role,
       searchQuery,
     } = this.props;
-    const { isEditForm, showNotificationForm, notificationBody } = this.state;
+    const {
+      isEditForm,
+      showNotificationForm,
+      showAssignPermissionsForm,
+      notificationBody,
+    } = this.state;
     return (
       <>
         {/* Topbar */}
@@ -344,6 +376,11 @@ class Roles extends Component {
                     title: 'Remove role from list of active role',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
+                  assignPermissions={{
+                    name: 'Edit permissions',
+                    title: 'Assign or remove permissions from the active role',
+                    onClick: () => this.handleAssignPermissions(item),
+                  }}
                 />
               )}
             >
@@ -365,7 +402,7 @@ class Roles extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          width="40%"
+          className="FormModal"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -383,6 +420,7 @@ class Roles extends Component {
 
         {/* create/edit form modal */}
         <Modal
+          className="FormModal"
           title={isEditForm ? 'Edit Role' : 'Add New Role'}
           visible={showForm}
           footer={null}
@@ -397,6 +435,21 @@ class Roles extends Component {
             role={role}
             onCancel={this.closePartyRolesForm}
           />
+        </Modal>
+        {/* end create/edit form modal */}
+
+        {/* create/edit form modal */}
+        <Modal
+          className="FormModal-80"
+          title="Edit Role's Permissions"
+          visible={showAssignPermissionsForm}
+          footer={null}
+          onCancel={this.closeAssignPermissionsForm}
+          destroyOnClose
+          maskClosable={false}
+          afterClose={this.handleAfterCloseForm}
+        >
+          <AssignPermissionForm onCancel={this.closeAssignPermissionsForm} />
         </Modal>
         {/* end create/edit form modal */}
       </>
