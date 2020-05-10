@@ -55,16 +55,6 @@ const ListItemActions = ({
           </Menu.Item>
         )}
 
-        {assignPermissions && (
-          <Menu.Item
-            key="share"
-            onClick={assignPermissions.onClick}
-            title={assignPermissions.title}
-          >
-            <UserSwitchOutlined /> {assignPermissions.name}
-          </Menu.Item>
-        )}
-
         {onMapPreview && (
           <Menu.Item
             key="onMapPreview"
@@ -78,6 +68,16 @@ const ListItemActions = ({
         {edit && (
           <Menu.Item key="edit" onClick={edit.onClick} title={edit.title}>
             <EditOutlined /> {edit.name}
+          </Menu.Item>
+        )}
+
+        {assignPermissions && (
+          <Menu.Item
+            key="share"
+            onClick={assignPermissions.onClick}
+            title={assignPermissions.title}
+          >
+            <UserSwitchOutlined /> {assignPermissions.name}
           </Menu.Item>
         )}
 
