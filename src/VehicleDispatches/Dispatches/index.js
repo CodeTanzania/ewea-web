@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { httpActions } from '@codetanzania/ewea-api-client';
+import {
+  httpActions,
+  getAuthenticatedParty,
+} from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -37,9 +40,11 @@ const {
   selectDispatch,
   refreshDispatches,
   paginateDispatches,
-  deleteFocalPerson,
+  deleteDispatch,
+  putDispatch,
 } = reduxActions;
 const { confirm } = Modal;
+const authenticatedParty = getAuthenticatedParty();
 
 const numberSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 10, xs: 10 };
 const vehicleSpan = { xxl: 6, xl: 6, lg: 6, md: 6, sm: 0, xs: 0 };
@@ -271,24 +276,92 @@ class Dispatches extends Component {
    * @function
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a focal person
-   * @param {object} item Resource item to be archived
+   * @param {object} dispatch Resource item to be archived
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = (item) => {
+  showArchiveConfirm = (dispatch) => {
     confirm({
       title: `Are you sure you want to archive this record ?`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteFocalPerson(
-          item._id, // eslint-disable-line
+        deleteDispatch(
+          dispatch._id, // eslint-disable-line
           () => notifySuccess('Vehicle Dispatch was archived successfully'),
           () =>
             notifyError(
               'An error occurred while archiving Vehicle Dispatch, Please contact your system Administrator'
+            )
+        );
+      },
+    });
+  };
+
+  /**
+   * @function
+   * @name handleCompleteDispatch
+   * @description Show confirmation modal window for marking dispatch as completed
+   * @param {object} dispatch Dispatch to be marked as complete
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleCompleteDispatch = (dispatch) => {
+    const data = {
+      _id: dispatch._id, // eslint-disable-line
+      resolver: authenticatedParty._id, // eslint-disable-line
+      resolvedAt: new Date(),
+    };
+
+    confirm({
+      title: `Are you sure you want to complete this dispatch?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        putDispatch(
+          data, // eslint-disable-line
+          () => notifySuccess('Vehicle Dispatch was completed successfully'),
+          () =>
+            notifyError(
+              'An error occurred while marking vehicle dispatch as complete, Please contact your system Administrator'
+            )
+        );
+      },
+    });
+  };
+
+  /**
+   * @function
+   * @name handleCancelDispatch
+   * @description Show confirmation modal window for cancelling dispatch
+   * @param {object} dispatch Dispatch to be cancelled
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleCancelDispatch = (dispatch) => {
+    const data = {
+      _id: dispatch._id, // eslint-disable-line
+      canceller: authenticatedParty._id, // eslint-disable-line
+      canceledAt: new Date(),
+    };
+
+    confirm({
+      title: `Are you sure you want to cancel this dispatch?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        putDispatch(
+          data, // eslint-disable-line
+          () => notifySuccess('Vehicle Dispatch was cancelled successfully'),
+          () =>
+            notifyError(
+              'An error occurred while cancelling vehicle dispatch, Please contact your system Administrator'
             )
         );
       },
@@ -369,16 +442,21 @@ class Dispatches extends Component {
                     title: 'Update Vehicle Dispatch Details',
                     onClick: () => this.handleEdit(item),
                   }}
-                  share={{
-                    name: 'Share Vehicle Dispatch',
-                    title: 'Share Vehicle Dispatch details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
                   archive={{
                     name: 'Archive Vehicle Dispatch',
                     title:
                       'Remove focal person from list of active vehicle dispatches',
                     onClick: () => this.showArchiveConfirm(item),
+                  }}
+                  completeDispatch={{
+                    name: 'Complete Vehicle Dispatch',
+                    title: 'Mark dispatch as complete',
+                    onClick: () => this.handleCompleteDispatch(item),
+                  }}
+                  cancelDispatch={{
+                    name: 'Cancel Vehicle Dispatch',
+                    title: 'Cancel dispatch',
+                    onClick: () => this.handleCancelDispatch(item),
                   }}
                 />
               )}

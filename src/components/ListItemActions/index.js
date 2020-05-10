@@ -11,10 +11,13 @@ import {
   SwapOutlined,
   SyncOutlined,
   UserSwitchOutlined,
+  CloseCircleOutlined,
+  CheckCircleOutlined,
 } from '@ant-design/icons';
 
 import { Dropdown, Button, Menu } from 'antd';
 
+// TODO refactor this to receive menu items rather than objects
 /**
  * @function
  * @name ListItemActions
@@ -30,6 +33,8 @@ import { Dropdown, Button, Menu } from 'antd';
  * @param {object} props.archive on archive action callback
  * @param {object} props.transfer on transfer action callback
  * @param {object} props.adjust on adjust action callback
+ * @param {object} props.completeDispatch on complete dispatch action
+ * @param {object} props.cancelDispatch on cancel dispatch action
  * @returns {object} react element
  * @version 0.1.0
  * @since 0.1.0
@@ -45,6 +50,8 @@ const ListItemActions = ({
   whatsapp,
   reload,
   assignPermissions,
+  cancelDispatch,
+  completeDispatch,
 }) => (
   <Dropdown
     overlay={
@@ -78,6 +85,27 @@ const ListItemActions = ({
             title={assignPermissions.title}
           >
             <UserSwitchOutlined /> {assignPermissions.name}
+          </Menu.Item>
+        )}
+
+        {completeDispatch && (
+          <Menu.Item
+            key="transfer"
+            onClick={completeDispatch.onClick}
+            title={completeDispatch.title}
+          >
+            <CheckCircleOutlined /> {completeDispatch.name}
+          </Menu.Item>
+        )}
+
+        {cancelDispatch && (
+          <Menu.Item
+            key="transfer"
+            onClick={cancelDispatch.onClick}
+            title={cancelDispatch.title}
+          >
+            <CloseCircleOutlined />
+            {cancelDispatch.name}
           </Menu.Item>
         )}
 
@@ -196,6 +224,17 @@ ListItemActions.propTypes = {
     title: PropTypes.string,
     link: PropTypes.string,
   }),
+
+  completeDispatch: PropTypes.shape({
+    name: PropTypes.string,
+    title: PropTypes.string,
+    onClick: PropTypes.func,
+  }),
+  cancelDispatch: PropTypes.shape({
+    name: PropTypes.string,
+    title: PropTypes.string,
+    onClick: PropTypes.func,
+  }),
 };
 
 ListItemActions.defaultProps = {
@@ -209,6 +248,8 @@ ListItemActions.defaultProps = {
   adjust: null,
   whatsapp: null,
   assignPermissions: null,
+  completeDispatch: null,
+  cancelDispatch: null,
 };
 
 export default ListItemActions;
