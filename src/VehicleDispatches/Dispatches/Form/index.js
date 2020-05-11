@@ -49,8 +49,6 @@ const formItemLayout = {
 };
 const { Step } = Steps;
 
-// FIXME fix on filling multiple section without saving
-
 /**
  * @function
  * @name VehicleDispatchForm
@@ -88,7 +86,23 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
   };
 
   const onFinish = (sectionValues) => {
-    const values = { ...formValues, ...sectionValues };
+    let carrier = null;
+
+    if (get(cached, 'carrierVehicle')) {
+      const vehicle = get(cached, 'carrierVehicle');
+      carrier = {
+        type: get(vehicle, 'relations.type._id'),
+        owner: get(vehicle, 'relations.owner._id'),
+        vehicle: get(vehicle, '_id'),
+      };
+    }
+
+    const values = {
+      ...formValues,
+      ...sectionValues,
+      carrier: { ...sectionValues.carrier, ...carrier },
+    };
+
     if (isEditForm) {
       const updatedDispatch = { ...dispatch, ...values };
       putDispatch(
@@ -587,8 +601,8 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                 }
                 optionValue="_id"
                 initialValue={
-                  get(dispatch, 'carrier.vehicle') ||
-                  get(cached, 'carrierVehicle')
+                  get(cached, 'carrierVehicle') ||
+                  get(dispatch, 'carrier.vehicle')
                 }
                 onCache={(values) =>
                   setCache({ ...cached, carrierVehicle: values[0] })
