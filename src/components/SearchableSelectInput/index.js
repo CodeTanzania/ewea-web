@@ -71,7 +71,7 @@ class SearchableSelectInput extends Component {
    * @name handleChange
    * @description Function called when value of select box changes
    *
-   * @param {string} value value passed to the when function called
+   * @param {string[]|number[]} value value passed to the when function called
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -84,8 +84,9 @@ class SearchableSelectInput extends Component {
     });
 
     if (isFunction(onCache)) {
+      // TODO improve logic here check the mode of select input
       const state = filter(data, (entry) => value.includes(entry._id)); // eslint-disable-line
-      const cachedValues = uniqBy([...cached, ...state], '_id');
+      const cachedValues = uniqBy([...state, ...cached], '_id');
       onCache(cachedValues);
       this.setState({ cached: cachedValues });
     }
