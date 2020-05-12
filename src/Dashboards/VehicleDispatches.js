@@ -114,7 +114,7 @@ const VehicleDispatchesDashboard = ({ report }) => {
             title="Waiting"
             value={get(report, 'parties.agency', 0)}
             icon={<ApartmentOutlined style={{ color: SUCCESS_COLOR }} />}
-            secondaryText="Dispatches which haven't assigned vehicle yet"
+            secondaryText="Dispatches waiting vehicles"
             bottomBorderColor={SUCCESS_COLOR}
           />
         </Col>
@@ -123,7 +123,7 @@ const VehicleDispatchesDashboard = ({ report }) => {
             title="Dispatched"
             value={get(report, 'parties.focal', 0)}
             icon={<UserOutlined style={{ color: PURPLE_COLOR }} />}
-            secondaryText="Dispatches which are on going"
+            secondaryText="Dispatches which are in progress"
             bottomBorderColor={PURPLE_COLOR}
           />
         </Col>
