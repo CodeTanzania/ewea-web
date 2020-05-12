@@ -5,6 +5,7 @@ import { Button, Input, Tooltip, Row, Col, Checkbox, Form } from 'antd';
 
 import compact from 'lodash/compact';
 import isEmpty from 'lodash/isEmpty';
+import get from 'lodash/get';
 import map from 'lodash/map';
 import PropTypes from 'prop-types';
 import SearchableSelectInput from '../SearchableSelectInput';
@@ -33,22 +34,24 @@ const formItemLayout = {
 };
 
 /**
- * @param root0
- * @param root0.recipients
- * @param root0.subject
- * @param root0.body
- * @param root0.onCancel
- * @param root0.onSearchAgencies
- * @param root0.onSearchRecipients
- * @param root0.onSearchJurisdictions
- * @param root0.onSearchGroups
- * @param root0.onSearchRoles
- * @param root0.posting
  * @function
  * @name NotificationForm
  * @description Notification Form component for notify parties based on areas,
  * roles, groups and e.t.c
+ * @param {object} props Component props
+ * @param {object[]} props.recipients Array of parties that will be notified
+ * @param {string} props.subject Notification subject
+ * @param {string} props.body Notification body
+ * @param {Function} props.onCancel On Cancel form callback
+ * @param {Function} props.onSearchAgencies On Search Agencies callback
+ * @param {Function} props.onSearchRecipients on Search Parties(recipients) callback
+ * @param {Function} props.onSearchJurisdictions on Search areas(jurisdictions) callback
+ * @param {Function} props.onSearchGroups on Search party groups callback
+ * @param {Function} props.onSearchRoles on Search party roles callback
+ * @param {boolean} props.posting Flag to show sending state
  * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
  */
 const NotificationForm = ({
   recipients = [],
@@ -146,10 +149,16 @@ const NotificationForm = ({
       {/* notify recipients per jurisdictions */}
       {onSearchJurisdictions && moreFilters && (
         // eslint-disable-next-line react/jsx-props-no-spreading
-        <Form.Item name="area" label="Areas">
+        <Form.Item name="area" label="Area(s)">
           <SearchableSelectInput
             onSearch={onSearchJurisdictions}
-            optionLabel={(area) => `${area.strings.name.en}`}
+            optionLabel={(area) =>
+              `${area.strings.name.en} (${get(
+                area,
+                'relations.level.strings.name.en',
+                'N/A'
+              )})`
+            }
             optionValue="_id"
             mode="multiple"
           />

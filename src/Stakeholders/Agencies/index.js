@@ -18,10 +18,9 @@ import { notifyError, notifySuccess, generateAgencyVCard } from '../../util';
 import './styles.css';
 
 const {
-  getFocalPeople,
-  getJurisdictions,
+  getAgencies: getAgenciesFromAPI,
+  getAdministrativeAreas,
   getPartyGroups,
-  getRoles,
   getAgenciesExportUrl,
 } = httpActions;
 const {
@@ -434,12 +433,9 @@ class Agencies extends Component {
           width="40%"
         >
           <NotificationForm
-            recipients={getFocalPeople}
-            onSearchRecipients={getFocalPeople}
-            onSearchJurisdictions={getJurisdictions}
+            onSearchRecipients={getAgenciesFromAPI}
+            onSearchJurisdictions={getAdministrativeAreas}
             onSearchGroups={getPartyGroups}
-            onSearchAgencies={getAgencies}
-            onSearchRoles={getRoles}
             onCancel={this.closeNotificationForm}
             selectedAgencies={selectedAgencies}
             subject={notificationSubject}

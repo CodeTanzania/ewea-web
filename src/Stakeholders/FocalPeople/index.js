@@ -23,9 +23,9 @@ import {
 /* constants */
 const {
   getFocalPeople: getFocalPeopleFromAPI,
-  getJurisdictions,
+  getAdministrativeAreas,
   getPartyGroups,
-  getRoles,
+  getPartyRoles,
   getAgencies,
   getFocalPeopleExportUrl,
 } = httpActions;
@@ -202,7 +202,7 @@ class FocalPeople extends Component {
     let message = '';
     let subject = '';
     if (isArray(focalPeople)) {
-      subject = 'Contact Details for Focals';
+      subject = 'Contact Details for Focal People';
       const focalPeopleList = focalPeople.map(
         (focalPerson) => generateFocalPersonVCard(focalPerson).body
       );
@@ -468,10 +468,10 @@ class FocalPeople extends Component {
           <NotificationForm
             recipients={selectedFocalPeople}
             onSearchRecipients={getFocalPeopleFromAPI}
-            onSearchJurisdictions={getJurisdictions}
+            onSearchJurisdictions={getAdministrativeAreas}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
-            onSearchRoles={getRoles}
+            onSearchRoles={getPartyRoles}
             subject={notificationSubject}
             body={notificationBody}
             onCancel={this.closeNotificationForm}
