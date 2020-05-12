@@ -405,6 +405,13 @@ class Agencies extends Component {
                     title: 'Remove Agency from list of active agency',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
+                  whatsapp={{
+                    name: 'Share on WhatsApp',
+                    title: 'Share Contact on Whatsapp',
+                    link: `https://wa.me/?text=${encodeURI(
+                      generateAgencyVCard(item).body
+                    )}`,
+                  }}
                 />
               )}
             >

@@ -409,6 +409,13 @@ class FocalPeople extends Component {
                       'Remove focal person from list of active focal people',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
+                  whatsapp={{
+                    name: 'Share on WhatsApp',
+                    title: 'Share Contact on Whatsapp',
+                    link: `https://wa.me/?text=${encodeURI(
+                      generateFocalPersonVCard(item).body
+                    )}`,
+                  }}
                 />
               )}
             >
