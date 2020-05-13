@@ -263,3 +263,23 @@ export const generateEventActionCatalogueVCard = (eventActionCatalogue) => {
 
   return { subject, body };
 };
+
+/**
+ * @function
+ * @name generateVehicleDispatchShareableDetails
+ * @param {object} vehicleDispatch Vehicle dispatch object for V-Card generation
+ * @returns {object} Formatted Focal person details to be shared
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const generateVehicleDispatchShareableDetails = (vehicleDispatch) => {
+  const subject = `Vehicle dispatch details for ${vehicleDispatch.number}`;
+  const body = `Number: ${vehicleDispatch.number}\nDispatcher: ${get(
+    vehicleDispatch,
+    'dispatcher.party.name',
+    'N/A'
+  )}\nRequested Date: ${moment(vehicleDispatch.createdAt).format(
+    'YYYY-MM-DD HH:mm:ss'
+  )}`;
+  return { subject, body };
+};

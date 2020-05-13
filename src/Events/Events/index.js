@@ -340,8 +340,8 @@ class Events extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a focal person
-   * @param {object} item Resource item to be archived
+   * @description show confirm modal before archiving an event
+   * @param {object} item Item to be archived
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -358,7 +358,7 @@ class Events extends Component {
           () => notifySuccess('Event was archived successfully'),
           () =>
             notifyError(
-              'An error occurred while archiving Event, Please contact your system Administrator'
+              'An error occurred while archiving event, Please contact your system Administrator'
             )
         );
       },

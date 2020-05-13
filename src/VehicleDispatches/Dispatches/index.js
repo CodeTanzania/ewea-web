@@ -19,7 +19,7 @@ import ListItemActions from '../../components/ListItemActions';
 import {
   notifyError,
   notifySuccess,
-  generateFocalPersonVCard,
+  generateVehicleDispatchShareableDetails,
 } from '../../util';
 import './styles.css';
 
@@ -178,14 +178,16 @@ class Dispatches extends Component {
     let message = '';
     let subject = '';
     if (isArray(dispatches)) {
-      subject = 'Contact Details for Focals';
+      subject = 'Event Dipatches Details';
       const dispatchesList = dispatches.map(
-        (dispatch) => generateFocalPersonVCard(dispatch).body
+        (dispatch) => generateVehicleDispatchShareableDetails(dispatch).body
       );
 
       message = dispatchesList.join('\n\n\n');
     } else {
-      const { subject: title, body } = generateFocalPersonVCard(dispatches);
+      const { subject: title, body } = generateVehicleDispatchShareableDetails(
+        dispatches
+      );
       subject = title;
       message = body;
     }
@@ -275,8 +277,8 @@ class Dispatches extends Component {
   /**
    * @function
    * @name showArchiveConfirm
-   * @description show confirm modal before archiving a focal person
-   * @param {object} dispatch Resource item to be archived
+   * @description show confirm modal before archiving vehicle dispatch
+   * @param {object} dispatch Item to be archived
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -445,7 +447,7 @@ class Dispatches extends Component {
                   archive={{
                     name: 'Archive Vehicle Dispatch',
                     title:
-                      'Remove focal person from list of active vehicle dispatches',
+                      'Remove vehicle dispatch from list of active vehicle dispatches',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                   completeDispatch={{
