@@ -4,6 +4,8 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
 import React from 'react';
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import ReactGA from 'react-ga';
 
 import SignIn from './Auth/components/SignIn';
 import EventFeedback from './Events/EventFeedback';
@@ -12,6 +14,12 @@ import SecureRoute from './Auth/SecureRoute';
 
 /* configure global spin indicator */
 Spin.setDefaultIndicator(<LoadingOutlined style={{ fontSize: 24 }} spin />);
+
+const history = createBrowserHistory();
+
+history.listen((location) => {
+  ReactGA.pageview(location.hash);
+});
 
 /**
  * @function
@@ -31,7 +39,7 @@ const App = () => {
 
   return (
     <StoreProvider>
-      <HashRouter hashType="hashbang">
+      <HashRouter hashType="hashbang" history={history}>
         <Switch>
           <SecureRoute path="/app" component={BaseLayout} />
           <Route path="/signin" component={SignIn} />

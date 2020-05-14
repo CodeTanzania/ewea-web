@@ -1,8 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactGA from 'react-ga';
+import get from 'lodash/get';
 import App from './App';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
+
+const TRACKING_ID = get(process.env, 'REACT_APP_GA_ID');
+if (TRACKING_ID) {
+  ReactGA.initialize(TRACKING_ID);
+}
 
 const render = (Component) => {
   ReactDOM.render(<Component />, document.getElementById('root')); // eslint-disable-line
