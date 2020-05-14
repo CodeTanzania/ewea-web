@@ -12,6 +12,7 @@ import {
 
 import {
   NumberWidget,
+  TimeWidget,
   SectionCard,
   PRIMARY_COLOR,
   PURPLE_COLOR,
@@ -139,25 +140,31 @@ const VehicleDispatchesDashboard = ({ report }) => {
       </Row>
       <Row>
         <Col span={8}>
-          <NumberWidget
-            title="Avg Waiting Time"
-            value={get(report, 'parties.total', 0)}
+          <TimeWidget
+            title="Avg. Waiting Time"
+            days={get(report, 'parties.total', 0)}
+            hours={0}
+            minutes={0}
             icon={<ClockCircleOutlined style={{ color: PRIMARY_COLOR }} />}
             bottomBorderColor={PRIMARY_COLOR}
           />
         </Col>
         <Col span={8}>
-          <NumberWidget
-            title="Avg Dispatch Time"
-            value={get(report, 'parties.agency', 0)}
+          <TimeWidget
+            title="Avg. Dispatch Time"
+            days={get(report, 'parties.agency', 0)}
+            hours={0}
+            minutes={0}
             icon={<ClockCircleOutlined style={{ color: SUCCESS_COLOR }} />}
             bottomBorderColor={WARNING_COLOR}
           />
         </Col>
         <Col span={8}>
-          <NumberWidget
-            title="Avg Respond Time"
-            value={get(report, 'parties.group', 0)}
+          <TimeWidget
+            title="Avg. Response Time"
+            days={get(report, 'parties.group', 0)}
+            hours={0}
+            minutes={0}
             icon={<ClockCircleOutlined style={{ color: WARNING_COLOR }} />}
             bottomBorderColor={DANGER_COLOR}
           />
