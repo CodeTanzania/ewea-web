@@ -21,14 +21,14 @@ export const DARK_GREEN = '#388E3C';
 
 /**
  * @function
- * @param props.title
- * @param props.secondaryText
- * @param props.value
- * @param props.icon
- * @param props.bottomBorderColor
  * @name NumberWidget
  * @description Number widget for dashboards
  * @param {object} props Number widget props
+ * @param {string} props.title Widget title
+ * @param {string} props.secondaryText Widget muted secondary text
+ * @param {number} props.value Number to be displayed on the card
+ * @param {object} props.icon Antd Icon or file icon | image
+ * @param {object} props.bottomBorderColor Bottom border color
  * @returns {object} Render Number widget component
  * @version 0.1.0
  * @since 0.1.0
@@ -79,11 +79,11 @@ NumberWidget.defaultProps = {
 
 /**
  * @function
- * @param props.title
- * @param props.children
  * @name SectionCard
  * @description Card component for different sections in dashboard
  * @param {object} props Section Card component props
+ * @param {string} props.title Card title
+ * @param {object|object[]} props.children React Nodes
  * @returns {object} Section Card component
  * @version 0.1.0
  * @since 0.1.0
@@ -106,18 +106,25 @@ SectionCard.propTypes = {
 
 /**
  * @function
- * @param props.title
- * @param props.shape
- * @param props.center
- * @param props.scale
  * @name MapWidget
  * @description Render SVG map inside sectionCard component
  * @param {object} props Map Widget component props
+ * @param {string} props.title Title for section card
+ * @param {string} props.shape Path to topojson file can be url or uri for file system
+ * @param {number[]} props.center Center coordinates to position the map
+ * @param {number} props.scale Scale number for the map
+ * @param {Function} props.getGeographyAttributes Function to extract map attributes
  * @returns {object} Map Widget component
  * @version 0.1.0
  * @since 0.1.0
  */
-export const MapWidget = ({ title, shape, center, scale }) => {
+export const MapWidget = ({
+  title,
+  shape,
+  center,
+  scale,
+  getGeographyAttributes,
+}) => {
   return (
     <SectionCard title={title}>
       <ComposableMap
@@ -128,31 +135,38 @@ export const MapWidget = ({ title, shape, center, scale }) => {
         <ZoomableGroup center={center}>
           <Geographies geography={shape} disableOptimization>
             {({ geographies }) =>
-              geographies.map((geography) => (
-                <Tooltip trigger="hover" title="Area" key={geography.rsmKey}>
-                  <Geography
+              geographies.map((geography) => {
+                const attributes = getGeographyAttributes(geography);
+                return (
+                  <Tooltip
+                    trigger="hover"
+                    title={attributes.name}
                     key={geography.rsmKey}
-                    geography={geography}
-                    style={{
-                      default: {
-                        fill: '#ddd',
-                        stroke: '#fff',
-                        outline: 'none',
-                      },
-                      hover: {
-                        fill: DARK_GREEN,
-                        stroke: '#fff',
-                        outline: 'none',
-                      },
-                      pressed: {
-                        fill: SUCCESS_COLOR,
-                        stroke: '#fff',
-                        outline: 'none',
-                      },
-                    }}
-                  />
-                </Tooltip>
-              ))
+                  >
+                    <Geography
+                      key={geography.rsmKey}
+                      geography={geography}
+                      style={{
+                        default: {
+                          fill: '#ddd',
+                          stroke: '#fff',
+                          outline: 'none',
+                        },
+                        hover: {
+                          fill: DARK_GREEN,
+                          stroke: '#fff',
+                          outline: 'none',
+                        },
+                        pressed: {
+                          fill: SUCCESS_COLOR,
+                          stroke: '#fff',
+                          outline: 'none',
+                        },
+                      }}
+                    />
+                  </Tooltip>
+                );
+              })
             }
           </Geographies>
         </ZoomableGroup>
@@ -166,4 +180,5 @@ MapWidget.propTypes = {
   title: PropTypes.string.isRequired,
   shape: PropTypes.string.isRequired,
   center: PropTypes.arrayOf(PropTypes.number).isRequired,
+  getGeographyAttributes: PropTypes.func.isRequired,
 };

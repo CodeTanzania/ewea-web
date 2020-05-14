@@ -136,6 +136,9 @@ const StakeholdersDashboard = ({ report, loading }) => {
                   shape={DarDistricts}
                   center={[39.3067144, -6.8699698]}
                   scale={50000}
+                  getGeographyAttributes={(geography) => ({
+                    name: get(geography, 'properties.District_N', 'N/A'),
+                  })}
                 />
               </Col>
             </Row>
