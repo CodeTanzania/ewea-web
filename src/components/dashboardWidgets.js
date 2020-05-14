@@ -119,15 +119,15 @@ export const TimeWidget = ({
         <Col span={2}>{icon}</Col>
       </Row>
       <Row>
-        <Col span={5}>
+        <Col span={6}>
           <Text style={{ fontSize: '3em', fontWeight: '500' }}>{days}</Text>
           <Text type="secondary"> days</Text>
         </Col>
-        <Col span={5}>
+        <Col span={6}>
           <Text style={{ fontSize: '3em', fontWeight: '500' }}>{hours}</Text>
           <Text type="secondary"> hours</Text>
         </Col>
-        <Col span={5}>
+        <Col span={6}>
           <Text style={{ fontSize: '3em', fontWeight: '500' }}>{minutes}</Text>
           <Text type="secondary"> minutes</Text>
         </Col>
