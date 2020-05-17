@@ -9,11 +9,11 @@ import './styles.css';
 
 /**
  * @function
- * @param props.loading
- * @param props.history
  * @name SignInForm
  * @description Sign In form  component
  * @param {object} props React props
+ * @param {boolean} props.loading Flag for showing login http request state
+ * @param {object} props.history Browser history object
  * @returns {object} Sign In Form
  * @version 0.1.0
  * @since 0.1.0
