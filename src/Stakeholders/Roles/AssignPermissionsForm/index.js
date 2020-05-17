@@ -57,7 +57,7 @@ const AssignPermissionsForm = ({
     if (isEmpty(permissions)) {
       getPermissions();
     }
-  }, []);
+  });
 
   const groupedPermissions = groupBy(permissions, 'resource');
   const assignedPermissions = map(
