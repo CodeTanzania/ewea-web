@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col, Table } from 'antd';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
+import { Row, Col, Table, Spin } from 'antd';
 import get from 'lodash/get';
 import {
   ClockCircleOutlined,
@@ -86,6 +87,7 @@ const data = [
     cancelled: 1,
   },
 ];
+const { getDispatchesReport } = reduxActions;
 
 /**
  * @function
@@ -93,116 +95,129 @@ const data = [
  * @description Vehicle Dispatch Dashboard
  * @param {object} props Dashboard properties
  * @param {object} props.report Vehicle dispatches dashboard data from the API
+ * @param {boolean} props.loading Boolean flag to indicate reports loading state
  * @returns {object} VehicleDispatchesDashboard
  * @version 0.1.0
  * @since 0.1.0
  */
-const VehicleDispatchesDashboard = ({ report }) => {
+const VehicleDispatchesDashboard = ({ report, loading }) => {
+  useEffect(() => {
+    getDispatchesReport();
+  }, []);
   return (
     <div>
-      <Row>
-        <Col span={6}>
-          <NumberWidget
-            title="Total"
-            value={get(report, 'parties.total', 0)}
-            icon={<NumberOutlined style={{ color: PRIMARY_COLOR }} />}
-            bottomBorderColor={PRIMARY_COLOR}
-            secondaryText="Total number of dispatches"
-          />
-        </Col>
-        <Col span={6}>
-          <NumberWidget
-            title="Waiting"
-            value={get(report, 'parties.agency', 0)}
-            icon={<ApartmentOutlined style={{ color: SUCCESS_COLOR }} />}
-            secondaryText="Dispatches waiting vehicles"
-            bottomBorderColor={SUCCESS_COLOR}
-          />
-        </Col>
-        <Col span={6}>
-          <NumberWidget
-            title="Dispatched"
-            value={get(report, 'parties.focal', 0)}
-            icon={<UserOutlined style={{ color: PURPLE_COLOR }} />}
-            secondaryText="Dispatches which are in progress"
-            bottomBorderColor={PURPLE_COLOR}
-          />
-        </Col>
-        <Col span={6}>
-          <NumberWidget
-            title="Completed"
-            value={get(report, 'parties.group', 0)}
-            icon={<TeamOutlined style={{ color: WARNING_COLOR }} />}
-            secondaryText="Dispatches which are completed"
-            bottomBorderColor={WARNING_COLOR}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col span={8}>
-          <TimeWidget
-            title="Avg. Waiting Time"
-            days={get(report, 'parties.total', 0)}
-            hours={0}
-            minutes={0}
-            icon={<ClockCircleOutlined style={{ color: PRIMARY_COLOR }} />}
-            bottomBorderColor={PRIMARY_COLOR}
-          />
-        </Col>
-        <Col span={8}>
-          <TimeWidget
-            title="Avg. Dispatch Time"
-            days={get(report, 'parties.agency', 0)}
-            hours={0}
-            minutes={0}
-            icon={<ClockCircleOutlined style={{ color: SUCCESS_COLOR }} />}
-            bottomBorderColor={WARNING_COLOR}
-          />
-        </Col>
-        <Col span={8}>
-          <TimeWidget
-            title="Avg. Response Time"
-            days={get(report, 'parties.group', 0)}
-            hours={0}
-            minutes={0}
-            icon={<ClockCircleOutlined style={{ color: WARNING_COLOR }} />}
-            bottomBorderColor={DANGER_COLOR}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col span={12}>
-          <Row>
+      <Spin spinning={loading}>
+        <Row>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
+            <NumberWidget
+              title="Total"
+              value={get(report, 'overview.total', 0)}
+              icon={<NumberOutlined style={{ color: PRIMARY_COLOR }} />}
+              bottomBorderColor={PRIMARY_COLOR}
+              secondaryText="Total Dispatches"
+            />
+          </Col>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
+            <NumberWidget
+              title="Waiting"
+              value={get(report, 'overview.waiting', 0)}
+              icon={<ApartmentOutlined style={{ color: SUCCESS_COLOR }} />}
+              secondaryText="Waiting for Vehicles"
+              bottomBorderColor={SUCCESS_COLOR}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
+            <NumberWidget
+              title="Dispatched"
+              value={get(report, 'overview.dispatched', 0)}
+              icon={<UserOutlined style={{ color: PURPLE_COLOR }} />}
+              secondaryText="Dispatches in progress"
+              bottomBorderColor={PURPLE_COLOR}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
+            <NumberWidget
+              title="Completed"
+              value={get(report, 'overview.resolved', 0)}
+              icon={<TeamOutlined style={{ color: WARNING_COLOR }} />}
+              secondaryText="Completed Dispatches"
+              bottomBorderColor={WARNING_COLOR}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
+            <TimeWidget
+              title="Avg. Waiting Time"
+              days={get(report, 'parties.total', 0)}
+              hours={0}
+              minutes={0}
+              icon={<ClockCircleOutlined style={{ color: PRIMARY_COLOR }} />}
+              bottomBorderColor={PRIMARY_COLOR}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
+            <TimeWidget
+              title="Avg. Dispatch Time"
+              days={get(report, 'parties.agency', 0)}
+              hours={0}
+              minutes={0}
+              icon={<ClockCircleOutlined style={{ color: SUCCESS_COLOR }} />}
+              bottomBorderColor={WARNING_COLOR}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
+            <TimeWidget
+              title="Avg. Response Time"
+              days={get(report, 'parties.group', 0)}
+              hours={0}
+              minutes={0}
+              icon={<ClockCircleOutlined style={{ color: WARNING_COLOR }} />}
+              bottomBorderColor={DANGER_COLOR}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={24} sm={24} lg={12}>
+            <Row>
+              <Col span={24}>
+                <SectionCard title="Vehicle Type per Dispatch Status">
+                  <Table
+                    dataSource={data}
+                    columns={columns}
+                    pagination={false}
+                  />
+                </SectionCard>
+              </Col>
+            </Row>
+          </Col>
+          <Col xs={24} sm={24} lg={12}>
             <Col span={24}>
-              <SectionCard title="Vehicle Type per Dispatch Status">
-                <Table dataSource={data} columns={columns} pagination={false} />
+              <SectionCard title="Vehicle Dispatch Status">
+                <Table
+                  dataSource={vehicleData}
+                  columns={vehicleStatusColumns}
+                  pagination={false}
+                />
               </SectionCard>
             </Col>
-          </Row>
-        </Col>
-        <Col span={12}>
-          <Col span={24}>
-            <SectionCard title="Vehicle Dispatch Status">
-              <Table
-                dataSource={vehicleData}
-                columns={vehicleStatusColumns}
-                pagination={false}
-              />
-            </SectionCard>
           </Col>
-        </Col>
-      </Row>
+        </Row>
+      </Spin>
     </div>
   );
 };
 
 VehicleDispatchesDashboard.propTypes = {
   report: PropTypes.shape({ overview: PropTypes.object }),
-  // loading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 VehicleDispatchesDashboard.defaultProps = {
   report: null,
 };
 
-export default VehicleDispatchesDashboard;
+export default Connect(VehicleDispatchesDashboard, {
+  report: 'dispatchesReport.data',
+  loading: 'dispatchesReport.loading',
+});

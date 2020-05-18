@@ -59,7 +59,7 @@ const StakeholdersDashboard = ({ report, loading }) => {
     <div>
       <Spin spinning={loading}>
         <Row>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <NumberWidget
               title="Total"
               value={get(report, 'overview.total', 0)}
@@ -68,7 +68,7 @@ const StakeholdersDashboard = ({ report, loading }) => {
               secondaryText="Total Registered Stakeholders"
             />
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <NumberWidget
               title="Agencies"
               value={get(report, 'overview.agency', 0)}
@@ -77,7 +77,7 @@ const StakeholdersDashboard = ({ report, loading }) => {
               bottomBorderColor={SUCCESS_COLOR}
             />
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <NumberWidget
               title="Focal People"
               value={get(report, 'overview.focal', 0)}
@@ -86,18 +86,18 @@ const StakeholdersDashboard = ({ report, loading }) => {
               bottomBorderColor={PURPLE_COLOR}
             />
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <NumberWidget
               title="Groups"
               value={get(report, 'overview.group', 0)}
               icon={<TeamOutlined style={{ color: WARNING_COLOR }} />}
-              secondaryText="Registered Stakeholder's Groups"
+              secondaryText="Stakeholder's Groups"
               bottomBorderColor={WARNING_COLOR}
             />
           </Col>
         </Row>
         <Row>
-          <Col span={12}>
+          <Col xs={24} sm={24} lg={12}>
             <Row>
               <Col span={24}>
                 <SectionCard title="Overall - Working Level Breakdown">
@@ -119,7 +119,7 @@ const StakeholdersDashboard = ({ report, loading }) => {
               </Col>
             </Row>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={24} lg={12}>
             <Row>
               <Col span={24}>
                 <SectionCard title="Overall - Performing Roles Breakdown">

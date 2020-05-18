@@ -71,7 +71,7 @@ const EventsOverviewDashboard = ({ report, loading }) => {
     <div>
       <Spin spinning={loading}>
         <Row>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
             <NumberWidget
               title="Total Events"
               value={get(report, 'overview.total', 0)}
@@ -83,7 +83,7 @@ const EventsOverviewDashboard = ({ report, loading }) => {
               }
             />
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
             <NumberWidget
               title="Active Events"
               bottomBorderColor={DANGER_COLOR}
@@ -95,7 +95,7 @@ const EventsOverviewDashboard = ({ report, loading }) => {
               }
             />
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
             <NumberWidget
               title="Ended Events"
               value={get(report, 'overview.ended', 0)}
@@ -109,7 +109,7 @@ const EventsOverviewDashboard = ({ report, loading }) => {
           </Col>
         </Row>
         <Row>
-          <Col span={12}>
+          <Col xs={24} sm={24} lg={12}>
             <Row>
               <Col span={24}>
                 <SectionCard title="Overall - Event Types Breakdown">
@@ -140,7 +140,7 @@ const EventsOverviewDashboard = ({ report, loading }) => {
               </Col>
             </Row>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={24} lg={12}>
             <Row>
               <Col span={24}>
                 <SectionCard title="Overall - Event Groups Breakdown">

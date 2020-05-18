@@ -50,7 +50,7 @@ const OverviewDashboard = ({ report, loading }) => {
           <Text strong>EVENTS</Text>
         </Divider>
         <Row>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
             <NumberWidget
               title="Total Events"
               value={get(report, 'events.total', 0)}
@@ -62,7 +62,7 @@ const OverviewDashboard = ({ report, loading }) => {
               }
             />
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
             <NumberWidget
               title="Active Events"
               bottomBorderColor={DANGER_COLOR}
@@ -74,7 +74,7 @@ const OverviewDashboard = ({ report, loading }) => {
               }
             />
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
             <NumberWidget
               title="Ended Events"
               value={get(report, 'events.ended', 0)}
@@ -92,7 +92,7 @@ const OverviewDashboard = ({ report, loading }) => {
           <Text strong>VEHICLE DISPATCHES</Text>
         </Divider>
         <Row>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
             <NumberWidget
               title="Total"
               value={0}
@@ -101,7 +101,7 @@ const OverviewDashboard = ({ report, loading }) => {
               secondaryText="Total number of dispatches"
             />
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
             <NumberWidget
               title="Waiting"
               value={0}
@@ -110,7 +110,7 @@ const OverviewDashboard = ({ report, loading }) => {
               bottomBorderColor={SUCCESS_COLOR}
             />
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
             <NumberWidget
               title="Dispatched"
               value={0}
@@ -119,7 +119,7 @@ const OverviewDashboard = ({ report, loading }) => {
               bottomBorderColor={PURPLE_COLOR}
             />
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
             <NumberWidget
               title="Completed"
               value={0}
@@ -130,17 +130,17 @@ const OverviewDashboard = ({ report, loading }) => {
           </Col>
         </Row>
         <Row>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
             <TimeWidget
               title="Avg. Waiting Time"
-              days={get(report, 'parties.total', 0)}
+              days={0}
               hours={0}
               minutes={0}
               icon={<ClockCircleOutlined style={{ color: PRIMARY_COLOR }} />}
               bottomBorderColor={PRIMARY_COLOR}
             />
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
             <TimeWidget
               title="Avg. Dispatch Time"
               days={0}
@@ -150,7 +150,7 @@ const OverviewDashboard = ({ report, loading }) => {
               bottomBorderColor={WARNING_COLOR}
             />
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
             <TimeWidget
               title="Avg. Response Time"
               days={0}
@@ -165,7 +165,7 @@ const OverviewDashboard = ({ report, loading }) => {
           <Text strong>STAKEHOLDERS</Text>
         </Divider>
         <Row>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
             <NumberWidget
               title="Stakeholders"
               value={get(report, 'parties.total', 0)}
@@ -174,7 +174,7 @@ const OverviewDashboard = ({ report, loading }) => {
               secondaryText="Total Registered Stakeholders"
             />
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
             <NumberWidget
               title="Agencies"
               value={get(report, 'parties.agency', 0)}
@@ -183,7 +183,7 @@ const OverviewDashboard = ({ report, loading }) => {
               bottomBorderColor={SUCCESS_COLOR}
             />
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
             <NumberWidget
               title="Focal People"
               value={get(report, 'parties.focal', 0)}
@@ -192,7 +192,7 @@ const OverviewDashboard = ({ report, loading }) => {
               bottomBorderColor={PURPLE_COLOR}
             />
           </Col>
-          <Col span={6}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
             <NumberWidget
               title="Groups"
               value={get(report, 'parties.group', 0)}

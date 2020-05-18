@@ -119,16 +119,16 @@ export const TimeWidget = ({
         <Col span={2}>{icon}</Col>
       </Row>
       <Row>
-        <Col span={6}>
-          <Text style={{ fontSize: '3em', fontWeight: '500' }}>{days}</Text>
+        <Col xs={8} sm={8} lg={8} xl={6}>
+          <Text style={{ fontSize: '2em', fontWeight: '500' }}>{days}</Text>
           <Text type="secondary"> days</Text>
         </Col>
-        <Col span={6}>
-          <Text style={{ fontSize: '3em', fontWeight: '500' }}>{hours}</Text>
+        <Col xs={8} sm={8} lg={8} xl={6}>
+          <Text style={{ fontSize: '2em', fontWeight: '500' }}>{hours}</Text>
           <Text type="secondary"> hours</Text>
         </Col>
-        <Col span={6}>
-          <Text style={{ fontSize: '3em', fontWeight: '500' }}>{minutes}</Text>
+        <Col xs={8} sm={8} lg={8} xl={6}>
+          <Text style={{ fontSize: '2em', fontWeight: '500' }}>{minutes}</Text>
           <Text type="secondary"> minutes</Text>
         </Col>
       </Row>
@@ -157,6 +157,7 @@ TimeWidget.defaultProps = {
   hours: 0,
   minutes: 0,
 };
+
 /**
  * @function
  * @name SectionCard
@@ -172,7 +173,11 @@ export const SectionCard = ({ title, children }) => {
   return (
     <Card
       title={title}
-      style={{ margin: '10px', boxShadow: '0 0 10px #e9e9e9' }}
+      style={{
+        margin: '10px',
+        boxShadow: '0 0 10px #e9e9e9',
+      }}
+      bodyStyle={{ overflow: 'auto' }}
     >
       {children}
     </Card>
