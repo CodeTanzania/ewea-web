@@ -42,6 +42,8 @@ const App = () => {
       <Alert
         message="This is a depiction of the Emergency Management Information System for the sole purpose of development and training of users. The system itself is located exclusively on government servers at DarMAERT EOC, and collected data is not accessible to any external parties"
         type="error"
+        banner
+        showIcon={false}
       />
       <HashRouter hashType="hashbang" history={history}>
         <Switch>
