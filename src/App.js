@@ -1,7 +1,7 @@
 import { StoreProvider, initializeApp } from '@codetanzania/ewea-api-states';
 import { isTokenValid } from '@codetanzania/ewea-api-client';
 import { LoadingOutlined } from '@ant-design/icons';
-import { Spin } from 'antd';
+import { Spin, Alert } from 'antd';
 import React from 'react';
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
@@ -39,6 +39,10 @@ const App = () => {
 
   return (
     <StoreProvider>
+      <Alert
+        message="This is a depiction of the Emergency Management Information System for the sole purpose of development and training of users. The system itself is located exclusively on government servers at DarMAERT EOC, and collected data is not accessible to any external parties"
+        type="error"
+      />
       <HashRouter hashType="hashbang" history={history}>
         <Switch>
           <SecureRoute path="/app" component={BaseLayout} />
