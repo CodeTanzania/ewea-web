@@ -92,39 +92,39 @@ const OverviewDashboard = ({ report, loading }) => {
           <Text strong>VEHICLE DISPATCHES</Text>
         </Divider>
         <Row>
-          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <NumberWidget
               title="Total"
-              value={0}
+              value={get(report, 'dispatches.total', 0)}
               icon={<NumberOutlined style={{ color: PRIMARY_COLOR }} />}
               bottomBorderColor={PRIMARY_COLOR}
-              secondaryText="Total number of dispatches"
+              secondaryText="Total Dispatches"
             />
           </Col>
-          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <NumberWidget
               title="Waiting"
-              value={0}
+              value={get(report, 'dispatches.waiting', 0)}
               icon={<ApartmentOutlined style={{ color: SUCCESS_COLOR }} />}
-              secondaryText="Dispatches waiting vehicles"
+              secondaryText="Waiting for Vehicles"
               bottomBorderColor={SUCCESS_COLOR}
             />
           </Col>
-          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <NumberWidget
               title="Dispatched"
-              value={0}
+              value={get(report, 'dispatches.dispatched', 0)}
               icon={<UserOutlined style={{ color: PURPLE_COLOR }} />}
-              secondaryText="Dispatches which are in progress"
+              secondaryText="Dispatches in progress"
               bottomBorderColor={PURPLE_COLOR}
             />
           </Col>
-          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <NumberWidget
               title="Completed"
-              value={0}
+              value={get(report, 'dispatches.resolved', 0)}
               icon={<TeamOutlined style={{ color: WARNING_COLOR }} />}
-              secondaryText="Dispatches which are completed"
+              secondaryText="Completed Dispatches"
               bottomBorderColor={WARNING_COLOR}
             />
           </Col>
@@ -133,9 +133,9 @@ const OverviewDashboard = ({ report, loading }) => {
           <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
             <TimeWidget
               title="Avg. Waiting Time"
-              days={0}
-              hours={0}
-              minutes={0}
+              days={get(report, 'dispatches.averageWaitTime.days', 0)}
+              hours={get(report, 'dispatches.averageWaitTime.hours', 0)}
+              minutes={get(report, 'dispatches.averageWaitTime.minutes', 0)}
               icon={<ClockCircleOutlined style={{ color: PRIMARY_COLOR }} />}
               bottomBorderColor={PRIMARY_COLOR}
             />
@@ -143,9 +143,9 @@ const OverviewDashboard = ({ report, loading }) => {
           <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
             <TimeWidget
               title="Avg. Dispatch Time"
-              days={0}
-              hours={0}
-              minutes={0}
+              days={get(report, 'dispatches.averageDispatchTime.days', 0)}
+              hours={get(report, 'dispatches.averageDispatchTime.hours', 0)}
+              minutes={get(report, 'dispatches.averageDispatchTime.minutes', 0)}
               icon={<ClockCircleOutlined style={{ color: SUCCESS_COLOR }} />}
               bottomBorderColor={WARNING_COLOR}
             />
@@ -153,9 +153,9 @@ const OverviewDashboard = ({ report, loading }) => {
           <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
             <TimeWidget
               title="Avg. Response Time"
-              days={0}
-              hours={0}
-              minutes={0}
+              days={get(report, 'dispatches.averageResolveTime.days', 0)}
+              hours={get(report, 'dispatches.averageResolveTime.hours', 0)}
+              minutes={get(report, 'dispatches.averageResolveTime.minutes', 0)}
               icon={<ClockCircleOutlined style={{ color: WARNING_COLOR }} />}
               bottomBorderColor={DANGER_COLOR}
             />
@@ -165,7 +165,7 @@ const OverviewDashboard = ({ report, loading }) => {
           <Text strong>STAKEHOLDERS</Text>
         </Divider>
         <Row>
-          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <NumberWidget
               title="Stakeholders"
               value={get(report, 'parties.total', 0)}
@@ -174,7 +174,7 @@ const OverviewDashboard = ({ report, loading }) => {
               secondaryText="Total Registered Stakeholders"
             />
           </Col>
-          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <NumberWidget
               title="Agencies"
               value={get(report, 'parties.agency', 0)}
@@ -183,7 +183,7 @@ const OverviewDashboard = ({ report, loading }) => {
               bottomBorderColor={SUCCESS_COLOR}
             />
           </Col>
-          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <NumberWidget
               title="Focal People"
               value={get(report, 'parties.focal', 0)}
@@ -192,7 +192,7 @@ const OverviewDashboard = ({ report, loading }) => {
               bottomBorderColor={PURPLE_COLOR}
             />
           </Col>
-          <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={6}>
+          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
             <NumberWidget
               title="Groups"
               value={get(report, 'parties.group', 0)}
