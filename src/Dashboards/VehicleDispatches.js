@@ -149,9 +149,9 @@ const VehicleDispatchesDashboard = ({ report, loading }) => {
           <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
             <TimeWidget
               title="Avg. Waiting Time"
-              days={get(report, 'parties.total', 0)}
-              hours={0}
-              minutes={0}
+              days={get(report, 'overview.averageWaitTime.days', 0)}
+              hours={get(report, 'overview.averageWaitTime.hours', 0)}
+              minutes={get(report, 'overview.averageWaitTime.minutes', 0)}
               icon={<ClockCircleOutlined style={{ color: PRIMARY_COLOR }} />}
               bottomBorderColor={PRIMARY_COLOR}
             />
@@ -159,9 +159,9 @@ const VehicleDispatchesDashboard = ({ report, loading }) => {
           <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
             <TimeWidget
               title="Avg. Dispatch Time"
-              days={get(report, 'parties.agency', 0)}
-              hours={0}
-              minutes={0}
+              days={get(report, 'overview.averageDispatchTime.days', 0)}
+              hours={get(report, 'overview.averageDispatchTime.hours', 0)}
+              minutes={get(report, 'overview.averageDispatchTime.minutes', 0)}
               icon={<ClockCircleOutlined style={{ color: SUCCESS_COLOR }} />}
               bottomBorderColor={WARNING_COLOR}
             />
@@ -169,9 +169,9 @@ const VehicleDispatchesDashboard = ({ report, loading }) => {
           <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
             <TimeWidget
               title="Avg. Response Time"
-              days={get(report, 'parties.group', 0)}
-              hours={0}
-              minutes={0}
+              days={get(report, 'overview.averageResolveTime.days', 0)}
+              hours={get(report, 'overview.averageResolveTime.hours', 0)}
+              minutes={get(report, 'overview.averageResolveTime.minutes', 0)}
               icon={<ClockCircleOutlined style={{ color: WARNING_COLOR }} />}
               bottomBorderColor={DANGER_COLOR}
             />
