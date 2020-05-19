@@ -178,7 +178,7 @@ class Dispatches extends Component {
     let message = '';
     let subject = '';
     if (isArray(dispatches)) {
-      subject = 'Event Dipatches Details';
+      subject = 'Event Dispatches Details';
       const dispatchesList = dispatches.map(
         (dispatch) => generateVehicleDispatchShareableDetails(dispatch).body
       );
@@ -469,7 +469,15 @@ class Dispatches extends Component {
                 {...vehicleSpan}
                 title={get(item, 'role.strings.name.en', 'N/A')}
               >
-                {`${get(item, 'carrier.vehicle.strings.name.en', 'N/A')}`}
+                {`${get(
+                  item,
+                  'carrier.vehicle.strings.name.en',
+                  'N/A'
+                )} - ${get(
+                  item,
+                  'carrier.vehicle.relations.type.strings.name.en',
+                  'N/A'
+                )}`}
               </Col>
               <Col {...eventSpan}>
                 {get(item, 'type.strings.name.en', 'N/A')}
