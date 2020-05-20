@@ -1,207 +1,247 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { Form } from '@ant-design/compatible';
-import { Button } from 'antd';
-import '@ant-design/compatible/assets/index.css';
+import { Button, Form, Row, Col } from 'antd';
+import get from 'lodash/get';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* declarations */
 const {
-  getPartyGroups,
+  getVehicles,
+  getPartyOwnerships,
+  getVehicleTypes,
+  getFeatures,
+  getEventTypes,
+  getPriorities,
   getAdministrativeAreas,
-  getPartyRoles,
-  getAgencies,
+  getVehicleStatuses,
 } = httpActions;
-const { clearFocalPersonFilters, filterFocalPeople } = reduxActions;
+const { clearDispatchFilters, filterDispatches } = reduxActions;
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 24 },
+    md: { span: 24 },
+    lg: { span: 24 },
+    xl: { span: 24 },
+    xxl: { span: 24 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 24 },
+    md: { span: 24 },
+    lg: { span: 24 },
+    xl: { span: 24 },
+    xxl: { span: 24 },
+  },
+};
 
 /**
- * @class
- * @name FocalPeopleFilters
- * @description Filter modal component for filtering contacts
- *
+ * @function
+ * @name VehicleDispatchFilters
+ * @description Vehicle Dispatch Filters form
+ * @param {object} props Filter props
+ * @param {object} props.filter Filter object from the store
+ * @param {object} props.cached Cached values for lazy loaded values
+ * @param {Function} props.onCache Cache value callback
+ * @param {Function} props.onClearCache Clear cached values callback
+ * @param {Function} props.onCancel Close filter form callback
+ * @returns {object} Vehicle dispatch filter component
  * @version 0.1.0
  * @since 0.1.0
  */
-class FocalPeopleFilters extends Component {
-  /**
-   * @function
-   * @name handleSubmit
-   * @description Handle filter action
-   *
-   * @param {object} event onSubmit event object
-   * @returns {undefined}
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleSubmit = (event) => {
-    event.preventDefault();
-    const {
-      form: { validateFields },
-      onCancel,
-    } = this.props;
-
-    validateFields((error, values) => {
-      if (!error) {
-        filterFocalPeople(values);
-        onCancel();
-      }
-    });
-  };
-
-  /**
-   * @function
-   * @name handleClearFilter
-   * @description Action handle when clear
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleClearFilter = () => {
-    const { onCancel, onClearCache } = this.props;
-    clearFocalPersonFilters();
-
-    onClearCache();
+const VehicleDispatchFilters = ({
+  filter,
+  cached,
+  onCache,
+  onClearCache,
+  onCancel,
+}) => {
+  const onFinish = (values) => {
+    // TODO remove empty values
+    filterDispatches(values);
     onCancel();
   };
 
   /**
    * @function
-   * @name cacheFilters
-   * @description cache lazy loaded value from filters
-   *
-   * @param {object} values Object with key value of what is to be cached
+   * @name onClearFilters
+   * @description On clear form filters callback
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  cacheFilters = (values) => {
-    const { onCache } = this.props;
-    onCache(values);
+  const onClearFilters = () => {
+    clearDispatchFilters();
+    onClearCache();
+    onCancel();
   };
 
-  render() {
-    const {
-      form: { getFieldDecorator },
-      onCancel,
-      filter,
-      cached,
-    } = this.props;
+  return (
+    <Form
+      onFinish={onFinish}
+      {...formItemLayout} // eslint-disable-line
+      autoComplete="off"
+      initialValues={{
+        ...filter,
+      }}
+    >
+      <Row justify="space-between">
+        <Col xs={24} sm={24} lg={11}>
+          {/* start vehicle type  filters */}
+          <Form.Item label="By Vehicle Type" name={['carrier', 'type']}>
+            <SearchableSelectInput
+              onSearch={getVehicleTypes}
+              optionLabel={(type) => type.strings.name.en}
+              optionValue="_id"
+              onCache={(type) => onCache({ carrierType: type })}
+              initialValue={get(cached, 'carrierType')}
+            />
+          </Form.Item>
+          {/* end vehicle type filters */}
+        </Col>
+        <Col xs={24} sm={24} lg={11}>
+          {/* vehicle filter */}
+          <Form.Item label="By Vehicle" name={['carrier', 'vehicle']}>
+            <SearchableSelectInput
+              onSearch={getVehicles}
+              optionLabel={(vehicle) =>
+                `${vehicle.strings.name.en} (${get(
+                  vehicle,
+                  'relations.type.strings.name.en',
+                  'N/A'
+                )})`
+              }
+              optionValue="_id"
+              onCache={(vehicle) => onCache({ vehicle })}
+              initialValue={get(cached, 'vehicle')}
+            />
+          </Form.Item>
+          {/* end vehicle filter */}
+        </Col>
+      </Row>
 
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-    };
-
-    return (
-      <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* start contact group filters */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="By Area(s)">
-          {getFieldDecorator('area', {
-            initialValue: filter ? filter.area : [],
-          })(
+      <Row justify="space-between">
+        <Col xs={24} sm={24} lg={11}>
+          {/* start event/diagnosis  filters */}
+          <Form.Item label="By Event/Diagnosis" name="type">
+            <SearchableSelectInput
+              onSearch={getEventTypes}
+              optionLabel={(eventType) => eventType.strings.name.en}
+              optionValue="_id"
+              onCache={(type) => onCache({ type })}
+              initialValue={get(cached, 'type')}
+            />
+          </Form.Item>
+          {/* end event/diagnosis filters */}
+        </Col>
+        <Col xs={24} sm={24} lg={11}>
+          {/* start contact group filters */}
+          <Form.Item label="By Status" name="status">
+            <SearchableSelectInput
+              onSearch={getVehicleStatuses}
+              optionLabel={(status) => status.strings.name.en}
+              optionValue="_id"
+              onCache={(status) => {
+                onCache({ status });
+              }}
+              initialValue={get(cached, 'status')}
+            />
+          </Form.Item>
+          {/* end contact group filters */}
+        </Col>
+      </Row>
+      <Row justify="space-between">
+        <Col xs={24} sm={24} lg={11}>
+          {/* start priority  filters */}
+          <Form.Item label="By Priority" name="priority">
+            <SearchableSelectInput
+              onSearch={getPriorities}
+              optionLabel={(priority) => priority.strings.name.en}
+              optionValue="_id"
+              onCache={(priority) => onCache({ priority })}
+              initialValue={get(cached, 'priority')}
+            />
+          </Form.Item>
+          {/* end priority filters */}
+        </Col>
+        <Col xs={24} sm={24} lg={11}>
+          {/* start area filters */}
+          <Form.Item label="By Area" name={['requester', 'area']}>
             <SearchableSelectInput
               onSearch={getAdministrativeAreas}
-              optionLabel={(area) => area.strings.name.en}
+              optionLabel={(area) =>
+                `${area.strings.name.en} (${get(
+                  area,
+                  'relations.level.strings.name.en',
+                  'N/A'
+                )})`
+              }
               optionValue="_id"
-              mode="multiple"
-              onCache={(areas) => {
-                this.cacheFilters({ areas });
+              onCache={(area) => {
+                onCache({ area });
               }}
-              initialValue={cached && cached.areas ? cached.areas : []}
+              initialValue={get(cached, 'area')}
             />
-          )}
-        </Form.Item>
-        {/* end contact group filters */}
+          </Form.Item>
+          {/* end area filters */}
+        </Col>
+      </Row>
 
-        {/* start contact group filters */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="By Group(s)">
-          {getFieldDecorator('group', {
-            initialValue: filter ? filter.group : [],
-          })(
+      <Row justify="space-between">
+        <Col xs={24} sm={24} lg={11}>
+          {/* start priority  filters */}
+          <Form.Item
+            label="By Requester Facility"
+            name={['requester', 'facility']}
+          >
             <SearchableSelectInput
-              onSearch={getPartyGroups}
-              optionLabel={(group) => group.strings.name.en}
+              onSearch={getFeatures}
+              optionLabel={(feature) => feature.strings.name.en}
               optionValue="_id"
-              mode="multiple"
-              onCache={(groups) => this.cacheFilters({ groups })}
-              initialValue={cached && cached.groups ? cached.groups : []}
+              onCache={(facility) => onCache({ facility })}
+              initialValue={get(cached, 'facility')}
             />
-          )}
-        </Form.Item>
-        {/* end contact group filters */}
-
-        {/* start contact group filters */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="By Role(s)">
-          {getFieldDecorator('role', {
-            initialValue: filter ? filter.role : [],
-          })(
+          </Form.Item>
+          {/* end priority filters */}
+        </Col>
+        <Col xs={24} sm={24} lg={11}>
+          {/* start area filters */}
+          <Form.Item
+            label="By Vehicle Ownership"
+            name={['carrier', 'ownership']}
+          >
             <SearchableSelectInput
-              onSearch={getPartyRoles}
-              optionLabel={(role) => role.strings.name.en}
+              onSearch={getPartyOwnerships}
+              optionLabel={(ownership) => `${ownership.strings.name.en}`}
               optionValue="_id"
-              mode="multiple"
-              onCache={(roles) => this.cacheFilters({ roles })}
-              initialValue={cached && cached.roles ? cached.roles : []}
+              onCache={(ownership) => {
+                onCache({ ownership });
+              }}
+              initialValue={get(cached, 'ownership')}
             />
-          )}
-        </Form.Item>
-        {/* end contact group filters */}
+          </Form.Item>
+          {/* end area filters */}
+        </Col>
+      </Row>
 
-        {/* start contact group filters */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="By Agencies">
-          {getFieldDecorator('party', {
-            initialValue: filter ? filter.party : [],
-          })(
-            <SearchableSelectInput
-              onSearch={getAgencies}
-              optionLabel="name"
-              optionValue="_id"
-              mode="multiple"
-              onCache={(agencies) => this.cacheFilters({ agencies })}
-              initialValue={cached && cached.agencies ? cached.agencies : []}
-            />
-          )}
-        </Form.Item>
-        {/* end contact group filters */}
+      {/* form actions */}
+      <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
+        <Button onClick={onCancel}>Cancel</Button>
+        <Button style={{ marginLeft: 8 }} onClick={onClearFilters}>
+          Clear
+        </Button>
+        <Button style={{ marginLeft: 8 }} type="primary" htmlType="submit">
+          Filter
+        </Button>
+      </Form.Item>
+      {/* end form actions */}
+    </Form>
+  );
+};
 
-        {/* form actions */}
-        <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
-          <Button onClick={onCancel}>Cancel</Button>
-          <Button style={{ marginLeft: 8 }} onClick={this.handleClearFilter}>
-            Clear
-          </Button>
-          <Button style={{ marginLeft: 8 }} type="primary" htmlType="submit">
-            Filter
-          </Button>
-        </Form.Item>
-        {/* end form actions */}
-      </Form>
-    );
-  }
-}
-
-FocalPeopleFilters.propTypes = {
+VehicleDispatchFilters.propTypes = {
   filter: PropTypes.objectOf(
     PropTypes.shape({
       groups: PropTypes.arrayOf(PropTypes.string),
@@ -222,11 +262,11 @@ FocalPeopleFilters.propTypes = {
   onClearCache: PropTypes.func.isRequired,
 };
 
-FocalPeopleFilters.defaultProps = {
+VehicleDispatchFilters.defaultProps = {
   filter: null,
   cached: null,
 };
 
-export default Connect(Form.create()(FocalPeopleFilters), {
-  filter: 'focalPeople.filter',
+export default Connect(VehicleDispatchFilters, {
+  filter: 'dispatches.filter',
 });

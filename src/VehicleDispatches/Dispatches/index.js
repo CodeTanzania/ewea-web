@@ -11,6 +11,7 @@ import isArray from 'lodash/isArray';
 import get from 'lodash/get';
 
 import NotificationForm from '../../components/NotificationForm';
+import FilterForm from './Filters';
 import Topbar from '../../components/Topbar';
 import DispatchForm from './Form';
 import ItemList from '../../components/List';
@@ -23,6 +24,7 @@ import {
 } from '../../util';
 import './styles.css';
 
+// TODO use formModal class for modal windows
 /* constants */
 const {
   getDispatches: getDispatchesFromAPI,
@@ -69,6 +71,7 @@ const headerLayout = [
 class Dispatches extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
+    showFilters: false,
     isEditForm: false,
     showNotificationForm: false,
     selectedDispatches: [],
@@ -107,6 +110,32 @@ class Dispatches extends Component {
    */
   handleClearCachedValues = () => {
     this.setState({ cached: null });
+  };
+
+  /**
+   * @function
+   * @name openFiltersModal
+   * @description open filters modal by setting it's visible property
+   * to false via state
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  openFiltersModal = () => {
+    this.setState({ showFilters: true });
+  };
+
+  /**
+   * @function
+   * @name closeFiltersModal
+   * @description Close filters modal by setting it's visible property
+   * to false via state
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeFiltersModal = () => {
+    this.setState({ showFilters: false });
   };
 
   /**
@@ -383,12 +412,15 @@ class Dispatches extends Component {
     } = this.props;
 
     const {
+      showFilters,
+      cached,
       isEditForm,
       showNotificationForm,
       selectedDispatches,
       notificationSubject,
       notificationBody,
     } = this.state;
+
     return (
       <>
         {/* Topbar */}
@@ -419,6 +451,7 @@ class Dispatches extends Component {
           itemCount={total}
           loading={loading}
           onShare={this.handleShare}
+          onFilter={this.openFiltersModal}
           onRefresh={this.handleRefreshDispatches}
           onPaginate={(nextPage) => paginateDispatches(nextPage)}
           generateExportUrl={getDispatchesExportUrl}
@@ -518,13 +551,32 @@ class Dispatches extends Component {
         </Modal>
         {/* end Notification modal */}
 
+        {/* Filters modal */}
+        <Modal
+          title="Filter Dispatches"
+          visible={showFilters}
+          width="80%"
+          footer={null}
+          onCancel={this.closeFiltersModal}
+          destroyOnClose
+          maskClosable={false}
+        >
+          <FilterForm
+            cached={cached}
+            onCache={this.handleOnCachedValues}
+            onCancel={this.closeFiltersModal}
+            onClearCache={this.handleClearCachedValues}
+          />
+        </Modal>
+        {/* Filters modal */}
+
         {/* create/edit form modal */}
         <Modal
           title={
             isEditForm ? 'Edit Vehicle Dispatch' : 'Add New Vehicle Dispatch'
           }
           visible={showForm}
-          width="70%"
+          width="90%"
           footer={null}
           onCancel={this.closeDispatchForm}
           destroyOnClose

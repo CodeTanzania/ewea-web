@@ -13,22 +13,22 @@ import './styles.css';
 
 /**
  * @function
- * @param props.itemName
- * @param props.items
- * @param props.page
- * @param props.loading
- * @param props.itemCount
- * @param props.headerLayout
- * @param props.onFilter
- * @param props.onNotify
- * @param props.onPaginate
- * @param props.onRefresh
- * @param props.onShare
- * @param props.generateExportUrl
- * @param props.renderListItem
  * @name CustomList
  * @description List UI with tool bar , list header and list items
  * @param {object} props CustomList props
+ * @param {string} props.itemName
+ * @param {object[]} props.items
+ * @param {number} props.page
+ * @param {boolean} props.loading
+ * @param {number} props.itemCount
+ * @param {object} props.headerLayout
+ * @param {Function} props.onFilter
+ * @param {Function} props.onNotify
+ * @param {Function} props.onPaginate
+ * @param {Function} props.onRefresh
+ * @param {Function} props.onShare
+ * @param {Function} props.generateExportUrl
+ * @param {Function} props.renderListItem
  * @returns {object} CustomList component
  * @version 0.1.0
  * @since 0.1.0
