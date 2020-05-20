@@ -362,22 +362,22 @@ class Roles extends Component {
               renderActions={() => (
                 <ListItemActions
                   edit={{
-                    name: 'Edit role',
+                    name: 'Edit Role',
                     title: 'Update role Details',
                     onClick: () => this.handleEdit(item),
                   }}
                   share={{
-                    name: 'Share role',
+                    name: 'Share Role',
                     title: 'Share role details with others',
                     onClick: () => this.handleShare(item),
                   }}
                   archive={{
-                    name: 'Archive role',
+                    name: 'Archive Role',
                     title: 'Remove role from list of active role',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
                   assignPermissions={{
-                    name: 'Edit permissions',
+                    name: 'Edit Permissions',
                     title: 'Assign or remove permissions from the active role',
                     onClick: () => this.handleAssignPermissions(item),
                   }}
