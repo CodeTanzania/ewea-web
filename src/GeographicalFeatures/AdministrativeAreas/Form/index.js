@@ -138,7 +138,6 @@ class AdministrativeAreaForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* adminstrativeArea Level */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Administrative Level">
           {getFieldDecorator('level', {
@@ -167,7 +166,6 @@ class AdministrativeAreaForm extends Component {
         </Form.Item>
         {/* end administrativeArea Level */}
 
-        {/* administrativeArea Parent */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Form.Item {...formItemLayout} label="Administrative Area Parent">
           {getFieldDecorator('parent', {

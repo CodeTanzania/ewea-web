@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { reduxActions } from '@codetanzania/ewea-api-states';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Button, Col, Input, Row } from 'antd';
+import { Button, Input } from 'antd';
 import { notifyError, notifySuccess } from '../../../util';
 
 const { postNotificationTemplate, putNotificationTemplate } = reduxActions;
+const { TextArea } = Input;
 
 /**
  * @class
@@ -107,46 +108,38 @@ class NotificationTemplateForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit} autoComplete="off">
-        <Row>
-          <Col>
-            {/* notification template name */}
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Form.Item {...formItemLayout} label="Name">
-              {getFieldDecorator('name', {
-                initialValue: isEditForm
-                  ? notificationTemplate.strings.name.en
-                  : undefined,
-                rules: [
-                  {
-                    required: true,
-                    message: 'Notificaton Template name is required',
-                  },
-                ],
-              })(<Input />)}
-            </Form.Item>
-            {/* end notification template name */}
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            {/* notification template description */}
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <Form.Item {...formItemLayout} label="Description">
-              {getFieldDecorator('description', {
-                initialValue: isEditForm
-                  ? notificationTemplate.strings.description.en
-                  : undefined,
-                rules: [
-                  {
-                    required: true,
-                    message: 'Notificaton Template description is required',
-                  },
-                ],
-              })(<Input />)}
-            </Form.Item>
-            {/* end notification template description */}
-          </Col>
-        </Row>
+        {/* notification template name */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <Form.Item {...formItemLayout} label="Name">
+          {getFieldDecorator('name', {
+            initialValue: isEditForm
+              ? notificationTemplate.strings.name.en
+              : undefined,
+            rules: [
+              {
+                required: true,
+                message: 'Notification Template name is required',
+              },
+            ],
+          })(<Input />)}
+        </Form.Item>
+        {/* end notification template name */}
+        {/* notification template description */}
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <Form.Item {...formItemLayout} label="Description">
+          {getFieldDecorator('description', {
+            initialValue: isEditForm
+              ? notificationTemplate.strings.description.en
+              : undefined,
+            rules: [
+              {
+                required: true,
+                message: 'Notification Template description is required',
+              },
+            ],
+          })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
+        </Form.Item>
+        {/* end notification template description */}
 
         {/* form actions */}
         <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
