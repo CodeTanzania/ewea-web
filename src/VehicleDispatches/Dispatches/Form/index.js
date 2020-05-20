@@ -26,6 +26,7 @@ const {
   getEventTypes,
   getPartyGenders,
   getFocalPeople,
+  getPriorities,
 } = httpActions;
 const { postDispatch, putDispatch } = reduxActions;
 const { TextArea } = Input;
@@ -96,7 +97,6 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
         vehicle: get(vehicle, '_id'),
       };
     }
-
     const values = {
       ...formValues,
       ...sectionValues,
@@ -145,6 +145,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
             'YYYY-MM-DD HH:mm:ss'
           ),
           type: get(dispatch, 'type._id'),
+          priority: get(dispatch, 'priority._id'),
           crew: map(get(dispatch, 'crew', []), '_id'),
           requester: {
             ...get(dispatch, 'requester', null),
@@ -180,12 +181,12 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
           <>
             {dispatch && (
               <Row justify="space-between">
-                <Col span={11}>
+                <Col xs={24} sm={24} md={11}>
                   <Form.Item name="number" label="Dispatch Number">
                     <Input disabled />
                   </Form.Item>
                 </Col>
-                <Col span={11}>
+                <Col xs={24} sm={24} md={11}>
                   <Form.Item name="reportedAt" label="Request Time">
                     <Input disabled />
                   </Form.Item>
@@ -194,7 +195,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
             )}
 
             <Row justify="space-between">
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item
                   name={['requester', 'name']}
                   label="Name"
@@ -205,7 +206,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item
                   name={['requester', 'mobile']}
                   label="Phone"
@@ -219,7 +220,47 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
             </Row>
 
             <Row justify="space-between">
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
+                <Form.Item
+                  name="type"
+                  label="Event/Diagnosis"
+                  rules={[
+                    { required: true, message: 'This field is required' },
+                  ]}
+                >
+                  <SearchableSelectInput
+                    onSearch={getEventTypes}
+                    optionLabel={(type) => `${type.strings.name.en} `}
+                    optionValue="_id"
+                    initialValue={
+                      get(dispatch, 'type', undefined) ||
+                      get(cached, 'type', undefined)
+                    }
+                    onCache={(values) =>
+                      setCache({ ...cached, type: values[0] })
+                    }
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={11}>
+                <Form.Item name="priority" label="Priority">
+                  <SearchableSelectInput
+                    onSearch={getPriorities}
+                    optionLabel={(priority) => priority.strings.name.en}
+                    optionValue="_id"
+                    onCache={(values) =>
+                      setCache({ ...cached, priority: values[0] })
+                    }
+                    initialValue={
+                      get(dispatch, 'priority') || get(cached, 'priority')
+                    }
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Row justify="space-between">
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['requester', 'facility']} label="Facility">
                   <SearchableSelectInput
                     onSearch={getFeatures}
@@ -235,7 +276,8 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={11}>
+
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item
                   name={['requester', 'area']}
                   label="Area"
@@ -265,11 +307,11 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
               </Col>
             </Row>
 
-            <Form.Item name={['requester', 'address']} label="Address">
+            <Form.Item name="description" label="Description/Notes">
               <TextArea autoSize={{ minRows: 3, maxRows: 3 }} />
             </Form.Item>
 
-            <Form.Item name="description" label="Description/Notes">
+            <Form.Item name={['requester', 'address']} label="Address">
               <TextArea autoSize={{ minRows: 3, maxRows: 3 }} />
             </Form.Item>
           </>
@@ -278,7 +320,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
         {currentStep === 1 && (
           <>
             <Row justify="space-between">
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item
                   name={['victim', 'name']}
                   label="Name"
@@ -289,37 +331,43 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={11}>
-                <Form.Item
-                  name={['type']}
-                  label="Event/Diagnosis"
-                  rules={[
-                    { required: true, message: 'This field is required' },
-                  ]}
-                >
-                  <SearchableSelectInput
-                    onSearch={getEventTypes}
-                    optionLabel={(type) => `${type.strings.name.en} `}
-                    optionValue="_id"
-                    initialValue={
-                      get(dispatch, 'type', undefined) ||
-                      get(cached, 'type', undefined)
-                    }
-                    onCache={(values) =>
-                      setCache({ ...cached, type: values[0] })
-                    }
-                  />
+
+              <Col xs={24} sm={24} md={11}>
+                <Form.Item name={['victim', 'mobile']} label="Phone">
+                  <Input />
                 </Form.Item>
               </Col>
             </Row>
 
             <Row justify="space-between">
-              <Col span={11}>
-                <Form.Item name={['victim', 'mobile']} label="Phone">
-                  <Input />
+              <Col xs={24} sm={24} md={11}>
+                <Form.Item
+                  name={['victim', 'area']}
+                  label="Area"
+                  rules={[
+                    { required: true, message: 'This field is required' },
+                  ]}
+                >
+                  <SearchableSelectInput
+                    onSearch={getAdministrativeAreas}
+                    optionLabel={(area) =>
+                      `${area.strings.name.en} (${get(
+                        area,
+                        'relations.level.strings.name.en',
+                        'N/A'
+                      )})`
+                    }
+                    optionValue="_id"
+                    initialValue={
+                      get(dispatch, 'victim.area') || get(cached, 'victimArea')
+                    }
+                    onCache={(values) =>
+                      setCache({ ...cached, victimArea: values[0] })
+                    }
+                  />
                 </Form.Item>
               </Col>
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['victim', 'gender']} label="Gender">
                   <SearchableSelectInput
                     onSearch={getPartyGenders}
@@ -338,12 +386,12 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
             </Row>
 
             <Row justify="space-between">
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['victim', 'age']} label="Age">
                   <InputNumber min={0} max={150} style={{ width: '100%' }} />
                 </Form.Item>
               </Col>
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['victim', 'weight']} label="Weight (kg)">
                   <InputNumber min={0} max={1000} style={{ width: '100%' }} />
                 </Form.Item>
@@ -351,41 +399,17 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
             </Row>
 
             <Row justify="space-between">
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['victim', 'pcr']} label="PCR #">
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['victim', 'referral']} label="Referral #">
                   <Input />
                 </Form.Item>
               </Col>
             </Row>
-
-            <Form.Item
-              name={['victim', 'area']}
-              label="Area"
-              rules={[{ required: true, message: 'This field is required' }]}
-            >
-              <SearchableSelectInput
-                onSearch={getAdministrativeAreas}
-                optionLabel={(area) =>
-                  `${area.strings.name.en} (${get(
-                    area,
-                    'relations.level.strings.name.en',
-                    'N/A'
-                  )})`
-                }
-                optionValue="_id"
-                initialValue={
-                  get(dispatch, 'victim.area') || get(cached, 'victimArea')
-                }
-                onCache={(values) =>
-                  setCache({ ...cached, victimArea: values[0] })
-                }
-              />
-            </Form.Item>
 
             <Form.Item name={['victim', 'description']} label="Chief Complaint">
               <TextArea autoSize={{ minRows: 3, maxRows: 3 }} />
@@ -400,7 +424,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
         {currentStep === 2 && (
           <>
             <Row justify="space-between">
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['pickup', 'facility']} label="Facility">
                   <SearchableSelectInput
                     onSearch={getFeatures}
@@ -416,7 +440,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['pickup', 'area']} label="Area">
                   <SearchableSelectInput
                     onSearch={getAdministrativeAreas}
@@ -440,7 +464,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
             </Row>
 
             <Row justify="space-between">
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item
                   name={['pickup', 'correspondent']}
                   label="Correspondent"
@@ -448,7 +472,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['pickup', 'address']} label="Address">
                   <Input />
                 </Form.Item>
@@ -456,7 +480,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
             </Row>
 
             <Row justify="space-between">
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item
                   name={['pickup', 'dispatchedAt']}
                   label="Dispatched Time"
@@ -468,7 +492,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['pickup', 'arrivedAt']} label="Arrived Time">
                   <DatePicker
                     showTime
@@ -488,7 +512,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
         {currentStep === 3 && (
           <>
             <Row justify="space-between">
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['dropoff', 'facility']} label="Facility">
                   <SearchableSelectInput
                     onSearch={getFeatures}
@@ -504,7 +528,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['dropoff', 'area']} label="Area">
                   <SearchableSelectInput
                     onSearch={getAdministrativeAreas}
@@ -529,7 +553,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
             </Row>
 
             <Row justify="space-between">
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item
                   name={['dropoff', 'correspondent']}
                   label="Correspondent"
@@ -537,7 +561,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['dropoff', 'address']} label="Address">
                   <Input />
                 </Form.Item>
@@ -545,7 +569,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
             </Row>
 
             <Row justify="space-between">
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item
                   name={['dropoff', 'dispatchedAt']}
                   label="Dispatched Time"
@@ -557,7 +581,7 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['dropoff', 'arrivedAt']} label="Arrived Time">
                   <DatePicker
                     showTime
@@ -611,12 +635,12 @@ const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
             </Form.Item>
 
             {/* <Row justify="space-between">
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['carrier', 'owner', '_id']} label="Owner">
                   <Input />
                 </Form.Item>
               </Col>
-              <Col span={11}>
+              <Col xs={24} sm={24} md={11}>
                 <Form.Item name={['carrier', 'ownership']} label="Ownership">
                   <Input />
                 </Form.Item>
