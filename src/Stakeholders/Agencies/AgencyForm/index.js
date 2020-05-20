@@ -167,7 +167,7 @@ class AgencyForm extends Component {
             {/* agency organization */}
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Form.Item {...formItemLayout} label="Abbreviation">
-              {getFieldDecorator('Abbreviation', {
+              {getFieldDecorator('abbreviation', {
                 rules: [{ required: true }],
                 initialValue: isEditForm ? agency.abbreviation : undefined,
               })(<Input />)}
@@ -257,7 +257,7 @@ class AgencyForm extends Component {
               <Col xxl={11} xl={11} lg={11} md={11} sm={24} xs={24}>
                 {/* agency landline number */}
                 {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Form.Item {...formItemLayout} label="Landline/Other Number">
+                <Form.Item {...formItemLayout} label="Other Number">
                   {getFieldDecorator('landline', {
                     initialValue: isEditForm ? agency.landline : undefined,
                   })(<Input />)}

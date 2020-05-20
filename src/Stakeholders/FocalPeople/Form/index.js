@@ -235,6 +235,12 @@ class FocalPersonForm extends Component {
                       isEditForm && focalPerson.area
                         ? focalPerson.area._id // eslint-disable-line
                         : undefined,
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Focal People area is required',
+                      },
+                    ],
                   })(
                     <SearchableSelectInput
                       onSearch={getAdministrativeAreas}

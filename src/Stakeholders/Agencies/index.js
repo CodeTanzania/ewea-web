@@ -474,7 +474,7 @@ class Agencies extends Component {
         <Modal
           title={isEditForm ? 'Edit Agency' : 'Add New Agency'}
           visible={showForm}
-          width="50%"
+          className="FormModal-80"
           footer={null}
           onCancel={this.closeAgencyForm}
           destroyOnClose
