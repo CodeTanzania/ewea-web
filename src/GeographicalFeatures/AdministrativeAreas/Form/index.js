@@ -1,10 +1,11 @@
+import React, { Component } from 'react';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Input } from 'antd';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import get from 'lodash/get';
 import { notifyError, notifySuccess } from '../../../util';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import 'rc-color-picker/assets/index.css';
@@ -143,7 +144,7 @@ class AdministrativeAreaForm extends Component {
           {getFieldDecorator('level', {
             initialValue:
               isEditForm && administrativeArea
-                ? administrativeArea.relations.level._id // eslint-disable-line
+                ? get(administrativeArea, 'relations.level._id')
                 : undefined,
             rules: [
               {
@@ -158,13 +159,13 @@ class AdministrativeAreaForm extends Component {
               optionValue="_id"
               initialValue={
                 isEditForm && administrativeArea
-                  ? administrativeArea.relations.level
+                  ? get(administrativeArea, 'relations.level')
                   : undefined
               }
             />
           )}
         </Form.Item>
-        {/* end adminstrativeArea Level */}
+        {/* end administrativeArea Level */}
 
         {/* administrativeArea Parent */}
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
@@ -172,7 +173,7 @@ class AdministrativeAreaForm extends Component {
           {getFieldDecorator('parent', {
             initialValue:
               isEditForm && administrativeArea
-                ? administrativeArea.relations.parent._id // eslint-disable-line
+                ? get(administrativeArea, 'relations.parent._id')
                 : undefined,
           })(
             <SearchableSelectInput
@@ -181,7 +182,7 @@ class AdministrativeAreaForm extends Component {
               optionValue="_id"
               initialValue={
                 isEditForm && administrativeArea
-                  ? administrativeArea.relations.parent
+                  ? get(administrativeArea, 'relations.parent')
                   : undefined
               }
             />
