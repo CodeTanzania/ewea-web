@@ -49,14 +49,16 @@ const { confirm } = Modal;
 const authenticatedParty = getAuthenticatedParty();
 
 const numberSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 10, xs: 10 };
-const vehicleSpan = { xxl: 6, xl: 6, lg: 6, md: 6, sm: 0, xs: 0 };
+const vehicleSpan = { xxl: 4, xl: 4, lg: 5, md: 6, sm: 0, xs: 0 };
 const eventSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 9, xs: 8 };
-const statusSpan = { xxl: 6, xl: 6, lg: 6, md: 6, sm: 0, xs: 0 };
+const prioritySpan = { xxl: 2, xl: 2, lg: 3, md: 0, sm: 0, xs: 0 };
+const statusSpan = { xxl: 6, xl: 6, lg: 4, md: 4, sm: 0, xs: 0 };
 
 const headerLayout = [
   { ...numberSpan, header: 'Number' },
   { ...vehicleSpan, header: 'Vehicle' },
   { ...eventSpan, header: 'Event' },
+  { ...prioritySpan, header: 'Priority' },
   { ...statusSpan, header: 'Status' },
 ];
 
@@ -514,6 +516,10 @@ class Dispatches extends Component {
               </Col>
               <Col {...eventSpan}>
                 {get(item, 'type.strings.name.en', 'N/A')}
+              </Col>
+
+              <Col {...prioritySpan}>
+                {get(item, 'priority.strings.name.en', 'N/A')}
               </Col>
               <Col {...statusSpan}>{`${get(
                 item,
