@@ -24,7 +24,6 @@ import eventResponsesIcon from '../assets/icons/settings/eventresponses.svg';
 import eventUrgenciesIcon from '../assets/icons/settings/eventurgencies.svg';
 import administrativeLevelsIcon from '../assets/icons/settings/administrativelevels.svg';
 import featureTypesIcon from '../assets/icons/settings/featuretypes.svg';
-import vehiclesIcon from '../assets/icons/settings/vehicles.svg';
 import vehicleMakesIcon from '../assets/icons/settings/vehiclemakes.svg';
 import vehicleModelsIcon from '../assets/icons/settings/vehiclemodels.svg';
 import vehicleStatusesIcon from '../assets/icons/settings/vehiclestatuses.svg';
@@ -159,12 +158,6 @@ const routes = [
     description: modules.units,
   },
   {
-    name: 'Vehicles',
-    path: '/vehicles',
-    icon: vehiclesIcon,
-    description: modules.units,
-  },
-  {
     name: 'Vehicle Makes',
     path: '/vehiclemakes',
     icon: vehicleMakesIcon,
@@ -197,21 +190,21 @@ const routes = [
 ];
 
 /**
- * @param root0
- * @param root0.match
  * @function
- * @name Settings
+ * @name SettingsNavMenu
  * @description Settings module to bundle all configs UIs
+ * @param {object} props Component Props
+ * @param {object} props.match Match prop from react router
  * @returns {object} React component
  * @version 0.1.0
  * @since 0.1.0
  */
-const Settings = ({ match }) => (
+const SettingsNavMenu = ({ match }) => (
   <NavigationMenu routes={routes} match={match} />
 );
 
-Settings.propTypes = {
+SettingsNavMenu.propTypes = {
   match: PropTypes.shape({ url: PropTypes.string }).isRequired,
 };
 
-export default Settings;
+export default SettingsNavMenu;

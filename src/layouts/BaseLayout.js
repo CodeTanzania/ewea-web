@@ -50,6 +50,8 @@ import OverviewDashboard from '../Dashboards/Overview';
 import EventsOverviewDashboard from '../Dashboards/EventsOverview';
 import StakeholdersDashboard from '../Dashboards/Stakeholders';
 import VehicleDispatchesDashboard from '../Dashboards/VehicleDispatches';
+// Resources
+import Resources from '../navigation/Resources';
 
 import './styles.css';
 
@@ -123,6 +125,16 @@ const breadcrumbNameMap = {
   '/app/dashboards/dispatches': {
     name: 'Vehicle Dispatches',
     title: 'Vehicle Dispatches Dashboard',
+  },
+
+  /* Resources routes */
+  '/app/resources': {
+    name: 'Resources',
+    title: 'Resources Module',
+  },
+  '/app/resources/vehicles': {
+    name: 'Vehicles',
+    title: 'Vehicles',
   },
 
   /* settings routes */
@@ -362,6 +374,19 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
           />
           {/* end dashboard routes */}
 
+          {/* Resources routes */}
+
+          <SecureRoute
+            exact
+            path={`${baseUrl}/resources`}
+            component={Resources}
+          />
+          <SecureRoute
+            path={`${baseUrl}/resources/vehicles`}
+            component={Vehicles}
+          />
+          {/* end Resources routes */}
+
           <SecureRoute path={`${baseUrl}/actions`} component={ActionsTaken} />
           <SecureRoute
             exact
@@ -457,11 +482,6 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
 
           <SecureRoute path={`${baseUrl}/settings/units`} component={Units} />
 
-          <SecureRoute
-            exact
-            path={`${baseUrl}/settings/vehicles`}
-            component={Vehicles}
-          />
           <SecureRoute
             path={`${baseUrl}/settings/vehiclemakes`}
             component={VehicleMakes}

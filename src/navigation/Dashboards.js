@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import eventsIcon from '../assets/icons/events.svg';
 import stakeholdersIcon from '../assets/icons/dashboards/stakeholders.svg';
@@ -17,52 +18,52 @@ import modules from '../modules.json';
 const routes = [
   {
     name: 'Overview',
-    path: '/app/dashboards/overview',
+    path: '/overview',
     icon: overviewDashboardIcon,
     description: modules.alertsIssued,
   },
   {
     name: 'Events',
-    path: '/app/dashboards/events',
+    path: '/events',
     icon: eventsIcon,
     description: modules.alertsIssued,
   },
   {
     name: 'Indicators',
-    path: '/app/dashboards/indicators',
+    path: '/indicators',
     icon: indicatorDashboardIcon,
     description: modules.alertsIssued,
     disabled: true,
   },
   {
     name: 'Stakeholders',
-    path: '/app/dashboards/stakeholders',
+    path: '/stakeholders',
     icon: stakeholdersIcon,
     description: modules.alertsIssued,
   },
   {
     name: 'Cases',
-    path: '/app/dashboards/casemanagement',
+    path: '/casemanagement',
     icon: caseManagementIcon,
     description: modules.alertsIssued,
     disabled: true,
   },
   {
     name: 'Resources',
-    path: '/app/dashboards/resourcemanagement',
+    path: '/resourcemanagement',
     icon: resourceManagementIcon,
     description: modules.alertsIssued,
     disabled: true,
   },
   {
     name: 'Vehicle Dispatches',
-    path: '/app/dashboards/dispatches',
+    path: '/dispatches',
     icon: vehicleDispatchIcon,
     description: modules.alertsIssued,
   },
   {
     name: 'Critical Infrastructures',
-    path: '/app/dashboards/features',
+    path: '/features',
     icon: criticalInfrastructuresIcon,
     description: modules.alertsIssued,
     disabled: true,
@@ -73,12 +74,19 @@ const routes = [
  * @function
  * @name Home
  * @description Home component which shows to base navigation menu
- *
+ * @param {object} props Component Props
+ * @param {object} props.match Match prop from react router
  * @returns {object} Navigation Menu
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-const DashboardNavMenu = () => <NavigationMenu routes={routes} />;
+const DashboardNavMenu = ({ match }) => (
+  <NavigationMenu routes={routes} match={match} />
+);
+
+DashboardNavMenu.propTypes = {
+  match: PropTypes.shape({ url: PropTypes.string }).isRequired,
+};
 
 export default DashboardNavMenu;

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import dashboardIcon from '../assets/icons/dashboards.svg';
 import settingsIcon from '../assets/icons/settings.svg';
 import agenciesIcon from '../assets/icons/agencies.svg';
@@ -9,7 +9,7 @@ import eventsIcon from '../assets/icons/events.svg';
 // import actionsTakenIcon from '../assets/icons/actionstaken.svg';
 import actionCatalogueIcon from '../assets/icons/actioncatalog.svg';
 import caseManagementIcon from '../assets/icons/dashboards/case-management-disabled.svg';
-import resourceManagementIcon from '../assets/icons/dashboards/resource-management-disabled.svg';
+import resourceManagementIcon from '../assets/icons/dashboards/resource-management.svg';
 import vehicleDispatchIcon from '../assets/icons/dashboards/vehicle-dispatch.svg';
 import modules from '../modules.json';
 
@@ -17,20 +17,20 @@ import modules from '../modules.json';
 const routes = [
   {
     name: 'Events',
-    path: '/app/events',
+    path: '/events',
     icon: eventsIcon,
     description: modules.alertsIssued,
   },
   {
     name: 'Cases',
-    path: '/app/dashboards/casemanagement',
+    path: '/dashboards/casemanagement',
     icon: caseManagementIcon,
     description: modules.alertsIssued,
     disabled: true,
   },
   {
     name: 'Vehicle Dispatches',
-    path: '/app/dispatches',
+    path: '/dispatches',
     icon: vehicleDispatchIcon,
     description: modules.alertsIssued,
   },
@@ -42,38 +42,37 @@ const routes = [
   // },
   {
     name: 'Action Catalogue',
-    path: '/app/actioncatalogue',
+    path: '/actioncatalogue',
     icon: actionCatalogueIcon,
     description: modules.alertsActions,
   },
   {
     name: 'Resources',
-    path: '/app/dashboards/resourcemanagement',
+    path: '/resources',
     icon: resourceManagementIcon,
     description: modules.alertsIssued,
-    disabled: true,
   },
   {
     name: 'Focal People',
-    path: '/app/focalpeople',
+    path: '/focalpeople',
     icon: focalPeopleIcon,
     description: modules.stakeholdersFocalPeople,
   },
   {
     name: 'Agencies',
-    path: '/app/agencies',
+    path: '/agencies',
     icon: agenciesIcon,
     description: modules.stakeholdersAgencies,
   },
   {
     name: 'Dashboards',
-    path: '/app/dashboards',
+    path: '/dashboards',
     icon: dashboardIcon,
     description: modules.dashboards,
   },
   {
     name: 'Settings',
-    path: '/app/settings',
+    path: '/settings',
     icon: settingsIcon,
     description: modules.notificationTemplate,
   },
@@ -81,14 +80,20 @@ const routes = [
 
 /**
  * @function
- * @name Home
+ * @name HomeNavMenu
  * @description Home component which shows to base navigation menu
- *
+ * @param {object} props Component Props
+ * @param {object} props.match Match prop from react router
  * @returns {object} Navigation Menu
  *
  * @version 0.1.0
  * @since 0.1.0
  */
-const Home = () => <NavigationMenu routes={routes} />;
+const HomeNavMenu = ({ match }) => (
+  <NavigationMenu routes={routes} match={match} />
+);
 
-export default Home;
+HomeNavMenu.propTypes = {
+  match: PropTypes.shape({ url: PropTypes.string }).isRequired,
+};
+export default HomeNavMenu;
