@@ -435,7 +435,7 @@ class Dispatches extends Component {
           }}
           actions={[
             {
-              label: 'New Vehicle Dispatch',
+              label: 'New Dispatch',
               icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Vehicle Dispatch',
