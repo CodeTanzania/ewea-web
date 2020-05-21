@@ -28,7 +28,7 @@ const SignInForm = ({ loading, history }) => {
         // populate app store with schemas
         initializeApp();
 
-        notifySuccess('Welcome to EWEA');
+        notifySuccess(`Welcome to EMIS`);
       },
       () => {
         notifyError('Invalid username or password, Please Try Again');
