@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  httpActions,
-  getAuthenticatedParty,
-} from '@codetanzania/ewea-api-client';
+import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -46,7 +43,6 @@ const {
   putDispatch,
 } = reduxActions;
 const { confirm } = Modal;
-const authenticatedParty = getAuthenticatedParty();
 
 const numberSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 10, xs: 10 };
 const vehicleSpan = { xxl: 4, xl: 4, lg: 5, md: 6, sm: 0, xs: 0 };
@@ -335,66 +331,63 @@ class Dispatches extends Component {
 
   /**
    * @function
-   * @name handleCompleteDispatch
-   * @description Show confirmation modal window for marking dispatch as completed
-   * @param {object} dispatch Dispatch to be marked as complete
-   *
+   * @name handleDispatch
+   * @description Show confirmation modal window based on dispatch action
+   * it can be complete, cancel, atPickup, atDropOff, fromPickup, fromDropOff
+   * @param {object} dispatch Dispatch to be marked as dispatched
+   * @param {string} action Dispatch action
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleCompleteDispatch = (dispatch) => {
-    const data = {
+  handleDispatch = (dispatch, action) => {
+    let data = {
       _id: dispatch._id, // eslint-disable-line
-      resolver: authenticatedParty._id, // eslint-disable-line
-      resolvedAt: new Date(),
     };
+    let confirmMessage;
+    if (action === 'dispatch') {
+      confirmMessage = 'Are you sure you want to dispatch this';
+      data = { ...data, dispatchedAt: new Date() };
+    } else if (action === 'atPickup') {
+      confirmMessage =
+        'Are you sure you want to mark vehicle is at pickup location';
+      data = {
+        ...data,
+        pickup: {
+          arrivedAt: new Date(),
+        },
+      };
+    } else if (action === 'fromPickup') {
+      confirmMessage =
+        'Are you sure you want to mark vehicle is leaving pickup location';
+      data = { ...data, pickup: { dispatchedAt: new Date() } };
+    } else if (action === 'atDropOff') {
+      confirmMessage =
+        'Are you sure you want to mark vehicle is at drop off location';
+      data = { ...data, dropoff: { arrivedAt: new Date() } };
+    } else if (action === 'fromDropOff') {
+      confirmMessage =
+        'Are you sure you want to mark vehicle is leaving drop off location';
+      data = { ...data, dropoff: { dispatchedAt: new Date() } };
+    } else if (action === 'complete') {
+      confirmMessage = 'Are you sure you want to complete this dispatch';
+      data = { ...data, resolvedAt: new Date() };
+    } else if (action === 'cancel') {
+      confirmMessage = 'Are you sure you want to cancel this dispatch';
+      data = { ...data, canceledAt: new Date() };
+    }
 
     confirm({
-      title: `Are you sure you want to complete this dispatch?`,
+      title: `${confirmMessage}?`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk() {
         putDispatch(
           data, // eslint-disable-line
-          () => notifySuccess('Vehicle Dispatch was completed successfully'),
+          () => notifySuccess('Vehicle Dispatch was updated successfully'),
           () =>
             notifyError(
-              'An error occurred while marking vehicle dispatch as complete, Please contact your system Administrator'
-            )
-        );
-      },
-    });
-  };
-
-  /**
-   * @function
-   * @name handleCancelDispatch
-   * @description Show confirmation modal window for cancelling dispatch
-   * @param {object} dispatch Dispatch to be cancelled
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleCancelDispatch = (dispatch) => {
-    const data = {
-      _id: dispatch._id, // eslint-disable-line
-      canceller: authenticatedParty._id, // eslint-disable-line
-      canceledAt: new Date(),
-    };
-
-    confirm({
-      title: `Are you sure you want to cancel this dispatch?`,
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
-      onOk() {
-        putDispatch(
-          data, // eslint-disable-line
-          () => notifySuccess('Vehicle Dispatch was cancelled successfully'),
-          () =>
-            notifyError(
-              'An error occurred while cancelling vehicle dispatch, Please contact your system Administrator'
+              'An error occurred while updating dispatch, Please contact your system Administrator'
             )
         );
       },
@@ -475,25 +468,50 @@ class Dispatches extends Component {
               renderActions={() => (
                 <ListItemActions
                   edit={{
-                    name: 'Edit Vehicle Dispatch',
+                    name: 'Edit Dispatch',
                     title: 'Update Vehicle Dispatch Details',
                     onClick: () => this.handleEdit(item),
                   }}
                   archive={{
-                    name: 'Archive Vehicle Dispatch',
+                    name: 'Archive Dispatch',
                     title:
                       'Remove vehicle dispatch from list of active vehicle dispatches',
                     onClick: () => this.showArchiveConfirm(item),
                   }}
+                  dispatch={{
+                    name: 'Dispatch Vehicle',
+                    title: 'Mark dispatch as dispatched',
+                    onClick: () => this.handleDispatch(item, 'dispatch'),
+                  }}
+                  atPickup={{
+                    name: 'Vehicle at Pickup',
+                    title: 'Mark vehicle is at pickup location',
+                    onClick: () => this.handleDispatch(item, 'atPickup'),
+                  }}
+                  fromPickup={{
+                    name: 'Vehicle From Pickup',
+                    title: 'Mark vehicle is leaving pickup location',
+                    onClick: () => this.handleDispatch(item, 'fromPickup'),
+                  }}
+                  atDropOff={{
+                    name: 'Vehicle at Drop Off',
+                    title: 'Mark vehicle is at drop off location',
+                    onClick: () => this.handleDispatch(item, 'atDropOff'),
+                  }}
+                  fromDropOff={{
+                    name: 'Vehicle from Drop Off',
+                    title: 'Mark vehicle is leaving drop off location',
+                    onClick: () => this.handleDispatch(item, 'fromDropOff'),
+                  }}
                   completeDispatch={{
-                    name: 'Complete Vehicle Dispatch',
+                    name: 'Complete Dispatch',
                     title: 'Mark dispatch as complete',
-                    onClick: () => this.handleCompleteDispatch(item),
+                    onClick: () => this.handleDispatch(item, 'complete'),
                   }}
                   cancelDispatch={{
                     name: 'Cancel Vehicle Dispatch',
                     title: 'Cancel dispatch',
-                    onClick: () => this.handleCancelDispatch(item),
+                    onClick: () => this.handleDispatch(item, 'cancel'),
                   }}
                 />
               )}

@@ -13,6 +13,7 @@ import {
   UserSwitchOutlined,
   CloseCircleOutlined,
   CheckCircleOutlined,
+  CarOutlined,
 } from '@ant-design/icons';
 
 import { Dropdown, Button, Menu } from 'antd';
@@ -32,6 +33,11 @@ import { Dropdown, Button, Menu } from 'antd';
  * @param {object} props.reload on reload action
  * @param {object} props.archive on archive action callback
  * @param {object} props.transfer on transfer action callback
+ * @param {object} props.dispatch on Dispatch vehicle action
+ * @param {object} props.atPickup when vehicle at pick up point action
+ * @param {object} props.fromPickup when vehicle is leaving pickup point action
+ * @param {object} props.atDropOff when vehicle is at drop off point action
+ * @param {object} props.fromDropOff when vehicle is leaving drop off point action
  * @param {object} props.adjust on adjust action callback
  * @param {object} props.completeDispatch on complete dispatch action
  * @param {object} props.cancelDispatch on cancel dispatch action
@@ -51,6 +57,11 @@ const ListItemActions = ({
   reload,
   assignPermissions,
   cancelDispatch,
+  dispatch,
+  atPickup,
+  fromPickup,
+  atDropOff,
+  fromDropOff,
   completeDispatch,
 }) => (
   <Dropdown
@@ -88,19 +99,70 @@ const ListItemActions = ({
           </Menu.Item>
         )}
 
+        {dispatch && (
+          <Menu.Item
+            key="dispatch"
+            onClick={dispatch.onClick}
+            title={dispatch.title}
+          >
+            <CarOutlined /> {dispatch.name}
+          </Menu.Item>
+        )}
+
+        {atPickup && (
+          <Menu.Item
+            key="atPickup"
+            onClick={atPickup.onClick}
+            title={atPickup.title}
+          >
+            <CarOutlined /> {atPickup.name}
+          </Menu.Item>
+        )}
+
+        {fromPickup && (
+          <Menu.Item
+            key="fromPickup"
+            onClick={fromPickup.onClick}
+            title={fromPickup.title}
+          >
+            <CarOutlined /> {fromPickup.name}
+          </Menu.Item>
+        )}
+
+        {atDropOff && (
+          <Menu.Item
+            key="atDropOff"
+            onClick={atDropOff.onClick}
+            title={atDropOff.title}
+          >
+            <CarOutlined /> {atDropOff.name}
+          </Menu.Item>
+        )}
+
+        {fromDropOff && (
+          <Menu.Item
+            key="fromDropOff"
+            onClick={fromDropOff.onClick}
+            title={fromDropOff.title}
+          >
+            <CarOutlined /> {fromDropOff.name}
+          </Menu.Item>
+        )}
+
         {completeDispatch && (
           <Menu.Item
-            key="transfer"
+            key="completeDispatch"
             onClick={completeDispatch.onClick}
             title={completeDispatch.title}
           >
-            <CheckCircleOutlined /> {completeDispatch.name}
+            <CheckCircleOutlined />
+            {completeDispatch.name}
           </Menu.Item>
         )}
 
         {cancelDispatch && (
           <Menu.Item
-            key="transfer"
+            key="cancelDispatch"
             onClick={cancelDispatch.onClick}
             title={cancelDispatch.title}
           >
@@ -173,68 +235,33 @@ const ListItemActions = ({
 );
 
 /* props validation */
+const actionShape = {
+  name: PropTypes.string,
+  title: PropTypes.string,
+  onClick: PropTypes.func,
+};
 ListItemActions.propTypes = {
-  view: PropTypes.shape({
-    name: PropTypes.string,
-    title: PropTypes.string,
-    onClick: PropTypes.func,
-  }),
-  onMapPreview: PropTypes.shape({
-    name: PropTypes.string,
-    title: PropTypes.string,
-    onClick: PropTypes.func,
-  }),
-  edit: PropTypes.shape({
-    name: PropTypes.string,
-    title: PropTypes.string,
-    onClick: PropTypes.func,
-  }),
-  reload: PropTypes.shape({
-    name: PropTypes.string,
-    title: PropTypes.string,
-    onClick: PropTypes.func,
-  }),
-  share: PropTypes.shape({
-    name: PropTypes.string,
-    title: PropTypes.string,
-    onClick: PropTypes.func,
-  }),
-  archive: PropTypes.shape({
-    name: PropTypes.string,
-    title: PropTypes.string,
-    onClick: PropTypes.func,
-  }),
-  transfer: PropTypes.shape({
-    name: PropTypes.string,
-    title: PropTypes.string,
-    onClick: PropTypes.func,
-  }),
-  adjust: PropTypes.shape({
-    name: PropTypes.string,
-    title: PropTypes.string,
-    onClick: PropTypes.func,
-  }),
-  assignPermissions: PropTypes.shape({
-    name: PropTypes.string,
-    title: PropTypes.string,
-    onClick: PropTypes.func,
-  }),
+  view: PropTypes.shape(actionShape),
+  onMapPreview: PropTypes.shape(actionShape),
+  edit: PropTypes.shape(actionShape),
+  reload: PropTypes.shape(actionShape),
+  share: PropTypes.shape(actionShape),
+  archive: PropTypes.shape(actionShape),
+  transfer: PropTypes.shape(actionShape),
+  adjust: PropTypes.shape(actionShape),
+  assignPermissions: PropTypes.shape(actionShape),
   whatsapp: PropTypes.shape({
     name: PropTypes.string,
     title: PropTypes.string,
     link: PropTypes.string,
   }),
-
-  completeDispatch: PropTypes.shape({
-    name: PropTypes.string,
-    title: PropTypes.string,
-    onClick: PropTypes.func,
-  }),
-  cancelDispatch: PropTypes.shape({
-    name: PropTypes.string,
-    title: PropTypes.string,
-    onClick: PropTypes.func,
-  }),
+  completeDispatch: PropTypes.shape(actionShape),
+  cancelDispatch: PropTypes.shape(actionShape),
+  dispatch: PropTypes.shape(actionShape),
+  atPickup: PropTypes.shape(actionShape),
+  fromPickup: PropTypes.shape(actionShape),
+  atDropOff: PropTypes.shape(actionShape),
+  fromDropOff: PropTypes.shape(actionShape),
 };
 
 ListItemActions.defaultProps = {
@@ -250,6 +277,11 @@ ListItemActions.defaultProps = {
   assignPermissions: null,
   completeDispatch: null,
   cancelDispatch: null,
+  dispatch: null,
+  atPickup: null,
+  fromPickup: null,
+  atDropOff: null,
+  fromDropOff: null,
 };
 
 export default ListItemActions;
