@@ -22,13 +22,13 @@ const SignInForm = ({ loading, history }) => {
   const onFinish = (values) => {
     signIn(
       values,
-      () => {
+      (party) => {
         history.push('/app');
 
         // populate app store with schemas
         initializeApp();
 
-        notifySuccess(`Welcome to EMIS`);
+        notifySuccess(`Welcome ${party.name}`);
       },
       () => {
         notifyError('Invalid username or password, Please Try Again');
