@@ -541,7 +541,7 @@ class Dispatches extends Component {
               </Col>
               <Col {...statusSpan}>{`${get(
                 item,
-                'vehicle.relations.status.strings.name.en',
+                'status.strings.name.en',
                 'N/A'
               )}`}</Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
