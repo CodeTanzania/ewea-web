@@ -41,13 +41,13 @@ const formItemLayout = {
 
 /**
  * @function
- * @param props.vehicle
- * @param props.isEditForm
- * @param props.posting
- * @param props.onCancel
+ * @param {object} props props object
+ * @param {object} props.vehicle valid vehicle
+ * @param {boolean} props.isEditForm edit flag
+ * @param {boolean} props.posting posting flag
+ * @param {Function} props.onCancel cancel callback
  * @name VehicleForm
  * @description Render form for creating and editing vehicle types
- * @param {object} props VehicleForm props
  * @returns {object} VehicleForm component
  * @version 0.1.0
  * @since 0.1.0

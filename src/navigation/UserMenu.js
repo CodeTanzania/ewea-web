@@ -9,11 +9,11 @@ import './styles.css';
 
 /**
  * @function
- * @param props.history
- * @param props.history.push
+ * @param {object} props User menu props
+ * @param {object} props.history history object
+ * @param {Function} props.history.push push handler
  * @name UserMenu
  * @description Menu for shown when user click user icon at the top bar
- * @param {object} props User menu props
  * @returns {object} User Menu component
  * @version 0.1.0
  * @since 0.1.0

@@ -9,15 +9,15 @@ const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 2, xs: 3 };
 const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 3 };
 
 /**
- * @param root0
- * @param root0.name
- * @param root0.avatarBackgroundColor
- * @param root0.item
- * @param root0.isSelected
- * @param root0.onSelectItem
- * @param root0.onDeselectItem
- * @param root0.renderActions
- * @param root0.children
+ * @param {*} props props object
+ * @param {*} props.name item name
+ * @param {*} props.avatarBackgroundColor item avatar background color
+ * @param {*} props.item valid item
+ * @param {*} props.isSelected select flag
+ * @param {*} props.onSelectItem select callback
+ * @param {*} props.onDeselectItem deselect callback
+ * @param {*} props.renderActions item render actions
+ * @param {*} props.children item children
  * @function
  * @name ListItem
  * @description Generic list item(row) for list component

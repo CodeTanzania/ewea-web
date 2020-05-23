@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
  * @description Route which check authentication status and route to appropriate
  *  component
  *
- * @param {object} properties  React props
+ * @param {object} properties props object
  *
  * @returns {object} React Element
  *

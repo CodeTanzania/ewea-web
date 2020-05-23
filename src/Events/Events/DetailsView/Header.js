@@ -6,13 +6,13 @@ const { Text } = Typography;
 
 /**
  * @function
- * @param props.number
- * @param props.type
- * @param props.description
- * @param props.stage
+ * @param {object} props props object
+ * @param {string} props.number event number
+ * @param {string} props.type event type
+ * @param {string} props.description event description
+ * @param {string} props.stage event stage
  * @name EventDetailsViewHeader
  * @description Event Details header for drawer
- * @param {object} props React props
  * @returns {object} React component
  * @version 0.1.0
  * @since 0.1.0

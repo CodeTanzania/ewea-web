@@ -16,19 +16,19 @@ import './styles.css';
  * @name CustomList
  * @description List UI with tool bar , list header and list items
  * @param {object} props CustomList props
- * @param {string} props.itemName
- * @param {object[]} props.items
- * @param {number} props.page
- * @param {boolean} props.loading
- * @param {number} props.itemCount
- * @param {object} props.headerLayout
- * @param {Function} props.onFilter
- * @param {Function} props.onNotify
- * @param {Function} props.onPaginate
- * @param {Function} props.onRefresh
- * @param {Function} props.onShare
- * @param {Function} props.generateExportUrl
- * @param {Function} props.renderListItem
+ * @param {string} props.itemName item name
+ * @param {object[]} props.items list of items
+ * @param {number} props.page list page
+ * @param {boolean} props.loading list loading flag
+ * @param {number} props.itemCount list item count
+ * @param {object} props.headerLayout list header layout
+ * @param {Function} props.onFilter list filter callback
+ * @param {Function} props.onNotify list notify callback
+ * @param {Function} props.onPaginate list paginate callback
+ * @param {Function} props.onRefresh list refresh callback
+ * @param {Function} props.onShare list share callback
+ * @param {Function} props.generateExportUrl list export url callback
+ * @param {Function} props.renderListItem list item render callback
  * @returns {object} CustomList component
  * @version 0.1.0
  * @since 0.1.0

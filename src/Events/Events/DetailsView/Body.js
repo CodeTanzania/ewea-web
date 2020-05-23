@@ -60,15 +60,15 @@ const { Paragraph, Text } = Typography;
 
 /**
  * @function
- * @param props.event
- * @param props.openForm
- * @param props.onEdit
- * @param props.onShare
- * @param props.openIndicatorDashboard
- * @param props.onContent
+ * @param {object} props props object
+ * @param {object} props.event valid event objetc
+ * @param {Function} props.openForm open callback
+ * @param {Function} props.onEdit edit callback
+ * @param {Function} props.onShare share callback
+ * @param {Function} props.openIndicatorDashboard indicator callback
+ * @param {Function} props.onContent content callback
  * @name EventToolbar
  * @description List of actions user can perform on a particular event
- * @param {object} props React props
  * @returns {object} React component
  * @version 0.1.0
  * @since 0.1.0
@@ -223,10 +223,10 @@ const EventToolbar = ({
 
 /**
  * @function
- * @param props.cause
+ * @param {object} props props object
+ * @param {string} props.cause event cause
  * @name EventCause
  * @description Display Event Cause
- * @param {object} props React props
  * @returns {object} React component
  * @version 0.1.0
  * @since 0.1.0
@@ -242,11 +242,11 @@ const EventCause = ({ cause }) => {
 
 /**
  * @function
- * @param props.title
- * @param props.actions
+ * @param {object} props props object
+ * @param {string} props.title valid title
+ * @param {*} props.actions valid actions
  * @name EventDetailsSectionHeader
  * @description Header section for event details drawer
- * @param {object} props React props
  * @returns {object} React component
  * @version 0.1.0
  * @since 0.1.0
@@ -261,9 +261,9 @@ export const EventDetailsSectionHeader = ({ title, actions }) => {
 };
 
 /**
- * @param root0
- * @param root0.areas
- * @param root0.openForm
+ * @param {object} props props object
+ * @param {object[]} props.areas list of areas
+ * @param {Function} props.openForm open callback
  * @function
  * @name EventLocations
  * @description Section which show event location(s) in hierarchy
@@ -295,8 +295,8 @@ export const EventLocations = ({ areas = [], openForm }) => {
 };
 
 /**
- * @param root0
- * @param root0.places
+ * @param {object} props props object
+ * @param {*} props.places valid places
  * @function
  * @name EventPlaces
  * @description Section which show event affected place(s) in hierarchy
@@ -316,11 +316,11 @@ export const EventPlaces = ({ places = '' }) => {
 
 /**
  * @function
- * @param props.actions
- * @param props.openForm
+ * @param {object} props Event action taken props
+ * @param {object[]} props.actions valid actions
+ * @param {Function} props.openForm open callback
  * @name EventActionsTaken
  * @description Section which show actions taken per event
- * @param {object} props Event action taken props
  * @returns {object} React component
  * @version 0.1.0
  * @since 0.1.0
@@ -355,9 +355,9 @@ export const EventActionsTaken = ({ actions = [], openForm }) => {
 };
 
 /**
- * @param root0
- * @param root0.agencies
- * @param root0.openForm
+ * @param {object} props props object
+ * @param {object[]} props.agencies list of agencies
+ * @param {Function} props.openForm open callback
  * @function
  * @name EventRespondingAgencies
  * @description Section which show event responding agencies
@@ -393,9 +393,9 @@ export const EventRespondingAgencies = ({ agencies = [], openForm }) => {
 };
 
 /**
- * @param root0
- * @param root0.focalPeople
- * @param root0.openForm
+ * @param {object} props props object
+ * @param {object[]} props.focalPeople list of focal people
+ * @param {Function} props.openForm open callback
  * @function
  * @name EventRespondingFocalPeople
  * @description Section which show event responding agencies
@@ -436,11 +436,11 @@ export const EventRespondingFocalPeople = ({ focalPeople = [], openForm }) => {
 
 /**
  * @function
- * @param props.initiator
- * @param props.date
+ * @param {object} props Component props
+ * @param {object} props.initiator valid initiator
+ * @param {Date} props.date valid date
  * @name EventFeedItemHeader
  * @description Render Event feed item header
- * @param {object} props Component props
  * @returns {object} EventFeedItemHeader component
  * @version 0.1.0
  * @since 0.1.0
@@ -455,8 +455,8 @@ const EventFeedItemHeader = ({ initiator, date }) => {
 };
 
 /**
- * @param root0
- * @param root0.openForm
+ * @param {object} props props object
+ * @param {Function} props.openForm open callback
  * @function
  * @name EventImpact
  * @description Display Event impact based on indicators
@@ -499,11 +499,11 @@ const EventImpact = ({ openForm }) => {
 
 /**
  * @function
- * @param props.gaps
- * @param props.openForm
+ * @param {object} props React components props
+ * @param {object[]} props.gaps list of gaps
+ * @param {Function} props.openForm open callback
  * @name EventGaps
  * @description Event Gaps and Constraints
- * @param {object} props React components props
  * @returns {object} EventGaps
  * @version 0.1.0
  * @since 0.1.0
@@ -537,11 +537,11 @@ const EventGaps = ({ gaps = [], openForm }) => {
 
 /**
  * @function
- * @param props.recommendations
- * @param props.openForm
+ * @param {object} props React components props
+ * @param {object[]} props.recommendations list of recommendations
+ * @param {Function} props.openForm open callback
  * @name EventRecommendations
  * @description Event Recommendations and Remarks
- * @param {object} props React components props
  * @returns {object} EventRecommendations
  * @version 0.1.0
  * @since 0.1.0
@@ -741,12 +741,12 @@ const renderFeed = (feed) => {
 
 /**
  * @function
- * @param props.feeds
- * @param props.loading
- * @param props.hasMore
+ * @param {object} props React props
+ * @param {object[]} props.feeds list of feeds
+ * @param {boolean} props.loading loading flag
+ * @param {boolean} props.hasMore more flag
  * @name EventFeed
  * @description A list of activities(feeds) happening on a particular event
- * @param {object} props React props
  * @returns {object} React component
  * @version 0.1.0
  * @since 0.1.0
@@ -787,14 +787,14 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
 
 /**
  * @function
- * @param props.type
- * @param props.description
- * @param props.number
- * @param props.reportedDate
+ * @param {object} props PrintEventDetails Props
+ * @param {string} props.type event type
+ * @param {string} props.description event description
+ * @param {string} props.number event number
+ * @param {Date} props.reportedDate event report date
  * @name PrintedEventDetails
  * @description This is event details section which will be visible on printed
  * report only
- * @param {object} props PrintEventDetails Props
  * @returns {object} PrintedEventDetails Component
  * @version 0.1.0
  * @since 0.1.0
@@ -820,18 +820,18 @@ const PrintedEventDetails = ({ type, description, number, reportedDate }) => {
 
 /**
  * @function
- * @param props.event
- * @param props.showForm
- * @param props.posting
- * @param props.changelogs
- * @param props.loading
- * @param props.hasMore
- * @param props.onEdit
- * @param props.onShare
- * @param props.eventPosting
+ * @param {object} props React props
+ * @param {object} props.event valid event
+ * @param {boolean} props.showForm show flag
+ * @param {boolean} props.posting posting flag
+ * @param {object[]} props.changelogs list of changelogs
+ * @param {boolean} props.loading loading flag
+ * @param {boolean} props.hasMore more flag
+ * @param {Function} props.onEdit edit callback
+ * @param {Function} props.onShare share callback
+ * @param {boolean} props.eventPosting event posting flag
  * @name EventDetailsViewBody
  * @description Event Details body view
- * @param {object} props React props
  * @returns {object} React component
  * @version 0.1.0
  * @since 0.1.0

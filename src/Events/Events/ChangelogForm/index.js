@@ -51,14 +51,14 @@ const formItemLayout = {
 
 /**
  * @function
- * @param props.event
- * @param props.posting
- * @param props.onCancel
- * @param props.action
+ * @param {object} props Event Changelog Form properties
+ * @param {object} props.event event object
+ * @param {boolean} props.posting posting flag
+ * @param {Function} props.onCancel cancel callback
+ * @param {string} props.action valid action
  * @name EventChangelogForm
  * @description Render Event form for creating and updating stakeholder
  * event details
- * @param {object} props Event Changelog Form properties
  * @returns {object} Event Changelog Form
  * @version 0.2.1
  * @since 0.1.0

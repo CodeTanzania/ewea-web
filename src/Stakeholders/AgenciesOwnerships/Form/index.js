@@ -28,13 +28,13 @@ const formItemLayout = {
 
 /**
  * @function
- * @param props.partyOwnership
- * @param props.isEditForm
- * @param props.posting
- * @param props.onCancel
+ * @param {object} props props object
+ * @param {object} props.partyOwnership valid party ownership
+ * @param {boolean} props.isEditForm edit flag
+ * @param {boolean} props.posting posting flag
+ * @param {Function} props.onCancel cancel callback
  * @name PartyOwnershipForm
  * @description Render form for creating and editing party ownerships
- * @param {object} props PartyOwnershipForm props
  * @returns {object} PartyOwnershipForm component
  * @version 0.1.0
  * @since 0.1.0

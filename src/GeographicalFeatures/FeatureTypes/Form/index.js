@@ -29,13 +29,13 @@ const formItemLayout = {
 
 /**
  * @function
- * @param props.featureType
- * @param props.isEditForm
- * @param props.posting
- * @param props.onCancel
+ * @param {object} props props object
+ * @param {object} props.featureType valid feature type
+ * @param {boolean} props.isEditForm edit flag
+ * @param {boolean} props.posting posting flag
+ * @param {Function} props.onCancel cancel callback
  * @name FeatureTypeForm
  * @description Feature Type Form
- * @param {object} props React props
  * @returns {object} React Component
  * @version 0.1.0
  * @since 0.1.0

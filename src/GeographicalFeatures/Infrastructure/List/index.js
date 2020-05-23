@@ -9,9 +9,8 @@ import CriticalInfrastructureListItem from '../ListItem';
  * @name CriticalInfrastructureList
  * @description Render Critical Infrastructure list
  * @param {object} props props object
- * @param props.criticalInfrastructures
+ * @param {object[]} props.criticalInfrastructures list of critical infrastructure
  * @param {boolean} props.loading preload list of Critical Infrastructure
- * @param {Array} props.districts array list of Critical Infrastructure
  * @param {Function} props.onEdit function for editing Critical Infrastructure
  * @returns {object} React component
  * @version 0.1.0

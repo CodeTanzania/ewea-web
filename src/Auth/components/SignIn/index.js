@@ -11,7 +11,7 @@ import './styles.css';
  * @function
  * @name SignInForm
  * @description Sign In form  component
- * @param {object} props React props
+ * @param {object} props props object
  * @param {boolean} props.loading Flag for showing login http request state
  * @param {object} props.history Browser history object
  * @returns {object} Sign In Form

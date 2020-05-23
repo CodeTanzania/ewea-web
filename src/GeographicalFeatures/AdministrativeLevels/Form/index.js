@@ -28,13 +28,13 @@ const formItemLayout = {
 
 /**
  * @function
- * @param props.administrativeLevel
- * @param props.isEditForm
- * @param props.posting
- * @param props.onCancel
+ * @param {object} props props object
+ * @param {*} props.administrativeLevel valid administrative level
+ * @param {boolean} props.isEditForm edit flag
+ * @param {boolean} props.posting posting flag
+ * @param {Function} props.onCancel cancel callback
  * @name AdministrativeLevelForm
  * @description Administrative Level Form
- * @param {object} props React props
  * @returns {object} React Component
  * @version 0.1.0
  * @since 0.1.0
