@@ -106,6 +106,13 @@ and view it on http://localhost:3000
 - [Http client for EWEA API](https://github.com/CodeTanzania/ewea-api-client)
 - [Redux state manager for EWEA](https://github.com/CodeTanzania/ewea-api-states)
 
+## References
+- [Create React App](https://create-react-app.dev/)
+- [Add a web app manifest](https://web.dev/add-manifest/)
+- [Adaptive icon support in PWAs](https://web.dev/maskable-icon/)
+- [Web App Manifest Generator](https://app-manifest.firebaseapp.com/)
+- [awesome-meta-and-manifest](https://github.com/gokulkrishh/awesome-meta-and-manifest)
+
 ## License
 
 MIT License
