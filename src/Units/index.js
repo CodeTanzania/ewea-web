@@ -2,176 +2,238 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import isArray from 'lodash/isArray';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import get from 'lodash/get';
+import isArray from 'lodash/isArray';
 import Topbar from '../components/Topbar';
 import UnitForm from './Form';
 import NotificationForm from '../components/NotificationForm';
+import { notifyError, notifySuccess, truncateString } from '../util';
 import ItemList from '../components/List';
 import ListItem from '../components/ListItem';
 import ListItemActions from '../components/ListItemActions';
-import { notifyError, notifySuccess, truncateString } from '../util';
 import './styles.css';
 
+/* http actions */
 const {
-  getUnitsExportUrl,
   getFocalPeople,
   getJurisdictions,
   getPartyGroups,
-  getRoles,
   getAgencies,
+  getRoles,
+  getUnitsExportUrl,
 } = httpActions;
+
+/* state actions */
 const {
   getUnits,
   openUnitForm,
   searchUnits,
   selectUnit,
   closeUnitForm,
-  refreshUnits,
   paginateUnits,
+  refreshUnits,
   deleteUnit,
 } = reduxActions;
 
-/* constants */
-const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 6, xs: 14 };
-const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 5, xs: 4 };
-const descriptionSpan = { xxl: 15, xl: 15, lg: 15, md: 14, sm: 9, xs: 0 };
-
+/* ui */
+const { confirm } = Modal;
+const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 16, xs: 14 };
+const abbreviationSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 4 };
+const descriptionSpan = { xxl: 14, xl: 14, lg: 14, md: 13, sm: 0, xs: 0 };
 const headerLayout = [
-  { ...nameSpan, header: 'Name' },
-  { ...codeSpan, header: 'Code' },
-  { ...descriptionSpan, header: 'Description' },
+  { ...nameSpan, header: 'Name', title: 'Unit Name' },
+  { ...abbreviationSpan, header: 'Abbreviation', title: 'Unit Abbreviation' },
+  {
+    ...descriptionSpan,
+    header: 'Description',
+    title: 'Unit Usage Description',
+  },
 ];
 
-const { confirm } = Modal;
+/* messages */
+const MESSAGE_LIST_REFRESH_SUCCESS = 'Units were refreshed successfully';
+const MESSAGE_LIST_REFRESH_ERROR =
+  'An Error occurred while refreshing Units, please try again!';
 
 /**
- * @class
- * @name Units
- * @description Render Units list which have search box,
- * actions and units list
- *
- * @version 0.1.0
+ * @function UnitList
+ * @name UnitList
+ * @description List units of measure
+ * @param {object} props Valid list properties
+ * @param {object} props.units Valid unit list
+ * @param {boolean} props.loading Flag whether list is loading data
+ * @param {boolean} props.posting Flag whether list is posting data
+ * @param {boolean} props.showForm Flag whether to show unit form
+ * @param {string} props.searchQuery Applied search term
+ * @param {number} props.page Current page number
+ * @param {number} props.total Available list items
+ * @param {object} props.unit Current selected unit object
+ * @returns {object} UnitList component
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
  * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * <UnitList />
+ *
  */
-class Units extends Component {
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    isEditForm: false,
-    notificationBody: undefined,
-    showNotificationForm: false,
-  };
+class UnitList extends Component {
+  /**
+   * @function constructor
+   * @name constructor
+   * @description Initialize states
+   * @param {object} props Valid component properties
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  constructor(props) {
+    super(props);
+    this.state = {
+      isEditForm: false,
+      showNotificationForm: false,
+      notificationBody: undefined,
+    };
+  }
 
+  /**
+   * @function componentDidMount
+   * @name componentDidMount
+   * @description Load data
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
   componentDidMount() {
     getUnits();
   }
 
   /**
-   * @function
-   * @name openUnitsForm
-   * @description Open unit form
+   * @function handleFormOpen
+   * @name handleFormOpen
+   * @description Handle form opening
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openUnitsForm = () => {
+  handleFormOpen = () => {
     openUnitForm();
   };
 
   /**
-   * @function
-   * @name closeUnitsForm
-   * @description close unit form
+   * @function handleFormClose
+   * @name handleFormClose
+   * @description Handle form closing
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeUnitsForm = () => {
+  handleFormClose = () => {
     closeUnitForm();
     this.setState({ isEditForm: false });
   };
 
   /**
-   * @function
-   * @name searchUnits
-   * @description Search Units List based on supplied filter word
-   *
-   * @param {object} event - Event instance
+   * @function handleFormClose
+   * @name handleFormClose
+   * @description Handle post form close and perform cleanups
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchUnits = (event) => {
+  handleAfterFormClose = () => {
+    selectUnit(null);
+    this.setState({ isEditForm: false });
+  };
+
+  /**
+   * @function handleListSearch
+   * @name handleListSearch
+   * @description Handle list search
+   * @param {object} event List search event
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleListSearch = (event) => {
     searchUnits(event.target.value);
   };
 
   /**
-   * @function
-   * @name handleEdit
-   * @description Handle on Edit action for list item
-   *
-   * @param {object} eventType unit to be edited
+   * @function handleListRefresh
+   * @name handleListRefresh
+   * @description Handle list refresh
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = (eventType) => {
-    selectUnit(eventType);
+  handleListRefresh = () => {
+    refreshUnits(
+      () => notifySuccess(MESSAGE_LIST_REFRESH_SUCCESS),
+      () => notifyError(MESSAGE_LIST_REFRESH_ERROR)
+    );
+  };
+
+  /**
+   * @function handleItemEdit
+   * @name handleItemEdit
+   * @description Handle list item edit
+   * @param {object} item List item
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleItemEdit = (item) => {
+    selectUnit(item);
     this.setState({ isEditForm: true });
     openUnitForm();
   };
 
   /**
    * @function
-   * @name handleAfterCloseForm
-   * @description Perform post close form cleanups
+   * @name showArchiveConfirm
+   * @description show confirm modal before archiving a unit
    *
+   * @param {object} item List item
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleAfterCloseForm = () => {
-    this.setState({ isEditForm: false });
+
+  showArchiveConfirm = (item) => {
+    confirm({
+      title: `Are you sure you want to archive ${item.strings.name.en} ?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteUnit(
+          item._id, // eslint-disable-line
+          () => notifySuccess('Unit was archived successfully'),
+          () =>
+            notifyError(
+              'An error occurred while archiving Unit, Please contact your system Administrator'
+            )
+        );
+      },
+    });
   };
 
   /**
    * @function
-   * @name closeNotificationForm
-   * @description Handle on notify units
+   * @name handleListShare
+   * @description Handle share multiple event Indicators
+   *
+   * @param {object[]| object} units event Indicators list to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeNotificationForm = () => {
-    this.setState({ showNotificationForm: false });
-  };
-
-  /**
-   * @function
-   * @name handleAfterCloseNotificationForm
-   * @description Perform post close notification form cleanups
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleAfterCloseNotificationForm = () => {
-    this.setState({ notificationBody: undefined });
-  };
-
-  /**
-   * @function
-   * @name handleShare
-   * @description Handle share multiple units
-   *
-   * @param {object[]| object} units units list to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleShare = (units) => {
+  handleListShare = (units) => {
     let message = '';
     if (isArray(units)) {
-      const unitsList = units.map(
+      const unitList = units.map(
         (unit) =>
           `Name: ${unit.strings.name.en}\nDescription: ${
             // eslint-disable-line
@@ -179,7 +241,7 @@ class Units extends Component {
           }\n`
       );
 
-      message = unitsList.join('\n\n\n');
+      message = unitList.join('\n\n\n');
     } else {
       message = `Name: ${units.strings.name.en}\nDescription: ${
         // eslint-disable-line
@@ -191,71 +253,65 @@ class Units extends Component {
   };
 
   /**
-   * @function
-   * @name handleRefreshUnits
-   * @description Refresh Units list
-   *
-   * @returns {undefined}
+   * @function handleItemShare
+   * @name handleItemShare
+   * @description Handle list item edit
+   * @param {object} item List item
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleRefreshUnits = () =>
-    refreshUnits(
-      () => notifySuccess('Event groups refreshed successfully'),
-      () =>
-        notifyError(
-          'An Error occurred while refreshing Event groups, please contact system administrator'
-        )
-    );
+  handleItemShare = (item) => {
+    const message = `Name: ${item.strings.name.en}\nDescription: ${
+      // eslint-disable-line
+      item.strings.description.en
+    }\n`;
 
-  /**
-   * @function
-   * @name showArchiveConfirm
-   * @description show confirm modal before archiving a unit
-   * @param {object} item Resource item to be archived
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  showArchiveConfirm = (item) => {
-    confirm({
-      title: `Are you sure you want to archive this record ?`,
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
-      onOk() {
-        deleteUnit(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Event group was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Event group, Please contact your system Administrator'
-            )
-        );
-      },
-    });
+    this.setState({ notificationBody: message, showNotificationForm: true });
   };
 
+  /**
+   * @function handleNotificationFormClose
+   * @name handleNotificationFormClose
+   * @description Handle notification form closing
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleNotificationFormClose = () => {
+    this.setState({ showNotificationForm: false });
+  };
+
+  /**
+   * @function render
+   * @name render
+   * @description Render list
+   * @returns {object} List to render
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
   render() {
     const {
       units,
       loading,
       page,
       posting,
-      eventType,
+      unit,
       showForm,
       searchQuery,
       total,
     } = this.props;
-    const { isEditForm, notificationBody, showNotificationForm } = this.state;
+    const { isEditForm, showNotificationForm, notificationBody } = this.state;
+
     return (
       <>
-        {/* Topbar */}
+        {/* start: list topbar */}
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for units here ...',
-            onChange: this.searchUnits,
+            placeholder: 'Search for units ...',
+            title: 'Search for units ...',
+            onChange: this.handleListSearch,
             value: searchQuery,
           }}
           actions={[
@@ -264,24 +320,25 @@ class Units extends Component {
               icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Unit',
-              onClick: this.openUnitsForm,
+              onClick: this.handleFormOpen,
             },
           ]}
         />
-        {/* end Topbar */}
+        {/* end: list topbar */}
 
+        {/* start: list */}
         <ItemList
-          itemName="Units"
+          itemName="Unit"
           items={units}
           page={page}
           itemCount={total}
           loading={loading}
-          // onFilter={this.openFiltersModal}
-          // onNotify={this.openNotificationForm}
-          onShare={this.handleShare}
-          onRefresh={this.handleRefreshUnits}
-          generateExportUrl={getUnitsExportUrl}
+          // onFilter={this.handleListFilter}
+          onNotify={this.openNotificationForm}
+          onShare={this.handleListShare}
+          onRefresh={this.handleListRefresh}
           onPaginate={(nextPage) => paginateUnits(nextPage)}
+          generateExportUrl={getUnitsExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
             item,
@@ -289,52 +346,62 @@ class Units extends Component {
             onSelectItem,
             onDeselectItem,
           }) => (
-            <ListItem
-              key={item._id} // eslint-disable-line
-              name={item.strings.name.en}
-              item={item}
-              isSelected={isSelected}
-              avatarBackgroundColor={item.strings.color}
-              onSelectItem={onSelectItem}
-              onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Unit',
-                    title: 'Update Unit Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Unit',
-                    title: 'Share Unit details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Unit',
-                    title: 'Remove Unit from list of active units',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
-            >
-              {/* eslint-disable react/jsx-props-no-spreading */}
-              <Col {...nameSpan}>{item.strings.name.en}</Col>
-              <Col {...codeSpan}>{item.strings.code}</Col>
-              <Col {...descriptionSpan}>
-                <span title={item.strings.description.en}>
-                  {truncateString(item.strings.description.en, 120)}
-                </span>
-              </Col>
-              {/* eslint-enable react/jsx-props-no-spreading */}
-            </ListItem>
+            <>
+              {/* start: list item */}
+              <ListItem
+                key={get(item, '_id')}
+                item={item}
+                name={item.strings.name.en}
+                isSelected={isSelected}
+                avatarBackgroundColor={item.strings.color}
+                onSelectItem={onSelectItem}
+                onDeselectItem={onDeselectItem}
+                renderActions={() => (
+                  <ListItemActions
+                    edit={{
+                      name: 'Edit Unit',
+                      title: 'Update unit Details',
+                      onClick: () => this.handleItemEdit(item),
+                    }}
+                    share={{
+                      name: 'Share Unit',
+                      title: 'Share unit details with others',
+                      onClick: () => this.handleItemShare(item),
+                    }}
+                    archive={{
+                      name: 'Archive Unit',
+                      title: 'Remove unit from list of active units',
+                      onClick: () => this.showArchiveConfirm(item),
+                    }}
+                  />
+                )}
+              >
+                {/* eslint-disable react/jsx-props-no-spreading */}
+                <Col {...nameSpan}>{get(item, 'strings.name.en', 'N/A')}</Col>
+                <Col {...abbreviationSpan}>
+                  {get(item, 'strings.abbreviation.en', 'N/A')}
+                </Col>
+                <Col {...descriptionSpan}>
+                  <span title={get(item, 'strings.description.en', 'N/A')}>
+                    {truncateString(
+                      get(item, 'strings.description.en', 'N/A'),
+                      100
+                    )}
+                  </span>
+                </Col>
+                {/* eslint-enable react/jsx-props-no-spreading */}
+              </ListItem>
+              {/* end: list item */}
+            </>
           )}
         />
+        {/* end: list */}
 
-        {/* Notification Modal modal */}
+        {/* start: notification modal */}
         <Modal
-          title="Notify Units"
+          title="Notify Unit"
           visible={showNotificationForm}
-          onCancel={this.closeNotificationForm}
+          onCancel={this.handleNotificationFormClose}
           footer={null}
           destroyOnClose
           maskClosable={false}
@@ -342,46 +409,47 @@ class Units extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
+            recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
             onSearchRoles={getRoles}
             body={notificationBody}
-            onCancel={this.closeNotificationForm}
+            onCancel={this.handleNotificationFormClose}
           />
         </Modal>
-        {/* end Notification modal */}
+        {/* end: notification modal */}
 
-        {/* create/edit form modal */}
+        {/* start: form modal */}
         <Modal
           title={isEditForm ? 'Edit Unit' : 'Add New Unit'}
           visible={showForm}
           className="FormModal"
           footer={null}
-          onCancel={this.closeUnitsForm}
-          destroyOnClose
+          onCancel={this.handleFormClose}
+          afterClose={this.handleAfterFormClose}
           maskClosable={false}
-          afterClose={this.handleAfterCloseForm}
+          destroyOnClose
         >
           <UnitForm
-            posting={posting}
+            unit={unit}
+            isPosting={posting}
             isEditForm={isEditForm}
-            eventType={eventType}
-            onCancel={this.closeUnitsForm}
+            onCancel={this.handleFormClose}
           />
         </Modal>
-        {/* end create/edit form modal */}
+        {/* end: form modal */}
       </>
     );
   }
 }
 
-Units.propTypes = {
+UnitList.propTypes = {
   loading: PropTypes.bool.isRequired,
   units: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
-  eventType: PropTypes.shape({ name: PropTypes.string }),
+  unit: PropTypes.shape({ name: PropTypes.string }),
   page: PropTypes.number.isRequired,
   searchQuery: PropTypes.string,
   total: PropTypes.number.isRequired,
@@ -389,14 +457,14 @@ Units.propTypes = {
   showForm: PropTypes.bool.isRequired,
 };
 
-Units.defaultProps = {
-  eventType: null,
+UnitList.defaultProps = {
+  unit: null,
   searchQuery: undefined,
 };
 
-export default Connect(Units, {
+export default Connect(UnitList, {
   units: 'units.list',
-  eventType: 'units.selected',
+  unit: 'units.selected',
   loading: 'units.loading',
   posting: 'units.posting',
   page: 'units.page',

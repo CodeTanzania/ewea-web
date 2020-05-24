@@ -1,181 +1,170 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { Button, Input, Form, Row, Col } from 'antd';
 import { reduxActions } from '@codetanzania/ewea-api-states';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Button, Input } from 'antd';
 import { notifyError, notifySuccess } from '../../util';
 
+/* state actions */
 const { putUnit, postUnit } = reduxActions;
 
-/**
- * @class
- * @name UnitForm
- * @description  Render form for creating a new unit
- *
- * @version 0.1.0
- * @since 0.1.0
- */
-class UnitForm extends Component {
-  /**
-   * @function
-   * @name handleSubmit
-   * @description  call back function to handle submit action
-   *
-   * @param {object} e event object
-   *
-   * @returns {undefined} does not return anything
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const {
-      form: { validateFieldsAndScroll },
-      eventType,
-      isEditForm,
-    } = this.props;
+/* ui */
+const { TextArea } = Input;
+const labelCol = {
+  xs: { span: 24 },
+  sm: { span: 24 },
+  md: { span: 24 },
+  lg: { span: 24 },
+  xl: { span: 24 },
+  xxl: { span: 24 },
+};
+const wrapperCol = {
+  xs: { span: 24 },
+  sm: { span: 24 },
+  md: { span: 24 },
+  lg: { span: 24 },
+  xl: { span: 24 },
+  xxl: { span: 24 },
+};
 
-    validateFieldsAndScroll((error, values) => {
-      if (!error) {
-        const payload = {
-          strings: {
-            code: values.code,
-            name: {
-              en: values.name,
-            },
-            description: {
-              en: values.description,
-            },
-          },
-        };
-        if (isEditForm) {
-          const updatedContact = { ...eventType, ...payload };
-          putUnit(
-            updatedContact,
-            () => {
-              notifySuccess('Unit was updated successfully');
-            },
-            () => {
-              notifyError(
-                'Something occurred while updating Unit, please try again!'
-              );
-            }
-          );
-        } else {
-          postUnit(
-            payload,
-            () => {
-              notifySuccess('Unit was created successfully');
-            },
-            () => {
-              notifyError(
-                'Something occurred while saving Unit, please try again!'
-              );
-            }
-          );
-        }
-      }
-    });
+/* messages */
+const MESSAGE_POST_SUCCESS = 'Unit was created successfully';
+const MESSAGE_POST_ERROR =
+  'Something occurred while saving Unit, please try again!';
+const MESSAGE_PUT_SUCCESS = 'Unit was updated successfully';
+const MESSAGE_PUT_ERROR =
+  'Something occurred while updating Unit, please try again!';
+
+/**
+ * @function UnitForm
+ * @name UnitForm
+ * @description Form for create and edit unit of measure
+ * @param {object} props Valid form properties
+ * @param {object} props.unit Valid unit object
+ * @param {boolean} props.isEditForm Flag wether form is on edit mode
+ * @param {boolean} props.isPosting Flag whether form is posting data
+ * @param {Function} props.onCancel Form cancel callback
+ * @returns {object} UnitForm component
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * <UnitForm
+ *   unit={unit}
+ *   isEditForm={isEditForm}
+ *   isPosting={isPosting}
+ *   onCancel={this.handleCloseUnitForm}
+ * />
+ *
+ */
+const UnitForm = ({ unit, isEditForm, isPosting, onCancel }) => {
+  // form finish(submit) handler
+  const onFinish = (values) => {
+    if (isEditForm) {
+      const updates = { ...unit, ...values };
+      putUnit(
+        updates,
+        () => notifySuccess(MESSAGE_PUT_SUCCESS),
+        () => notifyError(MESSAGE_PUT_ERROR)
+      );
+    } else {
+      postUnit(
+        values,
+        () => notifySuccess(MESSAGE_POST_SUCCESS),
+        () => notifyError(MESSAGE_POST_ERROR)
+      );
+    }
   };
 
-  render() {
-    const {
-      posting,
-      onCancel,
-      isEditForm,
-      eventType,
-      form: { getFieldDecorator },
-    } = this.props;
+  return (
+    <Form
+      labelCol={labelCol}
+      wrapperCol={wrapperCol}
+      onFinish={onFinish}
+      initialValues={{ ...unit }}
+      autoComplete="off"
+    >
+      {/* start:name */}
+      <Form.Item
+        label="Name"
+        title="Unit name e.g Kilogram"
+        name={['strings', 'name', 'en']}
+        rules={[
+          {
+            required: true,
+            message: 'Unit name is required',
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      {/* end:name */}
 
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-    };
-
-    return (
-      <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* Unit name */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Name">
-          {getFieldDecorator('name', {
-            initialValue: isEditForm ? eventType.strings.name.en : undefined,
-            rules: [
+      {/* start: abbreviation & symbol */}
+      <Row justify="space-between">
+        {/* start:abbreviation */}
+        <Col span={11}>
+          <Form.Item
+            label="Abbreviation"
+            title="Unit abbreviation e.g kg"
+            name={['strings', 'abbreviation', 'en']}
+            rules={[
               {
                 required: true,
-                message: ' Units  name is required',
+                message: 'Unit abbreviation is required',
               },
-            ],
-          })(<Input />)}
-        </Form.Item>
-        {/* end Unit name */}
-
-        {/* Unit code */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Unit code">
-          {getFieldDecorator('code', {
-            initialValue: isEditForm ? eventType.strings.code : undefined,
-            rules: [
-              {
-                required: false,
-              },
-            ],
-          })(<Input />)}
-        </Form.Item>
-        {/* end Unit code */}
-
-        {/* Unit Description */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Description">
-          {getFieldDecorator('description', {
-            initialValue: isEditForm
-              ? eventType.strings.description.en
-              : undefined,
-            rules: [
-              {
-                required: true,
-                message: 'Unit Description is required',
-              },
-            ],
-          })(<Input />)}
-        </Form.Item>
-        {/* end Unit */}
-
-        {/* form actions */}
-        <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
-          <Button onClick={onCancel}>Cancel</Button>
-          <Button
-            style={{ marginLeft: 8 }}
-            type="primary"
-            htmlType="submit"
-            loading={posting}
+            ]}
           >
-            Save
-          </Button>
-        </Form.Item>
-        {/* end form actions */}
-      </Form>
-    );
-  }
-}
+            <Input />
+          </Form.Item>
+        </Col>
+        {/* end:abbreviation */}
+        {/* start:symbol */}
+        <Col span={11}>
+          <Form.Item
+            label="Symbol"
+            title="Unit symbol e.g $"
+            name={['strings', 'symbol']}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+        {/* end:symbol */}
+      </Row>
+      {/* end: abbreviation & symbol */}
+
+      {/* start:description */}
+      <Form.Item
+        label="Description"
+        title="Unit usage description"
+        name={['strings', 'description', 'en']}
+      >
+        <TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
+      </Form.Item>
+      {/* end:description */}
+
+      {/* start:form actions */}
+      <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
+        <Button onClick={onCancel}>Cancel</Button>
+        <Button
+          style={{ marginLeft: 8 }}
+          type="primary"
+          htmlType="submit"
+          loading={isPosting}
+        >
+          Save
+        </Button>
+      </Form.Item>
+      {/* end:form actions */}
+    </Form>
+  );
+};
 
 UnitForm.propTypes = {
-  eventType: PropTypes.shape({
+  unit: PropTypes.shape({
     strings: PropTypes.shape({
       code: PropTypes.string.isRequired,
       name: PropTypes.shape({
@@ -188,12 +177,8 @@ UnitForm.propTypes = {
     }),
   }).isRequired,
   isEditForm: PropTypes.bool.isRequired,
-  posting: PropTypes.bool.isRequired,
+  isPosting: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
-  form: PropTypes.shape({
-    getFieldDecorator: PropTypes.func,
-    validateFieldsAndScroll: PropTypes.func,
-  }).isRequired,
 };
 
-export default Form.create()(UnitForm);
+export default UnitForm;
