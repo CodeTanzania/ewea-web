@@ -38,12 +38,14 @@ const {
 
 /* ui */
 const { confirm } = Modal;
-const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 16, xs: 14 };
-const abbreviationSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 4 };
-const descriptionSpan = { xxl: 14, xl: 14, lg: 14, md: 13, sm: 0, xs: 0 };
+const nameSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 16, xs: 14 };
+const abbreviationSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 4, xs: 4 };
+const symbolSpan = { xxl: 4, xl: 3, lg: 4, md: 4, sm: 0, xs: 0 };
+const descriptionSpan = { xxl: 10, xl: 10, lg: 10, md: 8, sm: 0, xs: 0 };
 const headerLayout = [
   { ...nameSpan, header: 'Name', title: 'Unit Name' },
   { ...abbreviationSpan, header: 'Abbreviation', title: 'Unit Abbreviation' },
+  { ...symbolSpan, header: 'Symbol', title: 'Unit Symbol' },
   {
     ...descriptionSpan,
     header: 'Description',
@@ -116,44 +118,6 @@ class UnitList extends Component {
   }
 
   /**
-   * @function handleFormOpen
-   * @name handleFormOpen
-   * @description Handle form opening
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleFormOpen = () => {
-    openUnitForm();
-  };
-
-  /**
-   * @function handleFormClose
-   * @name handleFormClose
-   * @description Handle form closing
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleFormClose = () => {
-    closeUnitForm();
-    this.setState({ isEditForm: false });
-  };
-
-  /**
-   * @function handleFormClose
-   * @name handleFormClose
-   * @description Handle post form close and perform cleanups
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleAfterFormClose = () => {
-    selectUnit(null);
-    this.setState({ isEditForm: false });
-  };
-
-  /**
    * @function handleListSearch
    * @name handleListSearch
    * @description Handle list search
@@ -212,6 +176,44 @@ class UnitList extends Component {
   };
 
   /**
+   * @function handleFormOpen
+   * @name handleFormOpen
+   * @description Handle form opening
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleFormOpen = () => {
+    openUnitForm();
+  };
+
+  /**
+   * @function handleFormClose
+   * @name handleFormClose
+   * @description Handle form closing
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleFormClose = () => {
+    closeUnitForm();
+    this.setState({ isEditForm: false });
+  };
+
+  /**
+   * @function handleFormClose
+   * @name handleFormClose
+   * @description Handle post form close and perform cleanups
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleAfterFormClose = () => {
+    selectUnit(null);
+    this.setState({ isEditForm: false });
+  };
+
+  /**
    * @function handleItemEdit
    * @name handleItemEdit
    * @description Handle list item edit
@@ -226,16 +228,14 @@ class UnitList extends Component {
   };
 
   /**
-   * @function
-   * @name showArchiveConfirm
-   * @description show confirm modal before archiving a unit
-   *
+   * @function handleItemArchive
+   * @name handleItemArchive
+   * @description Handle list item archiving with confirmation
    * @param {object} item List item
    * @version 0.1.0
    * @since 0.1.0
    */
-
-  showArchiveConfirm = (item) => {
+  handleItemArchive = (item) => {
     const itemId = get(item, '_id');
     const itemName = get(item, 'strings.name.en', 'N/A');
     confirm({
@@ -388,7 +388,7 @@ class UnitList extends Component {
                     archive={{
                       name: 'Archive Unit',
                       title: 'Remove unit from list of active units',
-                      onClick: () => this.showArchiveConfirm(item),
+                      onClick: () => this.handleItemArchive(item),
                     }}
                   />
                 )}
@@ -398,6 +398,7 @@ class UnitList extends Component {
                 <Col {...abbreviationSpan}>
                   {get(item, 'strings.abbreviation.en', 'N/A')}
                 </Col>
+                <Col {...symbolSpan}>{get(item, 'strings.symbol', 'N/A')}</Col>
                 <Col {...descriptionSpan}>
                   <span title={get(item, 'strings.description.en', 'N/A')}>
                     {truncateString(
@@ -464,15 +465,15 @@ class UnitList extends Component {
 }
 
 UnitList.propTypes = {
-  loading: PropTypes.bool.isRequired,
   units: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
-  unit: PropTypes.shape({ name: PropTypes.string }),
-  page: PropTypes.number.isRequired,
-  searchQuery: PropTypes.string,
-  total: PropTypes.number.isRequired,
+  loading: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
+  searchQuery: PropTypes.string,
   showForm: PropTypes.bool.isRequired,
+  page: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+  unit: PropTypes.shape({ name: PropTypes.string }),
 };
 
 UnitList.defaultProps = {
@@ -482,11 +483,11 @@ UnitList.defaultProps = {
 
 export default Connect(UnitList, {
   units: 'units.list',
-  unit: 'units.selected',
   loading: 'units.loading',
   posting: 'units.posting',
-  page: 'units.page',
-  showForm: 'units.showForm',
-  total: 'units.total',
   searchQuery: 'units.q',
+  showForm: 'units.showForm',
+  page: 'units.page',
+  total: 'units.total',
+  unit: 'units.selected',
 });

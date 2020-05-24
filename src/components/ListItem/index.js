@@ -125,21 +125,13 @@ const ListItem = ({
 
 ListItem.propTypes = {
   item: PropTypes.shape({
-    location: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    role: PropTypes.shape({ strings: PropTypes.object }),
-    area: PropTypes.shape({ strings: PropTypes.object }),
-    email: PropTypes.string.isRequired,
-    mobile: PropTypes.string.isRequired,
-    party: PropTypes.shape({
-      name: PropTypes.string,
-      abbreviation: PropTypes.string,
-    }),
+    _id: PropTypes.string,
+    name: PropTypes.string,
   }).isRequired,
   name: PropTypes.string,
   avatarBackgroundColor: PropTypes.string,
   children: PropTypes.node.isRequired,
-  renderActions: PropTypes.string.isRequired,
+  renderActions: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
   onSelectItem: PropTypes.func.isRequired,
   onDeselectItem: PropTypes.func.isRequired,

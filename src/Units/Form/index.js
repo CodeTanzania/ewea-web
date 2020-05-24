@@ -163,6 +163,10 @@ const UnitForm = ({ unit, isEditForm, isPosting, onCancel }) => {
   );
 };
 
+UnitForm.defaultProps = {
+  unit: {},
+};
+
 UnitForm.propTypes = {
   unit: PropTypes.shape({
     strings: PropTypes.shape({
@@ -175,7 +179,7 @@ UnitForm.propTypes = {
       }),
       _id: PropTypes.string,
     }),
-  }).isRequired,
+  }),
   isEditForm: PropTypes.bool.isRequired,
   isPosting: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
