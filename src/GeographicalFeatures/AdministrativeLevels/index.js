@@ -1,281 +1,353 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Col, Modal } from 'antd';
+import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import isArray from 'lodash/isArray';
 import get from 'lodash/get';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import AdministrativeLevelForm from './Form';
-import ListItemActions from '../../components/ListItemActions';
-import ListItem from '../../components/ListItem';
+import NotificationForm from '../../components/NotificationForm';
+import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
-import { notifyError, notifySuccess } from '../../util';
+import ListItem from '../../components/ListItem';
+import ListItemActions from '../../components/ListItemActions';
 import './styles.css';
 
-/* constants */
+/* http actions */
 const {
   getFocalPeople,
   getJurisdictions,
   getPartyGroups,
-  getRoles,
   getAgencies,
+  getRoles,
   getAdministrativeLevelsExportUrl,
 } = httpActions;
+
+/* state actions */
 const {
-  closeAdministrativeLevelForm,
   getAdministrativeLevels,
   openAdministrativeLevelForm,
   searchAdministrativeLevels,
   selectAdministrativeLevel,
-  refreshAdministrativeLevels,
+  closeAdministrativeLevelForm,
   paginateAdministrativeLevels,
+  refreshAdministrativeLevels,
   deleteAdministrativeLevel,
 } = reduxActions;
 
-const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
-const descriptionSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };
-
+/* ui */
+const { confirm } = Modal;
+const nameSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 16, xs: 14 };
+const levelSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 4, xs: 4 };
+const parentSpan = { xxl: 4, xl: 3, lg: 4, md: 4, sm: 0, xs: 0 };
+const descriptionSpan = { xxl: 10, xl: 10, lg: 10, md: 8, sm: 0, xs: 0 };
 const headerLayout = [
-  { ...nameSpan, header: 'Name' },
-  { ...descriptionSpan, header: 'Description' },
+  { ...nameSpan, header: 'Name', title: 'Administrative Level Name' },
+  {
+    ...levelSpan,
+    header: 'Level',
+    title: 'Administrative Level Number',
+  },
+  { ...parentSpan, header: 'Parent', title: 'Administrative Level Parent' },
+  {
+    ...descriptionSpan,
+    header: 'Description',
+    title: 'AdministrativeLevel Usage Description',
+  },
 ];
 
-const { confirm } = Modal;
+/* messages */
+const MESSAGE_LIST_REFRESH_SUCCESS =
+  'Administrative Levels were refreshed successfully';
+const MESSAGE_LIST_REFRESH_ERROR =
+  'An Error occurred while refreshing Administrative Levels, Please try again!';
+const MESSAGE_ITEM_ARCHIVE_SUCCESS =
+  'Administrative Level was archived successfully';
+const MESSAGE_ITEM_ARCHIVE_ERROR =
+  'An error occurred while archiving Administrative Level, Please try again!';
 
 /**
- * @class
- * @name AdministrativeLevels
- * @description Render administrativeLevel list which have search box, actions and administrativeLevel list
- *
- * @version 0.1.0
+ * @function AdministrativeLevelList
+ * @name AdministrativeLevelList
+ * @description List administrative levels
+ * @param {object} props Valid list properties
+ * @param {object} props.administrativeLevels Valid list items
+ * @param {boolean} props.loading Flag whether list is loading data
+ * @param {boolean} props.posting Flag whether list is posting data
+ * @param {boolean} props.showForm Flag whether to show administrative level form
+ * @param {string} props.searchQuery Applied search term
+ * @param {number} props.page Current page number
+ * @param {number} props.total Available list items
+ * @param {object} props.administrativeLevel Current selected list item
+ * @returns {object} AdministrativeLevelList component
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
  * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * <AdministrativeLevelList />
+ *
  */
-class AdministrativeLevels extends Component {
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    isEditForm: false,
-    showNotificationForm: false,
-    notificationBody: undefined,
-    cached: null,
-  };
+class AdministrativeLevelList extends Component {
+  /**
+   * @function constructor
+   * @name constructor
+   * @description Initialize states
+   * @param {object} props Valid component properties
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  constructor(props) {
+    super(props);
+    this.state = {
+      isEditForm: false,
+      showNotificationForm: false,
+      notificationSubject: undefined,
+      notificationBody: undefined,
+    };
+  }
 
+  /**
+   * @function componentDidMount
+   * @name componentDidMount
+   * @description Load data
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
   componentDidMount() {
     getAdministrativeLevels();
   }
 
   /**
-   * @function
-   * @name handleOnCachedValues
-   * @description Cached selected values for filters
-   *
-   * @param {object} cached values to be cached from filter
-   *
+   * @function handleListSearch
+   * @name handleListSearch
+   * @description Handle list search
+   * @param {object} event List search event
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnCachedValues = (cached) => {
-    const { cached: previousCached } = this.state;
-    const values = { ...previousCached, ...cached };
-    this.setState({ cached: values });
+  handleListSearch = (event) => {
+    searchAdministrativeLevels(event.target.value);
   };
 
   /**
-   * @function
-   * @name handleClearCachedValues
-   * @description Clear cached values
+   * @function handleListRefresh
+   * @name handleListRefresh
+   * @description Handle list refresh
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleClearCachedValues = () => {
-    this.setState({ cached: null });
+  handleListRefresh = () => {
+    refreshAdministrativeLevels(
+      () => notifySuccess(MESSAGE_LIST_REFRESH_SUCCESS),
+      () => notifyError(MESSAGE_LIST_REFRESH_ERROR)
+    );
   };
 
   /**
-   * @function
-   * @name openAdministrativeLevelForm
-   * @description Open administrativeLevel form
+   * @function handleListPaginate
+   * @name handleListPaginate
+   * @description Handle list paginate
+   * @param {number} nextPage List next page number
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openAdministrativeLevelForm = () => {
+  handleListPaginate = (nextPage) => {
+    paginateAdministrativeLevels(nextPage);
+  };
+
+  /**
+   * @function handleListShare
+   * @name handleListShare
+   * @description Handle list sharing
+   * @param {object[]} items List of items
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleListShare = (items) => {
+    const itemList = [].concat(items);
+
+    const notificationSubject = 'List of Administrative Levels';
+    const notificationBody = itemList
+      .map((item) => {
+        const itemName = get(item, 'strings.name.en', 'N/A');
+        const itemLevel = get(item, 'numbers.weight', 'N/A');
+        const itemParent = get(item, 'relations.parent.strings.name.en', 'N/A');
+        const itemDescription = get(item, 'strings.description.en', 'N/A');
+        const body = `Name: ${itemName}\nLevel: ${itemLevel}\nParent: ${itemParent}\nDescription: ${itemDescription}\n`;
+        return body;
+      })
+      .join('\n');
+    const showNotificationForm = true;
+
+    this.setState({
+      notificationSubject,
+      notificationBody,
+      showNotificationForm,
+    });
+  };
+
+  /**
+   * @function handleFormOpen
+   * @name handleFormOpen
+   * @description Handle form opening
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleFormOpen = () => {
     openAdministrativeLevelForm();
   };
 
   /**
-   * @function
-   * @name openAdministrativeLevelForm
-   * @description close administrativeLevel form
+   * @function handleFormClose
+   * @name handleFormClose
+   * @description Handle form closing
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeAdministrativeLevelForm = () => {
+  handleFormClose = () => {
     closeAdministrativeLevelForm();
     this.setState({ isEditForm: false });
   };
 
   /**
-   * @function
-   * @name searchAdministrativeLevels
-   * @description Search AdministrativeLevels List based on supplied filter word
-   *
-   * @param {object} event - Event instance
+   * @function handleFormClose
+   * @name handleFormClose
+   * @description Handle post form close and perform cleanups
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchAdministrativeLevels = (event) => {
-    searchAdministrativeLevels(event.target.value);
-  };
-
-  /**
-   * @function
-   * @name handleEdit
-   * @description Handle on Edit action for list item
-   *
-   * @param {object} administrativeLevel administrativeLevel to be edited
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleEdit = (administrativeLevel) => {
-    selectAdministrativeLevel(administrativeLevel);
-    this.setState({ isEditForm: true });
-    openAdministrativeLevelForm();
-  };
-
-  /**
-   * @function
-   * @name handleShare
-   * @description Handle share multiple event Actions
-   *
-   * @param {object[]| object} administrativeLevels event Actions list to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleShare = (administrativeLevels) => {
-    let message = '';
-    if (isArray(administrativeLevels)) {
-      const administrativeLevelList = administrativeLevels.map(
-        (administrativeLevel) =>
-          `Name: ${administrativeLevel.strings.name.en}\nDescription: ${
-            // eslint-disable-line
-            administrativeLevel.strings.description.en
-          }\n`
-      );
-
-      message = administrativeLevelList.join('\n\n\n');
-    } else {
-      message = `Name: ${administrativeLevels.strings.name.en}\nDescription: ${
-        // eslint-disable-line
-        administrativeLevels.strings.description.en
-      }\n`;
-    }
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name closeNotificationForm
-   * @description Handle on notify administrativeLevel
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closeNotificationForm = () => {
-    this.setState({ showNotificationForm: false });
-  };
-
-  /**
-   * @function
-   * @name handleAfterCloseForm
-   * @description Perform post close form cleanups
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleAfterCloseForm = () => {
+  handleAfterFormClose = () => {
     selectAdministrativeLevel(null);
     this.setState({ isEditForm: false });
   };
 
   /**
-   * @function
-   * @name handleAfterCloseNotificationForm
-   * @description Perform post close notification form cleanups
-   *
+   * @function handleItemEdit
+   * @name handleItemEdit
+   * @description Handle list item edit
+   * @param {object} item List item
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleAfterCloseNotificationForm = () => {
-    this.setState({ notificationBody: undefined });
+  handleItemEdit = (item) => {
+    selectAdministrativeLevel(item);
+    this.setState({ isEditForm: true });
+    openAdministrativeLevelForm();
   };
 
   /**
-   * @function
-   * @name showArchiveConfirm
-   * @description show confirm modal before archiving an administrative level
-   * @param {object} item Resource item to be archived
-   *
+   * @function handleItemArchive
+   * @name handleItemArchive
+   * @description Handle list item archiving with confirmation
+   * @param {object} item List item
    * @version 0.1.0
    * @since 0.1.0
    */
-  showArchiveConfirm = (item) => {
+  handleItemArchive = (item) => {
+    const itemId = get(item, '_id');
+    const itemName = get(item, 'strings.name.en', 'N/A');
     confirm({
-      title: `Are you sure you want to archive this record ?`,
+      title: `Are you sure you want to archive ${itemName} ?`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk() {
         deleteAdministrativeLevel(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Administrative Level was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Administrative Level, Please contact your system Administrator'
-            )
+          itemId,
+          () => notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS),
+          () => notifyError(MESSAGE_ITEM_ARCHIVE_ERROR)
         );
       },
     });
   };
 
-  handleRefreshAdministrativeLevels = () =>
-    refreshAdministrativeLevels(
-      () => notifySuccess('Administrative Levels refreshed successfully'),
-      () =>
-        notifyError(
-          'An Error occurred while refreshing Administrative Levels, please contact system administrator'
-        )
-    );
+  /**
+   * @function handleItemShare
+   * @name handleItemShare
+   * @description Handle list item sharing
+   * @param {object} item List item
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleItemShare = (item) => {
+    const itemName = get(item, 'strings.name.en', 'N/A');
+    const itemLevel = get(item, 'numbers.weight', 'N/A');
+    const itemParent = get(item, 'relations.parent.strings.name.en', 'N/A');
+    const itemDescription = get(item, 'strings.description.en', 'N/A');
 
+    const notificationSubject = 'List of Administrative Levels';
+    const notificationBody = `Name: ${itemName}\nLevel: ${itemLevel}\nParent: ${itemParent}\nDescription: ${itemDescription}\n`;
+    const showNotificationForm = true;
+
+    this.setState({
+      notificationSubject,
+      notificationBody,
+      showNotificationForm,
+    });
+  };
+
+  /**
+   * @function handleNotificationFormClose
+   * @name handleNotificationFormClose
+   * @description Handle notification form closing
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleNotificationFormClose = () => {
+    this.setState({ showNotificationForm: false });
+  };
+
+  /**
+   * @function render
+   * @name render
+   * @description Render list
+   * @returns {object} List to render
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
   render() {
+    // props
     const {
       administrativeLevels,
-      administrativeLevel,
       loading,
-      posting,
       page,
+      posting,
+      administrativeLevel,
       showForm,
       searchQuery,
       total,
     } = this.props;
-    const { isEditForm, showNotificationForm, notificationBody } = this.state;
+
+    // states
+    const {
+      isEditForm,
+      showNotificationForm,
+      notificationSubject,
+      notificationBody,
+    } = this.state;
 
     return (
       <>
-        {/* Topbar */}
+        {/* start: list topbar */}
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for administrative level here ...',
-            onChange: this.searchAdministrativeLevels,
+            placeholder: 'Search administrative levels ...',
+            title: 'Search administrative levels ...',
+            onChange: this.handleListSearch,
             value: searchQuery,
           }}
           actions={[
@@ -284,23 +356,24 @@ class AdministrativeLevels extends Component {
               icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Administrative Level',
-              onClick: this.openAdministrativeLevelForm,
+              onClick: this.handleFormOpen,
             },
           ]}
         />
-        {/* end Topbar */}
+        {/* end: list topbar */}
 
-        {/* list starts */}
+        {/* start: list */}
         <ItemList
-          itemName="administrative levels"
+          itemName="AdministrativeLevel"
           items={administrativeLevels}
           page={page}
           itemCount={total}
           loading={loading}
-          // onFilter={this.openFiltersModal}
-          onShare={this.handleShare}
-          onRefresh={this.handleRefreshAdministrativeLevels}
-          onPaginate={(nextPage) => paginateAdministrativeLevels(nextPage)}
+          // onFilter={this.handleListFilter}
+          onNotify={this.openNotificationForm}
+          onShare={this.handleListShare}
+          onRefresh={this.handleListRefresh}
+          onPaginate={this.handleListPaginate}
           generateExportUrl={getAdministrativeLevelsExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
@@ -309,52 +382,64 @@ class AdministrativeLevels extends Component {
             onSelectItem,
             onDeselectItem,
           }) => (
-            <ListItem
-              key={item._id} // eslint-disable-line
-              name={item.strings.name.en}
-              avatarBackgroundColor={item.strings.color}
-              item={item}
-              isSelected={isSelected}
-              onSelectItem={onSelectItem}
-              onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Administrative Level',
-                    title: 'Update Administrative Level Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Administrative Level',
-                    title: 'Share Administrative Level details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Administrative Level',
-                    title:
-                      'Remove Administrative Level from list of active administrative leveles',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
-            >
-              {/* eslint-disable-next-line */}
-              <Col {...nameSpan}>{get(item, 'strings.name.en', 'N/A')} </Col>
-
-              {/* eslint-disable-next-line */}
-              <Col {...descriptionSpan}>
-                {get(item, 'strings.description.en', 'N/A')}{' '}
-              </Col>
-            </ListItem>
+            <>
+              {/* start: list item */}
+              <ListItem
+                key={get(item, '_id')}
+                item={item}
+                name={get(item, 'strings.name.en')}
+                isSelected={isSelected}
+                avatarBackgroundColor={get(item, 'strings.color')}
+                onSelectItem={onSelectItem}
+                onDeselectItem={onDeselectItem}
+                renderActions={() => (
+                  <ListItemActions
+                    edit={{
+                      name: 'Edit Administrative Level',
+                      title: 'Update administrative level details',
+                      onClick: () => this.handleItemEdit(item),
+                    }}
+                    share={{
+                      name: 'Share Administrative Level',
+                      title: 'Share administrative level details with others',
+                      onClick: () => this.handleItemShare(item),
+                    }}
+                    archive={{
+                      name: 'Archive AdministrativeLevel',
+                      title:
+                        'Remove administrative level from list of active administrativeLevels',
+                      onClick: () => this.handleItemArchive(item),
+                    }}
+                  />
+                )}
+              >
+                {/* eslint-disable react/jsx-props-no-spreading */}
+                <Col {...nameSpan}>{get(item, 'strings.name.en', 'N/A')}</Col>
+                <Col {...levelSpan}>{get(item, 'numbers.weight', 'N/A')}</Col>
+                <Col {...parentSpan}>
+                  {get(item, 'relations.parent.strings.name.en', 'N/A')}
+                </Col>
+                <Col {...descriptionSpan}>
+                  <span title={get(item, 'strings.description.en', 'N/A')}>
+                    {truncateString(
+                      get(item, 'strings.description.en', 'N/A'),
+                      100
+                    )}
+                  </span>
+                </Col>
+                {/* eslint-enable react/jsx-props-no-spreading */}
+              </ListItem>
+              {/* end: list item */}
+            </>
           )}
         />
-        {/* end list */}
+        {/* end: list */}
 
-        {/* Notification Modal modal */}
+        {/* start: notification modal */}
         <Modal
-          title="Notify Administrative Levels"
+          title="Share Administrative Levels"
           visible={showNotificationForm}
-          onCancel={this.closeNotificationForm}
+          onCancel={this.handleNotificationFormClose}
           footer={null}
           destroyOnClose
           maskClosable={false}
@@ -362,18 +447,20 @@ class AdministrativeLevels extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
+            recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
             onSearchRoles={getRoles}
+            subject={notificationSubject}
             body={notificationBody}
-            onCancel={this.closeNotificationForm}
+            onCancel={this.handleNotificationFormClose}
           />
         </Modal>
-        {/* end Notification modal */}
+        {/* end: notification modal */}
 
-        {/* create/edit form modal */}
+        {/* start: form modal */}
         <Modal
           title={
             isEditForm
@@ -383,49 +470,53 @@ class AdministrativeLevels extends Component {
           visible={showForm}
           className="FormModal"
           footer={null}
-          onCancel={this.closeAdministrativeLevelForm}
-          destroyOnClose
+          onCancel={this.handleFormClose}
+          afterClose={this.handleAfterFormClose}
           maskClosable={false}
-          afterClose={this.handleAfterCloseForm}
+          destroyOnClose
         >
           <AdministrativeLevelForm
+            administrativeLevel={administrativeLevel}
             posting={posting}
             isEditForm={isEditForm}
-            administrativeLevel={administrativeLevel}
-            onCancel={this.closeAdministrativeLevelForm}
+            onCancel={this.handleFormClose}
           />
         </Modal>
-        {/* end create/edit form modal */}
+        {/* end: form modal */}
       </>
     );
   }
 }
 
-AdministrativeLevels.propTypes = {
+AdministrativeLevelList.propTypes = {
+  administrativeLevels: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+    })
+  ).isRequired,
   loading: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
-  administrativeLevels: PropTypes.arrayOf(
-    PropTypes.shape({ name: PropTypes.string })
-  ).isRequired,
-  administrativeLevel: PropTypes.shape({ name: PropTypes.string }),
-  page: PropTypes.number.isRequired,
-  showForm: PropTypes.bool.isRequired,
   searchQuery: PropTypes.string,
+  showForm: PropTypes.bool.isRequired,
+  page: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
+  administrativeLevel: PropTypes.shape({
+    _id: PropTypes.string,
+  }),
 };
 
-AdministrativeLevels.defaultProps = {
+AdministrativeLevelList.defaultProps = {
   administrativeLevel: null,
   searchQuery: undefined,
 };
 
-export default Connect(AdministrativeLevels, {
+export default Connect(AdministrativeLevelList, {
   administrativeLevels: 'administrativeLevels.list',
-  administrativeLevel: 'administrativeLevels.selected',
   loading: 'administrativeLevels.loading',
   posting: 'administrativeLevels.posting',
-  page: 'administrativeLevels.page',
-  showForm: 'administrativeLevels.showForm',
-  total: 'administrativeLevels.total',
   searchQuery: 'administrativeLevels.q',
+  showForm: 'administrativeLevels.showForm',
+  page: 'administrativeLevels.page',
+  total: 'administrativeLevels.total',
+  administrativeLevel: 'administrativeLevels.selected',
 });

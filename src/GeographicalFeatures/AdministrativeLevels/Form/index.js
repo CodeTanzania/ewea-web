@@ -90,6 +90,25 @@ const AdministrativeLevelForm = ({
     }
   };
 
+  // search administrative level exclude self
+  const searchAdministrativeLevels = (optns, me) => {
+    const filter = {};
+    const myId = get(me, '_id');
+    const myLevel = get(me, 'numbers.weight');
+
+    // ignore self from selection
+    if (myId) {
+      // eslint-disable-next-line no-underscore-dangle
+      filter._id = { $nin: [myId] };
+    }
+    // ensure higher levels
+    if (myLevel) {
+      filter['numbers.weight'] = { $lt: myLevel };
+    }
+
+    return getAdministrativeLevels({ ...optns, filter });
+  };
+
   return (
     <Form
       labelCol={labelCol}
@@ -141,7 +160,9 @@ const AdministrativeLevelForm = ({
             name={['relations', 'parent', '_id']}
           >
             <SearchableSelectInput
-              onSearch={getAdministrativeLevels}
+              onSearch={(optns = {}) => {
+                return searchAdministrativeLevels(optns, administrativeLevel);
+              }}
               optionLabel={(parent) => get(parent, 'strings.name.en')}
               optionValue="_id"
               initialValue={get(

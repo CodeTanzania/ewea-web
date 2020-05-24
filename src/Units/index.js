@@ -66,14 +66,14 @@ const MESSAGE_ITEM_ARCHIVE_ERROR =
  * @name UnitList
  * @description List units of measure
  * @param {object} props Valid list properties
- * @param {object} props.units Valid unit list
+ * @param {object} props.units Valid list items
  * @param {boolean} props.loading Flag whether list is loading data
  * @param {boolean} props.posting Flag whether list is posting data
  * @param {boolean} props.showForm Flag whether to show unit form
  * @param {string} props.searchQuery Applied search term
  * @param {number} props.page Current page number
  * @param {number} props.total Available list items
- * @param {object} props.unit Current selected unit object
+ * @param {object} props.unit Current selected list item
  * @returns {object} UnitList component
  * @author lally elias <lallyelias87@gmail.com>
  * @license MIT
@@ -142,6 +142,19 @@ class UnitList extends Component {
       () => notifySuccess(MESSAGE_LIST_REFRESH_SUCCESS),
       () => notifyError(MESSAGE_LIST_REFRESH_ERROR)
     );
+  };
+
+  /**
+   * @function handleListPaginate
+   * @name handleListPaginate
+   * @description Handle list paginate
+   * @param {number} nextPage List next page number
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleListPaginate = (nextPage) => {
+    paginateUnits(nextPage);
   };
 
   /**
@@ -354,7 +367,7 @@ class UnitList extends Component {
           onNotify={this.openNotificationForm}
           onShare={this.handleListShare}
           onRefresh={this.handleListRefresh}
-          onPaginate={(nextPage) => paginateUnits(nextPage)}
+          onPaginate={this.handleListPaginate}
           generateExportUrl={getUnitsExportUrl}
           headerLayout={headerLayout}
           renderListItem={({
@@ -368,16 +381,16 @@ class UnitList extends Component {
               <ListItem
                 key={get(item, '_id')}
                 item={item}
-                name={item.strings.name.en}
+                name={get(item, 'strings.name.en')}
                 isSelected={isSelected}
-                avatarBackgroundColor={item.strings.color}
+                avatarBackgroundColor={get(item, 'strings.color')}
                 onSelectItem={onSelectItem}
                 onDeselectItem={onDeselectItem}
                 renderActions={() => (
                   <ListItemActions
                     edit={{
                       name: 'Edit Unit',
-                      title: 'Update unit Details',
+                      title: 'Update unit details',
                       onClick: () => this.handleItemEdit(item),
                     }}
                     share={{
@@ -417,7 +430,7 @@ class UnitList extends Component {
 
         {/* start: notification modal */}
         <Modal
-          title="Notify Unit"
+          title="Share Units"
           visible={showNotificationForm}
           onCancel={this.handleNotificationFormClose}
           footer={null}
