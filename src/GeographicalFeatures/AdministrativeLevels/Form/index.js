@@ -1,43 +1,70 @@
-import { reduxActions } from '@codetanzania/ewea-api-states';
-import { Button, Input, Form } from 'antd';
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+import get from 'lodash/get';
+import { Button, Input, InputNumber, Form, Row, Col } from 'antd';
+import { httpActions } from '@codetanzania/ewea-api-client';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
+import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
-/* constants */
+/* http actions */
+const { getAdministrativeLevels } = httpActions;
+
+/* state actions */
 const { putAdministrativeLevel, postAdministrativeLevel } = reduxActions;
+
+/* ui */
 const { TextArea } = Input;
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 24 },
-    md: { span: 24 },
-    lg: { span: 24 },
-    xl: { span: 24 },
-    xxl: { span: 24 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 24 },
-    md: { span: 24 },
-    lg: { span: 24 },
-    xl: { span: 24 },
-    xxl: { span: 24 },
-  },
+const labelCol = {
+  xs: { span: 24 },
+  sm: { span: 24 },
+  md: { span: 24 },
+  lg: { span: 24 },
+  xl: { span: 24 },
+  xxl: { span: 24 },
+};
+const wrapperCol = {
+  xs: { span: 24 },
+  sm: { span: 24 },
+  md: { span: 24 },
+  lg: { span: 24 },
+  xl: { span: 24 },
+  xxl: { span: 24 },
 };
 
+/* messages */
+const MESSAGE_POST_SUCCESS = 'Administrative Level was created successfully';
+const MESSAGE_POST_ERROR =
+  'Something occurred while saving Administrative Level, Please try again!';
+const MESSAGE_PUT_SUCCESS = 'Administrative Level was updated successfully';
+const MESSAGE_PUT_ERROR =
+  'Something occurred while updating Administrative Level, Please try again!';
+
 /**
- * @function
- * @param {object} props props object
- * @param {*} props.administrativeLevel valid administrative level
- * @param {boolean} props.isEditForm edit flag
- * @param {boolean} props.posting posting flag
- * @param {Function} props.onCancel cancel callback
+ * @function AdministrativeLevelForm
  * @name AdministrativeLevelForm
- * @description Administrative Level Form
- * @returns {object} React Component
- * @version 0.1.0
+ * @description Form for create and edit administrative level
+ * @param {object} props Valid form properties
+ * @param {object} props.administrativeLevel Valid administrative level object
+ * @param {boolean} props.isEditForm Flag wether form is on edit mode
+ * @param {boolean} props.posting Flag whether form is posting data
+ * @param {Function} props.onCancel Form cancel callback
+ * @returns {object} AdministrativeLevelForm component
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
  * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * <AdministrativeLevelForm
+ *   administrativeLevel={administrativeLevel}
+ *   isEditForm={isEditForm}
+ *   posting={posting}
+ *   onCancel={this.handleCloseAdministrativeLevelForm}
+ * />
+ *
  */
 const AdministrativeLevelForm = ({
   administrativeLevel,
@@ -45,67 +72,101 @@ const AdministrativeLevelForm = ({
   posting,
   onCancel,
 }) => {
+  // form finish(submit) handler
   const onFinish = (values) => {
     if (isEditForm) {
-      const updatedEventStatus = { ...administrativeLevel, ...values };
+      const updates = { ...administrativeLevel, ...values };
       putAdministrativeLevel(
-        updatedEventStatus,
-        () => {
-          notifySuccess('Administrative level was updated successfully');
-        },
-        () => {
-          notifyError(
-            'Something occurred while updating administrative level, please try again!'
-          );
-        }
+        updates,
+        () => notifySuccess(MESSAGE_PUT_SUCCESS),
+        () => notifyError(MESSAGE_PUT_ERROR)
       );
     } else {
       postAdministrativeLevel(
         values,
-        () => {
-          notifySuccess('Administrative level was created successfully');
-        },
-        () => {
-          notifyError(
-            'Something occurred while saving administrative level, please try again!'
-          );
-        }
+        () => notifySuccess(MESSAGE_POST_SUCCESS),
+        () => notifyError(MESSAGE_POST_ERROR)
       );
     }
   };
 
   return (
     <Form
+      labelCol={labelCol}
+      wrapperCol={wrapperCol}
       onFinish={onFinish}
-      {...formItemLayout} // eslint-disable-line
-      initialValues={{
-        ...administrativeLevel,
-      }}
+      initialValues={{ ...administrativeLevel }}
       autoComplete="off"
     >
-      {/* administrative level name */}
+      {/* start:name */}
       <Form.Item
         label="Name"
+        title="Administrative level name e.g County"
         name={['strings', 'name', 'en']}
         rules={[
-          { required: true, message: 'Administrative level name is required' },
+          {
+            required: true,
+            message: 'Administrative level name is required',
+          },
         ]}
       >
         <Input />
       </Form.Item>
-      {/* end administrative level name */}
+      {/* end:name */}
 
-      {/* administrative level description */}
+      {/* start: level & parent */}
+      <Row justify="space-between">
+        {/* start:level */}
+        <Col span={11}>
+          <Form.Item
+            label="Level"
+            title="Administrative level number e.g 3"
+            name={['numbers', 'weight']}
+            rules={[
+              {
+                required: true,
+                message: 'Administrative level number is required',
+              },
+            ]}
+          >
+            <InputNumber min={0} style={{ width: '100%' }} />
+          </Form.Item>
+        </Col>
+        {/* end:level */}
+        {/* start:parent */}
+        <Col span={11}>
+          <Form.Item
+            label="Parent"
+            title="Administrative level parent e.g Province"
+            name={['relations', 'parent', '_id']}
+          >
+            <SearchableSelectInput
+              onSearch={getAdministrativeLevels}
+              optionLabel={(parent) => get(parent, 'strings.name.en')}
+              optionValue="_id"
+              initialValue={get(
+                administrativeLevel,
+                'relations.parent',
+                undefined
+              )}
+            />
+          </Form.Item>
+        </Col>
+        {/* end:parent */}
+      </Row>
+      {/* end: level & parent */}
+
+      {/* start:description */}
       <Form.Item
-        {...formItemLayout} // eslint-disable-line
         label="Description"
+        title="Administrative level usage description"
         name={['strings', 'description', 'en']}
       >
         <TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
       </Form.Item>
-      {/* end administrative level description */}
+      {/* end:description */}
 
-      {/* form actions */}
+      {/* start:form actions */}
       <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
         <Button onClick={onCancel}>Cancel</Button>
         <Button
@@ -117,26 +178,38 @@ const AdministrativeLevelForm = ({
           Save
         </Button>
       </Form.Item>
-      {/* end form actions */}
+      {/* end:form actions */}
     </Form>
   );
 };
 
-AdministrativeLevelForm.propTypes = {
-  isEditForm: PropTypes.bool.isRequired,
-  administrativeLevel: PropTypes.shape({
-    strings: PropTypes.shape({
-      name: PropTypes.shape({ en: PropTypes.string }),
-      abbreviation: PropTypes.shape({ en: PropTypes.string }),
-      description: PropTypes.shape({ en: PropTypes.string }),
-    }),
-  }),
-  onCancel: PropTypes.func.isRequired,
-  posting: PropTypes.bool.isRequired,
+AdministrativeLevelForm.defaultProps = {
+  administrativeLevel: {},
 };
 
-AdministrativeLevelForm.defaultProps = {
-  administrativeLevel: null,
+AdministrativeLevelForm.propTypes = {
+  administrativeLevel: PropTypes.shape({
+    _id: PropTypes.string,
+    strings: PropTypes.shape({
+      name: PropTypes.shape({
+        en: PropTypes.string.isRequired,
+      }),
+      description: PropTypes.shape({
+        en: PropTypes.string.isRequired,
+      }),
+    }),
+    numbers: PropTypes.shape({
+      weight: PropTypes.number.isRequired,
+    }),
+    relations: PropTypes.shape({
+      parent: PropTypes.shape({
+        _id: PropTypes.string,
+      }),
+    }),
+  }),
+  isEditForm: PropTypes.bool.isRequired,
+  posting: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
 };
 
 export default AdministrativeLevelForm;

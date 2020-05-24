@@ -326,8 +326,8 @@ class UnitList extends Component {
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for units ...',
-            title: 'Search for units ...',
+            placeholder: 'Search units ...',
+            title: 'Search units ...',
             onChange: this.handleListSearch,
             value: searchQuery,
           }}
@@ -465,15 +465,20 @@ class UnitList extends Component {
 }
 
 UnitList.propTypes = {
-  units: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
-    .isRequired,
+  units: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+    })
+  ).isRequired,
   loading: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
   searchQuery: PropTypes.string,
   showForm: PropTypes.bool.isRequired,
   page: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
-  unit: PropTypes.shape({ name: PropTypes.string }),
+  unit: PropTypes.shape({
+    _id: PropTypes.string,
+  }),
 };
 
 UnitList.defaultProps = {

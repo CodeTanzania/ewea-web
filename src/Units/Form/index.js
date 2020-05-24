@@ -29,10 +29,10 @@ const wrapperCol = {
 /* messages */
 const MESSAGE_POST_SUCCESS = 'Unit was created successfully';
 const MESSAGE_POST_ERROR =
-  'Something occurred while saving Unit, please try again!';
+  'Something occurred while saving Unit, Please try again!';
 const MESSAGE_PUT_SUCCESS = 'Unit was updated successfully';
 const MESSAGE_PUT_ERROR =
-  'Something occurred while updating Unit, please try again!';
+  'Something occurred while updating Unit, Please try again!';
 
 /**
  * @function UnitForm
@@ -169,6 +169,7 @@ UnitForm.defaultProps = {
 
 UnitForm.propTypes = {
   unit: PropTypes.shape({
+    _id: PropTypes.string,
     strings: PropTypes.shape({
       code: PropTypes.string.isRequired,
       name: PropTypes.shape({
@@ -177,7 +178,6 @@ UnitForm.propTypes = {
       description: PropTypes.shape({
         en: PropTypes.string.isRequired,
       }),
-      _id: PropTypes.string,
     }),
   }),
   isEditForm: PropTypes.bool.isRequired,
