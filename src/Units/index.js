@@ -55,7 +55,10 @@ const headerLayout = [
 /* messages */
 const MESSAGE_LIST_REFRESH_SUCCESS = 'Units were refreshed successfully';
 const MESSAGE_LIST_REFRESH_ERROR =
-  'An Error occurred while refreshing Units, please try again!';
+  'An Error occurred while refreshing Units, Please try again!';
+const MESSAGE_ITEM_ARCHIVE_SUCCESS = 'Unit was archived successfully';
+const MESSAGE_ITEM_ARCHIVE_ERROR =
+  'An error occurred while archiving Unit, Please try again!';
 
 /**
  * @function UnitList
@@ -96,6 +99,7 @@ class UnitList extends Component {
     this.state = {
       isEditForm: false,
       showNotificationForm: false,
+      notificationSubject: undefined,
       notificationBody: undefined,
     };
   }
@@ -202,19 +206,18 @@ class UnitList extends Component {
    */
 
   showArchiveConfirm = (item) => {
+    const itemId = get(item, '_id');
+    const itemName = get(item, 'strings.name.en', 'N/A');
     confirm({
-      title: `Are you sure you want to archive ${item.strings.name.en} ?`,
+      title: `Are you sure you want to archive ${itemName} ?`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk() {
         deleteUnit(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Unit was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Unit, Please contact your system Administrator'
-            )
+          itemId,
+          () => notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS),
+          () => notifyError(MESSAGE_ITEM_ARCHIVE_ERROR)
         );
       },
     });
@@ -261,12 +264,18 @@ class UnitList extends Component {
    * @since 0.1.0
    */
   handleItemShare = (item) => {
-    const message = `Name: ${item.strings.name.en}\nDescription: ${
-      // eslint-disable-line
-      item.strings.description.en
-    }\n`;
+    const itemName = get(item, 'strings.name.en', 'N/A');
+    const itemDescription = get(item, 'strings.description.en', 'N/A');
 
-    this.setState({ notificationBody: message, showNotificationForm: true });
+    const notificationSubject = 'Unit Details';
+    const notificationBody = `Name: ${itemName}\nDescription: ${itemDescription}\n`;
+    const showNotificationForm = true;
+
+    this.setState({
+      notificationSubject,
+      notificationBody,
+      showNotificationForm,
+    });
   };
 
   /**
@@ -291,6 +300,7 @@ class UnitList extends Component {
    * @since 0.1.0
    */
   render() {
+    // props
     const {
       units,
       loading,
@@ -301,7 +311,14 @@ class UnitList extends Component {
       searchQuery,
       total,
     } = this.props;
-    const { isEditForm, showNotificationForm, notificationBody } = this.state;
+
+    // states
+    const {
+      isEditForm,
+      showNotificationForm,
+      notificationSubject,
+      notificationBody,
+    } = this.state;
 
     return (
       <>
@@ -415,6 +432,7 @@ class UnitList extends Component {
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
             onSearchRoles={getRoles}
+            subject={notificationSubject}
             body={notificationBody}
             onCancel={this.handleNotificationFormClose}
           />
