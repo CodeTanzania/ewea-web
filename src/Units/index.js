@@ -453,7 +453,7 @@ class UnitList extends Component {
         >
           <UnitForm
             unit={unit}
-            isPosting={posting}
+            posting={posting}
             isEditForm={isEditForm}
             onCancel={this.handleFormClose}
           />

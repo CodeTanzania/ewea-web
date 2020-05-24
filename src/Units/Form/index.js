@@ -41,7 +41,7 @@ const MESSAGE_PUT_ERROR =
  * @param {object} props Valid form properties
  * @param {object} props.unit Valid unit object
  * @param {boolean} props.isEditForm Flag wether form is on edit mode
- * @param {boolean} props.isPosting Flag whether form is posting data
+ * @param {boolean} props.posting Flag whether form is posting data
  * @param {Function} props.onCancel Form cancel callback
  * @returns {object} UnitForm component
  * @author lally elias <lallyelias87@gmail.com>
@@ -55,12 +55,12 @@ const MESSAGE_PUT_ERROR =
  * <UnitForm
  *   unit={unit}
  *   isEditForm={isEditForm}
- *   isPosting={isPosting}
+ *   posting={posting}
  *   onCancel={this.handleCloseUnitForm}
  * />
  *
  */
-const UnitForm = ({ unit, isEditForm, isPosting, onCancel }) => {
+const UnitForm = ({ unit, isEditForm, posting, onCancel }) => {
   // form finish(submit) handler
   const onFinish = (values) => {
     if (isEditForm) {
@@ -153,7 +153,7 @@ const UnitForm = ({ unit, isEditForm, isPosting, onCancel }) => {
           style={{ marginLeft: 8 }}
           type="primary"
           htmlType="submit"
-          loading={isPosting}
+          loading={posting}
         >
           Save
         </Button>
@@ -181,7 +181,7 @@ UnitForm.propTypes = {
     }),
   }),
   isEditForm: PropTypes.bool.isRequired,
-  isPosting: PropTypes.bool.isRequired,
+  posting: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
 };
 
