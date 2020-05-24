@@ -5,7 +5,6 @@ import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
-import isArray from 'lodash/isArray';
 import Topbar from '../components/Topbar';
 import UnitForm from './Form';
 import NotificationForm from '../components/NotificationForm';
@@ -182,6 +181,37 @@ class UnitList extends Component {
   };
 
   /**
+   * @function handleListShare
+   * @name handleListShare
+   * @description Handle list sharing
+   * @param {object[]} items List of items
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleListShare = (items) => {
+    const itemList = [].concat(items);
+
+    const notificationSubject = 'List of Units';
+    const notificationBody = itemList
+      .map((item) => {
+        const itemName = get(item, 'strings.name.en', 'N/A');
+        const itemAbbreviation = get(item, 'strings.abbreviation.en', 'N/A');
+        const itemSymbol = get(item, 'strings.symbol', 'N/A');
+        const itemDescription = get(item, 'strings.description.en', 'N/A');
+        const body = `Name: ${itemName}\nAbbreviation: ${itemAbbreviation}\nSymbol: ${itemSymbol}\nDescription: ${itemDescription}\n`;
+        return body;
+      })
+      .join('\n');
+    const showNotificationForm = true;
+
+    this.setState({
+      notificationSubject,
+      notificationBody,
+      showNotificationForm,
+    });
+  };
+
+  /**
    * @function handleItemEdit
    * @name handleItemEdit
    * @description Handle list item edit
@@ -224,51 +254,21 @@ class UnitList extends Component {
   };
 
   /**
-   * @function
-   * @name handleListShare
-   * @description Handle share multiple event Indicators
-   *
-   * @param {object[]| object} units event Indicators list to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleListShare = (units) => {
-    let message = '';
-    if (isArray(units)) {
-      const unitList = units.map(
-        (unit) =>
-          `Name: ${unit.strings.name.en}\nDescription: ${
-            // eslint-disable-line
-            unit.strings.description.en
-          }\n`
-      );
-
-      message = unitList.join('\n\n\n');
-    } else {
-      message = `Name: ${units.strings.name.en}\nDescription: ${
-        // eslint-disable-line
-        units.strings.description.en
-      }\n`;
-    }
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
    * @function handleItemShare
    * @name handleItemShare
-   * @description Handle list item edit
+   * @description Handle list item sharing
    * @param {object} item List item
    * @version 0.1.0
    * @since 0.1.0
    */
   handleItemShare = (item) => {
     const itemName = get(item, 'strings.name.en', 'N/A');
+    const itemAbbreviation = get(item, 'strings.abbreviation.en', 'N/A');
+    const itemSymbol = get(item, 'strings.symbol', 'N/A');
     const itemDescription = get(item, 'strings.description.en', 'N/A');
 
-    const notificationSubject = 'Unit Details';
-    const notificationBody = `Name: ${itemName}\nDescription: ${itemDescription}\n`;
+    const notificationSubject = 'List of Units';
+    const notificationBody = `Name: ${itemName}\nAbbreviation: ${itemAbbreviation}\nSymbol: ${itemSymbol}\nDescription: ${itemDescription}\n`;
     const showNotificationForm = true;
 
     this.setState({
