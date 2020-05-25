@@ -137,7 +137,7 @@ const EventFunctionForm = ({
         <Col span={11}>
           <Form.Item
             label="Code"
-            title="Emergency function code e.g EF3"
+            title="Emergency function code e.g ERF3"
             name={['strings', 'code']}
             rules={[
               {
@@ -155,9 +155,15 @@ const EventFunctionForm = ({
 
       {/* start:groups */}
       <Form.Item
-        label="Groups/Agencies"
-        title="Lead and Supporting Groups/Agencies"
+        label="Agencies"
+        title="Lead and Supporting Agencies e.g Police Force"
         name={['relations', 'groups']}
+        rules={[
+          {
+            required: true,
+            message: 'Lead or Supporting Agencies are required',
+          },
+        ]}
       >
         <SearchableSelectInput
           onSearch={getPartyGroups}
