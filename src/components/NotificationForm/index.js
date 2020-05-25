@@ -314,11 +314,11 @@ NotificationForm.propTypes = {
   body: PropTypes.string,
   subject: PropTypes.string,
   onCancel: PropTypes.func.isRequired,
-  onSearchRecipients: PropTypes.func.isRequired,
-  onSearchJurisdictions: PropTypes.func.isRequired,
-  onSearchGroups: PropTypes.func.isRequired,
-  onSearchRoles: PropTypes.func.isRequired,
-  onSearchAgencies: PropTypes.func.isRequired,
+  onSearchRecipients: PropTypes.func,
+  onSearchJurisdictions: PropTypes.func,
+  onSearchGroups: PropTypes.func,
+  onSearchRoles: PropTypes.func,
+  onSearchAgencies: PropTypes.func,
   posting: PropTypes.bool.isRequired,
 };
 
@@ -326,6 +326,11 @@ NotificationForm.defaultProps = {
   subject: undefined,
   body: undefined,
   recipients: [],
+  onSearchRecipients: undefined,
+  onSearchJurisdictions: undefined,
+  onSearchGroups: undefined,
+  onSearchRoles: undefined,
+  onSearchAgencies: undefined,
 };
 
 export default Connect(NotificationForm, {

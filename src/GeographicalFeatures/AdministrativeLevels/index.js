@@ -53,7 +53,7 @@ const headerLayout = [
   {
     ...descriptionSpan,
     header: 'Description',
-    title: 'AdministrativeLevel Usage Description',
+    title: 'Administrative Level Usage Description',
   },
 ];
 
@@ -407,7 +407,7 @@ class AdministrativeLevelList extends Component {
                     archive={{
                       name: 'Archive AdministrativeLevel',
                       title:
-                        'Remove administrative level from list of active administrativeLevels',
+                        'Remove administrative level from list of active administrative levels',
                       onClick: () => this.handleItemArchive(item),
                     }}
                   />

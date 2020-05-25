@@ -1,299 +1,374 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import isArray from 'lodash/isArray';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-
+import isEmpty from 'lodash/isEmpty';
+import get from 'lodash/get';
+import map from 'lodash/map';
+import sortBy from 'lodash/sortBy';
+import Topbar from '../../components/Topbar';
+import EventFunctionForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
+import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
-import Topbar from '../../components/Topbar';
-import EventFunctionsFilters from './Filters';
-import FunctionForm from './Form';
-import { notifyError, notifySuccess, truncateString } from '../../util';
 import './styles.css';
 
-/* constants */
-const {
-  searchEventFunctions,
-  selectEventFunction,
-  getEventFunctions,
-  openEventFunctionForm,
-  closeEventFunctionForm,
-  paginateEventFunctions,
-  deleteEventFunction,
-  refreshEventFunctions,
-} = reduxActions;
-const nameSpan = { xxl: 5, xl: 5, lg: 6, md: 7, sm: 8, xs: 14 };
-const typeSpan = { xxl: 3, xl: 3, lg: 3, md: 2, sm: 0, xs: 0 };
-const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 2, sm: 2, xs: 4 };
-const descriptionSpan = { xxl: 11, xl: 11, lg: 10, md: 10, sm: 10, xs: 0 };
-const headerLayout = [
-  { ...nameSpan, header: 'Name' },
-  { ...codeSpan, header: 'Code' },
-  { ...typeSpan, header: 'Type' },
-  { ...descriptionSpan, header: 'Description' },
-];
+/* http actions */
 const {
   getFocalPeople,
   getJurisdictions,
   getPartyGroups,
-  getRoles,
   getAgencies,
+  getRoles,
   getEventFunctionsExportUrl,
 } = httpActions;
+
+/* state actions */
+const {
+  getEventFunctions,
+  openEventFunctionForm,
+  searchEventFunctions,
+  selectEventFunction,
+  closeEventFunctionForm,
+  paginateEventFunctions,
+  refreshEventFunctions,
+  deleteEventFunction,
+} = reduxActions;
+
+/* ui */
 const { confirm } = Modal;
+const numberSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 };
+const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 };
+const nameSpan = { xxl: 6, xl: 6, lg: 6, md: 6, sm: 16, xs: 14 };
+const groupsSpan = { xxl: 12, xl: 12, lg: 12, md: 10, sm: 0, xs: 0 };
+const headerLayout = [
+  {
+    ...numberSpan,
+    header: 'Number',
+    title: 'Emergency Function Number',
+  },
+  {
+    ...codeSpan,
+    header: 'Code',
+    title: 'Emergency Function Code',
+  },
+  { ...nameSpan, header: 'Name', title: 'Emergency Function Name' },
+  {
+    ...groupsSpan,
+    header: 'Group/Agencies',
+    title: 'Emergency Function Lead and Supporting Agencies',
+  },
+];
+
+/* messages */
+const MESSAGE_LIST_REFRESH_SUCCESS =
+  'Emergency Functions were refreshed successfully';
+const MESSAGE_LIST_REFRESH_ERROR =
+  'An Error occurred while refreshing Emergency Functions, Please try again!';
+const MESSAGE_ITEM_ARCHIVE_SUCCESS =
+  'Emergency Function was archived successfully';
+const MESSAGE_ITEM_ARCHIVE_ERROR =
+  'An error occurred while archiving Emergency Function, Please try again!';
+
+/* helpers */
+const getGroupsFor = (item) => {
+  const groups = [].concat(get(item, 'relations.groups', []));
+  if (isEmpty(groups)) {
+    return 'N/A';
+  }
+  const joinedGroups = map(groups, (group) => {
+    return get(group, 'strings.name.en', '');
+  }).join(', ');
+  return joinedGroups;
+};
 
 /**
- * @class
- * @name EventFunctions
- * @description Render functions list which have search box, actions and list event functions
- *
- * @version 0.1.0
+ * @function EventFunctionList
+ * @name EventFunctionList
+ * @description List emergency functions
+ * @param {object} props Valid list properties
+ * @param {object} props.eventFunctions Valid list items
+ * @param {boolean} props.loading Flag whether list is loading data
+ * @param {boolean} props.posting Flag whether list is posting data
+ * @param {boolean} props.showForm Flag whether to show emergency function form
+ * @param {string} props.searchQuery Applied search term
+ * @param {number} props.page Current page number
+ * @param {number} props.total Available list items
+ * @param {object} props.eventFunction Current selected list item
+ * @returns {object} EventFunctionList component
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
  * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * <EventFunctionList />
+ *
  */
-class EventFunctions extends Component {
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    showFilters: false,
-    isEditForm: false,
-    cached: null,
-    notificationBody: undefined,
-    showNotificationForm: false,
-  };
+class EventFunctionList extends Component {
+  /**
+   * @function constructor
+   * @name constructor
+   * @description Initialize states
+   * @param {object} props Valid component properties
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  constructor(props) {
+    super(props);
+    this.state = {
+      isEditForm: false,
+      showNotificationForm: false,
+      notificationSubject: undefined,
+      notificationBody: undefined,
+    };
+  }
 
+  /**
+   * @function componentDidMount
+   * @name componentDidMount
+   * @description Load data
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
   componentDidMount() {
     getEventFunctions();
   }
 
   /**
-   * @function
-   * @name handleOnCachedValues
-   * @description Cached selected values for filters
-   *
-   * @param {object} cached values to be cached from filter
-   *
+   * @function handleListSearch
+   * @name handleListSearch
+   * @description Handle list search
+   * @param {object} event List search event
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnCachedValues = (cached) => {
-    const { cached: previousCached } = this.state;
-    const values = { ...previousCached, ...cached };
-    this.setState({ cached: values });
+  handleListSearch = (event) => {
+    searchEventFunctions(event.target.value);
   };
 
   /**
-   * @function
-   * @name handleClearCachedValues
-   * @description Clear cached values
+   * @function handleListRefresh
+   * @name handleListRefresh
+   * @description Handle list refresh
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleClearCachedValues = () => {
-    this.setState({ cached: null });
+  handleListRefresh = () => {
+    refreshEventFunctions(
+      () => notifySuccess(MESSAGE_LIST_REFRESH_SUCCESS),
+      () => notifyError(MESSAGE_LIST_REFRESH_ERROR)
+    );
   };
 
   /**
-   * @function
-   * @name openFiltersModal
-   * @description open filters modal by setting it's visible property
-   * to false via state
+   * @function handleListPaginate
+   * @name handleListPaginate
+   * @description Handle list paginate
+   * @param {number} nextPage List next page number
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openFiltersModal = () => {
-    this.setState({ showFilters: true });
+  handleListPaginate = (nextPage) => {
+    paginateEventFunctions(nextPage);
   };
 
   /**
-   * @function
-   * @name closeFiltersModal
-   * @description Close filters modal by setting it's visible property
-   * to false via state
-   *
+   * @function handleListShare
+   * @name handleListShare
+   * @description Handle list sharing
+   * @param {object[]} items List of items
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeFiltersModal = () => {
-    this.setState({ showFilters: false });
+  handleListShare = (items) => {
+    const itemList = sortBy([].concat(items), 'numbers.weight');
+
+    const notificationSubject = 'List of Emergency Functions';
+    const notificationBody = itemList
+      .map((item) => {
+        const itemNumber = get(item, 'numbers.weight', 'N/A');
+        const itemCode = get(item, 'strings.code', 'N/A');
+        const itemName = get(item, 'strings.name.en', 'N/A');
+        const itemGroups = getGroupsFor(item);
+        const itemDescription = get(item, 'strings.description.en', 'N/A');
+        const body = `Number: ${itemNumber}\nCode: ${itemCode}\nName: ${itemName}\nLead and Supporting Agencies: ${itemGroups}\nDescription: ${itemDescription}\n`;
+        return body;
+      })
+      .join('\n');
+    const showNotificationForm = true;
+
+    this.setState({
+      notificationSubject,
+      notificationBody,
+      showNotificationForm,
+    });
   };
 
   /**
-   * @function
-   * @name openEventFunctionForm
-   * @description Open eventFunction form
+   * @function handleFormOpen
+   * @name handleFormOpen
+   * @description Handle form opening
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openEventFunctionForm = () => {
+  handleFormOpen = () => {
     openEventFunctionForm();
   };
 
   /**
-   * @function
-   * @name closeEventFunctionForm
-   * @description close eventFunction form
+   * @function handleFormClose
+   * @name handleFormClose
+   * @description Handle form closing
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeEventFunctionForm = () => {
+  handleFormClose = () => {
     closeEventFunctionForm();
     this.setState({ isEditForm: false });
   };
 
   /**
-   * @function
-   * @name searchEventFunctions
-   * @description Search EventFunctions List based on supplied filter word
-   *
-   * @param {object} event - Event instance
+   * @function handleFormClose
+   * @name handleFormClose
+   * @description Handle post form close and perform cleanups
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchEventFunctions = (event) => {
-    searchEventFunctions(event.target.value);
+  handleAfterFormClose = () => {
+    selectEventFunction(null);
+    this.setState({ isEditForm: false });
   };
 
   /**
-   * @function
-   * @name handleEdit
-   * @description Handle on Edit action for list item
-   *
-   * @param {object} eventFunction eventFunction to be edited
-   *
+   * @function handleItemEdit
+   * @name handleItemEdit
+   * @description Handle list item edit
+   * @param {object} item List item
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = (eventFunction) => {
-    selectEventFunction(eventFunction);
+  handleItemEdit = (item) => {
+    selectEventFunction(item);
     this.setState({ isEditForm: true });
     openEventFunctionForm();
   };
 
   /**
-   * @function
-   * @name handleShare
-   * @description Handle share multiple event functions
-   *
-   * @param {object[]| object} eventFunctions event functions list to be shared
-   *
+   * @function handleItemArchive
+   * @name handleItemArchive
+   * @description Handle list item archiving with confirmation
+   * @param {object} item List item
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = (eventFunctions) => {
-    let message = '';
-    if (isArray(eventFunctions)) {
-      const eventFunctionsList = eventFunctions.map(
-        (eventFunction) =>
-          `Name: ${eventFunction.strings.name.en}\nDescription: ${
-            // eslint-disable-line
-            eventFunction.strings.description.en
-          }\n`
-      );
-
-      message = eventFunctionsList.join('\n\n\n');
-    } else {
-      message = `Name: ${eventFunctions.strings.name.en}\nDescription: ${
-        // eslint-disable-line
-        eventFunctions.strings.description.en
-      }\n`;
-    }
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name closeNotificationForm
-   * @description Handle on notify event functions
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closeNotificationForm = () => {
-    this.setState({ showNotificationForm: false });
-  };
-
-  /**
-   * @function
-   * @name showArchiveConfirm
-   * @description show confirm modal before archiving a focal person
-   * @param {object} item Resource item to be archived
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  showArchiveConfirm = (item) => {
+  handleItemArchive = (item) => {
+    const itemId = get(item, '_id');
+    const itemName = get(item, 'strings.name.en', 'N/A');
     confirm({
-      title: `Are you sure you want to archive this record ?`,
+      title: `Are you sure you want to archive ${itemName} ?`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk() {
         deleteEventFunction(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Emergency Function was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Emergency Function, Please contact your system Administrator'
-            )
+          itemId,
+          () => notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS),
+          () => notifyError(MESSAGE_ITEM_ARCHIVE_ERROR)
         );
       },
     });
   };
 
   /**
-   * @function
-   * @name handleRefreshEventFunctions
-   * @description Refresh Event Function list
-   *
-   * @returns {undefined}
+   * @function handleItemShare
+   * @name handleItemShare
+   * @description Handle list item sharing
+   * @param {object} item List item
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleRefreshEventFunctions = () =>
-    refreshEventFunctions(
-      () => notifySuccess('Emergency Functions refreshed successfully'),
-      () =>
-        notifyError(
-          'An Error occurred while refreshing Emergency Functions, please contact system administrator'
-        )
-    );
+  handleItemShare = (item) => {
+    const itemNumber = get(item, 'numbers.weight', 'N/A');
+    const itemCode = get(item, 'strings.code', 'N/A');
+    const itemName = get(item, 'strings.name.en', 'N/A');
+    const itemGroups = getGroupsFor(item);
+    const itemDescription = get(item, 'strings.description.en', 'N/A');
+    const notificationBody = `Number: ${itemNumber}\nCode: ${itemCode}\nName: ${itemName}\nLead and Supporting Agencies: ${itemGroups}\nDescription: ${itemDescription}\n`;
 
+    const notificationSubject = 'List of Emergency Functions';
+    const showNotificationForm = true;
+
+    this.setState({
+      notificationSubject,
+      notificationBody,
+      showNotificationForm,
+    });
+  };
+
+  /**
+   * @function handleNotificationFormClose
+   * @name handleNotificationFormClose
+   * @description Handle notification form closing
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleNotificationFormClose = () => {
+    this.setState({ showNotificationForm: false });
+  };
+
+  /**
+   * @function render
+   * @name render
+   * @description Render list
+   * @returns {object} List to render
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
   render() {
+    // props
     const {
       eventFunctions,
-      eventFunction,
       loading,
-      posting,
       page,
+      posting,
+      eventFunction,
       showForm,
       searchQuery,
       total,
     } = this.props;
+
+    // states
     const {
-      showFilters,
       isEditForm,
-      cached,
-      notificationBody,
       showNotificationForm,
+      notificationSubject,
+      notificationBody,
     } = this.state;
+
     return (
       <>
-        {/* Topbar */}
+        {/* start: list topbar */}
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for emergency functions here ...',
-            onChange: this.searchEventFunctions,
+            placeholder: 'Search emergency functions ...',
+            title: 'Search emergency functions ...',
+            onChange: this.handleListSearch,
             value: searchQuery,
           }}
           actions={[
@@ -302,24 +377,25 @@ class EventFunctions extends Component {
               icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Emergency Function',
-              onClick: this.openEventFunctionForm,
+              onClick: this.handleFormOpen,
             },
           ]}
         />
-        {/* end Topbar */}
+        {/* end: list topbar */}
 
+        {/* start: list */}
         <ItemList
-          itemName="emergency functions"
+          itemName="EmergencyFunction"
           items={eventFunctions}
           page={page}
           itemCount={total}
           loading={loading}
-          onFilter={this.openFiltersModal}
+          // onFilter={this.handleListFilter}
           onNotify={this.openNotificationForm}
-          onShare={this.handleShare}
-          onRefresh={this.handleRefreshEventFunctions}
+          onShare={this.handleListShare}
+          onRefresh={this.handleListRefresh}
+          onPaginate={this.handleListPaginate}
           generateExportUrl={getEventFunctionsExportUrl}
-          onPaginate={(nextPage) => paginateEventFunctions(nextPage)}
           headerLayout={headerLayout}
           renderListItem={({
             item,
@@ -327,73 +403,69 @@ class EventFunctions extends Component {
             onSelectItem,
             onDeselectItem,
           }) => (
-            <ListItem
-              key={item._id} // eslint-disable-line
-              name={item.strings.name.en}
-              item={item}
-              isSelected={isSelected}
-              avatarBackgroundColor={item.strings.color}
-              onSelectItem={onSelectItem}
-              onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Event Action',
-                    title: 'Update Event Action Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Event Action',
-                    title: 'Share Event Action details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Event Action',
-                    title:
-                      'Remove Event Action from list of active focal People',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
-            >
-              {/* eslint-disable react/jsx-props-no-spreading */}
-              <Col {...nameSpan}>{item.strings.name.en}</Col>
-              <Col {...codeSpan}>{item.strings.code}</Col>
-              <Col {...typeSpan}>{item.strings.code}</Col>
-              <Col {...descriptionSpan}>
-                <span title={item.strings.description.en}>
-                  {truncateString(item.strings.description.en, 100)}
-                </span>
-              </Col>
-              {/* eslint-enable react/jsx-props-no-spreading */}
-            </ListItem>
+            <>
+              {/* start: list item */}
+              <ListItem
+                key={get(item, '_id')}
+                item={item}
+                name={get(item, 'strings.name.en')}
+                isSelected={isSelected}
+                avatarBackgroundColor={get(item, 'strings.color')}
+                onSelectItem={onSelectItem}
+                onDeselectItem={onDeselectItem}
+                renderActions={() => (
+                  <ListItemActions
+                    edit={{
+                      name: 'Edit Emergency Function',
+                      title: 'Update emergency function details',
+                      onClick: () => this.handleItemEdit(item),
+                    }}
+                    share={{
+                      name: 'Share Emergency Function',
+                      title: 'Share emergency function details with others',
+                      onClick: () => this.handleItemShare(item),
+                    }}
+                    archive={{
+                      name: 'Archive EventFunction',
+                      title:
+                        'Remove emergency function from list of active emergency functions',
+                      onClick: () => this.handleItemArchive(item),
+                    }}
+                  />
+                )}
+              >
+                {/* eslint-disable react/jsx-props-no-spreading */}
+                <Col {...numberSpan}>{get(item, 'numbers.weight', 'N/A')}</Col>
+                <Col {...codeSpan}>{get(item, 'strings.code', 'N/A')}</Col>
+                <Col {...nameSpan}>
+                  <span
+                    title={get(
+                      item,
+                      'strings.description.en',
+                      get(item, 'strings.name.en', 'N/A')
+                    )}
+                  >
+                    {get(item, 'strings.name.en', 'N/A')}
+                  </span>
+                </Col>
+                <Col {...groupsSpan}>
+                  <span title={getGroupsFor(item)}>
+                    {truncateString(getGroupsFor(item), 100)}
+                  </span>
+                </Col>
+                {/* eslint-enable react/jsx-props-no-spreading */}
+              </ListItem>
+              {/* end: list item */}
+            </>
           )}
         />
+        {/* end: list */}
 
-        {/* filter modal */}
+        {/* start: notification modal */}
         <Modal
-          title="Filter Emergency Function"
-          visible={showFilters}
-          onCancel={this.closeFiltersModal}
-          footer={null}
-          destroyOnClose
-          maskClosable={false}
-          className="FormModal"
-        >
-          <EventFunctionsFilters
-            onCancel={this.closeFiltersModal}
-            cached={cached}
-            onCache={this.handleOnCachedValues}
-            onClearCache={this.handleClearCachedValues}
-          />
-        </Modal>
-        {/* end filter modal */}
-
-        {/* Notification Modal modal */}
-        <Modal
-          title="Notify Event Actions"
+          title="Share Emergency Functions"
           visible={showNotificationForm}
-          onCancel={this.closeNotificationForm}
+          onCancel={this.handleNotificationFormClose}
           footer={null}
           destroyOnClose
           maskClosable={false}
@@ -401,17 +473,20 @@ class EventFunctions extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
+            recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
             onSearchRoles={getRoles}
+            subject={notificationSubject}
             body={notificationBody}
-            onCancel={this.closeNotificationForm}
+            onCancel={this.handleNotificationFormClose}
           />
         </Modal>
-        {/* end Notification modal */}
-        {/* create/edit form modal */}
+        {/* end: notification modal */}
+
+        {/* start: form modal */}
         <Modal
           title={
             isEditForm
@@ -421,48 +496,53 @@ class EventFunctions extends Component {
           visible={showForm}
           className="FormModal"
           footer={null}
-          onCancel={this.closeEventFunctionForm}
-          destroyOnClose
+          onCancel={this.handleFormClose}
+          afterClose={this.handleAfterFormClose}
           maskClosable={false}
-          afterClose={this.handleAfterCloseForm}
+          destroyOnClose
         >
-          <FunctionForm
+          <EventFunctionForm
+            eventFunction={eventFunction}
             posting={posting}
             isEditForm={isEditForm}
-            eventFunction={eventFunction}
-            onCancel={this.closeEventFunctionForm}
+            onCancel={this.handleFormClose}
           />
         </Modal>
-        {/* end create/edit form modal */}
+        {/* end: form modal */}
       </>
     );
   }
 }
 
-EventFunctions.propTypes = {
+EventFunctionList.propTypes = {
+  eventFunctions: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+    })
+  ).isRequired,
   loading: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
-  eventFunctions: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
-    .isRequired,
-  eventFunction: PropTypes.shape({ name: PropTypes.string }),
-  page: PropTypes.number.isRequired,
-  showForm: PropTypes.bool.isRequired,
   searchQuery: PropTypes.string,
+  showForm: PropTypes.bool.isRequired,
+  page: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
+  eventFunction: PropTypes.shape({
+    _id: PropTypes.string,
+  }),
 };
 
-EventFunctions.defaultProps = {
+EventFunctionList.defaultProps = {
   eventFunction: null,
   searchQuery: undefined,
 };
 
-export default Connect(EventFunctions, {
+export default Connect(EventFunctionList, {
   eventFunctions: 'eventFunctions.list',
-  eventFunction: 'eventFunctions.selected',
   loading: 'eventFunctions.loading',
   posting: 'eventFunctions.posting',
-  page: 'eventFunctions.page',
-  showForm: 'eventFunctions.showForm',
-  total: 'eventFunctions.total',
   searchQuery: 'eventFunctions.q',
+  showForm: 'eventFunctions.showForm',
+  page: 'eventFunctions.page',
+  total: 'eventFunctions.total',
+  eventFunction: 'eventFunctions.selected',
 });

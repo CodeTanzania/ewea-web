@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import map from 'lodash/map';
 import get from 'lodash/get';
 import { Button, Input, InputNumber, Form, Row, Col } from 'antd';
 import { httpActions } from '@codetanzania/ewea-api-client';
@@ -95,7 +96,12 @@ const EventFunctionForm = ({
       labelCol={labelCol}
       wrapperCol={wrapperCol}
       onFinish={onFinish}
-      initialValues={{ ...eventFunction }}
+      initialValues={{
+        ...eventFunction,
+        relations: {
+          groups: map(get(eventFunction, 'relations.groups', []), '_id'),
+        },
+      }}
       autoComplete="off"
     >
       {/* start:name */}
@@ -155,7 +161,7 @@ const EventFunctionForm = ({
 
       {/* start:groups */}
       <Form.Item
-        label="Agencies"
+        label="Group/Agencies"
         title="Lead and Supporting Agencies e.g Police Force"
         name={['relations', 'groups']}
         rules={[
@@ -169,7 +175,7 @@ const EventFunctionForm = ({
           onSearch={getPartyGroups}
           optionLabel={(group) => get(group, 'strings.name.en')}
           optionValue="_id"
-          initialValue={get(eventFunction, 'relations.groups', undefined)}
+          initialValue={get(eventFunction, 'relations.groups', [])}
           mode="multiple"
         />
       </Form.Item>
