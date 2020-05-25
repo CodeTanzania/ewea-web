@@ -1,212 +1,208 @@
-import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Button, Input, Select } from 'antd';
+import React from 'react';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import get from 'lodash/get';
+import { Button, Input, InputNumber, Form, Row, Col } from 'antd';
+import { httpActions } from '@codetanzania/ewea-api-client';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
-import 'rc-color-picker/assets/index.css';
+import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
-const { postEventFunction, putEventFunction } = reduxActions;
-const { Option } = Select;
+/* http actions */
+const { getPartyGroups } = httpActions;
+
+/* state actions */
+const { putEventFunction, postEventFunction } = reduxActions;
+
+/* ui */
 const { TextArea } = Input;
+const labelCol = {
+  xs: { span: 24 },
+  sm: { span: 24 },
+  md: { span: 24 },
+  lg: { span: 24 },
+  xl: { span: 24 },
+  xxl: { span: 24 },
+};
+const wrapperCol = {
+  xs: { span: 24 },
+  sm: { span: 24 },
+  md: { span: 24 },
+  lg: { span: 24 },
+  xl: { span: 24 },
+  xxl: { span: 24 },
+};
+
+/* messages */
+const MESSAGE_POST_SUCCESS = 'Emergency Function was created successfully';
+const MESSAGE_POST_ERROR =
+  'Something occurred while saving Emergency Function, Please try again!';
+const MESSAGE_PUT_SUCCESS = 'Emergency Function was updated successfully';
+const MESSAGE_PUT_ERROR =
+  'Something occurred while updating Emergency Function, Please try again!';
 
 /**
- * @class
- * @name FunctionForm
- * @description Render function form for creating/editing function
- *
- * @version 0.1.0
+ * @function EventFunctionForm
+ * @name EventFunctionForm
+ * @description Form for create and edit event function
+ * @param {object} props Valid form properties
+ * @param {object} props.eventFunction Valid event function object
+ * @param {boolean} props.isEditForm Flag wether form is on edit mode
+ * @param {boolean} props.posting Flag whether form is posting data
+ * @param {Function} props.onCancel Form cancel callback
+ * @returns {object} EventFunctionForm component
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
  * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * <EventFunctionForm
+ *   eventFunction={eventFunction}
+ *   isEditForm={isEditForm}
+ *   posting={posting}
+ *   onCancel={this.handleCloseEventFunctionForm}
+ * />
+ *
  */
-
-class FunctionForm extends Component {
-  /**
-   * @function
-   * @name onChangeColor
-   * @description Handle changing of color
-   *
-   * @param {string} color event object
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  onChangeColor = ({ color }) => {
-    const {
-      form: { setFieldsValue },
-    } = this.props;
-    setFieldsValue({ color });
+const EventFunctionForm = ({
+  eventFunction,
+  isEditForm,
+  posting,
+  onCancel,
+}) => {
+  // form finish(submit) handler
+  const onFinish = (values) => {
+    if (isEditForm) {
+      const updates = { ...eventFunction, ...values };
+      putEventFunction(
+        updates,
+        () => notifySuccess(MESSAGE_PUT_SUCCESS),
+        () => notifyError(MESSAGE_PUT_ERROR)
+      );
+    } else {
+      postEventFunction(
+        values,
+        () => notifySuccess(MESSAGE_POST_SUCCESS),
+        () => notifyError(MESSAGE_POST_ERROR)
+      );
+    }
   };
 
-  /**
-   * @function
-   * @name handleSubmit
-   * @description Handle create/edit action
-   *
-   * @param {object} e event object
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleSubmit = (e) => {
-    e.preventDefault();
-
-    const {
-      form: { validateFieldsAndScroll },
-      eventFunction,
-      isEditForm,
-    } = this.props;
-
-    validateFieldsAndScroll((error, values) => {
-      if (!error) {
-        const payload = {
-          strings: {
-            name: { en: values.name },
-            description: { en: values.description },
-            code: values.code,
-            color: values.color,
+  return (
+    <Form
+      labelCol={labelCol}
+      wrapperCol={wrapperCol}
+      onFinish={onFinish}
+      initialValues={{ ...eventFunction }}
+      autoComplete="off"
+    >
+      {/* start:name */}
+      <Form.Item
+        label="Name"
+        title="Emergency function name e.g Evacuation"
+        name={['strings', 'name', 'en']}
+        rules={[
+          {
+            required: true,
+            message: 'Emergency function name is required',
           },
-        };
-        if (isEditForm) {
-          const updatedEventFunction = {
-            ...eventFunction,
-            ...payload,
-          };
-          putEventFunction(
-            updatedEventFunction,
-            () => {
-              notifySuccess('Function was updated successfully');
-            },
-            () => {
-              notifyError(
-                `Something occurred while updating Function,
-                 please try again!`
-              );
-            }
-          );
-        } else {
-          postEventFunction(
-            payload,
-            () => {
-              notifySuccess('Function was created successfully');
-            },
-            () => {
-              notifyError(
-                'Something occurred while saving Function, please try again!'
-              );
-            }
-          );
-        }
-      }
-    });
-  };
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      {/* end:name */}
 
-  render() {
-    const {
-      isEditForm,
-      eventFunction,
-      types,
-      posting,
-      onCancel,
-      form: { getFieldDecorator },
-    } = this.props;
-
-    const {
-      strings: { name, description, code },
-    } = eventFunction || {
-      strings: { name: {}, code: '', description: {} },
-    };
-
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-    };
-
-    return (
-      <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* function  name */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Name ">
-          {getFieldDecorator('name', {
-            initialValue: isEditForm ? name.en : undefined,
-            rules: [{ required: true, message: 'Function name is required' }],
-          })(<Input />)}
-        </Form.Item>
-        {/* end function  name */}
-
-        {/* function Type */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Type">
-          {getFieldDecorator('type', {
-            initialValue: isEditForm ? name.en : undefined,
-            rules: [{ required: false, message: 'Function type is required' }],
-          })(
-            <Select>
-              {types.map((nature) => (
-                <Option key={nature} value={nature}>
-                  {nature}
-                </Option>
-              ))}
-            </Select>
-          )}
-        </Form.Item>
-        {/* end nature */}
-
-        {/* function description */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Description">
-          {getFieldDecorator('description', {
-            initialValue: isEditForm ? description.en : undefined,
-            rules: [
-              { required: true, message: 'Function description is required' },
-            ],
-          })(<TextArea autoSize={{ minRows: 3, maxRows: 10 }} />)}
-        </Form.Item>
-        {/* end description */}
-
-        {/* function code */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Code">
-          {getFieldDecorator('code', {
-            initialValue: isEditForm ? code : undefined,
-            rules: [{ required: true, message: 'Code is required' }],
-          })(<Input />)}
-        </Form.Item>
-        {/* end function code */}
-
-        {/* form actions */}
-        <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
-          <Button onClick={onCancel}>Cancel</Button>
-          <Button
-            style={{ marginLeft: 8 }}
-            type="primary"
-            htmlType="submit"
-            loading={posting}
+      {/* start: number & code */}
+      <Row justify="space-between">
+        {/* start:number */}
+        <Col span={11}>
+          <Form.Item
+            label="Number"
+            title="Emergency function number e.g 3"
+            name={['numbers', 'weight']}
+            rules={[
+              {
+                required: true,
+                message: 'Emergency function number is required',
+              },
+            ]}
           >
-            Save
-          </Button>
-        </Form.Item>
-        {/* end form actions */}
-      </Form>
-    );
-  }
-}
+            <InputNumber min={0} style={{ width: '100%' }} />
+          </Form.Item>
+        </Col>
+        {/* end:number */}
+        {/* start:code */}
+        <Col span={11}>
+          <Form.Item
+            label="Code"
+            title="Emergency function code e.g EF3"
+            name={['strings', 'code']}
+            rules={[
+              {
+                required: true,
+                message: 'Emergency function code is required',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+        {/* end:code */}
+      </Row>
+      {/* end: number & code */}
 
-FunctionForm.propTypes = {
-  isEditForm: PropTypes.bool.isRequired,
+      {/* start:groups */}
+      <Form.Item
+        label="Groups/Agencies"
+        title="Lead and Supporting Groups/Agencies"
+        name={['relations', 'groups']}
+      >
+        <SearchableSelectInput
+          onSearch={getPartyGroups}
+          optionLabel={(group) => get(group, 'strings.name.en')}
+          optionValue="_id"
+          initialValue={get(eventFunction, 'relations.groups', undefined)}
+          mode="multiple"
+        />
+      </Form.Item>
+      {/* end:groups */}
+
+      {/* start:description */}
+      <Form.Item
+        label="Description"
+        title="Emergency function description"
+        name={['strings', 'description', 'en']}
+      >
+        <TextArea autoSize={{ minRows: 4, maxRows: 10 }} />
+      </Form.Item>
+      {/* end:description */}
+
+      {/* start:form actions */}
+      <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
+        <Button onClick={onCancel}>Cancel</Button>
+        <Button
+          style={{ marginLeft: 8 }}
+          type="primary"
+          htmlType="submit"
+          loading={posting}
+        >
+          Save
+        </Button>
+      </Form.Item>
+      {/* end:form actions */}
+    </Form>
+  );
+};
+
+EventFunctionForm.defaultProps = {
+  eventFunction: {},
+};
+
+EventFunctionForm.propTypes = {
   eventFunction: PropTypes.shape({
+    _id: PropTypes.string,
     strings: PropTypes.shape({
       name: PropTypes.shape({
         en: PropTypes.string.isRequired,
@@ -214,23 +210,21 @@ FunctionForm.propTypes = {
       description: PropTypes.shape({
         en: PropTypes.string.isRequired,
       }),
-      code: PropTypes.string.isRequired,
+    }),
+    numbers: PropTypes.shape({
+      weight: PropTypes.number.isRequired,
+    }),
+    relations: PropTypes.shape({
+      groups: PropTypes.arrayOf(
+        PropTypes.shape({
+          _id: PropTypes.string,
+        })
+      ),
     }),
   }),
-  form: PropTypes.shape({
-    getFieldDecorator: PropTypes.func,
-    validateFieldsAndScroll: PropTypes.func,
-    setFieldsValue: PropTypes.func,
-  }).isRequired,
-  types: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onCancel: PropTypes.func.isRequired,
+  isEditForm: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
 };
 
-FunctionForm.defaultProps = {
-  eventFunction: null,
-};
-
-export default Connect(Form.create()(FunctionForm), {
-  types: 'eventTypes.list',
-});
+export default EventFunctionForm;

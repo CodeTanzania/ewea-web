@@ -15,15 +15,15 @@ const { Option } = Select;
  * @class
  * @name SearchableSelectInput
  * @description Searchable select input
- * @params {object} props object
- * @params {string|function} props.optionLabel option label
- * @params {string|function} props.optionValue option
- * @params {string|function} props.value selected value
- * @params {string|object} props.initialValue initial value
- * @params {boolean} props.isFilter filter activation flag
- * @params {function} props.onChange value chang callback
- * @params {function} props.onSearch search callback
- * @params {function} props.onCache cache callback
+ * @property {object} props object
+ * @property {string|Function} props.optionLabel option label
+ * @property {string|Function} props.optionValue option
+ * @property {string|Function} props.value selected value
+ * @property {string|object} props.initialValue initial value
+ * @property {boolean} props.isFilter filter activation flag
+ * @property {Function} props.onChange value chang callback
+ * @property {Function} props.onSearch search callback
+ * @property {Function} props.onCache cache callback
  * @returns {object} React Component
  * @version 0.1.0
  * @since 0.1.0
