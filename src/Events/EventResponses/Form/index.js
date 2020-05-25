@@ -26,6 +26,19 @@ const formItemLayout = {
   },
 };
 
+/**
+ * @function
+ * @name EventResponseForm
+ * @description Event Response Form component
+ * @param {object} props properties object
+ * @param {object} props.eventResponse Event response object
+ * @param {boolean} props.isEditForm Flag to mark form as edit form
+ * @param {boolean} props.posting Flags to show posting data to the api state
+ * @param {Function} props.onCancel On Cancel form callback function
+ * @returns {object} Event Response Form form
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 const EventResponseForm = ({
   eventResponse,
   isEditForm,
