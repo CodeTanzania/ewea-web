@@ -9,26 +9,26 @@ const sideSpan = { xxl: 1, xl: 1, lg: 1, md: 2, sm: 2, xs: 3 };
 const isHoveredSpan = { xxl: 1, xl: 1, lg: 1, md: 1, sm: 2, xs: 3 };
 
 /**
- * @param {*} props props object
- * @param {*} props.name item name
- * @param {*} props.avatarBackgroundColor item avatar background color
- * @param {*} props.item valid item
- * @param {*} props.isSelected select flag
- * @param {*} props.onSelectItem select callback
- * @param {*} props.onDeselectItem deselect callback
- * @param {*} props.renderActions item render actions
- * @param {*} props.children item children
- * @function
+ * @function ListItem
  * @name ListItem
  * @description Generic list item(row) for list component
+ * @param {object} props props object
+ * @param {object} props.item valid item
+ * @param {string} props.name item name
+ * @param {string} props.avatarBackgroundColor item avatar background color
+ * @param {boolean} props.isSelected select flag
+ * @param {Function} props.onSelectItem select callback
+ * @param {Function} props.onDeselectItem deselect callback
+ * @param {Function} props.renderActions item render actions
+ * @param {object[]} props.children item children
  * @returns {object} React Component
  * @version 0.1.0
  * @since 0.1.0
  */
 const ListItem = ({
+  item,
   name,
   avatarBackgroundColor,
-  item,
   isSelected,
   onSelectItem,
   onDeselectItem,
@@ -130,11 +130,11 @@ ListItem.propTypes = {
   }).isRequired,
   name: PropTypes.string,
   avatarBackgroundColor: PropTypes.string,
-  children: PropTypes.node.isRequired,
-  renderActions: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
   onSelectItem: PropTypes.func.isRequired,
   onDeselectItem: PropTypes.func.isRequired,
+  renderActions: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 ListItem.defaultProps = {

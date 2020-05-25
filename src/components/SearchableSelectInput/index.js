@@ -15,7 +15,16 @@ const { Option } = Select;
  * @class
  * @name SearchableSelectInput
  * @description Searchable select input
- *
+ * @params {object} props object
+ * @params {string|function} props.optionLabel option label
+ * @params {string|function} props.optionValue option
+ * @params {string|function} props.value selected value
+ * @params {string|object} props.initialValue initial value
+ * @params {boolean} props.isFilter filter activation flag
+ * @params {function} props.onChange value chang callback
+ * @params {function} props.onSearch search callback
+ * @params {function} props.onCache cache callback
+ * @returns {object} React Component
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -198,8 +207,6 @@ class SearchableSelectInput extends Component {
 }
 
 SearchableSelectInput.propTypes = {
-  onChange: PropTypes.func,
-  onSearch: PropTypes.func.isRequired,
   optionLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.func])
     .isRequired,
   optionValue: PropTypes.oneOfType([
@@ -222,6 +229,8 @@ SearchableSelectInput.propTypes = {
     }),
   ]),
   isFilter: PropTypes.bool,
+  onChange: PropTypes.func,
+  onSearch: PropTypes.func.isRequired,
   onCache: PropTypes.func,
 };
 
