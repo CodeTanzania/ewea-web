@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
-import EventResponseForm from './Form';
+import SettingForm from '../../components/SettingForm';
 import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
@@ -33,6 +33,8 @@ const {
   refreshEventResponses,
   paginateEventResponses,
   deleteEventResponse,
+  postEventResponse,
+  putEventResponse,
 } = reduxActions;
 
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
@@ -384,11 +386,12 @@ class EventResponses extends Component {
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <EventResponseForm
+          <SettingForm
+            setting={eventResponse}
             posting={posting}
-            isEditForm={isEditForm}
-            eventResponse={eventResponse}
             onCancel={this.closeEventResponseForm}
+            onCreate={postEventResponse}
+            onUpdate={putEventResponse}
           />
         </Modal>
         {/* end create/edit form modal */}

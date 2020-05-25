@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
-import EventStatusForm from './Form';
+import SettingForm from '../../components/SettingForm';
 import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
@@ -33,6 +33,8 @@ const {
   refreshEventStatuses,
   paginateEventStatuses,
   deleteEventStatus,
+  postEventStatus,
+  putEventStatus,
 } = reduxActions;
 
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
@@ -202,6 +204,7 @@ class EventStatuses extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
+    selectEventStatus(null);
     this.setState({ isEditForm: false });
   };
 
@@ -383,11 +386,12 @@ class EventStatuses extends Component {
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <EventStatusForm
+          <SettingForm
             posting={posting}
-            isEditForm={isEditForm}
-            eventStatus={eventStatus}
-            onCancel={this.closeEventStatusForm}
+            setting={eventStatus}
+            onCancel={this.handleAfterCloseForm}
+            onCreate={postEventStatus}
+            onUpdate={putEventStatus}
           />
         </Modal>
         {/* end create/edit form modal */}
