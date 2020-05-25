@@ -484,7 +484,7 @@ class Dispatches extends Component {
                     onClick: () => this.handleDispatch(item, 'dispatch'),
                   }}
                   atPickup={{
-                    name: 'Vehicle at Pickup',
+                    name: 'Vehicle At Pickup',
                     title: 'Mark vehicle is at pickup location',
                     onClick: () => this.handleDispatch(item, 'atPickup'),
                   }}
@@ -494,12 +494,12 @@ class Dispatches extends Component {
                     onClick: () => this.handleDispatch(item, 'fromPickup'),
                   }}
                   atDropOff={{
-                    name: 'Vehicle at Drop Off',
+                    name: 'Vehicle At Dropoff',
                     title: 'Mark vehicle is at drop off location',
                     onClick: () => this.handleDispatch(item, 'atDropOff'),
                   }}
                   fromDropOff={{
-                    name: 'Vehicle from Drop Off',
+                    name: 'Vehicle From Dropoff',
                     title: 'Mark vehicle is leaving drop off location',
                     onClick: () => this.handleDispatch(item, 'fromDropOff'),
                   }}
@@ -509,7 +509,7 @@ class Dispatches extends Component {
                     onClick: () => this.handleDispatch(item, 'complete'),
                   }}
                   cancelDispatch={{
-                    name: 'Cancel Vehicle Dispatch',
+                    name: 'Cancel Dispatch',
                     title: 'Cancel dispatch',
                     onClick: () => this.handleDispatch(item, 'cancel'),
                   }}
