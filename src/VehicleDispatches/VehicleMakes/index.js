@@ -6,7 +6,7 @@ import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
 import Topbar from '../../components/Topbar';
-import VehicleMakeForm from './Form';
+import SettingForm from '../../components/SettingForm';
 import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
@@ -23,6 +23,8 @@ const {
   paginateVehicleMakes,
   refreshVehicleMakes,
   deleteVehicleMake,
+  postVehicleMake,
+  putVehicleMake,
 } = reduxActions;
 const { confirm } = Modal;
 
@@ -356,11 +358,12 @@ class VehicleMake extends Component {
           maskClosable={false}
           destroyOnClose
         >
-          <VehicleMakeForm
+          <SettingForm
+            setting={vehicleMake}
             posting={posting}
-            isEditForm={isEditForm}
-            vehicleMake={vehicleMake}
             onCancel={this.closeVehicleMakeForm}
+            onCreate={postVehicleMake}
+            onUpdate={putVehicleMake}
           />
         </Modal>
         {/* end create/edit form modal */}

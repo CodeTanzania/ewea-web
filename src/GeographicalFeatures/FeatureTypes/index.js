@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
-import FeatureTypeForm from './Form';
+import SettingForm from '../../components/SettingForm';
 import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
@@ -33,6 +33,8 @@ const {
   refreshFeatureTypes,
   paginateFeatureTypes,
   deleteFeatureType,
+  postFeatureType,
+  putFeatureType,
 } = reduxActions;
 
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
@@ -384,11 +386,12 @@ class FeatureTypes extends Component {
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <FeatureTypeForm
+          <SettingForm
+            setting={featureType}
             posting={posting}
-            isEditForm={isEditForm}
-            featureType={featureType}
             onCancel={this.closeFeatureTypeForm}
+            onCreate={postFeatureType}
+            onUpdate={putFeatureType}
           />
         </Modal>
         {/* end create/edit form modal */}
