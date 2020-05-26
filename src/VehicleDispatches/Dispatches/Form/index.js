@@ -58,14 +58,21 @@ const { Step } = Steps;
  * @param {object} props.dispatch Dispatch instance
  * @param {boolean} props.isEditForm Flag for edit form (true) if editing dispatch
  * @param {boolean} props.posting Flag from the store marking posting data to the api
+ * @param {boolean} props.openInStep Set the step on which the form should open at i.e 0,1,2,3 or 4
  * @param {Function} props.onCancel Function to be invoked on cancelling the form
  * @returns {object} Render Vehicle Dispatch Form
  * @version 0.1.0
  * @since 0.1.0
  */
-const VehicleDispatchForm = ({ dispatch, isEditForm, posting, onCancel }) => {
+const VehicleDispatchForm = ({
+  dispatch,
+  isEditForm,
+  posting,
+  onCancel,
+  openInStep,
+}) => {
   const [form] = Form.useForm();
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(openInStep);
   const [formValues, setFormValues] = useState({});
   const [cached, setCache] = useState({}); // for caching lazy component values
   const pickupDispatchedTime = get(dispatch, 'pickup.dispatchedAt')
@@ -702,10 +709,12 @@ VehicleDispatchForm.propTypes = {
   isEditForm: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
+  openInStep: PropTypes.number,
 };
 
 VehicleDispatchForm.defaultProps = {
   dispatch: null,
+  openInStep: 0,
 };
 
 export default VehicleDispatchForm;

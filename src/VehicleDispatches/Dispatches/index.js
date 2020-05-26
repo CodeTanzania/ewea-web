@@ -21,8 +21,7 @@ import {
 } from '../../util';
 import './styles.css';
 
-// TODO use formModal class for modal windows
-/* constants */
+/* http actions */
 const {
   getDispatches: getDispatchesFromAPI,
   getJurisdictions,
@@ -31,6 +30,7 @@ const {
   getAgencies,
   getDispatchesExportUrl,
 } = httpActions;
+/* redux actions */
 const {
   closeDispatchForm,
   getDispatches,
@@ -44,12 +44,12 @@ const {
 } = reduxActions;
 const { confirm } = Modal;
 
+/* constants */
 const numberSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 10, xs: 10 };
 const vehicleSpan = { xxl: 4, xl: 4, lg: 5, md: 6, sm: 0, xs: 0 };
 const eventSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 9, xs: 8 };
 const prioritySpan = { xxl: 2, xl: 2, lg: 3, md: 0, sm: 0, xs: 0 };
 const statusSpan = { xxl: 6, xl: 6, lg: 4, md: 4, sm: 0, xs: 0 };
-
 const headerLayout = [
   { ...numberSpan, header: 'Number' },
   { ...vehicleSpan, header: 'Vehicle' },
@@ -76,6 +76,7 @@ class Dispatches extends Component {
     notificationSubject: undefined,
     notificationBody: undefined,
     cached: null,
+    openFormInStep: 0,
   };
 
   componentDidMount() {
@@ -344,6 +345,14 @@ class Dispatches extends Component {
       _id: dispatch._id, // eslint-disable-line
     };
     let confirmMessage;
+
+    // prevent further actions on dispatch when vehicle is not set
+    if (!get(dispatch, 'carrier.vehicle') && action !== 'cancel') {
+      this.setState({ openFormInStep: 4 });
+      this.handleEdit(dispatch);
+      return;
+    }
+
     if (action === 'dispatch') {
       confirmMessage = 'Are you sure you want to dispatch this';
       data = { ...data, dispatchedAt: new Date() };
@@ -414,6 +423,7 @@ class Dispatches extends Component {
       selectedDispatches,
       notificationSubject,
       notificationBody,
+      openFormInStep,
     } = this.state;
 
     return (
@@ -612,6 +622,7 @@ class Dispatches extends Component {
             isEditForm={isEditForm}
             dispatch={selectedDispatch}
             onCancel={this.closeDispatchForm}
+            openInStep={openFormInStep}
           />
         </Modal>
         {/* end create/edit form modal */}
