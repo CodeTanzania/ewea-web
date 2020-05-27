@@ -4,7 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import PropTypes from 'prop-types';
 import MapGL, { Source, Layer, NavigationControl } from 'react-map-gl';
 
-const TOKEN = process.env.REACT_APP_MapboxAccessToken;
+const TOKEN = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 export const dataLayer = {
   id: 'data',
   type: 'fill',
