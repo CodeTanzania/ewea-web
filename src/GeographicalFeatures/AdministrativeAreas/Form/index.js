@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import { Button, Input, Form, Row, Col } from 'antd';
 import { httpActions } from '@codetanzania/ewea-api-client';
@@ -47,7 +46,7 @@ const MESSAGE_PUT_ERROR =
  * @description Form for create and edit administrative area
  * @param {object} props Valid form properties
  * @param {object} props.administrativeArea Valid administrative area object
- * @param {boolean} props.isEditForm Flag wether form is on edit mode
+ * @param {boolean} props.isEditForm Flag whether form is on edit mode
  * @param {boolean} props.posting Flag whether form is posting data
  * @param {Function} props.onCancel Form cancel callback
  * @returns {object} AdministrativeAreaForm component
@@ -130,7 +129,7 @@ const AdministrativeAreaForm = ({
     >
       {/* start: name & code */}
       <Row justify="space-between">
-        {/* start:code */}
+        {/* start:name */}
         <Col span={11}>
           <Form.Item
             label="Name"
@@ -258,6 +257,7 @@ AdministrativeAreaForm.propTypes = {
   administrativeArea: PropTypes.shape({
     _id: PropTypes.string,
     strings: PropTypes.shape({
+      code: PropTypes.string,
       name: PropTypes.shape({
         en: PropTypes.string.isRequired,
       }),
@@ -269,6 +269,9 @@ AdministrativeAreaForm.propTypes = {
       weight: PropTypes.number.isRequired,
     }),
     relations: PropTypes.shape({
+      level: PropTypes.shape({
+        _id: PropTypes.string,
+      }),
       parent: PropTypes.shape({
         _id: PropTypes.string,
       }),

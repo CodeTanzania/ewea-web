@@ -40,7 +40,7 @@ const MESSAGE_PUT_ERROR =
  * @description Form for create and edit unit of measure
  * @param {object} props Valid form properties
  * @param {object} props.unit Valid unit object
- * @param {boolean} props.isEditForm Flag wether form is on edit mode
+ * @param {boolean} props.isEditForm Flag whether form is on edit mode
  * @param {boolean} props.posting Flag whether form is posting data
  * @param {Function} props.onCancel Form cancel callback
  * @returns {object} UnitForm component

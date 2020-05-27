@@ -1,221 +1,307 @@
-import { reduxActions } from '@codetanzania/ewea-api-states';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Button, Input } from 'antd';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import get from 'lodash/get';
+import { Button, Input, InputNumber, Form, Row, Col } from 'antd';
+import { httpActions } from '@codetanzania/ewea-api-client';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
+import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
+/* http actions */
+const { getAgencies, getAdministrativeAreas, getFeatureTypes } = httpActions;
+
+/* state actions */
 const { putFeature, postFeature } = reduxActions;
-/**
- * @class
- * @name FeaturesForm
- * @description  Render form for creating a new critical facility
- *
- * @version 0.1.0
- * @since 0.1.0
- */
-class FeaturesForm extends Component {
-  /**
-   * @function
-   * @name handleSubmit
-   * @description  call back function to handle submit action
-   *
-   * @param {object} e event object
-   *
-   * @returns {undefined} does not return anything
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const {
-      form: { validateFieldsAndScroll },
-      feature,
-      isEditForm,
-    } = this.props;
 
-    validateFieldsAndScroll((error, values) => {
-      if (!error) {
-        const payload = {
-          strings: {
-            name: {
-              en: values.name,
-            },
-            code: values.code,
-            description: {
-              en: values.description,
-            },
-          },
-          properties: {
-            amenity: values.amenity,
-            address_city: values.address_city,
-          },
-        };
-        if (isEditForm) {
-          const updatedContact = { ...feature, ...payload };
-          putFeature(
-            updatedContact,
-            () => {
-              notifySuccess('Critical facility was updated successfully');
-            },
-            () => {
-              notifyError(
-                'Something occurred while updating Critical facility, please try again!'
-              );
-            }
-          );
-        } else {
-          postFeature(
-            payload,
-            () => {
-              notifySuccess('Critical facility was created successfully');
-            },
-            () => {
-              notifyError(
-                'Something occurred while saving Critical facility, please try again!'
-              );
-            }
-          );
-        }
-      }
-    });
+/* ui */
+const { TextArea } = Input;
+const labelCol = {
+  xs: { span: 24 },
+  sm: { span: 24 },
+  md: { span: 24 },
+  lg: { span: 24 },
+  xl: { span: 24 },
+  xxl: { span: 24 },
+};
+const wrapperCol = {
+  xs: { span: 24 },
+  sm: { span: 24 },
+  md: { span: 24 },
+  lg: { span: 24 },
+  xl: { span: 24 },
+  xxl: { span: 24 },
+};
+
+/* messages */
+const MESSAGE_POST_SUCCESS = 'Critical Infrastructure was created successfully';
+const MESSAGE_POST_ERROR =
+  'Something occurred while saving Critical Infrastructure, Please try again!';
+const MESSAGE_PUT_SUCCESS = 'Critical Infrastructure was updated successfully';
+const MESSAGE_PUT_ERROR =
+  'Something occurred while updating Critical Infrastructure, Please try again!';
+
+/**
+ * @function FeatureForm
+ * @name FeatureForm
+ * @description Form for create and edit feature
+ * @param {object} props Valid form properties
+ * @param {object} props.feature Valid feature object
+ * @param {boolean} props.isEditForm Flag whether form is on edit mode
+ * @param {boolean} props.posting Flag whether form is posting data
+ * @param {Function} props.onCancel Form cancel callback
+ * @returns {object} FeatureForm component
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * <FeatureForm
+ *   feature={feature}
+ *   isEditForm={isEditForm}
+ *   posting={posting}
+ *   onCancel={this.handleCloseFeatureForm}
+ * />
+ *
+ */
+const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
+  // form finish(submit) handler
+  const onFinish = (values) => {
+    const formData = { ...values };
+
+    if (isEditForm) {
+      const updates = { ...feature, ...formData };
+      putFeature(
+        updates,
+        () => notifySuccess(MESSAGE_PUT_SUCCESS),
+        () => notifyError(MESSAGE_PUT_ERROR)
+      );
+    } else {
+      postFeature(
+        formData,
+        () => notifySuccess(MESSAGE_POST_SUCCESS),
+        () => notifyError(MESSAGE_POST_ERROR)
+      );
+    }
   };
 
-  render() {
-    const {
-      posting,
-      onCancel,
-      isEditForm,
-      feature,
-      form: { getFieldDecorator },
-    } = this.props;
+  const [moreFilters, setMoreFilters] = useState(false);
 
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-    };
-
-    return (
-      <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* critical facility name */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Name">
-          {getFieldDecorator('name', {
-            initialValue: isEditForm ? feature.strings.name.en : undefined,
-            rules: [
+  return (
+    <Form
+      labelCol={labelCol}
+      wrapperCol={wrapperCol}
+      onFinish={onFinish}
+      initialValues={{ ...feature }}
+      autoComplete="off"
+    >
+      {/* start: type & code */}
+      <Row justify="space-between">
+        {/* start:type */}
+        <Col span={11}>
+          <Form.Item
+            label="Type"
+            title="Administrative type e.g Hospital"
+            name={['relations', 'type', '_id']}
+            rules={[
               {
                 required: true,
-                message: ' Critical facility name is required',
+                message: 'Administrative type is required',
               },
-            ],
-          })(<Input />)}
-        </Form.Item>
-        {/* end critical facility name */}
-
-        {/* critical facility code */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="code">
-          {getFieldDecorator('code', {
-            initialValue:
-              isEditForm && feature.strings.code // eslint-disable-line
-                ? feature.strings.code // eslint-disable-line
-                : undefined,
-            rules: [{ message: 'critical facility code is required' }],
-          })(<Input />)}
-        </Form.Item>
-        {/* end critical facility code */}
-
-        {/* Critical facility amenity */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Amenity">
-          {getFieldDecorator('amenity', {
-            initialValue: isEditForm ? feature.properties.amenity : undefined,
-            rules: [{ required: true, message: 'Amenity is required' }],
-          })(<Input />)}
-        </Form.Item>
-        {/* end critical facility amenity */}
-
-        {/* Critical facility address */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Address">
-          {getFieldDecorator('address_city', {
-            initialValue: isEditForm
-              ? feature.properties.address_city
-              : undefined,
-            rules: [{ required: true, message: 'Address is required' }],
-          })(<Input />)}
-        </Form.Item>
-        {/* end critical facility address */}
-
-        {/* Critical facility description */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Description">
-          {getFieldDecorator('description', {
-            initialValue: isEditForm
-              ? feature.strings.description.en
-              : undefined,
-            rules: [{ required: true, message: 'Description is required' }],
-          })(<Input />)}
-        </Form.Item>
-        {/* end critical facility description */}
-
-        {/* form actions */}
-        <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
-          <Button onClick={onCancel}>Cancel</Button>
-          <Button
-            style={{ marginLeft: 8 }}
-            type="primary"
-            htmlType="submit"
-            loading={posting}
+            ]}
           >
-            Save
-          </Button>
-        </Form.Item>
-        {/* end form actions */}
-      </Form>
-    );
-  }
-}
+            <SearchableSelectInput
+              onSearch={(optns = {}) => {
+                return getFeatureTypes(optns);
+              }}
+              optionLabel={(type) => get(type, 'strings.name.en')}
+              optionValue="_id"
+              initialValue={get(feature, 'relations.type', undefined)}
+            />
+          </Form.Item>
+        </Col>
+        {/* end:type */}
+        {/* start:code */}
+        <Col span={11}>
+          <Form.Item
+            label="Code"
+            title="Critical infrastructure code e.g DSM001"
+            name={['strings', 'code']}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+        {/* end:code */}
+      </Row>
+      {/* end: type & code */}
 
-FeaturesForm.propTypes = {
+      {/* start: name & area */}
+      <Row justify="space-between">
+        {/* start:name */}
+        <Col span={11}>
+          <Form.Item
+            label="Name"
+            title="Critical infrastructure name e.g Dar es Salaam"
+            name={['strings', 'name', 'en']}
+            rules={[
+              {
+                required: true,
+                message: 'Critical infrastructure name is required',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+        {/* end:name */}
+        {/* start:area */}
+        <Col span={11}>
+          <Form.Item
+            label="Area"
+            title="Critical infrastructure area e.g Dar es Salaam"
+            initialValue={null}
+            name={['relations', 'area', '_id']}
+            rules={[
+              {
+                required: true,
+                message: 'Critical infrastructure area is required',
+              },
+            ]}
+          >
+            <SearchableSelectInput
+              onSearch={(optns = {}) => {
+                return getAdministrativeAreas(optns, feature);
+              }}
+              optionLabel={(area) => {
+                return `${get(area, 'strings.name.en')} (${get(
+                  area,
+                  'relations.level.strings.name.en',
+                  'N/A'
+                )})`;
+              }}
+              optionValue="_id"
+              initialValue={get(feature, 'relations.area', undefined)}
+            />
+          </Form.Item>
+        </Col>
+        {/* end:area */}
+      </Row>
+      {/* end: name & area */}
+
+      {/* start: longitude & latitude */}
+      {moreFilters && (
+        <Row justify="space-between">
+          {/* start:longitude */}
+          <Col span={11}>
+            <Form.Item
+              label="Longitude"
+              title="Critical infrastructure longitude(x-coordinate) e.g 39.2858"
+              name={['geos', 'point[0]']}
+            >
+              <InputNumber style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
+          {/* end:longitude */}
+          {/* start:latitude */}
+          <Col span={11}>
+            <Form.Item
+              label="Latitude"
+              title="Critical infrastructure latitude(y-coordinate) e.g -6.8188"
+              name={['geos', 'point[1]']}
+            >
+              <InputNumber style={{ width: '100%' }} />
+            </Form.Item>
+          </Col>
+          {/* end:latitude */}
+        </Row>
+      )}
+      {/* end: longitude & latitude */}
+
+      {/* start: custodians */}
+      <Form.Item
+        label="Custodians"
+        title="Responsible Agencies e.g Police Force"
+        name={['relations', 'custodians']}
+      >
+        <SearchableSelectInput
+          onSearch={(optns = {}) => {
+            return getAgencies(optns, feature);
+          }}
+          optionLabel={(custodian) => get(custodian, 'name')}
+          optionValue="_id"
+          initialValue={get(feature, 'relations.custodians', [])}
+          mode="multiple"
+        />
+      </Form.Item>
+      {/* end: custodians */}
+
+      {/* start:description */}
+      <Form.Item
+        label="Description"
+        title="Critical infrastructure description"
+        name={['strings', 'description', 'en']}
+      >
+        <TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
+      </Form.Item>
+      {/* end:description */}
+
+      {/* start:form actions */}
+      <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
+        <Button type="link" onClick={() => setMoreFilters(!moreFilters)}>
+          {moreFilters ? 'Less Filters' : 'More Filters'}
+        </Button>
+        <Button style={{ marginLeft: 8 }} onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button
+          style={{ marginLeft: 8 }}
+          type="primary"
+          htmlType="submit"
+          loading={posting}
+        >
+          Send
+        </Button>
+      </Form.Item>
+      {/* end:form actions */}
+    </Form>
+  );
+};
+
+FeatureForm.defaultProps = {
+  feature: {},
+};
+
+FeatureForm.propTypes = {
   feature: PropTypes.shape({
+    _id: PropTypes.string,
     strings: PropTypes.shape({
+      code: PropTypes.string,
       name: PropTypes.shape({
         en: PropTypes.string.isRequired,
       }),
       description: PropTypes.shape({
         en: PropTypes.string.isRequired,
       }),
-      _id: PropTypes.string,
     }),
-    properties: PropTypes.shape({
-      amenity: PropTypes.string,
-      address_city: PropTypes.string,
+    relations: PropTypes.shape({
+      type: PropTypes.shape({
+        _id: PropTypes.string,
+      }),
+      area: PropTypes.shape({
+        _id: PropTypes.string,
+      }),
+      custodians: PropTypes.arrayOf(
+        PropTypes.shape({
+          _id: PropTypes.string,
+        })
+      ),
     }),
-  }).isRequired,
+  }),
   isEditForm: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
-  form: PropTypes.shape({
-    getFieldDecorator: PropTypes.func,
-    validateFieldsAndScroll: PropTypes.func,
-  }).isRequired,
 };
 
-export default Form.create()(FeaturesForm);
+export default FeatureForm;
