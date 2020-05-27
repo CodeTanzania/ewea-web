@@ -1,20 +1,30 @@
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
-import EventCertaintyForm from './Form';
+import SettingForm from '../../components/SettingForm';
 import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
 
-/* constants */
+/* http actions */
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getRoles,
+  getAgencies,
+  getEventCertaintiesExportUrl,
+} = httpActions;
+/* redux actions */
 const {
   closeEventCertaintyForm,
   getEventCertainties,
@@ -24,25 +34,18 @@ const {
   refreshEventCertainties,
   paginateEventCertainties,
   deleteEventCertainty,
+  postEventCertainty,
+  putEventCertainty,
 } = reduxActions;
-const {
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getRoles,
-  getAgencies,
-  getEventCertaintiesExportUrl,
-} = httpActions;
 
+/* constants */
+const { confirm } = Modal;
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
 const descriptionSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };
-
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...descriptionSpan, header: 'Description' },
 ];
-
-const { confirm } = Modal;
 
 /**
  * @class
@@ -201,6 +204,7 @@ class EventCertainties extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
+    selectEventCertainty(null);
     this.setState({ isEditForm: false });
   };
 
@@ -384,11 +388,12 @@ class EventCertainties extends Component {
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <EventCertaintyForm
+          <SettingForm
+            setting={eventCertainty}
             posting={posting}
-            isEditForm={isEditForm}
-            eventCertainty={eventCertainty}
             onCancel={this.closeEventCertaintyForm}
+            onCreate={postEventCertainty}
+            onUpdate={putEventCertainty}
           />
         </Modal>
         {/* end create/edit form modal */}
