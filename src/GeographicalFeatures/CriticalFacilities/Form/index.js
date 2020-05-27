@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
+import map from 'lodash/map';
 import { Button, Input, InputNumber, Form, Row, Col } from 'antd';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { reduxActions } from '@codetanzania/ewea-api-states';
@@ -71,6 +72,14 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
   const onFinish = (values) => {
     const formData = { ...values };
 
+    // TODO: fix clearing custodians relations
+    // TODO: fix form ref geos.point.coordinates[0]
+    const longitude = get(formData, 'geos.longitude');
+    const latitude = get(formData, 'geos.latitude');
+    if (longitude && latitude) {
+      formData.geos.point = { coordinates: [longitude, latitude] };
+    }
+
     if (isEditForm) {
       const updates = { ...feature, ...formData };
       putFeature(
@@ -87,14 +96,20 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
     }
   };
 
-  const [moreFilters, setMoreFilters] = useState(false);
+  const [moreOptions, setMoreOptions] = useState(false);
 
   return (
     <Form
       labelCol={labelCol}
       wrapperCol={wrapperCol}
       onFinish={onFinish}
-      initialValues={{ ...feature }}
+      initialValues={{
+        ...feature,
+        relations: {
+          ...get(feature, 'relations', {}),
+          custodians: map(get(feature, 'relations.custodians', []), '_id'),
+        },
+      }}
       autoComplete="off"
     >
       {/* start: type & code */}
@@ -126,7 +141,7 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
         {/* start:code */}
         <Col span={11}>
           <Form.Item
-            label="Code"
+            label="Code/Number"
             title="Critical infrastructure code e.g DSM001"
             name={['strings', 'code']}
           >
@@ -172,7 +187,7 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
           >
             <SearchableSelectInput
               onSearch={(optns = {}) => {
-                return getAdministrativeAreas(optns, feature);
+                return getAdministrativeAreas(optns);
               }}
               optionLabel={(area) => {
                 return `${get(area, 'strings.name.en')} (${get(
@@ -191,14 +206,15 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
       {/* end: name & area */}
 
       {/* start: longitude & latitude */}
-      {moreFilters && (
+      {moreOptions && (
         <Row justify="space-between">
           {/* start:longitude */}
           <Col span={11}>
             <Form.Item
               label="Longitude"
               title="Critical infrastructure longitude(x-coordinate) e.g 39.2858"
-              name={['geos', 'point[0]']}
+              name={['geos', 'longitude']}
+              initialValue={get(feature, 'geos.point.coordinates[0]')}
             >
               <InputNumber style={{ width: '100%' }} />
             </Form.Item>
@@ -209,7 +225,8 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
             <Form.Item
               label="Latitude"
               title="Critical infrastructure latitude(y-coordinate) e.g -6.8188"
-              name={['geos', 'point[1]']}
+              name={['geos', 'latitude']}
+              initialValue={get(feature, 'geos.point.coordinates[1]')}
             >
               <InputNumber style={{ width: '100%' }} />
             </Form.Item>
@@ -227,7 +244,7 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
       >
         <SearchableSelectInput
           onSearch={(optns = {}) => {
-            return getAgencies(optns, feature);
+            return getAgencies(optns);
           }}
           optionLabel={(custodian) => get(custodian, 'name')}
           optionValue="_id"
@@ -249,8 +266,8 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
 
       {/* start:form actions */}
       <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
-        <Button type="link" onClick={() => setMoreFilters(!moreFilters)}>
-          {moreFilters ? 'Less Filters' : 'More Filters'}
+        <Button type="link" onClick={() => setMoreOptions(!moreOptions)}>
+          {moreOptions ? 'Less Options' : 'More Options'}
         </Button>
         <Button style={{ marginLeft: 8 }} onClick={onCancel}>
           Cancel
@@ -261,7 +278,7 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
           htmlType="submit"
           loading={posting}
         >
-          Send
+          Save
         </Button>
       </Form.Item>
       {/* end:form actions */}

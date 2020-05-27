@@ -1,29 +1,32 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import isArray from 'lodash/isArray';
-import { Modal, Col, Drawer } from 'antd';
+import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import isEmpty from 'lodash/isEmpty';
+import get from 'lodash/get';
+import map from 'lodash/map';
 import Topbar from '../../components/Topbar';
-import FeaturesForm from './Form';
+import FeatureForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
-import ListItemActions from '../../components/ListItemActions';
-import ListItem from '../../components/ListItem';
+import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
-import { notifyError, notifySuccess } from '../../util';
+import ListItem from '../../components/ListItem';
+import ListItemActions from '../../components/ListItemActions';
 import './styles.css';
-import MapPoint from '../../Map/MapPoint';
 
-/* constants */
+/* http actions */
 const {
-  getFeaturesExportUrl,
   getFocalPeople,
   getJurisdictions,
   getPartyGroups,
   getAgencies,
   getRoles,
+  getFeaturesExportUrl,
 } = httpActions;
+
+/* state actions */
 const {
   getFeatures,
   openFeatureForm,
@@ -34,246 +37,309 @@ const {
   refreshFeatures,
   deleteFeature,
 } = reduxActions;
-const nameSpan = { xxl: 5, xl: 6, lg: 6, md: 10, sm: 12, xs: 10 };
-const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 3, xs: 3 };
-const amenitySpan = { xxl: 4, xl: 4, lg: 3, md: 4, sm: 5, xs: 5 };
-const addressSpan = { xxl: 3, xl: 3, lg: 4, md: 4, sm: 0, xs: 0 };
-const descriptionSpan = { xxl: 7, xl: 6, lg: 6, md: 0, sm: 0, xs: 0 };
 
+/* ui */
+const { confirm } = Modal;
+const nameSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 16, xs: 14 };
+const codeSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 0 };
+const typeSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 4, xs: 4 };
+const areaSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 0 };
+const custodiansSpan = { xxl: 6, xl: 6, lg: 6, md: 4, sm: 0, xs: 0 };
 const headerLayout = [
-  { ...nameSpan, header: 'Name' },
-  { ...codeSpan, header: 'Code' },
-  { ...amenitySpan, header: 'Amenity' },
-  { ...addressSpan, header: 'Address' },
-  { ...descriptionSpan, header: 'Description' },
+  {
+    ...typeSpan,
+    header: 'Type',
+    title: 'Critical Infrastructure Type',
+  },
+  { ...codeSpan, header: 'Code/Number', title: 'Critical Infrastructure Code' },
+  { ...nameSpan, header: 'Name', title: 'Critical Infrastructure Name' },
+  { ...areaSpan, header: 'Area', title: 'Critical Infrastructure Area' },
+  {
+    ...custodiansSpan,
+    header: 'Custodians',
+    title: 'Critical Infrastructure Custodians',
+  },
 ];
 
-const { confirm } = Modal;
+/* messages */
+const MESSAGE_LIST_REFRESH_SUCCESS =
+  'Critical Infrastructures were refreshed successfully';
+const MESSAGE_LIST_REFRESH_ERROR =
+  'An Error occurred while refreshing Critical Infrastructures, Please try again!';
+const MESSAGE_ITEM_ARCHIVE_SUCCESS =
+  'Critical Infrastructure was archived successfully';
+const MESSAGE_ITEM_ARCHIVE_ERROR =
+  'An error occurred while archiving Critical Infrastructure, Please try again!';
+
+/* helpers */
+const getCustodiansFor = (item) => {
+  const custodians = [].concat(get(item, 'relations.custodians', []));
+  if (isEmpty(custodians)) {
+    return 'N/A';
+  }
+  const joinedCustodians = map(custodians, (custodian) => {
+    return get(custodian, 'name', '');
+  }).join(', ');
+  return joinedCustodians;
+};
 
 /**
- * @class
- * @name Features
- * @description Render Critical facilities list which have search box,
- * actions and critical infrastructures list
- *
- * @version 0.1.0
+ * @function FeatureList
+ * @name FeatureList
+ * @description List features
+ * @param {object} props Valid list properties
+ * @param {object} props.features Valid list items
+ * @param {boolean} props.loading Flag whether list is loading data
+ * @param {boolean} props.posting Flag whether list is posting data
+ * @param {boolean} props.showForm Flag whether to show feature form
+ * @param {string} props.searchQuery Applied search term
+ * @param {number} props.page Current page number
+ * @param {number} props.total Available list items
+ * @param {object} props.feature Current selected list item
+ * @returns {object} FeatureList component
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
  * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * <FeatureList />
+ *
  */
-class Features extends Component {
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    isEditForm: false,
-    showMap: false,
-    notificationBody: undefined,
-    showNotificationForm: false,
-  };
+class FeatureList extends Component {
+  /**
+   * @function constructor
+   * @name constructor
+   * @description Initialize states
+   * @param {object} props Valid component properties
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  constructor(props) {
+    super(props);
+    this.state = {
+      isEditForm: false,
+      showNotificationForm: false,
+      notificationSubject: undefined,
+      notificationBody: undefined,
+    };
+  }
 
+  /**
+   * @function componentDidMount
+   * @name componentDidMount
+   * @description Load data
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
   componentDidMount() {
     getFeatures();
   }
 
   /**
-   * @function
-   * @name openFeaturesForm
-   * @description Open feature form
+   * @function handleListSearch
+   * @name handleListSearch
+   * @description Handle list search
+   * @param {object} event List search event
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleListSearch = (event) => {
+    searchFeatures(event.target.value);
+  };
+
+  /**
+   * @function handleListRefresh
+   * @name handleListRefresh
+   * @description Handle list refresh
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openFeaturesForm = () => {
+  handleListRefresh = () => {
+    refreshFeatures(
+      () => notifySuccess(MESSAGE_LIST_REFRESH_SUCCESS),
+      () => notifyError(MESSAGE_LIST_REFRESH_ERROR)
+    );
+  };
+
+  /**
+   * @function handleListPaginate
+   * @name handleListPaginate
+   * @description Handle list paginate
+   * @param {number} nextPage List next page number
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleListPaginate = (nextPage) => {
+    paginateFeatures(nextPage);
+  };
+
+  /**
+   * @function handleListShare
+   * @name handleListShare
+   * @description Handle list sharing
+   * @param {object[]} items List of items
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleListShare = (items) => {
+    const itemList = [].concat(items);
+
+    const notificationSubject = 'List of Critical Infrastructures';
+    const notificationBody = itemList
+      .map((item) => {
+        const itemName = get(item, 'strings.name.en', 'N/A');
+        const itemCode = get(item, 'strings.code', 'N/A');
+        const itemType = get(item, 'relations.type.strings.name.en', 'N/A');
+        const itemArea = get(item, 'relations.area.strings.name.en', 'N/A');
+        const itemCustodians = getCustodiansFor(item);
+        const itemDescription = get(item, 'strings.description.en', 'N/A');
+        const body = `Type: ${itemType}\nName: ${itemName}\nCode: ${itemCode}\nArea: ${itemArea}\nCustodian: ${itemCustodians}\nDescription: ${itemDescription}\n`;
+        return body;
+      })
+      .join('\n');
+    const showNotificationForm = true;
+
+    this.setState({
+      notificationSubject,
+      notificationBody,
+      showNotificationForm,
+    });
+  };
+
+  /**
+   * @function handleFormOpen
+   * @name handleFormOpen
+   * @description Handle form opening
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleFormOpen = () => {
     openFeatureForm();
   };
 
   /**
-   * @function
-   * @name closeFeaturesForm
-   * @description close feature form
+   * @function handleFormClose
+   * @name handleFormClose
+   * @description Handle form closing
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeFeaturesForm = () => {
+  handleFormClose = () => {
     closeFeatureForm();
     this.setState({ isEditForm: false });
   };
 
   /**
-   * @function
-   * @name searchFeatures
-   * @description Search critical infrastructure List based on supplied filter word
-   *
-   * @param {object} event - Event instance
+   * @function handleFormClose
+   * @name handleFormClose
+   * @description Handle post form close and perform cleanups
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  searchFeatures = (event) => {
-    searchFeatures(event.target.value);
+  handleAfterFormClose = () => {
+    selectFeature(null);
+    this.setState({ isEditForm: false });
   };
 
   /**
-   * @function
-   * @name handleEdit
-   * @description Handle on Edit action for list item
-   *
-   * @param {object} feature critical infrastructure to be edited
-   *
+   * @function handleItemEdit
+   * @name handleItemEdit
+   * @description Handle list item edit
+   * @param {object} item List item
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleEdit = (feature) => {
-    selectFeature(feature);
+  handleItemEdit = (item) => {
+    selectFeature(item);
     this.setState({ isEditForm: true });
     openFeatureForm();
   };
 
   /**
-   * @function
-   * @name handleAfterCloseForm
-   * @description Perform post close form cleanups
-   *
+   * @function handleItemArchive
+   * @name handleItemArchive
+   * @description Handle list item archiving with confirmation
+   * @param {object} item List item
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleAfterCloseForm = () => {
-    this.setState({ isEditForm: false });
-  };
-
-  /**
-   * @function
-   * @name handleRefreshFeatures
-   * @description Handle list refresh action
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleRefreshFeatures = () => {
-    refreshFeatures(
-      () => {
-        notifySuccess('Features refreshed successfully');
-      },
-      () => {
-        notifyError(
-          'An Error occurred while refreshing Features please contact system administrator'
-        );
-      }
-    );
-  };
-
-  /**
-   * @function
-   * @name handleShare
-   * @description Handle share multiple features
-   *
-   * @param {object[]| object} features features list to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleShare = (features) => {
-    let message = '';
-    if (isArray(features)) {
-      const featureList = features.map(
-        (feature) =>
-          `Name: ${feature.strings.name.en}\nDescription: ${
-            // eslint-disable-line
-            feature.strings.description.en
-          }\n`
-      );
-
-      message = featureList.join('\n\n\n');
-    } else {
-      message = `Name: ${features.strings.name.en}\nDescription: ${
-        // eslint-disable-line
-        features.strings.description.en
-      }\n`;
-    }
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name showArchiveConfirm
-   * @description show confirm modal before archiving a critical infrastructure
-   *
-   * @param item {object} criticalfacility to archive
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-
-  showArchiveConfirm = (item) => {
+  handleItemArchive = (item) => {
+    const itemId = get(item, '_id');
+    const itemName = get(item, 'strings.name.en', 'N/A');
     confirm({
-      title: `Are you sure you want to archive ${item.strings.name.en} ?`,
+      title: `Are you sure you want to archive ${itemName} ?`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk() {
         deleteFeature(
-          item._id, // eslint-disable-line
-          () =>
-            notifySuccess('Critical infrastructure was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Critical infrastructure, Please contact your system Administrator'
-            )
+          itemId,
+          () => notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS),
+          () => notifyError(MESSAGE_ITEM_ARCHIVE_ERROR)
         );
       },
     });
   };
 
   /**
-   * @function
-   * @name closeNotificationForm
-   * @description Handle on notify features
+   * @function handleItemShare
+   * @name handleItemShare
+   * @description Handle list item sharing
+   * @param {object} item List item
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleItemShare = (item) => {
+    const itemName = get(item, 'strings.name.en', 'N/A');
+    const itemCode = get(item, 'strings.code', 'N/A');
+    const itemType = get(item, 'relations.type.strings.name.en', 'N/A');
+    const itemArea = get(item, 'relations.area.strings.name.en', 'N/A');
+    const itemCustodians = getCustodiansFor(item);
+    const itemDescription = get(item, 'strings.description.en', 'N/A');
+
+    const notificationSubject = 'List of Critical Infrastructures';
+    const notificationBody = `Type: ${itemType}\nName: ${itemName}\nCode: ${itemCode}\nArea: ${itemArea}\nCustodian: ${itemCustodians}\nDescription: ${itemDescription}\n`;
+    const showNotificationForm = true;
+
+    this.setState({
+      notificationSubject,
+      notificationBody,
+      showNotificationForm,
+    });
+  };
+
+  /**
+   * @function handleNotificationFormClose
+   * @name handleNotificationFormClose
+   * @description Handle notification form closing
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeNotificationForm = () => {
+  handleNotificationFormClose = () => {
     this.setState({ showNotificationForm: false });
   };
 
   /**
-   * @function
-   * @name handleAfterCloseNotificationForm
-   * @description Perform post close notification form cleanups
+   * @function render
+   * @name render
+   * @description Render list
+   * @returns {object} List to render
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleAfterCloseNotificationForm = () => {
-    this.setState({ notificationBody: undefined });
-  };
-
-  /**
-   * @function
-   * @name closeMapPreview
-   * @description close event details drawer
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closeMapPreview = () => {
-    this.setState({ showMap: false });
-  };
-
-  /**
-   * @function
-   * @name handleMapPreview
-   * @description Handle map preview
-   *
-   * @param {object} feature feature to be previewed
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleMapPreview = (feature) => {
-    selectFeature(feature);
-    this.setState({ showMap: true });
-  };
-
   render() {
+    // props
     const {
       features,
       loading,
@@ -284,21 +350,24 @@ class Features extends Component {
       searchQuery,
       total,
     } = this.props;
+
+    // states
     const {
       isEditForm,
       showNotificationForm,
+      notificationSubject,
       notificationBody,
-      showMap,
     } = this.state;
-    const geometry = feature?.geos?.geometry;
+
     return (
       <>
-        {/* Topbar */}
+        {/* start: list topbar */}
         <Topbar
           search={{
             size: 'large',
-            placeholder: 'Search for critical infrastructures here ...',
-            onChange: this.searchFeatures,
+            placeholder: 'Search critical infrastructures ...',
+            title: 'Search critical infrastructures ...',
+            onChange: this.handleListSearch,
             value: searchQuery,
           }}
           actions={[
@@ -307,90 +376,98 @@ class Features extends Component {
               icon: <PlusOutlined />,
               size: 'large',
               title: 'Add New Critical Infrastructure',
-              onClick: this.openFeaturesForm,
+              onClick: this.handleFormOpen,
             },
           ]}
         />
-        {/* end Topbar */}
+        {/* end: list topbar */}
 
-        {/* list starts */}
+        {/* start: list */}
         <ItemList
-          itemName="Critical infrastructure"
+          itemName="CriticalInfrastructure"
           items={features}
           page={page}
           itemCount={total}
           loading={loading}
-          onShare={this.handleShare}
-          headerLayout={headerLayout}
-          onRefresh={this.handleRefreshFeatures}
-          onPaginate={(nextPage) => paginateFeatures(nextPage)}
+          // onFilter={this.handleListFilter}
+          onNotify={this.openNotificationForm}
+          onShare={this.handleListShare}
+          onRefresh={this.handleListRefresh}
+          onPaginate={this.handleListPaginate}
           generateExportUrl={getFeaturesExportUrl}
+          headerLayout={headerLayout}
           renderListItem={({
             item,
             isSelected,
             onSelectItem,
             onDeselectItem,
           }) => (
-            <ListItem
-              key={item._id} // eslint-disable-line
-              name={item.strings.name.en}
-              item={item}
-              isSelected={isSelected}
-              onSelectItem={onSelectItem}
-              onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Critical Infrastructure',
-                    title: 'Update Critical Infrastructure Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  onMapPreview={{
-                    name: 'Preview on Map',
-                    title: 'Preview on map',
-                    onClick: () => this.handleMapPreview(item),
-                  }}
-                  share={{
-                    name: 'Share Critical Infrastructure',
-                    title: 'Share Critical Infrastructure details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Critical Infrastructure',
-                    title:
-                      'Remove Critical infrastructure from list of active critical infrastructures',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
-            >
-              {/* eslint-disable react/jsx-props-no-spreading */}
-              <Col {...nameSpan}>{item.strings.name.en}</Col>
-              <Col {...codeSpan}>
-                {item.strings.code ? item.strings.code : 'N/A'}
-              </Col>
-              <Col {...amenitySpan}>
-                {item.properties.amenity ? item.properties.amenity : 'N/A'}
-              </Col>
-              <Col {...addressSpan}>
-                {item.properties.address_city
-                  ? item.properties.address_city
-                  : 'N/A'}
-              </Col>
-              <Col {...descriptionSpan}>
-                {item.strings.description ? item.strings.description.en : 'N/A'}
-              </Col>
-              {/* eslint-enable react/jsx-props-no-spreading */}
-            </ListItem>
+            <>
+              {/* start: list item */}
+              <ListItem
+                key={get(item, '_id')}
+                item={item}
+                name={get(item, 'strings.name.en')}
+                isSelected={isSelected}
+                avatarBackgroundColor={get(
+                  item,
+                  'relations.type.strings.color'
+                )}
+                onSelectItem={onSelectItem}
+                onDeselectItem={onDeselectItem}
+                renderActions={() => (
+                  <ListItemActions
+                    edit={{
+                      name: 'Edit Critical Infrastructure',
+                      title: 'Update critical infrastructure details',
+                      onClick: () => this.handleItemEdit(item),
+                    }}
+                    share={{
+                      name: 'Share Critical Infrastructure',
+                      title:
+                        'Share critical infrastructure details with others',
+                      onClick: () => this.handleItemShare(item),
+                    }}
+                    archive={{
+                      name: 'Archive Feature',
+                      title:
+                        'Remove critical infrastructure from list of active critical infrastructures',
+                      onClick: () => this.handleItemArchive(item),
+                    }}
+                  />
+                )}
+              >
+                {/* eslint-disable react/jsx-props-no-spreading */}
+                <Col {...typeSpan}>
+                  {get(item, 'relations.type.strings.name.en', 'N/A')}
+                </Col>
+                <Col {...codeSpan}>{get(item, 'strings.code', 'N/A')}</Col>
+                <Col {...nameSpan}>
+                  <span title={get(item, 'strings.name.en', 'N/A')}>
+                    {get(item, 'strings.name.en', 'N/A')}
+                  </span>
+                </Col>
+                <Col {...areaSpan}>
+                  {get(item, 'relations.area.strings.name.en', 'N/A')}
+                </Col>
+                <Col {...custodiansSpan}>
+                  <span title={getCustodiansFor(item)}>
+                    {truncateString(getCustodiansFor(item), 100)}
+                  </span>
+                </Col>
+                {/* eslint-enable react/jsx-props-no-spreading */}
+              </ListItem>
+              {/* end: list item */}
+            </>
           )}
         />
-        {/* end list */}
+        {/* end: list */}
 
-        {/* Notification Modal modal */}
+        {/* start: notification modal */}
         <Modal
-          title="Notify Critical Infrastructure"
+          title="Share Critical Infrastructures"
           visible={showNotificationForm}
-          onCancel={this.closeNotificationForm}
+          onCancel={this.handleNotificationFormClose}
           footer={null}
           destroyOnClose
           maskClosable={false}
@@ -404,13 +481,14 @@ class Features extends Component {
             onSearchGroups={getPartyGroups}
             onSearchAgencies={getAgencies}
             onSearchRoles={getRoles}
+            subject={notificationSubject}
             body={notificationBody}
-            onCancel={this.closeNotificationForm}
+            onCancel={this.handleNotificationFormClose}
           />
         </Modal>
-        {/* end Notification modal */}
+        {/* end: notification modal */}
 
-        {/* create/edit form modal */}
+        {/* start: form modal */}
         <Modal
           title={
             isEditForm
@@ -420,61 +498,53 @@ class Features extends Component {
           visible={showForm}
           className="FormModal"
           footer={null}
-          onCancel={this.closeFeaturesForm}
-          destroyOnClose
+          onCancel={this.handleFormClose}
+          afterClose={this.handleAfterFormClose}
           maskClosable={false}
-          afterClose={this.handleAfterCloseForm}
+          destroyOnClose
         >
-          <FeaturesForm
+          <FeatureForm
+            feature={feature}
             posting={posting}
             isEditForm={isEditForm}
-            feature={feature}
-            onCancel={this.closeFeaturesForm}
+            onCancel={this.handleFormClose}
           />
         </Modal>
-        {/* end create/edit form modal */}
-        {/* Map preview drawer */}
-        <Drawer
-          title="Map preview"
-          placement="right"
-          width="100%"
-          className="map-drawer"
-          onClose={this.closeMapPreview}
-          visible={showMap}
-        >
-          <MapPoint geometry={geometry} />
-        </Drawer>
-
-        {/* End Map preview drawer */}
+        {/* end: form modal */}
       </>
     );
   }
 }
 
-Features.propTypes = {
+FeatureList.propTypes = {
+  features: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+    })
+  ).isRequired,
   loading: PropTypes.bool.isRequired,
-  features: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
-    .isRequired,
-  feature: PropTypes.shape({ name: PropTypes.string }),
-  page: PropTypes.number.isRequired,
-  searchQuery: PropTypes.string,
-  total: PropTypes.number.isRequired,
   posting: PropTypes.bool.isRequired,
+  searchQuery: PropTypes.string,
   showForm: PropTypes.bool.isRequired,
+  page: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+  feature: PropTypes.shape({
+    _id: PropTypes.string,
+  }),
 };
 
-Features.defaultProps = {
+FeatureList.defaultProps = {
   feature: null,
   searchQuery: undefined,
 };
 
-export default Connect(Features, {
+export default Connect(FeatureList, {
   features: 'features.list',
-  feature: 'features.selected',
   loading: 'features.loading',
   posting: 'features.posting',
-  page: 'features.page',
-  showForm: 'features.showForm',
-  total: 'features.total',
   searchQuery: 'features.q',
+  showForm: 'features.showForm',
+  page: 'features.page',
+  total: 'features.total',
+  feature: 'features.selected',
 });
