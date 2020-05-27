@@ -1,244 +1,251 @@
-import React, { Component } from 'react';
-import { httpActions } from '@codetanzania/ewea-api-client';
-import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Button, Input } from 'antd';
+import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
+import { Button, Input, Form, Row, Col } from 'antd';
+import { httpActions } from '@codetanzania/ewea-api-client';
+import { reduxActions } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
-import 'rc-color-picker/assets/index.css';
 
+/* http actions */
 const { getAdministrativeLevels, getAdministrativeAreas } = httpActions;
-const { postAdministrativeArea, putAdministrativeArea } = reduxActions;
+
+/* state actions */
+const { putAdministrativeArea, postAdministrativeArea } = reduxActions;
+
+/* ui */
+const { TextArea } = Input;
+const labelCol = {
+  xs: { span: 24 },
+  sm: { span: 24 },
+  md: { span: 24 },
+  lg: { span: 24 },
+  xl: { span: 24 },
+  xxl: { span: 24 },
+};
+const wrapperCol = {
+  xs: { span: 24 },
+  sm: { span: 24 },
+  md: { span: 24 },
+  lg: { span: 24 },
+  xl: { span: 24 },
+  xxl: { span: 24 },
+};
+
+/* messages */
+const MESSAGE_POST_SUCCESS = 'Administrative Area was created successfully';
+const MESSAGE_POST_ERROR =
+  'Something occurred while saving Administrative Area, Please try again!';
+const MESSAGE_PUT_SUCCESS = 'Administrative Area was updated successfully';
+const MESSAGE_PUT_ERROR =
+  'Something occurred while updating Administrative Area, Please try again!';
 
 /**
- * @class
+ * @function AdministrativeAreaForm
  * @name AdministrativeAreaForm
- * @description Render administrative area form for creating/editing function
- *
- * @version 0.1.0
+ * @description Form for create and edit administrative area
+ * @param {object} props Valid form properties
+ * @param {object} props.administrativeArea Valid administrative area object
+ * @param {boolean} props.isEditForm Flag wether form is on edit mode
+ * @param {boolean} props.posting Flag whether form is posting data
+ * @param {Function} props.onCancel Form cancel callback
+ * @returns {object} AdministrativeAreaForm component
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
  * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * <AdministrativeAreaForm
+ *   administrativeArea={administrativeArea}
+ *   isEditForm={isEditForm}
+ *   posting={posting}
+ *   onCancel={this.handleCloseAdministrativeAreaForm}
+ * />
+ *
  */
-class AdministrativeAreaForm extends Component {
-  /**
-   * @function
-   * @name onChangeColor
-   * @description Handle changing of color
-   *
-   * @param {string} color event object
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  onChangeColor = ({ color }) => {
-    const {
-      form: { setFieldsValue },
-    } = this.props;
-    setFieldsValue({ color });
+const AdministrativeAreaForm = ({
+  administrativeArea,
+  isEditForm,
+  posting,
+  onCancel,
+}) => {
+  // form finish(submit) handler
+  const onFinish = (values) => {
+    if (isEditForm) {
+      const updates = { ...administrativeArea, ...values };
+      putAdministrativeArea(
+        updates,
+        () => notifySuccess(MESSAGE_PUT_SUCCESS),
+        () => notifyError(MESSAGE_PUT_ERROR)
+      );
+    } else {
+      postAdministrativeArea(
+        values,
+        () => notifySuccess(MESSAGE_POST_SUCCESS),
+        () => notifyError(MESSAGE_POST_ERROR)
+      );
+    }
   };
 
-  /**
-   * @function
-   * @name handleSubmit
-   * @description Handle create/edit action
-   *
-   * @param {object} e event object
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleSubmit = (e) => {
-    e.preventDefault();
+  // search administrative area exclude self
+  const searchAdministrativeAreas = (optns, me) => {
+    const filter = {};
+    const myId = get(me, '_id');
+    const myLevel = get(me, 'relations.level');
 
-    const {
-      form: { validateFieldsAndScroll },
-      administrativeArea,
-      isEditForm,
-    } = this.props;
+    // ignore self from selection
+    if (myId) {
+      // eslint-disable-next-line no-underscore-dangle
+      filter._id = { $nin: [myId] };
+    }
+    // ensure higher levels
+    if (myLevel) {
+      // TODO: find with above level
+      // filter['relations.level'] = { $ne: get(myLevel, '_id', myLevel) };
+    }
 
-    validateFieldsAndScroll((error, values) => {
-      if (!error) {
-        const payload = {
-          strings: {
-            name: { en: values.name },
-            description: { en: values.description },
-          },
-          relations: {
-            level: values.level,
-            parent: values.parent,
-          },
-        };
-        if (isEditForm) {
-          const updatedAdministrativeArea = {
-            ...administrativeArea,
-            ...payload,
-          };
-          putAdministrativeArea(
-            updatedAdministrativeArea,
-            () => {
-              notifySuccess('AdministrativeArea was updated successfully');
-            },
-            () => {
-              notifyError(
-                `Something occurred while updating AdministrativeArea,
-                 please try again!`
-              );
-            }
-          );
-        } else {
-          postAdministrativeArea(
-            payload,
-            () => {
-              notifySuccess('AdministrativeArea was created successfully');
-            },
-            () => {
-              notifyError(
-                'Something occurred while saving AdministrativeArea, please try again!'
-              );
-            }
-          );
-        }
-      }
-    });
+    return getAdministrativeAreas({ ...optns, filter });
   };
 
-  render() {
-    const {
-      isEditForm,
-      administrativeArea,
-      posting,
-      onCancel,
-      form: { getFieldDecorator },
-    } = this.props;
-
-    const {
-      strings: { name, description },
-    } = administrativeArea || {
-      strings: { name: {}, code: '', description: {}, color: '' },
-    };
-
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-    };
-
-    return (
-      <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Administrative Level">
-          {getFieldDecorator('level', {
-            initialValue:
-              isEditForm && administrativeArea
-                ? get(administrativeArea, 'relations.level._id')
-                : undefined,
-            rules: [
+  return (
+    <Form
+      labelCol={labelCol}
+      wrapperCol={wrapperCol}
+      onFinish={onFinish}
+      initialValues={{ ...administrativeArea }}
+      autoComplete="off"
+    >
+      {/* start: name & code */}
+      <Row justify="space-between">
+        {/* start:code */}
+        <Col span={11}>
+          <Form.Item
+            label="Name"
+            title="Administrative area name e.g Dar es Salaam"
+            name={['strings', 'name', 'en']}
+            rules={[
               {
                 required: true,
-                message: 'Administrative Level is required',
+                message: 'Administrative area name is required',
               },
-            ],
-          })(
-            <SearchableSelectInput
-              onSearch={getAdministrativeLevels}
-              optionLabel={(level) => level.strings.name.en}
-              optionValue="_id"
-              initialValue={
-                isEditForm && administrativeArea
-                  ? get(administrativeArea, 'relations.level')
-                  : undefined
-              }
-            />
-          )}
-        </Form.Item>
-        {/* end administrativeArea Level */}
-
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Administrative Area Parent">
-          {getFieldDecorator('parent', {
-            initialValue:
-              isEditForm && administrativeArea
-                ? get(administrativeArea, 'relations.parent._id')
-                : undefined,
-          })(
-            <SearchableSelectInput
-              onSearch={getAdministrativeAreas}
-              optionLabel={(area) => area.strings.name.en}
-              optionValue="_id"
-              initialValue={
-                isEditForm && administrativeArea
-                  ? get(administrativeArea, 'relations.parent')
-                  : undefined
-              }
-            />
-          )}
-        </Form.Item>
-        {/* end administrativeArea Parent */}
-
-        {/* administrativeArea name */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Name ">
-          {getFieldDecorator('name', {
-            initialValue: isEditForm ? name.en : undefined,
-            rules: [
-              {
-                required: true,
-                message: 'AdministrativeArea name is required',
-              },
-            ],
-          })(<Input placeholder="e.g Tandale " />)}
-        </Form.Item>
-        {/* end administrativeArea name */}
-
-        {/* administrative area description */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="Description">
-          {getFieldDecorator('description', {
-            initialValue: isEditForm ? description.en : undefined,
-            rules: [
-              {
-                required: false,
-                message: 'AdministrativeArea description is required',
-              },
-            ],
-          })(<Input placeholder="e.g Tandale " />)}
-        </Form.Item>
-        {/* end description */}
-
-        {/* form actions */}
-        <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
-          <Button onClick={onCancel}>Cancel</Button>
-          <Button
-            style={{ marginLeft: 8 }}
-            type="primary"
-            htmlType="submit"
-            loading={posting}
+            ]}
           >
-            Save
-          </Button>
-        </Form.Item>
-        {/* end form actions */}
-      </Form>
-    );
-  }
-}
+            <Input />
+          </Form.Item>
+        </Col>
+        {/* end:name */}
+        {/* start:code */}
+        <Col span={11}>
+          <Form.Item
+            label="Code"
+            title="Administrative area code e.g DSM"
+            name={['strings', 'code']}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+        {/* end:code */}
+      </Row>
+      {/* end: name & code */}
+
+      {/* start: level & parent */}
+      <Row justify="space-between">
+        {/* start:level */}
+        <Col span={11}>
+          <Form.Item
+            label="Level"
+            title="Administrative level e.g Region"
+            name={['relations', 'level', '_id']}
+            rules={[
+              {
+                required: true,
+                message: 'Administrative level is required',
+              },
+            ]}
+          >
+            <SearchableSelectInput
+              onSearch={(optns = {}) => {
+                return getAdministrativeLevels(optns);
+              }}
+              optionLabel={(level) => get(level, 'strings.name.en')}
+              optionValue="_id"
+              initialValue={get(
+                administrativeArea,
+                'relations.level',
+                undefined
+              )}
+            />
+          </Form.Item>
+        </Col>
+        {/* end:level */}
+        {/* start:parent */}
+        <Col span={11}>
+          <Form.Item
+            label="Parent"
+            title="Administrative area parent e.g Tanzania"
+            name={['relations', 'parent', '_id']}
+          >
+            <SearchableSelectInput
+              onSearch={(optns = {}) => {
+                return searchAdministrativeAreas(optns, administrativeArea);
+              }}
+              optionLabel={(parent) => {
+                return `${get(parent, 'strings.name.en')} (${get(
+                  parent,
+                  'relations.level.strings.name.en',
+                  'N/A'
+                )})`;
+              }}
+              optionValue="_id"
+              initialValue={get(
+                administrativeArea,
+                'relations.parent',
+                undefined
+              )}
+            />
+          </Form.Item>
+        </Col>
+        {/* end:parent */}
+      </Row>
+      {/* end: level & parent */}
+
+      {/* start:description */}
+      <Form.Item
+        label="Description"
+        title="Administrative area description"
+        name={['strings', 'description', 'en']}
+      >
+        <TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
+      </Form.Item>
+      {/* end:description */}
+
+      {/* start:form actions */}
+      <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
+        <Button onClick={onCancel}>Cancel</Button>
+        <Button
+          style={{ marginLeft: 8 }}
+          type="primary"
+          htmlType="submit"
+          loading={posting}
+        >
+          Save
+        </Button>
+      </Form.Item>
+      {/* end:form actions */}
+    </Form>
+  );
+};
+
+AdministrativeAreaForm.defaultProps = {
+  administrativeArea: {},
+};
 
 AdministrativeAreaForm.propTypes = {
-  isEditForm: PropTypes.bool.isRequired,
   administrativeArea: PropTypes.shape({
+    _id: PropTypes.string,
     strings: PropTypes.shape({
       name: PropTypes.shape({
         en: PropTypes.string.isRequired,
@@ -246,40 +253,19 @@ AdministrativeAreaForm.propTypes = {
       description: PropTypes.shape({
         en: PropTypes.string.isRequired,
       }),
-      code: PropTypes.string.isRequired,
-      color: PropTypes.string.isRequired,
+    }),
+    numbers: PropTypes.shape({
+      weight: PropTypes.number.isRequired,
     }),
     relations: PropTypes.shape({
-      level: PropTypes.shape({
-        strings: PropTypes.shape({
-          name: PropTypes.shape({
-            en: PropTypes.string.isRequired,
-          }),
-        }),
-      }),
       parent: PropTypes.shape({
-        strings: PropTypes.shape({
-          name: PropTypes.shape({
-            en: PropTypes.string.isRequired,
-          }),
-        }),
+        _id: PropTypes.string,
       }),
     }),
   }),
-  form: PropTypes.shape({
-    getFieldDecorator: PropTypes.func,
-    validateFieldsAndScroll: PropTypes.func,
-    setFieldsValue: PropTypes.func,
-  }).isRequired,
-  types: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onCancel: PropTypes.func.isRequired,
+  isEditForm: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
 };
 
-AdministrativeAreaForm.defaultProps = {
-  administrativeArea: null,
-};
-
-export default Connect(Form.create()(AdministrativeAreaForm), {
-  types: 'eventTypes.list',
-});
+export default AdministrativeAreaForm;
