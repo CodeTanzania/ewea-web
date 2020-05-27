@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+// import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import { Button, Input, Form, Row, Col } from 'antd';
 import { httpActions } from '@codetanzania/ewea-api-client';
@@ -74,8 +75,17 @@ const AdministrativeAreaForm = ({
 }) => {
   // form finish(submit) handler
   const onFinish = (values) => {
+    // TODO: fix SearchableSelectInput
+    const formData = { ...values };
+    if (!get(formData, 'relations.parent._id')) {
+      formData.relations.parent = null;
+    }
+    if (!get(formData, 'relations.level._id')) {
+      formData.relations.level = null;
+    }
+
     if (isEditForm) {
-      const updates = { ...administrativeArea, ...values };
+      const updates = { ...administrativeArea, ...formData };
       putAdministrativeArea(
         updates,
         () => notifySuccess(MESSAGE_PUT_SUCCESS),
@@ -83,7 +93,7 @@ const AdministrativeAreaForm = ({
       );
     } else {
       postAdministrativeArea(
-        values,
+        formData,
         () => notifySuccess(MESSAGE_POST_SUCCESS),
         () => notifyError(MESSAGE_POST_ERROR)
       );
@@ -186,6 +196,7 @@ const AdministrativeAreaForm = ({
           <Form.Item
             label="Parent"
             title="Administrative area parent e.g Tanzania"
+            initialValue={null}
             name={['relations', 'parent', '_id']}
           >
             <SearchableSelectInput
