@@ -1,20 +1,21 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
-import EventSeverityForm from './Form';
+import SettingForm from '../../components/SettingForm';
 import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
 
-/* constants */
+/* http actions */
 const {
   getFocalPeople,
   getJurisdictions,
@@ -23,6 +24,7 @@ const {
   getAgencies,
   getEventSeveritiesExportUrl,
 } = httpActions;
+/* redux actions */
 const {
   closeEventSeverityForm,
   getEventSeverities,
@@ -32,17 +34,18 @@ const {
   refreshEventSeverities,
   paginateEventSeverities,
   deleteEventSeverity,
+  postEventSeverity,
+  putEventSeverity,
 } = reduxActions;
 
+/* constants */
+const { confirm } = Modal;
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
 const descriptionSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };
-
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...descriptionSpan, header: 'Description' },
 ];
-
-const { confirm } = Modal;
 
 /**
  * @class
@@ -201,6 +204,7 @@ class EventSeverities extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
+    selectEventSeverity(null);
     this.setState({ isEditForm: false });
   };
 
@@ -381,11 +385,12 @@ class EventSeverities extends Component {
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <EventSeverityForm
+          <SettingForm
+            setting={eventSeverity}
             posting={posting}
-            isEditForm={isEditForm}
-            eventSeverity={eventSeverity}
-            onCancel={this.closeEventSeverityForm}
+            onCancel={this.handleAfterCloseForm}
+            onCreate={postEventSeverity}
+            onUpdate={putEventSeverity}
           />
         </Modal>
         {/* end create/edit form modal */}
