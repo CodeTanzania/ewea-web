@@ -7,7 +7,7 @@ import isArray from 'lodash/isArray';
 import { PlusOutlined } from '@ant-design/icons';
 
 import Topbar from '../../components/Topbar';
-import EventLevelForm from './Form';
+import SettingForm from '../../components/SettingForm';
 import NotificationForm from '../../components/NotificationForm';
 import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
@@ -15,7 +15,16 @@ import ItemList from '../../components/List';
 import { notifyError, notifySuccess, truncateString } from '../../util';
 import './styles.css';
 
-/* constants */
+/* http actions */
+const {
+  getEventLevelsExportUrl,
+  getFocalPeople,
+  getJurisdictions,
+  getPartyTopics,
+  getRoles,
+  getAgencies,
+} = httpActions;
+/* redux actions */
 const {
   getEventLevels,
   openEventLevelForm,
@@ -25,25 +34,17 @@ const {
   deleteEventLevel,
   refreshEventLevels,
   paginateEventLevels,
+  postEventLevel,
+  putEventLevel,
 } = reduxActions;
+/* constants */
+const { confirm } = Modal;
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
 const descriptionSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };
-
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...descriptionSpan, header: 'Description' },
 ];
-
-const {
-  getEventLevelsExportUrl,
-  getFocalPeople,
-  getJurisdictions,
-  getPartyTopics,
-  getRoles,
-  getAgencies,
-} = httpActions;
-
-const { confirm } = Modal;
 
 /**
  * @class
@@ -142,6 +143,7 @@ class EventLevels extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
+    selectEventLevel(null);
     this.setState({ isEditForm: false });
   };
 
@@ -346,11 +348,12 @@ class EventLevels extends Component {
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <EventLevelForm
+          <SettingForm
+            setting={eventLevel}
             posting={posting}
-            isEditForm={isEditForm}
-            eventLevel={eventLevel}
             onCancel={this.closeEventLevelsForm}
+            onCreate={postEventLevel}
+            onUpdate={putEventLevel}
           />
         </Modal>
         {/* end create/edit form modal */}
