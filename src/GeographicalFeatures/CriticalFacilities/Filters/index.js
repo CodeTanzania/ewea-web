@@ -212,5 +212,5 @@ FeatureFiltersForm.defaultProps = {
 };
 
 export default Connect(FeatureFiltersForm, {
-  filter: 'dispatches.filter',
+  filter: 'features.filter',
 });
