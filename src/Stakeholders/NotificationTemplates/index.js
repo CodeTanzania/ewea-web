@@ -5,18 +5,19 @@ import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
+
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
-import NotificationTemplateForm from './Form';
+import SettingForm from '../../components/SettingForm';
 import { notifyError, notifySuccess } from '../../util';
 import './styles.css';
 
 const { confirm } = Modal;
 
-/* constants */
+/* http Actions */
 const {
   getFocalPeople,
   getJurisdictions,
@@ -25,21 +26,24 @@ const {
   getAgencies,
   // getFocalPeople,
 } = httpActions;
+/* redux actions */
 const {
   closeNotificationTemplateForm,
+  deleteNotificationTemplate,
   getNotificationTemplates,
   openNotificationTemplateForm,
+  postNotificationTemplate,
+  putNotificationTemplate,
   searchNotificationTemplates,
   selectNotificationTemplate,
   paginateNotificationTemplates,
-  deleteNotificationTemplate,
   refreshNotificationTemplates,
 } = reduxActions;
 
+/* constants */
 const nameSpan = { xxl: 6, xl: 6, lg: 6, md: 7, sm: 7, xs: 7 };
 const descriptionSpan = { xxl: 12, xl: 12, lg: 12, md: 10, sm: 10, xs: 11 };
 const codeSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 3, xs: 0 };
-
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...descriptionSpan, header: 'Description' },
@@ -57,7 +61,6 @@ const headerLayout = [
 class NotificationTemplates extends Component {
   // eslint-disable-next-line react/state-in-constructor
   state = {
-    showFilters: false,
     isEditForm: false,
     cached: null,
     notificationBody: undefined,
@@ -98,32 +101,6 @@ class NotificationTemplates extends Component {
 
   /**
    * @function
-   * @name openFiltersModal
-   * @description open filters modal by setting it's visible property
-   * to false via state
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  openFiltersModal = () => {
-    this.setState({ showFilters: true });
-  };
-
-  /**
-   * @function
-   * @name closeFiltersModal
-   * @description Close filters modal by setting it's visible property
-   * to false via state
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closeFiltersModal = () => {
-    this.setState({ showFilters: false });
-  };
-
-  /**
-   * @function
    * @name openNotificationTemplateForm
    * @description Open Notification Template form
    *
@@ -152,7 +129,7 @@ class NotificationTemplates extends Component {
    * @name searchNotificationTemplates
    * @description Search Notification Templates List based on supplied filter word
    *
-   * @param {object} event - Event instance
+   * @param {object} event  Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -191,18 +168,6 @@ class NotificationTemplates extends Component {
 
   /**
    * @function
-   * @name handleAfterCloseForm
-   * @description Perform post close form cleanups
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleAfterCloseForm = () => {
-    this.setState({ isEditForm: false });
-  };
-
-  /**
-   * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
    *
@@ -222,6 +187,7 @@ class NotificationTemplates extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
+    selectNotificationTemplate(null);
     this.setState({ isEditForm: false });
   };
 
@@ -320,7 +286,6 @@ class NotificationTemplates extends Component {
       total,
     } = this.props;
     const {
-      showFilters,
       isEditForm,
       showNotificationForm,
       notificationBody,
@@ -406,20 +371,6 @@ class NotificationTemplates extends Component {
         />
         {/* end list */}
 
-        {/* filter modal */}
-        <Modal
-          title="Filter Notification templates"
-          visible={showFilters}
-          onCancel={this.closeFiltersModal}
-          footer={null}
-          destroyOnClose
-          maskClosable={false}
-          className="FormModal"
-        >
-          <></>
-        </Modal>
-        {/* end filter modal */}
-
         {/* Notification Modal modal */}
         <Modal
           title="Notify Notification Template"
@@ -432,7 +383,6 @@ class NotificationTemplates extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            // recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
@@ -459,11 +409,12 @@ class NotificationTemplates extends Component {
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <NotificationTemplateForm
+          <SettingForm
+            setting={notificationTemplate}
             posting={posting}
-            isEditForm={isEditForm}
-            notificationTemplate={notificationTemplate}
             onCancel={this.closeNotificationTemplateForm}
+            onCreate={postNotificationTemplate}
+            onUpdate={putNotificationTemplate}
           />
         </Modal>
         {/* end create/edit form modal */}

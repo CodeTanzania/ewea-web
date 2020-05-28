@@ -225,7 +225,6 @@ SearchableSelectInput.propTypes = {
     PropTypes.number,
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
     }),
   ]),
   isFilter: PropTypes.bool,
