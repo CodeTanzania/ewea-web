@@ -110,7 +110,7 @@ const ListItem = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Row>
+      <Row align="middle">
         {/* eslint-disable react/jsx-props-no-spreading */}
         <Col {...sideSpan}>{renderSideComponent()}</Col>
         {children}
