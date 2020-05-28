@@ -118,12 +118,12 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
         <Col span={11}>
           <Form.Item
             label="Type"
-            title="Administrative type e.g Hospital"
+            title="Critical infrastructure type e.g Hospital"
             name={['relations', 'type', '_id']}
             rules={[
               {
                 required: true,
-                message: 'Administrative type is required',
+                message: 'Critical infrastructure type is required',
               },
             ]}
           >

@@ -9,6 +9,7 @@ import get from 'lodash/get';
 import map from 'lodash/map';
 import Topbar from '../../components/Topbar';
 import FeatureForm from './Form';
+import FeatureFiltersForm from './Filters';
 import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
@@ -120,10 +121,12 @@ class FeatureList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showFilters: false,
       isEditForm: false,
       showNotificationForm: false,
       notificationSubject: undefined,
       notificationBody: undefined,
+      cached: null,
     };
   }
 
@@ -138,6 +141,34 @@ class FeatureList extends Component {
   componentDidMount() {
     getFeatures();
   }
+
+  /**
+   * @function handleOnCache
+   * @name handleOnCache
+   * @description Handle updating cache
+   * @param {object} cached values cached
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleOnCache = (cached) => {
+    const { cached: previousCached } = this.state;
+    const values = { ...previousCached, ...cached };
+    this.setState({ cached: values });
+  };
+
+  /**
+   * @function handleOnClearCache
+   * @name handleOnClearCache
+   * @description Handle clearing cache
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleOnClearCache = () => {
+    // TODO: support keys to clear specific cached value
+    this.setState({ cached: null });
+  };
 
   /**
    * @function handleListSearch
@@ -330,6 +361,30 @@ class FeatureList extends Component {
   };
 
   /**
+   * @function handleNotificationFormClose
+   * @name handleNotificationFormClose
+   * @description Handle filters form opening
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleListFiltersFormOpen = () => {
+    this.setState({ showFilters: true });
+  };
+
+  /**
+   * @function handleNotificationFormClose
+   * @name handleNotificationFormClose
+   * @description Handle filters form closing
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleListFiltersFormClose = () => {
+    this.setState({ showFilters: false });
+  };
+
+  /**
    * @function render
    * @name render
    * @description Render list
@@ -353,6 +408,8 @@ class FeatureList extends Component {
 
     // states
     const {
+      showFilters,
+      cached,
       isEditForm,
       showNotificationForm,
       notificationSubject,
@@ -389,8 +446,7 @@ class FeatureList extends Component {
           page={page}
           itemCount={total}
           loading={loading}
-          // onFilter={this.handleListFilter}
-          onNotify={this.openNotificationForm}
+          onFilter={this.handleListFiltersFormOpen}
           onShare={this.handleListShare}
           onRefresh={this.handleListRefresh}
           onPaginate={this.handleListPaginate}
@@ -487,6 +543,25 @@ class FeatureList extends Component {
           />
         </Modal>
         {/* end: notification modal */}
+
+        {/* start: filter modal */}
+        <Modal
+          title="Filter Critical Infrastructures"
+          visible={showFilters}
+          className="FormModal"
+          footer={null}
+          onCancel={this.handleListFiltersFormClose}
+          destroyOnClose
+          maskClosable={false}
+        >
+          <FeatureFiltersForm
+            cached={cached}
+            onCache={this.handleOnCache}
+            onCancel={this.handleListFiltersFormClose}
+            onClearCache={this.handleOnClearCache}
+          />
+        </Modal>
+        {/* end: filter modal */}
 
         {/* start: form modal */}
         <Modal

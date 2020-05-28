@@ -390,8 +390,7 @@ class EventFunctionList extends Component {
           page={page}
           itemCount={total}
           loading={loading}
-          // onFilter={this.handleListFilter}
-          onNotify={this.openNotificationForm}
+          // onFilter={this.handleListFiltersFormOpen}
           onShare={this.handleListShare}
           onRefresh={this.handleListRefresh}
           onPaginate={this.handleListPaginate}
