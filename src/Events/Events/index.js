@@ -1,11 +1,12 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Drawer, Col, Tag, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import isArray from 'lodash/isArray';
 import get from 'lodash/get';
+import isArray from 'lodash/isArray';
+
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import EventFilters from './Filters';
@@ -23,7 +24,16 @@ import {
   timeAgo,
 } from '../../util';
 
-/* constants */
+/* http actions */
+const {
+  getFocalPeople,
+  getAdministrativeAreas,
+  getPartyGroups,
+  getRoles,
+  getAgencies,
+  getEventsExportUrl,
+} = httpActions;
+/* redux actions */
 const {
   closeEventForm,
   getEvents,
@@ -34,14 +44,8 @@ const {
   paginateEvents,
   deleteEvent,
 } = reduxActions;
-const {
-  getFocalPeople,
-  getAdministrativeAreas,
-  getPartyGroups,
-  getRoles,
-  getAgencies,
-  getEventsExportUrl,
-} = httpActions;
+
+/* constants */
 const { confirm } = Modal;
 const eventSpan = { xxl: 6, xl: 7, lg: 7, md: 8, sm: 10, xs: 11 };
 const referenceIDSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 6, xs: 7 };
@@ -426,96 +430,103 @@ class Events extends Component {
             isSelected,
             onSelectItem,
             onDeselectItem,
-          }) => (
-            <ListItem
-              key={item._id} // eslint-disable-line
-              name={item.description}
-              item={item}
-              isSelected={isSelected}
-              onSelectItem={onSelectItem}
-              onDeselectItem={onDeselectItem}
-              avatarBackgroundColor={get(item, 'type.strings.color', undefined)}
-              renderActions={() => (
-                <ListItemActions
-                  view={{
-                    name: 'View Event',
-                    title: 'View Event Details',
-                    onClick: () => this.handleView(item),
-                  }}
-                  edit={{
-                    name: 'Edit Event',
-                    title: 'Update Event Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Event',
-                    title: 'Share Event details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Event',
-                    title: 'Remove Event from list of active Events',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                  whatsapp={{
-                    name: 'Share on WhatsApp',
-                    title: 'Share Event on Whatsapp',
-                    link: `https://wa.me/?text=${encodeURI(
-                      generateEventTemplate(item).body
-                    )}`,
-                  }}
-                />
-              )}
-            >
-              {/* eslint-disable react/jsx-props-no-spreading */}
-              <Col {...eventSpan} title={item.description}>
-                <Button
-                  type="link"
-                  onClick={() => this.handleView(item)}
-                  style={{
-                    padding: 0,
-                    color: 'rgba(0, 0, 0, 0.65)',
-                    whiteSpace: 'normal',
-                    textAlign: 'left',
-                    wordWrap: 'break-word',
-                  }}
-                >
-                  {truncateString(item.description, 50)}
-                </Button>
-              </Col>
-              {/* <Col {...areaSpan}>{location}</Col> */}
-              <Col {...referenceIDSpan}>{item.number}</Col>
-              <Col
-                {...levelSpan}
-                title={get(item, 'item.level.strings.description', 'N/A')}
-              >
-                {item.level ? (
-                  <Tag
-                    color={
-                      item.level.strings.color === '#FFFFFF'
-                        ? undefined
-                        : item.level.strings.color
-                    }
-                  >
-                    {item.level.strings.name.en}
-                  </Tag>
-                ) : (
-                  'N/A'
+          }) => {
+            const eventLevelColor = get(item, 'level.strings.color');
+            return (
+              <ListItem
+                key={item._id} // eslint-disable-line
+                name={item.description}
+                item={item}
+                isSelected={isSelected}
+                onSelectItem={onSelectItem}
+                onDeselectItem={onDeselectItem}
+                avatarBackgroundColor={get(
+                  item,
+                  'type.strings.color',
+                  undefined
                 )}
-              </Col>
-              <Col {...stageSpan}>
-                <Tag color="volcano">{item.stage}</Tag>
-              </Col>
-              <Col {...typeSpan}>
-                {get(item, 'type.strings.name.en', 'N/A')}
-              </Col>
-              <Col {...groupSpan}>
-                {get(item, 'group.strings.name.en', 'N/A')}
-              </Col>
-              <Col {...lastUpdatedSpan}>{timeAgo(item.updatedAt)}</Col>
-              {/* eslint-enable react/jsx-props-no-spreading */}
-            </ListItem>
-          )}
+                renderActions={() => (
+                  <ListItemActions
+                    view={{
+                      name: 'View Event',
+                      title: 'View Event Details',
+                      onClick: () => this.handleView(item),
+                    }}
+                    edit={{
+                      name: 'Edit Event',
+                      title: 'Update Event Details',
+                      onClick: () => this.handleEdit(item),
+                    }}
+                    share={{
+                      name: 'Share Event',
+                      title: 'Share Event details with others',
+                      onClick: () => this.handleShare(item),
+                    }}
+                    archive={{
+                      name: 'Archive Event',
+                      title: 'Remove Event from list of active Events',
+                      onClick: () => this.showArchiveConfirm(item),
+                    }}
+                    whatsapp={{
+                      name: 'Share on WhatsApp',
+                      title: 'Share Event on Whatsapp',
+                      link: `https://wa.me/?text=${encodeURI(
+                        generateEventTemplate(item).body
+                      )}`,
+                    }}
+                  />
+                )}
+              >
+                {/* eslint-disable react/jsx-props-no-spreading */}
+                <Col {...eventSpan} title={item.description}>
+                  <Button
+                    type="link"
+                    onClick={() => this.handleView(item)}
+                    style={{
+                      padding: 0,
+                      color: 'rgba(0, 0, 0, 0.65)',
+                      whiteSpace: 'normal',
+                      textAlign: 'left',
+                      wordWrap: 'break-word',
+                    }}
+                  >
+                    {truncateString(item.description, 50)}
+                  </Button>
+                </Col>
+                {/* <Col {...areaSpan}>{location}</Col> */}
+                <Col {...referenceIDSpan}>{item.number}</Col>
+                <Col
+                  {...levelSpan}
+                  title={get(item, 'item.level.strings.description', 'N/A')}
+                >
+                  {item.level ? (
+                    <Tag
+                      color={
+                        eventLevelColor === '#FFFFFF'
+                          ? undefined
+                          : eventLevelColor
+                      }
+                    >
+                      {get(item, 'level.strings.name.en', 'N/A')}
+                    </Tag>
+                  ) : (
+                    'N/A'
+                  )}
+                </Col>
+                <Col {...stageSpan}>
+                  <Tag color="volcano">{item.stage}</Tag>
+                </Col>
+                <Col {...typeSpan}>
+                  {get(item, 'type.strings.name.en', 'N/A')}
+                </Col>
+                <Col {...groupSpan}>
+                  {get(item, 'group.strings.name.en', 'N/A')}
+                </Col>
+                <Col {...lastUpdatedSpan}>{timeAgo(item.updatedAt)}</Col>
+                {/* eslint-enable react/jsx-props-no-spreading */}
+              </ListItem>
+            );
+          }}
         />
         {/* end list */}
 
