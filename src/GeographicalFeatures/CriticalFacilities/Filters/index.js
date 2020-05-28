@@ -175,27 +175,35 @@ const FeatureFiltersForm = ({
 };
 
 FeatureFiltersForm.propTypes = {
-  filter: PropTypes.objectOf(
-    PropTypes.shape({
-      type: PropTypes.arrayOf(
-        PropTypes.shape({
-          _id: PropTypes.string,
-        })
-      ),
-      area: PropTypes.arrayOf(
-        PropTypes.shape({
-          _id: PropTypes.string,
-        })
-      ),
-      custodians: PropTypes.arrayOf(
-        PropTypes.shape({
-          _id: PropTypes.string,
-        })
-      ),
-    })
-  ),
+  filter: PropTypes.shape({
+    'relations.type': PropTypes.arrayOf(
+      PropTypes.shape({
+        _id: PropTypes.string,
+      })
+    ),
+    'relations.area': PropTypes.arrayOf(
+      PropTypes.shape({
+        _id: PropTypes.string,
+      })
+    ),
+    'relations.custodians': PropTypes.arrayOf(
+      PropTypes.shape({
+        _id: PropTypes.string,
+      })
+    ),
+  }),
   cached: PropTypes.shape({
-    type: PropTypes.arrayOf(
+    'relations.type': PropTypes.arrayOf(
+      PropTypes.shape({
+        _id: PropTypes.string,
+      })
+    ),
+    'relations.area': PropTypes.arrayOf(
+      PropTypes.shape({
+        _id: PropTypes.string,
+      })
+    ),
+    'relations.custodians': PropTypes.arrayOf(
       PropTypes.shape({
         _id: PropTypes.string,
       })
