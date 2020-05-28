@@ -425,7 +425,7 @@ class EventFunctionList extends Component {
                       onClick: () => this.handleItemShare(item),
                     }}
                     archive={{
-                      name: 'Archive EventFunction',
+                      name: 'Archive Emergency Function',
                       title:
                         'Remove emergency function from list of active emergency functions',
                       onClick: () => this.handleItemArchive(item),
