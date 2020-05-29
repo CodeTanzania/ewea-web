@@ -1,20 +1,30 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import isArray from 'lodash/isArray';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import isArray from 'lodash/isArray';
+import get from 'lodash/get';
+
 import Topbar from '../../components/Topbar';
-import EventGroupForm from './Form';
+import SettingForm from '../../components/SettingForm';
 import NotificationForm from '../../components/NotificationForm';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
 import { notifyError, notifySuccess, truncateString } from '../../util';
 import './styles.css';
-
-/* constants */
+/* http actions */
+const {
+  getEventGroupsExportUrl,
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getRoles,
+  getAgencies,
+} = httpActions;
+/* redux actions */
 const {
   getEventGroups,
   openEventGroupForm,
@@ -24,27 +34,19 @@ const {
   refreshEventGroups,
   paginateEventGroups,
   deleteEventGroup,
+  postEventGroup,
+  putEventGroup,
 } = reduxActions;
+/* constants */
+const { confirm } = Modal;
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 6, xs: 14 };
 const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 5, xs: 4 };
 const descriptionSpan = { xxl: 15, xl: 15, lg: 15, md: 14, sm: 9, xs: 0 };
-
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...codeSpan, header: 'Code' },
   { ...descriptionSpan, header: 'Description' },
 ];
-
-const { confirm } = Modal;
-
-const {
-  getEventGroupsExportUrl,
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getRoles,
-  getAgencies,
-} = httpActions;
 
 /**
  * @class
@@ -97,7 +99,7 @@ class EventGroups extends Component {
    * @name searchEventGroups
    * @description Search Event Groups List based on supplied filter word
    *
-   * @param {object} event - Event instance
+   * @param {object} event Event instance
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -131,6 +133,7 @@ class EventGroups extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
+    selectEventGroup(null);
     this.setState({ isEditForm: false });
   };
 
@@ -242,7 +245,7 @@ class EventGroups extends Component {
       loading,
       page,
       posting,
-      eventType,
+      eventGroup,
       showForm,
       searchQuery,
       total,
@@ -277,7 +280,6 @@ class EventGroups extends Component {
           itemCount={total}
           loading={loading}
           // onFilter={this.openFiltersModal}
-          // onNotify={this.openNotificationForm}
           onShare={this.handleShare}
           onRefresh={this.handleRefreshEventGroups}
           generateExportUrl={getEventGroupsExportUrl}
@@ -319,11 +321,11 @@ class EventGroups extends Component {
               )}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
-              <Col {...nameSpan}>{item.strings.name.en}</Col>
-              <Col {...codeSpan}>{item.strings.code}</Col>
+              <Col {...nameSpan}>{get(item, 'strings.name.en', 'N/A')}</Col>
+              <Col {...codeSpan}>{get(item, 'strings.code', 'N/A')}</Col>
               <Col {...descriptionSpan}>
-                <span title={item.strings.description.en}>
-                  {truncateString(item.strings.description.en, 120)}
+                <span title={get(item, 'strings.description.en', '')}>
+                  {truncateString(get(item, 'strings.description.en', ''), 120)}
                 </span>
               </Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
@@ -365,11 +367,12 @@ class EventGroups extends Component {
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <EventGroupForm
+          <SettingForm
+            setting={eventGroup}
             posting={posting}
-            isEditForm={isEditForm}
-            eventType={eventType}
-            onCancel={this.closeEventGroupsForm}
+            onCancel={this.handleAfterCloseForm}
+            onCreate={postEventGroup}
+            onUpdate={putEventGroup}
           />
         </Modal>
         {/* end create/edit form modal */}
@@ -382,7 +385,7 @@ EventGroups.propTypes = {
   loading: PropTypes.bool.isRequired,
   eventGroups: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
-  eventType: PropTypes.shape({ name: PropTypes.string }),
+  eventGroup: PropTypes.shape({ name: PropTypes.string }),
   page: PropTypes.number.isRequired,
   searchQuery: PropTypes.string,
   total: PropTypes.number.isRequired,
@@ -391,13 +394,13 @@ EventGroups.propTypes = {
 };
 
 EventGroups.defaultProps = {
-  eventType: null,
+  eventGroup: null,
   searchQuery: undefined,
 };
 
 export default Connect(EventGroups, {
   eventGroups: 'eventGroups.list',
-  eventType: 'eventGroups.selected',
+  eventGroup: 'eventGroups.selected',
   loading: 'eventGroups.loading',
   posting: 'eventGroups.posting',
   page: 'eventGroups.page',
