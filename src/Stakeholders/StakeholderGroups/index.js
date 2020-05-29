@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import isArray from 'lodash/isArray';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import isArray from 'lodash/isArray';
+
 import Topbar from '../../components/Topbar';
-import PartyGroupForm from './Form';
+import SettingForm from '../../components/SettingForm';
 import NotificationForm from '../../components/NotificationForm';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
@@ -14,19 +15,7 @@ import ListItemActions from '../../components/ListItemActions';
 import { notifyError, notifySuccess, truncateString } from '../../util';
 import './styles.css';
 
-/* constants */
-const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 6, xs: 14 };
-const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 5, xs: 4 };
-const descriptionSpan = { xxl: 15, xl: 15, lg: 15, md: 14, sm: 9, xs: 0 };
-
-const headerLayout = [
-  { ...nameSpan, header: 'Name' },
-  { ...codeSpan, header: 'Code' },
-  { ...descriptionSpan, header: 'Description' },
-];
-
-const { confirm } = Modal;
-
+/* http actions */
 const {
   getPartyGroupsExportUrl,
   getFocalPeople,
@@ -34,6 +23,7 @@ const {
   getRoles,
   getAgencies,
 } = httpActions;
+/* redux actions */
 const {
   getPartyGroups,
   openPartyGroupForm,
@@ -43,7 +33,20 @@ const {
   refreshPartyGroups,
   paginatePartyGroups,
   deletePartyGroup,
+  postPartyGroup,
+  putPartyGroup,
 } = reduxActions;
+
+/* constants */
+const { confirm } = Modal;
+const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 6, xs: 14 };
+const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 5, xs: 4 };
+const descriptionSpan = { xxl: 15, xl: 15, lg: 15, md: 14, sm: 9, xs: 0 };
+const headerLayout = [
+  { ...nameSpan, header: 'Name' },
+  { ...codeSpan, header: 'Code' },
+  { ...descriptionSpan, header: 'Description' },
+];
 
 /**
  * @class
@@ -96,7 +99,7 @@ class PartyGroups extends Component {
    * @name searchPartyGroups
    * @description Search Stakeholder Groups List based on supplied filter word
    *
-   * @param {object} party - Party instance
+   * @param {object} party Party instance
    *
    * @version 0.1.0
    * @since 0.1.0
@@ -130,6 +133,7 @@ class PartyGroups extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
+    selectPartyGroup(null);
     this.setState({ isEditForm: false });
   };
 
@@ -241,7 +245,7 @@ class PartyGroups extends Component {
       loading,
       page,
       posting,
-      partyType,
+      partyGroup,
       showForm,
       searchQuery,
       total,
@@ -366,11 +370,12 @@ class PartyGroups extends Component {
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <PartyGroupForm
+          <SettingForm
+            setting={partyGroup}
             posting={posting}
-            isEditForm={isEditForm}
-            partyType={partyType}
             onCancel={this.closePartyGroupsForm}
+            onCreate={postPartyGroup}
+            onUpdate={putPartyGroup}
           />
         </Modal>
         {/* end create/edit form modal */}
@@ -383,7 +388,7 @@ PartyGroups.propTypes = {
   loading: PropTypes.bool.isRequired,
   partyGroups: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
-  partyType: PropTypes.shape({ name: PropTypes.string }),
+  partyGroup: PropTypes.shape({ name: PropTypes.string }),
   page: PropTypes.number.isRequired,
   searchQuery: PropTypes.string,
   total: PropTypes.number.isRequired,
@@ -392,13 +397,13 @@ PartyGroups.propTypes = {
 };
 
 PartyGroups.defaultProps = {
-  partyType: null,
+  partyGroup: null,
   searchQuery: undefined,
 };
 
 export default Connect(PartyGroups, {
   partyGroups: 'partyGroups.list',
-  partyType: 'partyGroups.selected',
+  partyGroup: 'partyGroups.selected',
   loading: 'partyGroups.loading',
   posting: 'partyGroups.posting',
   page: 'partyGroups.page',
