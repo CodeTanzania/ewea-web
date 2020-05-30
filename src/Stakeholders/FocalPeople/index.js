@@ -10,7 +10,7 @@ import get from 'lodash/get';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import FocalPersonFilters from './Filters';
-import FocalPersonForm from './Form';
+import StakeholderForm from '../../components/StakeholderForm';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
@@ -38,6 +38,8 @@ const {
   refreshFocalPeople,
   paginateFocalPeople,
   deleteFocalPerson,
+  postFocalPerson,
+  putFocalPerson,
 } = reduxActions;
 const { confirm } = Modal;
 
@@ -259,6 +261,7 @@ class FocalPeople extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
+    selectFocalPerson(null);
     this.setState({ isEditForm: false });
   };
 
@@ -497,11 +500,36 @@ class FocalPeople extends Component {
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <FocalPersonForm
+          <StakeholderForm
+            stakeholder={focalPerson}
             posting={posting}
-            isEditForm={isEditForm}
-            focalPerson={focalPerson}
             onCancel={this.closeFocalPersonForm}
+            onCreate={(data) =>
+              postFocalPerson(
+                data,
+                () => {
+                  notifySuccess('Focal Person was created successfully');
+                },
+                () => {
+                  notifyError(
+                    'Something occurred while saving focal Person, please try again!'
+                  );
+                }
+              )
+            }
+            onUpdate={(data) =>
+              putFocalPerson(
+                data,
+                () => {
+                  notifySuccess('Focal Person was updated successfully');
+                },
+                () => {
+                  notifyError(
+                    'Something occurred while updating focal Person, please try again!'
+                  );
+                }
+              )
+            }
           />
         </Modal>
         {/* end create/edit form modal */}

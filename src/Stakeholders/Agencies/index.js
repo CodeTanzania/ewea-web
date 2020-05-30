@@ -8,7 +8,7 @@ import isArray from 'lodash/isArray';
 import get from 'lodash/get';
 
 import Topbar from '../../components/Topbar';
-import AgencyForm from './AgencyForm';
+import StakeholderForm from '../../components/StakeholderForm';
 import AgencyFilters from './Filters';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
@@ -17,12 +17,14 @@ import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess, generateAgencyVCard } from '../../util';
 import './styles.css';
 
+/* http actions */
 const {
   getAgencies: getAgenciesFromAPI,
   getAdministrativeAreas,
   getPartyGroups,
   getAgenciesExportUrl,
 } = httpActions;
+/* redux actions */
 const {
   closeAgencyForm,
   getAgencies,
@@ -32,6 +34,8 @@ const {
   refreshAgencies,
   paginateAgencies,
   deleteAgency,
+  postAgency,
+  putAgency,
 } = reduxActions;
 
 /* constants */
@@ -219,6 +223,7 @@ class Agencies extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
+    selectAgency(null);
     this.setState({ isEditForm: false });
   };
 
@@ -481,11 +486,37 @@ class Agencies extends Component {
           maskClosable={false}
           afterClose={this.handleAfterCloseForm}
         >
-          <AgencyForm
+          <StakeholderForm
+            isAgency
+            stakeholder={agency}
             posting={posting}
-            isEditForm={isEditForm}
-            agency={agency}
             onCancel={this.closeAgencyForm}
+            onCreate={(data) =>
+              postAgency(
+                data,
+                () => {
+                  notifySuccess('Agency was created successfully');
+                },
+                () => {
+                  notifyError(
+                    'Something occurred while saving agency, please try again!'
+                  );
+                }
+              )
+            }
+            onUpdate={(data) =>
+              putAgency(
+                data,
+                () => {
+                  notifySuccess('Agency was updated successfully');
+                },
+                () => {
+                  notifyError(
+                    'Something occurred while updating agency, please try again!'
+                  );
+                }
+              )
+            }
           />
         </Modal>
         {/* end create/edit form modal */}
