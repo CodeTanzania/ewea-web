@@ -15,6 +15,7 @@ import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
 import { notifyError, notifySuccess, truncateString } from '../../util';
 import './styles.css';
+
 /* http actions */
 const {
   getEventGroupsExportUrl,
@@ -37,6 +38,7 @@ const {
   postEventGroup,
   putEventGroup,
 } = reduxActions;
+
 /* constants */
 const { confirm } = Modal;
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 6, xs: 14 };

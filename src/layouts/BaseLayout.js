@@ -72,8 +72,8 @@ const breadcrumbNameMap = {
     title: 'List of all actions to be performed',
   },
   '/app/events': {
-    name: 'Events',
-    title: 'List of all Events(Alerts and Incidents)',
+    name: 'Emergencies',
+    title: 'List of all Emergencies(Alerts and Incidents)',
   },
 
   /* stakeholders routes */
