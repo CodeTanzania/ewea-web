@@ -74,16 +74,22 @@ const SettingForm = ({ setting, posting, onCancel, onCreate, onUpdate }) => {
     >
       {/* setting name */}
       <Form.Item
-        label="Name"
         name={['strings', 'name', 'en']}
+        label="Name"
         rules={[{ required: true, message: 'This field is required' }]}
       >
         <Input />
       </Form.Item>
       {/* end setting name */}
 
+      {/* setting code */}
+      <Form.Item name={['strings', 'code']} label="Code">
+        <Input />
+      </Form.Item>
+      {/* end setting code */}
+
       {/* setting description */}
-      <Form.Item label="Description" name={['strings', 'description', 'en']}>
+      <Form.Item name={['strings', 'description', 'en']} label="Description">
         <TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
       </Form.Item>
       {/* end setting description */}
