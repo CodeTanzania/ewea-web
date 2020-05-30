@@ -23,7 +23,7 @@ const routes = [
     description: modules.alertsIssued,
   },
   {
-    name: 'Events',
+    name: 'Emergencies',
     path: '/events',
     icon: eventsIcon,
     description: modules.alertsIssued,
