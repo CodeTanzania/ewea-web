@@ -13,7 +13,6 @@ const {
   getPartyRoles,
   getPartyGroups,
 } = httpActions;
-/* redux actions */
 /* constants */
 const { TextArea } = Input;
 const formItemLayout = {
@@ -35,6 +34,21 @@ const formItemLayout = {
   },
 };
 
+/**
+ * @function
+ * @name StakeholderForm
+ * @description Form for creating focal person or an agency in stakeholder module
+ * @param {object} props Form properties object
+ * @param {object|null} props.stakeholder Stakeholder object to be edited if present or created if null on save
+ * @param {boolean} props.posting Boolean flag for showing spinner while sending data to the api
+ * @param {Function} props.onCancel Callback for closing the form
+ * @param {Function} props.onCreate Callback for creating stakeholder
+ * @param {Function} props.onUpdate Callback for updating stakeholder
+ * @param {boolean} props.isAgency Boolean flag for marking the type of stakeholder
+ * @returns {object} Render stakeholder form based on stakeholder type i.e focal or agency
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 const StakeholderForm = ({
   stakeholder,
   posting,
@@ -57,6 +71,7 @@ const StakeholderForm = ({
     <Form
       {...formItemLayout} // eslint-disable-line
       onFinish={onFinish}
+      autoComplete="off"
       initialValues={{
         ...stakeholder,
         party: get(stakeholder, 'party._id'),

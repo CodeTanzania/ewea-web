@@ -131,6 +131,7 @@ class EventTypes extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
+    selectEventType(null);
     this.setState({ isEditForm: false });
   };
 
