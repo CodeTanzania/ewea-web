@@ -41,7 +41,7 @@ Action Catalog is a collection of all tasks that can take place when an alert is
 
 See API source code [repository](https://github.com/CodeTanzania/emis-stakeholder).
 
-#### Stakehholders
+#### Stakeholders
 
 EWEA Stakeholders contains an up to date database of all stakeholders responsible for emergency/disaster management within a specific area. They are categorized into three groups
 
@@ -107,6 +107,7 @@ and view it on http://localhost:3000
 - [Redux state manager for EWEA](https://github.com/CodeTanzania/ewea-api-states)
 
 ## References
+
 - [Create React App](https://create-react-app.dev/)
 - [Add a web app manifest](https://web.dev/add-manifest/)
 - [Adaptive icon support in PWAs](https://web.dev/maskable-icon/)
