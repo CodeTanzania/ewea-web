@@ -4,7 +4,9 @@ import { Button, Input, Form } from 'antd';
 import get from 'lodash/get';
 
 import { notifyError, notifySuccess } from '../../util';
+import ColorPicker from '../ColorPicker';
 
+/* constants */
 const { TextArea } = Input;
 const formItemLayout = {
   labelCol: {
@@ -40,6 +42,7 @@ const formItemLayout = {
  * @since 0.1.0
  */
 const SettingForm = ({ setting, posting, onCancel, onCreate, onUpdate }) => {
+  const [form] = Form.useForm();
   const onFinish = (values) => {
     if (get(setting, '_id')) {
       const updatedSetting = { ...setting, ...values };
@@ -69,6 +72,7 @@ const SettingForm = ({ setting, posting, onCancel, onCreate, onUpdate }) => {
     <Form
       {...formItemLayout} // eslint-disable-line
       autoComplete="off"
+      form={form}
       onFinish={onFinish}
       initialValues={{ ...setting }}
     >
@@ -93,6 +97,12 @@ const SettingForm = ({ setting, posting, onCancel, onCreate, onUpdate }) => {
         <TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
       </Form.Item>
       {/* end setting description */}
+
+      {/* setting color code */}
+      <Form.Item name={['strings', 'color']} label="Color">
+        <ColorPicker />
+      </Form.Item>
+      {/* end setting color code */}
 
       {/* form actions */}
       <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
