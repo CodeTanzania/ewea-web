@@ -170,6 +170,7 @@ class Roles extends Component {
    * @since 0.1.0
    */
   handleAfterCloseForm = () => {
+    selectPartyRole(null);
     this.setState({ isEditForm: false });
   };
 
@@ -431,7 +432,6 @@ class Roles extends Component {
         >
           <RoleForm
             posting={posting}
-            isEditForm={isEditForm}
             role={role}
             onCancel={this.closePartyRolesForm}
           />
