@@ -164,11 +164,10 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
               }
               optionValue="_id"
               initialValue={
-                get(caze, 'victim.area', undefined) ||
-                get(cached, 'victimArea', undefined)
+                get(caze, 'victim.area') || get(cached, 'victim.area')
               }
               onCache={(values) =>
-                setCache({ ...cached, victimArea: values[0] })
+                setCache({ ...cached, 'victim.area': values[0] })
               }
             />
           </Form.Item>
@@ -190,11 +189,10 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
               optionLabel={(gender) => `${get(gender, 'strings.name.en')}`}
               optionValue="_id"
               initialValue={
-                get(caze, 'victim.gender', undefined) ||
-                get(cached, 'victimGender', undefined)
+                get(caze, 'victim.gender') || get(cached, 'victim.gender')
               }
               onCache={(values) =>
-                setCache({ ...cached, victimGender: values[0] })
+                setCache({ ...cached, 'victim.gender': values[0] })
               }
             />
           </Form.Item>
@@ -225,11 +223,11 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
               }
               optionValue="_id"
               initialValue={
-                get(caze, 'victim.occupation', undefined) ||
-                get(cached, 'victimOccupation', undefined)
+                get(caze, 'victim.occupation') ||
+                get(cached, 'victim.occupation')
               }
               onCache={(values) =>
-                setCache({ ...cached, victimOccupation: values[0] })
+                setCache({ ...cached, 'victim.occupation': values[0] })
               }
             />
           </Form.Item>
