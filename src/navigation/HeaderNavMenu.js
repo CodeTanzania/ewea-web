@@ -9,7 +9,7 @@ import focalPeopleIcon from '../assets/icons/focalpeople.svg';
 import eventsIcon from '../assets/icons/events.svg';
 // import actionsTakenIcon from '../assets/icons/actionstaken.svg';
 import actionCatalogueIcon from '../assets/icons/actioncatalog.svg';
-import caseManagementIcon from '../assets/icons/dashboards/case-management-disabled.svg';
+import caseManagementIcon from '../assets/icons/dashboards/case-management.svg';
 import resourceManagementIcon from '../assets/icons/dashboards/resource-management.svg';
 import vehicleDispatchIcon from '../assets/icons/dashboards/vehicle-dispatch-disabled.svg';
 import './styles.css';
@@ -23,9 +23,8 @@ const routes = [
   },
   {
     name: 'Cases',
-    path: '/app/dashboards/casemanagement',
+    path: '/app/cases',
     icon: caseManagementIcon,
-    disabled: true,
   },
   {
     name: 'Vehicle Dispatches',
