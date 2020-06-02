@@ -75,6 +75,10 @@ const breadcrumbNameMap = {
     name: 'Emergencies',
     title: 'List of all Emergencies(Alerts and Incidents)',
   },
+  '/app/cases': {
+    name: 'Cases',
+    title: 'List of all Cases',
+  },
 
   /* stakeholders routes */
   '/app/focalpeople': {
@@ -330,6 +334,10 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
           <SecureRoute path={`${baseUrl}/events`} component={Events} />
+          <SecureRoute
+            path={`${baseUrl}/cases`}
+            component={VehicleDispatches}
+          />
 
           <SecureRoute
             path={`${baseUrl}/focalpeople`}

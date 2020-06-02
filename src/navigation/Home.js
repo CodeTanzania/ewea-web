@@ -8,7 +8,7 @@ import NavigationMenu from '../components/NavigationMenu';
 import eventsIcon from '../assets/icons/events.svg';
 // import actionsTakenIcon from '../assets/icons/actionstaken.svg';
 import actionCatalogueIcon from '../assets/icons/actioncatalog.svg';
-import caseManagementIcon from '../assets/icons/dashboards/case-management-disabled.svg';
+import caseManagementIcon from '../assets/icons/dashboards/case-management.svg';
 import resourceManagementIcon from '../assets/icons/dashboards/resource-management.svg';
 import vehicleDispatchIcon from '../assets/icons/dashboards/vehicle-dispatch.svg';
 import modules from '../modules.json';
@@ -23,10 +23,9 @@ const routes = [
   },
   {
     name: 'Cases',
-    path: '/dashboards/casemanagement',
+    path: '/cases',
     icon: caseManagementIcon,
     description: modules.alertsIssued,
-    disabled: true,
   },
   {
     name: 'Vehicle Dispatches',
