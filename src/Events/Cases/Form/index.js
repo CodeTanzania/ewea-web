@@ -101,6 +101,12 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
       onFinish={onFinish}
       initialValues={{
         ...caze,
+        victim: {
+          ...get(caze, 'victim', null),
+          area: get(caze, 'victim.area._id'),
+          gender: get(caze, 'victim.gender._id'),
+          occupation: get(caze, 'victim.occupation._id'),
+        },
       }}
       autoComplete="off"
     >
@@ -158,7 +164,8 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
               }
               optionValue="_id"
               initialValue={
-                get(caze, 'victim.area') || get(cached, 'victimArea')
+                get(caze, 'victim.area', undefined) ||
+                get(cached, 'victimArea', undefined)
               }
               onCache={(values) =>
                 setCache({ ...cached, victimArea: values[0] })
