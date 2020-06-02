@@ -127,7 +127,7 @@ const CaseFiltersForm = ({
       <Form.Item
         label="By Gender"
         title="Victim/Patient Gender e.g Female"
-        name={['victiom.gender']}
+        name={['victim.gender']}
       >
         <SearchableSelectInput
           onSearch={(optns = {}) => {
@@ -136,8 +136,8 @@ const CaseFiltersForm = ({
           optionLabel={(gender) => get(gender, 'strings.name.en')}
           optionValue="_id"
           mode="multiple"
-          onCache={(gender) => onCache({ 'victiom.gender': gender })}
-          initialValue={get(cached, 'victiom.gender')}
+          onCache={(gender) => onCache({ 'victim.gender': gender })}
+          initialValue={get(cached, 'victim.gender')}
         />
       </Form.Item>
       {/* end:gender filter */}
@@ -146,7 +146,7 @@ const CaseFiltersForm = ({
       <Form.Item
         label="By Occupation"
         title="Victim/Patient Occupation e.g Health Worker"
-        name={['victiom.occupation']}
+        name={['victim.occupation']}
       >
         <SearchableSelectInput
           onSearch={(optns = {}) => {
@@ -155,10 +155,8 @@ const CaseFiltersForm = ({
           optionLabel={(occupation) => get(occupation, 'strings.name.en')}
           optionValue="_id"
           mode="multiple"
-          onCache={(occupation) =>
-            onCache({ 'victiom.occupation': occupation })
-          }
-          initialValue={get(cached, 'victiom.occupation')}
+          onCache={(occupation) => onCache({ 'victim.occupation': occupation })}
+          initialValue={get(cached, 'victim.occupation')}
         />
       </Form.Item>
       {/* end:occupation filter */}
@@ -224,5 +222,5 @@ CaseFiltersForm.defaultProps = {
 };
 
 export default Connect(CaseFiltersForm, {
-  filter: 'features.filter',
+  filter: 'cases.filter',
 });

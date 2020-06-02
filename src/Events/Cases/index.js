@@ -39,11 +39,12 @@ const {
 
 /* ui */
 const { confirm } = Modal;
-const numberSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 16, xs: 14 };
-const mobileSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 4 };
-const genderSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 4, xs: 0 };
+const numberSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 16, xs: 14 };
+const mobileSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 4 };
+const genderSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
+const ageSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
 const areaSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 0 };
-const statusSpan = { xxl: 6, xl: 6, lg: 6, md: 4, sm: 0, xs: 0 };
+const severitySpan = { xxl: 6, xl: 6, lg: 6, md: 4, sm: 0, xs: 0 };
 const headerLayout = [
   {
     ...numberSpan,
@@ -60,11 +61,16 @@ const headerLayout = [
     header: 'Gender',
     title: 'Victim/Patient Gender',
   },
+  {
+    ...ageSpan,
+    header: 'Age',
+    title: 'Victim/Patient Age',
+  },
   { ...areaSpan, header: 'Area', title: 'Victim/Patient Residential Area' },
   {
-    ...statusSpan,
-    header: 'Status',
-    title: 'Case Status',
+    ...severitySpan,
+    header: 'Severity',
+    title: 'Case Severity',
   },
 ];
 
@@ -482,10 +488,11 @@ class CaseList extends Component {
                 <Col {...genderSpan}>
                   {get(item, 'victim.gender.strings.name.en', 'N/A')}
                 </Col>
+                <Col {...ageSpan}>{get(item, 'victim.age', 'N/A')}</Col>
                 <Col {...areaSpan}>
                   {get(item, 'victim.area.strings.name.en', 'N/A')}
                 </Col>
-                <Col {...statusSpan}>
+                <Col {...severitySpan}>
                   {get(item, 'status.strings.name.en', 'N/A')}
                 </Col>
                 {/* eslint-enable react/jsx-props-no-spreading */}
