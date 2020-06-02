@@ -53,7 +53,7 @@ const headerLayout = [
   },
   {
     ...mobileSpan,
-    header: 'Mobile',
+    header: 'Phone',
     title: 'Victim/Patient Mobile Phone Number',
   },
   {

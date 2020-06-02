@@ -139,6 +139,7 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
         </Col>
       </Row>
       {/* end: name & mobile */}
+
       {/* start: area & gender */}
       <Row justify="space-between">
         <Col xs={24} sm={24} md={11}>
@@ -199,6 +200,7 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
         </Col>
       </Row>
       {/* end: area & gender */}
+
       {/* start: age & occupation */}
       <Row justify="space-between">
         <Col xs={24} sm={24} md={11}>
@@ -206,6 +208,12 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
             name={['victim', 'age']}
             label="Age"
             title="Victim/Patient Age"
+            rules={[
+              {
+                required: true,
+                message: 'Victim/Patient Age is required',
+              },
+            ]}
           >
             <InputNumber min={0} max={150} style={{ width: '100%' }} />
           </Form.Item>
@@ -234,6 +242,30 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
         </Col>
       </Row>
       {/* end: age & occupation */}
+
+      {/* start: next of kin name & mobile */}
+      <Row justify="space-between">
+        <Col xs={24} sm={24} md={11}>
+          <Form.Item
+            label="Next of Kin - Name"
+            title="Valid Next of Kin Name e.g Asha Mdoe"
+            name={['victim', 'nextOfKin', 'name']}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+
+        <Col xs={24} sm={24} md={11}>
+          <Form.Item
+            label="Next of Kin - Phone"
+            title="Valid Next of Kin Mobile Phone Number"
+            name={['victim', 'nextOfKin', 'mobile']}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+      </Row>
+      {/* end: next of kin name & mobile */}
 
       {/* start: address */}
       <Form.Item
