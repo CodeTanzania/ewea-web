@@ -14,6 +14,7 @@ import StakeholdersAgencies from '../Stakeholders/Agencies';
 import StakeholdersFocalPeople from '../Stakeholders/FocalPeople';
 import AgenciesOwnerships from '../Stakeholders/AgenciesOwnerships';
 import NotificationTemplates from '../Stakeholders/NotificationTemplates';
+import Cases from '../Events/Cases';
 import Events from '../Events/Events';
 import EventFunctions from '../Events/EventFunctions';
 import EventTypes from '../Events/EventTypes';
@@ -334,10 +335,7 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
           <SecureRoute path={`${baseUrl}/events`} component={Events} />
-          <SecureRoute
-            path={`${baseUrl}/cases`}
-            component={VehicleDispatches}
-          />
+          <SecureRoute path={`${baseUrl}/cases`} component={Cases} />
 
           <SecureRoute
             path={`${baseUrl}/focalpeople`}
