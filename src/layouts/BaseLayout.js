@@ -35,6 +35,7 @@ import FeatureTypes from '../GeographicalFeatures/FeatureTypes';
 import Units from '../Units';
 // import StakeholdersNotifications from '../Stakeholders/Notifications';
 import StakeholdersRoles from '../Stakeholders/Roles';
+import StakeholderOccupations from '../Stakeholders/Occupations';
 import Vehicles from '../VehicleDispatches/Vehicles';
 import VehicleDispatches from '../VehicleDispatches/Dispatches';
 import VehicleMakes from '../VehicleDispatches/VehicleMakes';
@@ -170,6 +171,10 @@ const breadcrumbNameMap = {
   '/app/settings/functions': {
     name: 'Emergency Functions',
     title: 'Emergency functions module',
+  },
+  '/app/settings/occupations': {
+    name: 'Occupations',
+    title: 'Focal People Occupations',
   },
   '/app/settings/roles': {
     name: 'Roles',
@@ -426,6 +431,10 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
           <SecureRoute
             path={`${baseUrl}/settings/roles`}
             component={StakeholdersRoles}
+          />
+          <SecureRoute
+            path={`${baseUrl}/settings/occupations`}
+            component={StakeholderOccupations}
           />
           <SecureRoute
             path={`${baseUrl}/settings/notificationtemplates`}

@@ -173,7 +173,7 @@ const Toolbar = ({
           {/* end filter action */}
 
           {/* pagination */}
-          {onPaginate && total > 0 && (
+          {onPaginate && (
             <Col xxl={6} xl={7} lg={9} md={9} sm={24} xs={24}>
               <Pagination
                 simple
