@@ -233,10 +233,10 @@ const EventToolbar = ({
  */
 const EventCause = ({ cause }) => {
   return (
-    <>
+    <div style={{ marginTop: '30px' }}>
       <EventDetailsSectionHeader title="CAUSE" />
       {cause}
-    </>
+    </div>
   );
 };
 
@@ -274,7 +274,7 @@ export const EventDetailsSectionHeader = ({ title, actions }) => {
 export const EventLocations = ({ areas = [], openForm }) => {
   const locations = areas.map((area) => area.strings.name.en).join(', ');
   return isEmpty(areas) ? null : (
-    <div style={{ marginTop: '40px' }}>
+    <div style={{ marginTop: '30px' }}>
       <EventDetailsSectionHeader
         title="AFFECT AREAS"
         actions={
@@ -306,7 +306,7 @@ export const EventLocations = ({ areas = [], openForm }) => {
  */
 export const EventPlaces = ({ places = '' }) => {
   return isEmpty(places) ? null : (
-    <div style={{ marginTop: '40px' }}>
+    <div style={{ marginTop: '30px' }}>
       <EventDetailsSectionHeader title="AFFECT PLACES" />
 
       <span>{places}</span>
@@ -327,7 +327,7 @@ export const EventPlaces = ({ places = '' }) => {
  */
 export const EventActionsTaken = ({ actions = [], openForm }) => {
   return isEmpty(actions) ? null : (
-    <div style={{ marginTop: '40px' }}>
+    <div style={{ marginTop: '30px' }}>
       <EventDetailsSectionHeader
         title="ACTION TAKEN/ INTERVENTIONS"
         actions={
@@ -367,7 +367,7 @@ export const EventActionsTaken = ({ actions = [], openForm }) => {
  */
 export const EventRespondingAgencies = ({ agencies = [], openForm }) => {
   return (
-    <div style={{ marginTop: '40px' }}>
+    <div style={{ marginTop: '30px' }}>
       <EventDetailsSectionHeader
         title="AGENCIES RESPONDED"
         actions={
@@ -405,7 +405,7 @@ export const EventRespondingAgencies = ({ agencies = [], openForm }) => {
  */
 export const EventRespondingFocalPeople = ({ focalPeople = [], openForm }) => {
   return isEmpty(focalPeople) ? null : (
-    <div style={{ marginTop: '40px' }}>
+    <div style={{ marginTop: '30px' }}>
       <EventDetailsSectionHeader
         title="FOCAL PEOPLE RESPONDED"
         actions={
@@ -477,7 +477,7 @@ const EventImpact = ({ openForm }) => {
   ];
 
   return (
-    <div style={{ marginTop: '40px' }}>
+    <div style={{ marginTop: '30px' }}>
       <EventDetailsSectionHeader
         title="IMPACT"
         actions={
@@ -510,7 +510,7 @@ const EventImpact = ({ openForm }) => {
  */
 const EventGaps = ({ gaps = [], openForm }) => {
   return (
-    <div style={{ marginTop: '40px' }}>
+    <div style={{ marginTop: '30px' }}>
       <EventDetailsSectionHeader
         title="GAPS & CONSTRAINTS"
         actions={
@@ -548,7 +548,7 @@ const EventGaps = ({ gaps = [], openForm }) => {
  */
 const EventRecommendations = ({ recommendations = [], openForm }) => {
   return (
-    <div style={{ marginTop: '40px' }}>
+    <div style={{ marginTop: '30px' }}>
       <EventDetailsSectionHeader
         title="COMMENTS AND RECOMMENDATIONS"
         actions={
@@ -792,14 +792,14 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
  * @param {string} props.description event description
  * @param {string} props.number event number
  * @param {Date} props.reportedDate event report date
- * @name PrintedEventDetails
+ * @name EventDetails
  * @description This is event details section which will be visible on printed
  * report only
- * @returns {object} PrintedEventDetails Component
+ * @returns {object} EventDetails Component
  * @version 0.1.0
  * @since 0.1.0
  */
-const PrintedEventDetails = ({ type, description, number, reportedDate }) => {
+const EventDetails = ({ type, description, number, reportedDate }) => {
   return (
     <>
       <p>
@@ -809,7 +809,7 @@ const PrintedEventDetails = ({ type, description, number, reportedDate }) => {
         <Text strong>Event Number: </Text> {number} <br />
       </p>
       <p>
-        <Text strong>Event Description:</Text>: {description} <br />
+        <Text strong>Event Description:</Text> {description} <br />
       </p>
       <p>
         <Text strong>Reported Date: </Text> {reportedDate} <br />
@@ -872,15 +872,13 @@ const EventDetailsViewBody = ({
       />
       <div className="EventBodyContent">
         <Row ref={componentRef}>
-          <Col span={16} className="print-only">
-            <PrintedEventDetails
+          <Col span={16}>
+            <EventDetails
               number={get(event, 'number', 'N/A')}
               type={get(event, 'type.strings.name.en', 'N/A')}
               description={get(event, 'description', 'N/A')}
               reportedDate={formatDate(event.createdAt, 'DD/MM/YYYY')}
             />
-          </Col>
-          <Col span={16}>
             <EventCause cause={get(event, 'causes', 'N/A')} />
             <EventLocations areas={event.areas} openForm={openForm} />
             {event.places && <EventPlaces places={event.places} />}
@@ -1031,7 +1029,7 @@ EventCause.propTypes = {
   cause: PropTypes.string.isRequired,
 };
 
-PrintedEventDetails.propTypes = {
+EventDetails.propTypes = {
   type: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   number: PropTypes.string.isRequired,

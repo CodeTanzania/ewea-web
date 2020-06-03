@@ -410,7 +410,6 @@ class Events extends Component {
           ]}
         />
         {/* end Topbar */}
-
         {/* list starts */}
         <ItemList
           itemName="events"
@@ -529,7 +528,6 @@ class Events extends Component {
           }}
         />
         {/* end list */}
-
         {/* filter modal */}
         <Modal
           title="Filter Events"
@@ -548,7 +546,6 @@ class Events extends Component {
           />
         </Modal>
         {/* end filter modal */}
-
         {/* Notification Modal modal */}
         <Modal
           title="Notify Events"
@@ -573,7 +570,6 @@ class Events extends Component {
           />
         </Modal>
         {/* end Notification modal */}
-
         {/* create/edit form modal */}
         <Modal
           title={isEditForm ? 'Edit Event' : 'Add New Event'}
@@ -603,6 +599,7 @@ class Events extends Component {
               description={get(event, 'description', 'N/A')}
               type={get(event, 'type.strings.name.en', 'N/A')}
               stage={get(event, 'stage', 'N/A')}
+              onBack={this.closeEventDetails}
             />
           }
           placement="right"
@@ -610,6 +607,7 @@ class Events extends Component {
           onClose={this.closeEventDetails}
           visible={showEventDetails}
           drawerStyle={{ overflow: 'hidden' }}
+          headerStyle={{ padding: 0 }}
           bodyStyle={{ overflow: 'hidden', height: '100%', padding: '15px' }}
           destroyOnClose
         >
@@ -623,7 +621,6 @@ class Events extends Component {
             }}
           />
         </Drawer>
-
         {/* End Event details drawer */}
       </>
     );

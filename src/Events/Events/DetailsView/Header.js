@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Typography, Tag } from 'antd';
-
-const { Text } = Typography;
+import { Tag, PageHeader } from 'antd';
 
 /**
  * @function
@@ -10,6 +8,7 @@ const { Text } = Typography;
  * @param {string} props.number event number
  * @param {string} props.type event type
  * @param {string} props.description event description
+ * @param props.onBack
  * @param {string} props.stage event stage
  * @name EventDetailsViewHeader
  * @description Event Details header for drawer
@@ -22,15 +21,22 @@ const EventDetailsViewHeader = ({
   type = 'N/A',
   description = 'N/A',
   stage,
+  onBack,
 }) => (
-  <div>
-    <h5>
-      {`${type} - ${number} `} <Tag color="orange">{stage}</Tag>
-    </h5>
-    <Text type="secondary" style={{ fontSize: '12px' }}>
-      {description}
-    </Text>
-  </div>
+  <PageHeader
+    title={
+      <span
+        style={{ fontSize: '16px', fontWeight: 500 }}
+      >{`${type} - ${number} `}</span>
+    }
+    tags={[
+      <Tag key={stage} color="orange">
+        {stage}
+      </Tag>,
+    ]}
+    subTitle={description}
+    onBack={() => onBack()}
+  />
 );
 
 EventDetailsViewHeader.propTypes = {
@@ -38,6 +44,7 @@ EventDetailsViewHeader.propTypes = {
   type: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   stage: PropTypes.string.isRequired,
+  onBack: PropTypes.func.isRequired,
 };
 
 export default EventDetailsViewHeader;
