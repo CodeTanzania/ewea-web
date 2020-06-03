@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Col } from 'antd';
+import { Modal, Col, Drawer, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
@@ -13,6 +13,8 @@ import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
+import CaseDetailsViewHeader from './DetailsView/Header';
+import CaseDetailsViewBody from './DetailsView/Body';
 import './styles.css';
 
 /* http actions */
@@ -126,6 +128,7 @@ class CaseList extends Component {
     super(props);
     this.state = {
       showFilters: false,
+      showDetailsView: false,
       isEditForm: false,
       showNotificationForm: false,
       notificationSubject: undefined,
@@ -284,6 +287,30 @@ class CaseList extends Component {
   };
 
   /**
+   * @function handleItemView
+   * @name handleItemView
+   * @description Handle list item view
+   * @param {object} item List item
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleItemView = (item) => {
+    selectCase(item);
+    this.setState({ showDetailsView: true });
+  };
+
+  /**
+   * @function handleCloseItemView
+   * @name handleCloseItemView
+   * @description Handle close list item view
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleCloseItemView = () => {
+    this.setState({ showDetailsView: false });
+  };
+
+  /**
    * @function handleItemEdit
    * @name handleItemEdit
    * @description Handle list item edit
@@ -411,6 +438,7 @@ class CaseList extends Component {
       showFilters,
       cached,
       isEditForm,
+      showDetailsView,
       showNotificationForm,
       notificationSubject,
       notificationBody,
@@ -438,7 +466,6 @@ class CaseList extends Component {
           ]}
         />
         {/* end: list topbar */}
-
         {/* start: list */}
         <ItemList
           itemName="Case"
@@ -470,6 +497,11 @@ class CaseList extends Component {
                 onDeselectItem={onDeselectItem}
                 renderActions={() => (
                   <ListItemActions
+                    view={{
+                      name: 'View Case',
+                      title: 'View Case Details',
+                      onClick: () => this.handleItemView(item),
+                    }}
                     edit={{
                       name: 'Edit Case',
                       title: 'Update case details',
@@ -489,7 +521,21 @@ class CaseList extends Component {
                 )}
               >
                 {/* eslint-disable react/jsx-props-no-spreading */}
-                <Col {...numberSpan}>{get(item, 'number', 'N/A')}</Col>
+                <Col {...numberSpan}>
+                  <Button
+                    type="link"
+                    onClick={() => this.handleItemView(item)}
+                    style={{
+                      padding: 0,
+                      color: 'rgba(0, 0, 0, 0.65)',
+                      whiteSpace: 'normal',
+                      textAlign: 'left',
+                      wordWrap: 'break-word',
+                    }}
+                  >
+                    {get(item, 'number', 'N/A')}
+                  </Button>
+                </Col>
                 <Col {...nameSpan}>{get(item, 'victim.name', 'N/A')}</Col>
                 <Col {...mobileSpan}>{get(item, 'victim.mobile', 'N/A')}</Col>
                 <Col {...genderSpan}>
@@ -509,7 +555,6 @@ class CaseList extends Component {
           )}
         />
         {/* end: list */}
-
         {/* start: notification modal */}
         <Modal
           title="Share Cases"
@@ -534,7 +579,6 @@ class CaseList extends Component {
           />
         </Modal>
         {/* end: notification modal */}
-
         {/* start: filter modal */}
         <Modal
           title="Filter Cases"
@@ -553,7 +597,6 @@ class CaseList extends Component {
           />
         </Modal>
         {/* end: filter modal */}
-
         {/* start: form modal */}
         <Modal
           title={isEditForm ? 'Edit Case' : 'Add New Case'}
@@ -573,6 +616,28 @@ class CaseList extends Component {
           />
         </Modal>
         {/* end: form modal */}
+
+        {/* start: case details view */}
+        <Drawer
+          title={
+            <CaseDetailsViewHeader
+              number={get(caze, 'number', 'N/A')}
+              phone={get(caze, 'victim.mobile', 'N/A')}
+              onBack={this.handleCloseItemView}
+            />
+          }
+          placement="right"
+          width="100%"
+          drawerStyle={{ overflow: 'hidden' }}
+          headerStyle={{ padding: 0 }}
+          bodyStyle={{ overflow: 'hidden', height: '100%', padding: '15px' }}
+          visible={showDetailsView}
+          onClose={this.handleCloseItemView}
+          destroyOnClose
+        >
+          <CaseDetailsViewBody data={caze} />
+        </Drawer>
+        {/* end: case details view */}
       </>
     );
   }

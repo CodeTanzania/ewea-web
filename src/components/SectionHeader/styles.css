@@ -1,0 +1,11 @@
+.SectionHeader {
+  margin: 30px 30px 10px 0;
+  border-bottom: 1px solid #ededed;
+}
+
+.SectionHeaderText {
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 1em;
+  font-weight: 600;
+}

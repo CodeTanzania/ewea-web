@@ -1,0 +1,26 @@
+.CaseToolbar {
+  /* border-bottom: 1px solid #e8e8e8; */
+  height: 50px;
+  border-bottom: 1px solid #ededed;
+}
+
+.CasesBody {
+  height: 100%;
+  overflow: hidden;
+}
+
+.CaseBodyContent {
+  padding-top: 20px;
+  height: 90%;
+  overflow: auto;
+}
+
+@media print {
+  .ant-drawer-close {
+    display: none;
+  }
+
+  .CaseBodyContent {
+    overflow: hidden;
+  }
+}
