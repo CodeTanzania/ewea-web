@@ -4,6 +4,7 @@ import vehiclesIcon from '../assets/icons/settings/vehicles.svg';
 import stockIcon from '../assets/icons/resources/stock-disabled.svg';
 import itemsIcon from '../assets/icons/resources/item-disabled.svg';
 import adjustmentsIcon from '../assets/icons/resources/adjustment-disabled.svg';
+import equipmentsIcon from '../assets/icons/resources/equipments-disabled.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import modules from '../modules.json';
 
@@ -41,7 +42,7 @@ const routes = [
   {
     name: 'Equipments',
     path: '/equipments',
-    icon: itemsIcon,
+    icon: equipmentsIcon,
     description: modules.vehicles,
     disabled: true,
   },
