@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { getBaseUrl, getJwtToken } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import ReactToPrint from 'react-to-print';
@@ -36,17 +37,17 @@ import {
   Typography,
 } from 'antd';
 import isEmpty from 'lodash/isEmpty';
-import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import map from 'lodash/map';
 import concat from 'lodash/concat';
 import flatten from 'lodash/flatten';
 
 import { formatDate, notifySuccess, notifyError } from '../../../util';
+import SectionHeader from '../../../components/SectionHeader';
 import EventChangelogForm from '../ChangelogForm';
-import './styles.css';
 import IndicatorDashboard from '../../../Dashboards/Indicators';
 import EventDetailsViewHeader from './Header';
+import './styles.css';
 
 const {
   openChangelogForm,
@@ -233,29 +234,9 @@ const EventToolbar = ({
  */
 const EventCause = ({ cause }) => {
   return (
-    <div style={{ marginTop: '30px' }}>
-      <EventDetailsSectionHeader title="CAUSE" />
+    <div>
+      <SectionHeader title="CAUSE" />
       {cause}
-    </div>
-  );
-};
-
-/**
- * @function
- * @param {object} props props object
- * @param {string} props.title valid title
- * @param {*} props.actions valid actions
- * @name EventDetailsSectionHeader
- * @description Header section for event details drawer
- * @returns {object} React component
- * @version 0.1.0
- * @since 0.1.0
- */
-export const EventDetailsSectionHeader = ({ title, actions }) => {
-  return (
-    <div className="EventDetailsSectionHeader">
-      <span className="EventDetailsSectionHeaderText">{title}</span>
-      {actions}
     </div>
   );
 };
@@ -274,8 +255,8 @@ export const EventDetailsSectionHeader = ({ title, actions }) => {
 export const EventLocations = ({ areas = [], openForm }) => {
   const locations = areas.map((area) => area.strings.name.en).join(', ');
   return isEmpty(areas) ? null : (
-    <div style={{ marginTop: '30px' }}>
-      <EventDetailsSectionHeader
+    <div>
+      <SectionHeader
         title="AFFECT AREAS"
         actions={
           <Button
@@ -306,8 +287,8 @@ export const EventLocations = ({ areas = [], openForm }) => {
  */
 export const EventPlaces = ({ places = '' }) => {
   return isEmpty(places) ? null : (
-    <div style={{ marginTop: '30px' }}>
-      <EventDetailsSectionHeader title="AFFECT PLACES" />
+    <div>
+      <SectionHeader title="AFFECT PLACES" />
 
       <span>{places}</span>
     </div>
@@ -327,8 +308,8 @@ export const EventPlaces = ({ places = '' }) => {
  */
 export const EventActionsTaken = ({ actions = [], openForm }) => {
   return isEmpty(actions) ? null : (
-    <div style={{ marginTop: '30px' }}>
-      <EventDetailsSectionHeader
+    <div>
+      <SectionHeader
         title="ACTION TAKEN/ INTERVENTIONS"
         actions={
           <Button
@@ -367,8 +348,8 @@ export const EventActionsTaken = ({ actions = [], openForm }) => {
  */
 export const EventRespondingAgencies = ({ agencies = [], openForm }) => {
   return (
-    <div style={{ marginTop: '30px' }}>
-      <EventDetailsSectionHeader
+    <div>
+      <SectionHeader
         title="AGENCIES RESPONDED"
         actions={
           <Button
@@ -405,8 +386,8 @@ export const EventRespondingAgencies = ({ agencies = [], openForm }) => {
  */
 export const EventRespondingFocalPeople = ({ focalPeople = [], openForm }) => {
   return isEmpty(focalPeople) ? null : (
-    <div style={{ marginTop: '30px' }}>
-      <EventDetailsSectionHeader
+    <div>
+      <SectionHeader
         title="FOCAL PEOPLE RESPONDED"
         actions={
           <Button
@@ -477,8 +458,8 @@ const EventImpact = ({ openForm }) => {
   ];
 
   return (
-    <div style={{ marginTop: '30px' }}>
-      <EventDetailsSectionHeader
+    <div>
+      <SectionHeader
         title="IMPACT"
         actions={
           <Button
@@ -510,8 +491,8 @@ const EventImpact = ({ openForm }) => {
  */
 const EventGaps = ({ gaps = [], openForm }) => {
   return (
-    <div style={{ marginTop: '30px' }}>
-      <EventDetailsSectionHeader
+    <div>
+      <SectionHeader
         title="GAPS & CONSTRAINTS"
         actions={
           <Button
@@ -548,8 +529,8 @@ const EventGaps = ({ gaps = [], openForm }) => {
  */
 const EventRecommendations = ({ recommendations = [], openForm }) => {
   return (
-    <div style={{ marginTop: '30px' }}>
-      <EventDetailsSectionHeader
+    <div>
+      <SectionHeader
         title="COMMENTS AND RECOMMENDATIONS"
         actions={
           <Button
@@ -760,7 +741,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
 
   return (
     <div className="not-printable">
-      <EventDetailsSectionHeader title="EVENT FEED" />
+      <SectionHeader title="EVENT FEED" />
 
       <Spin spinning={loading}>
         {isEmpty(feeds) ? (
@@ -966,11 +947,6 @@ EventRespondingAgencies.propTypes = {
   openForm: PropTypes.func.isRequired,
 };
 
-EventDetailsSectionHeader.propTypes = {
-  title: PropTypes.string.isRequired,
-  actions: PropTypes.node,
-};
-
 EventLocations.propTypes = {
   areas: PropTypes.arrayOf(PropTypes.object).isRequired,
   openForm: PropTypes.func.isRequired,
@@ -980,10 +956,6 @@ EventImpact.propTypes = { openForm: PropTypes.func.isRequired };
 
 EventPlaces.propTypes = {
   places: PropTypes.string.isRequired,
-};
-
-EventDetailsSectionHeader.defaultProps = {
-  actions: null,
 };
 
 EventToolbar.propTypes = {

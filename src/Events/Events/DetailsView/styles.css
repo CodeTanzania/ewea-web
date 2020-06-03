@@ -1,15 +1,3 @@
-.EventDetailsSectionHeader {
-  margin: 0 30px 20px 0;
-  border-bottom: 1px solid #ededed;
-}
-
-.EventDetailsSectionHeaderText {
-  display: inline-block;
-  margin-right: 5px;
-  font-size: 1em;
-  font-weight: 600;
-}
-
 .EventBody {
   height: 100%;
   overflow: hidden;
