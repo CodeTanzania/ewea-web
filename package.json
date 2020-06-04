@@ -26,8 +26,8 @@
   "dependencies": {
     "@ant-design/compatible": "^1.0.2",
     "@ant-design/icons": "^4.2.1",
-    "@codetanzania/ewea-api-client": "^0.19.0",
-    "@codetanzania/ewea-api-states": "^0.27.1",
+    "@codetanzania/ewea-api-client": "^0.20.0",
+    "@codetanzania/ewea-api-states": "^0.27.2",
     "@lykmapipo/common": "^0.34.2",
     "antd": "^4.3.1",
     "axios": "^0.19.2",
