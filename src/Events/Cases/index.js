@@ -82,6 +82,12 @@ const headerLayout = [
   },
 ];
 
+/* titles */
+const MODAL_SHARE_TITLE = 'Share Cases';
+const MODAL_FILTER_TITLE = 'Filter Cases';
+const MODAL_FORM_EDIT_TITLE = 'Edit Case - Victim/Patient Information';
+const MODAL_FORM_CREATE_TITLE = 'Add New Case - Victim/Patient Information';
+
 /* messages */
 const MESSAGE_LIST_REFRESH_SUCCESS = 'Cases were refreshed successfully';
 const MESSAGE_LIST_REFRESH_ERROR =
@@ -557,7 +563,7 @@ class CaseList extends Component {
         {/* end: list */}
         {/* start: notification modal */}
         <Modal
-          title="Share Cases"
+          title={MODAL_SHARE_TITLE}
           visible={showNotificationForm}
           onCancel={this.handleNotificationFormClose}
           footer={null}
@@ -581,7 +587,7 @@ class CaseList extends Component {
         {/* end: notification modal */}
         {/* start: filter modal */}
         <Modal
-          title="Filter Cases"
+          title={MODAL_FILTER_TITLE}
           visible={showFilters}
           className="FormModal"
           footer={null}
@@ -599,7 +605,7 @@ class CaseList extends Component {
         {/* end: filter modal */}
         {/* start: form modal */}
         <Modal
-          title={isEditForm ? 'Edit Case' : 'Add New Case'}
+          title={isEditForm ? MODAL_FORM_EDIT_TITLE : MODAL_FORM_CREATE_TITLE}
           visible={showForm}
           className="FormModal"
           footer={null}
