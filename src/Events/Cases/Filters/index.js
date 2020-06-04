@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { Button, Form } from 'antd';
+import { Button, Form, InputNumber, Row, Col } from 'antd';
 import get from 'lodash/get';
 import isFunction from 'lodash/isFunction';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
@@ -161,6 +161,29 @@ const CaseFiltersForm = ({
       </Form.Item>
       {/* end:occupation filter */}
 
+      {/* start:age filter */}
+      <Row justify="space-between">
+        <Col xs={24} sm={24} md={11}>
+          <Form.Item
+            name={['victim.age', 'min']}
+            label="Minimum Age"
+            title="Victim/Patient Minimum Age"
+          >
+            <InputNumber min={0} max={150} style={{ width: '100%' }} />
+          </Form.Item>
+        </Col>
+        <Col xs={24} sm={24} md={11}>
+          <Form.Item
+            name={['victim.age', 'max']}
+            label="Maximum Age"
+            title="Victim/Patient Maximum Age"
+          >
+            <InputNumber min={0} max={150} style={{ width: '100%' }} />
+          </Form.Item>
+        </Col>
+      </Row>
+      {/* end:age filter */}
+
       {/* start:form actions */}
       <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
         <Button onClick={onCancel}>Cancel</Button>
@@ -193,6 +216,10 @@ CaseFiltersForm.propTypes = {
         _id: PropTypes.string,
       })
     ),
+    'victim.age': PropTypes.shape({
+      min: PropTypes.number,
+      max: PropTypes.number,
+    }),
   }),
   cached: PropTypes.shape({
     'victim.gender': PropTypes.arrayOf(
