@@ -72,7 +72,6 @@ const MESSAGE_PUT_ERROR =
  */
 const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
   const [cached, setCache] = useState({}); // for caching lazy component values
-  const [moreOptions, setMoreOptions] = useState(false);
 
   // form finish(submit) handler
   const onFinish = (values) => {
@@ -279,9 +278,6 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
 
       {/* start:form actions */}
       <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
-        <Button type="link" onClick={() => setMoreOptions(!moreOptions)}>
-          {moreOptions ? 'Less Options' : 'More Options'}
-        </Button>
         <Button style={{ marginLeft: 8 }} onClick={onCancel}>
           Cancel
         </Button>
