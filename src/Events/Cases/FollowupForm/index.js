@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import pick from 'lodash/pick';
-import { Button, Checkbox, Input, Radio, Form, Row, Col } from 'antd';
+import { Button, Input, Radio, Form, Row, Col } from 'antd';
 import { reduxActions } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
+import WrappedCheckbox from '../../../components/WrappedCheckbox';
 
 /* state actions */
 const { putCase } = reduxActions;
@@ -58,11 +59,8 @@ const MESSAGE_PUT_ERROR =
  *
  */
 const CaseFollowupForm = ({ caze, posting, onCancel }) => {
-  // const [cached, setCache] = useState({}); // for caching lazy component values
-
   // form finish(submit) handler
   const onFinish = (values) => {
-    // TODO: merge defaults
     const formData = { ...values, ...pick(caze, '_id') };
 
     putCase(
@@ -95,7 +93,11 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
       <Row justify="space-between">
         <Col xs={24} sm={24} md={7}>
           <Form.Item title="Fever" name={['followup', 'symptoms', 'fever']}>
-            <Checkbox value={3}>Fever</Checkbox>
+            <WrappedCheckbox
+              checkedValue={3}
+              unCheckedValue={0}
+              label="Fever"
+            />
           </Form.Item>
         </Col>
 
@@ -104,7 +106,11 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
             title="Shortness of Breath"
             name={['followup', 'symptoms', 'shortnessOfBreath']}
           >
-            <Checkbox value={5}>Shortness of Breath</Checkbox>
+            <WrappedCheckbox
+              checkedValue={5}
+              unCheckedValue={0}
+              label="Shortness of Breath"
+            />
           </Form.Item>
         </Col>
 
@@ -113,7 +119,11 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
             title="Muscle Pain"
             name={['followup', 'symptoms', 'musclePain']}
           >
-            <Checkbox value={1}>Muscle Pain</Checkbox>
+            <WrappedCheckbox
+              checkedValue={1}
+              unCheckedValue={0}
+              label="Muscle Pain"
+            />
           </Form.Item>
         </Col>
       </Row>
@@ -123,7 +133,11 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
       <Row justify="space-between">
         <Col xs={24} sm={24} md={7}>
           <Form.Item title="Cough" name={['followup', 'symptoms', 'cough']}>
-            <Checkbox value={1}>Cough</Checkbox>
+            <WrappedCheckbox
+              checkedValue={1}
+              unCheckedValue={0}
+              label="Cough"
+            />
           </Form.Item>
         </Col>
 
@@ -132,9 +146,11 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
             title="Vomiting Everything(>= 3 times a day)"
             name={['followup', 'symptoms', 'vomiting']}
           >
-            <Checkbox value={3}>
-              Vomiting Everything(3 times a day or more)
-            </Checkbox>
+            <WrappedCheckbox
+              checkedValue={3}
+              unCheckedValue={0}
+              label="Vomiting Everything(3 times a day or more)"
+            />
           </Form.Item>
         </Col>
 
@@ -143,7 +159,11 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
             title="Chest Tightness"
             name={['followup', 'symptoms', 'chestTightness']}
           >
-            <Checkbox value={5}>Chest Tightness</Checkbox>
+            <WrappedCheckbox
+              checkedValue={5}
+              unCheckedValue={0}
+              label="Chest Tightness"
+            />
           </Form.Item>
         </Col>
       </Row>
@@ -156,7 +176,11 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
             title="Sore Throat"
             name={['followup', 'symptoms', 'soreThroat']}
           >
-            <Checkbox value={1}>Sore Throat</Checkbox>
+            <WrappedCheckbox
+              checkedValue={1}
+              unCheckedValue={0}
+              label="Sore Throat"
+            />
           </Form.Item>
         </Col>
 
@@ -165,7 +189,11 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
             title="Diarrhea(>= 3 time a day)"
             name={['followup', 'symptoms', 'diarrhea']}
           >
-            <Checkbox value={3}>Diarrhea(3 times a day or more)</Checkbox>
+            <WrappedCheckbox
+              checkedValue={3}
+              unCheckedValue={0}
+              label="Diarrhea(3 times a day or more)"
+            />
           </Form.Item>
         </Col>
 
@@ -174,7 +202,11 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
             title="Abdominal Pain"
             name={['followup', 'symptoms', 'abdominalPain']}
           >
-            <Checkbox value={3}>Abdominal Pain</Checkbox>
+            <WrappedCheckbox
+              checkedValue={3}
+              unCheckedValue={0}
+              label="Abdominal Pain"
+            />
           </Form.Item>
         </Col>
       </Row>
@@ -187,7 +219,11 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
             title="Loss of Taste"
             name={['followup', 'symptoms', 'lossOfTaste']}
           >
-            <Checkbox value={1}>Loss of Taste</Checkbox>
+            <WrappedCheckbox
+              checkedValue={1}
+              unCheckedValue={0}
+              label="Loss of Taste"
+            />
           </Form.Item>
         </Col>
 
@@ -196,7 +232,11 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
             title="Loss of Smell"
             name={['followup', 'symptoms', 'lossOfSmell']}
           >
-            <Checkbox value={1}>Loss of Smell</Checkbox>
+            <WrappedCheckbox
+              checkedValue={1}
+              unCheckedValue={0}
+              label="Loss of Smell"
+            />
           </Form.Item>
         </Col>
 
@@ -205,7 +245,11 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
             title="Joint Pain"
             name={['followup', 'symptoms', 'jointPain']}
           >
-            <Checkbox value={1}>Joint Pain</Checkbox>
+            <WrappedCheckbox
+              checkedValue={1}
+              unCheckedValue={0}
+              label="Joint Pain"
+            />
           </Form.Item>
         </Col>
       </Row>
@@ -218,7 +262,11 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
             title="Headache"
             name={['followup', 'symptoms', 'headache']}
           >
-            <Checkbox value={3}>Headache</Checkbox>
+            <WrappedCheckbox
+              checkedValue={3}
+              unCheckedValue={0}
+              label="Headache"
+            />
           </Form.Item>
         </Col>
 
@@ -237,6 +285,7 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
         <Radio.Group>
           <Radio value="home">Home</Radio>
           <Radio value="hospital">Hospital</Radio>
+          <Radio value="unknown">Unknown</Radio>
         </Radio.Group>
       </Form.Item>
       {/* end: outcome */}

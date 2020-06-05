@@ -536,27 +536,27 @@ class CaseList extends Component {
                 renderActions={() => (
                   <ListItemActions
                     view={{
-                      name: 'View',
+                      name: 'View Case',
                       title: 'View Case Details',
                       onClick: () => this.handleItemView(item),
                     }}
                     edit={{
-                      name: 'Edit',
+                      name: 'Edit Case',
                       title: 'Update case details',
                       onClick: () => this.handleItemEdit(item),
                     }}
                     share={{
-                      name: 'Share',
+                      name: 'Share Case',
                       title: 'Share case details with others',
                       onClick: () => this.handleItemShare(item),
                     }}
                     archive={{
-                      name: 'Archive',
+                      name: 'Archive Case',
                       title: 'Remove case from list of active cases',
                       onClick: () => this.handleItemArchive(item),
                     }}
                     followup={{
-                      name: 'Followup',
+                      name: 'Followup Case',
                       title: 'Followup on case',
                       onClick: () => this.handleFollowupFormOpen(item),
                     }}
@@ -676,6 +676,7 @@ class CaseList extends Component {
         >
           <CaseFollowupForm
             caze={caze}
+            posting={posting}
             onCancel={this.handleFollowupFormClose}
           />
         </Modal>
