@@ -14,9 +14,13 @@ import {
   CloseCircleOutlined,
   CheckCircleOutlined,
   CarOutlined,
+  ClockCircleOutlined,
 } from '@ant-design/icons';
 
 import { Dropdown, Button, Menu } from 'antd';
+
+// TODO refactor to be independently per list item cause
+// there is infinity possibility of action per list
 
 // TODO refactor this to receive menu items rather than objects
 /**
@@ -39,6 +43,7 @@ import { Dropdown, Button, Menu } from 'antd';
  * @param {object} props.atDropOff when vehicle is at drop off point action
  * @param {object} props.fromDropOff when vehicle is leaving drop off point action
  * @param {object} props.adjust on adjust action callback
+ * @param {object} props.followup on followup action callback
  * @param {object} props.completeDispatch on complete dispatch action
  * @param {object} props.cancelDispatch on cancel dispatch action
  * @returns {object} react element
@@ -53,6 +58,7 @@ const ListItemActions = ({
   archive,
   transfer,
   adjust,
+  followup,
   whatsapp,
   reload,
   assignPermissions,
@@ -86,6 +92,16 @@ const ListItemActions = ({
         {edit && (
           <Menu.Item key="edit" onClick={edit.onClick} title={edit.title}>
             <EditOutlined /> {edit.name}
+          </Menu.Item>
+        )}
+
+        {followup && (
+          <Menu.Item
+            key="followup"
+            onClick={followup.onClick}
+            title={followup.title}
+          >
+            <ClockCircleOutlined /> {followup.name}
           </Menu.Item>
         )}
 
@@ -249,6 +265,7 @@ ListItemActions.propTypes = {
   archive: PropTypes.shape(actionShape),
   transfer: PropTypes.shape(actionShape),
   adjust: PropTypes.shape(actionShape),
+  followup: PropTypes.shape(actionShape),
   assignPermissions: PropTypes.shape(actionShape),
   whatsapp: PropTypes.shape({
     name: PropTypes.string,
@@ -273,6 +290,7 @@ ListItemActions.defaultProps = {
   archive: null,
   transfer: null,
   adjust: null,
+  followup: null,
   whatsapp: null,
   assignPermissions: null,
   completeDispatch: null,

@@ -7,6 +7,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import CaseForm from './Form';
+import CaseFollowupForm from './FollowupForm';
 import CaseFiltersForm from './Filters';
 import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess } from '../../util';
@@ -87,6 +88,8 @@ const MODAL_SHARE_TITLE = 'Share Cases';
 const MODAL_FILTER_TITLE = 'Filter Cases';
 const MODAL_FORM_EDIT_TITLE = 'Edit Case - Victim/Patient Information';
 const MODAL_FORM_CREATE_TITLE = 'Add New Case - Victim/Patient Information';
+const MODAL_FORM_FOLLOWUP_TITLE =
+  'Case Followup - Victim/Patient Clinical Information';
 
 /* messages */
 const MESSAGE_LIST_REFRESH_SUCCESS = 'Cases were refreshed successfully';
@@ -139,6 +142,7 @@ class CaseList extends Component {
       showNotificationForm: false,
       notificationSubject: undefined,
       notificationBody: undefined,
+      showFollowUpForm: false,
       cached: null,
     };
   }
@@ -394,8 +398,8 @@ class CaseList extends Component {
   };
 
   /**
-   * @function handleNotificationFormClose
-   * @name handleNotificationFormClose
+   * @function handleListFiltersFormOpen
+   * @name handleListFiltersFormOpen
    * @description Handle filters form opening
    *
    * @version 0.1.0
@@ -406,8 +410,8 @@ class CaseList extends Component {
   };
 
   /**
-   * @function handleNotificationFormClose
-   * @name handleNotificationFormClose
+   * @function handleListFiltersFormClose
+   * @name handleListFiltersFormClose
    * @description Handle filters form closing
    *
    * @version 0.1.0
@@ -415,6 +419,32 @@ class CaseList extends Component {
    */
   handleListFiltersFormClose = () => {
     this.setState({ showFilters: false });
+  };
+
+  /**
+   * @function handleFormOpen
+   * @name handleFormOpen
+   * @description Handle form opening
+   * @param {object} item List item
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleFollowupFormOpen = (item) => {
+    selectCase(item);
+    this.setState({ showFollowUpForm: true });
+  };
+
+  /**
+   * @function handleFormClose
+   * @name handleFormClose
+   * @description Handle form closing
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleFollowupFormClose = () => {
+    this.setState({ showFollowUpForm: false });
   };
 
   /**
@@ -448,6 +478,7 @@ class CaseList extends Component {
       showNotificationForm,
       notificationSubject,
       notificationBody,
+      showFollowUpForm,
     } = this.state;
 
     return (
@@ -472,6 +503,7 @@ class CaseList extends Component {
           ]}
         />
         {/* end: list topbar */}
+
         {/* start: list */}
         <ItemList
           itemName="Case"
@@ -504,24 +536,29 @@ class CaseList extends Component {
                 renderActions={() => (
                   <ListItemActions
                     view={{
-                      name: 'View Case',
+                      name: 'View',
                       title: 'View Case Details',
                       onClick: () => this.handleItemView(item),
                     }}
                     edit={{
-                      name: 'Edit Case',
+                      name: 'Edit',
                       title: 'Update case details',
                       onClick: () => this.handleItemEdit(item),
                     }}
                     share={{
-                      name: 'Share Case',
+                      name: 'Share',
                       title: 'Share case details with others',
                       onClick: () => this.handleItemShare(item),
                     }}
                     archive={{
-                      name: 'Archive Case',
+                      name: 'Archive',
                       title: 'Remove case from list of active cases',
                       onClick: () => this.handleItemArchive(item),
+                    }}
+                    followup={{
+                      name: 'Followup',
+                      title: 'Followup on case',
+                      onClick: () => this.handleFollowupFormOpen(item),
                     }}
                   />
                 )}
@@ -561,6 +598,7 @@ class CaseList extends Component {
           )}
         />
         {/* end: list */}
+
         {/* start: notification modal */}
         <Modal
           title={MODAL_SHARE_TITLE}
@@ -585,6 +623,7 @@ class CaseList extends Component {
           />
         </Modal>
         {/* end: notification modal */}
+
         {/* start: filter modal */}
         <Modal
           title={MODAL_FILTER_TITLE}
@@ -603,6 +642,7 @@ class CaseList extends Component {
           />
         </Modal>
         {/* end: filter modal */}
+
         {/* start: form modal */}
         <Modal
           title={isEditForm ? MODAL_FORM_EDIT_TITLE : MODAL_FORM_CREATE_TITLE}
@@ -622,6 +662,24 @@ class CaseList extends Component {
           />
         </Modal>
         {/* end: form modal */}
+
+        {/* start: followup modal */}
+        <Modal
+          title={MODAL_FORM_FOLLOWUP_TITLE}
+          visible={showFollowUpForm}
+          className="FormModal-80"
+          footer={null}
+          onCancel={this.handleFollowupFormClose}
+          afterClose={this.handleAfterFormClose}
+          maskClosable={false}
+          destroyOnClose
+        >
+          <CaseFollowupForm
+            caze={caze}
+            onCancel={this.handleFollowupFormClose}
+          />
+        </Modal>
+        {/* end: followup modal */}
 
         {/* start: case details view */}
         <Drawer
