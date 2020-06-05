@@ -38,12 +38,14 @@ export const NumberWidget = ({
   secondaryText,
   value,
   icon,
-  bottomBorderColor = SECONDARY_COLOR,
+  bottomBorderColor,
 }) => {
   return (
     <Card
       style={{
-        borderBottom: `3px solid  ${bottomBorderColor}`,
+        borderBottom: bottomBorderColor
+          ? `3px solid  ${bottomBorderColor}`
+          : 'none',
         margin: '10px',
         boxShadow: '0 0 10px #e9e9e9',
       }}
@@ -186,7 +188,7 @@ export const SectionCard = ({ title, children }) => {
 
 SectionCard.propTypes = {
   title: PropTypes.string.isRequired,
-  children: PropTypes.instanceOf(PropTypes.node).isRequired,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.element]).isRequired,
 };
 
 /**
