@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactEchartsCore from 'echarts-for-react/lib/core';
 import echarts from 'echarts/lib/echarts';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
+import 'echarts/lib/component/legend';
 import 'echarts/lib/chart/pie';
 
 /**
@@ -18,9 +21,8 @@ const PieChart = () => {
       formatter: '{a} <br/>{b}: {c} ({d}%)', // configurable
     },
     legend: {
-      orient: 'horizontal',
-      left: 10,
-      bottom: 10,
+      orient: 'vertical',
+      right: 10,
       icon: 'circle',
       data: ['Male', 'Female', 'Unknown'], // configurable
     },
