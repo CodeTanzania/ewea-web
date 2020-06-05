@@ -48,6 +48,7 @@ import SecureRoute from '../Auth/SecureRoute';
 import HeaderNavMenu from '../navigation/HeaderNavMenu';
 // Dashboards
 import Dashboards from '../navigation/Dashboards';
+import CasesDashboard from '../Dashboards/Cases';
 import OverviewDashboard from '../Dashboards/Overview';
 import EventsOverviewDashboard from '../Dashboards/EventsOverview';
 import StakeholdersDashboard from '../Dashboards/Stakeholders';
@@ -103,6 +104,10 @@ const breadcrumbNameMap = {
   '/app/dashboards': {
     name: 'Dashboards',
     title: 'Dashboards',
+  },
+  '/app/dashboards/cases': {
+    name: 'Cases Dashboard',
+    title: 'Cases Dashboard',
   },
   '/app/dashboards/overview': {
     name: 'Overview Dashboard',
@@ -365,6 +370,10 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
             exact
             path={`${baseUrl}/dashboards`}
             component={Dashboards}
+          />
+          <SecureRoute
+            path={`${baseUrl}/dashboards/cases`}
+            component={CasesDashboard}
           />
           <SecureRoute
             path={`${baseUrl}/dashboards/overview`}
