@@ -21,8 +21,9 @@ const PieChart = () => {
       formatter: '{a} <br/>{b}: {c} ({d}%)', // configurable
     },
     legend: {
-      orient: 'vertical',
-      right: 10,
+      orient: 'horizontal',
+      left: 'center',
+      bottom: 0,
       icon: 'circle',
       data: ['Male', 'Female', 'Unknown'], // configurable
     },
