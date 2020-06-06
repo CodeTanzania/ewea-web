@@ -12,7 +12,6 @@ import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
-import './styles.css';
 
 /* http actions */
 const {
@@ -442,7 +441,7 @@ class AdministrativeLevelList extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -467,7 +466,7 @@ class AdministrativeLevelList extends Component {
               : 'Add New Administrative Level'
           }
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.handleFormClose}
           afterClose={this.handleAfterFormClose}

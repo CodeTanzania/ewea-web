@@ -13,7 +13,6 @@ import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
-import './styles.css';
 
 /* constants */
 const {
@@ -360,7 +359,7 @@ class FeatureTypes extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -379,7 +378,7 @@ class FeatureTypes extends Component {
         <Modal
           title={isEditForm ? 'Edit Feature Type' : 'Add New Feature Type'}
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeFeatureTypeForm}
           destroyOnClose

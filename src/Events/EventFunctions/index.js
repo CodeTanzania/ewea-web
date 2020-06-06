@@ -15,7 +15,6 @@ import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
-import './styles.css';
 
 /* http actions */
 const {
@@ -468,7 +467,7 @@ class EventFunctionList extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -493,7 +492,7 @@ class EventFunctionList extends Component {
               : 'Add New Emergency Function'
           }
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.handleFormClose}
           afterClose={this.handleAfterFormClose}

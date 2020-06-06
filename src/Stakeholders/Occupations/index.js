@@ -13,7 +13,6 @@ import ListItemActions from '../../components/ListItemActions';
 import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess } from '../../util';
 import OccupationForm from './Form';
-import './styles.css';
 
 /* http actions */
 const {
@@ -375,7 +374,7 @@ class Occupations extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -393,7 +392,7 @@ class Occupations extends Component {
 
         {/* create/edit form modal */}
         <Modal
-          className="FormModal"
+          className="modal-window-50"
           title={isEditForm ? 'Edit Occupation' : 'Add New Occupation'}
           visible={showForm}
           footer={null}

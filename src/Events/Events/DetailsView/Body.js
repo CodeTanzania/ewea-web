@@ -896,7 +896,7 @@ const EventDetailsViewBody = ({
       <Modal
         title={action.label}
         visible={showForm}
-        className="FormModal"
+        className="modal-window-50"
         footer={null}
         onCancel={() => closeChangelogForm()}
         destroyOnClose

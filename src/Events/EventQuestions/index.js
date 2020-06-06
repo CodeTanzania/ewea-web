@@ -13,7 +13,6 @@ import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
 import { notifyError, notifySuccess } from '../../util';
-import './styles.css';
 
 const {
   getEventQuestions,
@@ -347,7 +346,7 @@ class EventQuestions extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -366,7 +365,7 @@ class EventQuestions extends Component {
         <Modal
           title={isEditForm ? 'Edit Event Question' : 'Add New Event Question'}
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeEventQuestionsForm}
           destroyOnClose

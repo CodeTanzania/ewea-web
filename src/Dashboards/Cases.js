@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Col, Row, Spin, Table } from 'antd';
+import get from 'lodash/get';
 
 import { NumberWidget, SectionCard } from '../components/dashboardWidgets';
 import { DonutChart } from '../components/charts';
 
+const { getCasesReport } = reduxActions;
 const OCCUPATION_COLUMNS = [
   { title: 'Occupation', dataIndex: 'occupation' },
   { title: 'Total', dataIndex: 'number' },
@@ -17,15 +21,8 @@ const OCCUPATION_DATA = [
 ];
 
 const NATIONALITY_COLUMNS = [
-  { title: 'Nationality', dataIndex: 'name' },
-  { title: 'Total', dataIndex: 'number' },
-];
-
-const NATIONALITY_DATA = [
-  { name: 'Tanzanian', number: 20 },
-  { name: 'Kenyan', number: 29 },
-  { name: 'Ugandan', number: 10 },
-  { name: 'American', number: 2 },
+  { title: 'Nationality', dataIndex: ['name', 'en'] },
+  { title: 'Total', dataIndex: 'total' },
 ];
 
 const AGE_GROUPS_COLUMNS = [
@@ -46,14 +43,20 @@ const AGE_GROUPS_DATA = [
  * @function
  * @name CasesDashboard
  * @description Cases Dashboard
+ * @param {object} props Case dashboard properties object
+ * @param {object} props.report Case report data from the API
+ * @param {boolean} props.loading Flag for showing spinner while loading report
  * @returns {object} Cases Dashboard
  * @version 0.1.0
  * @since 0.1.0
  */
-const CasesDashboard = () => {
+const CasesDashboard = ({ report, loading }) => {
+  useEffect(() => {
+    getCasesReport();
+  }, []);
   return (
     <div>
-      <Spin spinning={false}>
+      <Spin spinning={loading}>
         <Row>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
             <NumberWidget title="Total" value={0} />
@@ -107,7 +110,7 @@ const CasesDashboard = () => {
               <Col span={24}>
                 <SectionCard title="Cases Breakdown - Nationality">
                   <Table
-                    dataSource={NATIONALITY_DATA}
+                    dataSource={get(report, 'overall.nationalities', [])}
                     columns={NATIONALITY_COLUMNS}
                     pagination={false}
                   />
@@ -143,4 +146,16 @@ const CasesDashboard = () => {
   );
 };
 
-export default CasesDashboard;
+CasesDashboard.propTypes = {
+  report: PropTypes.shape({ overview: PropTypes.object }),
+  loading: PropTypes.bool.isRequired,
+};
+
+CasesDashboard.defaultProps = {
+  report: null,
+};
+
+export default Connect(CasesDashboard, {
+  report: 'casesReport.data',
+  loading: 'casesReport.loading',
+});

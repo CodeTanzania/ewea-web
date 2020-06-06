@@ -14,7 +14,6 @@ import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
-import './styles.css';
 
 /* http actions */
 const {
@@ -361,7 +360,7 @@ class EventUrgency extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -380,7 +379,7 @@ class EventUrgency extends Component {
         <Modal
           title={isEditForm ? 'Edit Event Urgency' : 'Add New Event Urgency'}
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeEventUrgencyForm}
           destroyOnClose

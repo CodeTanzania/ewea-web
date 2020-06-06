@@ -13,7 +13,6 @@ import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
-import './styles.css';
 
 /* http actions */
 const {
@@ -360,7 +359,7 @@ class EventCertainties extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -381,7 +380,7 @@ class EventCertainties extends Component {
             isEditForm ? 'Edit Event Certainty' : 'Add New Event Certainty'
           }
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeEventCertaintyForm}
           destroyOnClose

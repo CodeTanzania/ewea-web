@@ -13,7 +13,6 @@ import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
-import './styles.css';
 
 const {
   getVehicles,
@@ -348,7 +347,7 @@ class Vehicle extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -368,7 +367,7 @@ class Vehicle extends Component {
         <Modal
           title={isEditForm ? 'Edit Vehicle' : 'Add New Vehicle'}
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeVehicleForm}
           afterClose={this.handleAfterCloseForm}

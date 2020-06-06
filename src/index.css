@@ -151,40 +151,39 @@ code {
   }
 }
 
-.FormModal {
+.modal-window-50 {
   width: 50% !important;
 }
 
-.FormModal-80 {
+.modal-window-60 {
+  width: 60% !important;
+}
+
+.modal-window-70 {
+  width: 70% !important;
+}
+
+.modal-window-80 {
   width: 80% !important;
 }
 
-@media screen and (max-width: 1024px) {
-  .FormModal {
-    width: 80% !important;
-  }
-
-  .FormModal-80 {
-    width: 70% !important;
-  }
+.modal-window-90 {
+  width: 90% !important;
 }
 
-@media screen and (max-width: 768px) {
-  .FormModal {
-    width: 80% !important;
-  }
-
-  .FormModal-80 {
+@media screen and (max-width: 992px) {
+  .modal-window-50,
+  .modal-window-60,
+  .modal-window-70 {
     width: 80% !important;
   }
 }
 
-@media screen and (max-width: 426px) {
-  .FormModal {
-    width: 90% !important;
-  }
-
-  .FormModal-80 {
+@media screen and (max-width: 575px) {
+  .modal-window-50,
+  .modal-window-60,
+  .modal-window-70,
+  .modal-window-80 {
     width: 90% !important;
   }
 }

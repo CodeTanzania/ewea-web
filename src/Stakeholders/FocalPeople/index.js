@@ -453,7 +453,7 @@ class FocalPeople extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
         >
           <FocalPersonFilters
             onCancel={this.closeFiltersModal}
@@ -472,7 +472,7 @@ class FocalPeople extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -493,7 +493,7 @@ class FocalPeople extends Component {
         <Modal
           title={isEditForm ? 'Edit Focal Person' : 'Add New Focal Person'}
           visible={showForm}
-          className="FormModal-80"
+          className="modal-window-80"
           footer={null}
           onCancel={this.closeFocalPersonForm}
           destroyOnClose

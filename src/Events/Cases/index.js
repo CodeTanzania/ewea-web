@@ -15,7 +15,6 @@ import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
 import CaseDetailsViewHeader from './DetailsView/Header';
 import CaseDetailsViewBody from './DetailsView/Body';
-import './styles.css';
 
 /* http actions */
 const {
@@ -569,7 +568,7 @@ class CaseList extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -589,7 +588,7 @@ class CaseList extends Component {
         <Modal
           title={MODAL_FILTER_TITLE}
           visible={showFilters}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.handleListFiltersFormClose}
           destroyOnClose
@@ -607,7 +606,7 @@ class CaseList extends Component {
         <Modal
           title={isEditForm ? MODAL_FORM_EDIT_TITLE : MODAL_FORM_CREATE_TITLE}
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.handleFormClose}
           afterClose={this.handleAfterFormClose}

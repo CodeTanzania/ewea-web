@@ -12,7 +12,6 @@ import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
 import { notifyError, notifySuccess, truncateString } from '../../util';
-import './styles.css';
 
 /* constants */
 const {
@@ -339,7 +338,7 @@ class EventTopics extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -358,7 +357,7 @@ class EventTopics extends Component {
         <Modal
           title={isEditForm ? 'Edit Event Topic' : 'Add New Event Topic'}
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeEventTopicsForm}
           destroyOnClose

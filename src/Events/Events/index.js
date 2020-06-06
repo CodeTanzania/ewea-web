@@ -536,7 +536,7 @@ class Events extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
         >
           <EventFilters
             onCancel={this.closeFiltersModal}
@@ -554,7 +554,7 @@ class Events extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
           zIndex={10000}
         >
@@ -574,7 +574,7 @@ class Events extends Component {
         <Modal
           title={isEditForm ? 'Edit Event' : 'Add New Event'}
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeEventForm}
           destroyOnClose

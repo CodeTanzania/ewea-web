@@ -12,7 +12,6 @@ import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
-import './styles.css';
 
 const {
   getPartyOwnerships,
@@ -329,7 +328,7 @@ class PartyOwnership extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -351,7 +350,7 @@ class PartyOwnership extends Component {
             isEditForm ? 'Edit Agency Ownership' : 'Add New Agency Ownership'
           }
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closePartyOwnershipForm}
           afterClose={this.handleAfterCloseForm}

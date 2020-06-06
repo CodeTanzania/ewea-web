@@ -19,7 +19,6 @@ import {
   notifySuccess,
   generateVehicleDispatchShareableDetails,
 } from '../../util';
-import './styles.css';
 
 /* http actions */
 const {
@@ -568,7 +567,7 @@ class Dispatches extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
