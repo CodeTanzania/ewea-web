@@ -212,27 +212,27 @@ class Occupations extends Component {
    * @name handleShare
    * @description Handle share multiple Party Occupations
    *
-   * @param {object[]| object} partyoccupations partyoccupations list to be shared
+   * @param {object[]| object} partyOccupations partyOccupations list to be shared
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleShare = (partyoccupations) => {
+  handleShare = (partyOccupations) => {
     let message = '';
-    if (isArray(partyoccupations)) {
-      const partyoccupationList = partyoccupations.map(
-        (partyoccupation) =>
-          `Name: ${partyoccupation.strings.name.en}\nDescription: ${
+    if (isArray(partyOccupations)) {
+      const partyOccupationList = partyOccupations.map(
+        (partyOccupation) =>
+          `Name: ${partyOccupation.strings.name.en}\nDescription: ${
             // eslint-disable-line
-            partyoccupation.strings.description.en
+            partyOccupation.strings.description.en
           }\n`
       );
 
-      message = partyoccupationList.join('\n\n\n');
+      message = partyOccupationList.join('\n\n\n');
     } else {
-      message = `Name: ${partyoccupations.strings.name.en}\nDescription: ${
+      message = `Name: ${partyOccupations.strings.name.en}\nDescription: ${
         // eslint-disable-line
-        partyoccupations.strings.description.en
+        partyOccupations.strings.description.en
       }\n`;
     }
 
