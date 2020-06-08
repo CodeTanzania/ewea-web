@@ -2,6 +2,10 @@
   padding: 0 40px;
 }
 
+.ListWrapper {
+  border-top: 1px solid #f0f0f0;
+}
+
 @media screen and (max-width: 768px) {
   .List {
     padding: 0 30px;
