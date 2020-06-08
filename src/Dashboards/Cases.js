@@ -5,6 +5,7 @@ import { Col, Row, Spin, Table, Button } from 'antd';
 import { BarChartOutlined, TableOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
 import map from 'lodash/map';
+import randomColor from 'randomcolor';
 
 import { NumberWidget, SectionCard } from '../components/dashboardWidgets';
 import {
@@ -74,43 +75,91 @@ const CasesDashboard = ({ report, loading }) => {
       <Spin spinning={loading}>
         <Row>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Total" value={0} />{' '}
+            <NumberWidget
+              title="Total"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />{' '}
           </Col>{' '}
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
             {' '}
-            <NumberWidget title="Suspect" value={0} />{' '}
+            <NumberWidget
+              title="Suspect"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />{' '}
           </Col>{' '}
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Probable" value={0} />
+            <NumberWidget
+              title="Probable"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
           </Col>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Tested" value={0} />
+            <NumberWidget
+              title="Tested"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
           </Col>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Treated" value={0} />
+            <NumberWidget
+              title="Treated"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
           </Col>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Followup" value={0} />
+            <NumberWidget
+              title="Followup"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
           </Col>
         </Row>
         <Row>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Recovered" value={0} />{' '}
+            <NumberWidget
+              title="Recovered"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />{' '}
           </Col>{' '}
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Mild" value={0} />
+            <NumberWidget
+              title="Mild"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
           </Col>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Moderate" value={0} />
+            <NumberWidget
+              title="Moderate"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
           </Col>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Critical" value={0} />
+            <NumberWidget
+              title="Critical"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
           </Col>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Severe" value={0} />
+            <NumberWidget
+              title="Severe"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
           </Col>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Died" value={0} />
+            <NumberWidget
+              title="Died"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
           </Col>
         </Row>
         <Row>
