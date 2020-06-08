@@ -312,14 +312,14 @@ StakeholderForm.propTypes = {
       name: PropTypes.string,
       title: PropTypes.string,
     }),
-    group: PropTypes.string,
-    area: PropTypes.string,
-    role: PropTypes.string,
+    group: PropTypes.oneOf([PropTypes.string, PropTypes.object]),
+    area: PropTypes.oneOf([PropTypes.string, PropTypes.object]),
+    role: PropTypes.oneOf([PropTypes.string, PropTypes.object]),
     landline: PropTypes.string,
     fax: PropTypes.string,
     physicalAddress: PropTypes.string,
     postalAddress: PropTypes.string,
-  }).isRequired,
+  }),
   onCancel: PropTypes.func.isRequired,
   onCreate: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
@@ -329,6 +329,7 @@ StakeholderForm.propTypes = {
 
 StakeholderForm.defaultProps = {
   isAgency: false,
+  stakeholder: null,
 };
 
 export default StakeholderForm;
