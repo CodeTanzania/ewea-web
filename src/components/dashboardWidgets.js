@@ -166,12 +166,13 @@ TimeWidget.defaultProps = {
  * @description Card component for different sections in dashboard
  * @param {object} props Section Card component props
  * @param {string} props.title Card title
+ * @param {object} props.actions Card extra actions
  * @param {object|object[]} props.children React Nodes
  * @returns {object} Section Card component
  * @version 0.1.0
  * @since 0.1.0
  */
-export const SectionCard = ({ title, children }) => {
+export const SectionCard = ({ title, children, actions }) => {
   return (
     <Card
       title={title}
@@ -180,6 +181,7 @@ export const SectionCard = ({ title, children }) => {
         boxShadow: '0 0 10px #e9e9e9',
       }}
       bodyStyle={{ overflow: 'auto' }}
+      extra={actions}
     >
       {children}
     </Card>
@@ -189,6 +191,11 @@ export const SectionCard = ({ title, children }) => {
 SectionCard.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.element]).isRequired,
+  actions: PropTypes.oneOfType([PropTypes.node, PropTypes.element]),
+};
+
+SectionCard.defaultProps = {
+  actions: null,
 };
 
 /**
