@@ -5,7 +5,7 @@ import eventsIcon from '../assets/icons/events.svg';
 import stakeholdersIcon from '../assets/icons/dashboards/stakeholders.svg';
 import indicatorDashboardIcon from '../assets/icons/dashboards/indicator-dashboard-disabled.svg';
 import overviewDashboardIcon from '../assets/icons/dashboards/overview-dashboard.svg';
-import caseManagementIcon from '../assets/icons/dashboards/case-management-disabled.svg';
+import caseManagementIcon from '../assets/icons/dashboards/case-management.svg';
 import resourceManagementIcon from '../assets/icons/dashboards/resource-management-disabled.svg';
 import vehicleDispatchIcon from '../assets/icons/dashboards/vehicle-dispatch.svg';
 import criticalInfrastructuresIcon from '../assets/icons/dashboards/infrastructure-disabled.svg';
@@ -43,10 +43,9 @@ const routes = [
   },
   {
     name: 'Cases',
-    path: '/casemanagement',
+    path: '/cases',
     icon: caseManagementIcon,
     description: modules.alertsIssued,
-    disabled: true,
   },
   {
     name: 'Resources',

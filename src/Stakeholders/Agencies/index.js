@@ -15,7 +15,6 @@ import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
 import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess, generateAgencyVCard } from '../../util';
-import './styles.css';
 
 /* http actions */
 const {
@@ -464,7 +463,7 @@ class Agencies extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
         >
           <AgencyFilters
             onCancel={this.closeFiltersModal}
@@ -479,7 +478,7 @@ class Agencies extends Component {
         <Modal
           title={isEditForm ? 'Edit Agency' : 'Add New Agency'}
           visible={showForm}
-          className="FormModal-80"
+          className="modal-window-80"
           footer={null}
           onCancel={this.closeAgencyForm}
           destroyOnClose

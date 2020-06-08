@@ -12,7 +12,6 @@ import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
-import './styles.css';
 
 const {
   getVehicleMakes,
@@ -331,7 +330,7 @@ class VehicleMake extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -351,7 +350,7 @@ class VehicleMake extends Component {
         <Modal
           title={isEditForm ? 'Edit Vehicle Make' : 'Add New Vehicle Make'}
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeVehicleMakeForm}
           afterClose={this.handleAfterCloseForm}

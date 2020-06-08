@@ -12,7 +12,6 @@ import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
-import './styles.css';
 
 const {
   getEventIndicators,
@@ -328,7 +327,7 @@ class EventIndicator extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -350,7 +349,7 @@ class EventIndicator extends Component {
             isEditForm ? 'Edit Event Indicator' : 'Add New Event Indicator'
           }
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeEventIndicatorForm}
           destroyOnClose

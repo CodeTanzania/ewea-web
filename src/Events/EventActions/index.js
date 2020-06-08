@@ -14,7 +14,6 @@ import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
-import './styles.css';
 
 /* constants */
 const {
@@ -391,7 +390,7 @@ class EventActions extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
         >
           <EventActionFilters
             onCancel={this.closeFiltersModal}
@@ -410,7 +409,7 @@ class EventActions extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -429,7 +428,7 @@ class EventActions extends Component {
         <Modal
           title={isEditForm ? 'Edit Event Action' : 'Add New Event Action'}
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeEventActionForm}
           destroyOnClose

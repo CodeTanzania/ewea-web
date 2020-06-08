@@ -13,7 +13,6 @@ import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
-import './styles.css';
 
 /* http actions */
 const {
@@ -359,7 +358,7 @@ class EventSeverities extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -378,7 +377,7 @@ class EventSeverities extends Component {
         <Modal
           title={isEditForm ? 'Edit Event Severity' : 'Add New Event Severity'}
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeEventSeverityForm}
           destroyOnClose

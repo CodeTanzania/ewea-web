@@ -8,7 +8,7 @@ import { Tag, PageHeader } from 'antd';
  * @param {string} props.number event number
  * @param {string} props.type event type
  * @param {string} props.description event description
- * @param {Function} props.onBack Callback for closing the drawer
+ * @param {Function} props.onBack Callback function for closing drawer window
  * @param {string} props.stage event stage
  * @name EventDetailsViewHeader
  * @description Event Details header for drawer

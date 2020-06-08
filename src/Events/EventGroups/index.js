@@ -14,7 +14,6 @@ import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
 import { notifyError, notifySuccess, truncateString } from '../../util';
-import './styles.css';
 
 /* http actions */
 const {
@@ -343,7 +342,7 @@ class EventGroups extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -362,7 +361,7 @@ class EventGroups extends Component {
         <Modal
           title={isEditForm ? 'Edit Event Group' : 'Add New Event Group'}
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeEventGroupsForm}
           destroyOnClose

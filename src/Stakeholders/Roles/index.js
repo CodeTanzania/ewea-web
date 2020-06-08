@@ -13,7 +13,6 @@ import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess } from '../../util';
 import RoleForm from './Form';
 import AssignPermissionForm from './AssignPermissionsForm';
-import './styles.css';
 
 const {
   getPartyRolesExportUrl,
@@ -403,7 +402,7 @@ class Roles extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -421,7 +420,7 @@ class Roles extends Component {
 
         {/* create/edit form modal */}
         <Modal
-          className="FormModal"
+          className="modal-window-50"
           title={isEditForm ? 'Edit Role' : 'Add New Role'}
           visible={showForm}
           footer={null}
@@ -440,7 +439,7 @@ class Roles extends Component {
 
         {/* create/edit form modal */}
         <Modal
-          className="FormModal-80"
+          className="modal-window-80"
           title="Edit Role's Permissions"
           visible={showAssignPermissionsForm}
           footer={null}

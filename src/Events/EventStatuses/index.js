@@ -13,7 +13,6 @@ import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
-import './styles.css';
 
 /* constants */
 const {
@@ -360,7 +359,7 @@ class EventStatuses extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -379,7 +378,7 @@ class EventStatuses extends Component {
         <Modal
           title={isEditForm ? 'Edit Event Status' : 'Add New Event Status'}
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeEventStatusForm}
           destroyOnClose

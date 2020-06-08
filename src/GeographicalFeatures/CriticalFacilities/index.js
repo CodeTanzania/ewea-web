@@ -15,7 +15,6 @@ import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
-import './styles.css';
 
 /* http actions */
 const {
@@ -527,7 +526,7 @@ class FeatureList extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -548,7 +547,7 @@ class FeatureList extends Component {
         <Modal
           title="Filter Critical Infrastructures"
           visible={showFilters}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.handleListFiltersFormClose}
           destroyOnClose
@@ -571,7 +570,7 @@ class FeatureList extends Component {
               : 'Add New Critical Infrastructure'
           }
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.handleFormClose}
           afterClose={this.handleAfterFormClose}

@@ -257,7 +257,7 @@ export const EventLocations = ({ areas = [], openForm }) => {
   return isEmpty(areas) ? null : (
     <div>
       <SectionHeader
-        title="AFFECT AREAS"
+        title="AFFECTED AREAS"
         actions={
           <Button
             shape="circle"
@@ -288,7 +288,7 @@ export const EventLocations = ({ areas = [], openForm }) => {
 export const EventPlaces = ({ places = '' }) => {
   return isEmpty(places) ? null : (
     <div>
-      <SectionHeader title="AFFECT PLACES" />
+      <SectionHeader title="AFFECTED PLACES" />
 
       <span>{places}</span>
     </div>
@@ -896,7 +896,7 @@ const EventDetailsViewBody = ({
       <Modal
         title={action.label}
         visible={showForm}
-        className="FormModal"
+        className="modal-window-50"
         footer={null}
         onCancel={() => closeChangelogForm()}
         destroyOnClose

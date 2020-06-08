@@ -19,7 +19,6 @@ import {
   notifySuccess,
   truncateString,
 } from '../../util';
-import './styles.css';
 
 /* constants */
 const {
@@ -427,8 +426,14 @@ class ActionCatalogue extends Component {
               <Col {...actionSpan} title={item.strings.name.en}>
                 {truncateString(item.strings.name.en, 50)}
               </Col>
-              <Col {...rolesSpan}>
-                {joinArrayOfObjectToString(item.relations.roles) || 'N/A'}
+              <Col
+                {...rolesSpan}
+                title={joinArrayOfObjectToString(item.relations.roles)}
+              >
+                {truncateString(
+                  joinArrayOfObjectToString(item.relations.roles),
+                  60
+                ) || 'N/A'}
               </Col>
               <Col {...groupsSpan}>
                 {joinArrayOfObjectToString(item.relations.groups) || 'N/A'}
@@ -447,7 +452,7 @@ class ActionCatalogue extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
         >
           <EventActionCatalogueFilters
             onCancel={this.closeFiltersModal}
@@ -466,7 +471,7 @@ class ActionCatalogue extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -487,7 +492,7 @@ class ActionCatalogue extends Component {
         <Modal
           title={isEditForm ? 'Edit Action' : 'Add New Action'}
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeEventActionCatalogueForm}
           destroyOnClose

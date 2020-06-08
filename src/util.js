@@ -147,6 +147,10 @@ export const getRGBAColor = (baseColor, alpha) => {
  * @since 0.1.0
  */
 export const truncateString = (str, num) => {
+  if (isEmpty(str)) {
+    return '';
+  }
+
   // If the length of str is less than or equal to num
   // just return str--don't truncate it.
   if (str.length <= num) {
@@ -168,7 +172,13 @@ export const truncateString = (str, num) => {
  * @since 0.1.0
  */
 export const generateEventTemplate = (event) => {
-  const subject = `${event.level.strings.name.en} Advisory: ${event.type.strings.name.en} ${event.stage} - No. ${event.number}`;
+  const subject = `${get(
+    event,
+    'level.strings.name.en',
+    'N/A'
+  )} Advisory: ${get(event, 'type.strings.name.en')} ${event.stage} - No. ${
+    event.number
+  }`;
 
   const body = `${subject} \n\nDescription: ${
     // eslint-disable-line

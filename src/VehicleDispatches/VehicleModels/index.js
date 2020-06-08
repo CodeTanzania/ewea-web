@@ -12,7 +12,6 @@ import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
-import './styles.css';
 
 const {
   getVehicleModels,
@@ -331,7 +330,7 @@ class VehicleModel extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          className="FormModal"
+          className="modal-window-50"
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
@@ -351,7 +350,7 @@ class VehicleModel extends Component {
         <Modal
           title={isEditForm ? 'Edit Vehicle Model' : 'Add New Vehicle Model'}
           visible={showForm}
-          className="FormModal"
+          className="modal-window-50"
           footer={null}
           onCancel={this.closeVehicleModelForm}
           afterClose={this.handleAfterCloseForm}
