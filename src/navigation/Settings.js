@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import rolesIcon from '../assets/icons/settings/roles.svg';
+import occupationsIcon from '../assets/icons/settings/stakeholderoccupations.svg';
 import administrativeAreasIcon from '../assets/icons/settings/administrativeareas.svg';
 import criticalFacilitiesIcon from '../assets/icons/criticalfacilities.svg';
 import eventTypesIcon from '../assets/icons/settings/eventtypes.svg';
@@ -76,7 +77,7 @@ const routes = [
   {
     name: 'Stakeholder Occupations',
     path: '/occupations',
-    icon: rolesIcon,
+    icon: occupationsIcon,
     description: modules.stakeholdersRoles,
   },
   {

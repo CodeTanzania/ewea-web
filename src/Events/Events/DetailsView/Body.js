@@ -257,7 +257,7 @@ export const EventLocations = ({ areas = [], openForm }) => {
   return isEmpty(areas) ? null : (
     <div>
       <SectionHeader
-        title="AFFECT AREAS"
+        title="AFFECTED AREAS"
         actions={
           <Button
             shape="circle"
@@ -288,7 +288,7 @@ export const EventLocations = ({ areas = [], openForm }) => {
 export const EventPlaces = ({ places = '' }) => {
   return isEmpty(places) ? null : (
     <div>
-      <SectionHeader title="AFFECT PLACES" />
+      <SectionHeader title="AFFECTED PLACES" />
 
       <span>{places}</span>
     </div>
