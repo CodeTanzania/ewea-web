@@ -27,6 +27,7 @@ import 'echarts/lib/chart/pie';
 export const generateDonutChartOption = (chartName, data) => {
   const legendLabels = map(data, (item) => item.name);
   const option = {
+    textStyle: { fontFamily: 'Lato' },
     tooltip: {
       trigger: 'item', // configurable
       formatter: '{a} <br/>{b}: {c} ({d}%)', // configurable
@@ -88,6 +89,7 @@ export const generateInvertedBarChartOption = (
   const Y_AXIS = map(data, (item) => item.name);
   const SERIES_DATA = map(data, (item) => item.value);
   const option = {
+    textStyle: { fontFamily: 'Lato' },
     title: {
       text: chartName,
     },

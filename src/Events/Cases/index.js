@@ -666,7 +666,7 @@ class CaseList extends Component {
         <Modal
           title={MODAL_FORM_FOLLOWUP_TITLE}
           visible={showFollowUpForm}
-          className="FormModal-80"
+          className="modal-window-80"
           footer={null}
           onCancel={this.handleFollowupFormClose}
           afterClose={this.handleAfterFormClose}
