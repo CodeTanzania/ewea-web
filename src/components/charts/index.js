@@ -6,6 +6,7 @@ import echarts from 'echarts/lib/echarts';
 
 // echarts components
 import 'echarts/lib/component/grid';
+import 'echarts/lib/component/graphic';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
@@ -13,6 +14,10 @@ import 'echarts/lib/component/title';
 // echarts charts
 import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/pie';
+
+import macaronsTheme from './macarons.theme.json';
+
+echarts.registerTheme('macarons', macaronsTheme.theme);
 
 /**
  * @function
@@ -142,6 +147,7 @@ export const EChart = ({ option, style }) => {
       notMerge
       lazyUpdate
       style={style}
+      theme="macarons"
     />
   );
 };
