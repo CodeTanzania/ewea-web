@@ -392,14 +392,16 @@ class FocalPeople extends Component {
               item={item}
               title={
                 <Row>
-                  <Col span={15}>{item.name}</Col>
+                  <Col span={15}>
+                    <span className="text-sm">{item.name}</span>
+                  </Col>
                   <Col span={6}>
-                    <span style={{ fontSize: '0.8em' }}>{item.mobile}</span>
+                    <span className="text-xs">{item.mobile}</span>
                   </Col>
                 </Row>
               }
               secondaryText={
-                <span style={{ fontSize: '0.8em' }}>
+                <span className="text-xs">
                   {`${get(item, 'role.strings.name.en', 'N/A')}, ${get(
                     item,
                     'party.abbreviation',

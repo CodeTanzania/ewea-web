@@ -391,17 +391,15 @@ class Agencies extends Component {
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              title={<span style={{ fontSize: '0.95em' }}>{item.name}</span>}
+              title={<span className="text-sm">{item.name}</span>}
               secondaryText={
                 <Row>
                   <Col span={16}>
-                    <span style={{ fontSize: '0.9em' }}>
-                      {item.abbreviation}
-                    </span>
+                    <span className="text-xs">{item.abbreviation}</span>
                   </Col>
 
                   <Col span={6}>
-                    <span style={{ fontSize: '0.9em' }}>{item.mobile}</span>
+                    <span className="text-xs">{item.mobile}</span>
                   </Col>
                 </Row>
               }
