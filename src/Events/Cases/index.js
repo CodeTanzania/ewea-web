@@ -689,7 +689,7 @@ class CaseList extends Component {
         <Modal
           title={MODAL_FILTER_TITLE}
           visible={showFilters}
-          className="modal-window-50"
+          className="modal-window-80"
           footer={null}
           onCancel={this.handleListFiltersFormClose}
           destroyOnClose

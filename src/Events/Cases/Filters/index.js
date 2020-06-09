@@ -9,9 +9,12 @@ import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* http actions */
 const {
-  getPartyGenders,
-  getPartyOccupations,
   getAdministrativeAreas,
+  getPartyGenders,
+  getPartyNationalities,
+  getPartyOccupations,
+  getCaseStages,
+  getCaseSeverities,
 } = httpActions;
 
 /* state actions */
@@ -71,7 +74,6 @@ const CaseFiltersForm = ({
 }) => {
   // form finish(submit) handler
   const onFinish = (values) => {
-    // TODO: clear false values
     filterCases(values);
     onCancel();
   };
@@ -85,6 +87,7 @@ const CaseFiltersForm = ({
    * @since 0.1.0
    */
   const onClearFilters = () => {
+    // TODO: fix age filter error
     clearCaseFilters();
     if (isFunction(onClearCache)) {
       onClearCache();
@@ -102,64 +105,134 @@ const CaseFiltersForm = ({
         ...filter,
       }}
     >
-      {/* start:are filter */}
-      <Form.Item
-        label="By Area"
-        title="Victim/Patient Residential Area e.g Dar es Salaam"
-        name={['victim.area']}
-      >
-        <SearchableSelectInput
-          onSearch={(optns = {}) => {
-            return getAdministrativeAreas(optns);
-          }}
-          optionLabel={(area) => {
-            return get(area, 'strings.name.en');
-          }}
-          optionValue="_id"
-          mode="multiple"
-          onCache={(area) => onCache({ 'victim.area': area })}
-          initialValue={get(cached, 'victim.area', [])}
-        />
-      </Form.Item>
-      {/* end:are filter */}
+      {/* start:area & gender filter */}
+      <Row justify="space-between">
+        <Col xs={24} sm={24} md={11}>
+          <Form.Item
+            label="By Area(s)"
+            title="Victim/Patient Residential Area e.g Dar es Salaam"
+            name={['victim.area']}
+          >
+            <SearchableSelectInput
+              onSearch={(optns = {}) => {
+                return getAdministrativeAreas(optns);
+              }}
+              optionLabel={(area) => {
+                return get(area, 'strings.name.en');
+              }}
+              optionValue="_id"
+              mode="multiple"
+              onCache={(area) => onCache({ 'victim.area': area })}
+              initialValue={get(cached, 'victim.area', [])}
+            />
+          </Form.Item>
+        </Col>
+        <Col xs={24} sm={24} md={11}>
+          <Form.Item
+            label="By Gender(s)"
+            title="Victim/Patient Gender e.g Female"
+            name={['victim.gender']}
+          >
+            <SearchableSelectInput
+              onSearch={(optns = {}) => {
+                return getPartyGenders(optns);
+              }}
+              optionLabel={(gender) => get(gender, 'strings.name.en')}
+              optionValue="_id"
+              mode="multiple"
+              onCache={(gender) => onCache({ 'victim.gender': gender })}
+              initialValue={get(cached, 'victim.gender')}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      {/* end:area & gender filter */}
 
-      {/* start:gender filter */}
-      <Form.Item
-        label="By Gender"
-        title="Victim/Patient Gender e.g Female"
-        name={['victim.gender']}
-      >
-        <SearchableSelectInput
-          onSearch={(optns = {}) => {
-            return getPartyGenders(optns);
-          }}
-          optionLabel={(gender) => get(gender, 'strings.name.en')}
-          optionValue="_id"
-          mode="multiple"
-          onCache={(gender) => onCache({ 'victim.gender': gender })}
-          initialValue={get(cached, 'victim.gender')}
-        />
-      </Form.Item>
-      {/* end:gender filter */}
+      {/* start:nationality & occupation filter */}
+      <Row justify="space-between">
+        <Col xs={24} sm={24} md={11}>
+          <Form.Item
+            label="By Nationality(s)"
+            title="Victim/Patient Nationality e.g Tanzanian"
+            name={['victim.nationality']}
+          >
+            <SearchableSelectInput
+              onSearch={(optns = {}) => {
+                return getPartyNationalities(optns);
+              }}
+              optionLabel={(nationality) => get(nationality, 'strings.name.en')}
+              optionValue="_id"
+              mode="multiple"
+              onCache={(nationality) =>
+                onCache({ 'victim.nationality': nationality })
+              }
+              initialValue={get(cached, 'victim.nationality')}
+            />
+          </Form.Item>
+        </Col>
+        <Col xs={24} sm={24} md={11}>
+          <Form.Item
+            label="By Occupation(s)"
+            title="Victim/Patient Occupation e.g Health Worker"
+            name={['victim.occupation']}
+          >
+            <SearchableSelectInput
+              onSearch={(optns = {}) => {
+                return getPartyOccupations(optns);
+              }}
+              optionLabel={(occupation) => get(occupation, 'strings.name.en')}
+              optionValue="_id"
+              mode="multiple"
+              onCache={(occupation) =>
+                onCache({ 'victim.occupation': occupation })
+              }
+              initialValue={get(cached, 'victim.occupation')}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      {/* end:nationality & occupation filter */}
 
-      {/* start:occupation filter */}
-      <Form.Item
-        label="By Occupation"
-        title="Victim/Patient Occupation e.g Health Worker"
-        name={['victim.occupation']}
-      >
-        <SearchableSelectInput
-          onSearch={(optns = {}) => {
-            return getPartyOccupations(optns);
-          }}
-          optionLabel={(occupation) => get(occupation, 'strings.name.en')}
-          optionValue="_id"
-          mode="multiple"
-          onCache={(occupation) => onCache({ 'victim.occupation': occupation })}
-          initialValue={get(cached, 'victim.occupation')}
-        />
-      </Form.Item>
-      {/* end:occupation filter */}
+      {/* start:stage & severity filter */}
+      <Row justify="space-between">
+        <Col xs={24} sm={24} md={11}>
+          <Form.Item
+            label="By Stage(s)"
+            title="Case Stage e.g Followup"
+            name={['stage']}
+          >
+            <SearchableSelectInput
+              onSearch={(optns = {}) => {
+                return getCaseStages(optns);
+              }}
+              optionLabel={(stage) => get(stage, 'strings.name.en')}
+              optionValue="_id"
+              mode="multiple"
+              onCache={(stage) => onCache({ stage })}
+              initialValue={get(cached, 'stage')}
+            />
+          </Form.Item>
+        </Col>
+        <Col xs={24} sm={24} md={11}>
+          <Form.Item
+            label="By Severity(s)"
+            title="Case Severity e.g Critical"
+            name={['severity']}
+          >
+            <SearchableSelectInput
+              onSearch={(optns = {}) => {
+                return getCaseSeverities(optns);
+              }}
+              optionLabel={(severity) => get(severity, 'strings.name.en')}
+              optionValue="_id"
+              mode="multiple"
+              onCache={(severity) => onCache({ severity })}
+              initialValue={get(cached, 'severity')}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      {/* start:end & severity filter */}
 
       {/* start:age filter */}
       <Row justify="space-between">
@@ -167,7 +240,7 @@ const CaseFiltersForm = ({
           <Form.Item
             name={['victim.age', 'min']}
             label="Minimum Age"
-            title="Victim/Patient Minimum Age"
+            title="Victim/Patient Minimum Age e.g 26"
           >
             <InputNumber min={0} max={150} style={{ width: '100%' }} />
           </Form.Item>
@@ -176,7 +249,7 @@ const CaseFiltersForm = ({
           <Form.Item
             name={['victim.age', 'max']}
             label="Maximum Age"
-            title="Victim/Patient Maximum Age"
+            title="Victim/Patient Maximum Age e.g 95"
           >
             <InputNumber min={0} max={150} style={{ width: '100%' }} />
           </Form.Item>
