@@ -20,15 +20,8 @@ const { getCasesReport } = reduxActions;
 const DISPLAY_TABLE = 'TABLE';
 const DISPLAY_CHART = 'CHART';
 const OCCUPATION_COLUMNS = [
-  { title: 'Occupation', dataIndex: 'occupation' },
-  { title: 'Total', dataIndex: 'number' },
-];
-
-const OCCUPATION_DATA = [
-  { occupation: 'Student', number: 20 },
-  { occupation: 'Health Worker', number: 29 },
-  { occupation: 'Businessman', number: 10 },
-  { occupation: 'Health Worker', number: 2 },
+  { title: 'Occupation', dataIndex: ['name', 'en'] },
+  { title: 'Total', dataIndex: 'total' },
 ];
 
 const STAGE_COLUMNS = [
@@ -151,6 +144,16 @@ const CasesDashboard = ({ report, loading }) => {
                   />
                 </SectionCard>
               </Col>
+
+              <Col span={24}>
+                <SectionCard title="Cases Breakdown - Occupation">
+                  <Table
+                    dataSource={get(report, 'overall.occupations', [])}
+                    columns={OCCUPATION_COLUMNS}
+                    pagination={false}
+                  />
+                </SectionCard>
+              </Col>
             </Row>
           </Col>
           <Col xs={24} sm={24} md={12}>
@@ -202,15 +205,6 @@ const CasesDashboard = ({ report, loading }) => {
                       style={{ height: '800px' }}
                     />
                   )}
-                </SectionCard>
-              </Col>
-              <Col span={24}>
-                <SectionCard title="Cases Breakdown - Occupation">
-                  <Table
-                    dataSource={OCCUPATION_DATA}
-                    columns={OCCUPATION_COLUMNS}
-                    pagination={false}
-                  />
                 </SectionCard>
               </Col>
             </Row>
