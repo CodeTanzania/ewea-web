@@ -162,6 +162,7 @@ const ListItem = ({
         placement="bottom"
         visible={showActions}
         onClose={() => setShowActions(false)}
+        bodyStyle={{ padding: 0 }}
       >
         <Menu style={{ border: 'none' }}>
           {map(actions, (action) => {
