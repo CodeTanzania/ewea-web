@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
 import pick from 'lodash/pick';
 import sum from 'lodash/sum';
+import pickBy from 'lodash/pickBy';
+import intersection from 'lodash/intersection';
+import keys from 'lodash/keys';
 import values from 'lodash/values';
 import { Button, Input, Radio, Form, Row, Col } from 'antd';
 import { reduxActions } from '@codetanzania/ewea-api-states';
@@ -52,6 +56,7 @@ const scoreFor = ({ followup }) => {
     lossOfSmell: 1,
     jointPain: 1,
     headache: 3,
+    chestPain: 5,
   };
 
   // calculate average weight for 5-point scale
@@ -59,10 +64,28 @@ const scoreFor = ({ followup }) => {
   const given = sum(values(followup.symptoms));
   const score = 5 * (given / overall); // 5 point scale
 
-  // TODO: compute outcome
+  // compute outcome
+  const criticalSymptoms = [
+    'headache',
+    'fever',
+    'shortnessOfBreath',
+    'chestTightness',
+    'vomiting',
+    'diarrhea',
+    'chestPain',
+    'abdominalPain',
+  ];
+  const givenCriticalSymptoms = pickBy({ ...followup.symptoms }, (val) => {
+    return !!val;
+  });
+  const hasCriticalSymptoms = !isEmpty(
+    intersection(criticalSymptoms, keys(givenCriticalSymptoms))
+  );
+  const outcome = hasCriticalSymptoms || score >= 3 ? 'hospital' : 'home';
+
   // TODO: if verify use verified score
 
-  return { followup: { ...followup, score } };
+  return { followup: { ...followup, score, outcome } };
 };
 
 /**
@@ -304,7 +327,18 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
           </Form.Item>
         </Col>
 
-        <Col xs={24} sm={24} md={8} />
+        <Col xs={24} sm={24} md={8}>
+          <Form.Item
+            title="Chest Pain"
+            name={['followup', 'symptoms', 'chestPain']}
+          >
+            <WrappedCheckbox
+              checkedValue={5}
+              unCheckedValue={0}
+              label="Chest Pain"
+            />
+          </Form.Item>
+        </Col>
 
         <Col xs={24} sm={24} md={7} />
       </Row>
