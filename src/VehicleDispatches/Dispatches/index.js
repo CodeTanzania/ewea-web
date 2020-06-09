@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Col } from 'antd';
+import { Modal, Row, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
 import get from 'lodash/get';
@@ -13,7 +13,6 @@ import Topbar from '../../components/Topbar';
 import DispatchForm from './Form';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 import {
   notifyError,
   notifySuccess,
@@ -474,56 +473,86 @@ class Dispatches extends Component {
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Dispatch',
-                    title: 'Update Vehicle Dispatch Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  archive={{
-                    name: 'Archive Dispatch',
-                    title:
-                      'Remove vehicle dispatch from list of active vehicle dispatches',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                  dispatch={{
-                    name: 'Dispatch Vehicle',
-                    title: 'Mark dispatch as dispatched',
-                    onClick: () => this.handleDispatch(item, 'dispatch'),
-                  }}
-                  atPickup={{
-                    name: 'Vehicle At Pickup',
-                    title: 'Mark vehicle is at pickup location',
-                    onClick: () => this.handleDispatch(item, 'atPickup'),
-                  }}
-                  fromPickup={{
-                    name: 'Vehicle From Pickup',
-                    title: 'Mark vehicle is leaving pickup location',
-                    onClick: () => this.handleDispatch(item, 'fromPickup'),
-                  }}
-                  atDropOff={{
-                    name: 'Vehicle At Dropoff',
-                    title: 'Mark vehicle is at drop off location',
-                    onClick: () => this.handleDispatch(item, 'atDropOff'),
-                  }}
-                  fromDropOff={{
-                    name: 'Vehicle From Dropoff',
-                    title: 'Mark vehicle is leaving drop off location',
-                    onClick: () => this.handleDispatch(item, 'fromDropOff'),
-                  }}
-                  completeDispatch={{
-                    name: 'Complete Dispatch',
-                    title: 'Mark dispatch as complete',
-                    onClick: () => this.handleDispatch(item, 'complete'),
-                  }}
-                  cancelDispatch={{
-                    name: 'Cancel Dispatch',
-                    title: 'Cancel dispatch',
-                    onClick: () => this.handleDispatch(item, 'cancel'),
-                  }}
-                />
-              )}
+              title={
+                <Row>
+                  <Col span={14}>
+                    <span className="text-sm">{item.number}</span>
+                  </Col>
+                  <Col span={9}>
+                    <span className="text-xs">
+                      {get(item, 'type.strings.name.en', 'N/A')}
+                    </span>
+                  </Col>
+                </Row>
+              }
+              secondaryText={
+                <span className="text-xs">{`${get(
+                  item,
+                  'carrier.vehicle.strings.name.en',
+                  'N/A'
+                )} - ${get(
+                  item,
+                  'carrier.vehicle.relations.type.strings.name.en',
+                  'N/A'
+                )}`}</span>
+              }
+              actions={[
+                {
+                  name: 'Edit Dispatch',
+                  title: 'Update Vehicle Dispatch Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Dispatch Vehicle',
+                  title: 'Mark dispatch as dispatched',
+                  onClick: () => this.handleDispatch(item, 'dispatch'),
+                  icon: 'vehicle',
+                },
+                {
+                  name: 'Vehicle At Pickup',
+                  title: 'Mark vehicle is at pickup location',
+                  onClick: () => this.handleDispatch(item, 'atPickup'),
+                  icon: 'vehicle',
+                },
+                {
+                  name: 'Vehicle From Pickup',
+                  title: 'Mark vehicle is leaving pickup location',
+                  onClick: () => this.handleDispatch(item, 'fromPickup'),
+                  icon: 'vehicle',
+                },
+                {
+                  name: 'Vehicle At Dropoff',
+                  title: 'Mark vehicle is at drop off location',
+                  onClick: () => this.handleDispatch(item, 'atDropOff'),
+                  icon: 'vehicle',
+                },
+                {
+                  name: 'Vehicle From Dropoff',
+                  title: 'Mark vehicle is leaving drop off location',
+                  onClick: () => this.handleDispatch(item, 'fromDropOff'),
+                  icon: 'vehicle',
+                },
+                {
+                  name: 'Complete Dispatch',
+                  title: 'Mark dispatch as complete',
+                  onClick: () => this.handleDispatch(item, 'complete'),
+                  icon: 'complete',
+                },
+                {
+                  name: 'Cancel Dispatch',
+                  title: 'Cancel dispatch',
+                  onClick: () => this.handleDispatch(item, 'cancel'),
+                  icon: 'cancel',
+                },
+                {
+                  name: 'Archive Dispatch',
+                  title:
+                    'Remove vehicle dispatch from list of active vehicle dispatches',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...numberSpan}>{item.number}</Col>

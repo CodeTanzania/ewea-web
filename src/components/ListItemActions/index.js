@@ -52,6 +52,18 @@ export const getCommonIcon = (iconName) => {
     return <WechatOutlined />;
   }
 
+  if (iconName === 'vehicle') {
+    return <CarOutlined />;
+  }
+
+  if (iconName === 'complete') {
+    return <CheckCircleOutlined />;
+  }
+
+  if (iconName === 'cancel') {
+    return <CloseCircleOutlined />;
+  }
+
   return null;
 };
 
