@@ -60,6 +60,7 @@ const scoreFor = ({ followup }) => {
   };
 
   // calculate average weight for 5-point scale
+  // TODO: asymptomatic, score === 0 (default?)
   const overall = sum(values(symptoms));
   const given = sum(values(followup.symptoms));
   const score = 5 * (given / overall); // 5 point scale
