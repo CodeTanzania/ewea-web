@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Col, Drawer, Button } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Modal, Row, Col, Drawer, Button } from 'antd';
+import { PlusOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import CaseForm from './Form';
@@ -13,7 +13,6 @@ import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 import CaseDetailsViewHeader from './DetailsView/Header';
 import CaseDetailsViewBody from './DetailsView/Body';
 
@@ -532,35 +531,57 @@ class CaseList extends Component {
                 avatarBackgroundColor={get(item, 'victim.gender.strings.color')}
                 onSelectItem={onSelectItem}
                 onDeselectItem={onDeselectItem}
-                renderActions={() => (
-                  <ListItemActions
-                    view={{
-                      name: 'View Case',
-                      title: 'View Case Details',
-                      onClick: () => this.handleItemView(item),
-                    }}
-                    edit={{
-                      name: 'Edit Case',
-                      title: 'Update case details',
-                      onClick: () => this.handleItemEdit(item),
-                    }}
-                    share={{
-                      name: 'Share Case',
-                      title: 'Share case details with others',
-                      onClick: () => this.handleItemShare(item),
-                    }}
-                    archive={{
-                      name: 'Archive Case',
-                      title: 'Remove case from list of active cases',
-                      onClick: () => this.handleItemArchive(item),
-                    }}
-                    followup={{
-                      name: 'Followup Case',
-                      title: 'Followup on case',
-                      onClick: () => this.handleFollowupFormOpen(item),
-                    }}
-                  />
-                )}
+                title={
+                  <Row>
+                    <Col span={16}>
+                      <span className="text-sm">
+                        {get(item, 'number', 'N/A')}
+                      </span>
+                    </Col>
+                    <Col span={6}>
+                      <span className="text-xs">
+                        {get(item, 'victim.mobile', 'N/A')}
+                      </span>
+                    </Col>
+                  </Row>
+                }
+                secondaryText={
+                  <span className="text-xs">
+                    {get(item, 'victim.name', 'N/A')}
+                  </span>
+                }
+                actions={[
+                  {
+                    name: 'View Case',
+                    title: 'View Case Details',
+                    onClick: () => this.handleItemView(item),
+                    icon: 'view',
+                  },
+                  {
+                    name: 'Edit Case',
+                    title: 'Update case details',
+                    onClick: () => this.handleItemEdit(item),
+                    icon: 'edit',
+                  },
+                  {
+                    name: 'Followup Case',
+                    title: 'Followup on case',
+                    onClick: () => this.handleFollowupFormOpen(item),
+                    icon: <ClockCircleOutlined />,
+                  },
+                  {
+                    name: 'Share Case',
+                    title: 'Share case details with others',
+                    onClick: () => this.handleItemShare(item),
+                    icon: 'share',
+                  },
+                  {
+                    name: 'Archive Case',
+                    title: 'Remove case from list of active cases',
+                    onClick: () => this.handleItemArchive(item),
+                    icon: 'archive',
+                  },
+                ]}
               >
                 {/* eslint-disable react/jsx-props-no-spreading */}
                 <Col {...numberSpan}>
