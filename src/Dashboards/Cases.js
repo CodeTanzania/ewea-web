@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Col, Row, Spin, Table, Button } from 'antd';
+import { Col, Row, Spin, Table, Button, Modal } from 'antd';
 import { BarChartOutlined, TableOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
 import map from 'lodash/map';
 import randomColor from 'randomcolor';
 
-import { NumberWidget, SectionCard } from '../components/dashboardWidgets';
+import ReportFilters from '../components/ReportFilters';
+import {
+  NumberWidget,
+  SectionCard,
+  FilterFloatingButton,
+} from '../components/dashboardWidgets';
 import {
   EChart,
   generateDonutChartOption,
@@ -21,15 +26,17 @@ const { getCasesReport } = reduxActions;
 const DISPLAY_TABLE = 'TABLE';
 const DISPLAY_CHART = 'CHART';
 const OCCUPATION_COLUMNS = [
-  { title: 'Occupation', dataIndex: 'occupation' },
-  { title: 'Total', dataIndex: 'number' },
+  { title: 'Occupation', dataIndex: ['name', 'en'] },
+  { title: 'Total', dataIndex: 'total' },
 ];
 
-const OCCUPATION_DATA = [
-  { occupation: 'Student', number: 20 },
-  { occupation: 'Health Worker', number: 29 },
-  { occupation: 'Businessman', number: 10 },
-  { occupation: 'Health Worker', number: 2 },
+const STAGE_COLUMNS = [
+  { title: 'Stage', dataIndex: ['name', 'en'] },
+  { title: 'Total', dataIndex: 'total' },
+];
+const SEVERITY_COLUMNS = [
+  { title: 'Severity', dataIndex: ['name', 'en'] },
+  { title: 'Total', dataIndex: 'total' },
 ];
 
 const NATIONALITY_COLUMNS = [
@@ -55,6 +62,7 @@ const AGE_GROUPS_COLUMNS = [
  */
 const CasesDashboard = ({ report, loading }) => {
   const [ageGroupsDisplay, setAgeGroupsDisplay] = useState(DISPLAY_TABLE);
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     getCasesReport();
@@ -72,6 +80,7 @@ const CasesDashboard = ({ report, loading }) => {
 
   return (
     <div>
+      <FilterFloatingButton onClick={() => setShowFilters(true)} />
       <Spin spinning={loading}>
         <Row>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
@@ -118,53 +127,38 @@ const CasesDashboard = ({ report, loading }) => {
             />
           </Col>
         </Row>
-        <Row>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Recovered"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />{' '}
-          </Col>{' '}
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Mild"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Moderate"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Critical"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Severe"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Died"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-        </Row>
+        {/* <Row> */}
+        {/*   <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}> */}
+        {/*     <NumberWidget title="Recovered" value={0} />{' '} */}
+        {/*   </Col>{' '} */}
+        {/*   <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}> */}
+        {/*     <NumberWidget title="Mild" value={0} /> */}
+        {/*   </Col> */}
+        {/*   <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}> */}
+        {/*     <NumberWidget title="Moderate" value={0} /> */}
+        {/*   </Col> */}
+        {/*   <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}> */}
+        {/*     <NumberWidget title="Critical" value={0} /> */}
+        {/*   </Col> */}
+        {/*   <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}> */}
+        {/*     <NumberWidget title="Severe" value={0} /> */}
+        {/*   </Col> */}
+        {/*   <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}> */}
+        {/*     <NumberWidget title="Died" value={0} /> */}
+        {/*   </Col> */}
+        {/* </Row> */}
         <Row>
           <Col xs={24} sm={24} md={12}>
             <Row>
+              <Col span={24}>
+                <SectionCard title="Cases Breakdown - Stage">
+                  <Table
+                    dataSource={get(report, 'overall.stages', [])}
+                    columns={STAGE_COLUMNS}
+                    pagination={false}
+                  />
+                </SectionCard>
+              </Col>
               <Col span={24}>
                 <SectionCard title="Cases Breakdown - Gender">
                   <EChart
@@ -182,10 +176,29 @@ const CasesDashboard = ({ report, loading }) => {
                   />
                 </SectionCard>
               </Col>
+
+              <Col span={24}>
+                <SectionCard title="Cases Breakdown - Occupation">
+                  <Table
+                    dataSource={get(report, 'overall.occupations', [])}
+                    columns={OCCUPATION_COLUMNS}
+                    pagination={false}
+                  />
+                </SectionCard>
+              </Col>
             </Row>
           </Col>
           <Col xs={24} sm={24} md={12}>
             <Row>
+              <Col span={24}>
+                <SectionCard title="Cases Breakdown - Severity">
+                  <Table
+                    dataSource={get(report, 'overall.severities', [])}
+                    columns={SEVERITY_COLUMNS}
+                    pagination={false}
+                  />
+                </SectionCard>
+              </Col>
               <Col span={24}>
                 <SectionCard
                   title="Cases Breakdown - Age Distributions"
@@ -226,19 +239,27 @@ const CasesDashboard = ({ report, loading }) => {
                   )}
                 </SectionCard>
               </Col>
-              <Col span={24}>
-                <SectionCard title="Cases Breakdown - Occupation">
-                  <Table
-                    dataSource={OCCUPATION_DATA}
-                    columns={OCCUPATION_COLUMNS}
-                    pagination={false}
-                  />
-                </SectionCard>
-              </Col>
             </Row>
           </Col>
         </Row>
       </Spin>
+
+      <Modal
+        title="Filter Report"
+        visible={showFilters}
+        onCancel={() => setShowFilters(false)}
+        footer={null}
+        maskClosable={false}
+        className="modal-window-50"
+      >
+        <ReportFilters
+          onFilter={(data) => {
+            getCasesReport({ filter: { ...data } });
+            setShowFilters(false);
+          }}
+          onCancel={() => setShowFilters(false)}
+        />
+      </Modal>
     </div>
   );
 };

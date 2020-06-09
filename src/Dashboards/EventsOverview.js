@@ -1,20 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Row, Col, Table, Spin } from 'antd';
+import { Row, Col, Table, Spin, Modal } from 'antd';
 import {
   WarningOutlined,
   AlertOutlined,
   StopOutlined,
 } from '@ant-design/icons';
 
+import ReportFilters from '../components/ReportFilters';
 import {
   NumberWidget,
   SectionCard,
   WARNING_COLOR,
   DANGER_COLOR,
   DARK_GREEN,
+  FilterFloatingButton,
 } from '../components/dashboardWidgets';
 
 const { getEventsReport } = reduxActions;
@@ -64,11 +66,15 @@ const generateColumnsFor = (name, titles) => {
  * @since 0.1.0
  */
 const EventsOverviewDashboard = ({ report, loading }) => {
+  const [showFilters, setShowFilters] = useState(false);
+
   useEffect(() => {
     getEventsReport();
   }, []);
+
   return (
     <div>
+      <FilterFloatingButton onClick={() => setShowFilters(true)} />
       <Spin spinning={loading}>
         <Row>
           <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
@@ -182,6 +188,23 @@ const EventsOverviewDashboard = ({ report, loading }) => {
           </Col>
         </Row>
       </Spin>
+
+      <Modal
+        title="Filter Report"
+        visible={showFilters}
+        onCancel={() => setShowFilters(false)}
+        footer={null}
+        maskClosable={false}
+        className="modal-window-50"
+      >
+        <ReportFilters
+          onFilter={(data) => {
+            getEventsReport({ filter: { ...data } });
+            setShowFilters(false);
+          }}
+          onCancel={() => setShowFilters(false)}
+        />
+      </Modal>
     </div>
   );
 };

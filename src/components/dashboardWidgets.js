@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import toUpper from 'lodash/toUpper';
-import { Card, Typography, Col, Row, Tooltip } from 'antd';
+import { Affix, Button, Card, Typography, Col, Row, Tooltip } from 'antd';
 import {
   ComposableMap,
   ZoomableGroup,
   Geographies,
   Geography,
 } from 'react-simple-maps';
+import { FilterOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -275,4 +276,40 @@ MapWidget.propTypes = {
   shape: PropTypes.string.isRequired,
   center: PropTypes.arrayOf(PropTypes.number).isRequired,
   getGeographyAttributes: PropTypes.func.isRequired,
+};
+
+/**
+ * @function
+ * @name FilterFloatingButton
+ * @description Floating button for opening filters
+ * @param {object} props Component object properties
+ * @param {Function} props.onClick On click callback
+ * @returns {object} FilterFloatingButton
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const FilterFloatingButton = ({ onClick }) => {
+  return (
+    <Affix
+      style={{
+        position: 'absolute',
+        bottom: '20px',
+        right: '25px',
+        zIndex: 1000,
+      }}
+    >
+      <Button
+        shape="circle"
+        type="primary"
+        title="Click to filter"
+        icon={<FilterOutlined />}
+        size="large"
+        onClick={onClick}
+      />
+    </Affix>
+  );
+};
+
+FilterFloatingButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
 };

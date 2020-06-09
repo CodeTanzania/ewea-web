@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import get from 'lodash/get';
-import { Divider, Row, Col, Spin, Typography } from 'antd';
+import { Divider, Row, Col, Spin, Typography, Modal } from 'antd';
 import {
   WarningOutlined,
   AlertOutlined,
@@ -14,6 +14,7 @@ import {
   ClockCircleOutlined,
 } from '@ant-design/icons';
 
+import ReportFilters from '../components/ReportFilters';
 import {
   NumberWidget,
   TimeWidget,
@@ -22,6 +23,7 @@ import {
   SUCCESS_COLOR,
   WARNING_COLOR,
   DANGER_COLOR,
+  FilterFloatingButton,
 } from '../components/dashboardWidgets';
 
 const { getOverviewsReport } = reduxActions;
@@ -40,11 +42,15 @@ const { Text } = Typography;
  * @since 0.1.0
  */
 const OverviewDashboard = ({ report, loading }) => {
+  const [showFilters, setShowFilters] = useState(false);
+
   useEffect(() => {
     getOverviewsReport();
   }, []);
+
   return (
     <div>
+      <FilterFloatingButton onClick={() => setShowFilters(true)} />
       <Spin spinning={loading}>
         <Divider orientation="left" plain>
           <Text strong>EVENTS</Text>
@@ -203,6 +209,23 @@ const OverviewDashboard = ({ report, loading }) => {
           </Col>
         </Row>
       </Spin>
+
+      <Modal
+        title="Filter Report"
+        visible={showFilters}
+        onCancel={() => setShowFilters(false)}
+        footer={null}
+        maskClosable={false}
+        className="modal-window-50"
+      >
+        <ReportFilters
+          onFilter={(data) => {
+            getOverviewsReport({ filter: { ...data } });
+            setShowFilters(false);
+          }}
+          onCancel={() => setShowFilters(false)}
+        />
+      </Modal>
     </div>
   );
 };
