@@ -86,7 +86,7 @@ const headerLayout = [
   {
     ...stageSpan,
     header: 'Stage',
-    title: 'Case Age',
+    title: 'Case Stage/Classification',
   },
   { ...areaSpan, header: 'Area', title: 'Victim/Patient Residential Area' },
   {
