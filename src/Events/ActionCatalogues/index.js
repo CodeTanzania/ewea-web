@@ -1,17 +1,18 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import isArray from 'lodash/isArray';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Col } from 'antd';
+import { Modal, Row, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import get from 'lodash/get';
+
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import EventActionCatalogueFilters from './Filters';
 import EventActionCatalogueForm from './Form';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 import {
   generateEventActionCatalogueVCard,
   joinArrayOfObjectToString,
@@ -393,38 +394,56 @@ class ActionCatalogue extends Component {
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Action Catalogue',
-                    title: 'Update Action Catalogue Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Action Catalogue',
-                    title: 'Share Action Catalogue details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Action Catalogue',
-                    title:
-                      'Remove Action Catalogue from list of active Action Catalogues',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {truncateString(get(item, 'strings.name.en'), 40)}
+                </span>
+              }
+              secondaryText={
+                <Row>
+                  <Col span={18}>
+                    <span className="text-xs">
+                      {get(item, 'relations.function.strings.name.en')}
+                    </span>
+                  </Col>
+                  <Col span={4}>
+                    <span className="text-xs">
+                      {get(item, 'relations.type.strings.name.en', 'All')}
+                    </span>
+                  </Col>
+                </Row>
+              }
+              actions={[
+                {
+                  name: 'Edit Action Catalogue',
+                  title: 'Update Action Catalogue Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Action Catalogue',
+                  title: 'Share Action Catalogue details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Action Catalogue',
+                  title:
+                    'Remove Action Catalogue from list of active Action Catalogues',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...eventTypeSpan}>
-                {item.relations.type
-                  ? item.relations.type.strings.name.en
-                  : 'All'}
+                {get(item, 'relations.type.strings.name.en', 'All')}
               </Col>
               <Col {...eventFunctionSpan}>
-                {item.relations.function.strings.name.en}
+                {get(item, 'relations.function.strings.name.en', 'N/A')}
               </Col>
-              <Col {...actionSpan} title={item.strings.name.en}>
-                {truncateString(item.strings.name.en, 50)}
+              <Col {...actionSpan} title={get(item, 'strings.name.en')}>
+                {truncateString(get(item, 'strings.name.en', 'N/A'), 50)}
               </Col>
               <Col
                 {...rolesSpan}
