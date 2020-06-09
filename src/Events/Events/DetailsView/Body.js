@@ -429,7 +429,8 @@ export const EventRespondingFocalPeople = ({ focalPeople = [], openForm }) => {
 const EventFeedItemHeader = ({ initiator, date }) => {
   return (
     <div style={{ marginBottom: '10px' }}>
-      <Tag color="orange">Update</Tag> by <Tag>{initiator.name}</Tag> on{' '}
+      <Tag color="orange">Update</Tag> by{' '}
+      <Tag>{get(initiator, 'name', 'N/A')}</Tag> on{' '}
       <Tag color="blue">{formatDate(date, 'YYYY-MM-DD HH:mm')}</Tag>
     </div>
   );

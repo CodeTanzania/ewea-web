@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Drawer, Col, Tag, Button } from 'antd';
+import { Modal, Drawer, Row, Col, Tag, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
 import isArray from 'lodash/isArray';
@@ -11,7 +11,6 @@ import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import EventFilters from './Filters';
 import EventForm from './Form';
-import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import EventDetailsViewHeader from './DetailsView/Header';
@@ -444,37 +443,55 @@ class Events extends Component {
                   'type.strings.color',
                   undefined
                 )}
-                renderActions={() => (
-                  <ListItemActions
-                    view={{
-                      name: 'View Event',
-                      title: 'View Event Details',
-                      onClick: () => this.handleView(item),
-                    }}
-                    edit={{
-                      name: 'Edit Event',
-                      title: 'Update Event Details',
-                      onClick: () => this.handleEdit(item),
-                    }}
-                    share={{
-                      name: 'Share Event',
-                      title: 'Share Event details with others',
-                      onClick: () => this.handleShare(item),
-                    }}
-                    archive={{
-                      name: 'Archive Event',
-                      title: 'Remove Event from list of active Events',
-                      onClick: () => this.showArchiveConfirm(item),
-                    }}
-                    whatsapp={{
-                      name: 'Share on WhatsApp',
-                      title: 'Share Event on Whatsapp',
-                      link: `https://wa.me/?text=${encodeURI(
-                        generateEventTemplate(item).body
-                      )}`,
-                    }}
-                  />
-                )}
+                title={
+                  <span className="text-sm">
+                    {truncateString(item.description, 50)}
+                  </span>
+                }
+                secondaryText={
+                  <Row>
+                    <Col span={16}>
+                      <span className="text-xs">{item.number}</span>
+                    </Col>
+                    <Col span={6}>
+                      <span className="text-xs">{timeAgo(item.updatedAt)}</span>
+                    </Col>
+                  </Row>
+                }
+                actions={[
+                  {
+                    name: 'View Event',
+                    title: 'View Event Details',
+                    onClick: () => this.handleView(item),
+                    icon: 'view',
+                  },
+                  {
+                    name: 'Edit Event',
+                    title: 'Update Event Details',
+                    onClick: () => this.handleEdit(item),
+                    icon: 'edit',
+                  },
+                  {
+                    name: 'Share Event',
+                    title: 'Share Event details with others',
+                    onClick: () => this.handleShare(item),
+                    icon: 'share',
+                  },
+                  {
+                    name: 'Archive Event',
+                    title: 'Remove Event from list of active Events',
+                    onClick: () => this.showArchiveConfirm(item),
+                    icon: 'archive',
+                  },
+                  {
+                    name: 'Share on WhatsApp',
+                    title: 'Share Event on Whatsapp',
+                    link: `https://wa.me/?text=${encodeURI(
+                      generateEventTemplate(item).body
+                    )}`,
+                    icon: 'whatsapp',
+                  },
+                ]}
               >
                 {/* eslint-disable react/jsx-props-no-spreading */}
                 <Col {...eventSpan} title={item.description}>
