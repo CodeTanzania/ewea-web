@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Col, Row, Spin, Table, Button } from 'antd';
+import { Col, Row, Spin, Table, Button, Modal } from 'antd';
 import { BarChartOutlined, TableOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
 import map from 'lodash/map';
 
-import { NumberWidget, SectionCard } from '../components/dashboardWidgets';
+import ReportFilters from '../components/ReportFilters';
+import {
+  NumberWidget,
+  SectionCard,
+  FilterFloatingButton,
+} from '../components/dashboardWidgets';
 import {
   EChart,
   generateDonutChartOption,
@@ -56,6 +61,7 @@ const AGE_GROUPS_COLUMNS = [
  */
 const CasesDashboard = ({ report, loading }) => {
   const [ageGroupsDisplay, setAgeGroupsDisplay] = useState(DISPLAY_TABLE);
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     getCasesReport();
@@ -73,6 +79,7 @@ const CasesDashboard = ({ report, loading }) => {
 
   return (
     <div>
+      <FilterFloatingButton onClick={() => setShowFilters(true)} />
       <Spin spinning={loading}>
         <Row>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
@@ -211,6 +218,23 @@ const CasesDashboard = ({ report, loading }) => {
           </Col>
         </Row>
       </Spin>
+
+      <Modal
+        title="Filter Report"
+        visible={showFilters}
+        onCancel={() => setShowFilters(false)}
+        footer={null}
+        maskClosable={false}
+        className="modal-window-50"
+      >
+        <ReportFilters
+          onFilter={(data) => {
+            getCasesReport({ filter: { ...data } });
+            setShowFilters(false);
+          }}
+          onCancel={() => setShowFilters(false)}
+        />
+      </Modal>
     </div>
   );
 };

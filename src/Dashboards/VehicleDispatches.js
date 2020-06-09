@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Row, Col, Table, Spin } from 'antd';
+import { Row, Col, Table, Spin, Modal } from 'antd';
 import get from 'lodash/get';
 import {
   ClockCircleOutlined,
@@ -11,6 +11,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 
+import ReportFilters from '../components/ReportFilters';
 import {
   NumberWidget,
   TimeWidget,
@@ -20,6 +21,7 @@ import {
   SUCCESS_COLOR,
   WARNING_COLOR,
   DANGER_COLOR,
+  FilterFloatingButton,
 } from '../components/dashboardWidgets';
 
 const columns = [
@@ -69,7 +71,7 @@ const vehicleData = [
     status: 'On Route',
   },
 ];
-const data = [
+const vehicleTypes = [
   {
     type: 'Ambulance',
     total: 10,
@@ -101,11 +103,15 @@ const { getDispatchesReport } = reduxActions;
  * @since 0.1.0
  */
 const VehicleDispatchesDashboard = ({ report, loading }) => {
+  const [showFilters, setShowFilters] = useState(false);
+
   useEffect(() => {
     getDispatchesReport();
   }, []);
+
   return (
     <div>
+      <FilterFloatingButton onClick={() => setShowFilters(true)} />
       <Spin spinning={loading}>
         <Row>
           <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
@@ -183,7 +189,7 @@ const VehicleDispatchesDashboard = ({ report, loading }) => {
               <Col span={24}>
                 <SectionCard title="Vehicle Type per Dispatch Status">
                   <Table
-                    dataSource={data}
+                    dataSource={vehicleTypes}
                     columns={columns}
                     pagination={false}
                   />
@@ -204,6 +210,23 @@ const VehicleDispatchesDashboard = ({ report, loading }) => {
           </Col>
         </Row>
       </Spin>
+
+      <Modal
+        title="Filter Report"
+        visible={showFilters}
+        onCancel={() => setShowFilters(false)}
+        footer={null}
+        maskClosable={false}
+        className="modal-window-50"
+      >
+        <ReportFilters
+          onFilter={(data) => {
+            getDispatchesReport({ filter: { ...data } });
+            setShowFilters(false);
+          }}
+          onCancel={() => setShowFilters(false)}
+        />
+      </Modal>
     </div>
   );
 };

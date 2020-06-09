@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
-import { Row, Col, Table, Spin } from 'antd';
+import { Row, Col, Table, Spin, Modal } from 'antd';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import {
   ApartmentOutlined,
@@ -10,6 +10,7 @@ import {
   NumberOutlined,
 } from '@ant-design/icons';
 
+import ReportFilters from '../components/ReportFilters';
 import {
   NumberWidget,
   MapWidget,
@@ -18,6 +19,7 @@ import {
   PURPLE_COLOR,
   SUCCESS_COLOR,
   WARNING_COLOR,
+  FilterFloatingButton,
 } from '../components/dashboardWidgets';
 import DarDistricts from '../assets/maps/dar.districts.json';
 
@@ -51,12 +53,15 @@ const generateColumnsFor = (name, titles) => {
 };
 
 const StakeholdersDashboard = ({ report, loading }) => {
+  const [showFilters, setShowFilters] = useState(false);
+
   useEffect(() => {
     getPartiesReport();
   }, []);
 
   return (
     <div>
+      <FilterFloatingButton onClick={() => setShowFilters(true)} />
       <Spin spinning={loading}>
         <Row>
           <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
@@ -145,6 +150,23 @@ const StakeholdersDashboard = ({ report, loading }) => {
           </Col>
         </Row>
       </Spin>
+
+      <Modal
+        title="Filter Report"
+        visible={showFilters}
+        onCancel={() => setShowFilters(false)}
+        footer={null}
+        maskClosable={false}
+        className="modal-window-50"
+      >
+        <ReportFilters
+          onFilter={(data) => {
+            getPartiesReport({ filter: { ...data } });
+            setShowFilters(false);
+          }}
+          onCancel={() => setShowFilters(false)}
+        />
+      </Modal>
     </div>
   );
 };
