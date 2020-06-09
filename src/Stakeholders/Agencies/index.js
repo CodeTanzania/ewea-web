@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Col, Modal } from 'antd';
+import { Row, Col, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
 import get from 'lodash/get';
@@ -12,7 +12,6 @@ import StakeholderForm from '../../components/StakeholderForm';
 import AgencyFilters from './Filters';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess, generateAgencyVCard } from '../../util';
 
@@ -392,32 +391,48 @@ class Agencies extends Component {
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Agency',
-                    title: 'Update Agency Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Agency',
-                    title: 'Share Agency details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Agency',
-                    title: 'Remove Agency from list of active agency',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                  whatsapp={{
-                    name: 'Share on WhatsApp',
-                    title: 'Share Contact on Whatsapp',
-                    link: `https://wa.me/?text=${encodeURI(
-                      generateAgencyVCard(item).body
-                    )}`,
-                  }}
-                />
-              )}
+              title={<span style={{ fontSize: '0.95em' }}>{item.name}</span>}
+              secondaryText={
+                <Row>
+                  <Col span={16}>
+                    <span style={{ fontSize: '0.9em' }}>
+                      {item.abbreviation}
+                    </span>
+                  </Col>
+
+                  <Col span={6}>
+                    <span style={{ fontSize: '0.9em' }}>{item.mobile}</span>
+                  </Col>
+                </Row>
+              }
+              actions={[
+                {
+                  name: 'Edit Agency',
+                  title: 'Update Agency Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Agency',
+                  title: 'Share Agency details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Share on WhatsApp',
+                  title: 'Share Contact on Whatsapp',
+                  link: `https://wa.me/?text=${encodeURI(
+                    generateAgencyVCard(item).body
+                  )}`,
+                  icon: 'whatsapp',
+                },
+                {
+                  name: 'Archive Agency',
+                  title: 'Remove Agency from list of active agency',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.name}</Col>
@@ -441,7 +456,7 @@ class Agencies extends Component {
           footer={null}
           destroyOnClose
           maskClosable={false}
-          width="40%"
+          className="modal-window-50"
         >
           <NotificationForm
             onSearchRecipients={getAgenciesFromAPI}
