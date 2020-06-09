@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import pick from 'lodash/pick';
+import sum from 'lodash/sum';
+import values from 'lodash/values';
 import { Button, Input, Radio, Form, Row, Col } from 'antd';
 import { reduxActions } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
@@ -33,6 +35,36 @@ const MESSAGE_PUT_SUCCESS = 'Case was updated successfully';
 const MESSAGE_PUT_ERROR =
   'Something occurred while updating Case, Please try again!';
 
+/* helpers */
+// TODO: refactor to case-descriptions
+const scoreFor = ({ followup }) => {
+  const symptoms = {
+    fever: 3,
+    shortnessOfBreath: 5,
+    musclePain: 1,
+    cough: 1,
+    vomiting: 3,
+    chestTightness: 5,
+    soreThroat: 1,
+    diarrhea: 3,
+    abdominalPain: 3,
+    lossOfTaste: 1,
+    lossOfSmell: 1,
+    jointPain: 1,
+    headache: 3,
+  };
+
+  // calculate average weight for 5-point scale
+  const overall = sum(values(symptoms));
+  const given = sum(values(followup.symptoms));
+  const score = 5 * (given / overall); // 5 point scale
+
+  // TODO: compute outcome
+  // TODO: if verify use verified score
+
+  return { followup: { ...followup, score } };
+};
+
 /**
  * @function CaseFollowupForm
  * @name CaseFollowupForm
@@ -54,14 +86,16 @@ const MESSAGE_PUT_ERROR =
  *   caze={case}
  *   isEditForm={isEditForm}
  *   posting={posting}
+ *   onScore={this.handleCaseScore}
  *   onCancel={this.handleFollowupFormClose}
  * />
  *
  */
 const CaseFollowupForm = ({ caze, posting, onCancel }) => {
   // form finish(submit) handler
-  const onFinish = (values) => {
-    const formData = { ...values, ...pick(caze, '_id') };
+  const onFinish = (updates) => {
+    const scored = scoreFor(updates);
+    const formData = { ...scored, ...pick(caze, '_id') };
 
     putCase(
       formData,
