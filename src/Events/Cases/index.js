@@ -45,10 +45,11 @@ const { confirm } = Modal;
 const numberSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 16, xs: 14 };
 const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
 const mobileSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 4 };
-const genderSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
-const ageSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
-const areaSpan = { xxl: 3, xl: 3, lg: 4, md: 3, sm: 0, xs: 0 };
-const statusSpan = { xxl: 4, xl: 4, lg: 4, md: 2, sm: 0, xs: 0 };
+const genderSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
+const ageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
+const stageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
+const areaSpan = { xxl: 3, xl: 3, lg: 4, md: 2, sm: 0, xs: 0 };
+const statusSpan = { xxl: 4, xl: 4, lg: 4, md: 3, sm: 0, xs: 0 };
 const headerLayout = [
   {
     ...numberSpan,
@@ -74,6 +75,11 @@ const headerLayout = [
     ...ageSpan,
     header: 'Age',
     title: 'Victim/Patient Age',
+  },
+  {
+    ...stageSpan,
+    header: 'Stage',
+    title: 'Case Age',
   },
   { ...areaSpan, header: 'Area', title: 'Victim/Patient Residential Area' },
   {
@@ -606,8 +612,15 @@ class CaseList extends Component {
                   {get(item, 'victim.gender.strings.name.en', 'N/A')}
                 </Col>
                 <Col {...ageSpan}>{get(item, 'victim.age', 'N/A')}</Col>
+                <Col {...stageSpan}>
+                  {get(item, 'stage.strings.name.en', 'N/A')}
+                </Col>
                 <Col {...areaSpan}>
-                  {get(item, 'victim.area.strings.name.en', 'N/A')}
+                  <span title={get(item, 'victim.area.strings.name.en', 'N/A')}>
+                    {truncateString(
+                      get(item, 'victim.area.strings.name.en', 'N/A')
+                    )}
+                  </span>
                 </Col>
                 <Col {...statusSpan}>
                   <span
