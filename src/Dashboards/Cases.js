@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Col, Row, Spin, Table, Button, Modal } from 'antd';
 import { BarChartOutlined, TableOutlined } from '@ant-design/icons';
+import randomColor from 'randomcolor';
 import get from 'lodash/get';
 import map from 'lodash/map';
 
@@ -72,25 +73,16 @@ const CasesDashboard = ({ report, loading }) => {
   const GENDER_DATA = map(get(report, 'overall.gender', []), (item) => ({
     value: item.total,
     name: item.name.en,
-    itemStyle: {
-      color: item.color,
-    },
   }));
 
   const SEVERITY_DATA = map(get(report, 'overall.severities', []), (item) => ({
     value: item.total,
     name: item.name.en,
-    itemStyle: {
-      color: item.color,
-    },
   }));
 
   const STAGE_DATA = map(get(report, 'overall.stages', []), (item) => ({
     value: item.total,
     name: item.name.en,
-    itemStyle: {
-      color: item.color,
-    },
   }));
 
   const AGE_GROUPS_DATA = map(get(report, 'overall.ageGroups', []), (item) => ({
@@ -104,45 +96,48 @@ const CasesDashboard = ({ report, loading }) => {
       <Spin spinning={loading}>
         <Row>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Total" value={0} />{' '}
-          </Col>{' '}
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            {' '}
-            <NumberWidget title="Suspect" value={0} />{' '}
-          </Col>{' '}
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Probable" value={0} />
+            <NumberWidget
+              title="Total"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
           </Col>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Tested" value={0} />
+            <NumberWidget
+              title="Suspect"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
           </Col>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Treated" value={0} />
+            <NumberWidget
+              title="Probable"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
           </Col>
           <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget title="Followup" value={0} />
+            <NumberWidget
+              title="Tested"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
+            <NumberWidget
+              title="Treated"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
+            <NumberWidget
+              title="Followup"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
           </Col>
         </Row>
-        {/* <Row> */}
-        {/*   <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}> */}
-        {/*     <NumberWidget title="Recovered" value={0} />{' '} */}
-        {/*   </Col>{' '} */}
-        {/*   <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}> */}
-        {/*     <NumberWidget title="Mild" value={0} /> */}
-        {/*   </Col> */}
-        {/*   <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}> */}
-        {/*     <NumberWidget title="Moderate" value={0} /> */}
-        {/*   </Col> */}
-        {/*   <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}> */}
-        {/*     <NumberWidget title="Critical" value={0} /> */}
-        {/*   </Col> */}
-        {/*   <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}> */}
-        {/*     <NumberWidget title="Severe" value={0} /> */}
-        {/*   </Col> */}
-        {/*   <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}> */}
-        {/*     <NumberWidget title="Died" value={0} /> */}
-        {/*   </Col> */}
-        {/* </Row> */}
         <Row>
           <Col xs={24} sm={24} md={12}>
             <Row>
