@@ -251,15 +251,13 @@ class VehicleMake extends Component {
             onChange: this.searchVehicleMakes,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Make',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Vehicle Make',
-              onClick: this.openVehicleMakesForm,
-            },
-          ]}
+          action={{
+            label: 'New Make',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Vehicle Make',
+            onClick: this.openVehicleMakesForm,
+          }}
         />
         {/* end Topbar */}
 

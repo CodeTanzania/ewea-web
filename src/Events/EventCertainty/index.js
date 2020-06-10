@@ -279,15 +279,13 @@ class EventCertainties extends Component {
             onChange: this.searchEventCertainties,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Certainty',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Certainty',
-              onClick: this.openEventCertaintyForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Certainty',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Certainty',
+            onClick: this.openEventCertaintyForm,
+          }}
         />
         {/* end Topbar */}
 

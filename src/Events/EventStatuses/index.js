@@ -279,15 +279,13 @@ class EventStatuses extends Component {
             onChange: this.searchEventStatuses,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Status',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Status',
-              onClick: this.openEventStatusForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Status',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Status',
+            onClick: this.openEventStatusForm,
+          }}
         />
         {/* end Topbar */}
 

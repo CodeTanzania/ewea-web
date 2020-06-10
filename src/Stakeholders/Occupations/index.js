@@ -290,15 +290,13 @@ class Occupations extends Component {
             onChange: this.searchOccupations,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Occupation',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Occupation',
-              onClick: this.openPartyOccupationsForm,
-            },
-          ]}
+          action={{
+            label: 'New Occupation',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Occupation',
+            onClick: this.openPartyOccupationsForm,
+          }}
         />
         {/* end Topbar */}
 

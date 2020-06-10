@@ -251,15 +251,13 @@ class VehicleType extends Component {
             onChange: this.searchVehicleTypes,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Type',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Vehicle Type',
-              onClick: this.openVehicleTypesForm,
-            },
-          ]}
+          action={{
+            label: 'New Type',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Vehicle Type',
+            onClick: this.openVehicleTypesForm,
+          }}
         />
         {/* end Topbar */}
 

@@ -262,15 +262,13 @@ class EventGroups extends Component {
             onChange: this.searchEventGroups,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Group',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Group',
-              onClick: this.openEventGroupsForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Group',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Group',
+            onClick: this.openEventGroupsForm,
+          }}
         />
         {/* end Topbar */}
 

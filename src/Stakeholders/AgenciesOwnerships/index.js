@@ -249,15 +249,13 @@ class PartyOwnership extends Component {
             onChange: this.searchPartyOwnerships,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Ownership',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Agency Ownership',
-              onClick: this.openPartyOwnershipsForm,
-            },
-          ]}
+          action={{
+            label: 'New Ownership',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Agency Ownership',
+            onClick: this.openPartyOwnershipsForm,
+          }}
         />
         {/* end Topbar */}
 

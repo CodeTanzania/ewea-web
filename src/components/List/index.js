@@ -6,6 +6,7 @@ import map from 'lodash/map';
 import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
 import remove from 'lodash/remove';
+import isEmpty from 'lodash/isEmpty';
 
 import Toolbar from '../Toolbar';
 import ListHeader from '../ListHeader';
@@ -159,20 +160,19 @@ const CustomList = ({
         />
       )}
 
-      <div className="ListWrapper">
-        <List
-          loading={loading}
-          dataSource={items}
-          renderItem={(item) =>
-            renderListItem({
-              item,
-              isSelected: isSelected(item),
-              onSelectItem: () => handleSelectItem(item),
-              onDeselectItem: () => handleDeselectItem(item),
-            })
-          }
-        />
-      </div>
+      <List
+        loading={loading}
+        dataSource={items}
+        className={loading && isEmpty(items) ? '' : 'ListWrapper'}
+        renderItem={(item) =>
+          renderListItem({
+            item,
+            isSelected: isSelected(item),
+            onSelectItem: () => handleSelectItem(item),
+            onDeselectItem: () => handleDeselectItem(item),
+          })
+        }
+      />
     </div>
   );
 };

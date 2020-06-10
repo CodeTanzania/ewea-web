@@ -280,15 +280,13 @@ class EventUrgency extends Component {
             onChange: this.searchEventUrgencies,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Urgency',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Urgency',
-              onClick: this.openEventUrgencyForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Urgency',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Urgency',
+            onClick: this.openEventUrgencyForm,
+          }}
         />
         {/* end Topbar */}
 

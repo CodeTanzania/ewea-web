@@ -370,15 +370,13 @@ class EventFunctionList extends Component {
             onChange: this.handleListSearch,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Function',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Emergency Function',
-              onClick: this.handleFormOpen,
-            },
-          ]}
+          action={{
+            label: 'New Function',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Emergency Function',
+            onClick: this.handleFormOpen,
+          }}
         />
         {/* end: list topbar */}
 

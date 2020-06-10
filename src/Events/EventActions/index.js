@@ -310,15 +310,13 @@ class EventActions extends Component {
             onChange: this.searchEventActions,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Action',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Action',
-              onClick: this.openEventActionForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Action',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Action',
+            onClick: this.openEventActionForm,
+          }}
         />
         {/* end Topbar */}
 

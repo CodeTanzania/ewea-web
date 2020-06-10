@@ -434,15 +434,13 @@ class Dispatches extends Component {
             onChange: this.searchDispatches,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Dispatch',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Vehicle Dispatch',
-              onClick: this.openDispatchForm,
-            },
-          ]}
+          action={{
+            label: 'New Dispatch',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Vehicle Dispatch',
+            onClick: this.openDispatchForm,
+          }}
         />
         {/* end Topbar */}
 

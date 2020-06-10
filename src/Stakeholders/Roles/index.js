@@ -319,15 +319,13 @@ class Roles extends Component {
             onChange: this.searchRoles,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Role',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Role',
-              onClick: this.openPartyRolesForm,
-            },
-          ]}
+          action={{
+            label: 'New Role',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Role',
+            onClick: this.openPartyRolesForm,
+          }}
         />
         {/* end Topbar */}
 

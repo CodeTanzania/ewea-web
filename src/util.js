@@ -2,6 +2,7 @@ import { message } from 'antd';
 import moment from 'moment';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
+import { isMobile } from 'react-device-detect';
 
 /**
  * @function
@@ -292,4 +293,17 @@ export const generateVehicleDispatchShareableDetails = (vehicleDispatch) => {
     'YYYY-MM-DD HH:mm:ss'
   )}`;
   return { subject, body };
+};
+
+/**
+ * @function
+ * @name isMobileScreen
+ * @description Determine if the screen is small based on breakpoints
+ * @param {object} screens Screens breakpoints object from antd Grid
+ * @returns {boolean} True if screen is < 768px
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const isMobileScreen = (screens) => {
+  return ((screens.xs || screens.sm) && !screens.md) || isMobile;
 };

@@ -16,8 +16,8 @@ import {
   WARNING_COLOR,
   DANGER_COLOR,
   DARK_GREEN,
-  FilterFloatingButton,
 } from '../components/dashboardWidgets';
+import { FilterFloatingButton } from '../components/FloatingButton';
 
 const { getEventsReport } = reduxActions;
 const titleMap = {

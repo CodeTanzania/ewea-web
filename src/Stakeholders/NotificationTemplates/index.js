@@ -299,15 +299,13 @@ class NotificationTemplates extends Component {
             onChange: this.searchNotificationTemplates,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Template',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Notification Template',
-              onClick: this.openNotificationTemplateForm,
-            },
-          ]}
+          action={{
+            label: 'New Template',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Notification Template',
+            onClick: this.openNotificationTemplateForm,
+          }}
         />
         {/* end Topbar */}
 

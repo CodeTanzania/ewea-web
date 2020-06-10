@@ -21,8 +21,8 @@ import {
   SUCCESS_COLOR,
   WARNING_COLOR,
   DANGER_COLOR,
-  FilterFloatingButton,
 } from '../components/dashboardWidgets';
+import { FilterFloatingButton } from '../components/FloatingButton';
 
 const columns = [
   { title: 'Type', dataIndex: 'type' },

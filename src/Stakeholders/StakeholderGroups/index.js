@@ -260,15 +260,13 @@ class PartyGroups extends Component {
             onChange: this.searchPartyGroups,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Stakeholder Group',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Stakeholder Group',
-              onClick: this.openPartyGroupsForm,
-            },
-          ]}
+          action={{
+            label: 'New Stakeholder Group',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Stakeholder Group',
+            onClick: this.openPartyGroupsForm,
+          }}
         />
         {/* end Topbar */}
 

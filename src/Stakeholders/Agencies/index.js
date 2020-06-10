@@ -352,15 +352,13 @@ class Agencies extends Component {
             onChange: this.searchAgencies,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Agency',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Agency',
-              onClick: this.openAgencyForm,
-            },
-          ]}
+          action={{
+            label: 'New Agency',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Agency',
+            onClick: this.openAgencyForm,
+          }}
         />
         {/* end Topbar */}
 

@@ -247,15 +247,13 @@ class EventLevels extends Component {
             onChange: this.searchEventLevels,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Level',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Level',
-              onClick: this.openEventLevelsForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Level',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Level',
+            onClick: this.openEventLevelsForm,
+          }}
         />
         {/* end Topbar */}
 

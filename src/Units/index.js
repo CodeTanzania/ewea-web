@@ -343,15 +343,13 @@ class UnitList extends Component {
             onChange: this.handleListSearch,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Unit',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Unit',
-              onClick: this.handleFormOpen,
-            },
-          ]}
+          action={{
+            label: 'New Unit',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Unit',
+            onClick: this.handleFormOpen,
+          }}
         />
         {/* end: list topbar */}
 

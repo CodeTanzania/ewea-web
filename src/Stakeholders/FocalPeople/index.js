@@ -355,15 +355,13 @@ class FocalPeople extends Component {
             onChange: this.searchFocalPeople,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Focal Person',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Focal Person',
-              onClick: this.openFocalPersonForm,
-            },
-          ]}
+          action={{
+            label: 'New Focal Person',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Focal Person',
+            onClick: this.openFocalPersonForm,
+          }}
         />
         {/* end Topbar */}
 

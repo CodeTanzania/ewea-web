@@ -490,15 +490,13 @@ class CaseList extends Component {
             onChange: this.handleListSearch,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Case',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Case',
-              onClick: this.handleFormOpen,
-            },
-          ]}
+          action={{
+            label: 'New Case',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Case',
+            onClick: this.handleFormOpen,
+          }}
         />
         {/* end: list topbar */}
 

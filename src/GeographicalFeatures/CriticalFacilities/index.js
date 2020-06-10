@@ -426,15 +426,13 @@ class FeatureList extends Component {
             onChange: this.handleListSearch,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Infrastructure',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Critical Infrastructure',
-              onClick: this.handleFormOpen,
-            },
-          ]}
+          action={{
+            label: 'New Infrastructure',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Critical Infrastructure',
+            onClick: this.handleFormOpen,
+          }}
         />
         {/* end: list topbar */}
 

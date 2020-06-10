@@ -8,11 +8,8 @@ import map from 'lodash/map';
 import randomColor from 'randomcolor';
 
 import ReportFilters from '../components/ReportFilters';
-import {
-  NumberWidget,
-  SectionCard,
-  FilterFloatingButton,
-} from '../components/dashboardWidgets';
+import { NumberWidget, SectionCard } from '../components/dashboardWidgets';
+import { FilterFloatingButton } from '../components/FloatingButton';
 import {
   EChart,
   generateDonutChartOption,

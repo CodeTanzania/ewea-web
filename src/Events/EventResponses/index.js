@@ -279,15 +279,13 @@ class EventResponses extends Component {
             onChange: this.searchEventResponses,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Response',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Response',
-              onClick: this.openEventResponseForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Response',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Response',
+            onClick: this.openEventResponseForm,
+          }}
         />
         {/* end Topbar */}
 

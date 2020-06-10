@@ -251,15 +251,13 @@ class VehicleStatus extends Component {
             onChange: this.searchVehicleStatuses,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Status',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Vehicle Status',
-              onClick: this.openVehicleStatusesForm,
-            },
-          ]}
+          action={{
+            label: 'New Status',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Vehicle Status',
+            onClick: this.openVehicleStatusesForm,
+          }}
         />
         {/* end Topbar */}
 

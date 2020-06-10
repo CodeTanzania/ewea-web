@@ -398,15 +398,13 @@ class Events extends Component {
             onChange: this.searchEvents,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event',
-              onClick: this.openEventForm,
-            },
-          ]}
+          action={{
+            label: 'New Event',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event',
+            onClick: this.openEventForm,
+          }}
         />
         {/* end Topbar */}
         {/* list starts */}

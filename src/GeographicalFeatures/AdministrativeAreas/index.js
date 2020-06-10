@@ -353,15 +353,13 @@ class AdministrativeAreaList extends Component {
             onChange: this.handleListSearch,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Area',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Administrative Area',
-              onClick: this.handleFormOpen,
-            },
-          ]}
+          action={{
+            label: 'New Area',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Administrative Area',
+            onClick: this.handleFormOpen,
+          }}
         />
         {/* end: list topbar */}
 

@@ -264,15 +264,13 @@ class EventQuestions extends Component {
             onChange: this.searchEventQuestions,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Question',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Question',
-              onClick: this.openEventQuestionsForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Question',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Question',
+            onClick: this.openEventQuestionsForm,
+          }}
         />
         {/* end Topbar */}
 

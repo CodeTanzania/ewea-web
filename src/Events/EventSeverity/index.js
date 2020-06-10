@@ -279,15 +279,13 @@ class EventSeverities extends Component {
             onChange: this.searchEventSeverities,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Severity',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Severity',
-              onClick: this.openEventSeverityForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Severity',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Severity',
+            onClick: this.openEventSeverityForm,
+          }}
         />
         {/* end Topbar */}
 

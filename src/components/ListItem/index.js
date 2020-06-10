@@ -7,6 +7,7 @@ import isString from 'lodash/isString';
 import map from 'lodash/map';
 
 import { ItemActions, getCommonIcon } from '../ListItemActions';
+import { isMobileScreen } from '../../util';
 import './styles.css';
 
 /* constants */
@@ -120,7 +121,7 @@ const ListItem = ({
 
   return (
     <>
-      {(screens.xs || screens.sm) && !screens.md ? (
+      {isMobileScreen(screens) ? (
         <List.Item onClick={() => setShowActions(true)}>
           <List.Item.Meta
             avatar={

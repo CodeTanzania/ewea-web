@@ -257,15 +257,13 @@ class EventTopics extends Component {
             onChange: this.searchEventTopics,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Topic',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Topic',
-              onClick: this.openEventTopicsForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Topic',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Topic',
+            onClick: this.openEventTopicsForm,
+          }}
         />
         {/* end Topbar */}
 

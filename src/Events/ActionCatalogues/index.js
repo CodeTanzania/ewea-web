@@ -356,15 +356,13 @@ class ActionCatalogue extends Component {
             onChange: this.searchEventActionCatalogues,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Action',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Action',
-              onClick: this.openEventActionCatalogueForm,
-            },
-          ]}
+          action={{
+            label: 'New Action',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Action',
+            onClick: this.openEventActionCatalogueForm,
+          }}
         />
         {/* end Topbar */}
 

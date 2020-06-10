@@ -279,15 +279,13 @@ class FeatureTypes extends Component {
             onChange: this.searchFeatureTypes,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Feature Type',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Feature Type',
-              onClick: this.openFeatureTypeForm,
-            },
-          ]}
+          action={{
+            label: 'New Feature Type',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Feature Type',
+            onClick: this.openFeatureTypeForm,
+          }}
         />
         {/* end Topbar */}
 

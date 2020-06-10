@@ -256,15 +256,13 @@ class Vehicle extends Component {
             onChange: this.searchVehicles,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Vehicle',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Vehicle',
-              onClick: this.openVehiclesForm,
-            },
-          ]}
+          action={{
+            label: 'New Vehicle',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Vehicle',
+            onClick: this.openVehiclesForm,
+          }}
         />
         {/* end Topbar */}
 

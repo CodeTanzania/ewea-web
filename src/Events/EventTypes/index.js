@@ -249,15 +249,13 @@ class EventTypes extends Component {
             onChange: this.searchAlerts,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Type',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Type',
-              onClick: this.openEventTypesForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Type',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Type',
+            onClick: this.openEventTypesForm,
+          }}
         />
         {/* end Topbar */}
 

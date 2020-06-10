@@ -349,15 +349,13 @@ class AdministrativeLevelList extends Component {
             onChange: this.handleListSearch,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Level',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Administrative Level',
-              onClick: this.handleFormOpen,
-            },
-          ]}
+          action={{
+            label: 'New Level',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Administrative Level',
+            onClick: this.handleFormOpen,
+          }}
         />
         {/* end: list topbar */}
 

@@ -248,15 +248,13 @@ class EventIndicator extends Component {
             onChange: this.searchEventIndicators,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Indicator',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Indicator',
-              onClick: this.openEventIndicatorsForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Indicator',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Indicator',
+            onClick: this.openEventIndicatorsForm,
+          }}
         />
         {/* end Topbar */}
 

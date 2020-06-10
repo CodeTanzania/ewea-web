@@ -251,15 +251,13 @@ class VehicleModel extends Component {
             onChange: this.searchVehicleModels,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Model',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Vehicle Model',
-              onClick: this.openVehicleModelsForm,
-            },
-          ]}
+          action={{
+            label: 'New Model',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Vehicle Model',
+            onClick: this.openVehicleModelsForm,
+          }}
         />
         {/* end Topbar */}
 

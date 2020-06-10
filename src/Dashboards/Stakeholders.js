@@ -19,8 +19,8 @@ import {
   PURPLE_COLOR,
   SUCCESS_COLOR,
   WARNING_COLOR,
-  FilterFloatingButton,
 } from '../components/dashboardWidgets';
+import { FilterFloatingButton } from '../components/FloatingButton';
 import DarDistricts from '../assets/maps/dar.districts.json';
 
 const { getPartiesReport } = reduxActions;
