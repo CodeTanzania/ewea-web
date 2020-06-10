@@ -30,12 +30,12 @@ const OCCUPATION_COLUMNS = [
 ];
 
 const STAGE_COLUMNS = [
-  { title: 'Stage', dataIndex: ['name', 'en'] },
-  { title: 'Total', dataIndex: 'total' },
+  { title: 'Stage', dataIndex: 'name' },
+  { title: 'Total', dataIndex: 'value' },
 ];
 const SEVERITY_COLUMNS = [
-  { title: 'Severity', dataIndex: ['name', 'en'] },
-  { title: 'Total', dataIndex: 'total' },
+  { title: 'Severity', dataIndex: 'name' },
+  { title: 'Total', dataIndex: 'value' },
 ];
 
 const NATIONALITY_COLUMNS = [
@@ -61,6 +61,8 @@ const AGE_GROUPS_COLUMNS = [
  */
 const CasesDashboard = ({ report, loading }) => {
   const [ageGroupsDisplay, setAgeGroupsDisplay] = useState(DISPLAY_TABLE);
+  const [severitiesDisplay, setSeveritiesDisplay] = useState(DISPLAY_TABLE);
+  const [stagesDisplay, setStagesDisplay] = useState(DISPLAY_TABLE);
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
@@ -70,6 +72,25 @@ const CasesDashboard = ({ report, loading }) => {
   const GENDER_DATA = map(get(report, 'overall.gender', []), (item) => ({
     value: item.total,
     name: item.name.en,
+    itemStyle: {
+      color: item.color,
+    },
+  }));
+
+  const SEVERITY_DATA = map(get(report, 'overall.severities', []), (item) => ({
+    value: item.total,
+    name: item.name.en,
+    itemStyle: {
+      color: item.color,
+    },
+  }));
+
+  const STAGE_DATA = map(get(report, 'overall.stages', []), (item) => ({
+    value: item.total,
+    name: item.name.en,
+    itemStyle: {
+      color: item.color,
+    },
   }));
 
   const AGE_GROUPS_DATA = map(get(report, 'overall.ageGroups', []), (item) => ({
@@ -126,14 +147,43 @@ const CasesDashboard = ({ report, loading }) => {
           <Col xs={24} sm={24} md={12}>
             <Row>
               <Col span={24}>
-                <SectionCard title="Cases Breakdown - Stage">
-                  <Table
-                    dataSource={get(report, 'overall.stages', [])}
-                    columns={STAGE_COLUMNS}
-                    pagination={false}
-                  />
+                <SectionCard
+                  title="Cases Breakdown - Stage"
+                  actions={
+                    <Button.Group>
+                      <Button
+                        icon={<TableOutlined />}
+                        onClick={() => setStagesDisplay(DISPLAY_TABLE)}
+                      />
+                      <Button
+                        icon={
+                          <BarChartOutlined
+                            onClick={() => setStagesDisplay(DISPLAY_CHART)}
+                          />
+                        }
+                      />
+                    </Button.Group>
+                  }
+                >
+                  {stagesDisplay === DISPLAY_TABLE && (
+                    <Table
+                      dataSource={STAGE_DATA}
+                      columns={STAGE_COLUMNS}
+                      pagination={false}
+                    />
+                  )}
+
+                  {stagesDisplay === DISPLAY_CHART && (
+                    <EChart
+                      option={generateDonutChartOption(
+                        'Case Stages',
+                        STAGE_DATA
+                      )}
+                    />
+                  )}
                 </SectionCard>
               </Col>
+
               <Col span={24}>
                 <SectionCard title="Cases Breakdown - Gender">
                   <EChart
@@ -163,17 +213,47 @@ const CasesDashboard = ({ report, loading }) => {
               </Col>
             </Row>
           </Col>
+
           <Col xs={24} sm={24} md={12}>
             <Row>
               <Col span={24}>
-                <SectionCard title="Cases Breakdown - Severity">
-                  <Table
-                    dataSource={get(report, 'overall.severities', [])}
-                    columns={SEVERITY_COLUMNS}
-                    pagination={false}
-                  />
+                <SectionCard
+                  title="Cases Breakdown - Severity"
+                  actions={
+                    <Button.Group>
+                      <Button
+                        icon={<TableOutlined />}
+                        onClick={() => setSeveritiesDisplay(DISPLAY_TABLE)}
+                      />
+                      <Button
+                        icon={
+                          <BarChartOutlined
+                            onClick={() => setSeveritiesDisplay(DISPLAY_CHART)}
+                          />
+                        }
+                      />
+                    </Button.Group>
+                  }
+                >
+                  {severitiesDisplay === DISPLAY_TABLE && (
+                    <Table
+                      dataSource={SEVERITY_DATA}
+                      columns={SEVERITY_COLUMNS}
+                      pagination={false}
+                    />
+                  )}
+
+                  {severitiesDisplay === DISPLAY_CHART && (
+                    <EChart
+                      option={generateDonutChartOption(
+                        'Case Severity',
+                        SEVERITY_DATA
+                      )}
+                    />
+                  )}
                 </SectionCard>
               </Col>
+
               <Col span={24}>
                 <SectionCard
                   title="Cases Breakdown - Age Distributions"
