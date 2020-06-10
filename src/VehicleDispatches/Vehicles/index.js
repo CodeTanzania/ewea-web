@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import get from 'lodash/get';
-import { Modal, Col } from 'antd';
+import { Modal, Row, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
 import Topbar from '../../components/Topbar';
@@ -12,7 +12,6 @@ import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 
 const {
   getVehicles,
@@ -37,14 +36,14 @@ const {
 
 /* constants */
 const typeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 8, xs: 7 };
-const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 8, xs: 7 };
+const plateNumberSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 8, xs: 7 };
 const statusSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 0 };
 const ownershipSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
-const ownerSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 4 };
+const ownerSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 0 };
 const descriptionSpan = { xxl: 6, xl: 6, lg: 6, md: 4, sm: 0, xs: 0 };
 const headerLayout = [
   { ...typeSpan, header: 'Type' },
-  { ...nameSpan, header: 'Plate No.' },
+  { ...plateNumberSpan, header: 'Plate No.' },
   { ...statusSpan, header: 'Status' },
   { ...ownershipSpan, header: 'Ownership' },
   { ...ownerSpan, header: 'Owner' },
@@ -294,38 +293,67 @@ class Vehicle extends Component {
               avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Vehicle',
-                    title: 'Update vehicle Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Vehicle',
-                    title: 'Share vehicle details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Vehicle',
-                    title: 'Remove vehicle from list of active vehicles',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <Row>
+                  <Col span={16}>
+                    <span className="text-sm">
+                      {get(item, 'relations.type.strings.name.en', 'N/A')}
+                    </span>
+                  </Col>
+                  <Col span={6}>
+                    <span className="text-xs">
+                      {get(item, 'strings.name.en', 'N/A')}
+                    </span>
+                  </Col>
+                </Row>
+              }
+              secondaryText={
+                <Row>
+                  <Col span={16}>
+                    <span className="text-xs">
+                      {get(item, 'relations.status.strings.name.en', 'N/A')}
+                    </span>
+                  </Col>
+                  <Col span={6}>
+                    <span className="text-xs">
+                      {get(item, 'relations.ownership.strings.name.en', 'N/A')}
+                    </span>
+                  </Col>
+                </Row>
+              }
+              actions={[
+                {
+                  name: 'Edit Vehicle',
+                  title: 'Update vehicle Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Vehicle',
+                  title: 'Share vehicle details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Vehicle',
+                  title: 'Remove vehicle from list of active vehicles',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...typeSpan}>
                 {get(item, 'relations.type.strings.name.en', 'N/A')}
               </Col>
-              <Col {...nameSpan}>{item.strings.name.en}</Col>
+              <Col {...plateNumberSpan}>{item.strings.name.en}</Col>
               <Col {...statusSpan}>
                 {get(item, 'relations.status.strings.name.en', 'N/A')}
               </Col>
               <Col {...ownershipSpan}>
                 {get(item, 'relations.ownership.strings.name.en', 'N/A')}
               </Col>
-              <Col {...ownershipSpan}>
+              <Col {...ownerSpan}>
                 {get(item, 'relations.owner.abbreviation', 'N/A')}
               </Col>
               <Col {...descriptionSpan} title={item.strings.description.en}>

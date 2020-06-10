@@ -2,8 +2,11 @@
   padding: 0 40px;
 }
 
-.ListWrapper {
+.List-b-t {
   border-top: 1px solid #f0f0f0;
+}
+
+.List-b-b {
   border-bottom: 1px solid #f0f0f0;
 }
 

@@ -10,6 +10,7 @@ import isEmpty from 'lodash/isEmpty';
 
 import Toolbar from '../Toolbar';
 import ListHeader from '../ListHeader';
+import { isMobileScreen } from '../../util';
 import './styles.css';
 
 const { useBreakpoint } = Grid;
@@ -151,7 +152,7 @@ const CustomList = ({
         }
       />
 
-      {(screens.xs || screens.sm) && screens.md && (
+      {!isMobileScreen(screens) && (
         <ListHeader
           headerLayout={headerLayout}
           onSelectAll={handleSelectPageItems}
@@ -163,7 +164,7 @@ const CustomList = ({
       <List
         loading={loading}
         dataSource={items}
-        className={loading && isEmpty(items) ? '' : 'ListWrapper'}
+        className={`List-b-t ${loading && isEmpty(items) ? '' : 'List-b-b'}`}
         renderItem={(item) =>
           renderListItem({
             item,
