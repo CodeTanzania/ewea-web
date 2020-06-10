@@ -1,7 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
 import pick from 'lodash/pick';
+import sum from 'lodash/sum';
+import pickBy from 'lodash/pickBy';
+import intersection from 'lodash/intersection';
+import keys from 'lodash/keys';
+import values from 'lodash/values';
 import { Button, Input, Radio, Form, Row, Col } from 'antd';
 import { reduxActions } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
@@ -33,6 +39,56 @@ const MESSAGE_PUT_SUCCESS = 'Case was updated successfully';
 const MESSAGE_PUT_ERROR =
   'Something occurred while updating Case, Please try again!';
 
+/* helpers */
+// TODO: refactor to case-descriptions
+const scoreFor = ({ followup }) => {
+  const symptoms = {
+    fever: 3,
+    shortnessOfBreath: 5,
+    musclePain: 1,
+    cough: 1,
+    vomiting: 3,
+    chestTightness: 5,
+    soreThroat: 1,
+    diarrhea: 3,
+    abdominalPain: 3,
+    lossOfTaste: 1,
+    lossOfSmell: 1,
+    jointPain: 1,
+    headache: 3,
+    chestPain: 5,
+  };
+
+  // calculate average weight for 5-point scale
+  // TODO: asymptomatic, score === 0 (default?)
+  const overall = sum(values(symptoms));
+  const given = sum(values(followup.symptoms));
+  const score = 5 * (given / overall); // 5 point scale
+
+  // compute outcome
+  const criticalSymptoms = [
+    'headache',
+    'fever',
+    'shortnessOfBreath',
+    'chestTightness',
+    'vomiting',
+    'diarrhea',
+    'chestPain',
+    'abdominalPain',
+  ];
+  const givenCriticalSymptoms = pickBy({ ...followup.symptoms }, (val) => {
+    return !!val;
+  });
+  const hasCriticalSymptoms = !isEmpty(
+    intersection(criticalSymptoms, keys(givenCriticalSymptoms))
+  );
+  const outcome = hasCriticalSymptoms || score >= 3 ? 'hospital' : 'home';
+
+  // TODO: if verify use verified score
+
+  return { followup: { ...followup, score, outcome } };
+};
+
 /**
  * @function CaseFollowupForm
  * @name CaseFollowupForm
@@ -54,14 +110,16 @@ const MESSAGE_PUT_ERROR =
  *   caze={case}
  *   isEditForm={isEditForm}
  *   posting={posting}
+ *   onScore={this.handleCaseScore}
  *   onCancel={this.handleFollowupFormClose}
  * />
  *
  */
 const CaseFollowupForm = ({ caze, posting, onCancel }) => {
   // form finish(submit) handler
-  const onFinish = (values) => {
-    const formData = { ...values, ...pick(caze, '_id') };
+  const onFinish = (updates) => {
+    const scored = scoreFor(updates);
+    const formData = { ...scored, ...pick(caze, '_id') };
 
     putCase(
       formData,
@@ -270,7 +328,18 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
           </Form.Item>
         </Col>
 
-        <Col xs={24} sm={24} md={8} />
+        <Col xs={24} sm={24} md={8}>
+          <Form.Item
+            title="Chest Pain"
+            name={['followup', 'symptoms', 'chestPain']}
+          >
+            <WrappedCheckbox
+              checkedValue={5}
+              unCheckedValue={0}
+              label="Chest Pain"
+            />
+          </Form.Item>
+        </Col>
 
         <Col xs={24} sm={24} md={7} />
       </Row>

@@ -40,9 +40,21 @@ const WrappedCheckbox = ({
 };
 
 WrappedCheckbox.propTypes = {
-  checkedValue: PropTypes.shape.isRequired,
-  unCheckedValue: PropTypes.shape,
-  value: PropTypes.shape,
+  checkedValue: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
+  unCheckedValue: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+    PropTypes.object,
+  ]),
+  value: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+    PropTypes.object,
+  ]),
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func,
 };

@@ -12,6 +12,8 @@ const {
   getAdministrativeAreas,
   getPartyGenders,
   getPartyOccupations,
+  getPartyNationalities,
+  getCaseStages,
 } = httpActions;
 
 /* state actions */
@@ -100,11 +102,13 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
       onFinish={onFinish}
       initialValues={{
         ...caze,
+        stage: get(caze, 'stage._id'),
         victim: {
           ...get(caze, 'victim', null),
           area: get(caze, 'victim.area._id'),
           gender: get(caze, 'victim.gender._id'),
           occupation: get(caze, 'victim.occupation._id'),
+          nationality: get(caze, 'victim.nationality._id'),
         },
       }}
       autoComplete="off"
@@ -116,9 +120,7 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
             label="Name"
             title="Victim/Patient Full Name e.g Jane Mdoe"
             name={['victim', 'name']}
-            rules={[
-              { required: true, message: 'Victim/Patient name is required' },
-            ]}
+            rules={[{ required: true, message: 'Name is required' }]}
           >
             <Input />
           </Form.Item>
@@ -129,9 +131,7 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
             label="Phone"
             title="Valid Victim/Patient Mobile Phone Number"
             name={['victim', 'mobile']}
-            rules={[
-              { required: true, message: 'Victim/Patient phone is required' },
-            ]}
+            rules={[{ required: true, message: 'Phone is required' }]}
           >
             <Input />
           </Form.Item>
@@ -149,7 +149,7 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
             rules={[
               {
                 required: true,
-                message: 'Victim/Patient Residential Area is required',
+                message: 'Area is required',
               },
             ]}
           >
@@ -180,7 +180,7 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
             rules={[
               {
                 required: true,
-                message: 'Victim/Patient Gender is required',
+                message: 'Gender is required',
               },
             ]}
           >
@@ -210,7 +210,7 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
             rules={[
               {
                 required: true,
-                message: 'Victim/Patient Age is required',
+                message: 'Age is required',
               },
             ]}
           >
@@ -241,6 +241,58 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
         </Col>
       </Row>
       {/* end: age & occupation */}
+
+      {/* start: nationality & stage */}
+      <Row justify="space-between">
+        <Col xs={24} sm={24} md={11}>
+          <Form.Item
+            label="Nationality"
+            title="Victim/Patient Nationality"
+            name={['victim', 'nationality']}
+            rules={[
+              {
+                required: true,
+                message: 'Nationality is required',
+              },
+            ]}
+          >
+            <SearchableSelectInput
+              onSearch={getPartyNationalities}
+              optionLabel={(nationality) => get(nationality, 'strings.name.en')}
+              optionValue="_id"
+              initialValue={
+                get(caze, 'victim.nationality') ||
+                get(cached, 'victim.nationality')
+              }
+              onCache={(values) =>
+                setCache({ ...cached, 'victim.nationality': values[0] })
+              }
+            />
+          </Form.Item>
+        </Col>
+        <Col xs={24} sm={24} md={11}>
+          <Form.Item
+            label="Stage"
+            title="Case Stage"
+            name={['stage']}
+            rules={[
+              {
+                required: true,
+                message: 'Stage is required',
+              },
+            ]}
+          >
+            <SearchableSelectInput
+              onSearch={getCaseStages}
+              optionLabel={(stage) => get(stage, 'strings.name.en')}
+              optionValue="_id"
+              initialValue={get(caze, 'stage') || get(cached, 'stage')}
+              onCache={(values) => setCache({ ...cached, stage: values[0] })}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      {/* end: nationality & stage */}
 
       {/* start: next of kin name & mobile */}
       <Row justify="space-between">

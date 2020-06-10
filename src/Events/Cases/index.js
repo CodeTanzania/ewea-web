@@ -5,12 +5,13 @@ import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Row, Col, Drawer, Button } from 'antd';
 import { PlusOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
+import upperFirst from 'lodash/upperFirst';
 import Topbar from '../../components/Topbar';
 import CaseForm from './Form';
 import CaseFollowupForm from './FollowupForm';
 import CaseFiltersForm from './Filters';
 import NotificationForm from '../../components/NotificationForm';
-import { notifyError, notifySuccess } from '../../util';
+import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import CaseDetailsViewHeader from './DetailsView/Header';
@@ -42,11 +43,13 @@ const {
 const { confirm } = Modal;
 const numberSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 16, xs: 14 };
 const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
-const mobileSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 4 };
-const genderSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
-const ageSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
-const areaSpan = { xxl: 3, xl: 3, lg: 4, md: 3, sm: 0, xs: 0 };
-const severitySpan = { xxl: 4, xl: 4, lg: 4, md: 2, sm: 0, xs: 0 };
+const mobileSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 4, xs: 4 };
+const genderSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
+const ageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
+const nationalitySpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
+const stageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
+const areaSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
+const statusSpan = { xxl: 4, xl: 4, lg: 4, md: 2, sm: 0, xs: 0 };
 const headerLayout = [
   {
     ...numberSpan,
@@ -64,20 +67,31 @@ const headerLayout = [
     title: 'Victim/Patient Mobile Phone Number',
   },
   {
+    ...ageSpan,
+    header: 'Age',
+    title: 'Victim/Patient Age',
+    style: { textAlign: 'center' },
+  },
+  {
     ...genderSpan,
     header: 'Gender',
     title: 'Victim/Patient Gender',
   },
   {
-    ...ageSpan,
-    header: 'Age',
-    title: 'Victim/Patient Age',
+    ...nationalitySpan,
+    header: 'Nationality',
+    title: 'Victim/Patient Nationality',
+  },
+  {
+    ...stageSpan,
+    header: 'Stage',
+    title: 'Case Stage/Classification',
   },
   { ...areaSpan, header: 'Area', title: 'Victim/Patient Residential Area' },
   {
-    ...severitySpan,
-    header: 'Severity',
-    title: 'Case Severity',
+    ...statusSpan,
+    header: 'Status',
+    title: 'Case Status',
   },
 ];
 
@@ -96,6 +110,23 @@ const MESSAGE_LIST_REFRESH_ERROR =
 const MESSAGE_ITEM_ARCHIVE_SUCCESS = 'Case was archived successfully';
 const MESSAGE_ITEM_ARCHIVE_ERROR =
   'An error occurred while archiving Case, Please try again!';
+
+/* helpers */
+const statusFor = (caze) => {
+  const severity = upperFirst(get(caze, 'severity.strings.name.en'));
+  const outcome = upperFirst(get(caze, 'followup.outcome'));
+  const status = `${severity}, ${outcome}`;
+  return status;
+};
+
+const statusColorFor = (caze) => {
+  const follower = get(caze, 'followup.follower');
+  const color = follower
+    ? '#52c41a' /* verified */
+    : '#f5222d'; /* not verified: danger */
+  // : '#fa8c16'; /*not verified: warning*/
+  return color;
+};
 
 /**
  * @function CaseList
@@ -526,7 +557,7 @@ class CaseList extends Component {
                 item={item}
                 name={get(item, 'victim.name')}
                 isSelected={isSelected}
-                avatarBackgroundColor={get(item, 'victim.gender.strings.color')}
+                avatarBackgroundColor={get(item, 'severity.strings.color')}
                 onSelectItem={onSelectItem}
                 onDeselectItem={onDeselectItem}
                 title={
@@ -597,17 +628,48 @@ class CaseList extends Component {
                     {get(item, 'number', 'N/A')}
                   </Button>
                 </Col>
-                <Col {...nameSpan}>{get(item, 'victim.name', 'N/A')}</Col>
+                <Col {...nameSpan}>
+                  <span title={get(item, 'victim.name', 'N/A')}>
+                    {truncateString(get(item, 'victim.name', 'N/A'))}
+                  </span>
+                </Col>
                 <Col {...mobileSpan}>{get(item, 'victim.mobile', 'N/A')}</Col>
+                <Col {...ageSpan} style={{ textAlign: 'center' }}>
+                  {get(item, 'victim.age', 'N/A')}
+                </Col>
                 <Col {...genderSpan}>
                   {get(item, 'victim.gender.strings.name.en', 'N/A')}
                 </Col>
-                <Col {...ageSpan}>{get(item, 'victim.age', 'N/A')}</Col>
-                <Col {...areaSpan}>
-                  {get(item, 'victim.area.strings.name.en', 'N/A')}
+                <Col {...nationalitySpan}>
+                  <span
+                    title={get(
+                      item,
+                      'victim.nationality.strings.name.en',
+                      'N/A'
+                    )}
+                  >
+                    {truncateString(
+                      get(item, 'victim.nationality.strings.name.en', 'N/A')
+                    )}
+                  </span>
                 </Col>
-                <Col {...severitySpan}>
-                  {get(item, 'status.strings.name.en', 'N/A')}
+                <Col {...stageSpan}>
+                  {get(item, 'stage.strings.name.en', 'N/A')}
+                </Col>
+                <Col {...areaSpan}>
+                  <span title={get(item, 'victim.area.strings.name.en', 'N/A')}>
+                    {truncateString(
+                      get(item, 'victim.area.strings.name.en', 'N/A')
+                    )}
+                  </span>
+                </Col>
+                <Col {...statusSpan}>
+                  <span
+                    title={statusFor(item)}
+                    style={{ color: statusColorFor(item) }}
+                  >
+                    {statusFor(item)}
+                  </span>
                 </Col>
                 {/* eslint-enable react/jsx-props-no-spreading */}
               </ListItem>
@@ -646,7 +708,7 @@ class CaseList extends Component {
         <Modal
           title={MODAL_FILTER_TITLE}
           visible={showFilters}
-          className="modal-window-50"
+          className="modal-window-80"
           footer={null}
           onCancel={this.handleListFiltersFormClose}
           destroyOnClose
