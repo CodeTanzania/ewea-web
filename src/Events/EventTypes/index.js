@@ -10,7 +10,6 @@ import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import NotificationForm from '../../components/NotificationForm';
 import EventTypeForm from './Form';
-import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess, truncateString } from '../../util';
@@ -150,7 +149,7 @@ class EventTypes extends Component {
       const eventTypeList = eventTypes.map(
         (eventType) =>
           `Name: ${eventType.strings.name.en}\nDescription: ${
-            // eslint-disable-line
+          // eslint-disable-line
             eventType.strings.description.en
           }\n`
       );
@@ -278,32 +277,43 @@ class EventTypes extends Component {
             onDeselectItem,
           }) => (
             <ListItem
-              key={item._id} // eslint-disable-line
+                key={item._id} // eslint-disable-line
               name={item.strings.name.en}
               item={item}
               isSelected={isSelected}
               avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Event Type',
-                    title: 'Update Event Type Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Event Type',
-                    title: 'Share Event Type details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Event Type',
-                    title: 'Remove Event Type from list of active Event Types',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {get(item, 'strings.name.en', 'N/A')}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'relations.group.strings.name.en', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Event Type',
+                  title: 'Update Event Type Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Event Type',
+                  title: 'Share Event Type details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Event Type',
+                  title: 'Remove Event Type from list of active Event Types',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>
