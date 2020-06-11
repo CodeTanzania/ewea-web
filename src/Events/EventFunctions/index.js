@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Col } from 'antd';
+import { Modal, Row, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import map from 'lodash/map';
 import sortBy from 'lodash/sortBy';
+
 import Topbar from '../../components/Topbar';
 import EventFunctionForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 
 /* http actions */
 const {
@@ -409,26 +409,46 @@ class EventFunctionList extends Component {
                 avatarBackgroundColor={get(item, 'strings.color')}
                 onSelectItem={onSelectItem}
                 onDeselectItem={onDeselectItem}
-                renderActions={() => (
-                  <ListItemActions
-                    edit={{
-                      name: 'Edit Emergency Function',
-                      title: 'Update emergency function details',
-                      onClick: () => this.handleItemEdit(item),
-                    }}
-                    share={{
-                      name: 'Share Emergency Function',
-                      title: 'Share emergency function details with others',
-                      onClick: () => this.handleItemShare(item),
-                    }}
-                    archive={{
-                      name: 'Archive Emergency Function',
-                      title:
-                        'Remove emergency function from list of active emergency functions',
-                      onClick: () => this.handleItemArchive(item),
-                    }}
-                  />
-                )}
+                title={
+                  <Row>
+                    <Col span={20}>
+                      <span className="text-sm">
+                        {get(item, 'strings.name.en', 'N/A')}
+                      </span>
+                    </Col>
+                    <Col span={2}>
+                      <span className="text-xs">
+                        {get(item, 'numbers.weight', 'N/A')}
+                      </span>
+                    </Col>
+                  </Row>
+                }
+                secondaryText={
+                  <span className="text-xs">
+                    {get(item, 'strings.code', 'N/A')}
+                  </span>
+                }
+                actions={[
+                  {
+                    name: 'Edit Emergency Function',
+                    title: 'Update emergency function details',
+                    onClick: () => this.handleItemEdit(item),
+                    icon: 'edit',
+                  },
+                  {
+                    name: 'Share Emergency Function',
+                    title: 'Share emergency function details with others',
+                    onClick: () => this.handleItemShare(item),
+                    icon: 'share',
+                  },
+                  {
+                    name: 'Archive Emergency Function',
+                    title:
+                      'Remove emergency function from list of active emergency functions',
+                    onClick: () => this.handleItemArchive(item),
+                    icon: 'archive',
+                  },
+                ]}
               >
                 {/* eslint-disable react/jsx-props-no-spreading */}
                 <Col {...numberSpan}>{get(item, 'numbers.weight', 'N/A')}</Col>
