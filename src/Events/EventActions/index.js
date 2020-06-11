@@ -10,12 +10,20 @@ import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import EventActionFilters from './Filters';
 import EventActionForm from './Form';
-import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
-import { notifyError, notifySuccess } from '../../util';
+import { truncateString, notifyError, notifySuccess } from '../../util';
 
-/* constants */
+/* http actions */
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getRoles,
+  getAgencies,
+  getEventActionsExportUrl,
+} = httpActions;
+/* redux actions */
 const {
   closeEventActionForm,
   getEventActions,
@@ -26,24 +34,15 @@ const {
   paginateEventActions,
   deleteEventAction,
 } = reduxActions;
-const {
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getRoles,
-  getAgencies,
-  getEventActionsExportUrl,
-} = httpActions;
 
+/* constants */
+const { confirm } = Modal;
 const functionSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
 const nameSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };
-
 const headerLayout = [
   { ...functionSpan, header: 'Function' },
   { ...nameSpan, header: 'Name' },
 ];
-
-const { confirm } = Modal;
 
 /**
  * @class
@@ -347,34 +346,44 @@ class EventActions extends Component {
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Event Action',
-                    title: 'Update Event Action Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Event Action',
-                    title: 'Share Event Action details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Event Action',
-                    title:
-                      'Remove Event Action from list of active focal People',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {truncateString(get(item, 'strings.name.en', 'N/A'), 45)}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'relations.function.strings.name.en', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Event Action',
+                  title: 'Update Event Action Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Event Action',
+                  title: 'Share Event Action details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Event Action',
+                  title: 'Remove Event Action from list of active focal People',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable-next-line */}
               <Col {...functionSpan}>
-                {get(item, 'relations.function.strings.name.en', 'N/A')}{' '}
+                {get(item, 'relations.function.strings.name.en', 'N/A')}
               </Col>
 
               {/* eslint-disable-next-line */}
-              <Col {...nameSpan}>{item.strings.name.en}</Col>
+              <Col {...nameSpan}>{get(item, 'strings.name.en')}</Col>
             </ListItem>
           )}
         />
