@@ -24,6 +24,30 @@ import {
   FilterFloatingButton,
 } from '../components/dashboardWidgets';
 
+/* redux actions */
+const { getDispatchesReport } = reduxActions;
+
+/* constants */
+const DISPATCHES_PER_EVENT_TYPE_COLUMNS = [
+  { title: 'Event', dataIndex: ['name', 'en'] },
+  { title: 'Total', dataIndex: 'total' },
+  {
+    title: 'Waiting',
+    dataIndex: 'waiting',
+  },
+  {
+    title: 'Dispatched',
+    dataIndex: 'dispatched',
+  },
+  {
+    title: 'Completed',
+    dataIndex: 'resolved',
+  },
+  {
+    title: 'Canceled',
+    dataIndex: 'canceled',
+  },
+];
 const columns = [
   { title: 'Type', dataIndex: 'type' },
   { title: 'Total', dataIndex: 'total' },
@@ -89,7 +113,6 @@ const vehicleTypes = [
     cancelled: 1,
   },
 ];
-const { getDispatchesReport } = reduxActions;
 
 /**
  * @function
@@ -187,10 +210,20 @@ const VehicleDispatchesDashboard = ({ report, loading }) => {
           <Col xs={24} sm={24} lg={12}>
             <Row>
               <Col span={24}>
-                <SectionCard title="Vehicle Type per Dispatch Status">
+                <SectionCard title="Dispatches Breakdown - Vehicle Type">
                   <Table
                     dataSource={vehicleTypes}
                     columns={columns}
+                    pagination={false}
+                  />
+                </SectionCard>
+              </Col>
+
+              <Col span={24}>
+                <SectionCard title="Dispatches Breakdown - Event Type">
+                  <Table
+                    dataSource={get(report, 'overall.types', [])}
+                    columns={DISPATCHES_PER_EVENT_TYPE_COLUMNS}
                     pagination={false}
                   />
                 </SectionCard>
