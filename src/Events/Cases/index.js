@@ -99,8 +99,6 @@ const headerLayout = [
 /* titles */
 const MODAL_SHARE_TITLE = 'Share Cases';
 const MODAL_FILTER_TITLE = 'Filter Cases';
-const MODAL_FORM_EDIT_TITLE = 'Edit Case - Victim/Patient Information';
-const MODAL_FORM_CREATE_TITLE = 'Add New Case - Victim/Patient Information';
 const MODAL_FORM_FOLLOWUP_TITLE =
   'Case Followup - Victim/Patient Clinical Information';
 
@@ -706,9 +704,8 @@ class CaseList extends Component {
 
         {/* start: form modal */}
         <Modal
-          title={isEditForm ? MODAL_FORM_EDIT_TITLE : MODAL_FORM_CREATE_TITLE}
           visible={showForm}
-          className="modal-window-50"
+          className="modal-window-80"
           footer={null}
           onCancel={this.handleFormClose}
           afterClose={this.handleAfterFormClose}
