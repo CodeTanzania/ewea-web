@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Col } from 'antd';
+import { Modal, Row, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
@@ -14,7 +14,6 @@ import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 
 /* http actions */
 const {
@@ -468,27 +467,46 @@ class FeatureList extends Component {
                 )}
                 onSelectItem={onSelectItem}
                 onDeselectItem={onDeselectItem}
-                renderActions={() => (
-                  <ListItemActions
-                    edit={{
-                      name: 'Edit Critical Infrastructure',
-                      title: 'Update critical infrastructure details',
-                      onClick: () => this.handleItemEdit(item),
-                    }}
-                    share={{
-                      name: 'Share Critical Infrastructure',
-                      title:
-                        'Share critical infrastructure details with others',
-                      onClick: () => this.handleItemShare(item),
-                    }}
-                    archive={{
-                      name: 'Archive Feature',
-                      title:
-                        'Remove critical infrastructure from list of active critical infrastructures',
-                      onClick: () => this.handleItemArchive(item),
-                    }}
-                  />
-                )}
+                title={
+                  <Row>
+                    <Col span={16}>
+                      <span className="text-sm">
+                        {get(item, 'strings.name.en', 'N/A')}
+                      </span>
+                    </Col>
+                    <Col span={6}>
+                      <span className="text-xs">
+                        {get(item, 'relations.area.strings.name.en', 'N/A')}
+                      </span>
+                    </Col>
+                  </Row>
+                }
+                secondaryText={
+                  <span className="text-xs">
+                    {get(item, 'relations.type.strings.name.en', 'N/A')}
+                  </span>
+                }
+                actions={[
+                  {
+                    name: 'Edit Critical Infrastructure',
+                    title: 'Update critical infrastructure details',
+                    onClick: () => this.handleItemEdit(item),
+                    icon: 'edit',
+                  },
+                  {
+                    name: 'Share Critical Infrastructure',
+                    title: 'Share critical infrastructure details with others',
+                    onClick: () => this.handleItemShare(item),
+                    icon: 'share',
+                  },
+                  {
+                    name: 'Archive Feature',
+                    title:
+                      'Remove critical infrastructure from list of active critical infrastructures',
+                    onClick: () => this.handleItemArchive(item),
+                    icon: 'archive',
+                  },
+                ]}
               >
                 {/* eslint-disable react/jsx-props-no-spreading */}
                 <Col {...typeSpan}>
