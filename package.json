@@ -33,7 +33,7 @@
     "axios": "^0.19.2",
     "echarts": "^4.8.0",
     "echarts-for-react": "^2.0.16",
-    "history": "^4.10.1",
+    "history": "^5.0.0",
     "inflection": "^1.12.0",
     "lodash": "^4.17.15",
     "moment": "^2.26.0",
