@@ -4,6 +4,7 @@ import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col, Drawer, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import compact from 'lodash/compact';
 import get from 'lodash/get';
 import upperFirst from 'lodash/upperFirst';
 import Topbar from '../../components/Topbar';
@@ -11,7 +12,12 @@ import CaseForm from './Form';
 import CaseFollowupForm from './FollowupForm';
 import CaseFiltersForm from './Filters';
 import NotificationForm from '../../components/NotificationForm';
-import { notifyError, notifySuccess, truncateString } from '../../util';
+import {
+  notifyError,
+  notifySuccess,
+  truncateString,
+  shareDetailsFor,
+} from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import ListItemActions from '../../components/ListItemActions';
@@ -114,7 +120,7 @@ const MESSAGE_ITEM_ARCHIVE_ERROR =
 const statusFor = (caze) => {
   const severity = upperFirst(get(caze, 'severity.strings.name.en'));
   const outcome = upperFirst(get(caze, 'followup.outcome'));
-  const status = `${severity}, ${outcome}`;
+  const status = compact([severity, outcome]).join(', ');
   return status;
 };
 
@@ -125,6 +131,25 @@ const statusColorFor = (caze) => {
     : '#f5222d'; /* not verified: danger */
   // : '#fa8c16'; /*not verified: warning*/
   return color;
+};
+
+/* fields */
+const shareFields = {
+  number: { header: 'Number', dataIndex: 'number' },
+  name: { header: 'Name', dataIndex: 'victim.name' },
+  phoneNumber: { header: 'Phone Number', dataIndex: 'victim.mobile' },
+  age: { header: 'Age', dataIndex: 'victim.age' },
+  gender: {
+    header: 'Gender',
+    dataIndex: 'victim.gender.strings.name.en',
+  },
+  nationality: {
+    header: 'Nationality',
+    dataIndex: 'victim.nationality.strings.name.en',
+  },
+  area: { header: 'Area', dataIndex: 'victim.area.strings.name.en' },
+  stage: { header: 'Stage', dataIndex: 'stage.strings.name.en' },
+  status: { header: 'Status', dataIndex: (item) => statusFor(item) },
 };
 
 /**
@@ -264,19 +289,8 @@ class CaseList extends Component {
    * @since 0.1.0
    */
   handleListShare = (items) => {
-    const itemList = [].concat(items);
-
     const notificationSubject = 'List of Cases';
-    const notificationBody = itemList
-      .map((item) => {
-        const itemNumber = get(item, 'number', 'N/A');
-        const itemGender = get(item, 'victim.gender.strings.name.en', 'N/A');
-        const itemArea = get(item, 'victim.area.strings.name.en', 'N/A');
-        const itemDescription = get(item, 'description', 'N/A');
-        const body = `Number: ${itemNumber}\nGender: ${itemGender}\nArea: ${itemArea}\nDescription: ${itemDescription}\n`;
-        return body;
-      })
-      .join('\n');
+    const notificationBody = shareDetailsFor(items, shareFields);
     const showNotificationForm = true;
 
     this.setState({
@@ -398,12 +412,8 @@ class CaseList extends Component {
    * @since 0.1.0
    */
   handleItemShare = (item) => {
-    const itemNumber = get(item, 'number', 'N/A');
-    const itemGender = get(item, 'victim.gender.strings.name.en', 'N/A');
-    const itemArea = get(item, 'victim.area.strings.name.en', 'N/A');
-    const itemDescription = get(item, 'description', 'N/A');
     const notificationSubject = 'List of Cases';
-    const notificationBody = `Number: ${itemNumber}\nGender: ${itemGender}\nArea: ${itemArea}\nDescription: ${itemDescription}\n`;
+    const notificationBody = shareDetailsFor(item, shareFields);
     const showNotificationForm = true;
 
     this.setState({
