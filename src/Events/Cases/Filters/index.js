@@ -305,17 +305,17 @@ CaseFiltersForm.propTypes = {
     }),
   }),
   cached: PropTypes.shape({
-    'victim.gender': PropTypes.arrayOf(
+    'filters.victim.gender': PropTypes.arrayOf(
       PropTypes.shape({
         _id: PropTypes.string,
       })
     ),
-    'victim.area': PropTypes.arrayOf(
+    'filters.victim.area': PropTypes.arrayOf(
       PropTypes.shape({
         _id: PropTypes.string,
       })
     ),
-    'victim.occupation': PropTypes.arrayOf(
+    'filters.victim.occupation': PropTypes.arrayOf(
       PropTypes.shape({
         _id: PropTypes.string,
       })

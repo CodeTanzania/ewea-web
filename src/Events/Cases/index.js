@@ -726,8 +726,8 @@ class CaseList extends Component {
           <CaseFiltersForm
             cached={cached}
             onCache={this.handleOnCache}
-            onCancel={this.handleListFiltersFormClose}
             onClearCache={this.handleOnClearCache}
+            onCancel={this.handleListFiltersFormClose}
           />
         </Modal>
         {/* end: filter modal */}
@@ -746,6 +746,9 @@ class CaseList extends Component {
             caze={caze}
             posting={posting}
             isEditForm={isEditForm}
+            cached={cached}
+            onCache={this.handleOnCache}
+            onClearCache={this.handleOnClearCache}
             onCancel={this.handleFormClose}
           />
         </Modal>

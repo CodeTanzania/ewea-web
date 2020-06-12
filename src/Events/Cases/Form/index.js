@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
+import first from 'lodash/first';
+import isFunction from 'lodash/isFunction';
 import { Button, Divider, Input, InputNumber, Form, Row, Col } from 'antd';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { reduxActions } from '@codetanzania/ewea-api-states';
@@ -55,6 +57,9 @@ const MESSAGE_PUT_ERROR =
  * @param {object} props.caze Valid case object
  * @param {boolean} props.isEditForm Flag whether form is on edit mode
  * @param {boolean} props.posting Flag whether form is posting data
+ * @param {object} props.cached Cached values for lazy loaded values
+ * @param {Function} props.onCache Cache value callback
+ * @param {Function} props.onClearCache Clear cached values callback
  * @param {Function} props.onCancel Form cancel callback
  * @returns {object} CaseForm component
  * @author lally elias <lallyelias87@gmail.com>
@@ -69,12 +74,39 @@ const MESSAGE_PUT_ERROR =
  *   caze={case}
  *   isEditForm={isEditForm}
  *   posting={posting}
+ *   cached={cached}
+ *   onCache={this.handleOnCache}
+ *   onClearCache={this.handleOnClearCache}
  *   onCancel={this.handleCloseCaseForm}
  * />
  *
  */
-const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
-  const [cached, setCache] = useState({}); // for caching lazy component values
+const CaseForm = ({
+  caze,
+  isEditForm,
+  posting,
+  cached,
+  onCache,
+  onClearCache,
+  onCancel,
+}) => {
+  // form scoped cache keys
+  const cacheKeys = [
+    'form.victim.nationality',
+    'form.victim.gender',
+    'form.victim.area',
+    'form.victim.occupation',
+    'form.stage',
+    'form.severity',
+  ];
+
+  // handle success form save
+  const onSuccess = (message) => {
+    if (isFunction(onClearCache)) {
+      onClearCache(...cacheKeys);
+    }
+    notifySuccess(message);
+  };
 
   // form finish(submit) handler
   const onFinish = (values) => {
@@ -84,13 +116,13 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
       const updates = { ...caze, ...formData };
       putCase(
         updates,
-        () => notifySuccess(MESSAGE_PUT_SUCCESS),
+        () => onSuccess(MESSAGE_PUT_SUCCESS),
         () => notifyError(MESSAGE_PUT_ERROR)
       );
     } else {
       postCase(
         formData,
-        () => notifySuccess(MESSAGE_POST_SUCCESS),
+        () => onSuccess(MESSAGE_POST_SUCCESS),
         () => notifyError(MESSAGE_POST_ERROR)
       );
     }
@@ -104,6 +136,7 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
       initialValues={{
         ...caze,
         stage: get(caze, 'stage._id'),
+        severity: get(caze, 'severity._id'),
         victim: {
           ...get(caze, 'victim', null),
           area: get(caze, 'victim.area._id'),
@@ -179,10 +212,10 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
               optionValue="_id"
               initialValue={
                 get(caze, 'victim.nationality') ||
-                get(cached, 'victim.nationality')
+                get(cached, 'form.victim.nationality')
               }
               onCache={(values) =>
-                setCache({ ...cached, 'victim.nationality': values[0] })
+                onCache({ 'form.victim.nationality': first(values) })
               }
             />
           </Form.Item>
@@ -204,10 +237,10 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
               optionLabel={(gender) => `${get(gender, 'strings.name.en')}`}
               optionValue="_id"
               initialValue={
-                get(caze, 'victim.gender') || get(cached, 'victim.gender')
+                get(caze, 'victim.gender') || get(cached, 'form.victim.gender')
               }
               onCache={(values) =>
-                setCache({ ...cached, 'victim.gender': values[0] })
+                onCache({ 'form.victim.gender': first(values) })
               }
             />
           </Form.Item>
@@ -255,10 +288,10 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
               }
               optionValue="_id"
               initialValue={
-                get(caze, 'victim.area') || get(cached, 'victim.area')
+                get(caze, 'victim.area') || get(cached, 'form.victim.area')
               }
               onCache={(values) =>
-                setCache({ ...cached, 'victim.area': values[0] })
+                onCache({ 'form.victim.area': first(values) })
               }
             />
           </Form.Item>
@@ -277,10 +310,10 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
               optionValue="_id"
               initialValue={
                 get(caze, 'victim.occupation') ||
-                get(cached, 'victim.occupation')
+                get(cached, 'form.victim.occupation')
               }
               onCache={(values) =>
-                setCache({ ...cached, 'victim.occupation': values[0] })
+                onCache({ 'form.victim.occupation': first(values) })
               }
             />
           </Form.Item>
@@ -301,8 +334,8 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
               onSearch={getCaseStages}
               optionLabel={(stage) => get(stage, 'strings.name.en')}
               optionValue="_id"
-              initialValue={get(caze, 'stage') || get(cached, 'stage')}
-              onCache={(values) => setCache({ ...cached, stage: values[0] })}
+              initialValue={get(caze, 'stage') || get(cached, 'form.stage')}
+              onCache={(values) => onCache({ 'form.stage': first(values) })}
             />
           </Form.Item>
         </Col>
@@ -374,7 +407,8 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
 };
 
 CaseForm.defaultProps = {
-  caze: {},
+  caze: null,
+  cached: null,
 };
 
 CaseForm.propTypes = {
@@ -384,6 +418,25 @@ CaseForm.propTypes = {
   }),
   isEditForm: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
+  cached: PropTypes.shape({
+    'form.stage': PropTypes.shape({
+      _id: PropTypes.string,
+    }),
+    'form.victim.gender': PropTypes.shape({
+      _id: PropTypes.string,
+    }),
+    'form.victim.area': PropTypes.shape({
+      _id: PropTypes.string,
+    }),
+    'form.victim.occupation': PropTypes.shape({
+      _id: PropTypes.string,
+    }),
+    'form.victim.nationality': PropTypes.shape({
+      _id: PropTypes.string,
+    }),
+  }),
+  onCache: PropTypes.func.isRequired,
+  onClearCache: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 };
 
