@@ -71,7 +71,7 @@
     "eslint-plugin-react": "7.20.0",
     "generate-changelog": "1.8.0",
     "husky": "4.2.5",
-    "lint-staged": "10.2.9",
+    "lint-staged": "10.2.10",
     "prettier": "2.0.5",
     "react-app-rewired": "2.1.6",
     "react-scripts": "3.4.1"
