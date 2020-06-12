@@ -38,6 +38,8 @@ const wrapperCol = {
 };
 
 /* messages */
+const TITLE_VICTIM_INFORMATION = 'Victim/Patient Information';
+const TITLE_NEXTOFKIN_INFORMATION = 'Next of Kin / Contact Person';
 const MESSAGE_POST_SUCCESS = 'Case was created successfully';
 const MESSAGE_POST_ERROR =
   'Something occurred while saving Case, Please try again!';
@@ -113,8 +115,8 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
       autoComplete="off"
     >
       {/* start: name, mobile & email */}
-      <Divider orientation="left" title="Victim/Patient Information">
-        Victim/Patient Information
+      <Divider orientation="left" title={TITLE_VICTIM_INFORMATION}>
+        {TITLE_VICTIM_INFORMATION}
       </Divider>
       <Row justify="space-between">
         <Col xs={24} sm={24} md={10}>
@@ -308,8 +310,8 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
       {/* end: area, occupation & stage */}
 
       {/* start: next of kin name, mobile & email */}
-      <Divider orientation="left" title="Next of Kin / Contact Person">
-        Next of Kin / Contact Person
+      <Divider orientation="left" title={TITLE_NEXTOFKIN_INFORMATION}>
+        {TITLE_NEXTOFKIN_INFORMATION}
       </Divider>
       <Row justify="space-between">
         <Col xs={24} sm={24} md={10}>
