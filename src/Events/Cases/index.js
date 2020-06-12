@@ -106,8 +106,6 @@ const headerLayout = [
 /* titles */
 const MODAL_SHARE_TITLE = 'Share Cases';
 const MODAL_FILTER_TITLE = 'Filter Cases';
-const MODAL_FORM_FOLLOWUP_TITLE =
-  'Case Followup - Victim/Patient Clinical Information';
 
 /* messages */
 const MESSAGE_LIST_REFRESH_SUCCESS = 'Cases were refreshed successfully';
@@ -756,7 +754,6 @@ class CaseList extends Component {
 
         {/* start: followup modal */}
         <Modal
-          title={MODAL_FORM_FOLLOWUP_TITLE}
           visible={showFollowUpForm}
           className="modal-window-80"
           footer={null}

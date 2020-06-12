@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
+import round from 'lodash/round';
 import isEmpty from 'lodash/isEmpty';
 import pick from 'lodash/pick';
 import sum from 'lodash/sum';
@@ -8,7 +9,7 @@ import pickBy from 'lodash/pickBy';
 import intersection from 'lodash/intersection';
 import keys from 'lodash/keys';
 import values from 'lodash/values';
-import { Button, Input, Radio, Form, Row, Col } from 'antd';
+import { Button, Input, Radio, Form, Row, Col, Divider } from 'antd';
 import { reduxActions } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
 import WrappedCheckbox from '../../../components/WrappedCheckbox';
@@ -35,6 +36,7 @@ const wrapperCol = {
 };
 
 /* messages */
+const TITLE_CLINICAL_INFORMATION = 'Victim/Patient Clinical Information';
 const MESSAGE_PUT_SUCCESS = 'Case was updated successfully';
 const MESSAGE_PUT_ERROR =
   'Something occurred while updating Case, Please try again!';
@@ -116,6 +118,8 @@ const scoreFor = ({ followup }) => {
  *
  */
 const CaseFollowupForm = ({ caze, posting, onCancel }) => {
+  // TODO: previous(yesterday) information
+
   // form finish(submit) handler
   const onFinish = (updates) => {
     const scored = scoreFor(updates);
@@ -144,9 +148,16 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
           gender: get(caze, 'victim.gender._id'),
           occupation: get(caze, 'victim.occupation._id'),
         },
+        followup: {
+          ...get(caze, 'followup'),
+          score: round(get(caze, 'followup.score', 0), 2),
+        },
       }}
       autoComplete="off"
     >
+      <Divider orientation="left" title={TITLE_CLINICAL_INFORMATION}>
+        {TITLE_CLINICAL_INFORMATION}
+      </Divider>
       {/* start: line one */}
       <Row justify="space-between">
         <Col xs={24} sm={24} md={7}>
@@ -345,29 +356,46 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
       </Row>
       {/* end: line five */}
 
-      {/* start: outcome */}
-      <Form.Item
-        label="Outcome"
-        title="Victim/Patient Followup Outcome"
-        name={['followup', 'outcome']}
-      >
-        <Radio.Group>
-          <Radio value="home">Home</Radio>
-          <Radio value="hospital">Hospital</Radio>
-          <Radio value="unknown">Unknown</Radio>
-        </Radio.Group>
-      </Form.Item>
-      {/* end: outcome */}
+      {/* start: line six */}
+      <Row justify="space-between">
+        <Col xs={24} sm={24} md={7}>
+          <Form.Item
+            label="Score"
+            title="Victim/Patient Followup Score"
+            name={['followup', 'score']}
+          >
+            <Input disabled />
+          </Form.Item>
+        </Col>
+        {/* start: outcome */}
+        <Col xs={24} sm={24} md={8}>
+          <Form.Item
+            label="Outcome"
+            title="Victim/Patient Followup Outcome"
+            name={['followup', 'outcome']}
+          >
+            <Radio.Group>
+              <Radio value="home">Home</Radio>
+              <Radio value="hospital">Hospital</Radio>
+              <Radio value="unknown">Unknown</Radio>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+        {/* end: outcome */}
 
-      {/* start: remarks */}
-      <Form.Item
-        label="Remarks"
-        title="Victim/Patient Followup Remarks"
-        name={['followup', 'remarks']}
-      >
-        <Input.TextArea autoSize={{ minRows: 2, maxRows: 10 }} />
-      </Form.Item>
-      {/* end: remarks */}
+        {/* start: remarks */}
+        <Col xs={24} sm={24} md={7}>
+          <Form.Item
+            label="Remarks"
+            title="Victim/Patient Followup Remarks"
+            name={['followup', 'remarks']}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+        {/* end: remarks */}
+      </Row>
+      {/* end: line six */}
 
       {/* start:form actions */}
       <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
