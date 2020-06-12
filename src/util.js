@@ -1,8 +1,13 @@
 import { message } from 'antd';
 import moment from 'moment';
-import isEmpty from 'lodash/isEmpty';
-import get from 'lodash/get';
 import { isMobile } from 'react-device-detect';
+import isEmpty from 'lodash/isEmpty';
+import isFunction from 'lodash/isFunction';
+import forEach from 'lodash/forEach';
+import get from 'lodash/get';
+import map from 'lodash/map';
+import merge from 'lodash/merge';
+import startCase from 'lodash/startCase';
 
 /**
  * @function
@@ -306,4 +311,47 @@ export const generateVehicleDispatchShareableDetails = (vehicleDispatch) => {
  */
 export const isMobileScreen = (screens) => {
   return ((screens.xs || screens.sm) && !screens.md) || isMobile;
+};
+
+/**
+ * @function shareDetailsFor
+ * @name shareDetailsFor
+ * @description Derive share details for an item
+ * @param {string[]} items list of items
+ * @param {object} fields item shared field details
+ * @returns {string} share details
+ * @author lally elias <lallyelias87@gmail.com>
+ * @license MIT
+ * @since 0.1.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * cost case = { ... };
+ * const fields =
+ *  { number: { header: 'Number', dataIndex: 'number', defaultValue: 'N/A' } };
+ * shareDetailsFor(case, fields);
+ * //=> Number: 1235
+ */
+export const shareDetailsFor = (items, fields) => {
+  // ensure items & fields
+  const itemz = [].concat(items);
+  const fieldz = merge({}, fields);
+
+  // prepare share details
+  const details = map(itemz, (item) => {
+    let itemDetails = '';
+    forEach(fieldz, ({ header, dataIndex, defaultValue = 'N/A' }, key) => {
+      const label = header || startCase(key);
+      const value = isFunction(dataIndex)
+        ? dataIndex(item) || defaultValue
+        : get(item, dataIndex, defaultValue);
+      itemDetails += `${label}: ${value}\n`;
+    });
+    return itemDetails;
+  }).join('\n');
+
+  // return
+  return details;
 };
