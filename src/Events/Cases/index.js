@@ -352,13 +352,13 @@ class CaseList extends Component {
   };
 
   /**
-   * @function handleCloseItemView
-   * @name handleCloseItemView
+   * @function handleItemViewClose
+   * @name handleItemViewClose
    * @description Handle close list item view
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleCloseItemView = () => {
+  handleItemViewClose = () => {
     this.setState({ showDetailsView: false });
   };
 
@@ -436,6 +436,21 @@ class CaseList extends Component {
   };
 
   /**
+   * @function handleAfterNotificationFormClose
+   * @name handleAfterNotificationFormClose
+   * @description Perform claeanups after close notification form
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleAfterNotificationFormClose = () => {
+    this.setState({
+      notificationSubject: undefined,
+      notificationBody: undefined,
+    });
+  };
+
+  /**
    * @function handleListFiltersFormOpen
    * @name handleListFiltersFormOpen
    * @description Handle filters form opening
@@ -460,15 +475,15 @@ class CaseList extends Component {
   };
 
   /**
-   * @function handleFormOpen
-   * @name handleFormOpen
-   * @description Handle form opening
+   * @function handleItemFollowup
+   * @name handleItemFollowup
+   * @description Handle list item followup
    * @param {object} item List item
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleFollowupFormOpen = (item) => {
+  handleItemFollowup = (item) => {
     selectCase(item);
     this.setState({ showFollowUpForm: true });
   };
@@ -583,20 +598,15 @@ class CaseList extends Component {
                       title: 'Update case details',
                       onClick: () => this.handleItemEdit(item),
                     }}
+                    followup={{
+                      name: 'Followup Case',
+                      title: 'Followup on case',
+                      onClick: () => this.handleItemFollowup(item),
+                    }}
                     share={{
                       name: 'Share Case',
                       title: 'Share case details with others',
                       onClick: () => this.handleItemShare(item),
-                    }}
-                    archive={{
-                      name: 'Archive Case',
-                      title: 'Remove case from list of active cases',
-                      onClick: () => this.handleItemArchive(item),
-                    }}
-                    followup={{
-                      name: 'Followup Case',
-                      title: 'Followup on case',
-                      onClick: () => this.handleFollowupFormOpen(item),
                     }}
                   />
                 )}
@@ -677,7 +687,7 @@ class CaseList extends Component {
           destroyOnClose
           maskClosable={false}
           className="modal-window-50"
-          afterClose={this.handleAfterCloseNotificationForm}
+          afterClose={this.handleAfterNotificationFormClose}
         >
           <NotificationForm
             recipients={getFocalPeople}
@@ -756,7 +766,7 @@ class CaseList extends Component {
             <CaseDetailsViewHeader
               number={get(caze, 'number', 'N/A')}
               phone={get(caze, 'victim.mobile', 'N/A')}
-              onBack={this.handleCloseItemView}
+              onBack={this.handleItemViewClose}
             />
           }
           placement="right"
@@ -765,7 +775,7 @@ class CaseList extends Component {
           headerStyle={{ padding: 0 }}
           bodyStyle={{ overflow: 'hidden', height: '100%', padding: '15px' }}
           visible={showDetailsView}
-          onClose={this.handleCloseItemView}
+          onClose={this.handleItemViewClose}
           destroyOnClose
         >
           <CaseDetailsViewBody data={caze} />
