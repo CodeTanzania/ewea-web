@@ -72,6 +72,16 @@ const CaseFiltersForm = ({
   onClearCache,
   onCancel,
 }) => {
+  // filter scoped cache keys
+  const cacheKeys = [
+    'filters.victim.area',
+    'filters.victim.gender',
+    'filters.victim.nationality',
+    'filters.victim.occupation',
+    'filters.stage',
+    'filters.severity',
+  ];
+
   // form finish(submit) handler
   const onFinish = (values) => {
     filterCases(values);
@@ -90,7 +100,7 @@ const CaseFiltersForm = ({
     // TODO: fix age filter error
     clearCaseFilters();
     if (isFunction(onClearCache)) {
-      onClearCache();
+      onClearCache(...cacheKeys);
     }
     onCancel();
   };
@@ -122,8 +132,8 @@ const CaseFiltersForm = ({
               }}
               optionValue="_id"
               mode="multiple"
-              onCache={(area) => onCache({ 'victim.area': area })}
-              initialValue={get(cached, 'victim.area', [])}
+              onCache={(area) => onCache({ 'filters.victim.area': area })}
+              initialValue={get(cached, 'filters.victim.area')}
             />
           </Form.Item>
         </Col>
@@ -140,8 +150,8 @@ const CaseFiltersForm = ({
               optionLabel={(gender) => get(gender, 'strings.name.en')}
               optionValue="_id"
               mode="multiple"
-              onCache={(gender) => onCache({ 'victim.gender': gender })}
-              initialValue={get(cached, 'victim.gender')}
+              onCache={(gender) => onCache({ 'filters.victim.gender': gender })}
+              initialValue={get(cached, 'filters.victim.gender')}
             />
           </Form.Item>
         </Col>
@@ -164,9 +174,9 @@ const CaseFiltersForm = ({
               optionValue="_id"
               mode="multiple"
               onCache={(nationality) =>
-                onCache({ 'victim.nationality': nationality })
+                onCache({ 'filters.victim.nationality': nationality })
               }
-              initialValue={get(cached, 'victim.nationality')}
+              initialValue={get(cached, 'filters.victim.nationality')}
             />
           </Form.Item>
         </Col>
@@ -184,9 +194,9 @@ const CaseFiltersForm = ({
               optionValue="_id"
               mode="multiple"
               onCache={(occupation) =>
-                onCache({ 'victim.occupation': occupation })
+                onCache({ 'filters.victim.occupation': occupation })
               }
-              initialValue={get(cached, 'victim.occupation')}
+              initialValue={get(cached, 'filters.victim.occupation')}
             />
           </Form.Item>
         </Col>
@@ -208,8 +218,8 @@ const CaseFiltersForm = ({
               optionLabel={(stage) => get(stage, 'strings.name.en')}
               optionValue="_id"
               mode="multiple"
-              onCache={(stage) => onCache({ stage })}
-              initialValue={get(cached, 'stage')}
+              onCache={(stage) => onCache({ 'filters.stage': stage })}
+              initialValue={get(cached, 'filters.stage')}
             />
           </Form.Item>
         </Col>
@@ -226,8 +236,8 @@ const CaseFiltersForm = ({
               optionLabel={(severity) => get(severity, 'strings.name.en')}
               optionValue="_id"
               mode="multiple"
-              onCache={(severity) => onCache({ severity })}
-              initialValue={get(cached, 'severity')}
+              onCache={(severity) => onCache({ 'filters.severity': severity })}
+              initialValue={get(cached, 'filters.severity')}
             />
           </Form.Item>
         </Col>

@@ -7,6 +7,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import compact from 'lodash/compact';
 import get from 'lodash/get';
 import upperFirst from 'lodash/upperFirst';
+import omit from 'lodash/omit';
 import Topbar from '../../components/Topbar';
 import CaseForm from './Form';
 import CaseFollowupForm from './FollowupForm';
@@ -231,13 +232,22 @@ class CaseList extends Component {
    * @function handleOnClearCache
    * @name handleOnClearCache
    * @description Handle clearing cache
+   * @param {...string} [keys] cache keys to clear
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnClearCache = () => {
-    // TODO: support keys to clear specific cached value
-    this.setState({ cached: null });
+  handleOnClearCache = (...keys) => {
+    // clear specific keys
+    if (keys) {
+      const { cached: previousCached } = this.state;
+      const values = omit({ ...previousCached }, ...keys);
+      this.setState({ cached: values });
+    }
+    // clear all
+    else {
+      this.setState({ cached: null });
+    }
   };
 
   /**
