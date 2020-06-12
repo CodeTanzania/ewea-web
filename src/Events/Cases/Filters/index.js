@@ -97,7 +97,6 @@ const CaseFiltersForm = ({
    * @since 0.1.0
    */
   const onClearFilters = () => {
-    // TODO: fix age filter error
     clearCaseFilters();
     if (isFunction(onClearCache)) {
       onClearCache(...cacheKeys);
