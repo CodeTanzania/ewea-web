@@ -54,8 +54,8 @@ const mobileSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 4, xs: 4 };
 const genderSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
 const ageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
 const nationalitySpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
-const stageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
 const areaSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
+const stageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
 const statusSpan = { xxl: 4, xl: 4, lg: 4, md: 2, sm: 0, xs: 0 };
 const headerLayout = [
   {
@@ -89,12 +89,12 @@ const headerLayout = [
     header: 'Nationality',
     title: 'Victim/Patient Nationality',
   },
+  { ...areaSpan, header: 'Area', title: 'Victim/Patient Residential Area' },
   {
     ...stageSpan,
     header: 'Stage',
     title: 'Case Stage/Classification',
   },
-  { ...areaSpan, header: 'Area', title: 'Victim/Patient Residential Area' },
   {
     ...statusSpan,
     header: 'Status',
@@ -642,15 +642,15 @@ class CaseList extends Component {
                     )}
                   </span>
                 </Col>
-                <Col {...stageSpan}>
-                  {get(item, 'stage.strings.name.en', 'N/A')}
-                </Col>
                 <Col {...areaSpan}>
                   <span title={get(item, 'victim.area.strings.name.en', 'N/A')}>
                     {truncateString(
                       get(item, 'victim.area.strings.name.en', 'N/A')
                     )}
                   </span>
+                </Col>
+                <Col {...stageSpan}>
+                  {get(item, 'stage.strings.name.en', 'N/A')}
                 </Col>
                 <Col {...statusSpan}>
                   <span
