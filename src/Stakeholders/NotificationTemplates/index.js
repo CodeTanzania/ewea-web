@@ -12,12 +12,7 @@ import Topbar from '../../components/Topbar';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import SettingForm from '../../components/SettingForm';
-import {
-  notifyError,
-  notifySuccess,
-  truncateString,
-  timeAgo,
-} from '../../util';
+import { notifyError, notifySuccess, truncateString } from '../../util';
 
 /* http Actions */
 const {
@@ -352,7 +347,7 @@ class NotificationTemplates extends Component {
                     <span className="text-xs">{item.number}</span>
                   </Col>
                   <Col span={6}>
-                    <span className="text-xs">{timeAgo(item.updatedAt)}</span>
+                    <span className="text-xs">{item.code}</span>
                   </Col>
                 </Row>
               }
