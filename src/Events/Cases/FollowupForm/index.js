@@ -135,11 +135,17 @@ const CaseFollowupForm = ({ caze, posting, onCancel }) => {
     );
   };
 
+  // update score & outcome
+  const onValuesChange = (/* changedValues, allValues */) => {
+    // TODO: update scores in UI
+  };
+
   return (
     <Form
       labelCol={labelCol}
       wrapperCol={wrapperCol}
       onFinish={onFinish}
+      onValuesChange={onValuesChange}
       initialValues={{
         ...caze,
         victim: {
