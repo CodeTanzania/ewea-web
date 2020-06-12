@@ -332,7 +332,7 @@ class NotificationTemplates extends Component {
               key={item._id} // eslint-disable-line
               item={item}
               name={item.strings.name.en}
-              avatarBackgroundColor={get(item, 'item.strings.color', undefined)}
+              avatarBackgroundColor={get(item, 'strings.color')}
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
@@ -343,9 +343,6 @@ class NotificationTemplates extends Component {
               }
               secondaryText={
                 <Row>
-                  <Col span={16}>
-                    <span className="text-xs">{item.number}</span>
-                  </Col>
                   <Col span={6}>
                     <span className="text-xs">{item.code}</span>
                   </Col>
