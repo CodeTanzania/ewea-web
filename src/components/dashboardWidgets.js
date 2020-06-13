@@ -1,7 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import toUpper from 'lodash/toUpper';
-import { Affix, Button, Card, Typography, Col, Row, Tooltip } from 'antd';
+import sortBy from 'lodash/sortBy';
+import {
+  Affix,
+  Button,
+  Card,
+  Typography,
+  Col,
+  Row,
+  Tooltip,
+  Divider,
+} from 'antd';
 import {
   ComposableMap,
   ZoomableGroup,
@@ -9,6 +19,9 @@ import {
   Geography,
 } from 'react-simple-maps';
 import { FilterOutlined } from '@ant-design/icons';
+
+import { map } from 'lodash';
+import { assignItemsGridSpan } from '../util';
 
 const { Text } = Typography;
 
@@ -312,4 +325,52 @@ export const FilterFloatingButton = ({ onClick }) => {
 
 FilterFloatingButton.propTypes = {
   onClick: PropTypes.func.isRequired,
+};
+
+/**
+ * @function
+ * @name Grid
+ * @description Render Grid components with provided params
+ * @param {object} props Component object properties
+ * @param {object[]} props.items Items to be rendered on the grid
+ * @param {string} props.header Grid Header
+ * @param {number} props.colPerRow Max items per grid row
+ * @returns {object} Grid components
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const Grid = ({ items, header, colPerRow }) => {
+  const spannedItems = assignItemsGridSpan(sortBy(items, 'weight'), colPerRow);
+  const columns = map(spannedItems, (item) => (
+    <Col xs={24} sm={24} md={12} lg={item.span}>
+      <NumberWidget
+        title={item.value.name.en}
+        value={item.value.total}
+        bottomBorderColor={item.value.color}
+      />
+    </Col>
+  ));
+
+  return (
+    <>
+      {header && (
+        <Divider orientation="left" plain>
+          {header}
+        </Divider>
+      )}
+      <Row>{columns}</Row>
+    </>
+  );
+};
+
+Grid.propTypes = {
+  header: PropTypes.string,
+  items: PropTypes.arrayOf(PropTypes.shape({})),
+  colPerRow: PropTypes.number,
+};
+
+Grid.defaultProps = {
+  header: undefined,
+  colPerRow: 4,
+  items: [],
 };

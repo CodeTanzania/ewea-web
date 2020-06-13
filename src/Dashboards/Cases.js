@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Col, Row, Spin, Table, Button, Modal } from 'antd';
+import { Col, Row, Spin, Table, Button, Modal, Divider } from 'antd';
 import { BarChartOutlined, TableOutlined } from '@ant-design/icons';
 import randomColor from 'randomcolor';
 import get from 'lodash/get';
@@ -12,6 +12,7 @@ import {
   NumberWidget,
   SectionCard,
   FilterFloatingButton,
+  Grid,
 } from '../components/dashboardWidgets';
 import {
   EChart,
@@ -62,8 +63,8 @@ const AGE_GROUPS_COLUMNS = [
  */
 const CasesDashboard = ({ report, loading }) => {
   const [ageGroupsDisplay, setAgeGroupsDisplay] = useState(DISPLAY_TABLE);
-  const [severitiesDisplay, setSeveritiesDisplay] = useState(DISPLAY_TABLE);
-  const [stagesDisplay, setStagesDisplay] = useState(DISPLAY_TABLE);
+  const [severitiesDisplay, setSeveritiesDisplay] = useState(DISPLAY_CHART);
+  const [stagesDisplay, setStagesDisplay] = useState(DISPLAY_CHART);
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
@@ -95,49 +96,27 @@ const CasesDashboard = ({ report, loading }) => {
       <FilterFloatingButton onClick={() => setShowFilters(true)} />
       <Spin spinning={loading}>
         <Row>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
+          <Col xs={24} sm={24} md={24}>
             <NumberWidget
               title="Total"
               value={0}
               bottomBorderColor={randomColor()}
             />
           </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Suspect"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Probable"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Tested"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Treated"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Followup"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
         </Row>
+        <Grid
+          header="Case Stages"
+          items={get(report, 'overall.stages', [])}
+          colPerRow={4}
+        />
+        <Grid
+          header="Case Severities"
+          items={get(report, 'overall.severities', [])}
+          colPerRow={4}
+        />
+        <Divider orientation="left" plain>
+          Overall Breakdown
+        </Divider>
         <Row>
           <Col xs={24} sm={24} md={12}>
             <Row>
