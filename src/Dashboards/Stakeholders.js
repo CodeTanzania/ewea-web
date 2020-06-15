@@ -31,6 +31,16 @@ const titleMap = {
   roles: 'Role',
 };
 
+/**
+ * @function
+ * @name generateColumnsFor
+ * @description Generate columns for tables in stakeholders dashboard
+ * @param {string} name Breakdown name i.e levels, roles e.t.c
+ * @param {object} titles Map of titles for specific tables
+ * @returns {object[]} Table columns
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 const generateColumnsFor = (name, titles) => {
   return [
     {
@@ -56,6 +66,16 @@ const generateColumnsFor = (name, titles) => {
   ];
 };
 
+/**
+ * @function
+ * @name StakeholdersDashboard
+ * @param {object} props Component properties object
+ * @param {object} props.report Report data from API
+ * @param {boolean} props.loading Flag for showing loading data from API
+ * @returns {object} Stakeholders Dashboard
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 const StakeholdersDashboard = ({ report, loading }) => {
   const [showFilters, setShowFilters] = useState(false);
 
