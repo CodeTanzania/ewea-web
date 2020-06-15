@@ -75,12 +75,12 @@ const CasesDashboard = ({ report, loading }) => {
 
   const SEVERITY_DATA = map(get(report, 'overall.severities', []), (item) => ({
     value: item.total,
-    name: item.name.en,
+    name: get(item, 'name.en', 'N/A'),
   }));
 
   const STAGE_DATA = map(get(report, 'overall.stages', []), (item) => ({
     value: item.total,
-    name: item.name.en,
+    name: get(item, 'name.en', 'N/A'),
   }));
 
   const AGE_GROUPS_DATA = map(get(report, 'overall.ageGroups', []), (item) => ({
@@ -96,7 +96,7 @@ const CasesDashboard = ({ report, loading }) => {
           <Col xs={24} sm={24} md={24}>
             <NumberWidget
               title="Total"
-              value={0}
+              value={get(report, 'overview.total', 0)}
               bottomBorderColor={randomColor()}
             />
           </Col>

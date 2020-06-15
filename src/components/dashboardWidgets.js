@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import toUpper from 'lodash/toUpper';
 import sortBy from 'lodash/sortBy';
+import get from 'lodash/get';
+import randomColor from 'randomcolor';
 import {
   Affix,
   Button,
@@ -344,9 +346,9 @@ export const Grid = ({ items, header, colPerRow }) => {
   const columns = map(spannedItems, (item) => (
     <Col xs={24} sm={24} md={12} lg={item.span}>
       <NumberWidget
-        title={item.value.name.en}
-        value={item.value.total}
-        bottomBorderColor={item.value.color}
+        title={get(item, 'value.name.en', 'N/A')}
+        value={get(item, 'value.total', 0)}
+        bottomBorderColor={get(item, 'value.color') || randomColor()}
       />
     </Col>
   ));
