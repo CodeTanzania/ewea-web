@@ -309,20 +309,20 @@ class EventGroups extends Component {
               }
               actions={[
                 {
-                  name: 'Edit Event Action',
-                  title: 'Update Event Action Details',
+                  name: 'Edit Event Group',
+                  title: 'Update Event Group Details',
                   onClick: () => this.handleEdit(item),
                   icon: 'edit',
                 },
                 {
-                  name: 'Share Event Action',
-                  title: 'Share Event Action details with others',
+                  name: 'Share Event Group',
+                  title: 'Share Event Group details with others',
                   onClick: () => this.handleShare(item),
                   icon: 'share',
                 },
                 {
-                  name: 'Archive Event Action',
-                  title: 'Remove Event Action from list of active focal People',
+                  name: 'Archive Event Group',
+                  title: 'Remove Event Group from list of active focal people',
                   onClick: () => this.showArchiveConfirm(item),
                   icon: 'archive',
                 },
