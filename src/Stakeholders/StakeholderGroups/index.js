@@ -5,13 +5,12 @@ import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
-
+import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import SettingForm from '../../components/SettingForm';
 import NotificationForm from '../../components/NotificationForm';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 import { notifyError, notifySuccess, truncateString } from '../../util';
 
 /* http actions */
@@ -297,26 +296,37 @@ class PartyGroups extends Component {
               avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Stakeholder Group',
-                    title: 'Update Stakeholder Group Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Stakeholder Group',
-                    title: 'Share Stakeholder Group details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Stakeholder Group',
-                    title:
-                      'Remove Stakeholder Group from list of active party groups',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {truncateString(get(item, 'strings.name.en', 'N/A'), 45)}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.abbreviation.en', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Stakeholder Group',
+                  title: 'Update Stakeholder Group Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Stakeholder Group',
+                  title: 'Share Stakeholder Group details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Stakeholder Group',
+                  title:
+                    'Remove Stakeholder Group from list of active focal people',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>
