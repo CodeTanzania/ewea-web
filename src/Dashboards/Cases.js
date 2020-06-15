@@ -27,27 +27,24 @@ const { getCasesReport } = reduxActions;
 const DISPLAY_TABLE = 'TABLE';
 const DISPLAY_CHART = 'CHART';
 const OCCUPATION_COLUMNS = [
-  { title: 'Occupation', dataIndex: ['name', 'en'] },
-  { title: 'Total', dataIndex: 'total' },
+  { title: 'Occupation', dataIndex: ['name', 'en'], key: 'name' },
+  { title: 'Total', dataIndex: 'total', key: 'total' },
 ];
-
 const STAGE_COLUMNS = [
-  { title: 'Stage', dataIndex: 'name' },
-  { title: 'Total', dataIndex: 'value' },
+  { title: 'Stage', dataIndex: 'name', key: 'name' },
+  { title: 'Total', dataIndex: 'value', key: 'total' },
 ];
 const SEVERITY_COLUMNS = [
-  { title: 'Severity', dataIndex: 'name' },
-  { title: 'Total', dataIndex: 'value' },
+  { title: 'Severity', dataIndex: 'name', key: 'name' },
+  { title: 'Total', dataIndex: 'value', key: 'total' },
 ];
-
 const NATIONALITY_COLUMNS = [
-  { title: 'Nationality', dataIndex: ['name', 'en'] },
-  { title: 'Total', dataIndex: 'total' },
+  { title: 'Nationality', dataIndex: ['name', 'en'], key: 'name' },
+  { title: 'Total', dataIndex: 'total', key: 'total' },
 ];
-
 const AGE_GROUPS_COLUMNS = [
-  { title: 'Age Group', dataIndex: 'name' },
-  { title: 'Total', dataIndex: 'value' },
+  { title: 'Age Group', dataIndex: 'name', key: 'name' },
+  { title: 'Total', dataIndex: 'value', key: 'total' },
 ];
 
 /**

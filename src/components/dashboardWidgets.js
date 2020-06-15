@@ -286,7 +286,7 @@ export const MapWidget = ({
 MapWidget.propTypes = {
   scale: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  shape: PropTypes.string.isRequired,
+  shape: PropTypes.shape(PropTypes.any).isRequired,
   center: PropTypes.arrayOf(PropTypes.number).isRequired,
   getGeographyAttributes: PropTypes.func.isRequired,
 };

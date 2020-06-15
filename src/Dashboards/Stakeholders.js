@@ -36,18 +36,22 @@ const generateColumnsFor = (name, titles) => {
     {
       title: titles[name],
       dataIndex: ['name', 'en'],
+      key: 'name',
     },
     {
       title: 'Total',
       dataIndex: 'total',
+      key: 'total',
     },
     {
       title: 'Agencies',
       dataIndex: 'agency',
+      key: 'agency',
     },
     {
       title: 'Focal People',
       dataIndex: 'focal',
+      key: 'focal',
     },
   ];
 };
