@@ -8,11 +8,11 @@ import get from 'lodash/get';
 import map from 'lodash/map';
 
 import ReportFilters from '../components/ReportFilters';
+import Grid from '../components/Grid';
 import {
   NumberWidget,
   SectionCard,
   FilterFloatingButton,
-  Grid,
 } from '../components/dashboardWidgets';
 import {
   EChart,
@@ -105,11 +105,25 @@ const CasesDashboard = ({ report, loading }) => {
           header="Case Stages"
           items={get(report, 'overall.stages', [])}
           colPerRow={4}
+          renderItem={(item) => (
+            <NumberWidget
+              title={get(item, 'value.name.en', 'N/A')}
+              value={get(item, 'value.total', 0)}
+              bottomBorderColor={get(item, 'value.color') || randomColor()}
+            />
+          )}
         />
         <Grid
           header="Case Severities"
           items={get(report, 'overall.severities', [])}
           colPerRow={4}
+          renderItem={(item) => (
+            <NumberWidget
+              title={get(item, 'value.name.en', 'N/A')}
+              value={get(item, 'value.total', 0)}
+              bottomBorderColor={get(item, 'value.color') || randomColor()}
+            />
+          )}
         />
         <Divider orientation="left" plain>
           Overall Breakdown

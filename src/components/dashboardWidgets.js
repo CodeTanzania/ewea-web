@@ -1,19 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import toUpper from 'lodash/toUpper';
-import sortBy from 'lodash/sortBy';
-import get from 'lodash/get';
-import randomColor from 'randomcolor';
-import {
-  Affix,
-  Button,
-  Card,
-  Typography,
-  Col,
-  Row,
-  Tooltip,
-  Divider,
-} from 'antd';
+import { Affix, Button, Card, Typography, Col, Row, Tooltip } from 'antd';
 import {
   ComposableMap,
   ZoomableGroup,
@@ -22,11 +10,8 @@ import {
 } from 'react-simple-maps';
 import { FilterOutlined } from '@ant-design/icons';
 
-import { map } from 'lodash';
-import { assignItemsGridSpan } from '../util';
-
+/* constants */
 const { Text } = Typography;
-
 export const PRIMARY_COLOR = '#1890FF';
 export const WARNING_COLOR = '#FAAD14';
 export const DANGER_COLOR = '#FF4D4F';
@@ -327,52 +312,4 @@ export const FilterFloatingButton = ({ onClick }) => {
 
 FilterFloatingButton.propTypes = {
   onClick: PropTypes.func.isRequired,
-};
-
-/**
- * @function
- * @name Grid
- * @description Render Grid components with provided params
- * @param {object} props Component object properties
- * @param {object[]} props.items Items to be rendered on the grid
- * @param {string} props.header Grid Header
- * @param {number} props.colPerRow Max items per grid row
- * @returns {object} Grid components
- * @version 0.1.0
- * @since 0.1.0
- */
-export const Grid = ({ items, header, colPerRow }) => {
-  const spannedItems = assignItemsGridSpan(sortBy(items, 'weight'), colPerRow);
-  const columns = map(spannedItems, (item) => (
-    <Col xs={24} sm={24} md={12} lg={item.span}>
-      <NumberWidget
-        title={get(item, 'value.name.en', 'N/A')}
-        value={get(item, 'value.total', 0)}
-        bottomBorderColor={get(item, 'value.color') || randomColor()}
-      />
-    </Col>
-  ));
-
-  return (
-    <>
-      {header && (
-        <Divider orientation="left" plain>
-          {header}
-        </Divider>
-      )}
-      <Row>{columns}</Row>
-    </>
-  );
-};
-
-Grid.propTypes = {
-  header: PropTypes.string,
-  items: PropTypes.arrayOf(PropTypes.shape({})),
-  colPerRow: PropTypes.number,
-};
-
-Grid.defaultProps = {
-  header: undefined,
-  colPerRow: 4,
-  items: [],
 };
