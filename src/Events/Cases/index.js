@@ -595,7 +595,7 @@ class CaseList extends Component {
                   {
                     name: 'Followup Case',
                     title: 'Followup on case',
-                    onClick: () => this.handleFollowupFormOpen(item),
+                    onClick: () => this.handleItemFollowup(item),
                     icon: <ClockCircleOutlined />,
                   },
                   {
@@ -603,12 +603,6 @@ class CaseList extends Component {
                     title: 'Share case details with others',
                     onClick: () => this.handleItemShare(item),
                     icon: 'share',
-                  },
-                  {
-                    name: 'Archive Case',
-                    title: 'Remove case from list of active cases',
-                    onClick: () => this.handleItemArchive(item),
-                    icon: 'archive',
                   },
                 ]}
               >

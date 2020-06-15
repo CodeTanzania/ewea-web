@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Col } from 'antd';
+import { Modal, Col, Row } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import get from 'lodash/get';
 import isArray from 'lodash/isArray';
 
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 import SettingForm from '../../components/SettingForm';
-import { notifyError, notifySuccess } from '../../util';
+import { notifyError, notifySuccess, truncateString } from '../../util';
 
 /* http Actions */
 const {
@@ -332,30 +332,43 @@ class NotificationTemplates extends Component {
               key={item._id} // eslint-disable-line
               item={item}
               name={item.strings.name.en}
-              avatarBackgroundColor={item.strings.color}
+              avatarBackgroundColor={get(item, 'strings.color')}
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Notification Template',
-                    title: 'Update Notification Template Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Notification Template',
-                    title: 'Share Notification Template details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Notification Template',
-                    title:
-                      'Remove Notification Template from list of active notification templates',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {truncateString(item.description, 50)}
+                </span>
+              }
+              secondaryText={
+                <Row>
+                  <Col span={6}>
+                    <span className="text-xs">{item.code}</span>
+                  </Col>
+                </Row>
+              }
+              actions={[
+                {
+                  name: 'Edit Notification Template',
+                  title: 'Update Notification Template Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Notification Template',
+                  title: 'Share Notification Template details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Notification Template',
+                  title:
+                    'Remove Notification Template from list of active notification templates',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>
