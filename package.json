@@ -28,12 +28,12 @@
     "@ant-design/icons": "^4.2.1",
     "@codetanzania/ewea-api-client": "^0.24.0",
     "@codetanzania/ewea-api-states": "^0.30.0",
-    "@lykmapipo/common": "^0.34.2",
-    "antd": "^4.3.1",
+    "@lykmapipo/common": "^0.34.3",
+    "antd": "^4.3.4",
     "axios": "^0.19.2",
     "echarts": "^4.8.0",
     "echarts-for-react": "^2.0.16",
-    "history": "^4.10.1",
+    "history": "^5.0.0",
     "inflection": "^1.12.0",
     "lodash": "^4.17.15",
     "moment": "^2.26.0",
@@ -44,11 +44,11 @@
     "react-color": "^2.18.1",
     "react-dom": "^16.13.1",
     "react-ga": "^3.0.0",
-    "react-map-gl": "^5.2.5",
+    "react-map-gl": "^5.2.7",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-simple-maps": "^2.1.2",
-    "react-to-print": "^2.8.0"
+    "react-to-print": "^2.9.0"
   },
   "eslintConfig": {
     "extends": "react-app"
