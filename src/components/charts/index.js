@@ -45,9 +45,13 @@ export const generateDonutChartOption = (chartName, data) => {
         type: 'pie',
         radius: ['40%', '60%'],
         avoidLabelOverlap: false,
+        selectMode: 'single',
         label: {
-          show: true,
-          position: 'outside',
+          normal: {
+            show: true,
+            position: 'outside',
+            formatter: ['{b}', '({c})'].join('\n'), // configurable
+          },
         },
         emphasis: {
           label: {
