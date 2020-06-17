@@ -327,7 +327,7 @@ class EventQuestions extends Component {
               <Col {...nameSpan}>{item.strings.name.en}</Col>
               <Col {...codeSpan}>{item.strings.code}</Col>
               <Col {...indicatorSpan}>
-                {get(item, 'item.relations.indicator.strings.name.en', 'N/A')}
+                {get(item, 'relations.indicator.strings.name.en', 'N/A')}
               </Col>
               <Col {...descriptionSpan}>{item.strings.description.en}</Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
