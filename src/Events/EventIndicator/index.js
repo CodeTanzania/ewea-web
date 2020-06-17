@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
-import get from 'lodash/lodash';
+import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import EventIndicatorForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
