@@ -260,7 +260,7 @@ const CasesDashboard = ({ report, loading }) => {
                         'Cases',
                         'Age Groups'
                       )}
-                      style={{ height: '800px' }}
+                      style={{ height: '850px' }}
                     />
                   )}
                 </SectionCard>
