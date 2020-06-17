@@ -312,7 +312,7 @@ class EventTopics extends Component {
                   icon: 'edit',
                 },
                 {
-                  name: 'Share Event Type',
+                  name: 'Share Event Topics',
                   title: 'Share Event Topics details with others',
                   onClick: () => this.handleShare(item),
                   icon: 'share',
