@@ -9,7 +9,6 @@ import React, { Component } from 'react';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import SettingForm from '../../components/SettingForm';
-import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
@@ -316,26 +315,37 @@ class EventStatuses extends Component {
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Event Status',
-                    title: 'Update Event Status Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Event Status',
-                    title: 'Share Event Status details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Event Status',
-                    title:
-                      'Remove Event Status from list of active event statuses',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {get(item, 'strings.name.en', 'N/A')}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.description.en', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Event Statuses',
+                  title: 'Update Event Statuses Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Event Statuses',
+                  title: 'Share Event Statuses details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Event Statuses',
+                  title:
+                    'Remove Event Statuses from list of active event statuses',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable-next-line */}
               <Col {...nameSpan}>{get(item, 'strings.name.en', 'N/A')} </Col>
