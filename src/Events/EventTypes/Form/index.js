@@ -158,7 +158,7 @@ EventTypeForm.propTypes = {
     relations: PropTypes.shape({
       group: PropTypes.string,
     }),
-  }).isRequired,
+  }),
   isEditForm: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
@@ -166,6 +166,10 @@ EventTypeForm.propTypes = {
     getFieldDecorator: PropTypes.func,
     validateFieldsAndScroll: PropTypes.func,
   }).isRequired,
+};
+
+EventTypeForm.defaultProps = {
+  eventType: null,
 };
 
 export default EventTypeForm;

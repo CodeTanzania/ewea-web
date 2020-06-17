@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import get from 'lodash/get';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Row, Col, Table, Spin, Modal } from 'antd';
 import {
@@ -8,6 +7,7 @@ import {
   AlertOutlined,
   StopOutlined,
 } from '@ant-design/icons';
+import get from 'lodash/get';
 
 import ReportFilters from '../components/ReportFilters';
 import {
@@ -19,25 +19,39 @@ import {
 } from '../components/dashboardWidgets';
 import { FilterFloatingButton } from '../components/FloatingButton';
 
+/* redux actions */
 const { getEventsReport } = reduxActions;
-const titleMap = {
-  areas: 'Area',
-  certainties: 'Certainty',
-  groups: 'Group',
-  levels: 'Level',
-  responses: 'Response',
-  roles: 'Role',
-  severities: 'Severity',
-  statuses: 'Status',
-  types: 'Type',
-  urgencies: 'Urgency',
-};
 
-const generateColumnsFor = (name, titles) => {
+/* constants */
+
+/**
+ * @function
+ * @name generateColumnsFor
+ * @description Generate table columns name
+ * @param {string} resource Resource name for displaying data
+ * @returns {object[]} Columns array for table
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const generateColumnsFor = (resource) => {
+  const titleMap = {
+    areas: 'Area',
+    certainties: 'Certainty',
+    groups: 'Group',
+    levels: 'Level',
+    responses: 'Response',
+    roles: 'Role',
+    severities: 'Severity',
+    statuses: 'Status',
+    types: 'Type',
+    urgencies: 'Urgency',
+  };
+
   return [
     {
-      title: titles[name],
+      title: titleMap[resource],
       dataIndex: ['name', 'en'],
+      key: titleMap[resource],
     },
     {
       title: 'Total',
@@ -121,7 +135,7 @@ const EventsOverviewDashboard = ({ report, loading }) => {
                 <SectionCard title="Overall - Event Types Breakdown">
                   <Table
                     dataSource={get(report, 'overall.types', [])}
-                    columns={generateColumnsFor('types', titleMap)}
+                    columns={generateColumnsFor('types')}
                     pagination={false}
                   />
                 </SectionCard>
@@ -130,7 +144,7 @@ const EventsOverviewDashboard = ({ report, loading }) => {
                 <SectionCard title="Overall - Event Levels Breakdown">
                   <Table
                     dataSource={get(report, 'overall.levels', [])}
-                    columns={generateColumnsFor('levels', titleMap)}
+                    columns={generateColumnsFor('levels')}
                     pagination={false}
                   />
                 </SectionCard>
@@ -139,7 +153,7 @@ const EventsOverviewDashboard = ({ report, loading }) => {
                 <SectionCard title="Overall - Event Urgencies Breakdown">
                   <Table
                     dataSource={get(report, 'overall.urgencies', [])}
-                    columns={generateColumnsFor('urgencies', titleMap)}
+                    columns={generateColumnsFor('urgencies')}
                     pagination={false}
                   />
                 </SectionCard>
@@ -152,7 +166,7 @@ const EventsOverviewDashboard = ({ report, loading }) => {
                 <SectionCard title="Overall - Event Groups Breakdown">
                   <Table
                     dataSource={get(report, 'overall.groups', [])}
-                    columns={generateColumnsFor('groups', titleMap)}
+                    columns={generateColumnsFor('groups')}
                     pagination={false}
                   />
                 </SectionCard>
@@ -161,7 +175,7 @@ const EventsOverviewDashboard = ({ report, loading }) => {
                 <SectionCard title="Overall - Event Severities Breakdown">
                   <Table
                     dataSource={get(report, 'overall.severities', [])}
-                    columns={generateColumnsFor('severities', titleMap)}
+                    columns={generateColumnsFor('severities')}
                     pagination={false}
                   />
                 </SectionCard>
@@ -170,7 +184,7 @@ const EventsOverviewDashboard = ({ report, loading }) => {
                 <SectionCard title="Overall - Event Certainty Breakdown">
                   <Table
                     dataSource={get(report, 'overall.certainties', [])}
-                    columns={generateColumnsFor('certainties', titleMap)}
+                    columns={generateColumnsFor('certainties')}
                     pagination={false}
                   />
                 </SectionCard>
@@ -179,7 +193,7 @@ const EventsOverviewDashboard = ({ report, loading }) => {
                 <SectionCard title="Overall - Event Responses Breakdown">
                   <Table
                     dataSource={get(report, 'overall.responses', [])}
-                    columns={generateColumnsFor('responses', titleMap)}
+                    columns={generateColumnsFor('responses')}
                     pagination={false}
                   />
                 </SectionCard>

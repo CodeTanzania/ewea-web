@@ -294,7 +294,7 @@ export const FilterFloatingButton = ({ onClick }) => {
       style={{
         position: 'absolute',
         bottom: '20px',
-        right: '25px',
+        right: '35px',
         zIndex: 1000,
       }}
     >
@@ -304,6 +304,11 @@ export const FilterFloatingButton = ({ onClick }) => {
         title="Click to filter"
         icon={<FilterOutlined />}
         size="large"
+        style={{
+          height: '60px',
+          width: '60px',
+          fontSize: '25px',
+        }}
         onClick={onClick}
       />
     </Affix>
