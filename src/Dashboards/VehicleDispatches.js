@@ -29,49 +29,57 @@ const { getDispatchesReport } = reduxActions;
 
 /* constants */
 const DISPATCHES_PER_EVENT_TYPE_COLUMNS = [
-  { title: 'Event', dataIndex: ['name', 'en'] },
-  { title: 'Total', dataIndex: 'total' },
+  { title: 'Event', dataIndex: ['name', 'en'], key: 'name' },
+  { title: 'Total', dataIndex: 'total', key: 'total' },
   {
     title: 'Waiting',
     dataIndex: 'waiting',
+    key: 'waiting',
   },
   {
     title: 'Dispatched',
     dataIndex: 'dispatched',
+    key: 'dispatched',
   },
   {
     title: 'Completed',
     dataIndex: 'resolved',
+    key: 'resolved',
   },
   {
     title: 'Canceled',
     dataIndex: 'canceled',
+    key: 'canceled',
   },
 ];
 const columns = [
-  { title: 'Type', dataIndex: 'type' },
-  { title: 'Total', dataIndex: 'total' },
+  { title: 'Type', dataIndex: 'type', key: 'type' },
+  { title: 'Total', dataIndex: 'total', key: 'total' },
   {
     title: 'Waiting',
     dataIndex: 'waiting',
+    key: 'waiting',
   },
   {
     title: 'Dispatched',
     dataIndex: 'dispatched',
+    key: 'dispatched',
   },
   {
     title: 'Completed',
     dataIndex: 'completed',
+    key: 'completed',
   },
   {
     title: 'Canceled',
-    dataIndex: 'cancelled',
+    dataIndex: 'canceled',
+    key: 'canceled',
   },
 ];
 const vehicleStatusColumns = [
-  { title: 'Vehicle', dataIndex: 'vehicle' },
-  { title: 'Number', dataIndex: 'number' },
-  { title: 'Status', dataIndex: 'status' },
+  { title: 'Vehicle', dataIndex: 'vehicle', key: 'vehicle' },
+  { title: 'Number', dataIndex: 'number', key: 'number' },
+  { title: 'Status', dataIndex: 'status', key: 'status' },
 ];
 const vehicleData = [
   {

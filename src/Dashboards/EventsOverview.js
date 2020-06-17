@@ -22,8 +22,6 @@ import { FilterFloatingButton } from '../components/FloatingButton';
 /* redux actions */
 const { getEventsReport } = reduxActions;
 
-/* constants */
-
 /**
  * @function
  * @name generateColumnsFor
@@ -51,19 +49,22 @@ const generateColumnsFor = (resource) => {
     {
       title: titleMap[resource],
       dataIndex: ['name', 'en'],
-      key: titleMap[resource],
+      key: 'name',
     },
     {
       title: 'Total',
       dataIndex: 'total',
+      key: 'total',
     },
     {
       title: 'Active',
       dataIndex: 'active',
+      key: 'active',
     },
     {
       title: 'Ended',
       dataIndex: 'ended',
+      key: 'ended',
     },
   ];
 };

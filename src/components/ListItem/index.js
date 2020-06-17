@@ -214,8 +214,12 @@ ListItem.propTypes = {
   onSelectItem: PropTypes.func.isRequired,
   onDeselectItem: PropTypes.func.isRequired,
   renderActions: PropTypes.func,
-  title: PropTypes.oneOf([PropTypes.string, PropTypes.node]),
-  secondaryText: PropTypes.oneOf([PropTypes.string, PropTypes.node]),
+  title: PropTypes.oneOf([PropTypes.string, PropTypes.node, PropTypes.element]),
+  secondaryText: PropTypes.oneOf([
+    PropTypes.string,
+    PropTypes.node,
+    PropTypes.element,
+  ]),
   children: PropTypes.node.isRequired,
   actions: PropTypes.arrayOf(
     PropTypes.shape({

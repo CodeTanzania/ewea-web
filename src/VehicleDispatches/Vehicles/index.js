@@ -13,6 +13,16 @@ import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 
+/* http actions */
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getAgencies,
+  getRoles,
+  getVehiclesExportUrl,
+} = httpActions;
+/* redux actions */
 const {
   getVehicles,
   openVehicleForm,
@@ -23,18 +33,9 @@ const {
   refreshVehicles,
   deleteVehicle,
 } = reduxActions;
-const { confirm } = Modal;
-
-const {
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getAgencies,
-  getRoles,
-  getVehiclesExportUrl,
-} = httpActions;
 
 /* constants */
+const { confirm } = Modal;
 const typeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 8, xs: 7 };
 const plateNumberSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 8, xs: 7 };
 const statusSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 0 };

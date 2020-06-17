@@ -26,8 +26,6 @@ import DarDistricts from '../assets/maps/dar.districts.json';
 /* redux actions */
 const { getPartiesReport } = reduxActions;
 
-/* constants */
-
 /**
  * @function
  * @name generateColumnsFor
@@ -49,18 +47,22 @@ const generateColumnsFor = (name) => {
     {
       title: titles[name],
       dataIndex: ['name', 'en'],
+      key: 'name',
     },
     {
       title: 'Total',
       dataIndex: 'total',
+      key: 'total',
     },
     {
       title: 'Agencies',
       dataIndex: 'agency',
+      key: 'agency',
     },
     {
       title: 'Focal People',
       dataIndex: 'focal',
+      key: 'focal',
     },
   ];
 };
