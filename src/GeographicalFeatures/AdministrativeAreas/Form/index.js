@@ -130,7 +130,7 @@ const AdministrativeAreaForm = ({
       {/* start: name & code */}
       <Row justify="space-between">
         {/* start:name */}
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Name"
             title="Administrative area name e.g Dar es Salaam"
@@ -147,7 +147,7 @@ const AdministrativeAreaForm = ({
         </Col>
         {/* end:name */}
         {/* start:code */}
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Code"
             title="Administrative area code e.g DSM"
@@ -163,7 +163,7 @@ const AdministrativeAreaForm = ({
       {/* start: level & parent */}
       <Row justify="space-between">
         {/* start:level */}
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Level"
             title="Administrative level e.g Region"
@@ -191,7 +191,7 @@ const AdministrativeAreaForm = ({
         </Col>
         {/* end:level */}
         {/* start:parent */}
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Parent"
             title="Administrative area parent e.g Tanzania"

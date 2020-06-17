@@ -1,14 +1,13 @@
 import { message } from 'antd';
 import moment from 'moment';
+import { isMobile } from 'react-device-detect';
 import isEmpty from 'lodash/isEmpty';
-import isFunction from 'lodash/isFunction';
-import forEach from 'lodash/forEach';
 import get from 'lodash/get';
 import map from 'lodash/map';
-import take from 'lodash/take';
-import takeRight from 'lodash/takeRight';
 import merge from 'lodash/merge';
 import startCase from 'lodash/startCase';
+import isFunction from 'lodash/isFunction';
+import forEach from 'lodash/forEach';
 
 /**
  * @function
@@ -302,6 +301,19 @@ export const generateVehicleDispatchShareableDetails = (vehicleDispatch) => {
 };
 
 /**
+ * @function
+ * @name isMobileScreen
+ * @description Determine if the screen is small based on breakpoints
+ * @param {object} screens Screens breakpoints object from antd Grid
+ * @returns {boolean} True if screen is < 768px
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const isMobileScreen = (screens) => {
+  return ((screens.xs || screens.sm) && !screens.md) || isMobile;
+};
+
+/**
  * @function shareDetailsFor
  * @name shareDetailsFor
  * @description Derive share details for an item
@@ -342,61 +354,4 @@ export const shareDetailsFor = (items, fields) => {
 
   // return
   return details;
-};
-
-/**
- * @function
- * @name normalizeItemsSpan
- * @description Map items with their span number on grid layout
- * @param {object[]} items items to be mapped
- * @param {number} span Number the item should span on grid
- * @returns {object[]} Mapped items with span number
- * @version 0.1.0
- * @since 0.1.0
- */
-const normalizeItemsSpan = (items, span) =>
-  map(items, (item) => ({
-    value: item,
-    span,
-  }));
-
-/**
- * @function
- * @name generateItemsGridSpan
- * @description Generate grid span for items to be rendered
- * @param {object[]} items Items to be rendered in a grid
- * @param {number} maxColPerRow Max number of items(cols) in a row
- * @returns {object[]} Items with span property
- * @version 0.1.0
- * @since 0.1.0
- */
-export const assignItemsGridSpan = (items = [], maxColPerRow) => {
-  const GRID_MAX_SPAN = 24;
-  const itemsCount = items.length;
-  const normalSpanCols = Math.floor(itemsCount / maxColPerRow) * maxColPerRow;
-  const remainder = itemsCount % maxColPerRow;
-  const gridRemainder = GRID_MAX_SPAN % itemsCount;
-
-  if (itemsCount > maxColPerRow) {
-    return [
-      ...normalizeItemsSpan(
-        take(items, normalSpanCols),
-        GRID_MAX_SPAN / maxColPerRow
-      ),
-      ...normalizeItemsSpan(
-        takeRight(items, remainder),
-        GRID_MAX_SPAN / remainder
-      ),
-    ];
-  }
-  if (itemsCount < maxColPerRow && gridRemainder === 0) {
-    return [...normalizeItemsSpan(items, GRID_MAX_SPAN / itemsCount)];
-  }
-  if (itemsCount < maxColPerRow && gridRemainder !== 0) {
-    return [
-      ...normalizeItemsSpan(take(items, itemsCount - 1), gridRemainder),
-      ...normalizeItemsSpan(takeRight(items), gridRemainder * 2),
-    ];
-  }
-  return [...normalizeItemsSpan(items, 24 / maxColPerRow)];
 };

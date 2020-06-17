@@ -12,7 +12,6 @@ import SettingForm from '../../components/SettingForm';
 import NotificationForm from '../../components/NotificationForm';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 import { notifyError, notifySuccess, truncateString } from '../../util';
 
 /* http actions */
@@ -262,15 +261,13 @@ class EventGroups extends Component {
             onChange: this.searchEventGroups,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Group',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Group',
-              onClick: this.openEventGroupsForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Group',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Group',
+            onClick: this.openEventGroupsForm,
+          }}
         />
         {/* end Topbar */}
 
@@ -300,26 +297,37 @@ class EventGroups extends Component {
               avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Event Group',
-                    title: 'Update Event Group Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Event Group',
-                    title: 'Share Event Group details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Event Group',
-                    title:
-                      'Remove Event Group from list of active event groups',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {truncateString(get(item, 'strings.name.en', 'N/A'), 45)}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.description.en', 'N/A')}{' '}
+                  {truncateString(get(item, 'strings.description.en', ''), 20)}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Event Group',
+                  title: 'Update Event Group Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Event Group',
+                  title: 'Share Event Group details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Event Group',
+                  title: 'Remove Event Group from list of active focal people',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{get(item, 'strings.name.en', 'N/A')}</Col>

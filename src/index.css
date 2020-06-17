@@ -119,6 +119,16 @@ code {
     monospace;
 }
 
+/* mobile specific: mainly for mobile based text component */
+.text-sm {
+  font-size: 1em;
+}
+
+.text-xs {
+  font-size: 0.8em;
+}
+/* end: mobile specific */
+
 .actionButton {
   border: none;
   box-shadow: none;

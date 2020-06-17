@@ -4,13 +4,13 @@ import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import get from 'lodash/get';
 import isArray from 'lodash/isArray';
 
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 import SettingForm from '../../components/SettingForm';
 import { notifyError, notifySuccess } from '../../util';
 
@@ -299,15 +299,13 @@ class NotificationTemplates extends Component {
             onChange: this.searchNotificationTemplates,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Template',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Notification Template',
-              onClick: this.openNotificationTemplateForm,
-            },
-          ]}
+          action={{
+            label: 'New Template',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Notification Template',
+            onClick: this.openNotificationTemplateForm,
+          }}
         />
         {/* end Topbar */}
 
@@ -334,30 +332,41 @@ class NotificationTemplates extends Component {
               key={item._id} // eslint-disable-line
               item={item}
               name={item.strings.name.en}
-              avatarBackgroundColor={item.strings.color}
+              avatarBackgroundColor={get(item, 'strings.color')}
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Notification Template',
-                    title: 'Update Notification Template Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Notification Template',
-                    title: 'Share Notification Template details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Notification Template',
-                    title:
-                      'Remove Notification Template from list of active notification templates',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {get(item, 'strings.name.en', 'N/A')}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.description.en', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Notification Template',
+                  title: 'Update Notification Template Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Notification Template',
+                  title: 'Share Notification Template details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Notification Template',
+                  title:
+                    'Remove Notification Template from list of active notification templates',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>

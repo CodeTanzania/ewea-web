@@ -5,12 +5,12 @@ import { PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 import NotificationForm from '../../components/NotificationForm';
-import { notifyError, notifySuccess } from '../../util';
+import { notifyError, notifySuccess, truncateString } from '../../util';
 import RoleForm from './Form';
 import AssignPermissionForm from './AssignPermissionsForm';
 
@@ -319,15 +319,13 @@ class Roles extends Component {
             onChange: this.searchRoles,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Role',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Role',
-              onClick: this.openPartyRolesForm,
-            },
-          ]}
+          action={{
+            label: 'New Role',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Role',
+            onClick: this.openPartyRolesForm,
+          }}
         />
         {/* end Topbar */}
 
@@ -359,30 +357,37 @@ class Roles extends Component {
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Role',
-                    title: 'Update role Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Role',
-                    title: 'Share role details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Role',
-                    title: 'Remove role from list of active role',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                  assignPermissions={{
-                    name: 'Edit Permissions',
-                    title: 'Assign or remove permissions from the active role',
-                    onClick: () => this.handleAssignPermissions(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {truncateString(get(item, 'strings.name.en', 'N/A'), 45)}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.abbreviation.en', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Stakeholder Role',
+                  title: 'Update Stakeholder Role Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Stakeholder Role',
+                  title: 'Share Stakeholder Role details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Stakeholder Role',
+                  title:
+                    'Remove Stakeholder Role from list of active focal people',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>

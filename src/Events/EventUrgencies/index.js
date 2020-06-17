@@ -10,7 +10,6 @@ import get from 'lodash/get';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import SettingForm from '../../components/SettingForm';
-import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
@@ -280,15 +279,13 @@ class EventUrgency extends Component {
             onChange: this.searchEventUrgencies,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Urgency',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Urgency',
-              onClick: this.openEventUrgencyForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Urgency',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Urgency',
+            onClick: this.openEventUrgencyForm,
+          }}
         />
         {/* end Topbar */}
 
@@ -319,26 +316,37 @@ class EventUrgency extends Component {
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Event Urgency',
-                    title: 'Update Event Urgency Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Event Urgency',
-                    title: 'Share Event Urgency details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Event Urgency',
-                    title:
-                      'Remove Event Urgency from list of active focal People',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {get(item, 'strings.name.en', 'N/A')}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.description.en', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Event Urgencies',
+                  title: 'Update Event Urgencies Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Event Urgencies',
+                  title: 'Share Event Urgencies details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Event Urgencies',
+                  title:
+                    'Remove Event Urgencies from list of active event urgencies',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable-next-line */}
               <Col {...nameSpan}>{get(item, 'strings.name.en', 'N/A')} </Col>

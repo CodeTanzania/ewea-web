@@ -21,65 +21,57 @@ import {
   SUCCESS_COLOR,
   WARNING_COLOR,
   DANGER_COLOR,
-  FilterFloatingButton,
 } from '../components/dashboardWidgets';
+import { FilterFloatingButton } from '../components/FloatingButton';
 
 /* redux actions */
 const { getDispatchesReport } = reduxActions;
 
 /* constants */
 const DISPATCHES_PER_EVENT_TYPE_COLUMNS = [
-  { title: 'Event', dataIndex: ['name', 'en'], key: 'name' },
-  { title: 'Total', dataIndex: 'total', key: 'total' },
+  { title: 'Event', dataIndex: ['name', 'en'] },
+  { title: 'Total', dataIndex: 'total' },
   {
     title: 'Waiting',
     dataIndex: 'waiting',
-    key: 'waiting',
   },
   {
     title: 'Dispatched',
     dataIndex: 'dispatched',
-    key: 'dispatched',
   },
   {
     title: 'Completed',
     dataIndex: 'resolved',
-    key: 'completed',
   },
   {
     title: 'Canceled',
     dataIndex: 'canceled',
-    key: 'canceled',
   },
 ];
 const columns = [
-  { title: 'Type', dataIndex: 'type', key: 'type' },
-  { title: 'Total', dataIndex: 'total', key: 'total' },
+  { title: 'Type', dataIndex: 'type' },
+  { title: 'Total', dataIndex: 'total' },
   {
     title: 'Waiting',
     dataIndex: 'waiting',
-    key: 'waiting',
   },
   {
     title: 'Dispatched',
     dataIndex: 'dispatched',
-    key: 'dispatched',
   },
   {
     title: 'Completed',
     dataIndex: 'completed',
-    key: 'completed',
   },
   {
     title: 'Canceled',
-    dataIndex: 'canceled',
-    key: 'canceled',
+    dataIndex: 'cancelled',
   },
 ];
 const vehicleStatusColumns = [
-  { title: 'Vehicle', dataIndex: 'vehicle', key: 'vehicle' },
-  { title: 'Number', dataIndex: 'number', key: 'number' },
-  { title: 'Status', dataIndex: 'status', key: 'status' },
+  { title: 'Vehicle', dataIndex: 'vehicle' },
+  { title: 'Number', dataIndex: 'number' },
+  { title: 'Status', dataIndex: 'status' },
 ];
 const vehicleData = [
   {
@@ -110,7 +102,7 @@ const vehicleTypes = [
     waiting: 4,
     dispatched: 3,
     completed: 2,
-    canceled: 1,
+    cancelled: 1,
   },
   {
     type: 'Water Tender',
@@ -118,7 +110,7 @@ const vehicleTypes = [
     waiting: 4,
     dispatched: 3,
     completed: 2,
-    canceled: 1,
+    cancelled: 1,
   },
 ];
 

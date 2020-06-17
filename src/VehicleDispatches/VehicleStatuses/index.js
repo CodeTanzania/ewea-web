@@ -5,13 +5,13 @@ import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import SettingForm from '../../components/SettingForm';
 import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 
 const {
   getVehicleStatuses,
@@ -251,15 +251,13 @@ class VehicleStatus extends Component {
             onChange: this.searchVehicleStatuses,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Status',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Vehicle Status',
-              onClick: this.openVehicleStatusesForm,
-            },
-          ]}
+          action={{
+            label: 'New Status',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Vehicle Status',
+            onClick: this.openVehicleStatusesForm,
+          }}
         />
         {/* end Topbar */}
 
@@ -291,26 +289,37 @@ class VehicleStatus extends Component {
               avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Vehicle Status',
-                    title: 'Update vehicle status details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Vehicle Status',
-                    title: 'Share vehicle status details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Vehicle Status',
-                    title:
-                      'Remove vehicle status from list of active vehicle statuses',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {get(item, 'strings.name.en', 'N/A')}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.code', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Vehicle Statuses',
+                  title: 'Update Vehicle Statuses Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Vehicle Statuses',
+                  title: 'Share Vehicle Statuses details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Vehicle Statuses',
+                  title:
+                    'Remove Vehicle Statuses from list of active vehicle statuses',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>

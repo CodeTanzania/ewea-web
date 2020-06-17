@@ -9,7 +9,6 @@ import React, { Component } from 'react';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import SettingForm from '../../components/SettingForm';
-import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
@@ -279,15 +278,13 @@ class FeatureTypes extends Component {
             onChange: this.searchFeatureTypes,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Feature Type',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Feature Type',
-              onClick: this.openFeatureTypeForm,
-            },
-          ]}
+          action={{
+            label: 'New Feature Type',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Feature Type',
+            onClick: this.openFeatureTypeForm,
+          }}
         />
         {/* end Topbar */}
 
@@ -318,26 +315,37 @@ class FeatureTypes extends Component {
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Feature Type',
-                    title: 'Update Feature Type Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Feature Type',
-                    title: 'Share Feature Type details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Feature Type',
-                    title:
-                      'Remove Feature Type from list of active feature types',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {get(item, 'strings.name.en', 'N/A')}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.description.en', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Feature Types',
+                  title: 'Update Feature Types Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Feature Types',
+                  title: 'Share Feature Types details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Feature Types',
+                  title:
+                    'Remove Feature Types from list of active feature types',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable-next-line */}
               <Col {...nameSpan}>{get(item, 'strings.name.en', 'N/A')} </Col>

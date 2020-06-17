@@ -5,11 +5,10 @@ import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
-
+import get from 'lodash/get';
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import SettingForm from '../../components/SettingForm';
-import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
@@ -279,15 +278,13 @@ class EventSeverities extends Component {
             onChange: this.searchEventSeverities,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Severity',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Severity',
-              onClick: this.openEventSeverityForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Severity',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Severity',
+            onClick: this.openEventSeverityForm,
+          }}
         />
         {/* end Topbar */}
 
@@ -318,26 +315,37 @@ class EventSeverities extends Component {
               avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Event Severity',
-                    title: 'Update Event Severity Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Event Severity',
-                    title: 'Share Event Severity details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Event Severity',
-                    title:
-                      'Remove Event Severity from list of active focal People',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {get(item, 'strings.name.en', 'N/A')}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.description.en', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Event Severity',
+                  title: 'Update Event Severity Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Event Severity',
+                  title: 'Share Event Severity details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Event Severity',
+                  title:
+                    'Remove Event Severity from list of active event severities',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>

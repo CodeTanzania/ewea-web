@@ -90,7 +90,7 @@ const VehicleForm = ({ vehicle, isEditForm, posting, onCancel }) => {
       autoComplete="off"
     >
       <Row justify="space-between">
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Type"
             name={['relations', 'type', '_id']}
@@ -104,7 +104,7 @@ const VehicleForm = ({ vehicle, isEditForm, posting, onCancel }) => {
             />
           </Form.Item>
         </Col>
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Plate No."
             name={['strings', 'name', 'en']}
@@ -121,7 +121,7 @@ const VehicleForm = ({ vehicle, isEditForm, posting, onCancel }) => {
       </Row>
 
       <Row justify="space-between">
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item label="Model" name={['relations', 'model', '_id']}>
             <SearchableSelectInput
               onSearch={getVehicleModels}
@@ -131,7 +131,7 @@ const VehicleForm = ({ vehicle, isEditForm, posting, onCancel }) => {
             />
           </Form.Item>
         </Col>
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item label="Make" name={['relations', 'make', '_id']}>
             <SearchableSelectInput
               onSearch={getVehicleMakes}
@@ -144,7 +144,7 @@ const VehicleForm = ({ vehicle, isEditForm, posting, onCancel }) => {
       </Row>
 
       <Row justify="space-between">
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Owner"
             name={['relations', 'owner', '_id']}
@@ -158,7 +158,7 @@ const VehicleForm = ({ vehicle, isEditForm, posting, onCancel }) => {
             />
           </Form.Item>
         </Col>
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Ownership"
             name={['relations', 'ownership', '_id']}
@@ -177,7 +177,7 @@ const VehicleForm = ({ vehicle, isEditForm, posting, onCancel }) => {
       </Row>
 
       <Row justify="space-between">
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Status"
             name={['relations', 'status', '_id']}
@@ -191,7 +191,7 @@ const VehicleForm = ({ vehicle, isEditForm, posting, onCancel }) => {
             />
           </Form.Item>
         </Col>
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Area"
             name={['relations', 'area', '_id']}

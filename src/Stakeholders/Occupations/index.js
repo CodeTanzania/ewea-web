@@ -5,13 +5,12 @@ import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
-
+import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 import NotificationForm from '../../components/NotificationForm';
-import { notifyError, notifySuccess } from '../../util';
+import { notifyError, notifySuccess, truncateString } from '../../util';
 import OccupationForm from './Form';
 
 /* http actions */
@@ -290,15 +289,13 @@ class Occupations extends Component {
             onChange: this.searchOccupations,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Occupation',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Occupation',
-              onClick: this.openPartyOccupationsForm,
-            },
-          ]}
+          action={{
+            label: 'New Occupation',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Occupation',
+            onClick: this.openPartyOccupationsForm,
+          }}
         />
         {/* end Topbar */}
 
@@ -330,31 +327,37 @@ class Occupations extends Component {
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Occupation',
-                    title: 'Update occupation Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Occupation',
-                    title: 'Share occupation details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Occupation',
-                    title: 'Remove occupation from list of active occupation',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                  assignPermissions={{
-                    name: 'Edit Permissions',
-                    title:
-                      'Assign or remove permissions from the active occupation',
-                    onClick: () => this.handleAssignPermissions(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {truncateString(get(item, 'strings.name.en', 'N/A'), 45)}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.abbreviation.en', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Stakeholder Occupation',
+                  title: 'Update Stakeholder Occupation Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Stakeholder Occupation',
+                  title: 'Share Stakeholder Occupation details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Stakeholder Occupation',
+                  title:
+                    'Remove Stakeholder Occupation from list of active focal people',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>

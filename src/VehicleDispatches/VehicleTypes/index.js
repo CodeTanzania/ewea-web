@@ -5,13 +5,13 @@ import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import SettingForm from '../../components/SettingForm';
 import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 
 const {
   getVehicleTypes,
@@ -251,15 +251,13 @@ class VehicleType extends Component {
             onChange: this.searchVehicleTypes,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Type',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Vehicle Type',
-              onClick: this.openVehicleTypesForm,
-            },
-          ]}
+          action={{
+            label: 'New Type',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Vehicle Type',
+            onClick: this.openVehicleTypesForm,
+          }}
         />
         {/* end Topbar */}
 
@@ -291,26 +289,37 @@ class VehicleType extends Component {
               avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Vehicle Type',
-                    title: 'Update vehicle type Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Vehicle Type',
-                    title: 'Share vehicle type details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Vehicle Type',
-                    title:
-                      'Remove vehicle type from list of active vehicle types',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {get(item, 'strings.name.en', 'N/A')}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.code', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Vehicle Types',
+                  title: 'Update Vehicle Types Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Vehicle Types',
+                  title: 'Share Vehicle Types details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Vehicle Types',
+                  title:
+                    'Remove Vehicle Types from list of active vehicle types',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>

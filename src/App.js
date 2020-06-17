@@ -19,7 +19,7 @@ Spin.setDefaultIndicator(<LoadingOutlined style={{ fontSize: 24 }} spin />);
 const history = createBrowserHistory();
 const showBanner = JSON.parse(get(process.env, 'REACT_APP_SHOW_BANNER', false));
 
-history.listen(({ location }) => {
+history.listen((location) => {
   ReactGA.pageview(location.hash);
 });
 

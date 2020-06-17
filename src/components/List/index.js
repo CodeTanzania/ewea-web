@@ -1,15 +1,19 @@
 import { getJwtToken } from '@codetanzania/ewea-api-client';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { List } from 'antd';
+import { List, Grid } from 'antd';
 import map from 'lodash/map';
 import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
 import remove from 'lodash/remove';
+import isEmpty from 'lodash/isEmpty';
 
 import Toolbar from '../Toolbar';
 import ListHeader from '../ListHeader';
+import { isMobileScreen } from '../../util';
 import './styles.css';
+
+const { useBreakpoint } = Grid;
 
 /**
  * @function
@@ -50,6 +54,7 @@ const CustomList = ({
 }) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectedPages, setSelectedPages] = useState([]);
+  const screens = useBreakpoint();
 
   /**
    * @function
@@ -147,16 +152,19 @@ const CustomList = ({
         }
       />
 
-      <ListHeader
-        headerLayout={headerLayout}
-        onSelectAll={handleSelectPageItems}
-        onDeselectAll={handleDeselectPageItems}
-        isBulkSelected={selectedPages.includes(page)}
-      />
+      {!isMobileScreen(screens) && (
+        <ListHeader
+          headerLayout={headerLayout}
+          onSelectAll={handleSelectPageItems}
+          onDeselectAll={handleDeselectPageItems}
+          isBulkSelected={selectedPages.includes(page)}
+        />
+      )}
 
       <List
         loading={loading}
         dataSource={items}
+        className={`List-b-t ${loading && isEmpty(items) ? '' : 'List-b-b'}`}
         renderItem={(item) =>
           renderListItem({
             item,

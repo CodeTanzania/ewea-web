@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import get from 'lodash/get';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Row, Col, Table, Spin, Modal } from 'antd';
 import {
@@ -8,6 +7,7 @@ import {
   AlertOutlined,
   StopOutlined,
 } from '@ant-design/icons';
+import get from 'lodash/get';
 
 import ReportFilters from '../components/ReportFilters';
 import {
@@ -16,8 +16,8 @@ import {
   WARNING_COLOR,
   DANGER_COLOR,
   DARK_GREEN,
-  FilterFloatingButton,
 } from '../components/dashboardWidgets';
+import { FilterFloatingButton } from '../components/FloatingButton';
 
 /* redux actions */
 const { getEventsReport } = reduxActions;
@@ -56,17 +56,14 @@ const generateColumnsFor = (resource) => {
     {
       title: 'Total',
       dataIndex: 'total',
-      key: 'total',
     },
     {
       title: 'Active',
       dataIndex: 'active',
-      key: 'active',
     },
     {
       title: 'Ended',
       dataIndex: 'ended',
-      key: 'ended',
     },
   ];
 };

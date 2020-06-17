@@ -2,6 +2,14 @@
   padding: 0 40px;
 }
 
+.List-b-t {
+  border-top: 1px solid #f0f0f0;
+}
+
+.List-b-b {
+  border-bottom: 1px solid #f0f0f0;
+}
+
 @media screen and (max-width: 768px) {
   .List {
     padding: 0 30px;

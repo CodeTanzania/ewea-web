@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import get from 'lodash/get';
 import { Row, Col, Table, Spin, Modal } from 'antd';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import {
@@ -9,6 +8,7 @@ import {
   TeamOutlined,
   NumberOutlined,
 } from '@ant-design/icons';
+import get from 'lodash/get';
 
 import ReportFilters from '../components/ReportFilters';
 import {
@@ -19,8 +19,8 @@ import {
   PURPLE_COLOR,
   SUCCESS_COLOR,
   WARNING_COLOR,
-  FilterFloatingButton,
 } from '../components/dashboardWidgets';
+import { FilterFloatingButton } from '../components/FloatingButton';
 import DarDistricts from '../assets/maps/dar.districts.json';
 
 /* redux actions */
@@ -49,36 +49,22 @@ const generateColumnsFor = (name) => {
     {
       title: titles[name],
       dataIndex: ['name', 'en'],
-      key: 'name',
     },
     {
       title: 'Total',
       dataIndex: 'total',
-      key: 'total',
     },
     {
       title: 'Agencies',
       dataIndex: 'agency',
-      key: 'agency',
     },
     {
       title: 'Focal People',
       dataIndex: 'focal',
-      key: 'focal',
     },
   ];
 };
 
-/**
- * @function
- * @name StakeholdersDashboard
- * @param {object} props Component properties object
- * @param {object} props.report Report data from API
- * @param {boolean} props.loading Flag for showing loading data from API
- * @returns {object} Stakeholders Dashboard
- * @version 0.1.0
- * @since 0.1.0
- */
 const StakeholdersDashboard = ({ report, loading }) => {
   const [showFilters, setShowFilters] = useState(false);
 
