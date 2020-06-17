@@ -5,13 +5,13 @@ import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import SettingForm from '../../components/SettingForm';
 import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 
 const {
   getVehicleMakes,
@@ -289,26 +289,37 @@ class VehicleMake extends Component {
               avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Vehicle Make',
-                    title: 'Update vehicle make Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Vehicle Make',
-                    title: 'Share vehicle make details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Vehicle Make',
-                    title:
-                      'Remove vehicle make from list of active vehicle makes',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {get(item, 'strings.name.en', 'N/A')}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.code', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Vehicle Makes',
+                  title: 'Update Vehicle Makes Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Vehicle Makes',
+                  title: 'Share Vehicle Makes details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Vehicle Makes',
+                  title:
+                    'Remove Vehicle Makes from list of active vehicle makes',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>
