@@ -53,6 +53,7 @@ export const generateDonutChartOption = (chartName, data) => {
         label: {
           show: true,
           position: 'outside',
+          formatter: '{b} \n({c})',
         },
         emphasis: {
           label: {

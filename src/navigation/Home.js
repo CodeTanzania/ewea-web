@@ -33,6 +33,18 @@ const routes = [
     description: modules.alertsIssued,
   },
   {
+    name: 'Emergency Parade',
+    path: '/emergencyparade',
+    icon: eventsIcon,
+    description: modules.alertsIssued,
+  },
+  // {
+  //   name: 'Actions Taken',
+  //   path: '/app/actions',
+  //   icon: actionsTakenIcon,
+  //   description: modules.alertsActions,
+  // },
+  {
     name: 'Action Catalogue',
     path: '/actioncatalogue',
     icon: actionCatalogueIcon,

@@ -199,14 +199,18 @@ VictimDetails.propTypes = {
   name: PropTypes.string.isRequired,
   mobile: PropTypes.string.isRequired,
   gender: PropTypes.string.isRequired,
-  age: PropTypes.string.isRequired,
+  age: PropTypes.number.isRequired,
   area: PropTypes.string.isRequired,
   nextOfKinName: PropTypes.string.isRequired,
   nextOfKinMobile: PropTypes.string.isRequired,
 };
 
 CaseDetailsViewBody.propTypes = {
-  data: PropTypes.shape({ _id: PropTypes.string }).isRequired,
+  data: PropTypes.shape({ _id: PropTypes.string }),
+};
+
+CaseDetailsViewBody.defaultProps = {
+  data: {},
 };
 
 export default CaseDetailsViewBody;

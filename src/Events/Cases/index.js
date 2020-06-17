@@ -4,14 +4,21 @@ import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Row, Col, Drawer, Button } from 'antd';
 import { PlusOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import compact from 'lodash/compact';
 import get from 'lodash/get';
 import upperFirst from 'lodash/upperFirst';
+import omit from 'lodash/omit';
 import Topbar from '../../components/Topbar';
 import CaseForm from './Form';
 import CaseFollowupForm from './FollowupForm';
 import CaseFiltersForm from './Filters';
 import NotificationForm from '../../components/NotificationForm';
-import { notifyError, notifySuccess, truncateString } from '../../util';
+import {
+  notifyError,
+  notifySuccess,
+  truncateString,
+  shareDetailsFor,
+} from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import CaseDetailsViewHeader from './DetailsView/Header';
@@ -47,8 +54,8 @@ const mobileSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 4, xs: 4 };
 const genderSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
 const ageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
 const nationalitySpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
-const stageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
 const areaSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
+const stageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
 const statusSpan = { xxl: 4, xl: 4, lg: 4, md: 2, sm: 0, xs: 0 };
 const headerLayout = [
   {
@@ -82,12 +89,12 @@ const headerLayout = [
     header: 'Nationality',
     title: 'Victim/Patient Nationality',
   },
+  { ...areaSpan, header: 'Area', title: 'Victim/Patient Residential Area' },
   {
     ...stageSpan,
     header: 'Stage',
     title: 'Case Stage/Classification',
   },
-  { ...areaSpan, header: 'Area', title: 'Victim/Patient Residential Area' },
   {
     ...statusSpan,
     header: 'Status',
@@ -98,8 +105,6 @@ const headerLayout = [
 /* titles */
 const MODAL_SHARE_TITLE = 'Share Cases';
 const MODAL_FILTER_TITLE = 'Filter Cases';
-const MODAL_FORM_EDIT_TITLE = 'Edit Case - Victim/Patient Information';
-const MODAL_FORM_CREATE_TITLE = 'Add New Case - Victim/Patient Information';
 const MODAL_FORM_FOLLOWUP_TITLE =
   'Case Followup - Victim/Patient Clinical Information';
 
@@ -115,7 +120,7 @@ const MESSAGE_ITEM_ARCHIVE_ERROR =
 const statusFor = (caze) => {
   const severity = upperFirst(get(caze, 'severity.strings.name.en'));
   const outcome = upperFirst(get(caze, 'followup.outcome'));
-  const status = `${severity}, ${outcome}`;
+  const status = compact([severity, outcome]).join(', ');
   return status;
 };
 
@@ -126,6 +131,25 @@ const statusColorFor = (caze) => {
     : '#f5222d'; /* not verified: danger */
   // : '#fa8c16'; /*not verified: warning*/
   return color;
+};
+
+/* fields */
+const shareFields = {
+  number: { header: 'Number', dataIndex: 'number' },
+  name: { header: 'Name', dataIndex: 'victim.name' },
+  phoneNumber: { header: 'Phone Number', dataIndex: 'victim.mobile' },
+  age: { header: 'Age', dataIndex: 'victim.age' },
+  gender: {
+    header: 'Gender',
+    dataIndex: 'victim.gender.strings.name.en',
+  },
+  nationality: {
+    header: 'Nationality',
+    dataIndex: 'victim.nationality.strings.name.en',
+  },
+  area: { header: 'Area', dataIndex: 'victim.area.strings.name.en' },
+  stage: { header: 'Stage', dataIndex: 'stage.strings.name.en' },
+  status: { header: 'Status', dataIndex: (item) => statusFor(item) },
 };
 
 /**
@@ -207,13 +231,22 @@ class CaseList extends Component {
    * @function handleOnClearCache
    * @name handleOnClearCache
    * @description Handle clearing cache
+   * @param {...string} [keys] cache keys to clear
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnClearCache = () => {
-    // TODO: support keys to clear specific cached value
-    this.setState({ cached: null });
+  handleOnClearCache = (...keys) => {
+    // clear specific keys
+    if (keys) {
+      const { cached: previousCached } = this.state;
+      const values = omit({ ...previousCached }, ...keys);
+      this.setState({ cached: values });
+    }
+    // clear all
+    else {
+      this.setState({ cached: null });
+    }
   };
 
   /**
@@ -265,19 +298,8 @@ class CaseList extends Component {
    * @since 0.1.0
    */
   handleListShare = (items) => {
-    const itemList = [].concat(items);
-
     const notificationSubject = 'List of Cases';
-    const notificationBody = itemList
-      .map((item) => {
-        const itemNumber = get(item, 'number', 'N/A');
-        const itemGender = get(item, 'victim.gender.strings.name.en', 'N/A');
-        const itemArea = get(item, 'victim.area.strings.name.en', 'N/A');
-        const itemDescription = get(item, 'description', 'N/A');
-        const body = `Number: ${itemNumber}\nGender: ${itemGender}\nArea: ${itemArea}\nDescription: ${itemDescription}\n`;
-        return body;
-      })
-      .join('\n');
+    const notificationBody = shareDetailsFor(items, shareFields);
     const showNotificationForm = true;
 
     this.setState({
@@ -339,13 +361,13 @@ class CaseList extends Component {
   };
 
   /**
-   * @function handleCloseItemView
-   * @name handleCloseItemView
+   * @function handleItemViewClose
+   * @name handleItemViewClose
    * @description Handle close list item view
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleCloseItemView = () => {
+  handleItemViewClose = () => {
     this.setState({ showDetailsView: false });
   };
 
@@ -399,12 +421,8 @@ class CaseList extends Component {
    * @since 0.1.0
    */
   handleItemShare = (item) => {
-    const itemNumber = get(item, 'number', 'N/A');
-    const itemGender = get(item, 'victim.gender.strings.name.en', 'N/A');
-    const itemArea = get(item, 'victim.area.strings.name.en', 'N/A');
-    const itemDescription = get(item, 'description', 'N/A');
     const notificationSubject = 'List of Cases';
-    const notificationBody = `Number: ${itemNumber}\nGender: ${itemGender}\nArea: ${itemArea}\nDescription: ${itemDescription}\n`;
+    const notificationBody = shareDetailsFor(item, shareFields);
     const showNotificationForm = true;
 
     this.setState({
@@ -424,6 +442,21 @@ class CaseList extends Component {
    */
   handleNotificationFormClose = () => {
     this.setState({ showNotificationForm: false });
+  };
+
+  /**
+   * @function handleAfterNotificationFormClose
+   * @name handleAfterNotificationFormClose
+   * @description Perform cleanups after close notification form
+   *
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleAfterNotificationFormClose = () => {
+    this.setState({
+      notificationSubject: undefined,
+      notificationBody: undefined,
+    });
   };
 
   /**
@@ -451,15 +484,15 @@ class CaseList extends Component {
   };
 
   /**
-   * @function handleFormOpen
-   * @name handleFormOpen
-   * @description Handle form opening
+   * @function handleItemFollowup
+   * @name handleItemFollowup
+   * @description Handle list item followup
    * @param {object} item List item
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleFollowupFormOpen = (item) => {
+  handleItemFollowup = (item) => {
     selectCase(item);
     this.setState({ showFollowUpForm: true });
   };
@@ -575,9 +608,22 @@ class CaseList extends Component {
                   </Row>
                 }
                 secondaryText={
-                  <span className="text-xs">
-                    {get(item, 'victim.name', 'N/A')}
-                  </span>
+                  <Row>
+                    <Col span={16}>
+                      <span className="text-xs">
+                        {get(item, 'victim.name', 'N/A')}
+                      </span>
+                    </Col>
+                    <Col span={8}>
+                      <span
+                        title={statusFor(item)}
+                        style={{ color: statusColorFor(item) }}
+                        className="text-xs"
+                      >
+                        {statusFor(item)}
+                      </span>
+                    </Col>
+                  </Row>
                 }
                 actions={[
                   {
@@ -647,15 +693,15 @@ class CaseList extends Component {
                     )}
                   </span>
                 </Col>
-                <Col {...stageSpan}>
-                  {get(item, 'stage.strings.name.en', 'N/A')}
-                </Col>
                 <Col {...areaSpan}>
                   <span title={get(item, 'victim.area.strings.name.en', 'N/A')}>
                     {truncateString(
                       get(item, 'victim.area.strings.name.en', 'N/A')
                     )}
                   </span>
+                </Col>
+                <Col {...stageSpan}>
+                  {get(item, 'stage.strings.name.en', 'N/A')}
                 </Col>
                 <Col {...statusSpan}>
                   <span
@@ -682,7 +728,7 @@ class CaseList extends Component {
           destroyOnClose
           maskClosable={false}
           className="modal-window-50"
-          afterClose={this.handleAfterCloseNotificationForm}
+          afterClose={this.handleAfterNotificationFormClose}
         >
           <NotificationForm
             recipients={getFocalPeople}
@@ -711,17 +757,16 @@ class CaseList extends Component {
           <CaseFiltersForm
             cached={cached}
             onCache={this.handleOnCache}
-            onCancel={this.handleListFiltersFormClose}
             onClearCache={this.handleOnClearCache}
+            onCancel={this.handleListFiltersFormClose}
           />
         </Modal>
         {/* end: filter modal */}
 
         {/* start: form modal */}
         <Modal
-          title={isEditForm ? MODAL_FORM_EDIT_TITLE : MODAL_FORM_CREATE_TITLE}
           visible={showForm}
-          className="modal-window-50"
+          className="modal-window-80"
           footer={null}
           onCancel={this.handleFormClose}
           afterClose={this.handleAfterFormClose}
@@ -732,6 +777,9 @@ class CaseList extends Component {
             caze={caze}
             posting={posting}
             isEditForm={isEditForm}
+            cached={cached}
+            onCache={this.handleOnCache}
+            onClearCache={this.handleOnClearCache}
             onCancel={this.handleFormClose}
           />
         </Modal>
@@ -762,7 +810,7 @@ class CaseList extends Component {
             <CaseDetailsViewHeader
               number={get(caze, 'number', 'N/A')}
               phone={get(caze, 'victim.mobile', 'N/A')}
-              onBack={this.handleCloseItemView}
+              onBack={this.handleItemViewClose}
             />
           }
           placement="right"
@@ -771,7 +819,7 @@ class CaseList extends Component {
           headerStyle={{ padding: 0 }}
           bodyStyle={{ overflow: 'hidden', height: '100%', padding: '15px' }}
           visible={showDetailsView}
-          onClose={this.handleCloseItemView}
+          onClose={this.handleItemViewClose}
           destroyOnClose
         >
           <CaseDetailsViewBody data={caze} />

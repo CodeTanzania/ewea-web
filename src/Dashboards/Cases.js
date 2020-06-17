@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Col, Row, Spin, Table, Button, Modal } from 'antd';
+import { Divider, Col, Row, Spin, Table, Button, Modal } from 'antd';
 import { BarChartOutlined, TableOutlined } from '@ant-design/icons';
 import randomColor from 'randomcolor';
 import get from 'lodash/get';
 import map from 'lodash/map';
 
 import ReportFilters from '../components/ReportFilters';
-import { NumberWidget, SectionCard } from '../components/dashboardWidgets';
-import { FilterFloatingButton } from '../components/FloatingButton';
+import Grid from '../components/Grid';
+import {
+  NumberWidget,
+  SectionCard,
+  FilterFloatingButton,
+} from '../components/dashboardWidgets';
 import {
   EChart,
   generateDonutChartOption,
@@ -59,8 +63,8 @@ const AGE_GROUPS_COLUMNS = [
  */
 const CasesDashboard = ({ report, loading }) => {
   const [ageGroupsDisplay, setAgeGroupsDisplay] = useState(DISPLAY_TABLE);
-  const [severitiesDisplay, setSeveritiesDisplay] = useState(DISPLAY_TABLE);
-  const [stagesDisplay, setStagesDisplay] = useState(DISPLAY_TABLE);
+  const [severitiesDisplay, setSeveritiesDisplay] = useState(DISPLAY_CHART);
+  const [stagesDisplay, setStagesDisplay] = useState(DISPLAY_CHART);
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
@@ -69,17 +73,17 @@ const CasesDashboard = ({ report, loading }) => {
 
   const GENDER_DATA = map(get(report, 'overall.gender', []), (item) => ({
     value: item.total,
-    name: item.name.en,
+    name: get(item, 'name.en', 'N/A'),
   }));
 
   const SEVERITY_DATA = map(get(report, 'overall.severities', []), (item) => ({
     value: item.total,
-    name: item.name.en,
+    name: get(item, 'name.en', 'N/A'),
   }));
 
   const STAGE_DATA = map(get(report, 'overall.stages', []), (item) => ({
     value: item.total,
-    name: item.name.en,
+    name: get(item, 'name.en', 'N/A'),
   }));
 
   const AGE_GROUPS_DATA = map(get(report, 'overall.ageGroups', []), (item) => ({
@@ -92,49 +96,41 @@ const CasesDashboard = ({ report, loading }) => {
       <FilterFloatingButton onClick={() => setShowFilters(true)} />
       <Spin spinning={loading}>
         <Row>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
+          <Col xs={24} sm={24}>
             <NumberWidget
               title="Total"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Suspect"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Probable"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Tested"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Treated"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Followup"
-              value={0}
+              value={get(report, 'overview.total', 0)}
               bottomBorderColor={randomColor()}
             />
           </Col>
         </Row>
+        <Grid
+          header="Case Stages"
+          items={get(report, 'overall.stages', [])}
+          colPerRow={4}
+          renderItem={(item) => (
+            <NumberWidget
+              title={get(item, 'value.name.en', 'N/A')}
+              value={get(item, 'value.total', 0)}
+              bottomBorderColor={get(item, 'value.color') || randomColor()}
+            />
+          )}
+        />
+        <Grid
+          header="Case Severities"
+          items={get(report, 'overall.severities', [])}
+          colPerRow={4}
+          renderItem={(item) => (
+            <NumberWidget
+              title={get(item, 'value.name.en', 'N/A')}
+              value={get(item, 'value.total', 0)}
+              bottomBorderColor={get(item, 'value.color') || randomColor()}
+            />
+          )}
+        />
+        <Divider orientation="left" plain>
+          Overall Breakdown
+        </Divider>
         <Row>
           <Col xs={24} sm={24} md={12}>
             <Row>

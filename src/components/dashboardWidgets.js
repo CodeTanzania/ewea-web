@@ -11,7 +11,6 @@ import {
 import { FilterOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
-
 export const PRIMARY_COLOR = '#1890FF';
 export const WARNING_COLOR = '#FAAD14';
 export const DANGER_COLOR = '#FF4D4F';

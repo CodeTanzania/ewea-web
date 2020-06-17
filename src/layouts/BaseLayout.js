@@ -15,6 +15,7 @@ import StakeholdersFocalPeople from '../Stakeholders/FocalPeople';
 import AgenciesOwnerships from '../Stakeholders/AgenciesOwnerships';
 import NotificationTemplates from '../Stakeholders/NotificationTemplates';
 import Cases from '../Events/Cases';
+import EmergencyParade from '../Events/EmergencyParade';
 import Events from '../Events/Events';
 import EventFunctions from '../Events/EventFunctions';
 import EventTypes from '../Events/EventTypes';
@@ -73,6 +74,10 @@ const breadcrumbNameMap = {
   '/app/actioncatalogue': {
     name: 'Action Catalogue',
     title: 'List of all actions to be performed',
+  },
+  '/app/emergencyparade': {
+    name: 'Emergency Parade',
+    title: 'List of all indicators to be checked daily',
   },
   '/app/events': {
     name: 'Emergencies',
@@ -344,6 +349,10 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
       <Content className="BaseLayoutContent">
         <Switch>
           <SecureRoute exact path={`${baseUrl}/`} component={Home} />
+          <SecureRoute
+            path={`${baseUrl}/emergencyparade`}
+            component={EmergencyParade}
+          />
           <SecureRoute path={`${baseUrl}/events`} component={Events} />
           <SecureRoute path={`${baseUrl}/cases`} component={Cases} />
 
