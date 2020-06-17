@@ -11,7 +11,6 @@ import EventQuestionForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 import { notifyError, notifySuccess } from '../../util';
 
 const {
@@ -302,26 +301,37 @@ class EventQuestions extends Component {
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Event Question',
-                    title: 'Update Event Question Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Event Question',
-                    title: 'Share Event Question details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Event Question',
-                    title:
-                      'Remove Event Question from list of active event question',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {get(item, 'strings.name.en', 'N/A')}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'relations.indicator.strings.name.en', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Event Questions',
+                  title: 'Update Event Questions Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Event Questions',
+                  title: 'Share Event Questions details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Event Questions',
+                  title:
+                    'Remove Event Questions from list of active event questions',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>

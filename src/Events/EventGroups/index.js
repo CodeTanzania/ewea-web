@@ -304,7 +304,8 @@ class EventGroups extends Component {
               }
               secondaryText={
                 <span className="text-xs">
-                  {get(item, 'strings.description.en', 'N/A')}
+                  {get(item, 'strings.description.en', 'N/A')}{' '}
+                  {truncateString(get(item, 'strings.description.en', ''), 20)}
                 </span>
               }
               actions={[
