@@ -295,20 +295,20 @@ class EventLevels extends Component {
               }
               actions={[
                 {
-                  name: 'Edit Event Levels',
-                  title: 'Update Event Levels Details',
+                  name: 'Edit Event Level',
+                  title: 'Update Event Level Details',
                   onClick: () => this.handleEdit(item),
                   icon: 'edit',
                 },
                 {
-                  name: 'Share Event Levels',
-                  title: 'Share Event Levels details with others',
+                  name: 'Share Event Level',
+                  title: 'Share Event Level details with others',
                   onClick: () => this.handleShare(item),
                   icon: 'share',
                 },
                 {
-                  name: 'Archive Event Levels',
-                  title: 'Remove Event Levels from list of active event levels',
+                  name: 'Archive Event Level',
+                  title: 'Remove Event Level from list of active event levels',
                   onClick: () => this.showArchiveConfirm(item),
                   icon: 'archive',
                 },

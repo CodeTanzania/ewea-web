@@ -313,21 +313,21 @@ class EventQuestions extends Component {
               }
               actions={[
                 {
-                  name: 'Edit Event Questions',
-                  title: 'Update Event Questions Details',
+                  name: 'Edit Event Question',
+                  title: 'Update Event Question Details',
                   onClick: () => this.handleEdit(item),
                   icon: 'edit',
                 },
                 {
-                  name: 'Share Event Questions',
-                  title: 'Share Event Questions details with others',
+                  name: 'Share Event Question',
+                  title: 'Share Event Question details with others',
                   onClick: () => this.handleShare(item),
                   icon: 'share',
                 },
                 {
-                  name: 'Archive Event Questions',
+                  name: 'Archive Event Question',
                   title:
-                    'Remove Event Questions from list of active event questions',
+                    'Remove Event Question from list of active event questions',
                   onClick: () => this.showArchiveConfirm(item),
                   icon: 'archive',
                 },

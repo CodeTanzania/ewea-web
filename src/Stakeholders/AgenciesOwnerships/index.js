@@ -299,21 +299,20 @@ class PartyOwnership extends Component {
               }
               actions={[
                 {
-                  name: 'Edit Agency Ownerships',
-                  title: 'Update Agency Ownerships Details',
+                  name: 'Edit Agency Ownership',
+                  title: 'Update Agency Ownership Details',
                   onClick: () => this.handleEdit(item),
                   icon: 'edit',
                 },
                 {
-                  name: 'Share Agency Ownerships',
-                  title: 'Share Agency Ownershsips details with others',
+                  name: 'Share Agency Ownership',
+                  title: 'Share Agency Ownershsip details with others',
                   onClick: () => this.handleShare(item),
                   icon: 'share',
                 },
                 {
-                  name: 'Archive Agency Ownerships',
-                  title:
-                    'Remove Agency Ownerships from list of active agencies',
+                  name: 'Archive Agency Ownership',
+                  title: 'Remove Agency Ownership from list of active agencies',
                   onClick: () => this.showArchiveConfirm(item),
                   icon: 'archive',
                 },

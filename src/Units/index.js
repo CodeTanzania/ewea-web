@@ -414,7 +414,7 @@ class UnitList extends Component {
                     icon: 'share',
                   },
                   {
-                    name: 'Archive AdministrativeArea',
+                    name: 'Archive Unit',
                     title: 'Remove unit from list of active units',
                     onClick: () => this.handleItemArchive(item),
                     icon: 'archive',

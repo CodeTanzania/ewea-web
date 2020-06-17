@@ -327,21 +327,21 @@ class EventStatuses extends Component {
               }
               actions={[
                 {
-                  name: 'Edit Event Statuses',
-                  title: 'Update Event Statuses Details',
+                  name: 'Edit Event Status',
+                  title: 'Update Event Status Details',
                   onClick: () => this.handleEdit(item),
                   icon: 'edit',
                 },
                 {
-                  name: 'Share Event Statuses',
-                  title: 'Share Event Statuses details with others',
+                  name: 'Share Event Status',
+                  title: 'Share Event Status details with others',
                   onClick: () => this.handleShare(item),
                   icon: 'share',
                 },
                 {
-                  name: 'Archive Event Statuses',
+                  name: 'Archive Event Status',
                   title:
-                    'Remove Event Statuses from list of active event statuses',
+                    'Remove Event Status from list of active event statuses',
                   onClick: () => this.showArchiveConfirm(item),
                   icon: 'archive',
                 },

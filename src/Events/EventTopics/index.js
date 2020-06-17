@@ -306,20 +306,20 @@ class EventTopics extends Component {
               }
               actions={[
                 {
-                  name: 'Edit Event Topics',
-                  title: 'Update Event Topics Details',
+                  name: 'Edit Event Topic',
+                  title: 'Update Event Topic Details',
                   onClick: () => this.handleEdit(item),
                   icon: 'edit',
                 },
                 {
-                  name: 'Share Event Topics',
-                  title: 'Share Event Topics details with others',
+                  name: 'Share Event Topic',
+                  title: 'Share Event Topic details with others',
                   onClick: () => this.handleShare(item),
                   icon: 'share',
                 },
                 {
-                  name: 'Archive Event Topics',
-                  title: 'Remove Event Topics from list of active event topics',
+                  name: 'Archive Event Topic',
+                  title: 'Remove Event Topic from list of active event topics',
                   onClick: () => this.showArchiveConfirm(item),
                   icon: 'archive',
                 },

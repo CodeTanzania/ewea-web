@@ -328,21 +328,21 @@ class EventCertainties extends Component {
               }
               actions={[
                 {
-                  name: 'Edit Event Certainities',
-                  title: 'Update Event Certainities Details',
+                  name: 'Edit Event Certainty',
+                  title: 'Update Event Certainty Details',
                   onClick: () => this.handleEdit(item),
                   icon: 'edit',
                 },
                 {
-                  name: 'Share Event Certainities',
-                  title: 'Share Event Certainities details with others',
+                  name: 'Share Event Certainty',
+                  title: 'Share Event Certainty details with others',
                   onClick: () => this.handleShare(item),
                   icon: 'share',
                 },
                 {
-                  name: 'Archive Event Certainities',
+                  name: 'Archive Event Certainty',
                   title:
-                    'Remove Event Certainities from list of active event certainities',
+                    'Remove Event Certainty from list of active event certainities',
                   onClick: () => this.showArchiveConfirm(item),
                   icon: 'archive',
                 },

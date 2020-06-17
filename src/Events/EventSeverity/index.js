@@ -327,21 +327,21 @@ class EventSeverities extends Component {
               }
               actions={[
                 {
-                  name: 'Edit Event Severities',
-                  title: 'Update Event Severities Details',
+                  name: 'Edit Event Severity',
+                  title: 'Update Event Severity Details',
                   onClick: () => this.handleEdit(item),
                   icon: 'edit',
                 },
                 {
-                  name: 'Share Event Severities',
-                  title: 'Share Event Severities details with others',
+                  name: 'Share Event Severity',
+                  title: 'Share Event Severity details with others',
                   onClick: () => this.handleShare(item),
                   icon: 'share',
                 },
                 {
-                  name: 'Archive Event Severities',
+                  name: 'Archive Event Severity',
                   title:
-                    'Remove Event Severities from list of active event severities',
+                    'Remove Event Severity from list of active event severities',
                   onClick: () => this.showArchiveConfirm(item),
                   icon: 'archive',
                 },
