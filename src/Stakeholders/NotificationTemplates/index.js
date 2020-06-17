@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Col, Row } from 'antd';
+import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
 import isArray from 'lodash/isArray';
@@ -12,7 +12,7 @@ import Topbar from '../../components/Topbar';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import SettingForm from '../../components/SettingForm';
-import { notifyError, notifySuccess, truncateString } from '../../util';
+import { notifyError, notifySuccess } from '../../util';
 
 /* http Actions */
 const {
@@ -338,15 +338,13 @@ class NotificationTemplates extends Component {
               onDeselectItem={onDeselectItem}
               title={
                 <span className="text-sm">
-                  {truncateString(item.description, 50)}
+                  {get(item, 'strings.name.en', 'N/A')}
                 </span>
               }
               secondaryText={
-                <Row>
-                  <Col span={6}>
-                    <span className="text-xs">{item.code}</span>
-                  </Col>
-                </Row>
+                <span className="text-xs">
+                  {get(item, 'strings.description.en', 'N/A')}
+                </span>
               }
               actions={[
                 {
