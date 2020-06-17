@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Col, Row, Spin, Table, Button, Modal, Divider } from 'antd';
+import { Divider, Col, Row, Spin, Table, Button, Modal } from 'antd';
 import { BarChartOutlined, TableOutlined } from '@ant-design/icons';
 import randomColor from 'randomcolor';
 import get from 'lodash/get';
@@ -27,24 +27,27 @@ const { getCasesReport } = reduxActions;
 const DISPLAY_TABLE = 'TABLE';
 const DISPLAY_CHART = 'CHART';
 const OCCUPATION_COLUMNS = [
-  { title: 'Occupation', dataIndex: ['name', 'en'], key: 'name' },
-  { title: 'Total', dataIndex: 'total', key: 'total' },
+  { title: 'Occupation', dataIndex: ['name', 'en'] },
+  { title: 'Total', dataIndex: 'total' },
 ];
+
 const STAGE_COLUMNS = [
-  { title: 'Stage', dataIndex: 'name', key: 'name' },
-  { title: 'Total', dataIndex: 'value', key: 'total' },
+  { title: 'Stage', dataIndex: 'name' },
+  { title: 'Total', dataIndex: 'value' },
 ];
 const SEVERITY_COLUMNS = [
-  { title: 'Severity', dataIndex: 'name', key: 'name' },
-  { title: 'Total', dataIndex: 'value', key: 'total' },
+  { title: 'Severity', dataIndex: 'name' },
+  { title: 'Total', dataIndex: 'value' },
 ];
+
 const NATIONALITY_COLUMNS = [
-  { title: 'Nationality', dataIndex: ['name', 'en'], key: 'name' },
-  { title: 'Total', dataIndex: 'total', key: 'total' },
+  { title: 'Nationality', dataIndex: ['name', 'en'] },
+  { title: 'Total', dataIndex: 'total' },
 ];
+
 const AGE_GROUPS_COLUMNS = [
-  { title: 'Age Group', dataIndex: 'name', key: 'name' },
-  { title: 'Total', dataIndex: 'value', key: 'total' },
+  { title: 'Age Group', dataIndex: 'name' },
+  { title: 'Total', dataIndex: 'value' },
 ];
 
 /**
@@ -60,8 +63,8 @@ const AGE_GROUPS_COLUMNS = [
  */
 const CasesDashboard = ({ report, loading }) => {
   const [ageGroupsDisplay, setAgeGroupsDisplay] = useState(DISPLAY_TABLE);
-  const [severitiesDisplay, setSeveritiesDisplay] = useState(DISPLAY_CHART);
-  const [stagesDisplay, setStagesDisplay] = useState(DISPLAY_CHART);
+  const [severitiesDisplay, setSeveritiesDisplay] = useState(DISPLAY_TABLE);
+  const [stagesDisplay, setStagesDisplay] = useState(DISPLAY_TABLE);
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
@@ -75,12 +78,12 @@ const CasesDashboard = ({ report, loading }) => {
 
   const SEVERITY_DATA = map(get(report, 'overall.severities', []), (item) => ({
     value: item.total,
-    name: get(item, 'name.en', 'N/A'),
+    name: item.name.en,
   }));
 
   const STAGE_DATA = map(get(report, 'overall.stages', []), (item) => ({
     value: item.total,
-    name: get(item, 'name.en', 'N/A'),
+    name: item.name.en,
   }));
 
   const AGE_GROUPS_DATA = map(get(report, 'overall.ageGroups', []), (item) => ({
@@ -93,10 +96,45 @@ const CasesDashboard = ({ report, loading }) => {
       <FilterFloatingButton onClick={() => setShowFilters(true)} />
       <Spin spinning={loading}>
         <Row>
-          <Col xs={24} sm={24} md={24}>
+          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
             <NumberWidget
               title="Total"
-              value={get(report, 'overview.total', 0)}
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
+            <NumberWidget
+              title="Suspect"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
+            <NumberWidget
+              title="Probable"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
+            <NumberWidget
+              title="Tested"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
+            <NumberWidget
+              title="Treated"
+              value={0}
+              bottomBorderColor={randomColor()}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
+            <NumberWidget
+              title="Followup"
+              value={0}
               bottomBorderColor={randomColor()}
             />
           </Col>
@@ -274,7 +312,7 @@ const CasesDashboard = ({ report, loading }) => {
                         'Cases',
                         'Age Groups'
                       )}
-                      style={{ height: '800px' }}
+                      style={{ height: '850px' }}
                     />
                   )}
                 </SectionCard>

@@ -115,7 +115,7 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
       {/* start: type & code */}
       <Row justify="space-between">
         {/* start:type */}
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Type"
             title="Critical infrastructure type e.g Hospital"
@@ -139,7 +139,7 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
         </Col>
         {/* end:type */}
         {/* start:code */}
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Code/Number"
             title="Critical infrastructure code e.g DSM001"
@@ -155,7 +155,7 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
       {/* start: name & area */}
       <Row justify="space-between">
         {/* start:name */}
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Name"
             title="Critical infrastructure name e.g Dar es Salaam"
@@ -172,7 +172,7 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
         </Col>
         {/* end:name */}
         {/* start:area */}
-        <Col span={11}>
+        <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Area"
             title="Critical infrastructure area e.g Dar es Salaam"

@@ -3,6 +3,7 @@ import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import Topbar from '../../components/Topbar';
@@ -10,7 +11,6 @@ import EventTopicForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 import { notifyError, notifySuccess, truncateString } from '../../util';
 
 /* constants */
@@ -257,15 +257,13 @@ class EventTopics extends Component {
             onChange: this.searchEventTopics,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Topic',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Topic',
-              onClick: this.openEventTopicsForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Topic',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Topic',
+            onClick: this.openEventTopicsForm,
+          }}
         />
         {/* end Topbar */}
 
@@ -296,26 +294,36 @@ class EventTopics extends Component {
               avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Event Topic',
-                    title: 'Update Event Topic Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Event Topic',
-                    title: 'Share Event Topic details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Event Topic',
-                    title:
-                      'Remove Event Topic from list of active event topics',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {get(item, 'strings.name.en', 'N/A')}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.description.en', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Event Topic',
+                  title: 'Update Event Topic Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Event Topic',
+                  title: 'Share Event Topic details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Event Topic',
+                  title: 'Remove Event Topic from list of active event topics',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>

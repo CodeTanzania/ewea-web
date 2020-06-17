@@ -1,14 +1,15 @@
 import { message } from 'antd';
 import moment from 'moment';
+import { isMobile } from 'react-device-detect';
 import isEmpty from 'lodash/isEmpty';
-import isFunction from 'lodash/isFunction';
-import forEach from 'lodash/forEach';
 import get from 'lodash/get';
 import map from 'lodash/map';
+import merge from 'lodash/merge';
+import forEach from 'lodash/forEach';
+import startCase from 'lodash/startCase';
+import isFunction from 'lodash/isFunction';
 import take from 'lodash/take';
 import takeRight from 'lodash/takeRight';
-import merge from 'lodash/merge';
-import startCase from 'lodash/startCase';
 
 /**
  * @function
@@ -299,6 +300,19 @@ export const generateVehicleDispatchShareableDetails = (vehicleDispatch) => {
     'YYYY-MM-DD HH:mm:ss'
   )}`;
   return { subject, body };
+};
+
+/**
+ * @function
+ * @name isMobileScreen
+ * @description Determine if the screen is small based on breakpoints
+ * @param {object} screens Screens breakpoints object from antd Grid
+ * @returns {boolean} True if screen is < 768px
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const isMobileScreen = (screens) => {
+  return ((screens.xs || screens.sm) && !screens.md) || isMobile;
 };
 
 /**

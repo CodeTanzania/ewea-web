@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Col } from 'antd';
+import { Modal, Row, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
 import get from 'lodash/get';
@@ -13,7 +13,6 @@ import FocalPersonFilters from './Filters';
 import StakeholderForm from '../../components/StakeholderForm';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 import {
   notifyError,
   notifySuccess,
@@ -356,15 +355,13 @@ class FocalPeople extends Component {
             onChange: this.searchFocalPeople,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Focal Person',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Focal Person',
-              onClick: this.openFocalPersonForm,
-            },
-          ]}
+          action={{
+            label: 'New Focal Person',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Focal Person',
+            onClick: this.openFocalPersonForm,
+          }}
         />
         {/* end Topbar */}
 
@@ -391,36 +388,56 @@ class FocalPeople extends Component {
             <ListItem
               key={item._id} // eslint-disable-line
               item={item}
+              title={
+                <Row>
+                  <Col span={15}>
+                    <span className="text-sm">{item.name}</span>
+                  </Col>
+                  <Col span={6}>
+                    <span className="text-xs">{item.mobile}</span>
+                  </Col>
+                </Row>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {`${get(item, 'role.strings.name.en', 'N/A')}, ${get(
+                    item,
+                    'party.abbreviation',
+                    'N/A'
+                  )}`}
+                </span>
+              }
               isSelected={isSelected}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Focal Person',
-                    title: 'Update Focal Person Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Focal Person',
-                    title: 'Share Focal Person details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Focal Person',
-                    title:
-                      'Remove focal person from list of active focal people',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                  whatsapp={{
-                    name: 'Share on WhatsApp',
-                    title: 'Share Contact on Whatsapp',
-                    link: `https://wa.me/?text=${encodeURI(
-                      generateFocalPersonVCard(item).body
-                    )}`,
-                  }}
-                />
-              )}
+              actions={[
+                {
+                  name: 'Edit Focal Person',
+                  title: 'Update Focal Person Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Focal Person',
+                  title: 'Share Focal Person details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Share on WhatsApp',
+                  title: 'Share Contact on Whatsapp',
+                  link: `https://wa.me/?text=${encodeURI(
+                    generateFocalPersonVCard(item).body
+                  )}`,
+                  icon: 'whatsapp',
+                },
+                {
+                  name: 'Archive Focal Person',
+                  title: 'Remove focal person from list of active focal people',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.name}</Col>

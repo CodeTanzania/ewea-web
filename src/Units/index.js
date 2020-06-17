@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Col } from 'antd';
+import { Modal, Row, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
 import Topbar from '../components/Topbar';
@@ -11,7 +11,6 @@ import NotificationForm from '../components/NotificationForm';
 import { notifyError, notifySuccess, truncateString } from '../util';
 import ItemList from '../components/List';
 import ListItem from '../components/ListItem';
-import ListItemActions from '../components/ListItemActions';
 
 /* http actions */
 const {
@@ -343,15 +342,13 @@ class UnitList extends Component {
             onChange: this.handleListSearch,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Unit',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Unit',
-              onClick: this.handleFormOpen,
-            },
-          ]}
+          action={{
+            label: 'New Unit',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Unit',
+            onClick: this.handleFormOpen,
+          }}
         />
         {/* end: list topbar */}
 
@@ -384,25 +381,45 @@ class UnitList extends Component {
                 avatarBackgroundColor={get(item, 'strings.color')}
                 onSelectItem={onSelectItem}
                 onDeselectItem={onDeselectItem}
-                renderActions={() => (
-                  <ListItemActions
-                    edit={{
-                      name: 'Edit Unit',
-                      title: 'Update unit details',
-                      onClick: () => this.handleItemEdit(item),
-                    }}
-                    share={{
-                      name: 'Share Unit',
-                      title: 'Share unit details with others',
-                      onClick: () => this.handleItemShare(item),
-                    }}
-                    archive={{
-                      name: 'Archive Unit',
-                      title: 'Remove unit from list of active units',
-                      onClick: () => this.handleItemArchive(item),
-                    }}
-                  />
-                )}
+                title={
+                  <Row>
+                    <Col span={16}>
+                      <span className="text-sm">
+                        {get(item, 'strings.name.en', 'N/A')}
+                      </span>
+                    </Col>
+                    <Col span={6}>
+                      <span className="text-xs">
+                        {get(item, 'strings.symbol', 'N/A')}
+                      </span>
+                    </Col>
+                  </Row>
+                }
+                secondaryText={
+                  <span className="text-xs">
+                    {get(item, 'strings.description.en', 'N/A')}
+                  </span>
+                }
+                actions={[
+                  {
+                    name: 'Edit Unit',
+                    title: 'Update unit details',
+                    onClick: () => this.handleItemEdit(item),
+                    icon: 'edit',
+                  },
+                  {
+                    name: 'Share Unit',
+                    title: 'Share unit details with others',
+                    onClick: () => this.handleItemShare(item),
+                    icon: 'share',
+                  },
+                  {
+                    name: 'Archive Unit',
+                    title: 'Remove unit from list of active units',
+                    onClick: () => this.handleItemArchive(item),
+                    icon: 'archive',
+                  },
+                ]}
               >
                 {/* eslint-disable react/jsx-props-no-spreading */}
                 <Col {...nameSpan}>{get(item, 'strings.name.en', 'N/A')}</Col>

@@ -10,7 +10,6 @@ import {
 } from 'react-simple-maps';
 import { FilterOutlined } from '@ant-design/icons';
 
-/* constants */
 const { Text } = Typography;
 export const PRIMARY_COLOR = '#1890FF';
 export const WARNING_COLOR = '#FAAD14';
@@ -273,7 +272,7 @@ export const MapWidget = ({
 MapWidget.propTypes = {
   scale: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  shape: PropTypes.shape(PropTypes.any).isRequired,
+  shape: PropTypes.string.isRequired,
   center: PropTypes.arrayOf(PropTypes.number).isRequired,
   getGeographyAttributes: PropTypes.func.isRequired,
 };
@@ -294,7 +293,7 @@ export const FilterFloatingButton = ({ onClick }) => {
       style={{
         position: 'absolute',
         bottom: '20px',
-        right: '25px',
+        right: '35px',
         zIndex: 1000,
       }}
     >
@@ -304,6 +303,11 @@ export const FilterFloatingButton = ({ onClick }) => {
         title="Click to filter"
         icon={<FilterOutlined />}
         size="large"
+        style={{
+          height: '60px',
+          width: '60px',
+          fontSize: '25px',
+        }}
         onClick={onClick}
       />
     </Affix>

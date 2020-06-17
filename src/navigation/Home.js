@@ -6,7 +6,6 @@ import agenciesIcon from '../assets/icons/agencies.svg';
 import focalPeopleIcon from '../assets/icons/focalpeople.svg';
 import NavigationMenu from '../components/NavigationMenu';
 import eventsIcon from '../assets/icons/events.svg';
-// import actionsTakenIcon from '../assets/icons/actionstaken.svg';
 import actionCatalogueIcon from '../assets/icons/actioncatalog.svg';
 import caseManagementIcon from '../assets/icons/dashboards/case-management.svg';
 import resourceManagementIcon from '../assets/icons/dashboards/resource-management.svg';
@@ -101,4 +100,5 @@ const HomeNavMenu = ({ match }) => (
 HomeNavMenu.propTypes = {
   match: PropTypes.shape({ url: PropTypes.string }).isRequired,
 };
+
 export default HomeNavMenu;

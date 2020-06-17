@@ -5,13 +5,13 @@ import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import PartyOwnershipForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
-import { notifyError, notifySuccess } from '../../util';
+import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 
 const {
   getPartyOwnerships,
@@ -249,15 +249,13 @@ class PartyOwnership extends Component {
             onChange: this.searchPartyOwnerships,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Ownership',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Agency Ownership',
-              onClick: this.openPartyOwnershipsForm,
-            },
-          ]}
+          action={{
+            label: 'New Ownership',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Agency Ownership',
+            onClick: this.openPartyOwnershipsForm,
+          }}
         />
         {/* end Topbar */}
 
@@ -289,26 +287,36 @@ class PartyOwnership extends Component {
               avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Agency Ownership',
-                    title: 'Update Agency Ownership Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Agency Ownership',
-                    title: 'Share Agency Ownership details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Agency Ownership',
-                    title:
-                      'Remove Agency Ownership from list of active agency ownerships',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {truncateString(get(item, 'strings.name.en', 'N/A'), 45)}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.code', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Agency Ownership',
+                  title: 'Update Agency Ownership Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Agency Ownership',
+                  title: 'Share Agency Ownershsip details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Agency Ownership',
+                  title: 'Remove Agency Ownership from list of active agencies',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>

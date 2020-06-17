@@ -5,13 +5,13 @@ import React, { Component } from 'react';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import EventIndicatorForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 
 const {
   getEventIndicators,
@@ -248,15 +248,13 @@ class EventIndicator extends Component {
             onChange: this.searchEventIndicators,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Indicator',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Indicator',
-              onClick: this.openEventIndicatorsForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Indicator',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Indicator',
+            onClick: this.openEventIndicatorsForm,
+          }}
         />
         {/* end Topbar */}
 
@@ -288,26 +286,37 @@ class EventIndicator extends Component {
               avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Event Indicator',
-                    title: 'Update Event Indicator Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Event Indicator',
-                    title: 'Share Event Indicator details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Event Indicator',
-                    title:
-                      'Remove Event Indicator from list of active event indicator',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {get(item, 'strings.name.en', 'N/A')}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.description.en', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Event Indicator',
+                  title: 'Update Event Indicator Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Event Indicator',
+                  title: 'Share Event Indicator details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Event Indicator',
+                  title:
+                    'Remove Event Indicator from list of active event indicators',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
               <Col {...nameSpan}>{item.strings.name.en}</Col>

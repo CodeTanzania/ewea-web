@@ -2,26 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Col, Drawer, Button } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import compact from 'lodash/compact';
+import { Modal, Row, Col, Drawer, Button } from 'antd';
+import { PlusOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
 import upperFirst from 'lodash/upperFirst';
-import omit from 'lodash/omit';
 import Topbar from '../../components/Topbar';
 import CaseForm from './Form';
 import CaseFollowupForm from './FollowupForm';
 import CaseFiltersForm from './Filters';
 import NotificationForm from '../../components/NotificationForm';
-import {
-  notifyError,
-  notifySuccess,
-  truncateString,
-  shareDetailsFor,
-} from '../../util';
+import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import ListItemActions from '../../components/ListItemActions';
 import CaseDetailsViewHeader from './DetailsView/Header';
 import CaseDetailsViewBody from './DetailsView/Body';
 
@@ -55,8 +47,8 @@ const mobileSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 4, xs: 4 };
 const genderSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
 const ageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
 const nationalitySpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
-const areaSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
 const stageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
+const areaSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
 const statusSpan = { xxl: 4, xl: 4, lg: 4, md: 2, sm: 0, xs: 0 };
 const headerLayout = [
   {
@@ -90,12 +82,12 @@ const headerLayout = [
     header: 'Nationality',
     title: 'Victim/Patient Nationality',
   },
-  { ...areaSpan, header: 'Area', title: 'Victim/Patient Residential Area' },
   {
     ...stageSpan,
     header: 'Stage',
     title: 'Case Stage/Classification',
   },
+  { ...areaSpan, header: 'Area', title: 'Victim/Patient Residential Area' },
   {
     ...statusSpan,
     header: 'Status',
@@ -106,6 +98,10 @@ const headerLayout = [
 /* titles */
 const MODAL_SHARE_TITLE = 'Share Cases';
 const MODAL_FILTER_TITLE = 'Filter Cases';
+const MODAL_FORM_EDIT_TITLE = 'Edit Case - Victim/Patient Information';
+const MODAL_FORM_CREATE_TITLE = 'Add New Case - Victim/Patient Information';
+const MODAL_FORM_FOLLOWUP_TITLE =
+  'Case Followup - Victim/Patient Clinical Information';
 
 /* messages */
 const MESSAGE_LIST_REFRESH_SUCCESS = 'Cases were refreshed successfully';
@@ -119,7 +115,7 @@ const MESSAGE_ITEM_ARCHIVE_ERROR =
 const statusFor = (caze) => {
   const severity = upperFirst(get(caze, 'severity.strings.name.en'));
   const outcome = upperFirst(get(caze, 'followup.outcome'));
-  const status = compact([severity, outcome]).join(', ');
+  const status = `${severity}, ${outcome}`;
   return status;
 };
 
@@ -130,25 +126,6 @@ const statusColorFor = (caze) => {
     : '#f5222d'; /* not verified: danger */
   // : '#fa8c16'; /*not verified: warning*/
   return color;
-};
-
-/* fields */
-const shareFields = {
-  number: { header: 'Number', dataIndex: 'number' },
-  name: { header: 'Name', dataIndex: 'victim.name' },
-  phoneNumber: { header: 'Phone Number', dataIndex: 'victim.mobile' },
-  age: { header: 'Age', dataIndex: 'victim.age' },
-  gender: {
-    header: 'Gender',
-    dataIndex: 'victim.gender.strings.name.en',
-  },
-  nationality: {
-    header: 'Nationality',
-    dataIndex: 'victim.nationality.strings.name.en',
-  },
-  area: { header: 'Area', dataIndex: 'victim.area.strings.name.en' },
-  stage: { header: 'Stage', dataIndex: 'stage.strings.name.en' },
-  status: { header: 'Status', dataIndex: (item) => statusFor(item) },
 };
 
 /**
@@ -230,22 +207,13 @@ class CaseList extends Component {
    * @function handleOnClearCache
    * @name handleOnClearCache
    * @description Handle clearing cache
-   * @param {...string} [keys] cache keys to clear
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleOnClearCache = (...keys) => {
-    // clear specific keys
-    if (keys) {
-      const { cached: previousCached } = this.state;
-      const values = omit({ ...previousCached }, ...keys);
-      this.setState({ cached: values });
-    }
-    // clear all
-    else {
-      this.setState({ cached: null });
-    }
+  handleOnClearCache = () => {
+    // TODO: support keys to clear specific cached value
+    this.setState({ cached: null });
   };
 
   /**
@@ -297,8 +265,19 @@ class CaseList extends Component {
    * @since 0.1.0
    */
   handleListShare = (items) => {
+    const itemList = [].concat(items);
+
     const notificationSubject = 'List of Cases';
-    const notificationBody = shareDetailsFor(items, shareFields);
+    const notificationBody = itemList
+      .map((item) => {
+        const itemNumber = get(item, 'number', 'N/A');
+        const itemGender = get(item, 'victim.gender.strings.name.en', 'N/A');
+        const itemArea = get(item, 'victim.area.strings.name.en', 'N/A');
+        const itemDescription = get(item, 'description', 'N/A');
+        const body = `Number: ${itemNumber}\nGender: ${itemGender}\nArea: ${itemArea}\nDescription: ${itemDescription}\n`;
+        return body;
+      })
+      .join('\n');
     const showNotificationForm = true;
 
     this.setState({
@@ -360,13 +339,13 @@ class CaseList extends Component {
   };
 
   /**
-   * @function handleItemViewClose
-   * @name handleItemViewClose
+   * @function handleCloseItemView
+   * @name handleCloseItemView
    * @description Handle close list item view
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleItemViewClose = () => {
+  handleCloseItemView = () => {
     this.setState({ showDetailsView: false });
   };
 
@@ -420,8 +399,12 @@ class CaseList extends Component {
    * @since 0.1.0
    */
   handleItemShare = (item) => {
+    const itemNumber = get(item, 'number', 'N/A');
+    const itemGender = get(item, 'victim.gender.strings.name.en', 'N/A');
+    const itemArea = get(item, 'victim.area.strings.name.en', 'N/A');
+    const itemDescription = get(item, 'description', 'N/A');
     const notificationSubject = 'List of Cases';
-    const notificationBody = shareDetailsFor(item, shareFields);
+    const notificationBody = `Number: ${itemNumber}\nGender: ${itemGender}\nArea: ${itemArea}\nDescription: ${itemDescription}\n`;
     const showNotificationForm = true;
 
     this.setState({
@@ -441,21 +424,6 @@ class CaseList extends Component {
    */
   handleNotificationFormClose = () => {
     this.setState({ showNotificationForm: false });
-  };
-
-  /**
-   * @function handleAfterNotificationFormClose
-   * @name handleAfterNotificationFormClose
-   * @description Perform claeanups after close notification form
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleAfterNotificationFormClose = () => {
-    this.setState({
-      notificationSubject: undefined,
-      notificationBody: undefined,
-    });
   };
 
   /**
@@ -483,15 +451,15 @@ class CaseList extends Component {
   };
 
   /**
-   * @function handleItemFollowup
-   * @name handleItemFollowup
-   * @description Handle list item followup
+   * @function handleFormOpen
+   * @name handleFormOpen
+   * @description Handle form opening
    * @param {object} item List item
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleItemFollowup = (item) => {
+  handleFollowupFormOpen = (item) => {
     selectCase(item);
     this.setState({ showFollowUpForm: true });
   };
@@ -553,15 +521,13 @@ class CaseList extends Component {
             onChange: this.handleListSearch,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Case',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Case',
-              onClick: this.handleFormOpen,
-            },
-          ]}
+          action={{
+            label: 'New Case',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Case',
+            onClick: this.handleFormOpen,
+          }}
         />
         {/* end: list topbar */}
 
@@ -594,30 +560,51 @@ class CaseList extends Component {
                 avatarBackgroundColor={get(item, 'severity.strings.color')}
                 onSelectItem={onSelectItem}
                 onDeselectItem={onDeselectItem}
-                renderActions={() => (
-                  <ListItemActions
-                    view={{
-                      name: 'View Case',
-                      title: 'View Case Details',
-                      onClick: () => this.handleItemView(item),
-                    }}
-                    edit={{
-                      name: 'Edit Case',
-                      title: 'Update case details',
-                      onClick: () => this.handleItemEdit(item),
-                    }}
-                    followup={{
-                      name: 'Followup Case',
-                      title: 'Followup on case',
-                      onClick: () => this.handleItemFollowup(item),
-                    }}
-                    share={{
-                      name: 'Share Case',
-                      title: 'Share case details with others',
-                      onClick: () => this.handleItemShare(item),
-                    }}
-                  />
-                )}
+                title={
+                  <Row>
+                    <Col span={16}>
+                      <span className="text-sm">
+                        {get(item, 'number', 'N/A')}
+                      </span>
+                    </Col>
+                    <Col span={6}>
+                      <span className="text-xs">
+                        {get(item, 'victim.mobile', 'N/A')}
+                      </span>
+                    </Col>
+                  </Row>
+                }
+                secondaryText={
+                  <span className="text-xs">
+                    {get(item, 'victim.name', 'N/A')}
+                  </span>
+                }
+                actions={[
+                  {
+                    name: 'View Case',
+                    title: 'View Case Details',
+                    onClick: () => this.handleItemView(item),
+                    icon: 'view',
+                  },
+                  {
+                    name: 'Edit Case',
+                    title: 'Update case details',
+                    onClick: () => this.handleItemEdit(item),
+                    icon: 'edit',
+                  },
+                  {
+                    name: 'Followup Case',
+                    title: 'Followup on case',
+                    onClick: () => this.handleItemFollowup(item),
+                    icon: <ClockCircleOutlined />,
+                  },
+                  {
+                    name: 'Share Case',
+                    title: 'Share case details with others',
+                    onClick: () => this.handleItemShare(item),
+                    icon: 'share',
+                  },
+                ]}
               >
                 {/* eslint-disable react/jsx-props-no-spreading */}
                 <Col {...numberSpan}>
@@ -660,15 +647,15 @@ class CaseList extends Component {
                     )}
                   </span>
                 </Col>
+                <Col {...stageSpan}>
+                  {get(item, 'stage.strings.name.en', 'N/A')}
+                </Col>
                 <Col {...areaSpan}>
                   <span title={get(item, 'victim.area.strings.name.en', 'N/A')}>
                     {truncateString(
                       get(item, 'victim.area.strings.name.en', 'N/A')
                     )}
                   </span>
-                </Col>
-                <Col {...stageSpan}>
-                  {get(item, 'stage.strings.name.en', 'N/A')}
                 </Col>
                 <Col {...statusSpan}>
                   <span
@@ -695,7 +682,7 @@ class CaseList extends Component {
           destroyOnClose
           maskClosable={false}
           className="modal-window-50"
-          afterClose={this.handleAfterNotificationFormClose}
+          afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
             recipients={getFocalPeople}
@@ -724,16 +711,17 @@ class CaseList extends Component {
           <CaseFiltersForm
             cached={cached}
             onCache={this.handleOnCache}
-            onClearCache={this.handleOnClearCache}
             onCancel={this.handleListFiltersFormClose}
+            onClearCache={this.handleOnClearCache}
           />
         </Modal>
         {/* end: filter modal */}
 
         {/* start: form modal */}
         <Modal
+          title={isEditForm ? MODAL_FORM_EDIT_TITLE : MODAL_FORM_CREATE_TITLE}
           visible={showForm}
-          className="modal-window-80"
+          className="modal-window-50"
           footer={null}
           onCancel={this.handleFormClose}
           afterClose={this.handleAfterFormClose}
@@ -744,9 +732,6 @@ class CaseList extends Component {
             caze={caze}
             posting={posting}
             isEditForm={isEditForm}
-            cached={cached}
-            onCache={this.handleOnCache}
-            onClearCache={this.handleOnClearCache}
             onCancel={this.handleFormClose}
           />
         </Modal>
@@ -754,6 +739,7 @@ class CaseList extends Component {
 
         {/* start: followup modal */}
         <Modal
+          title={MODAL_FORM_FOLLOWUP_TITLE}
           visible={showFollowUpForm}
           className="modal-window-80"
           footer={null}
@@ -776,7 +762,7 @@ class CaseList extends Component {
             <CaseDetailsViewHeader
               number={get(caze, 'number', 'N/A')}
               phone={get(caze, 'victim.mobile', 'N/A')}
-              onBack={this.handleItemViewClose}
+              onBack={this.handleCloseItemView}
             />
           }
           placement="right"
@@ -785,7 +771,7 @@ class CaseList extends Component {
           headerStyle={{ padding: 0 }}
           bodyStyle={{ overflow: 'hidden', height: '100%', padding: '15px' }}
           visible={showDetailsView}
-          onClose={this.handleItemViewClose}
+          onClose={this.handleCloseItemView}
           destroyOnClose
         >
           <CaseDetailsViewBody data={caze} />

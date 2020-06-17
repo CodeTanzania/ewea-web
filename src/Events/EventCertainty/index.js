@@ -5,11 +5,11 @@ import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Col, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
+import get from 'lodash/get';
 
 import NotificationForm from '../../components/NotificationForm';
 import Topbar from '../../components/Topbar';
 import SettingForm from '../../components/SettingForm';
-import ListItemActions from '../../components/ListItemActions';
 import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
@@ -279,15 +279,13 @@ class EventCertainties extends Component {
             onChange: this.searchEventCertainties,
             value: searchQuery,
           }}
-          actions={[
-            {
-              label: 'New Event Certainty',
-              icon: <PlusOutlined />,
-              size: 'large',
-              title: 'Add New Event Certainty',
-              onClick: this.openEventCertaintyForm,
-            },
-          ]}
+          action={{
+            label: 'New Event Certainty',
+            icon: <PlusOutlined />,
+            size: 'large',
+            title: 'Add New Event Certainty',
+            onClick: this.openEventCertaintyForm,
+          }}
         />
         {/* end Topbar */}
 
@@ -318,26 +316,37 @@ class EventCertainties extends Component {
               avatarBackgroundColor={item.strings.color}
               onSelectItem={onSelectItem}
               onDeselectItem={onDeselectItem}
-              renderActions={() => (
-                <ListItemActions
-                  edit={{
-                    name: 'Edit Event Certainty',
-                    title: 'Update Event Certainty Details',
-                    onClick: () => this.handleEdit(item),
-                  }}
-                  share={{
-                    name: 'Share Event Certainty',
-                    title: 'Share Event Certainty details with others',
-                    onClick: () => this.handleShare(item),
-                  }}
-                  archive={{
-                    name: 'Archive Event Certainty',
-                    title:
-                      'Remove Event Certainty from list of active focal People',
-                    onClick: () => this.showArchiveConfirm(item),
-                  }}
-                />
-              )}
+              title={
+                <span className="text-sm">
+                  {get(item, 'strings.name.en', 'N/A')}
+                </span>
+              }
+              secondaryText={
+                <span className="text-xs">
+                  {get(item, 'strings.description.en', 'N/A')}
+                </span>
+              }
+              actions={[
+                {
+                  name: 'Edit Event Certainty',
+                  title: 'Update Event Certainty Details',
+                  onClick: () => this.handleEdit(item),
+                  icon: 'edit',
+                },
+                {
+                  name: 'Share Event Certainty',
+                  title: 'Share Event Certainty details with others',
+                  onClick: () => this.handleShare(item),
+                  icon: 'share',
+                },
+                {
+                  name: 'Archive Event Certainty',
+                  title:
+                    'Remove Event Certainty from list of active event certainities',
+                  onClick: () => this.showArchiveConfirm(item),
+                  icon: 'archive',
+                },
+              ]}
             >
               {/* eslint-disable-next-line */}
               {/* eslint-disable react/jsx-props-no-spreading */}

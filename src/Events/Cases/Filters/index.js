@@ -72,16 +72,6 @@ const CaseFiltersForm = ({
   onClearCache,
   onCancel,
 }) => {
-  // filter scoped cache keys
-  const cacheKeys = [
-    'filters.victim.area',
-    'filters.victim.gender',
-    'filters.victim.nationality',
-    'filters.victim.occupation',
-    'filters.stage',
-    'filters.severity',
-  ];
-
   // form finish(submit) handler
   const onFinish = (values) => {
     filterCases(values);
@@ -97,9 +87,10 @@ const CaseFiltersForm = ({
    * @since 0.1.0
    */
   const onClearFilters = () => {
+    // TODO: fix age filter error
     clearCaseFilters();
     if (isFunction(onClearCache)) {
-      onClearCache(...cacheKeys);
+      onClearCache();
     }
     onCancel();
   };
@@ -131,8 +122,8 @@ const CaseFiltersForm = ({
               }}
               optionValue="_id"
               mode="multiple"
-              onCache={(area) => onCache({ 'filters.victim.area': area })}
-              initialValue={get(cached, 'filters.victim.area')}
+              onCache={(area) => onCache({ 'victim.area': area })}
+              initialValue={get(cached, 'victim.area', [])}
             />
           </Form.Item>
         </Col>
@@ -149,8 +140,8 @@ const CaseFiltersForm = ({
               optionLabel={(gender) => get(gender, 'strings.name.en')}
               optionValue="_id"
               mode="multiple"
-              onCache={(gender) => onCache({ 'filters.victim.gender': gender })}
-              initialValue={get(cached, 'filters.victim.gender')}
+              onCache={(gender) => onCache({ 'victim.gender': gender })}
+              initialValue={get(cached, 'victim.gender')}
             />
           </Form.Item>
         </Col>
@@ -173,9 +164,9 @@ const CaseFiltersForm = ({
               optionValue="_id"
               mode="multiple"
               onCache={(nationality) =>
-                onCache({ 'filters.victim.nationality': nationality })
+                onCache({ 'victim.nationality': nationality })
               }
-              initialValue={get(cached, 'filters.victim.nationality')}
+              initialValue={get(cached, 'victim.nationality')}
             />
           </Form.Item>
         </Col>
@@ -193,9 +184,9 @@ const CaseFiltersForm = ({
               optionValue="_id"
               mode="multiple"
               onCache={(occupation) =>
-                onCache({ 'filters.victim.occupation': occupation })
+                onCache({ 'victim.occupation': occupation })
               }
-              initialValue={get(cached, 'filters.victim.occupation')}
+              initialValue={get(cached, 'victim.occupation')}
             />
           </Form.Item>
         </Col>
@@ -217,8 +208,8 @@ const CaseFiltersForm = ({
               optionLabel={(stage) => get(stage, 'strings.name.en')}
               optionValue="_id"
               mode="multiple"
-              onCache={(stage) => onCache({ 'filters.stage': stage })}
-              initialValue={get(cached, 'filters.stage')}
+              onCache={(stage) => onCache({ stage })}
+              initialValue={get(cached, 'stage')}
             />
           </Form.Item>
         </Col>
@@ -235,8 +226,8 @@ const CaseFiltersForm = ({
               optionLabel={(severity) => get(severity, 'strings.name.en')}
               optionValue="_id"
               mode="multiple"
-              onCache={(severity) => onCache({ 'filters.severity': severity })}
-              initialValue={get(cached, 'filters.severity')}
+              onCache={(severity) => onCache({ severity })}
+              initialValue={get(cached, 'severity')}
             />
           </Form.Item>
         </Col>
@@ -304,17 +295,17 @@ CaseFiltersForm.propTypes = {
     }),
   }),
   cached: PropTypes.shape({
-    'filters.victim.gender': PropTypes.arrayOf(
+    'victim.gender': PropTypes.arrayOf(
       PropTypes.shape({
         _id: PropTypes.string,
       })
     ),
-    'filters.victim.area': PropTypes.arrayOf(
+    'victim.area': PropTypes.arrayOf(
       PropTypes.shape({
         _id: PropTypes.string,
       })
     ),
-    'filters.victim.occupation': PropTypes.arrayOf(
+    'victim.occupation': PropTypes.arrayOf(
       PropTypes.shape({
         _id: PropTypes.string,
       })
