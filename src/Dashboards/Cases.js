@@ -63,8 +63,8 @@ const AGE_GROUPS_COLUMNS = [
  */
 const CasesDashboard = ({ report, loading }) => {
   const [ageGroupsDisplay, setAgeGroupsDisplay] = useState(DISPLAY_TABLE);
-  const [severitiesDisplay, setSeveritiesDisplay] = useState(DISPLAY_TABLE);
-  const [stagesDisplay, setStagesDisplay] = useState(DISPLAY_TABLE);
+  const [severitiesDisplay, setSeveritiesDisplay] = useState(DISPLAY_CHART);
+  const [stagesDisplay, setStagesDisplay] = useState(DISPLAY_CHART);
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
@@ -73,17 +73,17 @@ const CasesDashboard = ({ report, loading }) => {
 
   const GENDER_DATA = map(get(report, 'overall.gender', []), (item) => ({
     value: item.total,
-    name: item.name.en,
+    name: get(item, 'name.en', 'N/A'),
   }));
 
   const SEVERITY_DATA = map(get(report, 'overall.severities', []), (item) => ({
     value: item.total,
-    name: item.name.en,
+    name: get(item, 'name.en', 'N/A'),
   }));
 
   const STAGE_DATA = map(get(report, 'overall.stages', []), (item) => ({
     value: item.total,
-    name: item.name.en,
+    name: get(item, 'name.en', 'N/A'),
   }));
 
   const AGE_GROUPS_DATA = map(get(report, 'overall.ageGroups', []), (item) => ({
@@ -96,45 +96,10 @@ const CasesDashboard = ({ report, loading }) => {
       <FilterFloatingButton onClick={() => setShowFilters(true)} />
       <Spin spinning={loading}>
         <Row>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
+          <Col xs={24} sm={24}>
             <NumberWidget
               title="Total"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Suspect"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Probable"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Tested"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Treated"
-              value={0}
-              bottomBorderColor={randomColor()}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={4} lg={4} xl={4} xxl={4}>
-            <NumberWidget
-              title="Followup"
-              value={0}
+              value={get(report, 'overview.total', 0)}
               bottomBorderColor={randomColor()}
             />
           </Col>
