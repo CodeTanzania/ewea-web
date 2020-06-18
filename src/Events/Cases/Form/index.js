@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
-import { Button, Input, InputNumber, Form, Row, Col } from 'antd';
+import first from 'lodash/first';
+import isFunction from 'lodash/isFunction';
+import { Button, Divider, Input, InputNumber, Form, Row, Col } from 'antd';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { reduxActions } from '@codetanzania/ewea-api-states';
 import { notifyError, notifySuccess } from '../../../util';
@@ -20,7 +22,6 @@ const {
 const { putCase, postCase } = reduxActions;
 
 /* ui */
-const { TextArea } = Input;
 const labelCol = {
   xs: { span: 24 },
   sm: { span: 24 },
@@ -39,6 +40,8 @@ const wrapperCol = {
 };
 
 /* messages */
+const TITLE_VICTIM_INFORMATION = 'Victim/Patient Information';
+const TITLE_NEXTOFKIN_INFORMATION = 'Next of Kin / Contact Person';
 const MESSAGE_POST_SUCCESS = 'Case was created successfully';
 const MESSAGE_POST_ERROR =
   'Something occurred while saving Case, Please try again!';
@@ -54,6 +57,9 @@ const MESSAGE_PUT_ERROR =
  * @param {object} props.caze Valid case object
  * @param {boolean} props.isEditForm Flag whether form is on edit mode
  * @param {boolean} props.posting Flag whether form is posting data
+ * @param {object} props.cached Cached values for lazy loaded values
+ * @param {Function} props.onCache Cache value callback
+ * @param {Function} props.onClearCache Clear cached values callback
  * @param {Function} props.onCancel Form cancel callback
  * @returns {object} CaseForm component
  * @author lally elias <lallyelias87@gmail.com>
@@ -68,12 +74,39 @@ const MESSAGE_PUT_ERROR =
  *   caze={case}
  *   isEditForm={isEditForm}
  *   posting={posting}
+ *   cached={cached}
+ *   onCache={this.handleOnCache}
+ *   onClearCache={this.handleOnClearCache}
  *   onCancel={this.handleCloseCaseForm}
  * />
  *
  */
-const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
-  const [cached, setCache] = useState({}); // for caching lazy component values
+const CaseForm = ({
+  caze,
+  isEditForm,
+  posting,
+  cached,
+  onCache,
+  onClearCache,
+  onCancel,
+}) => {
+  // form scoped cache keys
+  const cacheKeys = [
+    'form.victim.nationality',
+    'form.victim.gender',
+    'form.victim.area',
+    'form.victim.occupation',
+    'form.stage',
+    'form.severity',
+  ];
+
+  // handle success form save
+  const onSuccess = (message) => {
+    if (isFunction(onClearCache)) {
+      onClearCache(...cacheKeys);
+    }
+    notifySuccess(message);
+  };
 
   // form finish(submit) handler
   const onFinish = (values) => {
@@ -83,13 +116,13 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
       const updates = { ...caze, ...formData };
       putCase(
         updates,
-        () => notifySuccess(MESSAGE_PUT_SUCCESS),
+        () => onSuccess(MESSAGE_PUT_SUCCESS),
         () => notifyError(MESSAGE_PUT_ERROR)
       );
     } else {
       postCase(
         formData,
-        () => notifySuccess(MESSAGE_POST_SUCCESS),
+        () => onSuccess(MESSAGE_POST_SUCCESS),
         () => notifyError(MESSAGE_POST_ERROR)
       );
     }
@@ -103,6 +136,7 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
       initialValues={{
         ...caze,
         stage: get(caze, 'stage._id'),
+        severity: get(caze, 'severity._id'),
         victim: {
           ...get(caze, 'victim', null),
           area: get(caze, 'victim.area._id'),
@@ -113,12 +147,15 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
       }}
       autoComplete="off"
     >
-      {/* start: name & mobile */}
+      {/* start: name, mobile & email */}
+      <Divider orientation="left" title={TITLE_VICTIM_INFORMATION}>
+        {TITLE_VICTIM_INFORMATION}
+      </Divider>
       <Row justify="space-between">
-        <Col xs={24} sm={24} md={11}>
+        <Col xs={24} sm={24} md={10}>
           <Form.Item
             label="Name"
-            title="Victim/Patient Full Name e.g Jane Mdoe"
+            title="Valid Victim/Patient Full Name e.g Jane Mdoe"
             name={['victim', 'name']}
             rules={[{ required: true, message: 'Name is required' }]}
           >
@@ -126,9 +163,9 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
           </Form.Item>
         </Col>
 
-        <Col xs={24} sm={24} md={11}>
+        <Col xs={24} sm={24} md={6}>
           <Form.Item
-            label="Phone"
+            label="Phone Number"
             title="Valid Victim/Patient Mobile Phone Number"
             name={['victim', 'mobile']}
             rules={[{ required: true, message: 'Phone is required' }]}
@@ -136,12 +173,99 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
             <Input />
           </Form.Item>
         </Col>
-      </Row>
-      {/* end: name & mobile */}
 
-      {/* start: area & gender */}
+        <Col xs={24} sm={24} md={6}>
+          <Form.Item
+            label="Email"
+            title="Valid Victim/Patient Email Address e.g jane.mdoe@example.com"
+            name={['victim', 'email']}
+            rules={[
+              {
+                type: 'email',
+                message: 'Email is not valid',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+      </Row>
+      {/* end: name, mobile & email */}
+
+      {/* start: nationality, gender & age */}
       <Row justify="space-between">
-        <Col xs={24} sm={24} md={11}>
+        <Col xs={24} sm={24} md={10}>
+          <Form.Item
+            label="Nationality"
+            title="Victim/Patient Nationality"
+            name={['victim', 'nationality']}
+            rules={[
+              {
+                required: true,
+                message: 'Nationality is required',
+              },
+            ]}
+          >
+            <SearchableSelectInput
+              onSearch={getPartyNationalities}
+              optionLabel={(nationality) => get(nationality, 'strings.name.en')}
+              optionValue="_id"
+              initialValue={
+                get(caze, 'victim.nationality') ||
+                get(cached, 'form.victim.nationality')
+              }
+              onCache={(values) =>
+                onCache({ 'form.victim.nationality': first(values) })
+              }
+            />
+          </Form.Item>
+        </Col>
+        <Col xs={24} sm={24} md={6}>
+          <Form.Item
+            label="Gender"
+            title="Victim/Patient Gender"
+            name={['victim', 'gender']}
+            rules={[
+              {
+                required: true,
+                message: 'Gender is required',
+              },
+            ]}
+          >
+            <SearchableSelectInput
+              onSearch={getPartyGenders}
+              optionLabel={(gender) => `${get(gender, 'strings.name.en')}`}
+              optionValue="_id"
+              initialValue={
+                get(caze, 'victim.gender') || get(cached, 'form.victim.gender')
+              }
+              onCache={(values) =>
+                onCache({ 'form.victim.gender': first(values) })
+              }
+            />
+          </Form.Item>
+        </Col>
+        <Col xs={24} sm={24} md={6}>
+          <Form.Item
+            name={['victim', 'age']}
+            label="Age"
+            title="Victim/Patient Age"
+            rules={[
+              {
+                required: true,
+                message: 'Age is required',
+              },
+            ]}
+          >
+            <InputNumber min={0} max={150} style={{ width: '100%' }} />
+          </Form.Item>
+        </Col>
+      </Row>
+      {/* end: nationality, gender & age */}
+
+      {/* start: area, occupation & stage */}
+      <Row justify="space-between">
+        <Col xs={24} sm={24} md={10}>
           <Form.Item
             label="Area"
             title="Victim/Patient Residential Area"
@@ -164,60 +288,15 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
               }
               optionValue="_id"
               initialValue={
-                get(caze, 'victim.area') || get(cached, 'victim.area')
+                get(caze, 'victim.area') || get(cached, 'form.victim.area')
               }
               onCache={(values) =>
-                setCache({ ...cached, 'victim.area': values[0] })
+                onCache({ 'form.victim.area': first(values) })
               }
             />
           </Form.Item>
         </Col>
-        <Col xs={24} sm={24} md={11}>
-          <Form.Item
-            label="Gender"
-            title="Victim/Patient Gender"
-            name={['victim', 'gender']}
-            rules={[
-              {
-                required: true,
-                message: 'Gender is required',
-              },
-            ]}
-          >
-            <SearchableSelectInput
-              onSearch={getPartyGenders}
-              optionLabel={(gender) => `${get(gender, 'strings.name.en')}`}
-              optionValue="_id"
-              initialValue={
-                get(caze, 'victim.gender') || get(cached, 'victim.gender')
-              }
-              onCache={(values) =>
-                setCache({ ...cached, 'victim.gender': values[0] })
-              }
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-      {/* end: area & gender */}
-
-      {/* start: age & occupation */}
-      <Row justify="space-between">
-        <Col xs={24} sm={24} md={11}>
-          <Form.Item
-            name={['victim', 'age']}
-            label="Age"
-            title="Victim/Patient Age"
-            rules={[
-              {
-                required: true,
-                message: 'Age is required',
-              },
-            ]}
-          >
-            <InputNumber min={0} max={150} style={{ width: '100%' }} />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={24} md={11}>
+        <Col xs={24} sm={24} md={6}>
           <Form.Item
             label="Occupation"
             title="Victim/Patient Occupation e.g Health Worker"
@@ -231,46 +310,15 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
               optionValue="_id"
               initialValue={
                 get(caze, 'victim.occupation') ||
-                get(cached, 'victim.occupation')
+                get(cached, 'form.victim.occupation')
               }
               onCache={(values) =>
-                setCache({ ...cached, 'victim.occupation': values[0] })
+                onCache({ 'form.victim.occupation': first(values) })
               }
             />
           </Form.Item>
         </Col>
-      </Row>
-      {/* end: age & occupation */}
-
-      {/* start: nationality & stage */}
-      <Row justify="space-between">
-        <Col xs={24} sm={24} md={11}>
-          <Form.Item
-            label="Nationality"
-            title="Victim/Patient Nationality"
-            name={['victim', 'nationality']}
-            rules={[
-              {
-                required: true,
-                message: 'Nationality is required',
-              },
-            ]}
-          >
-            <SearchableSelectInput
-              onSearch={getPartyNationalities}
-              optionLabel={(nationality) => get(nationality, 'strings.name.en')}
-              optionValue="_id"
-              initialValue={
-                get(caze, 'victim.nationality') ||
-                get(cached, 'victim.nationality')
-              }
-              onCache={(values) =>
-                setCache({ ...cached, 'victim.nationality': values[0] })
-              }
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} sm={24} md={11}>
+        <Col xs={24} sm={24} md={6}>
           <Form.Item
             label="Stage"
             title="Case Stage"
@@ -286,47 +334,58 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
               onSearch={getCaseStages}
               optionLabel={(stage) => get(stage, 'strings.name.en')}
               optionValue="_id"
-              initialValue={get(caze, 'stage') || get(cached, 'stage')}
-              onCache={(values) => setCache({ ...cached, stage: values[0] })}
+              initialValue={get(caze, 'stage') || get(cached, 'form.stage')}
+              onCache={(values) => onCache({ 'form.stage': first(values) })}
             />
           </Form.Item>
         </Col>
       </Row>
-      {/* end: nationality & stage */}
+      {/* end: area, occupation & stage */}
 
-      {/* start: next of kin name & mobile */}
+      {/* start: next of kin name, mobile & email */}
+      <Divider orientation="left" title={TITLE_NEXTOFKIN_INFORMATION}>
+        {TITLE_NEXTOFKIN_INFORMATION}
+      </Divider>
       <Row justify="space-between">
-        <Col xs={24} sm={24} md={11}>
+        <Col xs={24} sm={24} md={10}>
           <Form.Item
-            label="Next of Kin - Name"
+            label="Name"
             title="Valid Next of Kin Name e.g Asha Mdoe"
             name={['victim', 'nextOfKin', 'name']}
+            rules={[{ required: true, message: 'Name is required' }]}
           >
             <Input />
           </Form.Item>
         </Col>
 
-        <Col xs={24} sm={24} md={11}>
+        <Col xs={24} sm={24} md={6}>
           <Form.Item
-            label="Next of Kin - Phone"
-            title="Valid Next of Kin Mobile Phone Number"
+            label="Phone Number"
+            title="Valid Next of Kin Mobile Phone Number e.g 0714112233"
             name={['victim', 'nextOfKin', 'mobile']}
+            rules={[{ required: true, message: 'Phone Number is required' }]}
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+
+        <Col xs={24} sm={24} md={6}>
+          <Form.Item
+            label="Email"
+            title="Valid Next of Kin Email Address e.g asha.mdoe@example.com"
+            name={['victim', 'nextOfKin', 'email']}
+            rules={[
+              {
+                type: 'email',
+                message: 'Email is not valid',
+              },
+            ]}
           >
             <Input />
           </Form.Item>
         </Col>
       </Row>
-      {/* end: next of kin name & mobile */}
-
-      {/* start: address */}
-      <Form.Item
-        label="Address"
-        title="Victim/Patient Physical Address"
-        name={['victim', 'address']}
-      >
-        <TextArea autoSize={{ minRows: 2, maxRows: 10 }} />
-      </Form.Item>
-      {/* end:address */}
+      {/* end: next of kin name, mobile & email */}
 
       {/* start:form actions */}
       <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
@@ -348,7 +407,8 @@ const CaseForm = ({ caze, isEditForm, posting, onCancel }) => {
 };
 
 CaseForm.defaultProps = {
-  caze: {},
+  caze: null,
+  cached: null,
 };
 
 CaseForm.propTypes = {
@@ -358,6 +418,25 @@ CaseForm.propTypes = {
   }),
   isEditForm: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
+  cached: PropTypes.shape({
+    'form.stage': PropTypes.shape({
+      _id: PropTypes.string,
+    }),
+    'form.victim.gender': PropTypes.shape({
+      _id: PropTypes.string,
+    }),
+    'form.victim.area': PropTypes.shape({
+      _id: PropTypes.string,
+    }),
+    'form.victim.occupation': PropTypes.shape({
+      _id: PropTypes.string,
+    }),
+    'form.victim.nationality': PropTypes.shape({
+      _id: PropTypes.string,
+    }),
+  }),
+  onCache: PropTypes.func.isRequired,
+  onClearCache: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
 };
 
