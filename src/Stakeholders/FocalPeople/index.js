@@ -356,7 +356,7 @@ class FocalPeople extends Component {
             value: searchQuery,
           }}
           action={{
-            label: 'New Focal Person',
+            label: 'New Person',
             icon: <PlusOutlined />,
             size: 'large',
             title: 'Add New Focal Person',
