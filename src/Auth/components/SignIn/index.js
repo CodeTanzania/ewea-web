@@ -54,7 +54,6 @@ const SignInForm = ({ loading, history }) => {
           <Input
             prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
             placeholder="Username"
-            size="large"
           />
         </Form.Item>
         {/* end username field */}
@@ -67,7 +66,6 @@ const SignInForm = ({ loading, history }) => {
           <Input.Password
             prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
             placeholder="Password"
-            size="large"
           />
         </Form.Item>
         {/* end password field */}
@@ -79,7 +77,6 @@ const SignInForm = ({ loading, history }) => {
             htmlType="submit"
             className="signIn-form-button"
             loading={loading}
-            size="large"
           >
             Sign In
           </Button>
