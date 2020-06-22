@@ -53,7 +53,7 @@ const OverviewDashboard = ({ report, loading }) => {
       <FilterFloatingButton onClick={() => setShowFilters(true)} />
       <Spin spinning={loading}>
         <Divider orientation="left" plain>
-          <Text strong>EVENTS</Text>
+          <Text strong>Emergencies</Text>
         </Divider>
         <Row>
           <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
@@ -95,7 +95,7 @@ const OverviewDashboard = ({ report, loading }) => {
         </Row>
 
         <Divider orientation="left" plain>
-          <Text strong>VEHICLE DISPATCHES</Text>
+          <Text strong>Vehicle Dispatches</Text>
         </Divider>
         <Row>
           <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
@@ -168,7 +168,7 @@ const OverviewDashboard = ({ report, loading }) => {
           </Col>
         </Row>
         <Divider orientation="left" plain>
-          <Text strong>STAKEHOLDERS</Text>
+          <Text strong>Stakeholders</Text>
         </Divider>
         <Row>
           <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
