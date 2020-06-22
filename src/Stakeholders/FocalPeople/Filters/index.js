@@ -1,205 +1,175 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { Form } from '@ant-design/compatible';
-import { Button } from 'antd';
-import '@ant-design/compatible/assets/index.css';
+import { Button, Form } from 'antd';
+import get from 'lodash/get';
+
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
-/* declarations */
+/* http actions */
 const {
   getPartyGroups,
   getAdministrativeAreas,
   getPartyRoles,
   getAgencies,
 } = httpActions;
+/* redux actions */
 const { clearFocalPersonFilters, filterFocalPeople } = reduxActions;
 
+const LABEL_COL = {
+  xs: { span: 24 },
+  sm: { span: 24 },
+  md: { span: 24 },
+  lg: { span: 24 },
+  xl: { span: 24 },
+  xxl: { span: 24 },
+};
+const WRAPPER_COL = {
+  xs: { span: 24 },
+  sm: { span: 24 },
+  md: { span: 24 },
+  lg: { span: 24 },
+  xl: { span: 24 },
+  xxl: { span: 24 },
+};
+
 /**
- * @class
+ * @function
  * @name FocalPeopleFilters
  * @description Filter modal component for filtering contacts
- *
- * @version 0.1.0
+ * @param {object} props Component object properties
+ * @param {object} props.filter filter object
+ * @param {object} props.cached Cached values for lazy loaded components
+ * @param {Function} props.onCache Callback for caching lazy loaded selected values
+ * @param {Function} props.onClearCache Callback for clearing cached values
+ * @param {Function} props.onCancel Callback for closing Filter modal window
+ * @returns {object} Focal people filters
+ * @version 0.2.0
  * @since 0.1.0
  */
-class FocalPeopleFilters extends Component {
+const FocalPeopleFilters = ({
+  filter,
+  cached,
+  onCache,
+  onClearCache,
+  onCancel,
+}) => {
   /**
    * @function
-   * @name handleSubmit
-   * @description Handle filter action
-   *
-   * @param {object} event onSubmit event object
-   * @returns {undefined}
-   *
+   * @name onFinish
+   * @description Callback invoked when submitting the form after successfully validation
+   * @param {object} values Filled form values object
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleSubmit = (event) => {
-    event.preventDefault();
-    const {
-      form: { validateFields },
-      onCancel,
-    } = this.props;
-
-    validateFields((error, values) => {
-      if (!error) {
-        filterFocalPeople(values);
-        onCancel();
-      }
-    });
+  const onFinish = (values) => {
+    filterFocalPeople(values);
+    onCancel();
   };
 
   /**
    * @function
-   * @name handleClearFilter
-   * @description Action handle when clear
+   * @name handleClearFilters
+   * @description Clear cached values and filter values in redux store
    *
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleClearFilter = () => {
-    const { onCancel, onClearCache } = this.props;
+  const handleClearFilters = () => {
     clearFocalPersonFilters();
 
     onClearCache();
     onCancel();
   };
 
-  /**
-   * @function
-   * @name cacheFilters
-   * @description cache lazy loaded value from filters
-   *
-   * @param {object} values Object with key value of what is to be cached
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  cacheFilters = (values) => {
-    const { onCache } = this.props;
-    onCache(values);
-  };
+  return (
+    <Form
+      labelCol={LABEL_COL}
+      wrapperCol={WRAPPER_COL}
+      onFinish={onFinish}
+      autoComplete="off"
+      initialValues={{
+        area: get(filter, 'area', []),
+        group: get(filter, 'group', []),
+        role: get(filter, 'role', []),
+        party: get(filter, 'party', []),
+      }}
+    >
+      {/* start contact group filters */}
+      <Form.Item label="By Area(s)" name="area">
+        <SearchableSelectInput
+          onSearch={getAdministrativeAreas}
+          optionLabel={(area) =>
+            `${get(area, 'strings.name.en')} (${get(
+              area,
+              'relations.level.strings.name.en',
+              'N/A'
+            )})`
+          }
+          optionValue="_id"
+          mode="multiple"
+          onCache={(areas) => {
+            onCache({ areas });
+          }}
+          initialValue={get(cached, 'areas', [])}
+        />
+      </Form.Item>
+      {/* end contact group filters */}
 
-  render() {
-    const {
-      form: { getFieldDecorator },
-      onCancel,
-      filter,
-      cached,
-    } = this.props;
+      {/* start contact group filters */}
+      <Form.Item label="By Group(s)" name="group">
+        <SearchableSelectInput
+          onSearch={getPartyGroups}
+          optionLabel={(group) => get(group, 'group.strings.name.en', 'N/A')}
+          optionValue="_id"
+          mode="multiple"
+          onCache={(groups) => onCache({ groups })}
+          initialValue={get(cached, 'groups', [])}
+        />
+      </Form.Item>
+      {/* end contact group filters */}
 
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 },
-        xl: { span: 24 },
-        xxl: { span: 24 },
-      },
-    };
+      {/* start contact group filters */}
+      <Form.Item label="By Role(s)" name="role">
+        <SearchableSelectInput
+          onSearch={getPartyRoles}
+          optionLabel={(role) => get(role, 'strings.name.en', 'N/A')}
+          optionValue="_id"
+          mode="multiple"
+          onCache={(roles) => onCache({ roles })}
+          initialValue={get(cached, 'roles', [])}
+        />
+      </Form.Item>
+      {/* end contact group filters */}
 
-    return (
-      <Form onSubmit={this.handleSubmit} autoComplete="off">
-        {/* start contact group filters */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="By Area(s)">
-          {getFieldDecorator('area', {
-            initialValue: filter ? filter.area : [],
-          })(
-            <SearchableSelectInput
-              onSearch={getAdministrativeAreas}
-              optionLabel={(area) => area.strings.name.en}
-              optionValue="_id"
-              mode="multiple"
-              onCache={(areas) => {
-                this.cacheFilters({ areas });
-              }}
-              initialValue={cached && cached.areas ? cached.areas : []}
-            />
-          )}
-        </Form.Item>
-        {/* end contact group filters */}
+      {/* start contact group filters */}
+      <Form.Item label="By Agencies" name="party">
+        <SearchableSelectInput
+          onSearch={getAgencies}
+          optionLabel="name"
+          optionValue="_id"
+          mode="multiple"
+          onCache={(agencies) => onCache({ agencies })}
+          initialValue={get(cached, 'agencies', [])}
+        />
+      </Form.Item>
+      {/* end contact group filters */}
 
-        {/* start contact group filters */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="By Group(s)">
-          {getFieldDecorator('group', {
-            initialValue: filter ? filter.group : [],
-          })(
-            <SearchableSelectInput
-              onSearch={getPartyGroups}
-              optionLabel={(group) => group.strings.name.en}
-              optionValue="_id"
-              mode="multiple"
-              onCache={(groups) => this.cacheFilters({ groups })}
-              initialValue={cached && cached.groups ? cached.groups : []}
-            />
-          )}
-        </Form.Item>
-        {/* end contact group filters */}
-
-        {/* start contact group filters */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="By Role(s)">
-          {getFieldDecorator('role', {
-            initialValue: filter ? filter.role : [],
-          })(
-            <SearchableSelectInput
-              onSearch={getPartyRoles}
-              optionLabel={(role) => role.strings.name.en}
-              optionValue="_id"
-              mode="multiple"
-              onCache={(roles) => this.cacheFilters({ roles })}
-              initialValue={cached && cached.roles ? cached.roles : []}
-            />
-          )}
-        </Form.Item>
-        {/* end contact group filters */}
-
-        {/* start contact group filters */}
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Form.Item {...formItemLayout} label="By Agencies">
-          {getFieldDecorator('party', {
-            initialValue: filter ? filter.party : [],
-          })(
-            <SearchableSelectInput
-              onSearch={getAgencies}
-              optionLabel="name"
-              optionValue="_id"
-              mode="multiple"
-              onCache={(agencies) => this.cacheFilters({ agencies })}
-              initialValue={cached && cached.agencies ? cached.agencies : []}
-            />
-          )}
-        </Form.Item>
-        {/* end contact group filters */}
-
-        {/* form actions */}
-        <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
-          <Button onClick={onCancel}>Cancel</Button>
-          <Button style={{ marginLeft: 8 }} onClick={this.handleClearFilter}>
-            Clear
-          </Button>
-          <Button style={{ marginLeft: 8 }} type="primary" htmlType="submit">
-            Filter
-          </Button>
-        </Form.Item>
-        {/* end form actions */}
-      </Form>
-    );
-  }
-}
+      {/* form actions */}
+      <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
+        <Button onClick={onCancel}>Cancel</Button>
+        <Button style={{ marginLeft: 8 }} onClick={handleClearFilters}>
+          Clear
+        </Button>
+        <Button style={{ marginLeft: 8 }} type="primary" htmlType="submit">
+          Filter
+        </Button>
+      </Form.Item>
+      {/* end form actions */}
+    </Form>
+  );
+};
 
 FocalPeopleFilters.propTypes = {
   filter: PropTypes.objectOf(
@@ -207,10 +177,6 @@ FocalPeopleFilters.propTypes = {
       groups: PropTypes.arrayOf(PropTypes.string),
     })
   ),
-  form: PropTypes.shape({
-    getFieldDecorator: PropTypes.func,
-    validateFields: PropTypes.func,
-  }).isRequired,
   onCancel: PropTypes.func.isRequired,
   cached: PropTypes.shape({
     groups: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })),
@@ -227,6 +193,6 @@ FocalPeopleFilters.defaultProps = {
   cached: null,
 };
 
-export default Connect(Form.create()(FocalPeopleFilters), {
+export default Connect(FocalPeopleFilters, {
   filter: 'focalPeople.filter',
 });
