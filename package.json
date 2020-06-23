@@ -27,7 +27,7 @@
     "@ant-design/compatible": "^1.0.2",
     "@ant-design/icons": "^4.2.1",
     "@codetanzania/ewea-api-client": "^0.24.0",
-    "@codetanzania/ewea-api-states": "^0.30.0",
+    "@codetanzania/ewea-api-states": "^0.31.0",
     "@lykmapipo/common": "^0.36.0",
     "antd": "^4.3.4",
     "axios": "^0.19.2",
