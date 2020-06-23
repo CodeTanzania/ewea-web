@@ -65,6 +65,8 @@ const AssignPermissionsForm = ({
     '_id'
   );
 
+  console.log(role, assignedPermissions);
+
   const onFinish = (values) => {
     const updatedRole = {
       ...role,
@@ -99,7 +101,14 @@ const AssignPermissionsForm = ({
           <Checkbox.Group>
             <Row>
               {map(groupedPermissions, (actions, resource) => (
-                <Col span={4} style={{ marginTop: '20px' }}>
+                <Col
+                  xs={24}
+                  sm={24}
+                  md={12}
+                  lg={6}
+                  xl={4}
+                  style={{ marginTop: '20px' }}
+                >
                   <Text strong>{resource}</Text>
 
                   {map(actions, (permission) => (

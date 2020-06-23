@@ -1,7 +1,7 @@
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, KeyOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import isArray from 'lodash/isArray';
@@ -375,6 +375,12 @@ class Roles extends Component {
                   icon: 'edit',
                 },
                 {
+                  name: 'Update Permissions',
+                  title: 'Update Role Permissions',
+                  onClick: () => this.handleAssignPermissions(item),
+                  icon: <KeyOutlined />,
+                },
+                {
                   name: 'Share Stakeholder Role',
                   title: 'Share Stakeholder Role details with others',
                   onClick: () => this.handleShare(item),
@@ -445,7 +451,7 @@ class Roles extends Component {
         {/* create/edit form modal */}
         <Modal
           className="modal-window-80"
-          title="Edit Role's Permissions"
+          title="Update Role's Permissions"
           visible={showAssignPermissionsForm}
           footer={null}
           onCancel={this.closeAssignPermissionsForm}
