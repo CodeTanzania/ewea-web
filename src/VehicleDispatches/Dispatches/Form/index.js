@@ -19,6 +19,7 @@ import map from 'lodash/map';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifySuccess, notifyError } from '../../../util';
 
+/* http actions */
 const {
   getFeatures,
   getAdministrativeAreas,
@@ -28,8 +29,11 @@ const {
   getFocalPeople,
   getPriorities,
 } = httpActions;
+/* reduxActions */
 const { postDispatch, putDispatch } = reduxActions;
+/* constants */
 const { TextArea } = Input;
+const { Step } = Steps;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -48,7 +52,6 @@ const formItemLayout = {
     xxl: { span: 24 },
   },
 };
-const { Step } = Steps;
 
 /**
  * @function
@@ -599,7 +602,7 @@ const VehicleDispatchForm = ({
               </Col>
             </Row>
 
-            <Form.Item name={['pickup', 'remarks']} label="Remarks">
+            <Form.Item name={['dropoff', 'remarks']} label="Remarks">
               <TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
             </Form.Item>
           </>

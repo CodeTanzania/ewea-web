@@ -43,15 +43,19 @@ const {
 const { confirm } = Modal;
 
 /* constants */
-const numberSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 10, xs: 10 };
+const numberSpan = { xxl: 3, xl: 3, lg: 4, md: 4, sm: 10, xs: 10 };
 const vehicleSpan = { xxl: 4, xl: 4, lg: 5, md: 6, sm: 0, xs: 0 };
 const eventSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 9, xs: 8 };
 const prioritySpan = { xxl: 2, xl: 2, lg: 3, md: 0, sm: 0, xs: 0 };
-const statusSpan = { xxl: 6, xl: 6, lg: 4, md: 4, sm: 0, xs: 0 };
+const statusSpan = { xxl: 2, xl: 2, lg: 3, md: 3, sm: 0, xs: 0 };
+const pickupSpan = { xxl: 3, xl: 3, lg: 1, md: 1, sm: 0, xs: 0 };
+const dropOffSpan = { xxl: 3, xl: 3, lg: 1, md: 1, sm: 0, xs: 0 };
 const headerLayout = [
   { ...numberSpan, header: 'Number' },
   { ...vehicleSpan, header: 'Vehicle' },
   { ...eventSpan, header: 'Event' },
+  { ...pickupSpan, header: 'Pickup Location' },
+  { ...dropOffSpan, header: 'Drop-Off Location' },
   { ...prioritySpan, header: 'Priority' },
   { ...statusSpan, header: 'Status' },
 ];
@@ -70,7 +74,6 @@ class Dispatches extends Component {
     showFilters: false,
     isEditForm: false,
     showNotificationForm: false,
-    selectedDispatches: [],
     notificationSubject: undefined,
     notificationBody: undefined,
     cached: null,
@@ -230,14 +233,11 @@ class Dispatches extends Component {
    * @name openNotificationForm
    * @description Handle on notify dispatches
    *
-   * @param {object[]} dispatches List of dispatches selected to be notified
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openNotificationForm = (dispatches) => {
+  openNotificationForm = () => {
     this.setState({
-      selectedDispatches: dispatches,
       showNotificationForm: true,
     });
   };
@@ -418,7 +418,6 @@ class Dispatches extends Component {
       cached,
       isEditForm,
       showNotificationForm,
-      selectedDispatches,
       notificationSubject,
       notificationBody,
       openFormInStep,
@@ -572,6 +571,12 @@ class Dispatches extends Component {
                 {get(item, 'type.strings.name.en', 'N/A')}
               </Col>
 
+              <Col {...pickupSpan}>
+                {get(item, 'pickup.facility.strings.name.en', 'N/A')}
+              </Col>
+              <Col {...dropOffSpan}>
+                {get(item, 'dropoff.facility.strings.name.en', 'N/A')}
+              </Col>
               <Col {...prioritySpan}>
                 {get(item, 'priority.strings.name.en', 'N/A')}
               </Col>
@@ -598,7 +603,6 @@ class Dispatches extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={selectedDispatches}
             onSearchRecipients={getDispatchesFromAPI}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
