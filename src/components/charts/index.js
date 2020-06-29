@@ -156,8 +156,8 @@ export const EChart = ({ option, style }) => {
 };
 
 EChart.propTypes = {
-  option: PropTypes.shape(PropTypes.any).isRequired,
-  style: PropTypes.shape(PropTypes.any),
+  option: PropTypes.objectOf(PropTypes.any).isRequired,
+  style: PropTypes.objectOf(PropTypes.any),
 };
 
 EChart.defaultProps = {

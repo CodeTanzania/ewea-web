@@ -225,7 +225,7 @@ const EventsOverviewDashboard = ({ report, loading }) => {
 };
 
 EventsOverviewDashboard.propTypes = {
-  report: PropTypes.shape({ overview: PropTypes.object }),
+  report: PropTypes.shape({ overview: PropTypes.objectOf(PropTypes.any) }),
   loading: PropTypes.bool.isRequired,
 };
 

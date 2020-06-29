@@ -565,15 +565,15 @@ EventChangelogForm.propTypes = {
     color: PropTypes.string,
     certainty: PropTypes.shape({
       _id: PropTypes.string,
-      strings: PropTypes.object,
+      strings: PropTypes.objectOf(PropTypes.any),
     }),
     urgency: PropTypes.shape({
       _id: PropTypes.string,
-      strings: PropTypes.object,
+      strings: PropTypes.objectOf(PropTypes.any),
     }),
     severity: PropTypes.shape({
       _id: PropTypes.string,
-      strings: PropTypes.object,
+      strings: PropTypes.objectOf(PropTypes.any),
     }),
   }).isRequired,
   form: PropTypes.shape({

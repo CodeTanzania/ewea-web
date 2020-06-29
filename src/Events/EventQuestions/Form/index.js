@@ -224,8 +224,8 @@ EventQuestionForm.propTypes = {
       _id: PropTypes.string,
     }),
     relations: PropTypes.shape({
-      indicator: PropTypes.object,
-      topic: PropTypes.object,
+      indicator: PropTypes.objectOf(PropTypes.any),
+      topic: PropTypes.objectOf(PropTypes.any),
     }),
   }).isRequired,
   isEditForm: PropTypes.bool.isRequired,
