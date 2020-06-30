@@ -40,9 +40,9 @@ const {
   deleteDispatch,
   putDispatch,
 } = reduxActions;
-const { confirm } = Modal;
 
 /* constants */
+const { confirm } = Modal;
 const numberSpan = { xxl: 3, xl: 3, lg: 4, md: 4, sm: 10, xs: 10 };
 const vehicleSpan = { xxl: 4, xl: 4, lg: 5, md: 6, sm: 0, xs: 0 };
 const eventSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 9, xs: 8 };
@@ -316,14 +316,21 @@ class Dispatches extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteDispatch(
-          dispatch._id, // eslint-disable-line
-          () => notifySuccess('Vehicle Dispatch was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Vehicle Dispatch, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve, reject) => {
+          deleteDispatch(
+            dispatch._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Vehicle Dispatch was archived successfully');
+            },
+            () => {
+              reject();
+              notifyError(
+                'An error occurred while archiving Vehicle Dispatch, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };
@@ -389,14 +396,21 @@ class Dispatches extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        putDispatch(
-          data, // eslint-disable-line
-          () => notifySuccess('Vehicle Dispatch was updated successfully'),
-          () =>
-            notifyError(
-              'An error occurred while updating dispatch, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve, reject) => {
+          putDispatch(
+            data, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Vehicle Dispatch was updated successfully');
+            },
+            () => {
+              reject();
+              notifyError(
+                'An error occurred while updating dispatch, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };
