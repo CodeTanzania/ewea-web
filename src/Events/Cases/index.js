@@ -731,7 +731,6 @@ class CaseList extends Component {
           afterClose={this.handleAfterNotificationFormClose}
         >
           <NotificationForm
-            recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}

@@ -13,6 +13,16 @@ import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 
+/* http actions */
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getAgencies,
+  getRoles,
+  getVehicleStatusesExportUrl,
+} = httpActions;
+/* redux actions */
 const {
   getVehicleStatuses,
   openVehicleStatusForm,
@@ -25,18 +35,9 @@ const {
   postVehicleStatus,
   putVehicleStatus,
 } = reduxActions;
-const { confirm } = Modal;
-
-const {
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getAgencies,
-  getRoles,
-  getVehicleStatusesExportUrl,
-} = httpActions;
 
 /* constants */
+const { confirm } = Modal;
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 16, xs: 14 };
 const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 4 };
 const descriptionSpan = { xxl: 14, xl: 14, lg: 14, md: 13, sm: 0, xs: 0 };
@@ -343,7 +344,6 @@ class VehicleStatus extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
