@@ -19,7 +19,7 @@ import {
   generateFocalPersonVCard,
 } from '../../util';
 
-/* constants */
+/* http actions */
 const {
   getFocalPeople: getFocalPeopleFromAPI,
   getAdministrativeAreas,
@@ -28,6 +28,7 @@ const {
   getAgencies,
   getFocalPeopleExportUrl,
 } = httpActions;
+/* redux actions */
 const {
   closeFocalPersonForm,
   getFocalPeople,
@@ -40,8 +41,9 @@ const {
   postFocalPerson,
   putFocalPerson,
 } = reduxActions;
+/* ui */
 const { confirm } = Modal;
-
+/* constants */
 const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
 const roleSpan = { xxl: 6, xl: 5, lg: 5, md: 0, sm: 0, xs: 0 };
 const phoneSpan = { xxl: 4, xl: 5, lg: 5, md: 4, sm: 9, xs: 8 };

@@ -30,7 +30,6 @@ const OCCUPATION_COLUMNS = [
   { title: 'Occupation', dataIndex: ['name', 'en'] },
   { title: 'Total', dataIndex: 'total' },
 ];
-
 const STAGE_COLUMNS = [
   { title: 'Stage', dataIndex: 'name' },
   { title: 'Total', dataIndex: 'value' },
@@ -39,12 +38,10 @@ const SEVERITY_COLUMNS = [
   { title: 'Severity', dataIndex: 'name' },
   { title: 'Total', dataIndex: 'value' },
 ];
-
 const NATIONALITY_COLUMNS = [
   { title: 'Nationality', dataIndex: ['name', 'en'] },
   { title: 'Total', dataIndex: 'total' },
 ];
-
 const AGE_GROUPS_COLUMNS = [
   { title: 'Age Group', dataIndex: 'name' },
   { title: 'Total', dataIndex: 'value' },

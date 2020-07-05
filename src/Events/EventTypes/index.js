@@ -14,7 +14,16 @@ import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess, truncateString } from '../../util';
 
-/* constants */
+/* http actions */
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getRoles,
+  getAgencies,
+  getEventTypesExportUrl,
+} = httpActions;
+/* redux actions */
 const {
   getEventTypes,
   openEventTypeForm,
@@ -25,6 +34,9 @@ const {
   refreshEventTypes,
   paginateEventTypes,
 } = reduxActions;
+
+/* constants */
+const { confirm } = Modal;
 const nameSpan = { xxl: 7, xl: 7, lg: 7, md: 7, sm: 10, xs: 9 };
 const groupSpan = { xxl: 4, xl: 4, lg: 4, md: 5, sm: 10, xs: 9 };
 const descriptionSpan = { xxl: 11, xl: 11, lg: 11, md: 9, sm: 0, xs: 0 };
@@ -33,16 +45,6 @@ const headerLayout = [
   { ...groupSpan, header: 'Group' },
   { ...descriptionSpan, header: 'Description' },
 ];
-const {
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getRoles,
-  getAgencies,
-  getEventTypesExportUrl,
-} = httpActions;
-
-const { confirm } = Modal;
 
 /**
  * @class
@@ -149,7 +151,7 @@ class EventTypes extends Component {
       const eventTypeList = eventTypes.map(
         (eventType) =>
           `Name: ${eventType.strings.name.en}\nDescription: ${
-          // eslint-disable-line
+            // eslint-disable-line
             eventType.strings.description.en
           }\n`
       );
@@ -277,7 +279,7 @@ class EventTypes extends Component {
             onDeselectItem,
           }) => (
             <ListItem
-                key={item._id} // eslint-disable-line
+              key={item._id} // eslint-disable-line
               name={item.strings.name.en}
               item={item}
               isSelected={isSelected}

@@ -35,8 +35,9 @@ const {
   putPartyGroup,
 } = reduxActions;
 
-/* constants */
+/* ui */
 const { confirm } = Modal;
+/* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 6, xs: 14 };
 const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 5, xs: 4 };
 const descriptionSpan = { xxl: 15, xl: 15, lg: 15, md: 14, sm: 9, xs: 0 };

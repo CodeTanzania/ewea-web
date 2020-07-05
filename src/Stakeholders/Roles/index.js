@@ -14,6 +14,7 @@ import { notifyError, notifySuccess, truncateString } from '../../util';
 import RoleForm from './Form';
 import AssignPermissionForm from './AssignPermissionsForm';
 
+/* http actions */
 const {
   getPartyRolesExportUrl,
   getFocalPeople,
@@ -22,6 +23,7 @@ const {
   getPartyRoles: getPartyRolesFromAPI,
   getAgencies,
 } = httpActions;
+/* redux actions */
 const {
   getPartyRoles,
   openPartyRoleForm,
@@ -32,6 +34,8 @@ const {
   deletePartyRole,
 } = reduxActions;
 
+/* ui */
+const { confirm } = Modal;
 /* constants */
 const nameSpan = { xxl: 7, xl: 7, lg: 7, md: 7, sm: 16, xs: 15 };
 const abbreviationSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 3, xs: 3 };
@@ -53,7 +57,6 @@ const headerLayout = [
     title: 'Explanation of roles',
   },
 ];
-const { confirm } = Modal;
 
 /**
  * @class

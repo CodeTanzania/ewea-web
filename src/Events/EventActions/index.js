@@ -35,8 +35,9 @@ const {
   deleteEventAction,
 } = reduxActions;
 
-/* constants */
+/* ui */
 const { confirm } = Modal;
+/* constants */
 const functionSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
 const nameSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };
 const headerLayout = [

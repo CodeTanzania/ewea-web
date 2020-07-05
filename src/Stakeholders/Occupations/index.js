@@ -33,8 +33,9 @@ const {
   deletePartyOccupation,
 } = reduxActions;
 
-/* constants */
+/* ui */
 const { confirm } = Modal;
+/* constants */
 const nameSpan = { xxl: 7, xl: 7, lg: 7, md: 7, sm: 16, xs: 15 };
 const abbreviationSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 3, xs: 3 };
 const descriptionSpan = { xxl: 11, xl: 11, lg: 11, md: 10, sm: 0, xs: 0 };

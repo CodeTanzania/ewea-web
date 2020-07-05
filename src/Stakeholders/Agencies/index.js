@@ -36,13 +36,14 @@ const {
   putAgency,
 } = reduxActions;
 
+/* ui */
+const { confirm } = Modal;
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 7, sm: 14, xs: 12 };
 const abbreviationSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
 const areaSpan = { xxl: 4, xl: 4, lg: 4, md: 0, sm: 0, xs: 0 };
 const phoneSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 6, xs: 6 };
 const emailSpan = { xxl: 5, xl: 5, lg: 5, md: 6, sm: 0, xs: 0 };
-
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...abbreviationSpan, header: 'Abbreviation' },
@@ -50,7 +51,6 @@ const headerLayout = [
   { ...phoneSpan, header: 'Phone Number' },
   { ...emailSpan, header: 'Email' },
 ];
-const { confirm } = Modal;
 
 /**
  * @class

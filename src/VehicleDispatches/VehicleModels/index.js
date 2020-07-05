@@ -13,6 +13,16 @@ import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 
+/* http actions */
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getAgencies,
+  getRoles,
+  getVehicleModelsExportUrl,
+} = httpActions;
+/* redux actions */
 const {
   getVehicleModels,
   openVehicleModelForm,
@@ -25,17 +35,9 @@ const {
   postVehicleModel,
   putVehicleModel,
 } = reduxActions;
+
+/* ui */
 const { confirm } = Modal;
-
-const {
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getAgencies,
-  getRoles,
-  getVehicleModelsExportUrl,
-} = httpActions;
-
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 16, xs: 14 };
 const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 4 };

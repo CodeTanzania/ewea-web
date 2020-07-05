@@ -21,8 +21,7 @@ const {
   getRoles,
   getUnitsExportUrl,
 } = httpActions;
-
-/* state actions */
+/* redux actions */
 const {
   getUnits,
   openUnitForm,
@@ -36,6 +35,7 @@ const {
 
 /* ui */
 const { confirm } = Modal;
+/* constants */
 const nameSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 16, xs: 14 };
 const abbreviationSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 4, xs: 4 };
 const symbolSpan = { xxl: 4, xl: 3, lg: 4, md: 4, sm: 0, xs: 0 };

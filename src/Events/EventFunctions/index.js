@@ -25,8 +25,7 @@ const {
   getRoles,
   getEventFunctionsExportUrl,
 } = httpActions;
-
-/* state actions */
+/* redux actions */
 const {
   getEventFunctions,
   openEventFunctionForm,

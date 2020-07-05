@@ -26,7 +26,9 @@ import {
 } from '../components/dashboardWidgets';
 import { FilterFloatingButton } from '../components/FloatingButton';
 
+/* redux actions */
 const { getOverviewsReport } = reduxActions;
+/* ui */
 const { Text } = Typography;
 
 /**

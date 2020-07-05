@@ -34,8 +34,9 @@ const {
   deleteVehicle,
 } = reduxActions;
 
-/* constants */
+/* ui */
 const { confirm } = Modal;
+/* constants */
 const typeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 8, xs: 7 };
 const plateNumberSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 8, xs: 7 };
 const statusSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 0 };
