@@ -356,14 +356,21 @@ class Events extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEvent(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Event was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving event, Please contact your system Administrator'
-            )
-        );
+        return Promise((resolve) => {
+          deleteEvent(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Event was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving event, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

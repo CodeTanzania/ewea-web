@@ -72,7 +72,6 @@ class PartyGroups extends Component {
    * @function
    * @name openPartyGroupsForm
    * @description Open party group form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -84,7 +83,6 @@ class PartyGroups extends Component {
    * @function
    * @name closePartyGroupsForm
    * @description close party group form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -97,9 +95,7 @@ class PartyGroups extends Component {
    * @function
    * @name searchPartyGroups
    * @description Search Stakeholder Groups List based on supplied filter word
-   *
    * @param {object} party Party instance
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -111,9 +107,7 @@ class PartyGroups extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} partyType party group to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -152,7 +146,6 @@ class PartyGroups extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -164,9 +157,7 @@ class PartyGroups extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple party groups
-   *
    * @param {object[]| object} partyGroups party groups list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -196,7 +187,6 @@ class PartyGroups extends Component {
    * @function
    * @name handleRefreshPartyGroups
    * @description Refresh Stakeholder Groups list
-   *
    * @returns {undefined}
    * @version 0.1.0
    * @since 0.1.0
@@ -226,14 +216,21 @@ class PartyGroups extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deletePartyGroup(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Stakeholder group was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Stakeholder group, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deletePartyGroup(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Stakeholder group was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Stakeholder group, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

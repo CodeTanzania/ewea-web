@@ -65,7 +65,6 @@ const headerLayout = [
  * @class
  * @name Dispatches
  * @description Render dispatch list which have search box, actions and dispatch list
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -89,9 +88,7 @@ class Dispatches extends Component {
    * @function
    * @name handleOnCachedValues
    * @description Cached selected values for filters
-   *
    * @param {object} cached values to be cached from filter
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -105,7 +102,6 @@ class Dispatches extends Component {
    * @function
    * @name handleClearCachedValues
    * @description Clear cached values
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -118,7 +114,6 @@ class Dispatches extends Component {
    * @name openFiltersModal
    * @description open filters modal by setting it's visible property
    * to false via state
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -131,7 +126,6 @@ class Dispatches extends Component {
    * @name closeFiltersModal
    * @description Close filters modal by setting it's visible property
    * to false via state
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -143,7 +137,6 @@ class Dispatches extends Component {
    * @function
    * @name openDispatchForm
    * @description Open dispatch form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -155,7 +148,6 @@ class Dispatches extends Component {
    * @function
    * @name openDispatchForm
    * @description close dispatch form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -168,9 +160,7 @@ class Dispatches extends Component {
    * @function
    * @name searchDispatches
    * @description Search Dispatches List based on supplied filter word
-   *
-   * @param {object} event - Event instance
-   *
+   * @param {object} event Event instance
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -182,9 +172,7 @@ class Dispatches extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} dispatch dispatch to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -198,9 +186,7 @@ class Dispatches extends Component {
    * @function
    * @name handleShare
    * @description Handle share single dispatch action
-   *
    * @param {object| object[]} dispatches dispatch to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -233,7 +219,6 @@ class Dispatches extends Component {
    * @function
    * @name openNotificationForm
    * @description Handle on notify dispatches
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -247,7 +232,6 @@ class Dispatches extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify dispatches
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -259,7 +243,6 @@ class Dispatches extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -272,7 +255,6 @@ class Dispatches extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -284,7 +266,6 @@ class Dispatches extends Component {
    * @function
    * @name handleRefreshDispatches
    * @description Handle list refresh action
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -306,7 +287,6 @@ class Dispatches extends Component {
    * @name showArchiveConfirm
    * @description show confirm modal before archiving vehicle dispatch
    * @param {object} dispatch Item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -317,7 +297,7 @@ class Dispatches extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           deleteDispatch(
             dispatch._id, // eslint-disable-line
             () => {
@@ -325,7 +305,7 @@ class Dispatches extends Component {
               notifySuccess('Vehicle Dispatch was archived successfully');
             },
             () => {
-              reject();
+              resolve();
               notifyError(
                 'An error occurred while archiving Vehicle Dispatch, Please contact your system Administrator'
               );

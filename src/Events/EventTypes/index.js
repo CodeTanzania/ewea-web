@@ -207,14 +207,21 @@ class EventTypes extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventType(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Event Type was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Event Type, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteEventType(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Event Type was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Event Type, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

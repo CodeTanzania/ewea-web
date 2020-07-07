@@ -315,14 +315,21 @@ class ActionCatalogue extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventActionCatalogue(
-          item._id, // eslint-disable-line
-          () => notifySuccess(' Action Catalogue was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Action Catalogue, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteEventActionCatalogue(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess(' Action Catalogue was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Action Catalogue, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

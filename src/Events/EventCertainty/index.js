@@ -236,18 +236,33 @@ class EventCertainties extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventCertainty(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Event Certainty was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Event Certainty, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteEventCertainty(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Event Certainty was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Event Certainty, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };
 
+  /**
+   * @function
+   * @name handleRefreshEventCertainties
+   * @description Callback for refresh list action
+   * @returns {undefined} Undefined
+   * @version 0.1.0
+   * @since 0.1.0
+   */
   handleRefreshEventCertainties = () =>
     refreshEventCertainties(
       () => notifySuccess('Event Certainties refreshed successfully'),

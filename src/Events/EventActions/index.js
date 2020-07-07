@@ -260,14 +260,21 @@ class EventActions extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventAction(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Focal Person was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Focal Person, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteEventAction(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Focal Person was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Focal Person, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

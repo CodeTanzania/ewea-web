@@ -202,7 +202,6 @@ class UnitList extends Component {
    * @function handleFormClose
    * @name handleFormClose
    * @description Handle form closing
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -215,7 +214,6 @@ class UnitList extends Component {
    * @function handleFormClose
    * @name handleFormClose
    * @description Handle post form close and perform cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -255,11 +253,19 @@ class UnitList extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteUnit(
-          itemId,
-          () => notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS),
-          () => notifyError(MESSAGE_ITEM_ARCHIVE_ERROR)
-        );
+        return new Promise((resolve) => {
+          deleteUnit(
+            itemId,
+            () => {
+              resolve();
+              notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS);
+            },
+            () => {
+              resolve();
+              notifyError(MESSAGE_ITEM_ARCHIVE_ERROR);
+            }
+          );
+        });
       },
     });
   };

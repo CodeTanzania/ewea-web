@@ -296,12 +296,10 @@ class Agencies extends Component {
    * @function
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a agency
-   *
-   * @param item {object} agency to archive
+   * @param {object} item agency to archive
    * @version 0.1.0
    * @since 0.1.0
    */
-
   showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive ${item.name} ?`,
@@ -309,14 +307,21 @@ class Agencies extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteAgency(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Agency was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Agency, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteAgency(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Agency was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Agency, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

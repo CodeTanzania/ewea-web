@@ -127,7 +127,6 @@ class VehicleType extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -140,7 +139,6 @@ class VehicleType extends Component {
    * @function
    * @name handleRefreshVehicleType
    * @description Handle list refresh action
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -161,12 +159,10 @@ class VehicleType extends Component {
    * @function
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a vehicle type
-   *
-   * @param item {object} vehicleType to archive
+   * @param {object} item vehicleType to archive
    * @version 0.1.0
    * @since 0.1.0
    */
-
   showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive ${item.strings.name.en} ?`,
@@ -174,14 +170,21 @@ class VehicleType extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteVehicleType(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Vehicle Type was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Vehicle Type, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteVehicleType(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Vehicle Type was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Vehicle Type, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };
@@ -190,9 +193,7 @@ class VehicleType extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple event Indicators
-   *
    * @param {object[]| object} vehicleTypes event Indicators list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -222,7 +223,6 @@ class VehicleType extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify vehicleTypes
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

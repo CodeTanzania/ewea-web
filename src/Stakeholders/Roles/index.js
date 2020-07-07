@@ -84,7 +84,6 @@ class Roles extends Component {
    * @function
    * @name openPartyRolesForm
    * @description Open role form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -96,9 +95,7 @@ class Roles extends Component {
    * @function
    * @name closePartyRolesForm
    * @description close role form
-   *
-   * @returns {undefined} - Nothing is returned
-   *
+   * @returns {undefined} Nothing is returned
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -111,9 +108,7 @@ class Roles extends Component {
    * @function
    * @name searchRoles
    * @description Search Roles List based on supplied filter word
-   *
    * @param {object} event Event instance
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -125,9 +120,7 @@ class Roles extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
-   * @param {object} role - role to be edited
-   *
+   * @param {object} role role to be edited
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -141,7 +134,6 @@ class Roles extends Component {
    * @function
    * @name openNotificationForm
    * @description Handle open on notify contacts
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -155,7 +147,6 @@ class Roles extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle close on notify contacts
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -167,7 +158,6 @@ class Roles extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Performs after close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -180,7 +170,6 @@ class Roles extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -192,7 +181,6 @@ class Roles extends Component {
    * @function
    * @name handleRefreshRoles
    * @description Handle list refresh action
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -213,9 +201,7 @@ class Roles extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple Party Roles
-   *
    * @param {object[]| object} partyroles partyroles list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -270,12 +256,10 @@ class Roles extends Component {
    * @function
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a role
-   *
-   * @param item {object} role to archive
+   * @param {object} item  role to archive
    * @version 0.1.0
    * @since 0.1.0
    */
-
   showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive ${item.strings.name.en} ?`,
@@ -283,14 +267,21 @@ class Roles extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deletePartyRole(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Role was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving role, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deletePartyRole(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Role was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving role, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

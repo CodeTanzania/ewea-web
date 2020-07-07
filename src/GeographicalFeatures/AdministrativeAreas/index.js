@@ -264,11 +264,19 @@ class AdministrativeAreaList extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteAdministrativeArea(
-          itemId,
-          () => notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS),
-          () => notifyError(MESSAGE_ITEM_ARCHIVE_ERROR)
-        );
+        return new Promise((resolve) => {
+          deleteAdministrativeArea(
+            itemId,
+            () => {
+              resolve();
+              notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS);
+            },
+            () => {
+              resolve();
+              notifyError(MESSAGE_ITEM_ARCHIVE_ERROR);
+            }
+          );
+        });
       },
     });
   };

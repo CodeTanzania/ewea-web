@@ -174,14 +174,21 @@ class VehicleMake extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteVehicleMake(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Vehicle Make was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Vehicle Make, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteVehicleMake(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Vehicle Make was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Vehicle Make, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

@@ -234,14 +234,21 @@ class EventSeverities extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventSeverity(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Event Severity was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Event Severity, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteEventSeverity(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Event Severity was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Event Severity, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

@@ -259,15 +259,21 @@ class NotificationTemplates extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteNotificationTemplate(
-          item._id, // eslint-disable-line
-          () =>
-            notifySuccess('Notification Template was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Notification Template, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteNotificationTemplate(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Notification Template was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Notification Template, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

@@ -50,7 +50,6 @@ const headerLayout = [
  * @class
  * @name PartyOwnership
  * @description Render Party(Agency) Ownership types list which have search box,
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -70,7 +69,6 @@ class PartyOwnership extends Component {
    * @function
    * @name openPartyOwnershipsForm
    * @description Open party ownership form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -82,7 +80,6 @@ class PartyOwnership extends Component {
    * @function
    * @name closePartyOwnershipForm
    * @description close party ownership form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -95,9 +92,7 @@ class PartyOwnership extends Component {
    * @function
    * @name searchPartyOwnerships
    * @description Search Agency Ownerships List based on supplied filter word
-   *
-   * @param {object} event - Event instance
-   *
+   * @param {object} event Event instance
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -109,9 +104,7 @@ class PartyOwnership extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} partyOwnership party ownership to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -125,7 +118,6 @@ class PartyOwnership extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -138,7 +130,6 @@ class PartyOwnership extends Component {
    * @function
    * @name handleRefreshPartyOwnership
    * @description Handle list refresh action
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -159,12 +150,10 @@ class PartyOwnership extends Component {
    * @function
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a party ownership
-   *
-   * @param item {object} partyOwnership to archive
+   * @param {object} item partyOwnership to archive
    * @version 0.1.0
    * @since 0.1.0
    */
-
   showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive ${item.strings.name.en} ?`,
@@ -172,14 +161,21 @@ class PartyOwnership extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deletePartyOwnership(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Agency Ownership was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Agency Ownership, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deletePartyOwnership(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Agency Ownership was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Agency Ownership, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };
@@ -188,9 +184,7 @@ class PartyOwnership extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple event Indicators
-   *
    * @param {object[]| object} partyOwnerships event Indicators list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -220,7 +214,6 @@ class PartyOwnership extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify partyOwnerships
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

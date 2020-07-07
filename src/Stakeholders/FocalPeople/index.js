@@ -49,7 +49,6 @@ const roleSpan = { xxl: 6, xl: 5, lg: 5, md: 0, sm: 0, xs: 0 };
 const phoneSpan = { xxl: 4, xl: 5, lg: 5, md: 4, sm: 9, xs: 8 };
 const emailSpan = { xxl: 4, xl: 4, lg: 5, md: 7, sm: 0, xs: 0 };
 const areaSpan = { xxl: 5, xl: 5, lg: 4, md: 5, sm: 0, xs: 0 };
-
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...roleSpan, header: 'Title & Organization' },
@@ -315,14 +314,21 @@ class FocalPeople extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteFocalPerson(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Focal Person was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Focal Person, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteFocalPerson(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Focal Person was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Focal Person, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };
@@ -347,6 +353,7 @@ class FocalPeople extends Component {
       notificationBody,
       cached,
     } = this.state;
+
     return (
       <>
         {/* Topbar */}

@@ -234,14 +234,21 @@ class EventStatuses extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventStatus(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Event Status was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Event Status, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteEventStatus(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Event Status was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Event Status, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

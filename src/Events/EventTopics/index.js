@@ -223,14 +223,21 @@ class EventTopics extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventTopic(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Event topic was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Event topic, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteEventTopic(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Event topic was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Event topic, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

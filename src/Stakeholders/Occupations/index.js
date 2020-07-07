@@ -61,7 +61,6 @@ const headerLayout = [
  * @class
  * @name Occupations
  * @description Render occupation module which has search box, actions and list of occupations
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -82,7 +81,6 @@ class Occupations extends Component {
    * @function
    * @name openPartyOccupationsForm
    * @description Open occupation form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -94,9 +92,7 @@ class Occupations extends Component {
    * @function
    * @name closePartyOccupationsForm
    * @description close occupation form
-   *
-   * @returns {undefined} - Nothing is returned
-   *
+   * @returns {undefined} Nothing is returned
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -109,9 +105,7 @@ class Occupations extends Component {
    * @function
    * @name searchOccupations
    * @description Search Occupations List based on supplied filter word
-   *
    * @param {object} event Event instance
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -123,9 +117,7 @@ class Occupations extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
-   * @param {object} occupation - occupation to be edited
-   *
+   * @param {object} occupation occupation to be edited
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -139,7 +131,6 @@ class Occupations extends Component {
    * @function
    * @name openNotificationForm
    * @description Handle open on notify contacts
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -153,7 +144,6 @@ class Occupations extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle close on notify contacts
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -165,7 +155,6 @@ class Occupations extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Performs after close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -178,7 +167,6 @@ class Occupations extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -190,7 +178,6 @@ class Occupations extends Component {
    * @function
    * @name handleRefreshOccupations
    * @description Handle list refresh action
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -243,12 +230,10 @@ class Occupations extends Component {
    * @function
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a occupation
-   *
-   * @param item {object} occupation to archive
+   * @param {object} item occupation to archive
    * @version 0.1.0
    * @since 0.1.0
    */
-
   showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive ${item.strings.name.en} ?`,
@@ -256,14 +241,21 @@ class Occupations extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deletePartyOccupation(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Occupation was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving occupation, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deletePartyOccupation(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Occupation was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving occupation, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

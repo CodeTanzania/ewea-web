@@ -174,14 +174,21 @@ class VehicleModel extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteVehicleModel(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Vehicle Model was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Vehicle Model, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteVehicleModel(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Vehicle Model was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Vehicle Model, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

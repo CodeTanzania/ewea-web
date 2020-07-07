@@ -403,11 +403,19 @@ class CaseList extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteCase(
-          itemId,
-          () => notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS),
-          () => notifyError(MESSAGE_ITEM_ARCHIVE_ERROR)
-        );
+        return new Promise((resolve) => {
+          deleteCase(
+            itemId,
+            () => {
+              resolve();
+              notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS);
+            },
+            () => {
+              resolve();
+              notifyError(MESSAGE_ITEM_ARCHIVE_ERROR);
+            }
+          );
+        });
       },
     });
   };
