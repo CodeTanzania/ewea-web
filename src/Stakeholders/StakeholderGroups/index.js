@@ -121,7 +121,6 @@ class PartyGroups extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -134,7 +133,6 @@ class PartyGroups extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify party groups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -205,7 +203,6 @@ class PartyGroups extends Component {
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a party group
    * @param {object} item Resource item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
