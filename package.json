@@ -38,7 +38,7 @@
     "lodash": "^4.17.19",
     "moment": "^2.27.0",
     "prop-types": "^15.7.2",
-    "randomcolor": "^0.5.4",
+    "randomcolor": "^0.6.0",
     "rc-color-picker": "^1.2.6",
     "react": "^16.13.1",
     "react-color": "^2.18.1",
