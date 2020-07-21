@@ -62,7 +62,7 @@ const { Paragraph, Text } = Typography;
 /**
  * @function
  * @param {object} props props object
- * @param {object} props.event valid event objetc
+ * @param {object} props.event valid event object
  * @param {Function} props.openForm open callback
  * @param {Function} props.onEdit edit callback
  * @param {Function} props.onShare share callback
@@ -224,10 +224,10 @@ const EventToolbar = ({
 
 /**
  * @function
+ * @description Display Event Cause
+ * @name EventCause
  * @param {object} props props object
  * @param {string} props.cause event cause
- * @name EventCause
- * @description Display Event Cause
  * @returns {object} React component
  * @version 0.1.0
  * @since 0.1.0

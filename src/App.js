@@ -27,9 +27,7 @@ history.listen(({ location }) => {
  * @function
  * @name App
  * @description Entry component for EMIS web application
- *
  * @returns {object} React Node
- *
  * @version 0.1.0
  * @since 0.1.0
  */

@@ -49,7 +49,6 @@ const headerLayout = [
  * @class
  * @name EventSeverities
  * @description Render eventSeverity list which have search box, severities and eventSeverity list
- *
  * @version 0.1.0
  * @since 0.1.0
  */
