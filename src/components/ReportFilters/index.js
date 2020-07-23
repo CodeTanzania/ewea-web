@@ -59,11 +59,11 @@ const ReportFilters = ({ filters, onFilter, onClear, onCancel }) => {
       <Row justify="space-between">
         <Col xs={24} sm={24} md={11}>
           <Form.Item label="Start Date" name="from">
-            <DatePicker style={{ width: '100%' }} />
+            <DatePicker style={{ width: '100%' }} allowClear={false} />
           </Form.Item>
         </Col>
         <Col xs={24} sm={24} md={11}>
-          <Form.Item label="End Date" name="to">
+          <Form.Item label="End Date" name="to" allowClear={false}>
             <DatePicker style={{ width: '100%' }} />
           </Form.Item>
         </Col>
