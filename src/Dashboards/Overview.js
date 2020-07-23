@@ -58,7 +58,7 @@ const OverviewDashboard = ({ report, loading }) => {
 
   useEffect(() => {
     getOverviewsReport({ filter: filters });
-  }, []);
+  }, [filters]);
 
   return (
     <div>
@@ -235,12 +235,10 @@ const OverviewDashboard = ({ report, loading }) => {
           filters={filters}
           onFilter={(data) => {
             setFilters(data);
-            getOverviewsReport({ filter: { ...data } });
             setShowFilters(false);
           }}
           onClear={() => {
             setFilters(DEFAULT_FILTERS);
-            getOverviewsReport({ filter: DEFAULT_FILTERS });
             setShowFilters(false);
           }}
           onCancel={() => setShowFilters(false)}

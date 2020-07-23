@@ -147,7 +147,7 @@ const VehicleDispatchesDashboard = ({ report, loading }) => {
 
   useEffect(() => {
     getDispatchesReport({ filter: filters });
-  }, []);
+  }, [filters]);
 
   return (
     <div>
@@ -274,12 +274,10 @@ const VehicleDispatchesDashboard = ({ report, loading }) => {
           filters={filters}
           onFilter={(data) => {
             setFilters(data);
-            getDispatchesReport({ filter: { ...data } });
             setShowFilters(false);
           }}
           onClear={() => {
             setFilters(DEFAULT_FILTERS);
-            getDispatchesReport({ filter: DEFAULT_FILTERS });
             setShowFilters(false);
           }}
           onCancel={() => setShowFilters(false)}

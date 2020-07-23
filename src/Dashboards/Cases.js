@@ -91,8 +91,8 @@ const CasesDashboard = ({ report, loading }) => {
   }));
 
   useEffect(() => {
-    getCasesReport();
-  }, []);
+    getCasesReport({ filter: filters });
+  }, [filters]);
 
   return (
     <div>
@@ -303,12 +303,10 @@ const CasesDashboard = ({ report, loading }) => {
           filters={filters}
           onFilter={(data) => {
             setFilters(data);
-            getCasesReport({ filter: { ...data } });
             setShowFilters(false);
           }}
           onClear={() => {
             setFilters(DEFAULT_FILTERS);
-            getCasesReport({ filter: DEFAULT_FILTERS });
             setShowFilters(false);
           }}
           onCancel={() => setShowFilters(false)}

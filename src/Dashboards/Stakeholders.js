@@ -94,7 +94,7 @@ const StakeholdersDashboard = ({ report, loading }) => {
 
   useEffect(() => {
     getPartiesReport({ filter: filters });
-  }, []);
+  }, [filters]);
 
   return (
     <div>
@@ -201,12 +201,10 @@ const StakeholdersDashboard = ({ report, loading }) => {
           filters={filters}
           onFilter={(data) => {
             setFilters(data);
-            getPartiesReport({ filter: { ...data } });
             setShowFilters(false);
           }}
           onClear={() => {
             setFilters(DEFAULT_FILTERS);
-            getPartiesReport({ filter: DEFAULT_FILTERS });
             setShowFilters(false);
           }}
           onCancel={() => setShowFilters(false)}

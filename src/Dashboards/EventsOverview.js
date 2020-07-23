@@ -93,8 +93,8 @@ const EventsOverviewDashboard = ({ report, loading }) => {
   );
 
   useEffect(() => {
-    getEventsReport();
-  }, []);
+    getEventsReport({ filter: filters });
+  }, [filters]);
 
   return (
     <div>
@@ -226,12 +226,10 @@ const EventsOverviewDashboard = ({ report, loading }) => {
           filters={filters}
           onFilter={(data) => {
             setFilters(data);
-            getEventsReport({ filter: { ...data } });
             setShowFilters(false);
           }}
           onClear={() => {
             setFilters(DEFAULT_FILTERS);
-            getEventsReport({ filter: DEFAULT_FILTERS });
             setShowFilters(false);
           }}
           onCancel={() => setShowFilters(false)}
