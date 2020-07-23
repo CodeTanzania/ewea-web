@@ -9,16 +9,14 @@ import map from 'lodash/map';
 
 import ReportFilters from '../components/ReportFilters';
 import Grid from '../components/Grid';
-import {
-  NumberWidget,
-  SectionCard,
-  FilterFloatingButton,
-} from '../components/dashboardWidgets';
+import { NumberWidget, SectionCard } from '../components/dashboardWidgets';
+import { FilterFloatingButton } from '../components/FloatingButton';
 import {
   EChart,
   generateDonutChartOption,
   generateInvertedBarChartOption,
 } from '../components/charts';
+import useFilters from '../hooks/filters';
 
 /* redux actions */
 const { getCasesReport } = reduxActions;
@@ -46,6 +44,12 @@ const AGE_GROUPS_COLUMNS = [
   { title: 'Age Group', dataIndex: 'name' },
   { title: 'Total', dataIndex: 'value' },
 ];
+const DEFAULT_FILTERS = {
+  createdAt: {
+    from: new Date(),
+    to: new Date(),
+  },
+};
 
 /**
  * @function
@@ -62,11 +66,9 @@ const CasesDashboard = ({ report, loading }) => {
   const [ageGroupsDisplay, setAgeGroupsDisplay] = useState(DISPLAY_TABLE);
   const [severitiesDisplay, setSeveritiesDisplay] = useState(DISPLAY_CHART);
   const [stagesDisplay, setStagesDisplay] = useState(DISPLAY_CHART);
-  const [showFilters, setShowFilters] = useState(false);
-
-  useEffect(() => {
-    getCasesReport();
-  }, []);
+  const { filters, setFilters, showFilters, setShowFilters } = useFilters(
+    DEFAULT_FILTERS
+  );
 
   const GENDER_DATA = map(get(report, 'overall.gender', []), (item) => ({
     value: item.total,
@@ -87,6 +89,10 @@ const CasesDashboard = ({ report, loading }) => {
     name: `${item.lowerBoundary} - ${item.upperBoundary}`,
     value: item.total || 0,
   }));
+
+  useEffect(() => {
+    getCasesReport();
+  }, []);
 
   return (
     <div>
@@ -291,10 +297,18 @@ const CasesDashboard = ({ report, loading }) => {
         footer={null}
         maskClosable={false}
         className="modal-window-50"
+        destroyOnClose
       >
         <ReportFilters
+          filters={filters}
           onFilter={(data) => {
+            setFilters(data);
             getCasesReport({ filter: { ...data } });
+            setShowFilters(false);
+          }}
+          onClear={() => {
+            setFilters(DEFAULT_FILTERS);
+            getCasesReport({ filter: DEFAULT_FILTERS });
             setShowFilters(false);
           }}
           onCancel={() => setShowFilters(false)}

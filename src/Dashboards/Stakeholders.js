@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Table, Spin, Modal } from 'antd';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
@@ -21,10 +21,19 @@ import {
   WARNING_COLOR,
 } from '../components/dashboardWidgets';
 import { FilterFloatingButton } from '../components/FloatingButton';
+import useFilters from '../hooks/filters';
 import DarDistricts from '../assets/maps/dar.districts.json';
 
 /* redux actions */
 const { getPartiesReport } = reduxActions;
+
+/* constants */
+const DEFAULT_FILTERS = {
+  createdAt: {
+    from: new Date(),
+    to: new Date(),
+  },
+};
 
 /**
  * @function
@@ -67,11 +76,24 @@ const generateColumnsFor = (name) => {
   ];
 };
 
+/**
+ * @function
+ * @name StakeholdersDashboard
+ * @description Dashboard which renders stakeholder's reports
+ * @param {object} props Stakeholder Dashboard props
+ * @param {object} props.report Report object from API
+ * @param {boolean} props.loading Flag for showing loading report state
+ * @returns {object} Stakeholder's Dashboard component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
 const StakeholdersDashboard = ({ report, loading }) => {
-  const [showFilters, setShowFilters] = useState(false);
+  const { filters, setFilters, showFilters, setShowFilters } = useFilters(
+    DEFAULT_FILTERS
+  );
 
   useEffect(() => {
-    getPartiesReport();
+    getPartiesReport({ filter: filters });
   }, []);
 
   return (
@@ -173,10 +195,18 @@ const StakeholdersDashboard = ({ report, loading }) => {
         footer={null}
         maskClosable={false}
         className="modal-window-50"
+        destroyOnClose
       >
         <ReportFilters
+          filters={filters}
           onFilter={(data) => {
+            setFilters(data);
             getPartiesReport({ filter: { ...data } });
+            setShowFilters(false);
+          }}
+          onClear={() => {
+            setFilters(DEFAULT_FILTERS);
+            getPartiesReport({ filter: DEFAULT_FILTERS });
             setShowFilters(false);
           }}
           onCancel={() => setShowFilters(false)}

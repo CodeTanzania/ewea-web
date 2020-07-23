@@ -32,6 +32,11 @@ export const FloatingButton = ({ icon, title, onClick }) => {
         icon={icon}
         size="large"
         onClick={onClick}
+        style={{
+          height: '60px',
+          width: '60px',
+          fontSize: '25px',
+        }}
       />
     </Affix>
   );

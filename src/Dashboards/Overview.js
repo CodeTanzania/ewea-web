@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import get from 'lodash/get';
@@ -25,11 +25,19 @@ import {
   DANGER_COLOR,
 } from '../components/dashboardWidgets';
 import { FilterFloatingButton } from '../components/FloatingButton';
+import useFilters from '../hooks/filters';
 
 /* redux actions */
 const { getOverviewsReport } = reduxActions;
 /* ui */
 const { Text } = Typography;
+/* constants */
+const DEFAULT_FILTERS = {
+  createdAt: {
+    from: new Date(),
+    to: new Date(),
+  },
+};
 
 /**
  * @function
@@ -44,10 +52,12 @@ const { Text } = Typography;
  * @since 0.1.0
  */
 const OverviewDashboard = ({ report, loading }) => {
-  const [showFilters, setShowFilters] = useState(false);
+  const { filters, setFilters, showFilters, setShowFilters } = useFilters(
+    DEFAULT_FILTERS
+  );
 
   useEffect(() => {
-    getOverviewsReport();
+    getOverviewsReport({ filter: filters });
   }, []);
 
   return (
@@ -219,10 +229,18 @@ const OverviewDashboard = ({ report, loading }) => {
         footer={null}
         maskClosable={false}
         className="modal-window-50"
+        destroyOnClose
       >
         <ReportFilters
+          filters={filters}
           onFilter={(data) => {
+            setFilters(data);
             getOverviewsReport({ filter: { ...data } });
+            setShowFilters(false);
+          }}
+          onClear={() => {
+            setFilters(DEFAULT_FILTERS);
+            getOverviewsReport({ filter: DEFAULT_FILTERS });
             setShowFilters(false);
           }}
           onCancel={() => setShowFilters(false)}

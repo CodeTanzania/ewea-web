@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, Row, Col, DatePicker } from 'antd';
 import moment from 'moment';
+import get from 'lodash/get';
 
+/* constants */
 const LABEL_COL = {
   xs: { span: 24 },
   sm: { span: 24 },
@@ -25,13 +27,15 @@ const WRAPPER_COL = {
  * @name ReportFilter
  * @description Report Filter generic form which have date filters and other common filters
  * @param {object} props Component properties object
+ * @param {object} props.filters Preselected filters
  * @param {Function} props.onFilter On filter reports callback
- * @param {Function} props.onCancel On cancel form callback
+ * @param {Function} props.onClear On clear/reset report filters callback
+ * @param {Function} props.onCancel On cancel filters callback
  * @returns {object} Report filter form
  * @version 0.1.0
  * @since 0.1.0
  */
-const ReportFilter = ({ onFilter, onCancel }) => {
+const ReportFilters = ({ filters, onFilter, onClear, onCancel }) => {
   const onFinish = (values) => {
     onFilter({
       createdAt: {
@@ -46,7 +50,10 @@ const ReportFilter = ({ onFilter, onCancel }) => {
       onFinish={onFinish}
       wrapperCol={WRAPPER_COL}
       labelCol={LABEL_COL}
-      initialValues={{ from: moment(), to: moment() }}
+      initialValues={{
+        from: moment(get(filters, 'createdAt.from', new Date())),
+        to: moment(get(filters, 'createdAt.to', new Date())),
+      }}
     >
       {/* start: data filters */}
       <Row justify="space-between">
@@ -66,9 +73,9 @@ const ReportFilter = ({ onFilter, onCancel }) => {
       {/* form actions */}
       <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
         <Button onClick={onCancel}>Cancel</Button>
-        {/* <Button style={{ marginLeft: 8 }} onClick={() => {}}> */}
-        {/*   Clear */}
-        {/* </Button> */}
+        <Button style={{ marginLeft: 8 }} onClick={onClear}>
+          Clear
+        </Button>
         <Button style={{ marginLeft: 8 }} type="primary" htmlType="submit">
           Filter
         </Button>
@@ -78,9 +85,15 @@ const ReportFilter = ({ onFilter, onCancel }) => {
   );
 };
 
-ReportFilter.propTypes = {
+ReportFilters.propTypes = {
   onFilter: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
+  onClear: PropTypes.func.isRequired,
+  filters: PropTypes.shape({ from: PropTypes.string, to: PropTypes.string }),
 };
 
-export default ReportFilter;
+ReportFilters.defaultProps = {
+  filters: null,
+};
+
+export default ReportFilters;
