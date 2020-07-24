@@ -49,6 +49,7 @@ import IndicatorDashboard from '../../../Dashboards/Indicators';
 import EventDetailsViewHeader from './Header';
 import './styles.css';
 
+/* redux actions */
 const {
   openChangelogForm,
   closeChangelogForm,
@@ -57,10 +58,12 @@ const {
   loadMoreChangelogs,
   postChangelog,
 } = reduxActions;
+/* ui */
 const { Paragraph, Text } = Typography;
 
 /**
  * @function
+ * @name EventToolbar
  * @param {object} props props object
  * @param {object} props.event valid event object
  * @param {Function} props.openForm open callback
@@ -68,7 +71,6 @@ const { Paragraph, Text } = Typography;
  * @param {Function} props.onShare share callback
  * @param {Function} props.openIndicatorDashboard indicator callback
  * @param {Function} props.onContent content callback
- * @name EventToolbar
  * @description List of actions user can perform on a particular event
  * @returns {object} React component
  * @version 0.1.0
@@ -85,7 +87,7 @@ const EventToolbar = ({
   return (
     <div className="EventToolbar not-printable">
       <Row>
-        <Col span={1}>
+        <Col xs={4} sm={4} md={1}>
           <Button
             shape="circle"
             size="large"
@@ -106,7 +108,7 @@ const EventToolbar = ({
           />
         </Col>
 
-        <Col span={1}>
+        <Col xs={0} sm={0} md={1}>
           <Button
             shape="circle"
             size="large"
@@ -117,7 +119,7 @@ const EventToolbar = ({
           />
         </Col>
 
-        <Col span={1}>
+        <Col xs={0} sm={0} md={1}>
           <Button
             shape="circle"
             size="large"
@@ -128,7 +130,7 @@ const EventToolbar = ({
           />
         </Col>
 
-        <Col span={1}>
+        <Col xs={4} sm={4} md={1}>
           <Button
             shape="circle"
             size="large"
@@ -138,7 +140,7 @@ const EventToolbar = ({
           />
         </Col>
 
-        <Col span={1}>
+        <Col xs={4} sm={4} md={1}>
           <Button
             shape="circle"
             size="large"
@@ -149,7 +151,7 @@ const EventToolbar = ({
           />
         </Col>
 
-        <Col span={1}>
+        <Col xs={4} sm={4} md={1}>
           <Button
             shape="circle"
             size="large"
@@ -160,7 +162,7 @@ const EventToolbar = ({
           />
         </Col>
 
-        <Col span={1}>
+        <Col xs={4} sm={4} md={1}>
           <Button
             shape="circle"
             size="large"
@@ -170,7 +172,7 @@ const EventToolbar = ({
           />
         </Col>
 
-        <Col span={1}>
+        <Col xs={0} sm={0} md={1}>
           <Button
             shape="circle"
             size="large"
@@ -181,7 +183,7 @@ const EventToolbar = ({
           />
         </Col>
 
-        <Col span={1}>
+        <Col xs={4} sm={4} md={1}>
           <Button
             shape="circle"
             size="large"
@@ -202,7 +204,7 @@ const EventToolbar = ({
           />
         </Col>
 
-        <Col span={1}>
+        <Col xs={0} sm={0} md={1}>
           <ReactToPrint
             trigger={() => (
               <Button
@@ -741,7 +743,7 @@ export const EventFeed = ({ feeds = [], loading, hasMore }) => {
   );
 
   return (
-    <div className="not-printable">
+    <div className="not-printable EventFeed">
       <SectionHeader title="EVENT FEED" />
 
       <Spin spinning={loading}>
@@ -854,7 +856,7 @@ const EventDetailsViewBody = ({
       />
       <div className="EventBodyContent">
         <Row ref={componentRef}>
-          <Col span={16}>
+          <Col xs={24} sm={24} md={24} lg={16}>
             <EventDetails
               number={get(event, 'number', 'N/A')}
               type={get(event, 'type.strings.name.en', 'N/A')}
@@ -883,7 +885,7 @@ const EventDetailsViewBody = ({
               openForm={openForm}
             />
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={24} md={24} lg={8}>
             <EventFeed
               feeds={changelogs}
               loading={loading}

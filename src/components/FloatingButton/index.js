@@ -33,9 +33,9 @@ export const FloatingButton = ({ icon, title, onClick }) => {
         size="large"
         onClick={onClick}
         style={{
-          height: '60px',
-          width: '60px',
-          fontSize: '25px',
+          height: '50px',
+          width: '50px',
+          fontSize: '20px',
         }}
       />
     </Affix>
