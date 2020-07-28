@@ -52,9 +52,9 @@ const statusSpan = { xxl: 2, xl: 2, lg: 3, md: 3, sm: 0, xs: 0 };
 const pickupSpan = { xxl: 3, xl: 3, lg: 1, md: 1, sm: 0, xs: 0 };
 const dropOffSpan = { xxl: 3, xl: 3, lg: 1, md: 1, sm: 0, xs: 0 };
 const headerLayout = [
-  { ...numberSpan, header: 'Number' },
+  { ...numberSpan, header: 'Dispatch No.' },
   { ...vehicleSpan, header: 'Vehicle' },
-  { ...eventSpan, header: 'Event' },
+  { ...eventSpan, header: 'Diagnosis / Event' },
   { ...pickupSpan, header: 'Pickup Location' },
   { ...dropOffSpan, header: 'Drop-Off Location' },
   { ...prioritySpan, header: 'Priority' },
