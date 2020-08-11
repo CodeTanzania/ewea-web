@@ -47,7 +47,7 @@
     "react-ga": "^3.1.2",
     "react-map-gl": "^5.2.7",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "3.4.2",
     "react-simple-maps": "^2.1.2",
     "react-to-print": "^2.9.0"
   },
@@ -75,7 +75,7 @@
     "lint-staged": "10.2.11",
     "prettier": "2.0.5",
     "react-app-rewired": "2.1.6",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.2"
   },
   "contributors": [
     {
