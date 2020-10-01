@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import eventsIcon from '../assets/icons/events.svg';
 import stakeholdersIcon from '../assets/icons/dashboards/stakeholders.svg';
-import indicatorDashboardIcon from '../assets/icons/dashboards/indicator-dashboard-disabled.svg';
+import indicatorDashboardIcon from '../assets/icons/dashboards/indicator-dashboard.svg';
 import overviewDashboardIcon from '../assets/icons/dashboards/overview-dashboard.svg';
 import caseManagementIcon from '../assets/icons/dashboards/case-management.svg';
 import resourceManagementIcon from '../assets/icons/dashboards/resource-management-disabled.svg';
@@ -29,11 +29,10 @@ const routes = [
     description: modules.alertsIssued,
   },
   {
-    name: 'Indicators',
-    path: '/indicators',
+    name: 'Parade',
+    path: '/parade',
     icon: indicatorDashboardIcon,
     description: modules.alertsIssued,
-    disabled: true,
   },
   {
     name: 'Stakeholders',
