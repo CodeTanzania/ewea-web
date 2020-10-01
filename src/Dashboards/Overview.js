@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import get from 'lodash/get';
-import { Divider, Row, Col, Spin, Typography, Modal } from 'antd';
+import { Row, Col, Spin, Modal } from 'antd';
 import {
   WarningOutlined,
   AlertOutlined,
@@ -18,6 +18,7 @@ import ReportFilters from '../components/ReportFilters';
 import {
   NumberWidget,
   TimeWidget,
+  SectionCard,
   PRIMARY_COLOR,
   PURPLE_COLOR,
   SUCCESS_COLOR,
@@ -29,8 +30,6 @@ import useFilters from '../hooks/filters';
 
 /* redux actions */
 const { getOverviewsReport } = reduxActions;
-/* ui */
-const { Text } = Typography;
 /* constants */
 const DEFAULT_FILTERS = {
   createdAt: {
@@ -64,9 +63,6 @@ const OverviewDashboard = ({ report, loading }) => {
     <div>
       <FilterFloatingButton onClick={() => setShowFilters(true)} />
       <Spin spinning={loading}>
-        <Divider orientation="left" plain>
-          <Text strong>Emergencies</Text>
-        </Divider>
         <Row>
           <Col xs={24} sm={24} md={8} lg={8} xl={8} xxl={8}>
             <NumberWidget
@@ -106,120 +102,128 @@ const OverviewDashboard = ({ report, loading }) => {
           </Col>
         </Row>
 
-        <Divider orientation="left" plain>
-          <Text strong>Vehicle Dispatches</Text>
-        </Divider>
-        <Row>
-          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
-            <NumberWidget
-              title="Total"
-              value={get(report, 'dispatches.total', 0)}
-              icon={<NumberOutlined style={{ color: PRIMARY_COLOR }} />}
-              bottomBorderColor={PRIMARY_COLOR}
-              secondaryText="Total Dispatches"
-            />
-          </Col>
-          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
-            <NumberWidget
-              title="Waiting"
-              value={get(report, 'dispatches.waiting', 0)}
-              icon={<ApartmentOutlined style={{ color: SUCCESS_COLOR }} />}
-              secondaryText="Waiting for Vehicles"
-              bottomBorderColor={SUCCESS_COLOR}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
-            <NumberWidget
-              title="Dispatched"
-              value={get(report, 'dispatches.dispatched', 0)}
-              icon={<UserOutlined style={{ color: PURPLE_COLOR }} />}
-              secondaryText="Dispatches in progress"
-              bottomBorderColor={PURPLE_COLOR}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
-            <NumberWidget
-              title="Completed"
-              value={get(report, 'dispatches.resolved', 0)}
-              icon={<TeamOutlined style={{ color: WARNING_COLOR }} />}
-              secondaryText="Completed Dispatches"
-              bottomBorderColor={WARNING_COLOR}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
-            <TimeWidget
-              title="Avg. Waiting Time"
-              days={get(report, 'dispatches.averageWaitTime.days', 0)}
-              hours={get(report, 'dispatches.averageWaitTime.hours', 0)}
-              minutes={get(report, 'dispatches.averageWaitTime.minutes', 0)}
-              icon={<ClockCircleOutlined style={{ color: PRIMARY_COLOR }} />}
-              bottomBorderColor={PRIMARY_COLOR}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
-            <TimeWidget
-              title="Avg. Dispatch Time"
-              days={get(report, 'dispatches.averageDispatchTime.days', 0)}
-              hours={get(report, 'dispatches.averageDispatchTime.hours', 0)}
-              minutes={get(report, 'dispatches.averageDispatchTime.minutes', 0)}
-              icon={<ClockCircleOutlined style={{ color: SUCCESS_COLOR }} />}
-              bottomBorderColor={WARNING_COLOR}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
-            <TimeWidget
-              title="Avg. Response Time"
-              days={get(report, 'dispatches.averageResolveTime.days', 0)}
-              hours={get(report, 'dispatches.averageResolveTime.hours', 0)}
-              minutes={get(report, 'dispatches.averageResolveTime.minutes', 0)}
-              icon={<ClockCircleOutlined style={{ color: WARNING_COLOR }} />}
-              bottomBorderColor={DANGER_COLOR}
-            />
-          </Col>
-        </Row>
-        <Divider orientation="left" plain>
-          <Text strong>Stakeholders</Text>
-        </Divider>
-        <Row>
-          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
-            <NumberWidget
-              title="Stakeholders"
-              value={get(report, 'parties.total', 0)}
-              icon={<NumberOutlined style={{ color: PRIMARY_COLOR }} />}
-              bottomBorderColor={PRIMARY_COLOR}
-              secondaryText="Total Registered Stakeholders"
-            />
-          </Col>
-          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
-            <NumberWidget
-              title="Agencies"
-              value={get(report, 'parties.agency', 0)}
-              icon={<ApartmentOutlined style={{ color: SUCCESS_COLOR }} />}
-              secondaryText="Registered Agencies"
-              bottomBorderColor={SUCCESS_COLOR}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
-            <NumberWidget
-              title="Focal People"
-              value={get(report, 'parties.focal', 0)}
-              icon={<UserOutlined style={{ color: PURPLE_COLOR }} />}
-              secondaryText="Registered Focal People"
-              bottomBorderColor={PURPLE_COLOR}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
-            <NumberWidget
-              title="Groups"
-              value={get(report, 'parties.group', 0)}
-              icon={<TeamOutlined style={{ color: WARNING_COLOR }} />}
-              secondaryText="Registered Stakeholder's Groups"
-              bottomBorderColor={WARNING_COLOR}
-            />
-          </Col>
-        </Row>
+        <SectionCard title="Vehicle Dispatches">
+          <Row>
+            <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
+              <NumberWidget
+                title="Total"
+                value={get(report, 'dispatches.total', 0)}
+                icon={<NumberOutlined style={{ color: PRIMARY_COLOR }} />}
+                bottomBorderColor={PRIMARY_COLOR}
+                secondaryText="Total Dispatches"
+              />
+            </Col>
+            <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
+              <NumberWidget
+                title="Waiting"
+                value={get(report, 'dispatches.waiting', 0)}
+                icon={<ApartmentOutlined style={{ color: SUCCESS_COLOR }} />}
+                secondaryText="Waiting for Vehicles"
+                bottomBorderColor={SUCCESS_COLOR}
+              />
+            </Col>
+            <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
+              <NumberWidget
+                title="Dispatched"
+                value={get(report, 'dispatches.dispatched', 0)}
+                icon={<UserOutlined style={{ color: PURPLE_COLOR }} />}
+                secondaryText="Dispatches in progress"
+                bottomBorderColor={PURPLE_COLOR}
+              />
+            </Col>
+            <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
+              <NumberWidget
+                title="Completed"
+                value={get(report, 'dispatches.resolved', 0)}
+                icon={<TeamOutlined style={{ color: WARNING_COLOR }} />}
+                secondaryText="Completed Dispatches"
+                bottomBorderColor={WARNING_COLOR}
+              />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
+              <TimeWidget
+                title="Avg. Waiting Time"
+                days={get(report, 'dispatches.averageWaitTime.days', 0)}
+                hours={get(report, 'dispatches.averageWaitTime.hours', 0)}
+                minutes={get(report, 'dispatches.averageWaitTime.minutes', 0)}
+                icon={<ClockCircleOutlined style={{ color: PRIMARY_COLOR }} />}
+                bottomBorderColor={PRIMARY_COLOR}
+              />
+            </Col>
+            <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
+              <TimeWidget
+                title="Avg. Dispatch Time"
+                days={get(report, 'dispatches.averageDispatchTime.days', 0)}
+                hours={get(report, 'dispatches.averageDispatchTime.hours', 0)}
+                minutes={get(
+                  report,
+                  'dispatches.averageDispatchTime.minutes',
+                  0
+                )}
+                icon={<ClockCircleOutlined style={{ color: SUCCESS_COLOR }} />}
+                bottomBorderColor={WARNING_COLOR}
+              />
+            </Col>
+            <Col xs={24} sm={24} md={12} lg={8} xl={8} xxl={8}>
+              <TimeWidget
+                title="Avg. Response Time"
+                days={get(report, 'dispatches.averageResolveTime.days', 0)}
+                hours={get(report, 'dispatches.averageResolveTime.hours', 0)}
+                minutes={get(
+                  report,
+                  'dispatches.averageResolveTime.minutes',
+                  0
+                )}
+                icon={<ClockCircleOutlined style={{ color: WARNING_COLOR }} />}
+                bottomBorderColor={DANGER_COLOR}
+              />
+            </Col>
+          </Row>
+        </SectionCard>
+
+        <SectionCard title="Stakeholders">
+          <Row>
+            <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
+              <NumberWidget
+                title="Stakeholders"
+                value={get(report, 'parties.total', 0)}
+                icon={<NumberOutlined style={{ color: PRIMARY_COLOR }} />}
+                bottomBorderColor={PRIMARY_COLOR}
+                secondaryText="Total Registered Stakeholders"
+              />
+            </Col>
+            <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
+              <NumberWidget
+                title="Agencies"
+                value={get(report, 'parties.agency', 0)}
+                icon={<ApartmentOutlined style={{ color: SUCCESS_COLOR }} />}
+                secondaryText="Registered Agencies"
+                bottomBorderColor={SUCCESS_COLOR}
+              />
+            </Col>
+            <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
+              <NumberWidget
+                title="Focal People"
+                value={get(report, 'parties.focal', 0)}
+                icon={<UserOutlined style={{ color: PURPLE_COLOR }} />}
+                secondaryText="Registered Focal People"
+                bottomBorderColor={PURPLE_COLOR}
+              />
+            </Col>
+            <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
+              <NumberWidget
+                title="Groups"
+                value={get(report, 'parties.group', 0)}
+                icon={<TeamOutlined style={{ color: WARNING_COLOR }} />}
+                secondaryText="Registered Stakeholder's Groups"
+                bottomBorderColor={WARNING_COLOR}
+              />
+            </Col>
+          </Row>
+        </SectionCard>
       </Spin>
 
       <Modal

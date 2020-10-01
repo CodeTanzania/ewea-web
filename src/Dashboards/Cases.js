@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Divider, Col, Row, Spin, Table, Button, Modal } from 'antd';
+import { Col, Row, Spin, Table, Button, Modal } from 'antd';
 import { BarChartOutlined, TableOutlined } from '@ant-design/icons';
 import randomColor from 'randomcolor';
 import get from 'lodash/get';
@@ -107,33 +107,35 @@ const CasesDashboard = ({ report, loading }) => {
             />
           </Col>
         </Row>
-        <Grid
-          header="Case Stages"
-          items={get(report, 'overall.stages', [])}
-          colPerRow={4}
-          renderItem={(item) => (
-            <NumberWidget
-              title={get(item, 'value.name.en', 'N/A')}
-              value={get(item, 'value.total', 0)}
-              bottomBorderColor={get(item, 'value.color') || randomColor()}
-            />
-          )}
-        />
-        <Grid
-          header="Case Severities"
-          items={get(report, 'overall.severities', [])}
-          colPerRow={4}
-          renderItem={(item) => (
-            <NumberWidget
-              title={get(item, 'value.name.en', 'N/A')}
-              value={get(item, 'value.total', 0)}
-              bottomBorderColor={get(item, 'value.color') || randomColor()}
-            />
-          )}
-        />
-        <Divider orientation="left" plain>
-          Overall Breakdown
-        </Divider>
+
+        <SectionCard title="Case Stages">
+          <Grid
+            items={get(report, 'overall.stages', [])}
+            colPerRow={4}
+            renderItem={(item) => (
+              <NumberWidget
+                title={get(item, 'value.name.en', 'N/A')}
+                value={get(item, 'value.total', 0)}
+                bottomBorderColor={get(item, 'value.color') || randomColor()}
+              />
+            )}
+          />
+        </SectionCard>
+
+        <SectionCard title="Case Severities">
+          <Grid
+            items={get(report, 'overall.severities', [])}
+            colPerRow={4}
+            renderItem={(item) => (
+              <NumberWidget
+                title={get(item, 'value.name.en', 'N/A')}
+                value={get(item, 'value.total', 0)}
+                bottomBorderColor={get(item, 'value.color') || randomColor()}
+              />
+            )}
+          />
+        </SectionCard>
+
         <Row>
           <Col xs={24} sm={24} md={12}>
             <Row>
