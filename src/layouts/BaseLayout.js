@@ -54,7 +54,7 @@ import OverviewDashboard from '../Dashboards/Overview';
 import EventsOverviewDashboard from '../Dashboards/EventsOverview';
 import StakeholdersDashboard from '../Dashboards/Stakeholders';
 import VehicleDispatchesDashboard from '../Dashboards/VehicleDispatches';
-import ParadeDashboard from '../Dashboards/Parade';
+import EmergencyPreparednessDashboard from '../Dashboards/EmergencyPreparedness';
 // Resources
 import Resources from '../navigation/Resources';
 
@@ -123,7 +123,7 @@ const breadcrumbNameMap = {
     name: 'Indicators Dashboard',
     title: 'Indicators Dashboard',
   },
-  '/app/dashboards/parade': {
+  '/app/dashboards/emergencypreparedness': {
     name: 'Parade Dashboard',
     title: 'Parade Dashboard',
   },
@@ -407,8 +407,8 @@ const BaseLayout = ({ location, match: { url: baseUrl } }) => {
             component={VehicleDispatchesDashboard}
           />
           <SecureRoute
-            path={`${baseUrl}/dashboards/parade`}
-            component={ParadeDashboard}
+            path={`${baseUrl}/dashboards/emergencypreparedness`}
+            component={EmergencyPreparednessDashboard}
           />
           {/* end dashboard routes */}
 

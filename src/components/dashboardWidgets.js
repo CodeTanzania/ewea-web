@@ -60,7 +60,7 @@ export const NumberWidget = ({
         borderBottom: bottomBorderColor
           ? `3px solid  ${bottomBorderColor}`
           : 'none',
-        margin: '10px',
+        margin: '5px',
         boxShadow: '0 0 10px #e9e9e9',
       }}
     >
@@ -72,7 +72,7 @@ export const NumberWidget = ({
         </Col>
         <Col span={2}>{icon}</Col>
       </Row>
-      <Text style={{ fontSize: '3.5em', fontWeight: '500' }}>
+      <Text style={{ fontSize: '3.0em', fontWeight: '500' }}>
         {value}
         {suffix}
       </Text>
@@ -118,12 +118,13 @@ export const NumbersWidget = ({
   secondaryText,
   items,
   bottomBorderColor,
+  progressValue,
 }) => {
   return (
     <Card
       style={{
         borderBottom: `3px solid  ${bottomBorderColor}`,
-        margin: '10px',
+        margin: '5px',
         boxShadow: '0 0 10px #e9e9e9',
       }}
     >
@@ -158,12 +159,13 @@ export const NumbersWidget = ({
           </Col>
         ))}
       </Row>
-
       <br />
       <Text type="secondary">{secondaryText}</Text>
-      <div>
-        <Progress type="circle" percent={75} style={{ margin: '0 auto' }} />
-      </div>
+      {progressValue >= 0 && (
+        <div style={{ margin: '0 auto', width: '50%' }}>
+          <Progress type="circle" percent={progressValue} />
+        </div>
+      )}
     </Card>
   );
 };
@@ -176,6 +178,7 @@ NumbersWidget.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({ value: PropTypes.value, label: PropTypes.string })
   ),
+  progressValue: PropTypes.number,
 };
 
 NumbersWidget.defaultProps = {
@@ -183,6 +186,7 @@ NumbersWidget.defaultProps = {
   icon: null,
   bottomBorderColor: undefined,
   items: [],
+  progressValue: undefined,
 };
 
 /**
@@ -283,10 +287,10 @@ export const SectionCard = ({ title, children, actions }) => {
     <Card
       title={title}
       style={{
-        margin: '10px',
+        margin: '5px',
         boxShadow: '0 0 10px #e9e9e9',
       }}
-      bodyStyle={{ overflow: 'auto' }}
+      bodyStyle={{ overflow: 'auto', padding: '15px' }}
       extra={actions}
     >
       {children}
