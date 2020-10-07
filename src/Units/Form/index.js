@@ -102,7 +102,6 @@ const UnitForm = ({ unit, isEditForm, posting, onCancel }) => {
         <Input />
       </Form.Item>
       {/* end:name */}
-
       {/* start: abbreviation & symbol */}
       <Row justify="space-between">
         {/* start:abbreviation */}
@@ -135,7 +134,6 @@ const UnitForm = ({ unit, isEditForm, posting, onCancel }) => {
         {/* end:symbol */}
       </Row>
       {/* end: abbreviation & symbol */}
-
       {/* start:description */}
       <Form.Item
         label="Description"
@@ -145,7 +143,6 @@ const UnitForm = ({ unit, isEditForm, posting, onCancel }) => {
         <TextArea autoSize={{ minRows: 3, maxRows: 10 }} />
       </Form.Item>
       {/* end:description */}
-
       {/* start:form actions */}
       <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
         <Button onClick={onCancel}>Cancel</Button>
@@ -158,7 +155,7 @@ const UnitForm = ({ unit, isEditForm, posting, onCancel }) => {
           Save
         </Button>
       </Form.Item>
-      {/* end:form actions */}
+      {/* end:form actions */}•••••••••
     </Form>
   );
 };

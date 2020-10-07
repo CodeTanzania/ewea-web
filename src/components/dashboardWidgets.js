@@ -1,7 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import toUpper from 'lodash/toUpper';
-import { Affix, Button, Card, Typography, Col, Row, Tooltip } from 'antd';
+import map from 'lodash/map';
+import {
+  Affix,
+  Button,
+  Card,
+  Typography,
+  Col,
+  Row,
+  Tooltip,
+  Progress,
+} from 'antd';
 import {
   ComposableMap,
   ZoomableGroup,
@@ -19,6 +29,8 @@ export const SUCCESS_COLOR = '#52C41A';
 export const PURPLE_COLOR = '#3F51B5';
 export const DARK_GREEN = '#388E3C';
 
+// TODO extract inline styles to external file
+
 /**
  * @function
  * @name NumberWidget
@@ -29,6 +41,7 @@ export const DARK_GREEN = '#388E3C';
  * @param {number} props.value Number to be displayed on the card
  * @param {object} props.icon Antd Icon or file icon | image
  * @param {object} props.bottomBorderColor Bottom border color
+ * @param {string} props.suffix Symbol or text to be appended after value
  * @returns {object} Render Number widget component
  * @version 0.1.0
  * @since 0.1.0
@@ -39,6 +52,7 @@ export const NumberWidget = ({
   value,
   icon,
   bottomBorderColor,
+  suffix,
 }) => {
   return (
     <Card
@@ -46,7 +60,7 @@ export const NumberWidget = ({
         borderBottom: bottomBorderColor
           ? `3px solid  ${bottomBorderColor}`
           : 'none',
-        margin: '10px',
+        margin: '5px',
         boxShadow: '0 0 10px #e9e9e9',
       }}
     >
@@ -58,7 +72,10 @@ export const NumberWidget = ({
         </Col>
         <Col span={2}>{icon}</Col>
       </Row>
-      <Text style={{ fontSize: '3.5em', fontWeight: '500' }}>{value}</Text>
+      <Text style={{ fontSize: '3.0em', fontWeight: '500' }}>
+        {value}
+        {suffix}
+      </Text>
       <br />
       <Text type="secondary">{secondaryText}</Text>
     </Card>
@@ -71,12 +88,105 @@ NumberWidget.propTypes = {
   icon: PropTypes.node,
   value: PropTypes.number.isRequired,
   bottomBorderColor: PropTypes.string,
+  suffix: PropTypes.string,
 };
 
 NumberWidget.defaultProps = {
   secondaryText: undefined,
   icon: null,
   bottomBorderColor: undefined,
+  suffix: undefined,
+};
+
+/**
+ * @function
+ * @name NumbersWidget
+ * @description Display multiple numbers on the same card
+ * @param {props} props Component properties object
+ * @param {string} props.title Widget title
+ * @param {object} props.icon Antd Icon or file icon | image
+ * @param {string} props.secondaryText Widget muted secondary text
+ * @param {object[]} props.items Items to be displayed
+ * @param {string} props.bottomBorderColor Bottom border color
+ * @returns {object} Render Number widget component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const NumbersWidget = ({
+  icon,
+  title,
+  secondaryText,
+  items,
+  bottomBorderColor,
+  progressValue,
+}) => {
+  return (
+    <Card
+      style={{
+        borderBottom: `3px solid  ${bottomBorderColor}`,
+        margin: '5px',
+        boxShadow: '0 0 10px #e9e9e9',
+      }}
+    >
+      <Row>
+        <Col span={22}>
+          <Text style={{ color: '#8c8c8c', fontWeight: '600' }}>
+            {toUpper(title)}
+          </Text>
+        </Col>
+        <Col span={2}>{icon}</Col>
+      </Row>
+      <Row>
+        {map(items, (item) => (
+          <Col xs={8} sm={8} lg={8} xl={8}>
+            <Row style={{ paddingTop: '10px' }}>
+              <Col xs={24} sm={24} style={{ textAlign: 'center' }}>
+                <Text
+                  style={{
+                    fontSize: '1.5em',
+                    fontWeight: '500',
+                  }}
+                >
+                  {item.value}
+                </Text>
+              </Col>
+              <Col xs={24} sm={24} style={{ textAlign: 'center' }}>
+                <Text type="secondary" style={{ fontSize: '0.8em' }}>
+                  {item.label}
+                </Text>
+              </Col>
+            </Row>
+          </Col>
+        ))}
+      </Row>
+      <br />
+      <Text type="secondary">{secondaryText}</Text>
+      {progressValue >= 0 && (
+        <div style={{ margin: '0 auto', width: '50%' }}>
+          <Progress type="circle" percent={progressValue} />
+        </div>
+      )}
+    </Card>
+  );
+};
+
+NumbersWidget.propTypes = {
+  title: PropTypes.string.isRequired,
+  secondaryText: PropTypes.string,
+  icon: PropTypes.node,
+  bottomBorderColor: PropTypes.string,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({ value: PropTypes.value, label: PropTypes.string })
+  ),
+  progressValue: PropTypes.number,
+};
+
+NumbersWidget.defaultProps = {
+  secondaryText: undefined,
+  icon: null,
+  bottomBorderColor: undefined,
+  items: [],
+  progressValue: undefined,
 };
 
 /**
@@ -90,7 +200,7 @@ NumberWidget.defaultProps = {
  * @param {number} props.hours Hours on provided time
  * @param {number} props.minutes Minutes on provided time
  * @param {object} props.icon Antd Icon or file icon | image
- * @param {object} props.bottomBorderColor Bottom border color
+ * @param {string} props.bottomBorderColor Bottom border color
  * @returns {object} Render Number widget component
  * @version 0.1.0
  * @since 0.1.0
@@ -177,10 +287,10 @@ export const SectionCard = ({ title, children, actions }) => {
     <Card
       title={title}
       style={{
-        margin: '10px',
+        margin: '5px',
         boxShadow: '0 0 10px #e9e9e9',
       }}
-      bodyStyle={{ overflow: 'auto' }}
+      bodyStyle={{ overflow: 'auto', padding: '15px' }}
       extra={actions}
     >
       {children}

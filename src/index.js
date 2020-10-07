@@ -6,6 +6,7 @@ import App from './App';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 
+/* for google analytics */
 const TRACKING_ID = get(process.env, 'REACT_APP_GA_ID');
 if (TRACKING_ID) {
   ReactGA.initialize(TRACKING_ID);

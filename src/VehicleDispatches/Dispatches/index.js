@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Row, Col } from 'antd';
+import { Modal, Row, Col, Button, Drawer } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
 import get from 'lodash/get';
@@ -13,6 +13,8 @@ import Topbar from '../../components/Topbar';
 import DispatchForm from './Form';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
+import VehicleDispatchViewHeader from './DetailsView/Header';
+import VehicleDispatchViewBody from './DetailsView/Body';
 import {
   notifyError,
   notifySuccess,
@@ -52,9 +54,9 @@ const statusSpan = { xxl: 2, xl: 2, lg: 3, md: 3, sm: 0, xs: 0 };
 const pickupSpan = { xxl: 3, xl: 3, lg: 1, md: 1, sm: 0, xs: 0 };
 const dropOffSpan = { xxl: 3, xl: 3, lg: 1, md: 1, sm: 0, xs: 0 };
 const headerLayout = [
-  { ...numberSpan, header: 'Number' },
+  { ...numberSpan, header: 'Dispatch No.' },
   { ...vehicleSpan, header: 'Vehicle' },
-  { ...eventSpan, header: 'Event' },
+  { ...eventSpan, header: 'Diagnosis / Event' },
   { ...pickupSpan, header: 'Pickup Location' },
   { ...dropOffSpan, header: 'Drop-Off Location' },
   { ...prioritySpan, header: 'Priority' },
@@ -73,6 +75,7 @@ class Dispatches extends Component {
   state = {
     showFilters: false,
     isEditForm: false,
+    showDetailsView: false,
     showNotificationForm: false,
     notificationSubject: undefined,
     notificationBody: undefined,
@@ -252,6 +255,30 @@ class Dispatches extends Component {
   };
 
   /**
+   * @function handleItemView
+   * @name handleItemView
+   * @description Handle list item view
+   * @param {object} item List item
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleItemView = (item) => {
+    selectDispatch(item);
+    this.setState({ showDetailsView: true });
+  };
+
+  /**
+   * @function handleItemViewClose
+   * @name handleItemViewClose
+   * @description Handle close list item view
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleItemViewClose = () => {
+    this.setState({ showDetailsView: false });
+  };
+
+  /**
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
@@ -412,6 +439,7 @@ class Dispatches extends Component {
       showFilters,
       cached,
       isEditForm,
+      showDetailsView,
       showNotificationForm,
       notificationSubject,
       notificationBody,
@@ -490,6 +518,12 @@ class Dispatches extends Component {
               }
               actions={[
                 {
+                  name: 'View Dispatch',
+                  title: 'View Vehicle Dispatch Details',
+                  onClick: () => this.handleItemView(item),
+                  icon: 'view',
+                },
+                {
                   name: 'Edit Dispatch',
                   title: 'Update Vehicle Dispatch Details',
                   onClick: () => this.handleEdit(item),
@@ -547,7 +581,21 @@ class Dispatches extends Component {
               ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
-              <Col {...numberSpan}>{item.number}</Col>
+              <Col {...numberSpan}>
+                <Button
+                  type="link"
+                  onClick={() => this.handleItemView(item)}
+                  style={{
+                    padding: 0,
+                    color: 'rgba(0, 0, 0, 0.65)',
+                    whiteSpace: 'normal',
+                    textAlign: 'left',
+                    wordWrap: 'break-word',
+                  }}
+                >
+                  {item.number}
+                </Button>
+              </Col>
               <Col
                 {...vehicleSpan}
                 title={get(item, 'role.strings.name.en', 'N/A')}
@@ -651,6 +699,28 @@ class Dispatches extends Component {
           />
         </Modal>
         {/* end create/edit form modal */}
+
+        {/* start: case details view */}
+        <Drawer
+          title={
+            <VehicleDispatchViewHeader
+              dispatchNo={get(selectedDispatch, 'number')}
+              event={get(selectedDispatch, 'type.strings.name.en', 'N/A')}
+              onBack={this.handleItemViewClose}
+            />
+          }
+          placement="right"
+          width="100%"
+          drawerStyle={{ overflow: 'hidden' }}
+          headerStyle={{ padding: 0 }}
+          bodyStyle={{ overflow: 'hidden', height: '100%', padding: '15px' }}
+          visible={showDetailsView}
+          onClose={this.handleItemViewClose}
+          destroyOnClose
+        >
+          <VehicleDispatchViewBody dispatch={selectedDispatch} />
+        </Drawer>
+        {/* end: case details view */}
       </>
     );
   }
