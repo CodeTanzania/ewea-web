@@ -9,6 +9,7 @@ import {
 import Grid from '../../components/Grid';
 import ParadeForm from './ParadeForm';
 
+/* ui */
 const { Text } = Typography;
 // simple data structure for emergency parade
 const DATA_STRUCTURE = [
@@ -35,25 +36,6 @@ const DATA_STRUCTURE = [
     name: 'SWILA 02',
     group: 'Ambulance',
     instance: { responded: false, activeAmbulances: 0, nurses: 0 },
-    form: {
-      responded: {
-        description: 'Is the call sign active?',
-        type: 'boolean',
-      },
-      haveOxygen: {
-        description: 'Do you have oxygen?',
-        type: 'boolean',
-      },
-      radioFunctioning: {
-        description: 'Is radio functioning well?',
-        type: 'boolean',
-      },
-    },
-  },
-  {
-    name: 'MKUNGA 02',
-    group: 'Ambulance',
-    instance: null,
     form: {
       responded: {
         description: 'Is the call sign active?',
@@ -113,6 +95,25 @@ const DATA_STRUCTURE = [
       oxygenTanks: {
         description: 'How many filled oxygen tanks do you have?',
         type: 'number',
+      },
+    },
+  },
+  {
+    name: 'MKUNGA 02',
+    group: 'Ambulance',
+    instance: null,
+    form: {
+      responded: {
+        description: 'Is the call sign active?',
+        type: 'boolean',
+      },
+      haveOxygen: {
+        description: 'Do you have oxygen?',
+        type: 'boolean',
+      },
+      radioFunctioning: {
+        description: 'Is radio functioning well?',
+        type: 'boolean',
       },
     },
   },
