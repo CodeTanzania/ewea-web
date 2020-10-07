@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, Modal } from 'antd';
 import get from 'lodash/get';
 import {
   NumberOutlined,
@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons';
 
 import { FilterFloatingButton } from '../components/FloatingButton';
+import ReportFilters from '../components/ReportFilters';
 import {
   NumberWidget,
   NumbersWidget,
@@ -18,6 +19,16 @@ import {
   SUCCESS_COLOR,
   WARNING_COLOR,
 } from '../components/dashboardWidgets';
+import useFilters from '../hooks/filters';
+
+// TODO extract this to common file
+/* constants */
+const DEFAULT_FILTERS = {
+  createdAt: {
+    from: new Date(),
+    to: new Date(),
+  },
+};
 
 /**
  * @function
@@ -29,9 +40,13 @@ import {
  */
 const ParadeDashboard = () => {
   const report = {};
+  const { filters, setFilters, showFilters, setShowFilters } = useFilters(
+    DEFAULT_FILTERS
+  );
+
   return (
     <div>
-      <FilterFloatingButton onClick={() => {}} />
+      <FilterFloatingButton onClick={() => setShowFilters(true)} />
       <Row>
         <Col xs={24} sm={24} md={12} lg={6} xl={6} xxl={6}>
           <NumberWidget
@@ -221,6 +236,29 @@ const ParadeDashboard = () => {
           </Row>
         </Col>
       </Row>
+
+      <Modal
+        title="Filter Report"
+        visible={showFilters}
+        onCancel={() => setShowFilters(false)}
+        footer={null}
+        maskClosable={false}
+        className="modal-window-50"
+        destroyOnClose
+      >
+        <ReportFilters
+          filters={filters}
+          onFilter={(data) => {
+            setFilters(data);
+            setShowFilters(false);
+          }}
+          onClear={() => {
+            setFilters(DEFAULT_FILTERS);
+            setShowFilters(false);
+          }}
+          onCancel={() => setShowFilters(false)}
+        />
+      </Modal>
     </div>
   );
 };
