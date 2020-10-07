@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Card, Typography, Drawer, Row, Col, Button } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  SafetyCertificateOutlined,
+  WarningOutlined,
+} from '@ant-design/icons';
 
 import Grid from '../../components/Grid';
 import ParadeForm from './ParadeForm';
@@ -49,7 +53,7 @@ const DATA_STRUCTURE = [
   {
     name: 'MKUNGA 02',
     group: 'Ambulance',
-    instance: { responded: false, activeAmbulances: 0, nurses: 0 },
+    instance: null,
     form: {
       responded: {
         description: 'Is the call sign active?',
@@ -84,6 +88,34 @@ const DATA_STRUCTURE = [
       },
     },
   },
+  {
+    name: 'KOBOKO 03',
+    group: 'Health Facility',
+    instance: {
+      responded: false,
+      availableBeds: 0,
+      bloodBags: 0,
+      oxygenTanks: 0,
+    },
+    form: {
+      responded: {
+        description: 'Is the call sign active?',
+        type: 'boolean',
+      },
+      availableBeds: {
+        description: 'Do you have oxygen?',
+        type: 'boolean',
+      },
+      bloodBags: {
+        description: 'Is radio functioning well?',
+        type: 'boolean',
+      },
+      oxygenTanks: {
+        description: 'How many filled oxygen tanks do you have?',
+        type: 'number',
+      },
+    },
+  },
 ];
 
 /**
@@ -102,7 +134,7 @@ const EmergencyParade = () => {
       <Row>
         <Col
           xxl={{ span: 3, offset: 21 }}
-          xl={{ span: 3, offset: 21 }}
+          xl={{ span: 5, offset: 19 }}
           lg={{ span: 6, offset: 18 }}
           md={{ span: 6, offset: 18 }}
           sm={{ span: 24 }}
@@ -132,9 +164,27 @@ const EmergencyParade = () => {
                   openModal(true);
                 }}
               >
-                <Text strong>{item.value.name}</Text>
-                <br />
-                <Text>{item.value.group}</Text>
+                <Row>
+                  <Col span={22}>
+                    <Text strong>{item.value.name}</Text>
+                    <br />
+                    <Text>{item.value.group}</Text>
+                  </Col>
+                  <Col span={2}>
+                    {item.value.instance ? (
+                      <SafetyCertificateOutlined
+                        style={{
+                          color: '#52C41A',
+                          fontSize: '1.5em',
+                        }}
+                      />
+                    ) : (
+                      <WarningOutlined
+                        style={{ color: '#FAAD14', fontSize: '1.5em' }}
+                      />
+                    )}
+                  </Col>
+                </Row>
               </Card>
             );
           }}
