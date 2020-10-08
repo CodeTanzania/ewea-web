@@ -162,7 +162,7 @@ export const NumbersWidget = ({
       <br />
       <Text type="secondary">{secondaryText}</Text>
       {progressValue >= 0 && (
-        <div style={{ margin: '0 auto', width: '50%' }}>
+        <div style={{ margin: '0 auto', width: '120px' }}>
           <Progress type="circle" percent={progressValue} />
         </div>
       )}

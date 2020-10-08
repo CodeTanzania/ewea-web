@@ -19,7 +19,7 @@ const DATA_STRUCTURE = [
     instance: { responded: false, activeAmbulances: 0, nurses: 0 },
     form: {
       responded: {
-        description: 'Is the call sign active?',
+        description: 'Is the call sign reachable?',
         type: 'boolean',
       },
       activeAmbulances: {
@@ -38,7 +38,7 @@ const DATA_STRUCTURE = [
     instance: { responded: false, activeAmbulances: 0, nurses: 0 },
     form: {
       responded: {
-        description: 'Is the call sign active?',
+        description: 'Is the call sign reachable?',
         type: 'boolean',
       },
       haveOxygen: {
@@ -57,7 +57,7 @@ const DATA_STRUCTURE = [
     instance: { responded: false, activeAmbulances: 0, nurses: 0 },
     form: {
       responded: {
-        description: 'Is the call sign active?',
+        description: 'Is the call sign reachable?',
         type: 'boolean',
       },
       haveOxygen: {
@@ -81,15 +81,15 @@ const DATA_STRUCTURE = [
     },
     form: {
       responded: {
-        description: 'Is the call sign active?',
+        description: 'Is the call sign reachable?',
         type: 'boolean',
       },
       availableBeds: {
-        description: 'Do you have oxygen?',
+        description: 'Do you have enough oxygen tanks?',
         type: 'boolean',
       },
       bloodBags: {
-        description: 'Is radio functioning well?',
+        description: 'Do you have enough blood bags?',
         type: 'boolean',
       },
       oxygenTanks: {
@@ -104,7 +104,7 @@ const DATA_STRUCTURE = [
     instance: null,
     form: {
       responded: {
-        description: 'Is the call sign active?',
+        description: 'Is the call sign reachable?',
         type: 'boolean',
       },
       haveOxygen: {
@@ -193,7 +193,9 @@ const EmergencyParade = () => {
       </div>
 
       <Drawer
-        title="Parade"
+        title={`Parade ${
+          selectedItem ? `for ${selectedItem.name}(${selectedItem.group})` : ''
+        }`}
         placement="right"
         width="100%"
         destroyOnClose

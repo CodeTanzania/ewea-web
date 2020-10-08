@@ -124,8 +124,8 @@ const breadcrumbNameMap = {
     title: 'Indicators Dashboard',
   },
   '/app/dashboards/emergencypreparedness': {
-    name: 'Parade Dashboard',
-    title: 'Parade Dashboard',
+    name: 'Emergency Preparedness Dashboard',
+    title: 'Emergency Preparedness Dashboard',
   },
   '/app/dashboards/needs': {
     name: 'Needs Dashboard',
