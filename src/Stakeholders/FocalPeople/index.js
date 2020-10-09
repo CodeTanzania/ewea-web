@@ -56,6 +56,21 @@ const headerLayout = [
   { ...emailSpan, header: 'Email' },
   { ...areaSpan, header: 'Area' },
 ];
+const SHARE_FOCAL_PERSON_SUBJECT = 'Contact Details for Focal People';
+
+/* messages */
+const MESSAGE_ITEM_CREATE_SUCCESS = 'Focal Person was created successfully';
+const MESSAGE_ITEM_CREATE_ERROR =
+  'Something occurred while saving focal Person, please try again!';
+const MESSAGE_ITEM_UPDATE_SUCCESS = 'Focal Person was updated successfully';
+const MESSAGE_ITEM_UPDATE_ERROR =
+  'Something occurred while updating focal Person, please try again!';
+const MESSAGE_LIST_REFRESH_SUCCESS = 'Focal People refreshed successfully';
+const MESSAGE_LIST_REFRESH_ERROR =
+  'An error occurred while refreshing focal people please contact system administrator';
+const MESSAGE_ITEM_ARCHIVE_SUCCESS = 'Focal Person was archived successfully';
+const MESSAGE_ITEM_ARCHIVE_ERROR =
+  'An error occurred while archiving Focal Person, Please contact your system Administrator';
 
 /**
  * @class
@@ -204,7 +219,7 @@ class FocalPeople extends Component {
     let message = '';
     let subject = '';
     if (isArray(focalPeople)) {
-      subject = 'Contact Details for Focal People';
+      subject = SHARE_FOCAL_PERSON_SUBJECT;
       const focalPeopleList = focalPeople.map(
         (focalPerson) => generateFocalPersonVCard(focalPerson).body
       );
@@ -288,12 +303,10 @@ class FocalPeople extends Component {
   handleRefreshFocalPeople = () => {
     refreshFocalPeople(
       () => {
-        notifySuccess('Focal People refreshed successfully');
+        notifySuccess(MESSAGE_LIST_REFRESH_SUCCESS);
       },
       () => {
-        notifyError(
-          'An error occurred while refreshing focal people please contact system administrator'
-        );
+        notifyError(MESSAGE_LIST_REFRESH_ERROR);
       }
     );
   };
@@ -319,13 +332,11 @@ class FocalPeople extends Component {
             item._id, // eslint-disable-line
             () => {
               resolve();
-              notifySuccess('Focal Person was archived successfully');
+              notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS);
             },
             () => {
               resolve();
-              notifyError(
-                'An error occurred while archiving Focal Person, Please contact your system Administrator'
-              );
+              notifyError(MESSAGE_ITEM_ARCHIVE_ERROR);
             }
           );
         });
@@ -534,12 +545,10 @@ class FocalPeople extends Component {
               postFocalPerson(
                 data,
                 () => {
-                  notifySuccess('Focal Person was created successfully');
+                  notifySuccess(MESSAGE_ITEM_CREATE_SUCCESS);
                 },
                 () => {
-                  notifyError(
-                    'Something occurred while saving focal Person, please try again!'
-                  );
+                  notifyError(MESSAGE_ITEM_CREATE_ERROR);
                 }
               )
             }
@@ -547,12 +556,10 @@ class FocalPeople extends Component {
               putFocalPerson(
                 data,
                 () => {
-                  notifySuccess('Focal Person was updated successfully');
+                  notifySuccess(MESSAGE_ITEM_UPDATE_SUCCESS);
                 },
                 () => {
-                  notifyError(
-                    'Something occurred while updating focal Person, please try again!'
-                  );
+                  notifyError(MESSAGE_ITEM_UPDATE_ERROR);
                 }
               )
             }
