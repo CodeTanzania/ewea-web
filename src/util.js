@@ -29,10 +29,8 @@ export const joinArrayOfObjectToString = (array, property = 'name') =>
  * @function
  * @name notifyError
  * @description Show error message box
- *
  * @param {object} error  error object
  * @returns {undefined} undefined
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -51,9 +49,7 @@ export const notifyError = (error) => {
  * @function
  * @name notifySuccess
  * @description Show a success message box
- *
  * @param {string} details information to be displayed on message box
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -65,9 +61,7 @@ export const notifySuccess = (details) => {
  * @function
  * @name notifyInfo
  * @description Show a info message box
- *
  * @param {string} info information to be displayed on message box
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -79,11 +73,9 @@ export const notifyInfo = (info) => {
  * @function
  * @name formatDate
  * @description formats date to ddd, MMM DD YYYY hA format
- *
  * @param {object} date date object
  * @param {string} format format that date object will be formatted to
  * @returns {string} formatted date
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -94,10 +86,8 @@ export const formatDate = (date, format = 'ddd, MMM DD YYYY hA') =>
  * @function
  * @name timeAgo
  * @description creates relative date
- *
  * @param {object} date date object
  * @returns {string} relative time
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -122,12 +112,9 @@ export const formatNumber = (number) =>
  * @function
  * @name getRGBAColor
  * @description Return RGBA color from base color and alpha value
- *
  * @param {string} baseColor  Base color i.e #ffddee
  * @param {number} alpha Alpha value should be between 0 and 1
- *
- * @returns {string} rbga(r,b,g,a)
- *
+ * @returns {string} color in rbga(r,b,g,a)
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -173,9 +160,7 @@ export const truncateString = (str, num = 60) => {
  * @function
  * @name generateEventTemplate
  * @description Create event message for sharing
- *
  * @param {object} event Event object
- *
  * @returns {object} Event description for sharing
  * @version 0.1.0
  * @since 0.1.0
@@ -201,30 +186,6 @@ export const generateEventTemplate = (event) => {
         }`
       : ''
   }${event.places ? `\nPlaces: ${event.places}` : ''}`;
-
-  return { subject, body };
-};
-
-/**
- * @function
- * @name generateFocalPersonVCard
- * @param {object} focalPerson Focal Person object for V-Card generation
- * @returns {object} Formatted Focal person details to be shared
- * @version 0.1.0
- * @since 0.1.0
- */
-export const generateFocalPersonVCard = (focalPerson) => {
-  const subject = `Contact Details for ${focalPerson.name}`;
-
-  const body = `Name: ${focalPerson.name}\n${
-    focalPerson.role
-      ? `Title: ${focalPerson.role.strings.name.en} ${
-          focalPerson.party ? `(${focalPerson.party.abbreviation})` : ''
-        }`
-      : ''
-  }\nMobile: ${focalPerson.mobile}\n${
-    focalPerson.email ? `Email: ${focalPerson.email}` : ''
-  }`;
 
   return { subject, body };
 };
@@ -424,6 +385,8 @@ export const assignItemsGridSpan = (items = [], maxColPerRow) => {
  * @returns {object} generated message constants
  * @version 0.1.0
  * @since 0.1.0
+ * @example
+ * const { MESSAGE_ITEM_ARCHIVE_ERROR } = generateFeedbackMessagesFor('focalPeople');
  */
 export const generateFeedbackMessagesFor = (resourceName) => {
   const singularName = startCase(singularize(resourceName));
