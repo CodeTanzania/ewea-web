@@ -10,6 +10,7 @@ import startCase from 'lodash/startCase';
 import isFunction from 'lodash/isFunction';
 import take from 'lodash/take';
 import takeRight from 'lodash/takeRight';
+import { singularize, pluralize } from 'inflection';
 
 /**
  * @function
@@ -413,4 +414,37 @@ export const assignItemsGridSpan = (items = [], maxColPerRow) => {
     ];
   }
   return [...normalizeItemsSpan(items, 24 / maxColPerRow)];
+};
+
+/**
+ * @function
+ * @name generateFeedbackMessagesFor
+ * @description Generate common feedback messages per a given resource
+ * @param {string} resourceName resource name to generate message for
+ * @returns {object} generated message constants
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+export const generateFeedbackMessagesFor = (resourceName) => {
+  const singularName = startCase(singularize(resourceName));
+  const pluralName = startCase(pluralize(resourceName));
+  const MESSAGE_ITEM_CREATE_SUCCESS = `${singularName} was created successfully`;
+  const MESSAGE_ITEM_CREATE_ERROR = `Something occurred while saving ${singularName}, please try again!`;
+  const MESSAGE_ITEM_UPDATE_SUCCESS = `${singularName} was updated successfully`;
+  const MESSAGE_ITEM_UPDATE_ERROR = `Something occurred while updating ${singularName}, please try again!`;
+  const MESSAGE_LIST_REFRESH_SUCCESS = `${pluralName} List refreshed successfully`;
+  const MESSAGE_LIST_REFRESH_ERROR = `An error occurred while refreshing ${pluralName} list, please contact system administrator`;
+  const MESSAGE_ITEM_ARCHIVE_SUCCESS = `${singularName} was archived successfully`;
+  const MESSAGE_ITEM_ARCHIVE_ERROR = `An error occurred while archiving ${singularName}, Please contact your system Administrator`;
+
+  return {
+    MESSAGE_ITEM_ARCHIVE_ERROR,
+    MESSAGE_ITEM_ARCHIVE_SUCCESS,
+    MESSAGE_ITEM_CREATE_ERROR,
+    MESSAGE_ITEM_CREATE_SUCCESS,
+    MESSAGE_ITEM_UPDATE_ERROR,
+    MESSAGE_ITEM_UPDATE_SUCCESS,
+    MESSAGE_LIST_REFRESH_ERROR,
+    MESSAGE_LIST_REFRESH_SUCCESS,
+  };
 };
