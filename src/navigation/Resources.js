@@ -38,6 +38,7 @@ const routes = [
     path: '/vehicles',
     icon: vehiclesIcon,
     description: modules.vehicles,
+    permission: 'vehicle:view',
   },
   {
     name: 'Equipments',
