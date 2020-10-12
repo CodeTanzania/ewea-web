@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Row, Col, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import isArray from 'lodash/isArray';
 import get from 'lodash/get';
 
 import Topbar from '../../components/Topbar';
@@ -13,7 +12,8 @@ import AgencyFilters from './Filters';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import NotificationForm from '../../components/NotificationForm';
-import { notifyError, notifySuccess, generateAgencyVCard } from '../../util';
+import { useList } from '../../hooks';
+import { shareDetailsFor } from '../../util';
 
 /* http actions */
 const {
@@ -23,21 +23,8 @@ const {
   getAgenciesExportUrl,
 } = httpActions;
 /* redux actions */
-const {
-  closeAgencyForm,
-  getAgencies,
-  openAgencyForm,
-  searchAgencies,
-  selectAgency,
-  refreshAgencies,
-  paginateAgencies,
-  deleteAgency,
-  postAgency,
-  putAgency,
-} = reduxActions;
+const { paginateAgencies } = reduxActions;
 
-/* ui */
-const { confirm } = Modal;
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 7, sm: 14, xs: 12 };
 const abbreviationSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
@@ -51,494 +38,240 @@ const headerLayout = [
   { ...phoneSpan, header: 'Phone Number' },
   { ...emailSpan, header: 'Email' },
 ];
+const FIELDS_TO_SHARE = {
+  name: {
+    header: 'Name',
+    dataIndex: (item) =>
+      `${get(item, 'name', 'N/A')} (${get(item, 'abbreviation', 'N/A')})`,
+    defaultValue: 'N/A',
+  },
+  mobile: { header: 'Mobile', dataIndex: 'mobile', defaultValue: 'N/A' },
+  email: { header: 'Email', dataIndex: 'email', defaultValue: 'N/A' },
+};
 
 /**
- * @class
+ * @function
  * @name Agencies
- * @description Render agency list which have search box, actions and agency list
- *
+ * @description Render focalPerson list which have search box, actions
+ * and focalPerson list
+ * @param { object} props component properties object
+ * @param {object[]} props.agencies List of agencies from redux store
+ * @param {object} props.agency Selected agency from redux store
+ * @param {boolean} props.loading Flag to indicate fetching data from API
+ * @param {boolean} props.posting Flag to indicate posting data to the API
+ * @param {number} props.page Current page
+ * @param {boolean} props.showForm Flag for controlling visibility of the form for
+ * creating or updating resource
+ * @param {string} props.searchQuery Search query string
+ * @param {number} props.total Total number of resources in the API
+ * @returns {object} Agencies list ui
  * @version 0.1.0
  * @since 0.1.0
  */
-class Agencies extends Component {
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    showFilters: false,
-    isEditForm: false,
-    showNotificationForm: false,
-    selectedAgencies: [],
-    notificationSubject: undefined,
-    notificationBody: undefined,
-    cached: null,
-  };
+const Agencies = ({
+  agencies,
+  agency,
+  loading,
+  posting,
+  page,
+  showForm,
+  searchQuery,
+  total,
+}) => {
+  const {
+    cachedValues,
+    showFilters,
+    isEditForm,
+    showNotificationForm,
+    selectedItems,
+    notificationSubject,
+    notificationBody,
 
-  componentDidMount() {
-    getAgencies();
-  }
+    handleOnCacheValues,
+    handleOnClearCachedValues,
+    handleOnOpenFiltersModal,
+    handleOnCloseFiltersModal,
+    handleOnOpenForm,
+    handleOnCloseForm,
+    handleOnSearch,
+    handleOnEdit,
+    handleOnOpenNotificationForm,
+    handleOnCloseNotificationForm,
+    handleAfterCloseForm,
+    handleAfterCloseNotificationForm,
+    handleOnRefreshList,
+    handleOnArchiveItem,
+    handleOnCreateItem,
+    handleOnUpdateItem,
+    handleOnShare,
+  } = useList('agencies');
 
-  /**
-   * @function
-   * @name handleOnCachedValues
-   * @description Cached selected values for filters
-   *
-   * @param {object} cached values to be cached from filter
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleOnCachedValues = (cached) => {
-    const { cached: previousCached } = this.state;
-    const values = { ...previousCached, ...cached };
-    this.setState({ cached: values });
-  };
+  return (
+    <>
+      {/* Topbar */}
+      <Topbar
+        search={{
+          size: 'large',
+          placeholder: 'Search for agencies here ...',
+          onChange: handleOnSearch,
+          value: searchQuery,
+        }}
+        action={{
+          label: 'New Agency',
+          icon: <PlusOutlined />,
+          size: 'large',
+          title: 'Add New Agency',
+          onClick: handleOnOpenForm,
+        }}
+      />
+      {/* end Topbar */}
 
-  /**
-   * @function
-   * @name handleClearCachedValues
-   * @description Clear cached values
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleClearCachedValues = () => {
-    this.setState({ cached: null });
-  };
+      {/* list starts */}
+      <ItemList
+        itemName="Agencies"
+        items={agencies}
+        page={page}
+        itemCount={total}
+        loading={loading}
+        onFilter={handleOnOpenFiltersModal}
+        onNotify={handleOnOpenNotificationForm}
+        onShare={(items) => handleOnShare(items, FIELDS_TO_SHARE)}
+        onRefresh={handleOnRefreshList}
+        onPaginate={(nextPage) => paginateAgencies(nextPage)}
+        headerLayout={headerLayout}
+        generateExportUrl={getAgenciesExportUrl}
+        renderListItem={({
+          item,
+          isSelected,
+          onSelectItem,
+          onDeselectItem,
+        }) => (
+          <ListItem
+            key={item._id} // eslint-disable-line
+            item={item}
+            name={item.name}
+            isSelected={isSelected}
+            onSelectItem={onSelectItem}
+            onDeselectItem={onDeselectItem}
+            title={<span className="text-sm">{item.name}</span>}
+            secondaryText={
+              <Row>
+                <Col span={16}>
+                  <span className="text-xs">{item.abbreviation}</span>
+                </Col>
 
-  /**
-   * @function
-   * @name openFiltersModal
-   * @description open filters modal by setting it's visible property to false via state
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  openFiltersModal = () => {
-    this.setState({ showFilters: true });
-  };
-
-  /**
-   * @function
-   * @name closeFiltersModal
-   * @description Close filters modal by setting it's visible property to false via state
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closeFiltersModal = () => {
-    this.setState({ showFilters: false });
-  };
-
-  /**
-   * @function
-   * @name openAgencyForm
-   * @description Open agency form
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  openAgencyForm = () => {
-    openAgencyForm();
-  };
-
-  /**
-   * @function
-   * @name openAgencyForm
-   * @description close agency form
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closeAgencyForm = () => {
-    closeAgencyForm();
-    this.setState({ isEditForm: false });
-  };
-
-  /**
-   * @function
-   * @name searchAgencies
-   * @description Search Agencies List based on supplied filter word
-   *
-   * @param {object} event - Event instance
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  searchAgencies = (event) => {
-    searchAgencies(event.target.value);
-  };
-
-  /**
-   * @function
-   * @name handleEdit
-   * @description Handle on Edit action for list item
-   *
-   * @param {object} agency agency to be edited
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleEdit = (agency) => {
-    selectAgency(agency);
-    this.setState({ isEditForm: true });
-    openAgencyForm();
-  };
-
-  /**
-   * @function
-   * @name openNotificationForm
-   * @description Handle on notify agencies
-   *
-   * @param {object[]} agencies List of agencies selected to be notified
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  openNotificationForm = (agencies) => {
-    this.setState({
-      selectedAgencies: agencies,
-      showNotificationForm: true,
-    });
-  };
-
-  /**
-   * @function
-   * @name closeNotificationForm
-   * @description Handle on notify agencies
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closeNotificationForm = () => {
-    this.setState({ showNotificationForm: false });
-  };
-
-  /**
-   * @function
-   * @name handleAfterCloseForm
-   * @description Perform post close form cleanups
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleAfterCloseForm = () => {
-    selectAgency(null);
-    this.setState({ isEditForm: false });
-  };
-
-  /**
-   * @function
-   * @name handleRefreshAgencies
-   * @description Handle list refresh action
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleRefreshAgencies = () => {
-    refreshAgencies(
-      () => {
-        notifySuccess('Agencies refreshed successfully');
-      },
-      () => {
-        notifyError(
-          'An Error occurred while refreshing Agencies please contact system administrator'
-        );
-      }
-    );
-  };
-
-  /**
-   * @function
-   * @name handleShare
-   * @description Handle share multiple agencies
-   *
-   * @param {object[]| object} agencies agencies list to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleShare = (agencies) => {
-    let message;
-    let subject;
-    if (isArray(agencies)) {
-      const agencyList = agencies.map(
-        (agency) => generateAgencyVCard(agency).body
-      );
-
-      subject = 'Agencies Contact Details';
-      message = agencyList.join('\n\n\n');
-    } else {
-      const { body, subject: title } = generateAgencyVCard(agencies);
-      subject = title;
-      message = body;
-    }
-
-    this.setState({
-      notificationSubject: subject,
-      notificationBody: message,
-      showNotificationForm: true,
-    });
-  };
-
-  /**
-   * @function
-   * @name openFiltersModal
-   * @description open filters modal by setting it's visible property
-   * to false via state
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  openFiltersModal = () => {
-    this.setState({ showFilters: true });
-  };
-
-  /**
-   * @function
-   * @name showArchiveConfirm
-   * @description show confirm modal before archiving a agency
-   * @param {object} item agency to archive
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  showArchiveConfirm = (item) => {
-    confirm({
-      title: `Are you sure you want to archive ${item.name} ?`,
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
-      onOk() {
-        return new Promise((resolve) => {
-          deleteAgency(
-            item._id, // eslint-disable-line
-            () => {
-              resolve();
-              notifySuccess('Agency was archived successfully');
-            },
-            () => {
-              resolve();
-              notifyError(
-                'An error occurred while archiving Agency, Please contact your system Administrator'
-              );
+                <Col span={6}>
+                  <span className="text-xs">{item.mobile}</span>
+                </Col>
+              </Row>
             }
-          );
-        });
-      },
-    });
-  };
+            actions={[
+              {
+                name: 'Edit Agency',
+                title: 'Update Agency Details',
+                onClick: () => handleOnEdit(item),
+                icon: 'edit',
+              },
+              {
+                name: 'Share Agency',
+                title: 'Share Agency details with others',
+                onClick: () => handleOnShare(item, FIELDS_TO_SHARE),
+                icon: 'share',
+              },
+              {
+                name: 'Share on WhatsApp',
+                title: 'Share Contact on Whatsapp',
+                link: `https://wa.me/?text=${encodeURI(
+                  shareDetailsFor(item, FIELDS_TO_SHARE)
+                )}`,
+                icon: 'whatsapp',
+              },
+              {
+                name: 'Archive Agency',
+                title: 'Remove Agency from list of active agency',
+                onClick: () => handleOnArchiveItem(item),
+                icon: 'archive',
+              },
+            ]}
+          >
+            {/* eslint-disable react/jsx-props-no-spreading */}
+            <Col {...nameSpan}>{item.name}</Col>
+            <Col {...abbreviationSpan}>{item.abbreviation}</Col>
+            <Col {...areaSpan}>{get(item, 'area.strings.name.en', 'N/A')}</Col>
+            <Col {...phoneSpan}>{item.mobile}</Col>
+            <Col {...emailSpan}>{item.email}</Col>
+            {/* eslint-enable react/jsx-props-no-spreading */}
+          </ListItem>
+        )}
+      />
+      {/* end list */}
 
-  render() {
-    const {
-      agencies,
-      agency,
-      loading,
-      posting,
-      page,
-      showForm,
-      searchQuery,
-      total,
-    } = this.props;
-    const {
-      showFilters,
-      isEditForm,
-      showNotificationForm,
-      selectedAgencies,
-      notificationSubject,
-      notificationBody,
-      cached,
-    } = this.state;
-
-    return (
-      <>
-        {/* Topbar */}
-        <Topbar
-          search={{
-            size: 'large',
-            placeholder: 'Search for agencies here ...',
-            onChange: this.searchAgencies,
-            value: searchQuery,
-          }}
-          action={{
-            label: 'New Agency',
-            icon: <PlusOutlined />,
-            size: 'large',
-            title: 'Add New Agency',
-            onClick: this.openAgencyForm,
-          }}
+      {/* Notification Modal modal */}
+      <Modal
+        title="Notify Agencies"
+        visible={showNotificationForm}
+        onCancel={handleOnCloseNotificationForm}
+        footer={null}
+        destroyOnClose
+        maskClosable={false}
+        className="modal-window-50"
+        afterClose={handleAfterCloseNotificationForm}
+      >
+        <NotificationForm
+          onSearchRecipients={getAgenciesFromAPI}
+          onSearchJurisdictions={getAdministrativeAreas}
+          onSearchGroups={getPartyGroups}
+          onCancel={handleOnCloseNotificationForm}
+          selectedAgencies={selectedItems}
+          subject={notificationSubject}
+          body={notificationBody}
         />
-        {/* end Topbar */}
+      </Modal>
+      {/* end Notification modal */}
 
-        {/* list starts */}
-        <ItemList
-          itemName="Agencies"
-          items={agencies}
-          page={page}
-          itemCount={total}
-          loading={loading}
-          onFilter={this.openFiltersModal}
-          onNotify={this.openNotificationForm}
-          onShare={this.handleShare}
-          onRefresh={this.handleRefreshAgencies}
-          onPaginate={(nextPage) => paginateAgencies(nextPage)}
-          headerLayout={headerLayout}
-          generateExportUrl={getAgenciesExportUrl}
-          renderListItem={({
-            item,
-            isSelected,
-            onSelectItem,
-            onDeselectItem,
-          }) => (
-            <ListItem
-              key={item._id} // eslint-disable-line
-              item={item}
-              name={item.name}
-              isSelected={isSelected}
-              onSelectItem={onSelectItem}
-              onDeselectItem={onDeselectItem}
-              title={<span className="text-sm">{item.name}</span>}
-              secondaryText={
-                <Row>
-                  <Col span={16}>
-                    <span className="text-xs">{item.abbreviation}</span>
-                  </Col>
-
-                  <Col span={6}>
-                    <span className="text-xs">{item.mobile}</span>
-                  </Col>
-                </Row>
-              }
-              actions={[
-                {
-                  name: 'Edit Agency',
-                  title: 'Update Agency Details',
-                  onClick: () => this.handleEdit(item),
-                  icon: 'edit',
-                },
-                {
-                  name: 'Share Agency',
-                  title: 'Share Agency details with others',
-                  onClick: () => this.handleShare(item),
-                  icon: 'share',
-                },
-                {
-                  name: 'Share on WhatsApp',
-                  title: 'Share Contact on Whatsapp',
-                  link: `https://wa.me/?text=${encodeURI(
-                    generateAgencyVCard(item).body
-                  )}`,
-                  icon: 'whatsapp',
-                },
-                {
-                  name: 'Archive Agency',
-                  title: 'Remove Agency from list of active agency',
-                  onClick: () => this.showArchiveConfirm(item),
-                  icon: 'archive',
-                },
-              ]}
-            >
-              {/* eslint-disable react/jsx-props-no-spreading */}
-              <Col {...nameSpan}>{item.name}</Col>
-              <Col {...abbreviationSpan}>{item.abbreviation}</Col>
-              <Col {...areaSpan}>
-                {get(item, 'area.strings.name.en', 'N/A')}
-              </Col>
-              <Col {...phoneSpan}>{item.mobile}</Col>
-              <Col {...emailSpan}>{item.email}</Col>
-              {/* eslint-enable react/jsx-props-no-spreading */}
-            </ListItem>
-          )}
+      {/* filter modal */}
+      <Modal
+        title="Filter Agency"
+        visible={showFilters}
+        onCancel={handleOnCloseFiltersModal}
+        footer={null}
+        destroyOnClose
+        maskClosable={false}
+        className="modal-window-50"
+      >
+        <AgencyFilters
+          onCancel={handleOnCloseFiltersModal}
+          cached={cachedValues}
+          onCache={handleOnCacheValues}
+          onClearCache={handleOnClearCachedValues}
         />
-        {/* end list */}
+      </Modal>
+      {/* end filter modal */}
 
-        {/* Notification Modal modal */}
-        <Modal
-          title="Notify Agencies"
-          visible={showNotificationForm}
-          onCancel={this.closeNotificationForm}
-          footer={null}
-          destroyOnClose
-          maskClosable={false}
-          className="modal-window-50"
-        >
-          <NotificationForm
-            onSearchRecipients={getAgenciesFromAPI}
-            onSearchJurisdictions={getAdministrativeAreas}
-            onSearchGroups={getPartyGroups}
-            onCancel={this.closeNotificationForm}
-            selectedAgencies={selectedAgencies}
-            subject={notificationSubject}
-            body={notificationBody}
-          />
-        </Modal>
-        {/* end Notification modal */}
-
-        {/* filter modal */}
-        <Modal
-          title="Filter Agency"
-          visible={showFilters}
-          onCancel={this.closeFiltersModal}
-          footer={null}
-          destroyOnClose
-          maskClosable={false}
-          className="modal-window-50"
-        >
-          <AgencyFilters
-            onCancel={this.closeFiltersModal}
-            cached={cached}
-            onCache={this.handleOnCachedValues}
-            onClearCache={this.handleClearCachedValues}
-          />
-        </Modal>
-        {/* end filter modal */}
-
-        {/* create/edit form modal */}
-        <Modal
-          title={isEditForm ? 'Edit Agency' : 'Add New Agency'}
-          visible={showForm}
-          className="modal-window-80"
-          footer={null}
-          onCancel={this.closeAgencyForm}
-          destroyOnClose
-          maskClosable={false}
-          afterClose={this.handleAfterCloseForm}
-        >
-          <StakeholderForm
-            isAgency
-            stakeholder={agency}
-            posting={posting}
-            onCancel={this.closeAgencyForm}
-            onCreate={(data) =>
-              postAgency(
-                data,
-                () => {
-                  notifySuccess('Agency was created successfully');
-                },
-                () => {
-                  notifyError(
-                    'Something occurred while saving agency, please try again!'
-                  );
-                }
-              )
-            }
-            onUpdate={(data) =>
-              putAgency(
-                data,
-                () => {
-                  notifySuccess('Agency was updated successfully');
-                },
-                () => {
-                  notifyError(
-                    'Something occurred while updating agency, please try again!'
-                  );
-                }
-              )
-            }
-          />
-        </Modal>
-        {/* end create/edit form modal */}
-      </>
-    );
-  }
-}
+      {/* create/edit form modal */}
+      <Modal
+        title={isEditForm ? 'Edit Agency' : 'Add New Agency'}
+        visible={showForm}
+        className="modal-window-80"
+        footer={null}
+        onCancel={handleOnCloseForm}
+        destroyOnClose
+        maskClosable={false}
+        afterClose={handleAfterCloseForm}
+      >
+        <StakeholderForm
+          isAgency
+          stakeholder={agency}
+          posting={posting}
+          onCancel={handleOnCloseForm}
+          onCreate={(data) => handleOnCreateItem(data)}
+          onUpdate={(data) => handleOnUpdateItem(data)}
+        />
+      </Modal>
+      {/* end create/edit form modal */}
+    </>
+  );
+};
 
 Agencies.propTypes = {
   loading: PropTypes.bool.isRequired,
