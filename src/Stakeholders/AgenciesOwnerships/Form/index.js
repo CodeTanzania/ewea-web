@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input, Form } from 'antd';
-import { reduxActions } from '@codetanzania/ewea-api-states';
-import { notifyError, notifySuccess } from '../../../util';
+import get from 'lodash/get';
 
 /* constants */
-const { putPartyOwnership, postPartyOwnership } = reduxActions;
 const { TextArea } = Input;
 const formItemLayout = {
   labelCol: {
@@ -28,51 +26,35 @@ const formItemLayout = {
 
 /**
  * @function
- * @param {object} props props object
- * @param {object} props.partyOwnership valid party ownership
- * @param {boolean} props.isEditForm edit flag
- * @param {boolean} props.posting posting flag
- * @param {Function} props.onCancel cancel callback
  * @name PartyOwnershipForm
  * @description Render form for creating and editing party ownerships
+ * @param {object} props props object
+ * @param {object} props.partyOwnership valid party ownership
+ * @param {boolean} props.posting posting flag
+ * @param {Function} props.onCreate onCreate data callback
+ * @param {Function} props.onUpdate onUpdate data callback
+ * @param {Function} props.onCancel cancel callback
  * @returns {object} PartyOwnershipForm component
  * @version 0.1.0
  * @since 0.1.0
  */
 const PartyOwnershipForm = ({
   partyOwnership,
-  isEditForm,
   posting,
   onCancel,
+  onCreate,
+  onUpdate,
 }) => {
   const onFinish = (values) => {
-    if (isEditForm) {
-      const updatedContact = { ...partyOwnership, ...values };
-      putPartyOwnership(
-        updatedContact,
-        () => {
-          notifySuccess('Agency Ownership was updated successfully');
-        },
-        () => {
-          notifyError(
-            'Something occurred while updating Agency Ownership, please try again!'
-          );
-        }
-      );
-    } else {
-      postPartyOwnership(
-        values,
-        () => {
-          notifySuccess('Agency Ownership was created successfully');
-        },
-        () => {
-          notifyError(
-            'Something occurred while saving Agency Ownership, please try again!'
-          );
-        }
-      );
+    if (get(partyOwnership, '_id')) {
+      const updatedData = { ...partyOwnership, ...values };
+      onUpdate(updatedData);
+      return;
     }
+
+    onCreate(values);
   };
+
   return (
     <Form
       onFinish={onFinish}
@@ -143,6 +125,8 @@ PartyOwnershipForm.propTypes = {
   isEditForm: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
   form: PropTypes.shape({
     getFieldDecorator: PropTypes.func,
     validateFieldsAndScroll: PropTypes.func,

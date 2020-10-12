@@ -3,6 +3,7 @@ import { reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal } from 'antd';
 import { pluralize, singularize } from 'inflection';
 import upperFirst from 'lodash/upperFirst';
+import get from 'lodash/get';
 
 import {
   generateFeedbackMessagesFor,
@@ -43,11 +44,13 @@ export const useFilters = (defaultFilters) => {
  * needed for a list component to function
  * @param  {string} resourceName name used for creating special resource handler
  * functions
+ * @param {object} [options] Additional options
  * @returns {object} map of exported state value and functions
  * @version 0.1.0
  * @since 0.1.0
  */
-export const useList = (resourceName) => {
+export const useList = (resourceName, options) => {
+  const nameForMessages = get(options, 'wellknown', resourceName);
   const singularName = upperFirst(singularize(resourceName));
   const pluralName = upperFirst(pluralize(resourceName));
   const {
@@ -59,7 +62,7 @@ export const useList = (resourceName) => {
     MESSAGE_ITEM_CREATE_SUCCESS,
     MESSAGE_ITEM_UPDATE_ERROR,
     MESSAGE_ITEM_UPDATE_SUCCESS,
-  } = generateFeedbackMessagesFor(resourceName);
+  } = generateFeedbackMessagesFor(nameForMessages);
   const [showFilters, setShowFilters] = useState(false);
   const [isEditForm, setIsEditForm] = useState(false);
   const [showNotificationForm, setShowNotificationForm] = useState(false);
