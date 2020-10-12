@@ -13,6 +13,16 @@ import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 
+/* http actions */
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getAgencies,
+  getRoles,
+  getEventIndicatorsExportUrl,
+} = httpActions;
+/* redux actions */
 const {
   getEventIndicators,
   openEventIndicatorForm,
@@ -23,27 +33,19 @@ const {
   refreshEventIndicators,
   deleteEventIndicator,
 } = reduxActions;
+
+/* ui */
 const { confirm } = Modal;
-
-const {
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getAgencies,
-  getRoles,
-  getEventIndicatorsExportUrl,
-} = httpActions;
-
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 16, xs: 14 };
 const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 4 };
 const descriptionSpan = { xxl: 14, xl: 14, lg: 14, md: 13, sm: 0, xs: 0 };
-
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...codeSpan, header: 'Code' },
   { ...descriptionSpan, header: 'Description' },
 ];
+
 /**
  * @class
  * @name EventIndicator
@@ -94,9 +96,7 @@ class EventIndicator extends Component {
    * @function
    * @name searchEventIndicators
    * @description Search Event Indicators List based on supplied filter word
-   *
-   * @param {object} event - Event instance
-   *
+   * @param {object} event Event instance
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -108,9 +108,7 @@ class EventIndicator extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} eventIndicator event indicator to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -124,7 +122,6 @@ class EventIndicator extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -157,12 +154,11 @@ class EventIndicator extends Component {
    * @function
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a event indicator
-   *
-   * @param item {object} eventIndicator to archive
+   * @param {object} item  eventIndicator to archive
+   * @returns {undefined}
    * @version 0.1.0
    * @since 0.1.0
    */
-
   showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive ${item.strings.name.en} ?`,
@@ -170,14 +166,21 @@ class EventIndicator extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventIndicator(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Event Indicator was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Event Indicator, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteEventIndicator(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Event Indicator was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Event Indicator, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };
@@ -186,9 +189,7 @@ class EventIndicator extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple event Indicators
-   *
    * @param {object[]| object} eventIndicators event Indicators list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -218,7 +219,6 @@ class EventIndicator extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify eventIndicators
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -340,7 +340,6 @@ class EventIndicator extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}

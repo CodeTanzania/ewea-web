@@ -22,7 +22,7 @@ const {
   getAdministrativeLevelsExportUrl,
 } = httpActions;
 
-/* state actions */
+/* redux actions */
 const {
   getAdministrativeLevels,
   openAdministrativeLevelForm,
@@ -36,6 +36,7 @@ const {
 
 /* ui */
 const { confirm } = Modal;
+/* constants */
 const nameSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 16, xs: 14 };
 const levelSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 4, xs: 4 };
 const parentSpan = { xxl: 4, xl: 3, lg: 4, md: 4, sm: 0, xs: 0 };
@@ -261,11 +262,19 @@ class AdministrativeLevelList extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteAdministrativeLevel(
-          itemId,
-          () => notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS),
-          () => notifyError(MESSAGE_ITEM_ARCHIVE_ERROR)
-        );
+        return new Promise((resolve) => {
+          deleteAdministrativeLevel(
+            itemId,
+            () => {
+              resolve();
+              notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS);
+            },
+            () => {
+              resolve();
+              notifyError(MESSAGE_ITEM_ARCHIVE_ERROR);
+            }
+          );
+        });
       },
     });
   };
@@ -462,7 +471,6 @@ class AdministrativeLevelList extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}

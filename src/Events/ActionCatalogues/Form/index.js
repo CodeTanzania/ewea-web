@@ -515,7 +515,7 @@ EventActionCatalogueForm.propTypes = {
   }),
   isEditForm: PropTypes.bool.isRequired,
   eventActionCatalogue: PropTypes.shape({
-    strings: PropTypes.object,
+    strings: PropTypes.objectOf(PropTypes.any),
     relations: PropTypes.shape({
       area: PropTypes.arrayOf(PropTypes.object),
       roles: PropTypes.arrayOf(PropTypes.object),

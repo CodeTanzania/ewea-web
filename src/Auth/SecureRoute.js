@@ -8,11 +8,8 @@ import PropTypes from 'prop-types';
  * @name SecureRoute
  * @description Route which check authentication status and route to appropriate
  *  component
- *
  * @param {object} properties props object
- *
  * @returns {object} React Element
- *
  * @version 0.1.0
  * @since 0.1.0
  */

@@ -6,7 +6,7 @@ import isEmpty from 'lodash/isEmpty';
 import isString from 'lodash/isString';
 import map from 'lodash/map';
 
-import { ItemActions, getCommonIcon } from '../ListItemActions';
+import { ListItemActions, getCommonIcon } from '../ListItemActions';
 import { isMobileScreen } from '../../util';
 import './styles.css';
 
@@ -151,7 +151,7 @@ const ListItem = ({
               {isEmpty(actions) ? (
                 renderActions()
               ) : (
-                <ItemActions actions={actions} />
+                <ListItemActions actions={actions} />
               )}
             </Col>
           </Row>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Row, Col, Table, Spin, Modal } from 'antd';
@@ -23,6 +23,7 @@ import {
   DANGER_COLOR,
 } from '../components/dashboardWidgets';
 import { FilterFloatingButton } from '../components/FloatingButton';
+import useFilters from '../hooks/filters';
 
 /* redux actions */
 const { getDispatchesReport } = reduxActions;
@@ -121,6 +122,12 @@ const vehicleTypes = [
     cancelled: 1,
   },
 ];
+const DEFAULT_FILTERS = {
+  createdAt: {
+    from: new Date(),
+    to: new Date(),
+  },
+};
 
 /**
  * @function
@@ -134,11 +141,13 @@ const vehicleTypes = [
  * @since 0.1.0
  */
 const VehicleDispatchesDashboard = ({ report, loading }) => {
-  const [showFilters, setShowFilters] = useState(false);
+  const { filters, setFilters, showFilters, setShowFilters } = useFilters(
+    DEFAULT_FILTERS
+  );
 
   useEffect(() => {
-    getDispatchesReport();
-  }, []);
+    getDispatchesReport({ filter: filters });
+  }, [filters]);
 
   return (
     <div>
@@ -259,10 +268,16 @@ const VehicleDispatchesDashboard = ({ report, loading }) => {
         footer={null}
         maskClosable={false}
         className="modal-window-50"
+        destroyOnClose
       >
         <ReportFilters
+          filters={filters}
           onFilter={(data) => {
-            getDispatchesReport({ filter: { ...data } });
+            setFilters(data);
+            setShowFilters(false);
+          }}
+          onClear={() => {
+            setFilters(DEFAULT_FILTERS);
             setShowFilters(false);
           }}
           onCancel={() => setShowFilters(false)}
@@ -273,7 +288,7 @@ const VehicleDispatchesDashboard = ({ report, loading }) => {
 };
 
 VehicleDispatchesDashboard.propTypes = {
-  report: PropTypes.shape({ overview: PropTypes.object }),
+  report: PropTypes.shape({ overview: PropTypes.objectOf(PropTypes.any) }),
   loading: PropTypes.bool.isRequired,
 };
 

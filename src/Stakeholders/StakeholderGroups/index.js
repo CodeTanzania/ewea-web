@@ -35,8 +35,9 @@ const {
   putPartyGroup,
 } = reduxActions;
 
-/* constants */
+/* ui */
 const { confirm } = Modal;
+/* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 6, xs: 14 };
 const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 5, xs: 4 };
 const descriptionSpan = { xxl: 15, xl: 15, lg: 15, md: 14, sm: 9, xs: 0 };
@@ -71,7 +72,6 @@ class PartyGroups extends Component {
    * @function
    * @name openPartyGroupsForm
    * @description Open party group form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -83,7 +83,6 @@ class PartyGroups extends Component {
    * @function
    * @name closePartyGroupsForm
    * @description close party group form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -96,9 +95,7 @@ class PartyGroups extends Component {
    * @function
    * @name searchPartyGroups
    * @description Search Stakeholder Groups List based on supplied filter word
-   *
    * @param {object} party Party instance
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -110,9 +107,7 @@ class PartyGroups extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} partyType party group to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -126,7 +121,6 @@ class PartyGroups extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -139,7 +133,6 @@ class PartyGroups extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify party groups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -151,7 +144,6 @@ class PartyGroups extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -163,9 +155,7 @@ class PartyGroups extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple party groups
-   *
    * @param {object[]| object} partyGroups party groups list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -195,7 +185,6 @@ class PartyGroups extends Component {
    * @function
    * @name handleRefreshPartyGroups
    * @description Refresh Stakeholder Groups list
-   *
    * @returns {undefined}
    * @version 0.1.0
    * @since 0.1.0
@@ -214,7 +203,6 @@ class PartyGroups extends Component {
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a party group
    * @param {object} item Resource item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -225,14 +213,21 @@ class PartyGroups extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deletePartyGroup(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Stakeholder group was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Stakeholder group, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deletePartyGroup(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Stakeholder group was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Stakeholder group, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

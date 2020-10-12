@@ -94,7 +94,10 @@ Section.propTypes = {
 
 IndicatorDashboard.propTypes = {
   indicators: PropTypes.arrayOf(
-    PropTypes.shape({ strings: PropTypes.object, _id: PropTypes.string })
+    PropTypes.shape({
+      strings: PropTypes.objectOf(PropTypes.any),
+      _id: PropTypes.string,
+    })
   ).isRequired,
 };
 

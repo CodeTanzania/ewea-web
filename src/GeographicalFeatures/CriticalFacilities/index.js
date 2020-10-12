@@ -25,7 +25,7 @@ const {
   getFeaturesExportUrl,
 } = httpActions;
 
-/* state actions */
+/* redux actions */
 const {
   getFeatures,
   openFeatureForm,
@@ -39,6 +39,7 @@ const {
 
 /* ui */
 const { confirm } = Modal;
+/* constants */
 const nameSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 16, xs: 14 };
 const codeSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 0 };
 const typeSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 4, xs: 4 };
@@ -310,11 +311,19 @@ class FeatureList extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteFeature(
-          itemId,
-          () => notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS),
-          () => notifyError(MESSAGE_ITEM_ARCHIVE_ERROR)
-        );
+        return new Promise((resolve) => {
+          deleteFeature(
+            itemId,
+            () => {
+              resolve();
+              notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS);
+            },
+            () => {
+              resolve();
+              notifyError(MESSAGE_ITEM_ARCHIVE_ERROR);
+            }
+          );
+        });
       },
     });
   };
@@ -546,7 +555,6 @@ class FeatureList extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}

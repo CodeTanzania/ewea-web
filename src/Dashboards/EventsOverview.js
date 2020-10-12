@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Row, Col, Table, Spin, Modal } from 'antd';
@@ -18,6 +18,7 @@ import {
   DARK_GREEN,
 } from '../components/dashboardWidgets';
 import { FilterFloatingButton } from '../components/FloatingButton';
+import useFilters from '../hooks/filters';
 
 /* redux actions */
 const { getEventsReport } = reduxActions;
@@ -68,6 +69,12 @@ const generateColumnsFor = (resource) => {
     },
   ];
 };
+const DEFAULT_FILTERS = {
+  createdAt: {
+    from: new Date(),
+    to: new Date(),
+  },
+};
 
 /**
  * @function
@@ -81,11 +88,13 @@ const generateColumnsFor = (resource) => {
  * @since 0.1.0
  */
 const EventsOverviewDashboard = ({ report, loading }) => {
-  const [showFilters, setShowFilters] = useState(false);
+  const { filters, setFilters, showFilters, setShowFilters } = useFilters(
+    DEFAULT_FILTERS
+  );
 
   useEffect(() => {
-    getEventsReport();
-  }, []);
+    getEventsReport({ filter: filters });
+  }, [filters]);
 
   return (
     <div>
@@ -211,10 +220,16 @@ const EventsOverviewDashboard = ({ report, loading }) => {
         footer={null}
         maskClosable={false}
         className="modal-window-50"
+        destroyOnClose
       >
         <ReportFilters
+          filters={filters}
           onFilter={(data) => {
-            getEventsReport({ filter: { ...data } });
+            setFilters(data);
+            setShowFilters(false);
+          }}
+          onClear={() => {
+            setFilters(DEFAULT_FILTERS);
             setShowFilters(false);
           }}
           onCancel={() => setShowFilters(false)}
@@ -225,7 +240,7 @@ const EventsOverviewDashboard = ({ report, loading }) => {
 };
 
 EventsOverviewDashboard.propTypes = {
-  report: PropTypes.shape({ overview: PropTypes.object }),
+  report: PropTypes.shape({ overview: PropTypes.objectOf(PropTypes.any) }),
   loading: PropTypes.bool.isRequired,
 };
 

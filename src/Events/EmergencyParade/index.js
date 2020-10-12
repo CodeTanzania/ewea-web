@@ -1,141 +1,123 @@
 import React, { useState } from 'react';
-import { Card, Typography, Modal } from 'antd';
-import { map } from 'lodash';
+import { Card, Typography, Drawer, Row, Col, Button } from 'antd';
+import {
+  PlusOutlined,
+  SafetyCertificateOutlined,
+  WarningOutlined,
+} from '@ant-design/icons';
 
 import Grid from '../../components/Grid';
+import ParadeForm from './ParadeForm';
 
+/* ui */
 const { Text } = Typography;
 // simple data structure for emergency parade
-const DATA_STRUCTURE = {
-  indicators: [
-    {
-      name: 'Health Facilities',
-      items: [
-        {
-          name: 'Amana Hospital',
-          instance: [
-            { label: 'Status', value: 'Operational' },
-            { label: 'Capacity', value: 1200 },
-            { label: 'Available Beds', value: 200 },
-          ],
-        },
-        {
-          name: 'Mloganzila Hospital',
-          instance: [
-            { label: 'Status', value: 'Operational' },
-            { label: 'Capacity', value: 1200 },
-            { label: 'Available Beds', value: 200 },
-          ],
-        },
-        {
-          name: 'Palestina Hospital',
-          instance: [
-            { label: 'Status', value: 'Operational' },
-            { label: 'Capacity', value: 1200 },
-            { label: 'Available Beds', value: 200 },
-          ],
-        },
-        {
-          name: 'Palestina Hospital',
-          instance: [
-            { label: 'Status', value: 'Operational' },
-            { label: 'Capacity', value: 1200 },
-            { label: 'available Beds', value: 200 },
-          ],
-        },
-        {
-          name: 'Palestina Hospital',
-          instance: [
-            { label: 'Status', value: 'Operational' },
-            { label: 'Capacity', value: 1200 },
-            { label: 'available Beds', value: 200 },
-          ],
-        },
-      ],
+const DATA_STRUCTURE = [
+  {
+    name: 'SWILA 01',
+    group: 'Dispatcher',
+    instance: { responded: false, activeAmbulances: 0, nurses: 0 },
+    form: {
+      responded: {
+        description: 'Is the call sign reachable?',
+        type: 'boolean',
+      },
+      activeAmbulances: {
+        description: 'How many working ambulances you have?',
+        type: 'number',
+      },
+      nurses: {
+        description: 'How many nurses do you have?',
+        type: 'number',
+      },
     },
-    {
-      name: 'Fire and Rescue Stations',
-      items: [
-        {
-          name: 'Ilala Station',
-          instance: [
-            { label: 'Status', value: 'Operational' },
-            { label: 'Capacity', value: 1200 },
-            { label: 'Available Beds', value: 200 },
-          ],
-        },
-        {
-          name: 'Temeke Station',
-          instance: [
-            { label: 'Status', value: 'Operational' },
-            { label: 'Capacity', value: 1200 },
-            { label: 'Available Beds', value: 200 },
-          ],
-        },
-        {
-          name: 'Kinondoni Station',
-          instance: [
-            { label: 'Status', value: 'Operational' },
-            { label: 'Capacity', value: 1200 },
-            { label: 'Available Beds', value: 200 },
-          ],
-        },
-        {
-          name: 'JNIA Station',
-          instance: [
-            { label: 'Status', value: 'Operational' },
-            { label: 'Capacity', value: 1200 },
-            { label: 'available Beds', value: 200 },
-          ],
-        },
-        {
-          name: 'Kigamboni Station',
-          instance: [
-            { label: 'Status', value: 'Operational' },
-            { label: 'Capacity', value: 1200 },
-            { label: 'available Beds', value: 200 },
-          ],
-        },
-      ],
+  },
+  {
+    name: 'SWILA 02',
+    group: 'Ambulance',
+    instance: { responded: false, activeAmbulances: 0, nurses: 0 },
+    form: {
+      responded: {
+        description: 'Is the call sign reachable?',
+        type: 'boolean',
+      },
+      haveOxygen: {
+        description: 'Do you have oxygen?',
+        type: 'boolean',
+      },
+      radioFunctioning: {
+        description: 'Is radio functioning well?',
+        type: 'boolean',
+      },
     },
-    {
-      name: 'Communications Channels',
-      items: [
-        {
-          name: 'USSD',
-          instance: [
-            { label: 'Status', value: 'Operational' },
-            { label: 'Payment Due At', value: '2020-01-09' },
-          ],
-        },
-        {
-          name: 'Internet',
-          instance: [
-            { label: 'Status', value: 'Operational' },
-            { label: 'Payment Due At', value: '2020-01-09' },
-          ],
-        },
-        {
-          name: 'SMS',
-          instance: [
-            { label: 'Status', value: 'Operational' },
-            { label: 'Balance', value: 300000 },
-          ],
-        },
-        {
-          name: 'Radio',
-          instance: [
-            { label: 'Status', value: 'Operational' },
-            {
-              label: 'Coverage',
-              value: '80%',
-            },
-          ],
-        },
-      ],
+  },
+  {
+    name: 'KOBOKO 02',
+    group: 'Ambulance',
+    instance: { responded: false, activeAmbulances: 0, nurses: 0 },
+    form: {
+      responded: {
+        description: 'Is the call sign reachable?',
+        type: 'boolean',
+      },
+      haveOxygen: {
+        description: 'Do you have oxygen?',
+        type: 'boolean',
+      },
+      radioFunctioning: {
+        description: 'Is radio functioning well?',
+        type: 'boolean',
+      },
     },
-  ],
-};
+  },
+  {
+    name: 'KOBOKO 03',
+    group: 'Health Facility',
+    instance: {
+      responded: false,
+      availableBeds: 0,
+      bloodBags: 0,
+      oxygenTanks: 0,
+    },
+    form: {
+      responded: {
+        description: 'Is the call sign reachable?',
+        type: 'boolean',
+      },
+      availableBeds: {
+        description: 'Do you have enough oxygen tanks?',
+        type: 'boolean',
+      },
+      bloodBags: {
+        description: 'Do you have enough blood bags?',
+        type: 'boolean',
+      },
+      oxygenTanks: {
+        description: 'How many filled oxygen tanks do you have?',
+        type: 'number',
+      },
+    },
+  },
+  {
+    name: 'MKUNGA 02',
+    group: 'Ambulance',
+    instance: null,
+    form: {
+      responded: {
+        description: 'Is the call sign reachable?',
+        type: 'boolean',
+      },
+      haveOxygen: {
+        description: 'Do you have oxygen?',
+        type: 'boolean',
+      },
+      radioFunctioning: {
+        description: 'Is radio functioning well?',
+        type: 'boolean',
+      },
+    },
+  },
+];
 
 /**
  * @function
@@ -147,45 +129,89 @@ const DATA_STRUCTURE = {
  */
 const EmergencyParade = () => {
   const [isModalOpen, openModal] = useState(false);
+  const [selectedItem, handleSelectItem] = useState(null);
   return (
     <>
-      <div style={{ padding: '24px' }}>
-        {map(DATA_STRUCTURE.indicators, (indicator) => (
-          <div
-            style={{
-              margin: '10px 0',
-            }}
-          >
-            <Grid
-              header={indicator.name}
-              items={indicator.items}
-              colPerRow={4}
-              renderItem={(item) => (
-                <Card
-                  style={{
-                    margin: '5px',
-                    boxShadow: '0 0 10px #e9e9e9',
-                  }}
-                  hoverable
-                  onClick={() => openModal(true)}
-                >
-                  <Text strong>{item.value.name}</Text>
-                  {map(item.value.instance, (instanceItem) => (
-                    <>
-                      <br />
-                      <Text>{instanceItem.label}</Text> :{' '}
-                      <Text> {instanceItem.value}</Text>
-                    </>
-                  ))}
-                </Card>
-              )}
-            />
+      <Row>
+        <Col
+          xxl={{ span: 3, offset: 21 }}
+          xl={{ span: 5, offset: 19 }}
+          lg={{ span: 6, offset: 18 }}
+          md={{ span: 6, offset: 18 }}
+          sm={{ span: 24 }}
+          xs={{ span: 24 }}
+        >
+          <div style={{ padding: '40px 40px 0' }}>
+            <Button type="primary" size="large" block icon={<PlusOutlined />}>
+              New Parade
+            </Button>
           </div>
-        ))}
+        </Col>
+      </Row>
+      <div style={{ padding: '24px' }}>
+        <Grid
+          items={DATA_STRUCTURE}
+          colPerRow={4}
+          renderItem={(item) => {
+            return (
+              <Card
+                style={{
+                  margin: '5px',
+                  boxShadow: '0 0 10px #e9e9e9',
+                }}
+                hoverable
+                onClick={() => {
+                  handleSelectItem(item.value);
+                  openModal(true);
+                }}
+              >
+                <Row>
+                  <Col span={22}>
+                    <Text strong>{item.value.name}</Text>
+                    <br />
+                    <Text>{item.value.group}</Text>
+                  </Col>
+                  <Col span={2}>
+                    {item.value.instance ? (
+                      <SafetyCertificateOutlined
+                        style={{
+                          color: '#52C41A',
+                          fontSize: '1.5em',
+                        }}
+                      />
+                    ) : (
+                      <WarningOutlined
+                        style={{ color: '#FAAD14', fontSize: '1.5em' }}
+                      />
+                    )}
+                  </Col>
+                </Row>
+              </Card>
+            );
+          }}
+        />
       </div>
-      <Modal visible={isModalOpen} onCancel={() => openModal(false)}>
-        Update something
-      </Modal>
+
+      <Drawer
+        title={`Parade ${
+          selectedItem ? `for ${selectedItem.name}(${selectedItem.group})` : ''
+        }`}
+        placement="right"
+        width="100%"
+        destroyOnClose
+        visible={isModalOpen}
+        onClose={() => openModal(false)}
+        maskClosable={false}
+      >
+        {selectedItem ? (
+          <ParadeForm
+            form={selectedItem.form}
+            onCancel={() => openModal(false)}
+          />
+        ) : (
+          'No item selected'
+        )}
+      </Drawer>
     </>
   );
 };

@@ -19,7 +19,7 @@ class MapPoint extends Component {
   static propTypes = {
     geometry: PropTypes.shape({
       type: PropTypes.string.isRequired,
-      coordinates: PropTypes.array.isRequired,
+      coordinates: PropTypes.arrayOf(PropTypes.any).isRequired,
     }).isRequired,
   };
 

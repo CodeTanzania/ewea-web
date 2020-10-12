@@ -25,8 +25,7 @@ const {
   getRoles,
   getEventFunctionsExportUrl,
 } = httpActions;
-
-/* state actions */
+/* redux actions */
 const {
   getEventFunctions,
   openEventFunctionForm,
@@ -40,6 +39,7 @@ const {
 
 /* ui */
 const { confirm } = Modal;
+/* constants */
 const numberSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 };
 const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 };
 const nameSpan = { xxl: 6, xl: 6, lg: 6, md: 6, sm: 16, xs: 14 };
@@ -282,11 +282,19 @@ class EventFunctionList extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventFunction(
-          itemId,
-          () => notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS),
-          () => notifyError(MESSAGE_ITEM_ARCHIVE_ERROR)
-        );
+        return new Promise((resolve) => {
+          deleteEventFunction(
+            itemId,
+            () => {
+              resolve();
+              notifySuccess(MESSAGE_ITEM_ARCHIVE_SUCCESS);
+            },
+            () => {
+              resolve();
+              notifyError(MESSAGE_ITEM_ARCHIVE_ERROR);
+            }
+          );
+        });
       },
     });
   };
@@ -489,7 +497,6 @@ class EventFunctionList extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}

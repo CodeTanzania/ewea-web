@@ -21,7 +21,6 @@ const {
   getPartyGroups,
   getRoles,
   getAgencies,
-  // getFocalPeople,
 } = httpActions;
 /* redux actions */
 const {
@@ -37,8 +36,9 @@ const {
   refreshNotificationTemplates,
 } = reduxActions;
 
-/* constants */
+/* ui */
 const { confirm } = Modal;
+/* constants */
 const nameSpan = { xxl: 6, xl: 6, lg: 6, md: 7, sm: 7, xs: 7 };
 const descriptionSpan = { xxl: 12, xl: 12, lg: 12, md: 10, sm: 10, xs: 11 };
 const codeSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 3, xs: 0 };
@@ -259,15 +259,21 @@ class NotificationTemplates extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteNotificationTemplate(
-          item._id, // eslint-disable-line
-          () =>
-            notifySuccess('Notification Template was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Notification Template, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteNotificationTemplate(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Notification Template was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Notification Template, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

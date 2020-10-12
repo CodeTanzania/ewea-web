@@ -13,7 +13,7 @@ import ListItem from '../../components/ListItem';
 import ItemList from '../../components/List';
 import { notifyError, notifySuccess } from '../../util';
 
-/* constants */
+/* http actions */
 const {
   getFocalPeople,
   getJurisdictions,
@@ -22,6 +22,7 @@ const {
   getAgencies,
   getEventResponsesExportUrl,
 } = httpActions;
+/* redux actions */
 const {
   closeEventResponseForm,
   getEventResponses,
@@ -35,15 +36,15 @@ const {
   putEventResponse,
 } = reduxActions;
 
+/* ui */
+const { confirm } = Modal;
+/* constants */
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
 const descriptionSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };
-
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...descriptionSpan, header: 'Description' },
 ];
-
-const { confirm } = Modal;
 
 /**
  * @class
@@ -234,14 +235,21 @@ class EventResponses extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventResponse(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Event Response was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Event Response, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteEventResponse(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Event Response was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Event Response, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

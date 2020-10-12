@@ -15,6 +15,10 @@
   border-bottom: 1px solid #ededed;
 }
 
+.EventFeed {
+  padding: 0 2px;
+}
+
 .LoadMoreButton {
   display: block;
   margin: 0 auto 50px;

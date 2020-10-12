@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Divider, Col, Row, Spin, Table, Button, Modal } from 'antd';
+import { Col, Row, Spin, Table, Button, Modal } from 'antd';
 import { BarChartOutlined, TableOutlined } from '@ant-design/icons';
 import randomColor from 'randomcolor';
 import get from 'lodash/get';
@@ -9,16 +9,14 @@ import map from 'lodash/map';
 
 import ReportFilters from '../components/ReportFilters';
 import Grid from '../components/Grid';
-import {
-  NumberWidget,
-  SectionCard,
-  FilterFloatingButton,
-} from '../components/dashboardWidgets';
+import { NumberWidget, SectionCard } from '../components/dashboardWidgets';
+import { FilterFloatingButton } from '../components/FloatingButton';
 import {
   EChart,
   generateDonutChartOption,
   generateInvertedBarChartOption,
 } from '../components/charts';
+import useFilters from '../hooks/filters';
 
 /* redux actions */
 const { getCasesReport } = reduxActions;
@@ -30,7 +28,6 @@ const OCCUPATION_COLUMNS = [
   { title: 'Occupation', dataIndex: ['name', 'en'] },
   { title: 'Total', dataIndex: 'total' },
 ];
-
 const STAGE_COLUMNS = [
   { title: 'Stage', dataIndex: 'name' },
   { title: 'Total', dataIndex: 'value' },
@@ -39,16 +36,20 @@ const SEVERITY_COLUMNS = [
   { title: 'Severity', dataIndex: 'name' },
   { title: 'Total', dataIndex: 'value' },
 ];
-
 const NATIONALITY_COLUMNS = [
   { title: 'Nationality', dataIndex: ['name', 'en'] },
   { title: 'Total', dataIndex: 'total' },
 ];
-
 const AGE_GROUPS_COLUMNS = [
   { title: 'Age Group', dataIndex: 'name' },
   { title: 'Total', dataIndex: 'value' },
 ];
+const DEFAULT_FILTERS = {
+  createdAt: {
+    from: new Date(),
+    to: new Date(),
+  },
+};
 
 /**
  * @function
@@ -65,11 +66,9 @@ const CasesDashboard = ({ report, loading }) => {
   const [ageGroupsDisplay, setAgeGroupsDisplay] = useState(DISPLAY_TABLE);
   const [severitiesDisplay, setSeveritiesDisplay] = useState(DISPLAY_CHART);
   const [stagesDisplay, setStagesDisplay] = useState(DISPLAY_CHART);
-  const [showFilters, setShowFilters] = useState(false);
-
-  useEffect(() => {
-    getCasesReport();
-  }, []);
+  const { filters, setFilters, showFilters, setShowFilters } = useFilters(
+    DEFAULT_FILTERS
+  );
 
   const GENDER_DATA = map(get(report, 'overall.gender', []), (item) => ({
     value: item.total,
@@ -91,6 +90,10 @@ const CasesDashboard = ({ report, loading }) => {
     value: item.total || 0,
   }));
 
+  useEffect(() => {
+    getCasesReport({ filter: filters });
+  }, [filters]);
+
   return (
     <div>
       <FilterFloatingButton onClick={() => setShowFilters(true)} />
@@ -104,33 +107,35 @@ const CasesDashboard = ({ report, loading }) => {
             />
           </Col>
         </Row>
-        <Grid
-          header="Case Stages"
-          items={get(report, 'overall.stages', [])}
-          colPerRow={4}
-          renderItem={(item) => (
-            <NumberWidget
-              title={get(item, 'value.name.en', 'N/A')}
-              value={get(item, 'value.total', 0)}
-              bottomBorderColor={get(item, 'value.color') || randomColor()}
-            />
-          )}
-        />
-        <Grid
-          header="Case Severities"
-          items={get(report, 'overall.severities', [])}
-          colPerRow={4}
-          renderItem={(item) => (
-            <NumberWidget
-              title={get(item, 'value.name.en', 'N/A')}
-              value={get(item, 'value.total', 0)}
-              bottomBorderColor={get(item, 'value.color') || randomColor()}
-            />
-          )}
-        />
-        <Divider orientation="left" plain>
-          Overall Breakdown
-        </Divider>
+
+        <SectionCard title="Case Stages">
+          <Grid
+            items={get(report, 'overall.stages', [])}
+            colPerRow={4}
+            renderItem={(item) => (
+              <NumberWidget
+                title={get(item, 'value.name.en', 'N/A')}
+                value={get(item, 'value.total', 0)}
+                bottomBorderColor={get(item, 'value.color') || randomColor()}
+              />
+            )}
+          />
+        </SectionCard>
+
+        <SectionCard title="Case Severities">
+          <Grid
+            items={get(report, 'overall.severities', [])}
+            colPerRow={4}
+            renderItem={(item) => (
+              <NumberWidget
+                title={get(item, 'value.name.en', 'N/A')}
+                value={get(item, 'value.total', 0)}
+                bottomBorderColor={get(item, 'value.color') || randomColor()}
+              />
+            )}
+          />
+        </SectionCard>
+
         <Row>
           <Col xs={24} sm={24} md={12}>
             <Row>
@@ -294,10 +299,16 @@ const CasesDashboard = ({ report, loading }) => {
         footer={null}
         maskClosable={false}
         className="modal-window-50"
+        destroyOnClose
       >
         <ReportFilters
+          filters={filters}
           onFilter={(data) => {
-            getCasesReport({ filter: { ...data } });
+            setFilters(data);
+            setShowFilters(false);
+          }}
+          onClear={() => {
+            setFilters(DEFAULT_FILTERS);
             setShowFilters(false);
           }}
           onCancel={() => setShowFilters(false)}
@@ -308,7 +319,7 @@ const CasesDashboard = ({ report, loading }) => {
 };
 
 CasesDashboard.propTypes = {
-  report: PropTypes.shape({ overview: PropTypes.object }),
+  report: PropTypes.shape({ overview: PropTypes.objectOf(PropTypes.any) }),
   loading: PropTypes.bool.isRequired,
 };
 

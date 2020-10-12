@@ -21,7 +21,16 @@ import {
   truncateString,
 } from '../../util';
 
-/* constants */
+/* http actions */
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getRoles,
+  getAgencies,
+  getEventActionCataloguesExportUrl,
+} = httpActions;
+/* redux actions */
 const {
   closeEventActionCatalogueForm,
   getEventActionCatalogues,
@@ -32,12 +41,15 @@ const {
   paginateEventActionCatalogues,
   deleteEventActionCatalogue,
 } = reduxActions;
+
+/* ui */
+const { confirm } = Modal;
+/* constants */
 const eventTypeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 6 };
 const eventFunctionSpan = { xxl: 4, xl: 4, lg: 3, md: 0, sm: 0, xs: 0 };
 const actionSpan = { xxl: 6, xl: 6, lg: 7, md: 7, sm: 8, xs: 12 };
 const rolesSpan = { xxl: 5, xl: 5, lg: 5, md: 6, sm: 8, xs: 0 };
 const groupsSpan = { xxl: 4, xl: 4, lg: 4, md: 5, sm: 0, xs: 0 };
-
 const headerLayout = [
   { ...eventTypeSpan, header: 'Event Type' },
   { ...eventFunctionSpan, header: 'Function' },
@@ -45,17 +57,6 @@ const headerLayout = [
   { ...rolesSpan, header: 'Roles' },
   { ...groupsSpan, header: 'Groups' },
 ];
-
-const { confirm } = Modal;
-
-const {
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getRoles,
-  getAgencies,
-  getEventActionCataloguesExportUrl,
-} = httpActions;
 
 /**
  * @class
@@ -314,14 +315,21 @@ class ActionCatalogue extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventActionCatalogue(
-          item._id, // eslint-disable-line
-          () => notifySuccess(' Action Catalogue was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Action Catalogue, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteEventActionCatalogue(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess(' Action Catalogue was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Action Catalogue, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

@@ -37,8 +37,9 @@ const {
   putEventUrgency,
 } = reduxActions;
 
-/* constants */
+/* ui */
 const { confirm } = Modal;
+/* constants */
 const nameSpan = { xxl: 4, xl: 5, lg: 6, md: 7, sm: 0, xs: 0 };
 const descriptionSpan = { xxl: 18, xl: 17, lg: 16, md: 14, sm: 20, xs: 18 };
 const headerLayout = [
@@ -235,14 +236,21 @@ class EventUrgency extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventUrgency(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Event Urgency was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Event Urgency, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteEventUrgency(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Event Urgency was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Event Urgency, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

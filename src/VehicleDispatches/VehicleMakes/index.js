@@ -13,6 +13,16 @@ import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 
+/* http actions */
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getAgencies,
+  getRoles,
+  getVehicleMakesExportUrl,
+} = httpActions;
+/* redux actions */
 const {
   getVehicleMakes,
   openVehicleMakeForm,
@@ -25,17 +35,9 @@ const {
   postVehicleMake,
   putVehicleMake,
 } = reduxActions;
+
+/* ui */
 const { confirm } = Modal;
-
-const {
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getAgencies,
-  getRoles,
-  getVehicleMakesExportUrl,
-} = httpActions;
-
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 16, xs: 14 };
 const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 4 };
@@ -172,14 +174,21 @@ class VehicleMake extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteVehicleMake(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Vehicle Make was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Vehicle Make, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteVehicleMake(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Vehicle Make was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Vehicle Make, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };
@@ -343,7 +352,6 @@ class VehicleMake extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}

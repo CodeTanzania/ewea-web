@@ -13,6 +13,16 @@ import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import { notifyError, notifySuccess } from '../../util';
 
+/* http actions */
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getAgencies,
+  getRoles,
+  getEventQuestionsExportUrl,
+} = httpActions;
+/* redux actions */
 const {
   getEventQuestions,
   openEventQuestionForm,
@@ -23,29 +33,20 @@ const {
   refreshEventQuestions,
   deleteEventQuestion,
 } = reduxActions;
-const { confirm } = Modal;
 
+/* ui */
+const { confirm } = Modal;
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 8, xs: 8 };
 const codeSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 4, xs: 3 };
 const indicatorSpan = { xxl: 6, xl: 6, lg: 6, md: 6, sm: 8, xs: 7 };
 const descriptionSpan = { xxl: 9, xl: 9, lg: 9, md: 8, sm: 0, xs: 0 };
-
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...codeSpan, header: 'Code' },
   { ...indicatorSpan, header: 'Indicator' },
   { ...descriptionSpan, header: 'Description' },
 ];
-
-const {
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getAgencies,
-  getRoles,
-  getEventQuestionsExportUrl,
-} = httpActions;
 
 /**
  * @class
@@ -229,14 +230,21 @@ class EventQuestions extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEventQuestion(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Event Question was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Event Question, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteEventQuestion(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Event Question was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Event Question, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };

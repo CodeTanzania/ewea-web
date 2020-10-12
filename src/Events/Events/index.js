@@ -44,8 +44,9 @@ const {
   deleteEvent,
 } = reduxActions;
 
-/* constants */
+/* ui */
 const { confirm } = Modal;
+/* constants */
 const eventSpan = { xxl: 6, xl: 7, lg: 7, md: 8, sm: 10, xs: 11 };
 const referenceIDSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 6, xs: 7 };
 const typeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
@@ -53,7 +54,6 @@ const stageSpan = { xxl: 2, xl: 2, lg: 2, md: 2, sm: 0, xs: 0 };
 const levelSpan = { xxl: 3, xl: 2, lg: 0, md: 0, sm: 0, xs: 0 };
 const groupSpan = { xxl: 2, xl: 2, lg: 4, md: 0, sm: 0, xs: 0 };
 const lastUpdatedSpan = { xxl: 2, xl: 2, lg: 3, md: 3, sm: 4, xs: 0 };
-
 const headerLayout = [
   { ...eventSpan, header: 'Event' },
   { ...referenceIDSpan, header: 'Reference ID' },
@@ -62,14 +62,12 @@ const headerLayout = [
   { ...typeSpan, header: 'Event Type' },
   { ...groupSpan, header: 'Event Group' },
   { ...lastUpdatedSpan, header: 'Last Updated' },
-  // { ...urgencySpan, header: 'Urgency' },
 ];
 
 /**
  * @class
  * @name Events
  * @description Render event list which have search box, actions and event list
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -93,9 +91,7 @@ class Events extends Component {
    * @function
    * @name handleOnCachedValues
    * @description Cached selected values for filters
-   *
    * @param {object} cached values to be cached from filter
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -109,7 +105,6 @@ class Events extends Component {
    * @function
    * @name handleClearCachedValues
    * @description Clear cached values
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -122,7 +117,6 @@ class Events extends Component {
    * @name openFiltersModal
    * @description open filters modal by setting it's visible property
    * to false via state
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -135,7 +129,6 @@ class Events extends Component {
    * @name closeFiltersModal
    * @description Close filters modal by setting it's visible property
    * to false via state
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -147,7 +140,6 @@ class Events extends Component {
    * @function
    * @name openEventForm
    * @description Open event form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -160,7 +152,6 @@ class Events extends Component {
    * @function
    * @name openEventForm
    * @description close event form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -173,7 +164,6 @@ class Events extends Component {
    * @function
    * @name closeEventDetails
    * @description close event details drawer
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -185,9 +175,7 @@ class Events extends Component {
    * @function
    * @name searchEvents
    * @description Search Events List based on supplied filter word
-   *
-   * @param {object} event - Event instance
-   *
+   * @param {object} event Event instance
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -199,9 +187,7 @@ class Events extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} event event to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -215,9 +201,7 @@ class Events extends Component {
    * @function
    * @name handleView
    * @description Handle on view event details action for list item
-   *
    * @param {object} event event to be viewed
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -230,9 +214,7 @@ class Events extends Component {
    * @function
    * @name handleShare
    * @description Handle share  event(s) action
-   *
    * @param {object| object[]} events event(s) to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -265,7 +247,6 @@ class Events extends Component {
    * @function
    * @name openNotificationForm
    * @description Handle on notify events
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -279,7 +260,6 @@ class Events extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify events
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -295,7 +275,6 @@ class Events extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -311,7 +290,6 @@ class Events extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -323,7 +301,6 @@ class Events extends Component {
    * @function
    * @name handleRefreshEvents
    * @description Handle list refresh action
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -345,7 +322,6 @@ class Events extends Component {
    * @name showArchiveConfirm
    * @description show confirm modal before archiving an event
    * @param {object} item Item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -356,14 +332,21 @@ class Events extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteEvent(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Event was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving event, Please contact your system Administrator'
-            )
-        );
+        return Promise((resolve) => {
+          deleteEvent(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Event was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving event, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };
@@ -561,9 +544,9 @@ class Events extends Component {
           />
         </Modal>
         {/* end filter modal */}
-        {/* Notification Modal modal */}
+        {/* Notification Form */}
         <Modal
-          title="Notify Events"
+          title="Notify Stakeholders"
           visible={showNotificationForm}
           onCancel={this.closeNotificationForm}
           footer={null}
@@ -584,7 +567,7 @@ class Events extends Component {
             onCancel={this.closeNotificationForm}
           />
         </Modal>
-        {/* end Notification modal */}
+        {/* end Notification Form */}
         {/* create/edit form modal */}
         <Modal
           title={isEditForm ? 'Edit Event' : 'Add New Event'}

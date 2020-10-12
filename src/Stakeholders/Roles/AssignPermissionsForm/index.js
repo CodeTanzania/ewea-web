@@ -153,7 +153,9 @@ AssignPermissionsForm.propTypes = {
   ).isRequired,
   role: PropTypes.shape({
     _id: PropTypes.string,
-    relations: PropTypes.shape({ permissions: PropTypes.array }),
+    relations: PropTypes.shape({
+      permissions: PropTypes.arrayOf(PropTypes.any),
+    }),
   }).isRequired,
   loading: PropTypes.bool.isRequired,
   posting: PropTypes.bool.isRequired,

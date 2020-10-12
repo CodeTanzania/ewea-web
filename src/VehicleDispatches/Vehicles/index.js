@@ -34,8 +34,9 @@ const {
   deleteVehicle,
 } = reduxActions;
 
-/* constants */
+/* ui */
 const { confirm } = Modal;
+/* constants */
 const typeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 8, xs: 7 };
 const plateNumberSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 8, xs: 7 };
 const statusSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 0 };
@@ -164,7 +165,6 @@ class Vehicle extends Component {
    * @function
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a vehicle
-   *
    * @param item {object} vehicle to archive
    * @version 0.1.0
    * @since 0.1.0
@@ -177,14 +177,21 @@ class Vehicle extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteVehicle(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Vehicle was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Vehicle, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteVehicle(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Vehicle was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Vehicle, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };
@@ -193,9 +200,7 @@ class Vehicle extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple event Indicators
-   *
    * @param {object[]| object} vehicles event Indicators list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -378,7 +383,6 @@ class Vehicle extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}

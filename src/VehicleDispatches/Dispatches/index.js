@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Row, Col } from 'antd';
+import { Modal, Row, Col, Button, Drawer } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isArray from 'lodash/isArray';
 import get from 'lodash/get';
@@ -13,6 +13,8 @@ import Topbar from '../../components/Topbar';
 import DispatchForm from './Form';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
+import VehicleDispatchViewHeader from './DetailsView/Header';
+import VehicleDispatchViewBody from './DetailsView/Body';
 import {
   notifyError,
   notifySuccess,
@@ -40,18 +42,23 @@ const {
   deleteDispatch,
   putDispatch,
 } = reduxActions;
-const { confirm } = Modal;
 
+/* ui */
+const { confirm } = Modal;
 /* constants */
-const numberSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 10, xs: 10 };
+const numberSpan = { xxl: 3, xl: 3, lg: 4, md: 4, sm: 10, xs: 10 };
 const vehicleSpan = { xxl: 4, xl: 4, lg: 5, md: 6, sm: 0, xs: 0 };
 const eventSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 9, xs: 8 };
 const prioritySpan = { xxl: 2, xl: 2, lg: 3, md: 0, sm: 0, xs: 0 };
-const statusSpan = { xxl: 6, xl: 6, lg: 4, md: 4, sm: 0, xs: 0 };
+const statusSpan = { xxl: 2, xl: 2, lg: 3, md: 3, sm: 0, xs: 0 };
+const pickupSpan = { xxl: 3, xl: 3, lg: 1, md: 1, sm: 0, xs: 0 };
+const dropOffSpan = { xxl: 3, xl: 3, lg: 1, md: 1, sm: 0, xs: 0 };
 const headerLayout = [
-  { ...numberSpan, header: 'Number' },
+  { ...numberSpan, header: 'Dispatch No.' },
   { ...vehicleSpan, header: 'Vehicle' },
-  { ...eventSpan, header: 'Event' },
+  { ...eventSpan, header: 'Diagnosis / Event' },
+  { ...pickupSpan, header: 'Pickup Location' },
+  { ...dropOffSpan, header: 'Drop-Off Location' },
   { ...prioritySpan, header: 'Priority' },
   { ...statusSpan, header: 'Status' },
 ];
@@ -60,7 +67,6 @@ const headerLayout = [
  * @class
  * @name Dispatches
  * @description Render dispatch list which have search box, actions and dispatch list
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -69,8 +75,8 @@ class Dispatches extends Component {
   state = {
     showFilters: false,
     isEditForm: false,
+    showDetailsView: false,
     showNotificationForm: false,
-    selectedDispatches: [],
     notificationSubject: undefined,
     notificationBody: undefined,
     cached: null,
@@ -85,9 +91,7 @@ class Dispatches extends Component {
    * @function
    * @name handleOnCachedValues
    * @description Cached selected values for filters
-   *
    * @param {object} cached values to be cached from filter
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -101,7 +105,6 @@ class Dispatches extends Component {
    * @function
    * @name handleClearCachedValues
    * @description Clear cached values
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -114,7 +117,6 @@ class Dispatches extends Component {
    * @name openFiltersModal
    * @description open filters modal by setting it's visible property
    * to false via state
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -127,7 +129,6 @@ class Dispatches extends Component {
    * @name closeFiltersModal
    * @description Close filters modal by setting it's visible property
    * to false via state
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -139,7 +140,6 @@ class Dispatches extends Component {
    * @function
    * @name openDispatchForm
    * @description Open dispatch form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -151,7 +151,6 @@ class Dispatches extends Component {
    * @function
    * @name openDispatchForm
    * @description close dispatch form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -164,9 +163,7 @@ class Dispatches extends Component {
    * @function
    * @name searchDispatches
    * @description Search Dispatches List based on supplied filter word
-   *
-   * @param {object} event - Event instance
-   *
+   * @param {object} event Event instance
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -178,9 +175,7 @@ class Dispatches extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} dispatch dispatch to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -194,9 +189,7 @@ class Dispatches extends Component {
    * @function
    * @name handleShare
    * @description Handle share single dispatch action
-   *
    * @param {object| object[]} dispatches dispatch to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -229,15 +222,11 @@ class Dispatches extends Component {
    * @function
    * @name openNotificationForm
    * @description Handle on notify dispatches
-   *
-   * @param {object[]} dispatches List of dispatches selected to be notified
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
-  openNotificationForm = (dispatches) => {
+  openNotificationForm = () => {
     this.setState({
-      selectedDispatches: dispatches,
       showNotificationForm: true,
     });
   };
@@ -246,7 +235,6 @@ class Dispatches extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify dispatches
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -258,7 +246,6 @@ class Dispatches extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -268,10 +255,33 @@ class Dispatches extends Component {
   };
 
   /**
+   * @function handleItemView
+   * @name handleItemView
+   * @description Handle list item view
+   * @param {object} item List item
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleItemView = (item) => {
+    selectDispatch(item);
+    this.setState({ showDetailsView: true });
+  };
+
+  /**
+   * @function handleItemViewClose
+   * @name handleItemViewClose
+   * @description Handle close list item view
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleItemViewClose = () => {
+    this.setState({ showDetailsView: false });
+  };
+
+  /**
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -283,7 +293,6 @@ class Dispatches extends Component {
    * @function
    * @name handleRefreshDispatches
    * @description Handle list refresh action
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -305,7 +314,6 @@ class Dispatches extends Component {
    * @name showArchiveConfirm
    * @description show confirm modal before archiving vehicle dispatch
    * @param {object} dispatch Item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -316,14 +324,21 @@ class Dispatches extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteDispatch(
-          dispatch._id, // eslint-disable-line
-          () => notifySuccess('Vehicle Dispatch was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Vehicle Dispatch, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteDispatch(
+            dispatch._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Vehicle Dispatch was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Vehicle Dispatch, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };
@@ -389,14 +404,21 @@ class Dispatches extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        putDispatch(
-          data, // eslint-disable-line
-          () => notifySuccess('Vehicle Dispatch was updated successfully'),
-          () =>
-            notifyError(
-              'An error occurred while updating dispatch, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve, reject) => {
+          putDispatch(
+            data, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Vehicle Dispatch was updated successfully');
+            },
+            () => {
+              reject();
+              notifyError(
+                'An error occurred while updating dispatch, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };
@@ -417,8 +439,8 @@ class Dispatches extends Component {
       showFilters,
       cached,
       isEditForm,
+      showDetailsView,
       showNotificationForm,
-      selectedDispatches,
       notificationSubject,
       notificationBody,
       openFormInStep,
@@ -496,6 +518,12 @@ class Dispatches extends Component {
               }
               actions={[
                 {
+                  name: 'View Dispatch',
+                  title: 'View Vehicle Dispatch Details',
+                  onClick: () => this.handleItemView(item),
+                  icon: 'view',
+                },
+                {
                   name: 'Edit Dispatch',
                   title: 'Update Vehicle Dispatch Details',
                   onClick: () => this.handleEdit(item),
@@ -553,7 +581,21 @@ class Dispatches extends Component {
               ]}
             >
               {/* eslint-disable react/jsx-props-no-spreading */}
-              <Col {...numberSpan}>{item.number}</Col>
+              <Col {...numberSpan}>
+                <Button
+                  type="link"
+                  onClick={() => this.handleItemView(item)}
+                  style={{
+                    padding: 0,
+                    color: 'rgba(0, 0, 0, 0.65)',
+                    whiteSpace: 'normal',
+                    textAlign: 'left',
+                    wordWrap: 'break-word',
+                  }}
+                >
+                  {item.number}
+                </Button>
+              </Col>
               <Col
                 {...vehicleSpan}
                 title={get(item, 'role.strings.name.en', 'N/A')}
@@ -572,6 +614,12 @@ class Dispatches extends Component {
                 {get(item, 'type.strings.name.en', 'N/A')}
               </Col>
 
+              <Col {...pickupSpan}>
+                {get(item, 'pickup.facility.strings.name.en', 'N/A')}
+              </Col>
+              <Col {...dropOffSpan}>
+                {get(item, 'dropoff.facility.strings.name.en', 'N/A')}
+              </Col>
               <Col {...prioritySpan}>
                 {get(item, 'priority.strings.name.en', 'N/A')}
               </Col>
@@ -598,7 +646,6 @@ class Dispatches extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={selectedDispatches}
             onSearchRecipients={getDispatchesFromAPI}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}
@@ -652,6 +699,28 @@ class Dispatches extends Component {
           />
         </Modal>
         {/* end create/edit form modal */}
+
+        {/* start: case details view */}
+        <Drawer
+          title={
+            <VehicleDispatchViewHeader
+              dispatchNo={get(selectedDispatch, 'number')}
+              event={get(selectedDispatch, 'type.strings.name.en', 'N/A')}
+              onBack={this.handleItemViewClose}
+            />
+          }
+          placement="right"
+          width="100%"
+          drawerStyle={{ overflow: 'hidden' }}
+          headerStyle={{ padding: 0 }}
+          bodyStyle={{ overflow: 'hidden', height: '100%', padding: '15px' }}
+          visible={showDetailsView}
+          onClose={this.handleItemViewClose}
+          destroyOnClose
+        >
+          <VehicleDispatchViewBody dispatch={selectedDispatch} />
+        </Drawer>
+        {/* end: case details view */}
       </>
     );
   }

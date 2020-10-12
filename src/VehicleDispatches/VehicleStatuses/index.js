@@ -13,6 +13,16 @@ import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 
+/* http actions */
+const {
+  getFocalPeople,
+  getJurisdictions,
+  getPartyGroups,
+  getAgencies,
+  getRoles,
+  getVehicleStatusesExportUrl,
+} = httpActions;
+/* redux actions */
 const {
   getVehicleStatuses,
   openVehicleStatusForm,
@@ -25,17 +35,9 @@ const {
   postVehicleStatus,
   putVehicleStatus,
 } = reduxActions;
+
+/* ui */
 const { confirm } = Modal;
-
-const {
-  getFocalPeople,
-  getJurisdictions,
-  getPartyGroups,
-  getAgencies,
-  getRoles,
-  getVehicleStatusesExportUrl,
-} = httpActions;
-
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 16, xs: 14 };
 const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 4 };
@@ -50,7 +52,6 @@ const headerLayout = [
  * @class
  * @name VehicleStatus
  * @description Render Party(Agency) Ownership types list which have search box,
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -70,7 +71,6 @@ class VehicleStatus extends Component {
    * @function
    * @name openVehicleStatusesForm
    * @description Open vehicle status form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -95,9 +95,7 @@ class VehicleStatus extends Component {
    * @function
    * @name searchVehicleStatuses
    * @description Search Vehicle statuses List based on supplied filter word
-   *
-   * @param {object} event - Event instance
-   *
+   * @param {object} event Event instance
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -109,9 +107,7 @@ class VehicleStatus extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} vehicleStatus vehicle status to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -125,7 +121,6 @@ class VehicleStatus extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -138,7 +133,6 @@ class VehicleStatus extends Component {
    * @function
    * @name handleRefreshVehicleStatus
    * @description Handle list refresh action
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -159,12 +153,11 @@ class VehicleStatus extends Component {
    * @function
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a vehicle status
-   *
-   * @param item {object} vehicleStatus to archive
+   * @param {object} item  vehicleStatus to archive
+   * @returns {undefined} undefined
    * @version 0.1.0
    * @since 0.1.0
    */
-
   showArchiveConfirm = (item) => {
     confirm({
       title: `Are you sure you want to archive ${item.strings.name.en} ?`,
@@ -172,14 +165,21 @@ class VehicleStatus extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteVehicleStatus(
-          item._id, // eslint-disable-line
-          () => notifySuccess('Vehicle Status was archived successfully'),
-          () =>
-            notifyError(
-              'An error occurred while archiving Vehicle Status, Please contact your system Administrator'
-            )
-        );
+        return new Promise((resolve) => {
+          deleteVehicleStatus(
+            item._id, // eslint-disable-line
+            () => {
+              resolve();
+              notifySuccess('Vehicle Status was archived successfully');
+            },
+            () => {
+              resolve();
+              notifyError(
+                'An error occurred while archiving Vehicle Status, Please contact your system Administrator'
+              );
+            }
+          );
+        });
       },
     });
   };
@@ -188,9 +188,7 @@ class VehicleStatus extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple event Indicators
-   *
    * @param {object[]| object} vehicleStatuses event Indicators list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -220,7 +218,6 @@ class VehicleStatus extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify vehicleStatuses
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -343,7 +340,6 @@ class VehicleStatus extends Component {
           afterClose={this.handleAfterCloseNotificationForm}
         >
           <NotificationForm
-            recipients={getFocalPeople}
             onSearchRecipients={getFocalPeople}
             onSearchJurisdictions={getJurisdictions}
             onSearchGroups={getPartyGroups}

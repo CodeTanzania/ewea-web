@@ -29,10 +29,9 @@ import ProneAreasIcon from '../assets/icons/dashboards/proneareas.svg';
 import DarWards from '../assets/maps/dar.wards.json';
 import './styles.css';
 
-/* declarations */
+/* constants */
 const DAR_POPULATION = 4365000;
 const BASE_COLOR = '#ff0000';
-
 const updatesWidgetSpan = { xxl: 6, xl: 6, lg: 12, md: 12, sm: 24, xs: 24 };
 const horizontalWidgetSpan = { xxl: 6, xl: 6, lg: 12, md: 12, sm: 12, xs: 12 };
 const verticalWidgetSpan = { xxl: 12, xl: 12, lg: 12, md: 12, sm: 12, xs: 12 };

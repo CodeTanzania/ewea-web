@@ -1,8 +1,10 @@
 import React from 'react';
 import { Button, Row, Col, Typography, Form, Input, Radio } from 'antd';
 
+/* ui */
 const { Title, Text } = Typography;
 const { TextArea } = Input;
+/* constants */
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
