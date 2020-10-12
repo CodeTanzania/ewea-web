@@ -1,13 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { reduxActions } from '@codetanzania/ewea-api-states';
 import { Button, Col, Form, Input, Row } from 'antd';
 import get from 'lodash/get';
 
-import { notifyError, notifySuccess } from '../../../util';
-
-/* redux actions */
-const { postPartyRole, putPartyRole } = reduxActions;
 /* constants */
 const { TextArea } = Input;
 const formItemLayout = {
@@ -34,6 +29,8 @@ const formItemLayout = {
  * @name RoleForm
  * @description Form component for creating and editing stakeholder roles
  * @param {object} props Form properties object
+ * @param {Function} props.onCreate on Create resource callback
+ * @param {Function} props.onUpdate on  update resource callback
  * @param {object|null} props.role Role object to be edited if null will be created
  * @param {boolean} props.posting Flag for showing spinner when posting data to the api
  * @param {Function} props.onCancel Callback function for closing form
@@ -41,34 +38,15 @@ const formItemLayout = {
  * @version 0.2.0
  * @since 0.1.0
  */
-const RoleForm = ({ role, posting, onCancel }) => {
+const RoleForm = ({ role, posting, onCancel, onCreate, onUpdate }) => {
   const onFinish = (values) => {
     if (get(role, '_id')) {
       const updatedRole = { ...role, ...values };
-      putPartyRole(
-        updatedRole,
-        () => {
-          notifySuccess('Role was updated successfully');
-        },
-        () => {
-          notifyError(
-            'Something occurred while updating role, please try again!'
-          );
-        }
-      );
-    } else {
-      postPartyRole(
-        values,
-        () => {
-          notifySuccess('Role was created successfully');
-        },
-        () => {
-          notifyError(
-            'Something occurred while saving role, please try again!'
-          );
-        }
-      );
+      onUpdate(updatedRole);
+      return;
     }
+
+    onCreate(values);
   };
 
   return (
@@ -136,6 +114,8 @@ RoleForm.propTypes = {
       description: PropTypes.shape({ en: PropTypes.string }),
     }),
   }),
+  onCreate: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   posting: PropTypes.bool.isRequired,
 };

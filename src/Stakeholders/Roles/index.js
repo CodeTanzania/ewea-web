@@ -3,14 +3,14 @@ import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined, KeyOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import isArray from 'lodash/isArray';
+import React, { useState } from 'react';
 import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 import NotificationForm from '../../components/NotificationForm';
-import { notifyError, notifySuccess, truncateString } from '../../util';
+import { truncateString } from '../../util';
+import { useList } from '../../hooks';
 import RoleForm from './Form';
 import AssignPermissionForm from './AssignPermissionsForm';
 
@@ -24,18 +24,8 @@ const {
   getAgencies,
 } = httpActions;
 /* redux actions */
-const {
-  getPartyRoles,
-  openPartyRoleForm,
-  selectPartyRole,
-  closePartyRoleForm,
-  refreshPartyRoles,
-  paginatePartyRoles,
-  deletePartyRole,
-} = reduxActions;
+const { selectPartyRole, paginatePartyRoles } = reduxActions;
 
-/* ui */
-const { confirm } = Modal;
 /* constants */
 const nameSpan = { xxl: 7, xl: 7, lg: 7, md: 7, sm: 16, xs: 15 };
 const abbreviationSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 3, xs: 3 };
@@ -57,409 +47,248 @@ const headerLayout = [
     title: 'Explanation of roles',
   },
 ];
+const FIELDS_TO_SHARE = {
+  name: { header: 'Name', dataIndex: 'strings.name.en', defaultValue: 'N/A' },
+  description: {
+    header: 'Description',
+    dataIndex: 'strings.description.en',
+    defaultValue: 'N/A',
+  },
+};
 
 /**
- * @class
+ * @function
  * @name Roles
  * @description Render role module which has search box, actions and list of roles
- *
+ * @param { object} props component properties object
+ * @param {object[]} props.roles List of party roles from the API
+ * @param {object} props.role Selected party role from from the API
+ * @param {boolean} props.loading Flag to indicate fetching data from API
+ * @param {boolean} props.posting Flag to indicate posting data to the API
+ * @param {number} props.page Current page
+ * @param {boolean} props.showForm Flag for controlling visibility of the form for
+ * creating or updating resource
+ * @param {string} props.searchQuery Search query string
+ * @param {number} props.total Total number of resources in the API
+ * @returns {object} Party Roles list ui
  * @version 0.1.0
  * @since 0.1.0
  */
-class Roles extends Component {
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    isEditForm: false,
-    showNotificationForm: false,
-    notificationBody: undefined,
-    showAssignPermissionsForm: false,
-  };
+const Roles = ({
+  roles,
+  role,
+  loading,
+  showForm,
+  posting,
+  page,
+  total,
+  searchQuery,
+}) => {
+  const [showAssignPermissionsForm, setShowAssignPermissionForm] = useState(
+    false
+  );
+  const {
+    isEditForm,
+    showNotificationForm,
+    notificationBody,
 
-  // eslint-disable-next-line react/no-deprecated
-  componentWillMount() {
-    getPartyRoles();
-  }
-
-  /**
-   * @function
-   * @name openPartyRolesForm
-   * @description Open role form
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  openPartyRolesForm = () => {
-    openPartyRoleForm();
-  };
-
-  /**
-   * @function
-   * @name closePartyRolesForm
-   * @description close role form
-   * @returns {undefined} Nothing is returned
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closePartyRolesForm = () => {
-    closePartyRoleForm();
-    this.setState({ isEditForm: false });
-  };
+    handleOnOpenForm,
+    handleOnCloseForm,
+    handleOnSearch,
+    handleOnEdit,
+    handleOnOpenNotificationForm,
+    handleOnCloseNotificationForm,
+    handleAfterCloseForm,
+    handleAfterCloseNotificationForm,
+    handleOnRefreshList,
+    handleOnArchiveItem,
+    handleOnCreateItem,
+    handleOnUpdateItem,
+    handleOnShare,
+  } = useList('partyRoles', { wellknown: 'roles' });
 
   /**
    * @function
-   * @name searchRoles
-   * @description Search Roles List based on supplied filter word
-   * @param {object} event Event instance
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  searchRoles = (event) => {
-    getPartyRoles({ q: event.target.value });
-  };
-
-  /**
-   * @function
-   * @name handleEdit
-   * @description Handle on Edit action for list item
-   * @param {object} role role to be edited
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleEdit = (role) => {
-    selectPartyRole(role);
-    this.setState({ isEditForm: true });
-    openPartyRoleForm();
-  };
-
-  /**
-   * @function
-   * @name openNotificationForm
-   * @description Handle open on notify contacts
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  openNotificationForm = () => {
-    this.setState({
-      showNotificationForm: true,
-    });
-  };
-
-  /**
-   * @function
-   * @name closeNotificationForm
-   * @description Handle close on notify contacts
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closeNotificationForm = () => {
-    this.setState({ showNotificationForm: false });
-  };
-
-  /**
-   * @function
-   * @name handleAfterCloseForm
-   * @description Performs after close form cleanups
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleAfterCloseForm = () => {
-    selectPartyRole(null);
-    this.setState({ isEditForm: false });
-  };
-
-  /**
-   * @function
-   * @name handleAfterCloseNotificationForm
-   * @description Perform post close notification form cleanups
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleAfterCloseNotificationForm = () => {
-    this.setState({ notificationBody: undefined });
-  };
-
-  /**
-   * @function
-   * @name handleRefreshRoles
-   * @description Handle list refresh action
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleRefreshRoles = () => {
-    refreshPartyRoles(
-      () => {
-        notifySuccess('Roles refreshed successfully');
-      },
-      () => {
-        notifyError(
-          'An Error occurred while refreshing roles please contact system administrator'
-        );
-      }
-    );
-  };
-
-  /**
-   * @function
-   * @name handleShare
-   * @description Handle share multiple Party Roles
-   * @param {object[]| object} partyroles partyroles list to be shared
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleShare = (partyroles) => {
-    let message = '';
-    if (isArray(partyroles)) {
-      const partyroleList = partyroles.map(
-        (partyrole) =>
-          `Name: ${partyrole.strings.name.en}\nDescription: ${
-            // eslint-disable-line
-            partyrole.strings.description.en
-          }\n`
-      );
-
-      message = partyroleList.join('\n\n\n');
-    } else {
-      message = `Name: ${partyroles.strings.name.en}\nDescription: ${
-        // eslint-disable-line
-        partyroles.strings.description.en
-      }\n`;
-    }
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name handleEditPermissions
+   * @param item
+   * @name handleOnAssignPermissions
    * @description Open Modal window for assigning and revoking permissions
    * @param {object} role Active role to be used
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleAssignPermissions = (role) => {
-    selectPartyRole(role);
-    this.setState({ showAssignPermissionsForm: true });
+  const handleOnAssignPermissions = (item) => {
+    selectPartyRole(item);
+    setShowAssignPermissionForm(true);
   };
 
   /**
    * @function
-   * @name closeEditPermissions
+   * @name handleOnCloseAssignPermissionsForm
    * @description close Modal window for assigning and revoking permissions
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeAssignPermissionsForm = () => {
-    this.setState({ showAssignPermissionsForm: false });
+  const handleOnCloseAssignPermissionsForm = () => {
+    setShowAssignPermissionForm(false);
   };
 
-  /**
-   * @function
-   * @name showArchiveConfirm
-   * @description show confirm modal before archiving a role
-   * @param {object} item  role to archive
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  showArchiveConfirm = (item) => {
-    confirm({
-      title: `Are you sure you want to archive ${item.strings.name.en} ?`,
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
-      onOk() {
-        return new Promise((resolve) => {
-          deletePartyRole(
-            item._id, // eslint-disable-line
-            () => {
-              resolve();
-              notifySuccess('Role was archived successfully');
-            },
-            () => {
-              resolve();
-              notifyError(
-                'An error occurred while archiving role, Please contact your system Administrator'
-              );
+  return (
+    <>
+      {/* Topbar */}
+      <Topbar
+        search={{
+          size: 'large',
+          placeholder: 'Search for roles here ...',
+          onChange: handleOnSearch,
+          value: searchQuery,
+        }}
+        action={{
+          label: 'New Role',
+          icon: <PlusOutlined />,
+          size: 'large',
+          title: 'Add New Role',
+          onClick: handleOnOpenForm,
+        }}
+      />
+      {/* end Topbar */}
+
+      {/* list starts */}
+      <ItemList
+        itemName="Roles"
+        items={roles}
+        page={page}
+        itemCount={total}
+        loading={loading}
+        // onFilter={this.openFiltersModal}
+        onNotify={handleOnOpenNotificationForm}
+        generateExportUrl={getPartyRolesExportUrl}
+        onShare={(items) => handleOnShare(items, FIELDS_TO_SHARE)}
+        onRefresh={handleOnRefreshList}
+        onPaginate={(nextPage) => paginatePartyRoles(nextPage)}
+        headerLayout={headerLayout}
+        renderListItem={({
+          item,
+          isSelected,
+          onSelectItem,
+          onDeselectItem,
+        }) => (
+          <ListItem
+            key={item._id} // eslint-disable-line
+            item={item}
+            name={item.strings.name.en}
+            avatarBackgroundColor={item.strings.color}
+            isSelected={isSelected}
+            onSelectItem={onSelectItem}
+            onDeselectItem={onDeselectItem}
+            title={
+              <span className="text-sm">
+                {truncateString(get(item, 'strings.name.en', 'N/A'), 45)}
+              </span>
             }
-          );
-        });
-      },
-    });
-  };
+            secondaryText={
+              <span className="text-xs">
+                {get(item, 'strings.abbreviation.en', 'N/A')}
+              </span>
+            }
+            actions={[
+              {
+                name: 'Edit Stakeholder Role',
+                title: 'Update Stakeholder Role Details',
+                onClick: () => handleOnEdit(item),
+                icon: 'edit',
+              },
+              {
+                name: 'Update Permissions',
+                title: 'Update Role Permissions',
+                onClick: () => handleOnAssignPermissions(item),
+                icon: <KeyOutlined />,
+              },
+              {
+                name: 'Share Stakeholder Role',
+                title: 'Share Stakeholder Role details with others',
+                onClick: () => handleOnShare(item, FIELDS_TO_SHARE),
+                icon: 'share',
+              },
+              {
+                name: 'Archive Stakeholder Role',
+                title:
+                  'Remove Stakeholder Role from list of active focal people',
+                onClick: () => handleOnArchiveItem(item),
+                icon: 'archive',
+              },
+            ]}
+          >
+            {/* eslint-disable react/jsx-props-no-spreading */}
+            <Col {...nameSpan}>{item.strings.name.en}</Col>
+            <Col {...abbreviationSpan}>{item.strings.abbreviation.en}</Col>
+            <Col {...descriptionSpan}>{item.strings.description.en}</Col>
+            {/* eslint-enable react/jsx-props-no-spreading */}
+          </ListItem>
+        )}
+      />
+      {/* end list */}
 
-  render() {
-    const {
-      roles,
-      loading,
-      showForm,
-      posting,
-      page,
-      total,
-      role,
-      searchQuery,
-    } = this.props;
-    const {
-      isEditForm,
-      showNotificationForm,
-      showAssignPermissionsForm,
-      notificationBody,
-    } = this.state;
-    return (
-      <>
-        {/* Topbar */}
-        <Topbar
-          search={{
-            size: 'large',
-            placeholder: 'Search for roles here ...',
-            onChange: this.searchRoles,
-            value: searchQuery,
-          }}
-          action={{
-            label: 'New Role',
-            icon: <PlusOutlined />,
-            size: 'large',
-            title: 'Add New Role',
-            onClick: this.openPartyRolesForm,
-          }}
+      {/* Notification Modal modal */}
+      <Modal
+        title="Notify according to roles"
+        visible={showNotificationForm}
+        onCancel={handleOnCloseNotificationForm}
+        footer={null}
+        destroyOnClose
+        maskClosable={false}
+        className="modal-window-50"
+        afterClose={handleAfterCloseNotificationForm}
+      >
+        <NotificationForm
+          //
+          onSearchRecipients={getFocalPeople}
+          onSearchJurisdictions={getJurisdictions}
+          onSearchGroups={getPartyGroups}
+          onSearchAgencies={getAgencies}
+          onSearchRoles={getPartyRolesFromAPI}
+          body={notificationBody}
+          onCancel={handleOnCloseNotificationForm}
         />
-        {/* end Topbar */}
+      </Modal>
+      {/* end Notification modal */}
 
-        {/* list starts */}
-        <ItemList
-          itemName="Roles"
-          items={roles}
-          page={page}
-          itemCount={total}
-          loading={loading}
-          // onFilter={this.openFiltersModal}
-          onNotify={this.openNotificationForm}
-          generateExportUrl={getPartyRolesExportUrl}
-          onShare={this.handleShare}
-          onRefresh={this.handleRefreshRoles}
-          onPaginate={(nextPage) => paginatePartyRoles(nextPage)}
-          headerLayout={headerLayout}
-          renderListItem={({
-            item,
-            isSelected,
-            onSelectItem,
-            onDeselectItem,
-          }) => (
-            <ListItem
-              key={item._id} // eslint-disable-line
-              item={item}
-              name={item.strings.name.en}
-              avatarBackgroundColor={item.strings.color}
-              isSelected={isSelected}
-              onSelectItem={onSelectItem}
-              onDeselectItem={onDeselectItem}
-              title={
-                <span className="text-sm">
-                  {truncateString(get(item, 'strings.name.en', 'N/A'), 45)}
-                </span>
-              }
-              secondaryText={
-                <span className="text-xs">
-                  {get(item, 'strings.abbreviation.en', 'N/A')}
-                </span>
-              }
-              actions={[
-                {
-                  name: 'Edit Stakeholder Role',
-                  title: 'Update Stakeholder Role Details',
-                  onClick: () => this.handleEdit(item),
-                  icon: 'edit',
-                },
-                {
-                  name: 'Update Permissions',
-                  title: 'Update Role Permissions',
-                  onClick: () => this.handleAssignPermissions(item),
-                  icon: <KeyOutlined />,
-                },
-                {
-                  name: 'Share Stakeholder Role',
-                  title: 'Share Stakeholder Role details with others',
-                  onClick: () => this.handleShare(item),
-                  icon: 'share',
-                },
-                {
-                  name: 'Archive Stakeholder Role',
-                  title:
-                    'Remove Stakeholder Role from list of active focal people',
-                  onClick: () => this.showArchiveConfirm(item),
-                  icon: 'archive',
-                },
-              ]}
-            >
-              {/* eslint-disable react/jsx-props-no-spreading */}
-              <Col {...nameSpan}>{item.strings.name.en}</Col>
-              <Col {...abbreviationSpan}>{item.strings.abbreviation.en}</Col>
-              <Col {...descriptionSpan}>{item.strings.description.en}</Col>
-              {/* eslint-enable react/jsx-props-no-spreading */}
-            </ListItem>
-          )}
+      {/* create/edit form modal */}
+      <Modal
+        className="modal-window-50"
+        title={isEditForm ? 'Edit Role' : 'Add New Role'}
+        visible={showForm}
+        footer={null}
+        onCancel={handleOnCloseForm}
+        destroyOnClose
+        maskClosable={false}
+        afterClose={handleAfterCloseForm}
+      >
+        <RoleForm
+          posting={posting}
+          role={role}
+          onCancel={handleOnCloseForm}
+          onCreate={handleOnCreateItem}
+          onUpdate={handleOnUpdateItem}
         />
-        {/* end list */}
+      </Modal>
+      {/* end create/edit form modal */}
 
-        {/* Notification Modal modal */}
-        <Modal
-          title="Notify according to roles"
-          visible={showNotificationForm}
-          onCancel={this.closeNotificationForm}
-          footer={null}
-          destroyOnClose
-          maskClosable={false}
-          className="modal-window-50"
-          afterClose={this.handleAfterCloseNotificationForm}
-        >
-          <NotificationForm
-            //
-            onSearchRecipients={getFocalPeople}
-            onSearchJurisdictions={getJurisdictions}
-            onSearchGroups={getPartyGroups}
-            onSearchAgencies={getAgencies}
-            onSearchRoles={getPartyRolesFromAPI}
-            body={notificationBody}
-            onCancel={this.closeNotificationForm}
-          />
-        </Modal>
-        {/* end Notification modal */}
-
-        {/* create/edit form modal */}
-        <Modal
-          className="modal-window-50"
-          title={isEditForm ? 'Edit Role' : 'Add New Role'}
-          visible={showForm}
-          footer={null}
-          onCancel={this.closePartyRolesForm}
-          destroyOnClose
-          maskClosable={false}
-          afterClose={this.handleAfterCloseForm}
-        >
-          <RoleForm
-            posting={posting}
-            role={role}
-            onCancel={this.closePartyRolesForm}
-          />
-        </Modal>
-        {/* end create/edit form modal */}
-
-        {/* create/edit form modal */}
-        <Modal
-          className="modal-window-80"
-          title="Update Role's Permissions"
-          visible={showAssignPermissionsForm}
-          footer={null}
-          onCancel={this.closeAssignPermissionsForm}
-          destroyOnClose
-          maskClosable={false}
-          afterClose={this.handleAfterCloseForm}
-        >
-          <AssignPermissionForm onCancel={this.closeAssignPermissionsForm} />
-        </Modal>
-        {/* end create/edit form modal */}
-      </>
-    );
-  }
-}
+      {/* create/edit form modal */}
+      <Modal
+        className="modal-window-80"
+        title="Update Role's Permissions"
+        visible={showAssignPermissionsForm}
+        footer={null}
+        onCancel={handleOnCloseAssignPermissionsForm}
+        destroyOnClose
+        maskClosable={false}
+      >
+        <AssignPermissionForm onCancel={handleOnCloseAssignPermissionsForm} />
+      </Modal>
+      {/* end create/edit form modal */}
+    </>
+  );
+};
 
 Roles.propTypes = {
   showForm: PropTypes.bool.isRequired,
