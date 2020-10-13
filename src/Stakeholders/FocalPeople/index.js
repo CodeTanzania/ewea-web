@@ -64,8 +64,8 @@ const SHARE_FOCAL_PERSON_SUBJECT = 'Contact Details for Focal People';
  * @description Render focalPerson list which have search box, actions
  * and focalPerson list
  * @param { object} props component properties object
- * @param {object[]} props.agencies List of focal people from the API
- * @param {object} props.agency Selected focal person from from the API
+ * @param {object[]} props.focalPeople List of focal people from the API
+ * @param {object} props.focalPerson Selected focal person from from the API
  * @param {boolean} props.loading Flag to indicate fetching data from API
  * @param {boolean} props.posting Flag to indicate posting data to the API
  * @param {number} props.page Current page
