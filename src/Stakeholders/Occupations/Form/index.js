@@ -1,13 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { reduxActions } from '@codetanzania/ewea-api-states';
 import { Button, Col, Form, Input, Row } from 'antd';
 import get from 'lodash/get';
 
-import { notifyError, notifySuccess } from '../../../util';
-
-/* redux actions */
-const { postPartyOccupation, putPartyOccupation } = reduxActions;
 /* constants */
 const { TextArea } = Input;
 const formItemLayout = {
@@ -34,6 +29,8 @@ const formItemLayout = {
  * @name OccupationForm
  * @description Form component for creating and editing stakeholder occupations
  * @param {object} props Form properties object
+ * @param {Function} props.onCreate on Create resource function
+ * @param {Function} props.onUpdate on Update resource function
  * @param {object|null} props.occupation Occupation object to be edited if null will be created
  * @param {boolean} props.posting Flag for showing spinner when posting data to the api
  * @param {Function} props.onCancel Callback function for closing form
@@ -41,34 +38,21 @@ const formItemLayout = {
  * @version 0.2.0
  * @since 0.1.0
  */
-const OccupationForm = ({ occupation, posting, onCancel }) => {
+const OccupationForm = ({
+  occupation,
+  posting,
+  onCancel,
+  onCreate,
+  onUpdate,
+}) => {
   const onFinish = (values) => {
     if (get(occupation, '_id')) {
       const updatedOccupation = { ...occupation, ...values };
-      putPartyOccupation(
-        updatedOccupation,
-        () => {
-          notifySuccess('Occupation was updated successfully');
-        },
-        () => {
-          notifyError(
-            'Something occurred while updating occupation, please try again!'
-          );
-        }
-      );
-    } else {
-      postPartyOccupation(
-        values,
-        () => {
-          notifySuccess('Occupation was created successfully');
-        },
-        () => {
-          notifyError(
-            'Something occurred while saving occupation, please try again!'
-          );
-        }
-      );
+      onUpdate(updatedOccupation);
+      return;
     }
+
+    onCreate(values);
   };
 
   return (
@@ -136,8 +120,10 @@ OccupationForm.propTypes = {
       description: PropTypes.shape({ en: PropTypes.string }),
     }),
   }),
-  onCancel: PropTypes.func.isRequired,
   posting: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onCreate: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 OccupationForm.defaultProps = {
