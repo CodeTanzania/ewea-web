@@ -46,7 +46,7 @@ export const useFilters = (defaultFilters) => {
  * functions
  * @param {object} [options] Additional options
  * @returns {object} map of exported state value and functions
- * @version 0.1.0
+ * @version 0.2.0
  * @since 0.1.0
  */
 export const useList = (resourceName, options) => {
@@ -64,6 +64,7 @@ export const useList = (resourceName, options) => {
     MESSAGE_ITEM_UPDATE_SUCCESS,
   } = generateFeedbackMessagesFor(nameForMessages);
   const [showFilters, setShowFilters] = useState(false);
+  const [showView, setShowView] = useState(false);
   const [isEditForm, setIsEditForm] = useState(false);
   const [showNotificationForm, setShowNotificationForm] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -74,6 +75,30 @@ export const useList = (resourceName, options) => {
   useEffect(() => {
     reduxActions[`get${pluralName}`]();
   }, [pluralName]);
+
+  /**
+   * @function
+   * @name handleOnView
+   * @description Handle event for showing details view for selected item
+   * @param {object} item Item to show details view for
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  const handleOnView = (item) => {
+    reduxActions[`select${singularName}`](item);
+    setShowView(true);
+  };
+
+  /**
+   * @function
+   * @name handleOnCloseView
+   * @description Handle event to close details view
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  const handleOnCloseView = () => {
+    setShowView(false);
+  };
 
   /**
    * @function
@@ -243,7 +268,6 @@ export const useList = (resourceName, options) => {
    * @name handleOnArchiveItem
    * @description show confirm modal before archiving a focal person
    * @param {object} item Resource item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -330,6 +354,7 @@ export const useList = (resourceName, options) => {
   };
 
   return {
+    showView,
     showFilters,
     setShowFilters,
     isEditForm,
@@ -345,6 +370,8 @@ export const useList = (resourceName, options) => {
     cachedValues,
     setCachedValues,
 
+    handleOnView,
+    handleOnCloseView,
     handleOnCacheValues,
     handleOnClearCachedValues,
     handleOnOpenFiltersModal,
