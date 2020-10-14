@@ -56,90 +56,20 @@ const FIELDS_TO_SHARE = {
 };
 
 /**
- * @param root0
- * @param root0.occupations
- * @param root0.loading
- * @param root0.showForm
- * @param root0.posting
- * @param root0.page
- * @param root0.total
- * @param root0.occupation
- * @param root0.searchQuery
- * @param root0
- * @param root0.occupations
- * @param root0.loading
- * @param root0.showForm
- * @param root0.posting
- * @param root0.page
- * @param root0.total
- * @param root0.occupation
- * @param root0.searchQuery
- * @param root0
- * @param root0.occupations
- * @param root0.loading
- * @param root0.showForm
- * @param root0.posting
- * @param root0.page
- * @param root0.total
- * @param root0.occupation
- * @param root0.searchQuery
- * @param root0
- * @param root0.occupations
- * @param root0.loading
- * @param root0.showForm
- * @param root0.posting
- * @param root0.page
- * @param root0.total
- * @param root0.occupation
- * @param root0.searchQuery
- * @param root0
- * @param root0.occupations
- * @param root0.loading
- * @param root0.showForm
- * @param root0.posting
- * @param root0.page
- * @param root0.total
- * @param root0.occupation
- * @param root0.searchQuery
- * @param root0
- * @param root0.occupations
- * @param root0.loading
- * @param root0.showForm
- * @param root0.posting
- * @param root0.page
- * @param root0.total
- * @param root0.occupation
- * @param root0.searchQuery
- * @param root0
- * @param root0.occupations
- * @param root0.loading
- * @param root0.showForm
- * @param root0.posting
- * @param root0.page
- * @param root0.total
- * @param root0.occupation
- * @param root0.searchQuery
- * @param root0
- * @param root0.occupations
- * @param root0.loading
- * @param root0.showForm
- * @param root0.posting
- * @param root0.page
- * @param root0.total
- * @param root0.occupation
- * @param root0.searchQuery
- * @param root0
- * @param root0.occupations
- * @param root0.loading
- * @param root0.showForm
- * @param root0.posting
- * @param root0.page
- * @param root0.total
- * @param root0.occupation
- * @param root0.searchQuery
- * @class
+ * @function
  * @name Occupations
  * @description Render occupation module which has search box, actions and list of occupations
+ * @param { object} props component properties object
+ * @param {object[]} props.occupations List of occupations from the API
+ * @param {object} props.occupation Selected occupation
+ * @param {boolean} props.loading Flag to indicate fetching data from API
+ * @param {boolean} props.posting Flag to indicate posting data to the API
+ * @param {number} props.page Current page
+ * @param {boolean} props.showForm Flag for controlling visibility of the form for
+ * creating or updating resource
+ * @param {string} props.searchQuery Search query string
+ * @param {number} props.total Total number of resources in the API
+ * @returns {object} Party Occupations list ui
  * @version 0.1.0
  * @since 0.1.0
  */
