@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { reduxActions } from '@codetanzania/ewea-api-states';
 import {
   Button,
   Form,
@@ -17,7 +16,6 @@ import get from 'lodash/get';
 import map from 'lodash/map';
 
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
-import { notifySuccess, notifyError } from '../../../util';
 
 /* http actions */
 const {
@@ -29,8 +27,6 @@ const {
   getFocalPeople,
   getPriorities,
 } = httpActions;
-/* reduxActions */
-const { postDispatch, putDispatch } = reduxActions;
 /* constants */
 const { TextArea } = Input;
 const { Step } = Steps;
@@ -59,7 +55,8 @@ const formItemLayout = {
  * @description Vehicle Dispatch form for ambulances and fire
  * @param {object} props Dispatch Form props
  * @param {object} props.dispatch Dispatch instance
- * @param {boolean} props.isEditForm Flag for edit form (true) if editing dispatch
+ * @param {Function} props.onCreate On Create resource callback
+ * @param {Function} props.onUpdate On Update resource callback
  * @param {boolean} props.posting Flag from the store marking posting data to the api
  * @param {boolean} props.openInStep Set the step on which the form should open at i.e 0,1,2,3 or 4
  * @param {Function} props.onCancel Function to be invoked on cancelling the form
@@ -69,10 +66,11 @@ const formItemLayout = {
  */
 const VehicleDispatchForm = ({
   dispatch,
-  isEditForm,
   posting,
   onCancel,
   openInStep,
+  onCreate,
+  onUpdate,
 }) => {
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(openInStep);
@@ -107,32 +105,20 @@ const VehicleDispatchForm = ({
         vehicle: get(vehicle, '_id'),
       };
     }
+
     const values = {
       ...formValues,
       ...sectionValues,
       carrier: { ...sectionValues.carrier, ...carrier },
     };
 
-    if (isEditForm) {
+    if (get(dispatch, '_id')) {
       const updatedDispatch = { ...dispatch, ...values };
-      putDispatch(
-        updatedDispatch,
-        () => notifySuccess('Vehicle dispatch was updated successfully'),
-        () =>
-          notifyError(
-            'An error occurred while updating vehicle dispatch, please contact your system administrator'
-          )
-      );
-    } else {
-      postDispatch(
-        values,
-        () => notifySuccess('Vehicle Dispatch was created successfully'),
-        () =>
-          notifyError(
-            'An error occurred while saving vehicle dispatch, please contact your system administrator'
-          )
-      );
+      onUpdate(updatedDispatch);
+      return;
     }
+
+    onCreate(values);
   };
 
   return (
@@ -713,6 +699,8 @@ VehicleDispatchForm.propTypes = {
   posting: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
   openInStep: PropTypes.number,
+  onCreate: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 VehicleDispatchForm.defaultProps = {
