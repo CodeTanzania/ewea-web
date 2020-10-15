@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import isArray from 'lodash/isArray';
 import get from 'lodash/get';
+
 import Topbar from '../../components/Topbar';
 import SettingForm from '../../components/SettingForm';
 import NotificationForm from '../../components/NotificationForm';
-import { notifyError, notifySuccess } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
+import { useList } from '../../hooks';
 
 /* http actions */
 const {
@@ -23,21 +23,8 @@ const {
   getVehicleMakesExportUrl,
 } = httpActions;
 /* redux actions */
-const {
-  getVehicleMakes,
-  openVehicleMakeForm,
-  searchVehicleMakes,
-  selectVehicleMake,
-  closeVehicleMakeForm,
-  paginateVehicleMakes,
-  refreshVehicleMakes,
-  deleteVehicleMake,
-  postVehicleMake,
-  putVehicleMake,
-} = reduxActions;
+const { paginateVehicleMakes } = reduxActions;
 
-/* ui */
-const { confirm } = Modal;
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 16, xs: 14 };
 const codeSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 4, xs: 4 };
@@ -47,348 +34,198 @@ const headerLayout = [
   { ...codeSpan, header: 'Code' },
   { ...descriptionSpan, header: 'Description' },
 ];
+const FIELDS_TO_SHARE = {
+  name: { header: 'Name', dataIndex: 'strings.name.en', defaultValue: 'N/A' },
+  description: {
+    header: 'Description',
+    dataIndex: 'strings.description.en',
+    defaultValue: 'N/A',
+  },
+};
 
 /**
- * @class
- * @name VehicleMake
+ * @function
+ * @name VehicleMakes
  * @description Render Party(Agency) Ownership types list which have search box,
- *
+ * @param { object} props component properties object
+ * @param {object[]} props.focalPeople List of vehicle makes from the API
+ * @param {object} props.focalPerson Selected vehicle make from from the API
+ * @param {boolean} props.loading Flag to indicate fetching data from API
+ * @param {boolean} props.posting Flag to indicate posting data to the API
+ * @param {number} props.page Current page
+ * @param {boolean} props.showForm Flag for controlling visibility of the form for
+ * creating or updating resource
+ * @param {string} props.searchQuery Search query string
+ * @param {number} props.total Total number of resources in the API
+ * @returns {object} Vehicle make list ui
  * @version 0.1.0
  * @since 0.1.0
  */
-class VehicleMake extends Component {
-  // eslint-disable-next-line react/state-in-constructor
-  state = {
-    isEditForm: false,
-    showNotificationForm: false,
-    notificationBody: undefined,
-  };
+const VehicleMakes = ({
+  vehicleMakes,
+  loading,
+  page,
+  posting,
+  vehicleMake,
+  showForm,
+  searchQuery,
+  total,
+}) => {
+  const {
+    isEditForm,
+    showNotificationForm,
+    notificationBody,
 
-  componentDidMount() {
-    getVehicleMakes();
-  }
+    handleOnOpenForm,
+    handleOnCloseForm,
+    handleOnSearch,
+    handleOnEdit,
+    handleOnCloseNotificationForm,
+    handleAfterCloseForm,
+    handleAfterCloseNotificationForm,
+    handleOnRefreshList,
+    handleOnArchiveItem,
+    handleOnCreateItem,
+    handleOnUpdateItem,
+    handleOnShare,
+  } = useList('vehicleMakes');
 
-  /**
-   * @function
-   * @name openVehicleMakesForm
-   * @description Open vehicle make form
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  openVehicleMakesForm = () => {
-    openVehicleMakeForm();
-  };
+  return (
+    <>
+      {/* Topbar */}
+      <Topbar
+        search={{
+          size: 'large',
+          placeholder: 'Search for vehicle makes here ...',
+          onChange: handleOnSearch,
+          value: searchQuery,
+        }}
+        action={{
+          label: 'New Make',
+          icon: <PlusOutlined />,
+          size: 'large',
+          title: 'Add New Vehicle Make',
+          onClick: handleOnOpenForm,
+        }}
+      />
+      {/* end Topbar */}
 
-  /**
-   * @function
-   * @name closeVehicleMakeForm
-   * @description close vehicle make form
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closeVehicleMakeForm = () => {
-    closeVehicleMakeForm();
-    this.setState({ isEditForm: false });
-  };
-
-  /**
-   * @function
-   * @name searchVehicleMakes
-   * @description Search Vehicle makes List based on supplied filter word
-   *
-   * @param {object} event Event instance
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  searchVehicleMakes = (event) => {
-    searchVehicleMakes(event.target.value);
-  };
-
-  /**
-   * @function
-   * @name handleEdit
-   * @description Handle on Edit action for list item
-   *
-   * @param {object} vehicleMake vehicle make to be edited
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleEdit = (vehicleMake) => {
-    selectVehicleMake(vehicleMake);
-    this.setState({ isEditForm: true });
-    openVehicleMakeForm();
-  };
-
-  /**
-   * @function
-   * @name handleAfterCloseForm
-   * @description Perform post close form cleanups
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleAfterCloseForm = () => {
-    selectVehicleMake(null);
-    this.setState({ isEditForm: false });
-  };
-
-  /**
-   * @function
-   * @name handleRefreshVehicleMake
-   * @description Handle list refresh action
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleRefreshVehicleMake = () => {
-    refreshVehicleMakes(
-      () => {
-        notifySuccess('Vehicle makes were refreshed successfully');
-      },
-      () => {
-        notifyError(
-          'An Error occurred while refreshing Vehicle makes please contact system administrator'
-        );
-      }
-    );
-  };
-
-  /**
-   * @function
-   * @name showArchiveConfirm
-   * @description show confirm modal before archiving a vehicle make
-   *
-   * @param item {object} vehicleMake to archive
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-
-  showArchiveConfirm = (item) => {
-    confirm({
-      title: `Are you sure you want to archive ${item.strings.name.en} ?`,
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
-      onOk() {
-        return new Promise((resolve) => {
-          deleteVehicleMake(
-            item._id, // eslint-disable-line
-            () => {
-              resolve();
-              notifySuccess('Vehicle Make was archived successfully');
-            },
-            () => {
-              resolve();
-              notifyError(
-                'An error occurred while archiving Vehicle Make, Please contact your system Administrator'
-              );
+      {/* list starts */}
+      <ItemList
+        itemName="Vehicle Make"
+        items={vehicleMakes}
+        page={page}
+        itemCount={total}
+        loading={loading}
+        // onFilter={this.openFiltersModal}
+        onShare={(items) => handleOnShare(items, FIELDS_TO_SHARE)}
+        onRefresh={handleOnRefreshList}
+        onPaginate={(nextPage) => paginateVehicleMakes(nextPage)}
+        generateExportUrl={getVehicleMakesExportUrl}
+        headerLayout={headerLayout}
+        renderListItem={({
+          item,
+          isSelected,
+          onSelectItem,
+          onDeselectItem,
+        }) => (
+          <ListItem
+            key={item._id} // eslint-disable-line
+            item={item}
+            name={item.strings.name.en}
+            isSelected={isSelected}
+            avatarBackgroundColor={item.strings.color}
+            onSelectItem={onSelectItem}
+            onDeselectItem={onDeselectItem}
+            title={
+              <span className="text-sm">
+                {get(item, 'strings.name.en', 'N/A')}
+              </span>
             }
-          );
-        });
-      },
-    });
-  };
+            secondaryText={
+              <span className="text-xs">
+                {get(item, 'strings.code', 'N/A')}
+              </span>
+            }
+            actions={[
+              {
+                name: 'Edit Vehicle Makes',
+                title: 'Update Vehicle Makes Details',
+                onClick: () => handleOnEdit(item),
+                icon: 'edit',
+              },
+              {
+                name: 'Share Vehicle Makes',
+                title: 'Share Vehicle Makes details with others',
+                onClick: () => handleOnShare(item, FIELDS_TO_SHARE),
+                icon: 'share',
+              },
+              {
+                name: 'Archive Vehicle Makes',
+                title: 'Remove Vehicle Makes from list of active vehicle makes',
+                onClick: () => handleOnArchiveItem(item),
+                icon: 'archive',
+              },
+            ]}
+          >
+            {/* eslint-disable react/jsx-props-no-spreading */}
+            <Col {...nameSpan}>{item.strings.name.en}</Col>
+            <Col {...codeSpan}>{item.strings.code}</Col>
+            <Col {...descriptionSpan}>{item.strings.description.en}</Col>
+            {/* eslint-enable react/jsx-props-no-spreading */}
+          </ListItem>
+        )}
+      />
+      {/* end list */}
 
-  /**
-   * @function
-   * @name handleShare
-   * @description Handle share multiple event Indicators
-   *
-   * @param {object[]| object} vehicleMakes event Indicators list to be shared
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  handleShare = (vehicleMakes) => {
-    let message = '';
-    if (isArray(vehicleMakes)) {
-      const vehicleMakeList = vehicleMakes.map(
-        (vehicleMake) =>
-          `Name: ${vehicleMake.strings.name.en}\nDescription: ${
-            // eslint-disable-line
-            vehicleMake.strings.description.en
-          }\n`
-      );
-
-      message = vehicleMakeList.join('\n\n\n');
-    } else {
-      message = `Name: ${vehicleMakes.strings.name.en}\nDescription: ${
-        // eslint-disable-line
-        vehicleMakes.strings.description.en
-      }\n`;
-    }
-
-    this.setState({ notificationBody: message, showNotificationForm: true });
-  };
-
-  /**
-   * @function
-   * @name closeNotificationForm
-   * @description Handle on notify vehicleMakes
-   *
-   * @version 0.1.0
-   * @since 0.1.0
-   */
-  closeNotificationForm = () => {
-    this.setState({ showNotificationForm: false });
-  };
-
-  render() {
-    const {
-      vehicleMakes,
-      loading,
-      page,
-      posting,
-      vehicleMake,
-      showForm,
-      searchQuery,
-      total,
-    } = this.props;
-    const { isEditForm, showNotificationForm, notificationBody } = this.state;
-
-    return (
-      <>
-        {/* Topbar */}
-        <Topbar
-          search={{
-            size: 'large',
-            placeholder: 'Search for vehicle makes here ...',
-            onChange: this.searchVehicleMakes,
-            value: searchQuery,
-          }}
-          action={{
-            label: 'New Make',
-            icon: <PlusOutlined />,
-            size: 'large',
-            title: 'Add New Vehicle Make',
-            onClick: this.openVehicleMakesForm,
-          }}
+      {/* Vehicle Make modal */}
+      <Modal
+        title="Notify Vehicle Make"
+        visible={showNotificationForm}
+        onCancel={handleOnCloseNotificationForm}
+        footer={null}
+        destroyOnClose
+        maskClosable={false}
+        className="modal-window-50"
+        afterClose={handleAfterCloseNotificationForm}
+      >
+        <NotificationForm
+          onSearchRecipients={getFocalPeople}
+          onSearchJurisdictions={getJurisdictions}
+          onSearchGroups={getPartyGroups}
+          onSearchAgencies={getAgencies}
+          onSearchRoles={getRoles}
+          body={notificationBody}
+          onCancel={handleOnCloseNotificationForm}
         />
-        {/* end Topbar */}
+      </Modal>
+      {/* end Vehicle Make modal */}
 
-        {/* list starts */}
-        <ItemList
-          itemName="Vehicle Make"
-          items={vehicleMakes}
-          page={page}
-          itemCount={total}
-          loading={loading}
-          // onFilter={this.openFiltersModal}
-          onNotify={this.openNotificationForm}
-          onShare={this.handleShare}
-          onRefresh={this.handleRefreshVehicleMake}
-          onPaginate={(nextPage) => paginateVehicleMakes(nextPage)}
-          generateExportUrl={getVehicleMakesExportUrl}
-          headerLayout={headerLayout}
-          renderListItem={({
-            item,
-            isSelected,
-            onSelectItem,
-            onDeselectItem,
-          }) => (
-            <ListItem
-              key={item._id} // eslint-disable-line
-              item={item}
-              name={item.strings.name.en}
-              isSelected={isSelected}
-              avatarBackgroundColor={item.strings.color}
-              onSelectItem={onSelectItem}
-              onDeselectItem={onDeselectItem}
-              title={
-                <span className="text-sm">
-                  {get(item, 'strings.name.en', 'N/A')}
-                </span>
-              }
-              secondaryText={
-                <span className="text-xs">
-                  {get(item, 'strings.code', 'N/A')}
-                </span>
-              }
-              actions={[
-                {
-                  name: 'Edit Vehicle Makes',
-                  title: 'Update Vehicle Makes Details',
-                  onClick: () => this.handleEdit(item),
-                  icon: 'edit',
-                },
-                {
-                  name: 'Share Vehicle Makes',
-                  title: 'Share Vehicle Makes details with others',
-                  onClick: () => this.handleShare(item),
-                  icon: 'share',
-                },
-                {
-                  name: 'Archive Vehicle Makes',
-                  title:
-                    'Remove Vehicle Makes from list of active vehicle makes',
-                  onClick: () => this.showArchiveConfirm(item),
-                  icon: 'archive',
-                },
-              ]}
-            >
-              {/* eslint-disable react/jsx-props-no-spreading */}
-              <Col {...nameSpan}>{item.strings.name.en}</Col>
-              <Col {...codeSpan}>{item.strings.code}</Col>
-              <Col {...descriptionSpan}>{item.strings.description.en}</Col>
-              {/* eslint-enable react/jsx-props-no-spreading */}
-            </ListItem>
-          )}
+      {/* create/edit form modal */}
+      <Modal
+        title={isEditForm ? 'Edit Vehicle Make' : 'Add New Vehicle Make'}
+        visible={showForm}
+        className="modal-window-50"
+        footer={null}
+        onCancel={handleOnCloseForm}
+        afterClose={handleAfterCloseForm}
+        maskClosable={false}
+        destroyOnClose
+      >
+        <SettingForm
+          setting={vehicleMake}
+          posting={posting}
+          onCancel={handleOnCloseForm}
+          onCreate={handleOnCreateItem}
+          onUpdate={handleOnUpdateItem}
         />
-        {/* end list */}
+      </Modal>
+      {/* end create/edit form modal */}
+    </>
+  );
+};
 
-        {/* Vehicle Make modal */}
-        <Modal
-          title="Notify Vehicle Make"
-          visible={showNotificationForm}
-          onCancel={this.closeNotificationForm}
-          footer={null}
-          destroyOnClose
-          maskClosable={false}
-          className="modal-window-50"
-          afterClose={this.handleAfterCloseNotificationForm}
-        >
-          <NotificationForm
-            onSearchRecipients={getFocalPeople}
-            onSearchJurisdictions={getJurisdictions}
-            onSearchGroups={getPartyGroups}
-            onSearchAgencies={getAgencies}
-            onSearchRoles={getRoles}
-            body={notificationBody}
-            onCancel={this.closeNotificationForm}
-          />
-        </Modal>
-        {/* end Vehicle Make modal */}
-
-        {/* create/edit form modal */}
-        <Modal
-          title={isEditForm ? 'Edit Vehicle Make' : 'Add New Vehicle Make'}
-          visible={showForm}
-          className="modal-window-50"
-          footer={null}
-          onCancel={this.closeVehicleMakeForm}
-          afterClose={this.handleAfterCloseForm}
-          maskClosable={false}
-          destroyOnClose
-        >
-          <SettingForm
-            setting={vehicleMake}
-            posting={posting}
-            onCancel={this.closeVehicleMakeForm}
-            onCreate={postVehicleMake}
-            onUpdate={putVehicleMake}
-          />
-        </Modal>
-        {/* end create/edit form modal */}
-      </>
-    );
-  }
-}
-
-VehicleMake.propTypes = {
+VehicleMakes.propTypes = {
   loading: PropTypes.bool.isRequired,
   vehicleMakes: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string }))
     .isRequired,
@@ -400,12 +237,12 @@ VehicleMake.propTypes = {
   showForm: PropTypes.bool.isRequired,
 };
 
-VehicleMake.defaultProps = {
+VehicleMakes.defaultProps = {
   vehicleMake: null,
   searchQuery: undefined,
 };
 
-export default Connect(VehicleMake, {
+export default Connect(VehicleMakes, {
   vehicleMakes: 'vehicleMakes.list',
   vehicleMake: 'vehicleMakes.selected',
   loading: 'vehicleMakes.loading',
