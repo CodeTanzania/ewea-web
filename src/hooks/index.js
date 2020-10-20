@@ -46,7 +46,7 @@ export const useFilters = (defaultFilters) => {
  * functions
  * @param {object} [options] Additional options
  * @returns {object} map of exported state value and functions
- * @version 0.2.0
+ * @version 0.3.0
  * @since 0.1.0
  */
 export const useList = (resourceName, options) => {
@@ -353,6 +353,18 @@ export const useList = (resourceName, options) => {
     setShowNotificationForm(true);
   };
 
+  /**
+   * @function
+   * @name handleOnPaginate
+   * @description Handle on paginate events
+   * @param {number} nextPage Next page to paginate to
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  const handleOnPaginate = (nextPage) => {
+    reduxActions[`paginate${pluralName}`](nextPage);
+  };
+
   return {
     showView,
     showFilters,
@@ -370,24 +382,25 @@ export const useList = (resourceName, options) => {
     cachedValues,
     setCachedValues,
 
-    handleOnView,
-    handleOnCloseView,
-    handleOnCacheValues,
-    handleOnClearCachedValues,
-    handleOnOpenFiltersModal,
-    handleOnCloseFiltersModal,
-    handleOnOpenForm,
-    handleOnCloseForm,
-    handleOnSearch,
-    handleOnEdit,
-    handleOnOpenNotificationForm,
-    handleOnCloseNotificationForm,
     handleAfterCloseForm,
     handleAfterCloseNotificationForm,
-    handleOnRefreshList,
     handleOnArchiveItem,
+    handleOnCacheValues,
+    handleOnClearCachedValues,
+    handleOnCloseFiltersModal,
+    handleOnCloseForm,
+    handleOnCloseNotificationForm,
+    handleOnCloseView,
     handleOnCreateItem,
-    handleOnUpdateItem,
+    handleOnEdit,
+    handleOnOpenFiltersModal,
+    handleOnOpenForm,
+    handleOnOpenNotificationForm,
+    handleOnPaginate,
+    handleOnRefreshList,
+    handleOnSearch,
     handleOnShare,
+    handleOnUpdateItem,
+    handleOnView,
   };
 };

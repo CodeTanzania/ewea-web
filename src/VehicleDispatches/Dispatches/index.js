@@ -28,7 +28,7 @@ const {
   getDispatchesExportUrl,
 } = httpActions;
 /* redux actions */
-const { paginateDispatches, putDispatch } = reduxActions;
+const { putDispatch } = reduxActions;
 
 /* ui */
 const { confirm } = Modal;
@@ -117,6 +117,7 @@ const VehicleDispatches = ({
     handleOnCreateItem,
     handleOnUpdateItem,
     handleOnShare,
+    handleOnPaginate,
   } = useList('dispatches', { wellknown: 'vehicleDispatches' });
   const [openFormInStep, setOpenFormInStep] = useState(0);
 
@@ -230,7 +231,7 @@ const VehicleDispatches = ({
         onShare={(items) => handleOnShare(items, FIELDS_TO_SHARE)}
         onFilter={handleOnOpenFiltersModal}
         onRefresh={handleOnRefreshList}
-        onPaginate={(nextPage) => paginateDispatches(nextPage)}
+        onPaginate={handleOnPaginate}
         generateExportUrl={getDispatchesExportUrl}
         headerLayout={headerLayout}
         renderListItem={({
