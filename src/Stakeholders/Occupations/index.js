@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
+import { Connect } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
@@ -22,8 +22,6 @@ const {
   getPartyOccupations: getPartyOccupationsFromAPI,
   getAgencies,
 } = httpActions;
-/* redux actions */
-const { paginatePartyOccupations } = reduxActions;
 
 /* constants */
 const nameSpan = { xxl: 7, xl: 7, lg: 7, md: 7, sm: 16, xs: 15 };
@@ -100,6 +98,7 @@ const Occupations = ({
     handleOnCreateItem,
     handleOnUpdateItem,
     handleOnShare,
+    handleOnPaginate,
   } = useList('partyOccupations', { wellknown: 'occupations' });
 
   return (
@@ -134,7 +133,7 @@ const Occupations = ({
         generateExportUrl={getPartyOccupationsExportUrl}
         onShare={(items) => handleOnShare(items, FIELDS_TO_SHARE)}
         onRefresh={handleOnRefreshList}
-        onPaginate={(nextPage) => paginatePartyOccupations(nextPage)}
+        onPaginate={handleOnPaginate}
         headerLayout={headerLayout}
         renderListItem={({
           item,

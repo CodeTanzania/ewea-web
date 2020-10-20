@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
+import { Connect } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
@@ -22,8 +22,6 @@ const {
   getRoles,
   getAgencies,
 } = httpActions;
-/* redux actions */
-const { paginatePartyGroups } = reduxActions;
 
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 6, xs: 14 };
@@ -89,6 +87,7 @@ const PartyGroups = ({
     handleOnCreateItem,
     handleOnUpdateItem,
     handleOnShare,
+    handleOnPaginate,
   } = useList('partyGroups', { wellknown: 'stakeholderGroups' });
 
   return (
@@ -122,7 +121,7 @@ const PartyGroups = ({
         onShare={(items) => handleOnShare(items, FIELDS_TO_SHARE)}
         onRefresh={handleOnRefreshList}
         generateExportUrl={getPartyGroupsExportUrl}
-        onPaginate={(nextPage) => paginatePartyGroups(nextPage)}
+        onPaginate={handleOnPaginate}
         headerLayout={headerLayout}
         renderListItem={({
           item,

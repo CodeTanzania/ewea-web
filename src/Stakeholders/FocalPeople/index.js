@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
+import { Connect } from '@codetanzania/ewea-api-states';
 import { Modal, Row, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
@@ -24,8 +24,7 @@ const {
   getAgencies,
   getFocalPeopleExportUrl,
 } = httpActions;
-/* redux actions */
-const { paginateFocalPeople } = reduxActions;
+
 /* constants */
 const nameSpan = { xxl: 3, xl: 3, lg: 3, md: 5, sm: 10, xs: 10 };
 const roleSpan = { xxl: 6, xl: 5, lg: 5, md: 0, sm: 0, xs: 0 };
@@ -113,6 +112,7 @@ const FocalPeople = ({
     handleOnCreateItem,
     handleOnUpdateItem,
     handleOnShare,
+    handleOnPaginate,
   } = useList('focalPeople');
 
   return (
@@ -148,7 +148,7 @@ const FocalPeople = ({
           handleOnShare(items, FIELDS_TO_SHARE, SHARE_FOCAL_PERSON_SUBJECT)
         }
         onRefresh={handleOnRefreshList}
-        onPaginate={(nextPage) => paginateFocalPeople(nextPage)}
+        onPaginate={handleOnPaginate}
         generateExportUrl={getFocalPeopleExportUrl}
         headerLayout={headerLayout}
         renderListItem={({

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
+import { Connect } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
@@ -23,8 +23,6 @@ const {
   getRoles,
   getPartyOwnershipsExportUrl,
 } = httpActions;
-/* redux actions */
-const { paginatePartyOwnerships } = reduxActions;
 
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 16, xs: 14 };
@@ -89,6 +87,7 @@ const AgencyOwnership = ({
     handleOnCreateItem,
     handleOnUpdateItem,
     handleOnShare,
+    handleOnPaginate,
   } = useList('partyOwnerships', { wellknown: 'agencyOwnership' });
 
   return (
@@ -121,7 +120,7 @@ const AgencyOwnership = ({
         // onFilter={this.openFiltersModal}
         onShare={(items) => handleOnShare(items, FIELDS_TO_SHARE)}
         onRefresh={handleOnRefreshList}
-        onPaginate={(nextPage) => paginatePartyOwnerships(nextPage)}
+        onPaginate={handleOnPaginate}
         generateExportUrl={getPartyOwnershipsExportUrl}
         headerLayout={headerLayout}
         renderListItem={({

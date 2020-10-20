@@ -25,7 +25,7 @@ const {
   getAgencies,
 } = httpActions;
 /* redux actions */
-const { selectPartyRole, paginatePartyRoles } = reduxActions;
+const { selectPartyRole } = reduxActions;
 
 /* constants */
 const nameSpan = { xxl: 7, xl: 7, lg: 7, md: 7, sm: 16, xs: 15 };
@@ -106,6 +106,7 @@ const Roles = ({
     handleOnCreateItem,
     handleOnUpdateItem,
     handleOnShare,
+    handleOnPaginate,
   } = useList('partyRoles', { wellknown: 'roles' });
 
   /**
@@ -164,7 +165,7 @@ const Roles = ({
         generateExportUrl={getPartyRolesExportUrl}
         onShare={(items) => handleOnShare(items, FIELDS_TO_SHARE)}
         onRefresh={handleOnRefreshList}
-        onPaginate={(nextPage) => paginatePartyRoles(nextPage)}
+        onPaginate={handleOnPaginate}
         headerLayout={headerLayout}
         renderListItem={({
           item,

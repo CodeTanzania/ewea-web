@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
+import { Connect } from '@codetanzania/ewea-api-states';
 import { Modal, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
@@ -22,8 +22,6 @@ const {
   getRoles,
   getVehicleMakesExportUrl,
 } = httpActions;
-/* redux actions */
-const { paginateVehicleMakes } = reduxActions;
 
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 5, sm: 16, xs: 14 };
@@ -88,6 +86,7 @@ const VehicleMakes = ({
     handleOnCreateItem,
     handleOnUpdateItem,
     handleOnShare,
+    handleOnPaginate,
   } = useList('vehicleMakes');
 
   return (
@@ -120,7 +119,7 @@ const VehicleMakes = ({
         // onFilter={this.openFiltersModal}
         onShare={(items) => handleOnShare(items, FIELDS_TO_SHARE)}
         onRefresh={handleOnRefreshList}
-        onPaginate={(nextPage) => paginateVehicleMakes(nextPage)}
+        onPaginate={handleOnPaginate}
         generateExportUrl={getVehicleMakesExportUrl}
         headerLayout={headerLayout}
         renderListItem={({

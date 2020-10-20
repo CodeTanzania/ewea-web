@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
+import { Connect } from '@codetanzania/ewea-api-states';
 import { Row, Col, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
@@ -22,8 +22,6 @@ const {
   getPartyGroups,
   getAgenciesExportUrl,
 } = httpActions;
-/* redux actions */
-const { paginateAgencies } = reduxActions;
 
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 7, sm: 14, xs: 12 };
@@ -104,6 +102,7 @@ const Agencies = ({
     handleOnCreateItem,
     handleOnUpdateItem,
     handleOnShare,
+    handleOnPaginate,
   } = useList('agencies');
 
   return (
@@ -137,7 +136,7 @@ const Agencies = ({
         onNotify={handleOnOpenNotificationForm}
         onShare={(items) => handleOnShare(items, FIELDS_TO_SHARE)}
         onRefresh={handleOnRefreshList}
-        onPaginate={(nextPage) => paginateAgencies(nextPage)}
+        onPaginate={handleOnPaginate}
         headerLayout={headerLayout}
         generateExportUrl={getAgenciesExportUrl}
         renderListItem={({
