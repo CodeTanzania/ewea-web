@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { reduxActions } from '@codetanzania/ewea-api-states';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Button, Input, Form, Row, Col } from 'antd';
 import get from 'lodash/get';
 
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
-import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
 const {
@@ -18,7 +16,8 @@ const {
   getVehicleMakes,
   getVehicleStatuses,
 } = httpActions;
-const { putVehicle, postVehicle } = reduxActions;
+
+/* constants */
 const { TextArea } = Input;
 const formItemLayout = {
   labelCol: {
@@ -41,45 +40,27 @@ const formItemLayout = {
 
 /**
  * @function
- * @param {object} props props object
- * @param {object} props.vehicle valid vehicle
- * @param {boolean} props.isEditForm edit flag
- * @param {boolean} props.posting posting flag
- * @param {Function} props.onCancel cancel callback
  * @name VehicleForm
  * @description Render form for creating and editing vehicle types
+ * @param {object} props props object
+ * @param {object} props.vehicle valid vehicle
+ * @param {boolean} props.posting posting flag
+ * @param {Function} props.onCreate Callback for creating new resource
+ * @param {Function} props.onUpdate Callback for updating existing resource
+ * @param {Function} props.onCancel cancel callback
  * @returns {object} VehicleForm component
  * @version 0.1.0
  * @since 0.1.0
  */
-const VehicleForm = ({ vehicle, isEditForm, posting, onCancel }) => {
+const VehicleForm = ({ vehicle, posting, onCancel, onCreate, onUpdate }) => {
   const onFinish = (values) => {
-    if (isEditForm) {
+    if (get(vehicle, '_id')) {
       const updatedContact = { ...vehicle, ...values };
-      putVehicle(
-        updatedContact,
-        () => {
-          notifySuccess('Vehicle Type was updated successfully');
-        },
-        () => {
-          notifyError(
-            'Something occurred while updating Vehicle Type, please try again!'
-          );
-        }
-      );
-    } else {
-      postVehicle(
-        values,
-        () => {
-          notifySuccess('Vehicle Type was created successfully');
-        },
-        () => {
-          notifyError(
-            'Something occurred while saving Vehicle Type, please try again!'
-          );
-        }
-      );
+      onUpdate(updatedContact);
+      return;
     }
+
+    onCreate(values);
   };
 
   return (
@@ -263,14 +244,15 @@ VehicleForm.propTypes = {
       }),
       _id: PropTypes.string,
     }),
-  }).isRequired,
-  isEditForm: PropTypes.bool.isRequired,
+  }),
   posting: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
-  form: PropTypes.shape({
-    getFieldDecorator: PropTypes.func,
-    validateFieldsAndScroll: PropTypes.func,
-  }).isRequired,
+  onCreate: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+};
+
+VehicleForm.defaultProps = {
+  vehicle: null,
 };
 
 export default VehicleForm;

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Button, Input, Form } from 'antd';
 import get from 'lodash/get';
 
-import { notifyError, notifySuccess } from '../../util';
 import ColorPicker from '../ColorPicker';
 
 /* constants */
@@ -46,26 +45,11 @@ const SettingForm = ({ setting, posting, onCancel, onCreate, onUpdate }) => {
   const onFinish = (values) => {
     if (get(setting, '_id')) {
       const updatedSetting = { ...setting, ...values };
-      onUpdate(
-        updatedSetting,
-        () => notifySuccess('Setting was updated successfully'),
-        () =>
-          notifyError(
-            'An error occurred while updating setting, please contact your system administrator'
-          )
-      );
-
+      onUpdate(updatedSetting);
       return;
     }
 
-    onCreate(
-      values,
-      () => notifySuccess('Setting was created successfully'),
-      () =>
-        notifyError(
-          'An error occurred while saving setting, please contact your system administrator'
-        )
-    );
+    onCreate(values);
   };
 
   return (
