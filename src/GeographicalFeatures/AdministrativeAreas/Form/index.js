@@ -3,15 +3,11 @@ import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import { Button, Input, Form, Row, Col } from 'antd';
 import { httpActions } from '@codetanzania/ewea-api-client';
-import { reduxActions } from '@codetanzania/ewea-api-states';
-import { notifyError, notifySuccess } from '../../../util';
+
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* http actions */
 const { getAdministrativeLevels, getAdministrativeAreas } = httpActions;
-
-/* state actions */
-const { putAdministrativeArea, postAdministrativeArea } = reduxActions;
 
 /* ui */
 const { TextArea } = Input;
@@ -32,21 +28,14 @@ const wrapperCol = {
   xxl: { span: 24 },
 };
 
-/* messages */
-const MESSAGE_POST_SUCCESS = 'Administrative Area was created successfully';
-const MESSAGE_POST_ERROR =
-  'Something occurred while saving Administrative Area, Please try again!';
-const MESSAGE_PUT_SUCCESS = 'Administrative Area was updated successfully';
-const MESSAGE_PUT_ERROR =
-  'Something occurred while updating Administrative Area, Please try again!';
-
 /**
  * @function AdministrativeAreaForm
  * @name AdministrativeAreaForm
  * @description Form for create and edit administrative area
  * @param {object} props Valid form properties
  * @param {object} props.administrativeArea Valid administrative area object
- * @param {boolean} props.isEditForm Flag whether form is on edit mode
+ * @param {Function} props.onCreate On Create resource callback
+ * @param {Function} props.onUpdate On Update resource callback
  * @param {boolean} props.posting Flag whether form is posting data
  * @param {Function} props.onCancel Form cancel callback
  * @returns {object} AdministrativeAreaForm component
@@ -59,18 +48,20 @@ const MESSAGE_PUT_ERROR =
  * @example
  *
  * <AdministrativeAreaForm
- *   administrativeArea={administrativeArea}
- *   isEditForm={isEditForm}
- *   posting={posting}
- *   onCancel={this.handleCloseAdministrativeAreaForm}
+ * administrativeArea={administrativeArea}
+ * isEditForm={isEditForm}
+ * posting={posting}
+ * onCancel={this.handleCloseAdministrativeAreaForm}
+ * onCreate={handleOnCreateItem}
+ * onUpdate={handleOnUpdateItem}
  * />
- *
  */
 const AdministrativeAreaForm = ({
   administrativeArea,
-  isEditForm,
   posting,
   onCancel,
+  onCreate,
+  onUpdate,
 }) => {
   // form finish(submit) handler
   const onFinish = (values) => {
@@ -83,20 +74,13 @@ const AdministrativeAreaForm = ({
       formData.relations.level = null;
     }
 
-    if (isEditForm) {
+    if (get(administrativeArea, '_id')) {
       const updates = { ...administrativeArea, ...formData };
-      putAdministrativeArea(
-        updates,
-        () => notifySuccess(MESSAGE_PUT_SUCCESS),
-        () => notifyError(MESSAGE_PUT_ERROR)
-      );
-    } else {
-      postAdministrativeArea(
-        formData,
-        () => notifySuccess(MESSAGE_POST_SUCCESS),
-        () => notifyError(MESSAGE_POST_ERROR)
-      );
+      onUpdate(updates);
+      return;
     }
+
+    onCreate(formData);
   };
 
   // search administrative area exclude self
@@ -277,7 +261,8 @@ AdministrativeAreaForm.propTypes = {
       }),
     }),
   }),
-  isEditForm: PropTypes.bool.isRequired,
+  onCreate: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
   posting: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
 };
