@@ -5,6 +5,7 @@ import { Connect } from '@codetanzania/ewea-api-states';
 import { Modal, Row, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import get from 'lodash/get';
+
 import Topbar from '../../components/Topbar';
 import AdministrativeAreaForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
@@ -44,13 +45,6 @@ const headerLayout = [
     title: 'Administrative Area Description',
   },
 ];
-
-// const itemName = get(item, 'strings.name.en', 'N/A');
-// const itemCode = get(item, 'strings.code', 'N/A');
-// const itemLevel = get(item, 'relations.level.strings.name.en', 'N/A');
-// const itemParent = get(item, 'relations.parent.strings.name.en', 'N/A');
-// const itemDescription = get(item, 'strings.description.en', 'N/A');
-// const body = `Name: ${itemName}\nCode: ${itemCode}\nLevel: ${itemLevel}\nParent: ${itemParent}\nDescription: ${itemDescription}\n`;
 const FIELDS_TO_SHARE = {
   name: { header: 'Name', dataIndex: 'strings.name.en', defaultValue: 'N/A' },
   code: { header: 'Code', dataIndex: 'strings.code', defaultValue: 'N/A' },
