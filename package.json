@@ -67,7 +67,7 @@
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jest": "24.0.2",
     "eslint-plugin-jsdoc": "30.7.8",
-    "eslint-plugin-jsx-a11y": "6.3.1",
+    "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-prettier": "3.1.4",
     "eslint-plugin-react": "7.21.5",
     "generate-changelog": "1.8.0",
