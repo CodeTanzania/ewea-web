@@ -31,7 +31,7 @@
     "@lykmapipo/common": "^0.42.1",
     "antd": "^4.6.6",
     "axios": "^0.21.0",
-    "echarts": "^4.9.0",
+    "echarts": "^5.0.0",
     "echarts-for-react": "^2.0.16",
     "history": "^5.0.0",
     "inflection": "^1.12.0",
