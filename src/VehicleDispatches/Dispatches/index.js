@@ -66,13 +66,12 @@ const FIELDS_TO_SHARE = {
  * @name VehicleDispatches
  * @description Render dispatch list which have search box, actions and
  * dispatch list
- * @param { object} props component properties object
+ * @param {object} props component properties object
  * @param {object[]} props.dispatches List of vehicle dispatches from the API
- * @param {object} props.focalPerson Selected vehicle dispatch
  * @param {boolean} props.loading Flag to indicate fetching data from API
  * @param {boolean} props.posting Flag to indicate posting data to the API
  * @param {number} props.page Current page
- * @param props.selectedDispatch
+ * @param {object} props.selectedDispatch Selected dispatch
  * @param {boolean} props.showForm Flag for controlling visibility of the form for
  * creating or updating resource
  * @param {string} props.searchQuery Search query string
