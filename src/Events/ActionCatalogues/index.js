@@ -62,7 +62,6 @@ const headerLayout = [
  * @class
  * @name ActionCatalogue
  * @description Render actions list which have search box, actions and Event Action Catalogue list
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -85,9 +84,7 @@ class ActionCatalogue extends Component {
    * @function
    * @name handleOnCachedValues
    * @description Cached selected values for filters
-   *
    * @param {object} cached values to be cached from filter
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -101,7 +98,6 @@ class ActionCatalogue extends Component {
    * @function
    * @name handleClearCachedValues
    * @description Clear cached values
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -114,7 +110,6 @@ class ActionCatalogue extends Component {
    * @name openFiltersModal
    * @description open filters modal by setting it's visible property
    * to false via state
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -127,7 +122,6 @@ class ActionCatalogue extends Component {
    * @name closeFiltersModal
    * @description Close filters modal by setting it's visible property
    * to false via state
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -139,7 +133,6 @@ class ActionCatalogue extends Component {
    * @function
    * @name openEventActionCatalogueForm
    * @description Open Event Action Catalogue form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -151,7 +144,6 @@ class ActionCatalogue extends Component {
    * @function
    * @name openEventActionCatalogueForm
    * @description close Event Action Catalogue form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -164,9 +156,7 @@ class ActionCatalogue extends Component {
    * @function
    * @name searchEventActionCatalogues
    * @description Search Event Action Catalogues List based on supplied filter word
-   *
    * @param {object} event - Event instance
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -178,9 +168,7 @@ class ActionCatalogue extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} eventActionCatalogue Event Action Catalogue to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -194,9 +182,7 @@ class ActionCatalogue extends Component {
    * @function
    * @name handleShare
    * @description Handle share single EventActionCatalogue action
-   *
    * @param {object| object[]} eventActionCatalogues EventActionCatalogue to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -229,9 +215,7 @@ class ActionCatalogue extends Component {
    * @function
    * @name openNotificationForm
    * @description Handle on notify EventActionCatalogues
-   *
    * @param {object[]} eventActionCatalogues List of Event Action Catalogues selected to be notified
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -246,7 +230,6 @@ class ActionCatalogue extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify Event Action Catalogues
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -258,7 +241,6 @@ class ActionCatalogue extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -270,7 +252,6 @@ class ActionCatalogue extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -282,7 +263,6 @@ class ActionCatalogue extends Component {
    * @function
    * @name handleRefreshEventActionCatalogues
    * @description Handle list refresh action
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -304,7 +284,6 @@ class ActionCatalogue extends Component {
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a Event Action Catalogue
    * @param {object} item Resource item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

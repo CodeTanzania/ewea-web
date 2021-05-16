@@ -9,10 +9,8 @@ const { Option } = Select;
  * @function
  * @name SelectInput
  * @description Render Select input wrapper on top of antd select input
- *
  * @param {object} properties Select Input Component props
  * @returns {object} React Element
- *
  * @version 0.1.0
  * @since 0.1.0
  */

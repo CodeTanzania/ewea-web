@@ -14,12 +14,10 @@ const { useBreakpoint } = Grid;
  * @function
  * @name Topbar
  * @description Topbar component which renders search input and primary actions
- *
  * @param {object} props props object
  * @param {object} props.search on Search callback
  * @param {object} props.action primary action
  * @returns {object} react element
- *
  * @version 0.1.0
  * @since 0.1.0
  */

@@ -49,7 +49,6 @@ const headerLayout = [
  * @class
  * @name EventActions
  * @description Render eventAction list which have search box, actions and eventAction list
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -71,9 +70,7 @@ class EventActions extends Component {
    * @function
    * @name handleOnCachedValues
    * @description Cached selected values for filters
-   *
    * @param {object} cached values to be cached from filter
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -87,7 +84,6 @@ class EventActions extends Component {
    * @function
    * @name handleClearCachedValues
    * @description Clear cached values
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -100,7 +96,6 @@ class EventActions extends Component {
    * @name openFiltersModal
    * @description open filters modal by setting it's visible property
    * to false via state
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -113,7 +108,6 @@ class EventActions extends Component {
    * @name closeFiltersModal
    * @description Close filters modal by setting it's visible property
    * to false via state
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -125,7 +119,6 @@ class EventActions extends Component {
    * @function
    * @name openEventActionForm
    * @description Open eventAction form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -137,7 +130,6 @@ class EventActions extends Component {
    * @function
    * @name openEventActionForm
    * @description close eventAction form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -150,9 +142,7 @@ class EventActions extends Component {
    * @function
    * @name searchEventActions
    * @description Search EventActions List based on supplied filter word
-   *
    * @param {object} event - Event instance
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -164,9 +154,7 @@ class EventActions extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} eventAction eventAction to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -180,9 +168,7 @@ class EventActions extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple event Actions
-   *
    * @param {object[]| object} eventActions event Actions list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -212,7 +198,6 @@ class EventActions extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify eventActions
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -224,7 +209,6 @@ class EventActions extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -236,7 +220,6 @@ class EventActions extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -249,7 +232,6 @@ class EventActions extends Component {
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a focal person
    * @param {object} item Resource item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

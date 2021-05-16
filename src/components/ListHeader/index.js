@@ -7,7 +7,6 @@ import './styles.css';
  * @function
  * @name ListHeader
  * @description List header component
- *
  * @param {object} props props object
  * @param {object[]} props.headerLayout list of header items configs
  * @param {Function} props.onSelectAll callback to handle select all checkbox
@@ -15,7 +14,6 @@ import './styles.css';
  * @param {boolean} props.isBulkSelected flag to show if current page results are
  * selected
  * @returns {object} react element
- *
  * @version 0.1.0
  * @since 0.1.0
  */

@@ -54,7 +54,6 @@ const headerLayout = [
  * @name EventGroups
  * @description Render Event Groups list which have search box,
  * actions and event groups list
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -74,7 +73,6 @@ class EventGroups extends Component {
    * @function
    * @name openEventGroupsForm
    * @description Open event group form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -86,7 +84,6 @@ class EventGroups extends Component {
    * @function
    * @name closeEventGroupsForm
    * @description close event group form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -99,9 +96,7 @@ class EventGroups extends Component {
    * @function
    * @name searchEventGroups
    * @description Search Event Groups List based on supplied filter word
-   *
    * @param {object} event Event instance
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -113,9 +108,7 @@ class EventGroups extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} eventType event group to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -129,7 +122,6 @@ class EventGroups extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -142,7 +134,6 @@ class EventGroups extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify event groups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -154,7 +145,6 @@ class EventGroups extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -166,9 +156,7 @@ class EventGroups extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple event groups
-   *
    * @param {object[]| object} eventGroups event groups list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -198,7 +186,6 @@ class EventGroups extends Component {
    * @function
    * @name handleRefreshEventGroups
    * @description Refresh Event Groups list
-   *
    * @returns {undefined}
    * @version 0.1.0
    * @since 0.1.0
@@ -217,7 +204,6 @@ class EventGroups extends Component {
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a event group
    * @param {object} item Resource item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

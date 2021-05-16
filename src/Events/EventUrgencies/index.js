@@ -51,7 +51,6 @@ const headerLayout = [
  * @class
  * @name EventUrgency
  * @description Render eventUrgency list which have search box, actions and eventUrgency list
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -72,9 +71,7 @@ class EventUrgency extends Component {
    * @function
    * @name handleOnCachedValues
    * @description Cached selected values for filters
-   *
    * @param {object} cached values to be cached from filter
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -88,7 +85,6 @@ class EventUrgency extends Component {
    * @function
    * @name handleClearCachedValues
    * @description Clear cached values
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -100,7 +96,6 @@ class EventUrgency extends Component {
    * @function
    * @name openEventUrgencyForm
    * @description Open eventUrgency form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -112,7 +107,6 @@ class EventUrgency extends Component {
    * @function
    * @name openEventUrgencyForm
    * @description close eventUrgency form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -125,9 +119,7 @@ class EventUrgency extends Component {
    * @function
    * @name searchEventUrgency
    * @description Search EventUrgency List based on supplied filter word
-   *
    * @param {object} event - Event instance
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -139,9 +131,7 @@ class EventUrgency extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} eventUrgency eventUrgency to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -155,9 +145,7 @@ class EventUrgency extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple event Actions
-   *
    * @param {object[]| object} eventUrgencies event Urgencies list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -187,7 +175,6 @@ class EventUrgency extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify eventUrgencies
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -199,7 +186,6 @@ class EventUrgency extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -212,7 +198,6 @@ class EventUrgency extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -225,7 +210,6 @@ class EventUrgency extends Component {
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a event urgency
    * @param {object} item Resource item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

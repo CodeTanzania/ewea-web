@@ -69,17 +69,6 @@ const MESSAGE_PUT_ERROR =
  * @static
  * @public
  * @example
- *
- * <CaseForm
- *   caze={case}
- *   isEditForm={isEditForm}
- *   posting={posting}
- *   cached={cached}
- *   onCache={this.handleOnCache}
- *   onClearCache={this.handleOnClearCache}
- *   onCancel={this.handleCloseCaseForm}
- * />
- *
  */
 const CaseForm = ({
   caze,

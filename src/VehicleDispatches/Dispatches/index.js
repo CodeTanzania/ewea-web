@@ -72,6 +72,7 @@ const FIELDS_TO_SHARE = {
  * @param {boolean} props.loading Flag to indicate fetching data from API
  * @param {boolean} props.posting Flag to indicate posting data to the API
  * @param {number} props.page Current page
+ * @param props.selectedDispatch
  * @param {boolean} props.showForm Flag for controlling visibility of the form for
  * creating or updating resource
  * @param {string} props.searchQuery Search query string

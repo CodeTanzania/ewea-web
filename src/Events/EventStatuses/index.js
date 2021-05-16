@@ -49,7 +49,6 @@ const headerLayout = [
  * @class
  * @name EventStatuses
  * @description Render eventStatus list which have search box, actions and eventStatus list
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -70,9 +69,7 @@ class EventStatuses extends Component {
    * @function
    * @name handleOnCachedValues
    * @description Cached selected values for filters
-   *
    * @param {object} cached values to be cached from filter
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -86,7 +83,6 @@ class EventStatuses extends Component {
    * @function
    * @name handleClearCachedValues
    * @description Clear cached values
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -98,7 +94,6 @@ class EventStatuses extends Component {
    * @function
    * @name openEventStatusForm
    * @description Open eventStatus form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -110,7 +105,6 @@ class EventStatuses extends Component {
    * @function
    * @name openEventStatusForm
    * @description close eventStatus form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -123,9 +117,7 @@ class EventStatuses extends Component {
    * @function
    * @name searchEventStatuses
    * @description Search EventStatuses List based on supplied filter word
-   *
    * @param {object} event - Event instance
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -137,9 +129,7 @@ class EventStatuses extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} eventStatus eventStatus to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -153,9 +143,7 @@ class EventStatuses extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple event Actions
-   *
    * @param {object[]| object} eventStatuses event Actions list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -185,7 +173,6 @@ class EventStatuses extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify eventStatus
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -197,7 +184,6 @@ class EventStatuses extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -210,7 +196,6 @@ class EventStatuses extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -223,7 +208,6 @@ class EventStatuses extends Component {
    * @name showArchiveConfirm
    * @description show confirm modal before archiving an event status
    * @param {object} item Resource item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

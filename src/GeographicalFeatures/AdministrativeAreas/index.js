@@ -86,9 +86,6 @@ const FIELDS_TO_SHARE = {
  * @static
  * @public
  * @example
- *
- * <AdministrativeAreaList />
- *
  */
 
 const AdministrativeAreasList = ({

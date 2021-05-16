@@ -69,9 +69,7 @@ class EventSeverities extends Component {
    * @function
    * @name handleOnCachedValues
    * @description Cached selected values for filters
-   *
    * @param {object} cached values to be cached from filter
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -85,7 +83,6 @@ class EventSeverities extends Component {
    * @function
    * @name handleClearCachedValues
    * @description Clear cached values
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -97,7 +94,6 @@ class EventSeverities extends Component {
    * @function
    * @name openEventSeverityForm
    * @description Open eventSeverity form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -109,7 +105,6 @@ class EventSeverities extends Component {
    * @function
    * @name openEventSeverityForm
    * @description close eventSeverity form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -122,9 +117,7 @@ class EventSeverities extends Component {
    * @function
    * @name searchEventSeverities
    * @description Search EventSeverities List based on supplied filter word
-   *
    * @param {object} event - Event instance
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -136,9 +129,7 @@ class EventSeverities extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit severity for list item
-   *
    * @param {object} eventSeverity Event Severity to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -152,9 +143,7 @@ class EventSeverities extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple event Severities
-   *
    * @param {object[]| object} eventSeverities event Severities list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -184,7 +173,6 @@ class EventSeverities extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify eventSeverities
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -196,7 +184,6 @@ class EventSeverities extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -209,7 +196,6 @@ class EventSeverities extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -222,7 +208,6 @@ class EventSeverities extends Component {
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a focal person
    * @param {object} item Resource item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

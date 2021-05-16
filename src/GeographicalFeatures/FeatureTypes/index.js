@@ -50,7 +50,6 @@ const headerLayout = [
  * @class
  * @name FeatureTypes
  * @description Render featureType list which have search box, actions and featureType list
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -71,9 +70,7 @@ class FeatureTypes extends Component {
    * @function
    * @name handleOnCachedValues
    * @description Cached selected values for filters
-   *
    * @param {object} cached values to be cached from filter
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -87,7 +84,6 @@ class FeatureTypes extends Component {
    * @function
    * @name handleClearCachedValues
    * @description Clear cached values
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -99,7 +95,6 @@ class FeatureTypes extends Component {
    * @function
    * @name openFeatureTypeForm
    * @description Open featureType form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -111,7 +106,6 @@ class FeatureTypes extends Component {
    * @function
    * @name closeFeatureTypeForm
    * @description close featureType form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -124,9 +118,7 @@ class FeatureTypes extends Component {
    * @function
    * @name searchFeatureTypes
    * @description Search FeatureTypes List based on supplied filter word
-   *
    * @param {object} event - Event instance
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -138,9 +130,7 @@ class FeatureTypes extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} featureType featureType to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -154,9 +144,7 @@ class FeatureTypes extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple event Actions
-   *
    * @param {object[]| object} featureTypes event Actions list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -186,7 +174,6 @@ class FeatureTypes extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify featureType
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -198,7 +185,6 @@ class FeatureTypes extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -211,7 +197,6 @@ class FeatureTypes extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -224,7 +209,6 @@ class FeatureTypes extends Component {
    * @name showArchiveConfirm
    * @description show confirm modal before archiving an feature type
    * @param {object} item Resource item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

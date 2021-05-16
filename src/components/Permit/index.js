@@ -15,10 +15,6 @@ import { Connect } from '@codetanzania/ewea-api-states';
  * @version 0.1.0
  * @since 0.1.0
  * @example
- *
- * <Permit withPermission="events:list">
- *   {...children}
- * </Permit>
  */
 const Permit = ({ withPermission, userPermissions, children }) => {
   return userPermissions.includes(withPermission) && children;

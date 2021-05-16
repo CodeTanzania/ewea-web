@@ -97,11 +97,8 @@ export const timeAgo = (date) => moment(date).fromNow();
  * @function
  * @name formatNumber
  * @description Format number to en-Us format i.e 2000 to 2,000
- *
  * @param {number|string} number Number to be formatted
- *
  * @returns {string} formatted number
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -291,12 +288,6 @@ export const isMobileScreen = (screens) => {
  * @static
  * @public
  * @example
- *
- * cost case = { ... };
- * const fields =
- *  { number: { header: 'Number', dataIndex: 'number', defaultValue: 'N/A' } };
- * shareDetailsFor(case, fields);
- * //=> Number: 1235
  */
 export const shareDetailsFor = (items, fields) => {
   // ensure items & fields

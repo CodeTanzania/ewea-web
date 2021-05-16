@@ -40,9 +40,8 @@ const DEFAULT_FILTERS = {
  */
 const ParadeDashboard = () => {
   const report = {};
-  const { filters, setFilters, showFilters, setShowFilters } = useFilters(
-    DEFAULT_FILTERS
-  );
+  const { filters, setFilters, showFilters, setShowFilters } =
+    useFilters(DEFAULT_FILTERS);
 
   return (
     <div>

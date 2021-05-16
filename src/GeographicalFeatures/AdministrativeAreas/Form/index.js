@@ -46,15 +46,6 @@ const wrapperCol = {
  * @static
  * @public
  * @example
- *
- * <AdministrativeAreaForm
- * administrativeArea={administrativeArea}
- * isEditForm={isEditForm}
- * posting={posting}
- * onCancel={this.handleCloseAdministrativeAreaForm}
- * onCreate={handleOnCreateItem}
- * onUpdate={handleOnUpdateItem}
- * />
  */
 const AdministrativeAreaForm = ({
   administrativeArea,

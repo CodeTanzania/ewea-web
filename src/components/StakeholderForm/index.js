@@ -7,12 +7,8 @@ import get from 'lodash/get';
 import SearchableSelectInput from '../SearchableSelectInput';
 
 /* http actions */
-const {
-  getAgencies,
-  getAdministrativeAreas,
-  getPartyRoles,
-  getPartyGroups,
-} = httpActions;
+const { getAgencies, getAdministrativeAreas, getPartyRoles, getPartyGroups } =
+  httpActions;
 /* constants */
 const { TextArea } = Input;
 const formItemLayout = {

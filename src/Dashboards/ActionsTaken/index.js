@@ -73,7 +73,6 @@ const mapSpan = { xxl: 24, xl: 24, lg: 24, md: 24, sm: 0, xs: 0 };
  * @param {object} prop React props object
  * @param {object} prop.details Ward details from react simple map
  * @returns {object} React Component
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -111,9 +110,7 @@ WardSummary.propTypes = {
  * @function
  * @name ActionsTaken
  * @description Action Taken visualization Dashboard
- *
  * @returns {object} React Component
- *
  * @version 0.1.0
  * @since 0.1.0
  */

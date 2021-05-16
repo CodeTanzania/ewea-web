@@ -88,9 +88,8 @@ const DEFAULT_FILTERS = {
  * @since 0.1.0
  */
 const EventsOverviewDashboard = ({ report, loading }) => {
-  const { filters, setFilters, showFilters, setShowFilters } = useFilters(
-    DEFAULT_FILTERS
-  );
+  const { filters, setFilters, showFilters, setShowFilters } =
+    useFilters(DEFAULT_FILTERS);
 
   useEffect(() => {
     getEventsReport({ filter: filters });

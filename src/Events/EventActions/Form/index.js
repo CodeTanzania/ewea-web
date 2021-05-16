@@ -14,7 +14,6 @@ const { TextArea } = Input;
  * @class
  * @name EventActionForm
  * @description Render React Form
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -23,9 +22,7 @@ class EventActionForm extends Component {
    * @function
    * @name handleSubmit
    * @description Handle form submit action
-   *
    * @param {object} event onSubmit event
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

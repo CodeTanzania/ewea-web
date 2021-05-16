@@ -58,14 +58,6 @@ const MESSAGE_PUT_ERROR =
  * @static
  * @public
  * @example
- *
- * <FeatureForm
- *   feature={feature}
- *   isEditForm={isEditForm}
- *   posting={posting}
- *   onCancel={this.handleCloseFeatureForm}
- * />
- *
  */
 const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
   // form finish(submit) handler

@@ -8,14 +8,12 @@ import './styles.css';
  * @function
  * @name EmptyState
  * @description Empty state component
- *
  * @param {object} props props object
  * @param {string} props.icon path to state icon
  * @param {string} props.description state description
  * @param {string} props.buttonLabel state button label
  * @param {Function} props.onClick state button onClick callback
  * @returns {object} react element
- *
  * @version 0.1.0
  * @since 0.1.0
  */

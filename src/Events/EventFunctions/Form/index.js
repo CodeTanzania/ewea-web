@@ -58,14 +58,6 @@ const MESSAGE_PUT_ERROR =
  * @static
  * @public
  * @example
- *
- * <EventFunctionForm
- *   eventFunction={eventFunction}
- *   isEditForm={isEditForm}
- *   posting={posting}
- *   onCancel={this.handleCloseEventFunctionForm}
- * />
- *
  */
 const EventFunctionForm = ({
   eventFunction,

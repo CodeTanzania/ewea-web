@@ -52,7 +52,6 @@ const headerLayout = [
  * @name EventLevels
  * @description Render Event Level list which have search box,
  * actions and event types list
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -72,7 +71,6 @@ class EventLevels extends Component {
    * @function
    * @name openEventLevelsForm
    * @description Open event level form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -84,7 +82,6 @@ class EventLevels extends Component {
    * @function
    * @name closeEventLevelsForm
    * @description close event level form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -97,9 +94,7 @@ class EventLevels extends Component {
    * @function
    * @name searchEventLevels
    * @description Search Event Level List based on supplied filter word
-   *
    * @param {object} event - Event instance
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -111,7 +106,6 @@ class EventLevels extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -123,9 +117,7 @@ class EventLevels extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} eventLevel event level to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -139,7 +131,6 @@ class EventLevels extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -152,7 +143,6 @@ class EventLevels extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple event levels
-   *
    * @param {object[]| object} eventLevels event levels list to be shared
    * @version 0.1.0
    * @since 0.1.0
@@ -182,7 +172,6 @@ class EventLevels extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on share
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -195,7 +184,6 @@ class EventLevels extends Component {
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a event levels
    * @param {object} item Resource item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

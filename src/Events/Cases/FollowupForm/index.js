@@ -105,15 +105,6 @@ const scoreFor = ({ followup }) => {
  * @static
  * @public
  * @example
- *
- * <CaseFollowupForm
- *   caze={case}
- *   isEditForm={isEditForm}
- *   posting={posting}
- *   onScore={this.handleCaseScore}
- *   onCancel={this.handleFollowupFormClose}
- * />
- *
  */
 const CaseFollowupForm = ({ caze, posting, onCancel }) => {
   // form finish(submit) handler

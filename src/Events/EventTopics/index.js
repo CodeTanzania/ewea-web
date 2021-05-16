@@ -50,7 +50,6 @@ const headerLayout = [
  * @name EventTopics
  * @description Render Event Topics list which have search box,
  * actions and event topics list
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -70,7 +69,6 @@ class EventTopics extends Component {
    * @function
    * @name openEventTopicsForm
    * @description Open event topic form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -82,7 +80,6 @@ class EventTopics extends Component {
    * @function
    * @name closeEventTopicsForm
    * @description close event topic form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -95,9 +92,7 @@ class EventTopics extends Component {
    * @function
    * @name searchEventTopics
    * @description Search Event Topics List based on supplied filter word
-   *
    * @param {object} event - Event instance
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -109,9 +104,7 @@ class EventTopics extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} eventType event topic to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -125,7 +118,6 @@ class EventTopics extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -137,7 +129,6 @@ class EventTopics extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify event topics
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -149,7 +140,6 @@ class EventTopics extends Component {
    * @function
    * @name handleAfterCloseNotificationForm
    * @description Perform post close notification form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -161,9 +151,7 @@ class EventTopics extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple event topics
-   *
    * @param {object[]| object} eventTopics event topics list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -193,7 +181,6 @@ class EventTopics extends Component {
    * @function
    * @name handleRefreshEventTopics
    * @description Refresh Event Topics list
-   *
    * @returns {undefined}
    * @version 0.1.0
    * @since 0.1.0
@@ -212,7 +199,6 @@ class EventTopics extends Component {
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a event topic
    * @param {object} item Resource item to be archived
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

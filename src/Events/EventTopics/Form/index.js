@@ -14,7 +14,6 @@ const { TextArea } = Input;
  * @class
  * @name EventTopicForm
  * @description  Render form for creating a new event topic
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -23,11 +22,8 @@ class EventTopicForm extends Component {
    * @function
    * @name handleSubmit
    * @description  call back function to handle submit action
-   *
    * @param {object} e event object
-   *
    * @returns {undefined} does not return anything
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

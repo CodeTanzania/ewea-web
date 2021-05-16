@@ -57,14 +57,6 @@ const MESSAGE_PUT_ERROR =
  * @static
  * @public
  * @example
- *
- * <AdministrativeLevelForm
- *   administrativeLevel={administrativeLevel}
- *   isEditForm={isEditForm}
- *   posting={posting}
- *   onCancel={this.handleCloseAdministrativeLevelForm}
- * />
- *
  */
 const AdministrativeLevelForm = ({
   administrativeLevel,

@@ -58,9 +58,7 @@ class SearchableSelectInput extends Component {
    * @function
    * @name handleSearch
    * @description Function called when searching in select box
-   *
    * @param {string} value value passed to the when function called
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -79,9 +77,7 @@ class SearchableSelectInput extends Component {
    * @function
    * @name handleChange
    * @description Function called when value of select box changes
-   *
    * @param {string[]|number[]} value value passed to the when function called
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -107,9 +103,7 @@ class SearchableSelectInput extends Component {
    * @function
    * @name handleOnDropdownVisibleChange
    * @description Function called when the select box is opened
-   *
    * @param {string} open open select box
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -137,12 +131,10 @@ class SearchableSelectInput extends Component {
    * @function
    * @name getOptionProp
    * @description Extract Option property based on provided prop
-   *
    * @param {string|Function} prop The property name or value return from
    * a provided function
    * @param {object} option A single data item for select options
    * @returns {string} Value of the extracted property
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

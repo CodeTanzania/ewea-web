@@ -34,14 +34,12 @@ const formItemLayout = {
  * @function
  * @name AssignPermissionsForm
  * @description Form for assigning role permission
- *
  * @param {object} props Component Props
  * @param {object[]} props.permissions All permissions from the api
  * @param {boolean} props.loading Flag to show spinner on loading permissions
  * @param {boolean} props.posting Flag to show spinner on updating role
  * @param {object} props.role Role to be updated
  * @param {Function} props.onCancel Callback for closing form
- *
  * @returns {object} AssignPermissionsForm
  * @version 0.1.0
  * @since 0.1.0

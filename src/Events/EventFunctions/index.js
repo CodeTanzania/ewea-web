@@ -106,9 +106,6 @@ const getGroupsFor = (item) => {
  * @static
  * @public
  * @example
- *
- * <EventFunctionList />
- *
  */
 class EventFunctionList extends Component {
   /**
@@ -133,7 +130,6 @@ class EventFunctionList extends Component {
    * @function componentDidMount
    * @name componentDidMount
    * @description Load data
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -157,7 +153,6 @@ class EventFunctionList extends Component {
    * @function handleListRefresh
    * @name handleListRefresh
    * @description Handle list refresh
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -173,7 +168,6 @@ class EventFunctionList extends Component {
    * @name handleListPaginate
    * @description Handle list paginate
    * @param {number} nextPage List next page number
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -217,7 +211,6 @@ class EventFunctionList extends Component {
    * @function handleFormOpen
    * @name handleFormOpen
    * @description Handle form opening
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -229,7 +222,6 @@ class EventFunctionList extends Component {
    * @function handleFormClose
    * @name handleFormClose
    * @description Handle form closing
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -242,7 +234,6 @@ class EventFunctionList extends Component {
    * @function handleFormClose
    * @name handleFormClose
    * @description Handle post form close and perform cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -329,7 +320,6 @@ class EventFunctionList extends Component {
    * @function handleNotificationFormClose
    * @name handleNotificationFormClose
    * @description Handle notification form closing
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -342,7 +332,6 @@ class EventFunctionList extends Component {
    * @name render
    * @description Render list
    * @returns {object} List to render
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

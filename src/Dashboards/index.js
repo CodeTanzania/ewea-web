@@ -43,13 +43,10 @@ const populationColSpan = { xxl: 8, xl: 8, lg: 24, md: 24, sm: 24, xs: 24 };
  * @function
  * @name ZoomControl
  * @description component that renders zoom controls
- *
  * @param {object} props - react props
  * @param {Function}  props.handleZoomIn - handles zoom in
  * @param {Function}  props.handleZoomOut - handles zoom in
- *
  * @returns {object} React Element
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -89,9 +86,7 @@ ZoomControl.propTypes = {
  * @function
  * @name OverviewDashboard
  * @description Simple dashboard to get overview of data in EMIS
- *
  * @returns {object} React Element
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -103,7 +98,6 @@ const AlertDashboard = () => {
    * @function
    * @name handleZoomIn
    * @description handle zoom in of svg map
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -116,7 +110,6 @@ const AlertDashboard = () => {
    * @function
    * @name handleZoomOut
    * @description handle zoom out of svg map
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

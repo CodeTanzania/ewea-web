@@ -24,7 +24,6 @@ const UserMenu = ({ history: { push } }) => {
    * @function
    * @name signOut
    * @description signOut user from EWEA system
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

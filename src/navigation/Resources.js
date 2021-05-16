@@ -56,7 +56,6 @@ const routes = [
  * @param {object} props Component props
  * @param {object} props.match Match object from react router
  * @returns {object} Navigation Menu
- *
  * @version 0.1.0
  * @since 0.1.0
  */

@@ -68,7 +68,6 @@ const VehicleDispatchFilters = ({
    * @function
    * @name onClearFilters
    * @description On clear form filters callback
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

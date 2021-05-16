@@ -56,14 +56,6 @@ const wrapperCol = {
  * @static
  * @public
  * @example
- *
- * <CaseFiltersForm
- *   filter={filter}
- *   cached={cached}
- *   onCache={this.handleOnCache}
- *   onClearCache={this.handleOnClearCache}
- *   onCancel={this.handleCloseFilterForm}
- * />
  */
 const CaseFiltersForm = ({
   filter,
@@ -82,7 +74,6 @@ const CaseFiltersForm = ({
    * @function
    * @name onClearFilters
    * @description On clear form filters callback
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

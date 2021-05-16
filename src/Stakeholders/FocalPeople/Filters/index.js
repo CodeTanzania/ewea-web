@@ -8,12 +8,8 @@ import get from 'lodash/get';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* http actions */
-const {
-  getPartyGroups,
-  getAdministrativeAreas,
-  getPartyRoles,
-  getAgencies,
-} = httpActions;
+const { getPartyGroups, getAdministrativeAreas, getPartyRoles, getAgencies } =
+  httpActions;
 /* redux actions */
 const { clearFocalPersonFilters, filterFocalPeople } = reduxActions;
 
@@ -72,7 +68,6 @@ const FocalPeopleFilters = ({
    * @function
    * @name handleClearFilters
    * @description Clear cached values and filter values in redux store
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

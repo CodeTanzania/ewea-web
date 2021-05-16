@@ -10,11 +10,8 @@ import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
-const {
-  getEventAction,
-  postEventActionCatalogue,
-  putEventActionCatalogue,
-} = reduxActions;
+const { getEventAction, postEventActionCatalogue, putEventActionCatalogue } =
+  reduxActions;
 const {
   getAdministrativeAreas,
   getEventTypes,
@@ -31,7 +28,6 @@ const { TextArea } = Input;
  * @class
  * @name EventActionCatalogueForm
  * @description Render Event Action Catalogue form for creating and updating action catalogue details
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -48,9 +44,7 @@ class EventActionCatalogueForm extends Component {
    * @function
    * @name autoFillActionDetails
    * @description auto fills event action details
-   *
    * @param {object} eventAction event action object
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -69,9 +63,7 @@ class EventActionCatalogueForm extends Component {
    * @function
    * @name handleSubmit
    * @description Handle submit form action
-   *
    * @param {object} event onSubmit event object
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

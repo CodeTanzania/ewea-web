@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import map from 'lodash/map';
 import ReactEchartsCore from 'echarts-for-react/lib/core';
-import echarts from 'echarts/lib/echarts';
+import * as echarts from 'echarts/lib/echarts';
 
 // echarts components
 import 'echarts/lib/component/grid';
@@ -84,7 +84,6 @@ export const generateDonutChartOption = (chartName, data) => {
  * @returns {object} Option object
  * @version 0.1.0
  * @since 0.1.0
- *
  */
 export const generateInvertedBarChartOption = (
   chartName,

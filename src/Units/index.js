@@ -80,9 +80,6 @@ const MESSAGE_ITEM_ARCHIVE_ERROR =
  * @static
  * @public
  * @example
- *
- * <UnitList />
- *
  */
 class UnitList extends Component {
   /**
@@ -107,7 +104,6 @@ class UnitList extends Component {
    * @function componentDidMount
    * @name componentDidMount
    * @description Load data
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -131,7 +127,6 @@ class UnitList extends Component {
    * @function handleListRefresh
    * @name handleListRefresh
    * @description Handle list refresh
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -147,7 +142,6 @@ class UnitList extends Component {
    * @name handleListPaginate
    * @description Handle list paginate
    * @param {number} nextPage List next page number
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -190,7 +184,6 @@ class UnitList extends Component {
    * @function handleFormOpen
    * @name handleFormOpen
    * @description Handle form opening
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -299,7 +292,6 @@ class UnitList extends Component {
    * @function handleNotificationFormClose
    * @name handleNotificationFormClose
    * @description Handle notification form closing
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -312,7 +304,6 @@ class UnitList extends Component {
    * @name render
    * @description Render list
    * @returns {object} List to render
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

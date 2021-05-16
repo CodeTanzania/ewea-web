@@ -173,9 +173,6 @@ const shareFields = {
  * @static
  * @public
  * @example
- *
- * <CaseList />
- *
  */
 class CaseList extends Component {
   /**
@@ -204,7 +201,6 @@ class CaseList extends Component {
    * @function componentDidMount
    * @name componentDidMount
    * @description Load data
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -217,7 +213,6 @@ class CaseList extends Component {
    * @name handleOnCache
    * @description Handle updating cache
    * @param {object} cached values cached
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -232,7 +227,6 @@ class CaseList extends Component {
    * @name handleOnClearCache
    * @description Handle clearing cache
    * @param {...string} [keys] cache keys to clear
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -265,7 +259,6 @@ class CaseList extends Component {
    * @function handleListRefresh
    * @name handleListRefresh
    * @description Handle list refresh
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -281,7 +274,6 @@ class CaseList extends Component {
    * @name handleListPaginate
    * @description Handle list paginate
    * @param {number} nextPage List next page number
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -313,7 +305,6 @@ class CaseList extends Component {
    * @function handleFormOpen
    * @name handleFormOpen
    * @description Handle form opening
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -325,7 +316,6 @@ class CaseList extends Component {
    * @function handleFormClose
    * @name handleFormClose
    * @description Handle form closing
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -338,7 +328,6 @@ class CaseList extends Component {
    * @function handleFormClose
    * @name handleFormClose
    * @description Handle post form close and perform cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -444,7 +433,6 @@ class CaseList extends Component {
    * @function handleNotificationFormClose
    * @name handleNotificationFormClose
    * @description Handle notification form closing
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -456,7 +444,6 @@ class CaseList extends Component {
    * @function handleAfterNotificationFormClose
    * @name handleAfterNotificationFormClose
    * @description Perform cleanups after close notification form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -471,7 +458,6 @@ class CaseList extends Component {
    * @function handleListFiltersFormOpen
    * @name handleListFiltersFormOpen
    * @description Handle filters form opening
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -483,7 +469,6 @@ class CaseList extends Component {
    * @function handleListFiltersFormClose
    * @name handleListFiltersFormClose
    * @description Handle filters form closing
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -496,7 +481,6 @@ class CaseList extends Component {
    * @name handleItemFollowup
    * @description Handle list item followup
    * @param {object} item List item
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -509,7 +493,6 @@ class CaseList extends Component {
    * @function handleFormClose
    * @name handleFormClose
    * @description Handle form closing
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -522,7 +505,6 @@ class CaseList extends Component {
    * @name render
    * @description Render list
    * @returns {object} List to render
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

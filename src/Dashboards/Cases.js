@@ -66,9 +66,8 @@ const CasesDashboard = ({ report, loading }) => {
   const [ageGroupsDisplay, setAgeGroupsDisplay] = useState(DISPLAY_TABLE);
   const [severitiesDisplay, setSeveritiesDisplay] = useState(DISPLAY_CHART);
   const [stagesDisplay, setStagesDisplay] = useState(DISPLAY_CHART);
-  const { filters, setFilters, showFilters, setShowFilters } = useFilters(
-    DEFAULT_FILTERS
-  );
+  const { filters, setFilters, showFilters, setShowFilters } =
+    useFilters(DEFAULT_FILTERS);
 
   const GENDER_DATA = map(get(report, 'overall.gender', []), (item) => ({
     value: item.total,

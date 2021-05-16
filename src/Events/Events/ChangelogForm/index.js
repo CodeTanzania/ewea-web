@@ -14,13 +14,8 @@ import SearchableSelectInput from '../../../components/SearchableSelectInput';
 import { notifyError, notifySuccess } from '../../../util';
 
 /* constants */
-const {
-  postChangelog,
-  getEvent,
-  getEvents,
-  putEvent,
-  closeChangelogForm,
-} = reduxActions;
+const { postChangelog, getEvent, getEvents, putEvent, closeChangelogForm } =
+  reduxActions;
 const {
   getFocalPeople,
   getAgencies,

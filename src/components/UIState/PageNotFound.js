@@ -7,9 +7,7 @@ import icon404 from '../../assets/icons/states/404.svg';
  * @function
  * @name PageNotFound
  * @description Page not found component for error 404
- *
  * @returns {React.Component} Page not found component
- *
  * @version 0.1.0
  * @since 0.1.0
  */

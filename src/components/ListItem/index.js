@@ -57,7 +57,6 @@ const ListItem = ({
    * @function
    * @name handleMouseEnter
    * @description Handle on MouseEnter ListItem event
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -69,7 +68,6 @@ const ListItem = ({
    * @function
    * @name handleMouseEnter
    * @description Handle on MouseLeave ListItem event
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -81,9 +79,7 @@ const ListItem = ({
    * @function
    * @name handleToggleSelect
    * @description Handle Toggling List Item checkbox
-   *
    * @param {object} event - Event object
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

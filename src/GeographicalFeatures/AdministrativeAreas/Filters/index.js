@@ -9,16 +9,13 @@ import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* declarations */
 const { getAdministrativeLevels } = httpActions;
-const {
-  clearAdministrativeAreaFilters,
-  filterAdministrativeAreas,
-} = reduxActions;
+const { clearAdministrativeAreaFilters, filterAdministrativeAreas } =
+  reduxActions;
 
 /**
  * @class
  * @name AdministrativeAreaFilters
  * @description Filter modal component for filtering functions
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -27,10 +24,8 @@ class AdministrativeAreaFilters extends Component {
    * @function
    * @name handleSubmit
    * @description Handle filter action
-   *
    * @param {object} event onSubmit event object
    * @returns {undefined}
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -53,7 +48,6 @@ class AdministrativeAreaFilters extends Component {
    * @function
    * @name handleClearFilter
    * @description Action handle when clear
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -69,9 +63,7 @@ class AdministrativeAreaFilters extends Component {
    * @function
    * @name cacheFilters
    * @description cache lazy loaded value from filters
-   *
    * @param {object} values Object with key value of what is to be cached
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

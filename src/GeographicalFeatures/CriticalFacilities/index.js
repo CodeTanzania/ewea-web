@@ -104,9 +104,6 @@ const getCustodiansFor = (item) => {
  * @static
  * @public
  * @example
- *
- * <FeatureList />
- *
  */
 class FeatureList extends Component {
   /**
@@ -133,7 +130,6 @@ class FeatureList extends Component {
    * @function componentDidMount
    * @name componentDidMount
    * @description Load data
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -146,7 +142,6 @@ class FeatureList extends Component {
    * @name handleOnCache
    * @description Handle updating cache
    * @param {object} cached values cached
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -160,7 +155,6 @@ class FeatureList extends Component {
    * @function handleOnClearCache
    * @name handleOnClearCache
    * @description Handle clearing cache
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -185,7 +179,6 @@ class FeatureList extends Component {
    * @function handleListRefresh
    * @name handleListRefresh
    * @description Handle list refresh
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -201,7 +194,6 @@ class FeatureList extends Component {
    * @name handleListPaginate
    * @description Handle list paginate
    * @param {number} nextPage List next page number
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -246,7 +238,6 @@ class FeatureList extends Component {
    * @function handleFormOpen
    * @name handleFormOpen
    * @description Handle form opening
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -258,7 +249,6 @@ class FeatureList extends Component {
    * @function handleFormClose
    * @name handleFormClose
    * @description Handle form closing
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -271,7 +261,6 @@ class FeatureList extends Component {
    * @function handleFormClose
    * @name handleFormClose
    * @description Handle post form close and perform cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -359,7 +348,6 @@ class FeatureList extends Component {
    * @function handleNotificationFormClose
    * @name handleNotificationFormClose
    * @description Handle notification form closing
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -371,7 +359,6 @@ class FeatureList extends Component {
    * @function handleNotificationFormClose
    * @name handleNotificationFormClose
    * @description Handle filters form opening
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -383,7 +370,6 @@ class FeatureList extends Component {
    * @function handleNotificationFormClose
    * @name handleNotificationFormClose
    * @description Handle filters form closing
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -396,7 +382,6 @@ class FeatureList extends Component {
    * @name render
    * @description Render list
    * @returns {object} List to render
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

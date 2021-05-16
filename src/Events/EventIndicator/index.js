@@ -51,7 +51,6 @@ const headerLayout = [
  * @name EventIndicator
  * @description Render Event Indicators list which have search box,
  * actions and event indicators list
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -71,7 +70,6 @@ class EventIndicator extends Component {
    * @function
    * @name openEventIndicatorsForm
    * @description Open event indicator form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -83,7 +81,6 @@ class EventIndicator extends Component {
    * @function
    * @name closeEventIndicatorForm
    * @description close event indicator form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -133,7 +130,6 @@ class EventIndicator extends Component {
    * @function
    * @name handleRefreshEventIndicator
    * @description Handle list refresh action
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

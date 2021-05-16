@@ -85,9 +85,8 @@ const Roles = ({
   total,
   searchQuery,
 }) => {
-  const [showAssignPermissionsForm, setShowAssignPermissionForm] = useState(
-    false
-  );
+  const [showAssignPermissionsForm, setShowAssignPermissionForm] =
+    useState(false);
   const {
     isEditForm,
     showNotificationForm,

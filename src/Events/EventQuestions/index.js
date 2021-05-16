@@ -53,7 +53,6 @@ const headerLayout = [
  * @name EventQuestions
  * @description Render Event Questions list which have search box,
  * actions and event questions list
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -73,7 +72,6 @@ class EventQuestions extends Component {
    * @function
    * @name openEventQuestionsForm
    * @description Open event question form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -85,7 +83,6 @@ class EventQuestions extends Component {
    * @function
    * @name closeEventQuestionsForm
    * @description close event question form
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -98,9 +95,7 @@ class EventQuestions extends Component {
    * @function
    * @name searchEventQuestions
    * @description Search Event Questions List based on supplied filter word
-   *
    * @param {object} event - Event instance
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -112,9 +107,7 @@ class EventQuestions extends Component {
    * @function
    * @name handleEdit
    * @description Handle on Edit action for list item
-   *
    * @param {object} eventQuestion event question to be edited
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -128,7 +121,6 @@ class EventQuestions extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -140,7 +132,6 @@ class EventQuestions extends Component {
    * @function
    * @name handleRefreshEventQuestions
    * @description Handle list refresh action
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -161,7 +152,6 @@ class EventQuestions extends Component {
    * @function
    * @name closeNotificationForm
    * @description Handle on notify notificationTemplate
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -173,7 +163,6 @@ class EventQuestions extends Component {
    * @function
    * @name handleAfterCloseForm
    * @description Perform post close form cleanups
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -185,9 +174,7 @@ class EventQuestions extends Component {
    * @function
    * @name handleShare
    * @description Handle share multiple event Questions
-   *
    * @param {object[]| object} eventQuestions event Questions list to be shared
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -217,7 +204,6 @@ class EventQuestions extends Component {
    * @function
    * @name showArchiveConfirm
    * @description show confirm modal before archiving a event question
-   *
    * @param item {object} eventQuestion to archive
    * @version 0.1.0
    * @since 0.1.0

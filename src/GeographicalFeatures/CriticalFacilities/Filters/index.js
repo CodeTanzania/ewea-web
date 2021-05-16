@@ -49,14 +49,6 @@ const wrapperCol = {
  * @static
  * @public
  * @example
- *
- * <FeatureFiltersForm
- *   filter={filter}
- *   cached={cached}
- *   onCache={this.handleOnCache}
- *   onClearCache={this.handleOnClearCache}
- *   onCancel={this.handleCloseFilterForm}
- * />
  */
 const FeatureFiltersForm = ({
   filter,
@@ -76,7 +68,6 @@ const FeatureFiltersForm = ({
    * @function
    * @name onClearFilters
    * @description On clear form filters callback
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

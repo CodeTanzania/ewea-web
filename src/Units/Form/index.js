@@ -51,14 +51,6 @@ const MESSAGE_PUT_ERROR =
  * @static
  * @public
  * @example
- *
- * <UnitForm
- *   unit={unit}
- *   isEditForm={isEditForm}
- *   posting={posting}
- *   onCancel={this.handleCloseUnitForm}
- * />
- *
  */
 const UnitForm = ({ unit, isEditForm, posting, onCancel }) => {
   // form finish(submit) handler

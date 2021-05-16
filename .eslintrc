@@ -3,38 +3,24 @@
     "airbnb",
     "plugin:react/recommended",
     "plugin:jsdoc/recommended",
-    "plugin:prettier/recommended",
     "plugin:jest/recommended",
     "plugin:jest/style",
-    "prettier",
-    "prettier/react",
+    "plugin:prettier/recommended"
   ],
-  "plugins": [
-    "jest",
-  "jsdoc",
-  "prettier"
-  ],
+  "plugins": ["jest", "jsdoc"],
   "parser": "babel-eslint",
   "rules": {
-    "prettier/prettier": "error",
     "react/jsx-filename-extension": [
       1,
-    {
-      "extensions": [
-        ".js",
-      ".jsx"
-      ]
-    }
+      {
+        "extensions": [".js", ".jsx"]
+      }
     ],
     "import/no-extraneous-dependencies": [
       "error",
-    {
-      "devDependencies": [
-        "**/*.test.js",
-      "**/*.spec.js",
-      "**/stories/*"
-      ]
-    }
+      {
+        "devDependencies": ["**/*.test.js", "**/*.spec.js", "**/stories/*"]
+      }
     ],
     "func-style": ["error", "expression"],
     "jest/no-disabled-tests": "warn",

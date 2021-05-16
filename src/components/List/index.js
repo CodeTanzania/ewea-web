@@ -60,9 +60,7 @@ const CustomList = ({
    * @function
    * @name handleSelectItem
    * @description Handle select a single row in a list action
-   *
    * @param {object} item selected item object
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -82,7 +80,6 @@ const CustomList = ({
    * @function
    * @name handleSelectPageItems
    * @description Handle select all items actions from current page
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -98,7 +95,6 @@ const CustomList = ({
    * @function
    * @name handleDeselectPageItems
    * @description Handle deselect all items in a current page
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -121,10 +117,8 @@ const CustomList = ({
    * @function
    * @name isSelected
    * @description Check if item is among selected items
-   *
    * @param {object} item item to check if it is selected
    * @returns {boolean} boolean value is item is selected
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

@@ -8,6 +8,7 @@ import { createBrowserHistory } from 'history';
 import ReactGA from 'react-ga';
 import get from 'lodash/get';
 
+import './app.less';
 import SignIn from './Auth/components/SignIn';
 import EventFeedback from './Events/EventFeedback';
 import BaseLayout from './layouts/BaseLayout';

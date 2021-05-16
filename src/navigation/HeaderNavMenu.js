@@ -68,13 +68,11 @@ const routes = [
  * @name NavItem
  * @description Navigation menu item that have icon(image) and name for the
  * module to navigate to
- *
  * @param {object} props props object
  * @param {string} props.name  name/description/label for nav item
  * @param {string} props.icon  path to svg image used as nav icon
  * @param {string} props.path  path to navigate to when clicked
  * @param {boolean} props.disabled flag to mark navigation item if is disabled
- *
  * @returns {object} Navigation item
  * @version 0.1.0
  * @since 0.1.0
@@ -98,9 +96,7 @@ const NavItem = ({ name, icon, path, disabled }) => (
  * @function
  * @name Home
  * @description Home route which shows to navigation icon
- *
  * @returns {object} Module Navigation Menu
- *
  * @version 0.1.0
  * @since 0.1.0
  */

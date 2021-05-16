@@ -19,7 +19,6 @@ import './styles.css';
  * @name Toolbar
  * @description Render action bar for actions which are applicable to list
  * content
- *
  * @param {object} props props object
  * @param {string} props.itemName names for items/ modules used by toolbar
  * @param {number} props.page current page
@@ -32,9 +31,7 @@ import './styles.css';
  * @param {Function} props.onPaginate on paginate action callback
  * @param {Function} props.onRefresh on refresh action callback
  * @param {Function} props.onShare on share action callback
- *
  * @returns {object} React component
- *
  * @version 0.1.0
  * @since 0.1.0
  */

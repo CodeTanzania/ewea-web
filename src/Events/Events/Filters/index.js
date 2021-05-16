@@ -16,7 +16,6 @@ const { clearEventFilters, filterEvents } = reduxActions;
  * @class
  * @name EventFilters
  * @description Filter modal component for filtering events
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -25,10 +24,8 @@ class EventFilters extends Component {
    * @function
    * @name handleSubmit
    * @description Handle filter action
-   *
    * @param {object} event onSubmit event object
    * @returns {undefined}
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -51,7 +48,6 @@ class EventFilters extends Component {
    * @function
    * @name handleClearFilter
    * @description Action handle when clear
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -67,9 +63,7 @@ class EventFilters extends Component {
    * @function
    * @name cacheFilters
    * @description cache lazy loaded value from filters
-   *
    * @param {object} values Object with key value of what is to be cached
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -83,9 +77,7 @@ class EventFilters extends Component {
    * @name renderSelectOptions
    * @description  display select options
    * @param {Array} options select options
-   *
    * @returns {object[]} Selected options components
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

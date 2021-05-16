@@ -58,6 +58,8 @@ const FIELDS_TO_SHARE = {
  * @param {boolean} props.posting Flag to indicate posting data to the API
  * @param {number} props.page Current page
  * @param {boolean} props.showForm Flag for controlling visibility of the form for
+ * @param props.vehicles
+ * @param props.vehicle
  * creating or updating resource
  * @param {string} props.searchQuery Search query string
  * @param {number} props.total Total number of resources in the API

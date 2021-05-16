@@ -11,7 +11,6 @@ const { clearPartyRoleFilters, filterPartyRoles } = reduxActions;
  * @class
  * @name RolesFilters
  * @description Filter modal component for filtering roles
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -20,9 +19,7 @@ class RolesFilters extends Component {
    * @function
    * @name handleSubmit
    * @description Handle filter action
-   *
    * @param {object} event onSubmit event
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -45,7 +42,6 @@ class RolesFilters extends Component {
    * @function
    * @name handleClearFilter
    * @description Action handle when clear
-   *
    * @version 0.1.0
    * @since 0.1.0
    */

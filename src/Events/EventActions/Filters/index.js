@@ -9,19 +9,14 @@ import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* declarations */
 const { filterFocalPeople, clearFocalPersonFilters } = reduxActions;
-const {
-  getPartyGroups,
-  getAdministrativeAreas,
-  getPartyRoles,
-  getAgencies,
-} = httpActions;
+const { getPartyGroups, getAdministrativeAreas, getPartyRoles, getAgencies } =
+  httpActions;
 
 // FIXME filters here are not correct
 /**
  * @class
  * @name EventActionsFilters
  * @description Filter modal component for filtering contacts
- *
  * @version 0.1.0
  * @since 0.1.0
  */
@@ -30,10 +25,8 @@ class EventActionsFilters extends Component {
    * @function
    * @name handleSubmit
    * @description Handle filter action
-   *
    * @param {object} event onSubmit event object
    * @returns {undefined}
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -56,7 +49,6 @@ class EventActionsFilters extends Component {
    * @function
    * @name handleClearFilter
    * @description Action handle when clear
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
@@ -72,9 +64,7 @@ class EventActionsFilters extends Component {
    * @function
    * @name cacheFilters
    * @description cache lazy loaded value from filters
-   *
    * @param {object} values Object with key value of what is to be cached
-   *
    * @version 0.1.0
    * @since 0.1.0
    */
