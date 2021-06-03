@@ -9,8 +9,8 @@ import get from 'lodash/get';
 import Topbar from '../../components/Topbar';
 import AdministrativeAreaForm from './Form';
 import NotificationForm from '../../components/NotificationForm';
-import { truncateString } from '../../util';
 import { useList } from '../../hooks';
+import { formatNumber } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
 
@@ -29,7 +29,7 @@ const nameSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 0 };
 const codeSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 16, xs: 14 };
 const levelSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 4, xs: 4 };
 const parentSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 0 };
-const descriptionSpan = { xxl: 6, xl: 6, lg: 6, md: 4, sm: 0, xs: 0 };
+const populationSpan = { xxl: 6, xl: 6, lg: 6, md: 4, sm: 0, xs: 0 };
 const headerLayout = [
   { ...nameSpan, header: 'Name', title: 'Administrative Area Name' },
   { ...codeSpan, header: 'Code', title: 'Administrative Area Code' },
@@ -40,9 +40,9 @@ const headerLayout = [
   },
   { ...parentSpan, header: 'Parent', title: 'Administrative Area Parent' },
   {
-    ...descriptionSpan,
-    header: 'Description',
-    title: 'Administrative Area Description',
+    ...populationSpan,
+    header: 'Population',
+    title: 'Administrative Area Population',
   },
 ];
 const FIELDS_TO_SHARE = {
@@ -59,7 +59,7 @@ const FIELDS_TO_SHARE = {
     defaultValue: 'N/A',
   },
   description: {
-    header: 'Description',
+    header: 'Population',
     dataIndex: 'strings.description.en',
     defaultValue: 'N/A',
   },
@@ -108,6 +108,7 @@ const AdministrativeAreasList = ({
     handleOnCloseForm,
     handleOnSearch,
     handleOnEdit,
+    handleOnView,
     handleOnCloseNotificationForm,
     handleAfterCloseForm,
     handleAfterCloseNotificationForm,
@@ -147,7 +148,7 @@ const AdministrativeAreasList = ({
         page={page}
         itemCount={total}
         loading={loading}
-        // onFilter={this.handleListFiltersFormOpen}
+        // onFilter={() => setShowFilters(true)}
         onShare={(items) => handleOnShare(items, FIELDS_TO_SHARE)}
         onRefresh={handleOnRefreshList}
         onPaginate={handleOnPaginate}
@@ -190,6 +191,12 @@ const AdministrativeAreasList = ({
               }
               actions={[
                 {
+                  name: 'View Administrative Area',
+                  title: 'View administrative area details',
+                  onClick: () => handleOnView(item),
+                  icon: 'view',
+                },
+                {
                   name: 'Edit Administrative Area',
                   title: 'Update administrative area details',
                   onClick: () => handleOnEdit(item),
@@ -219,13 +226,8 @@ const AdministrativeAreasList = ({
               <Col {...parentSpan}>
                 {get(item, 'relations.parent.strings.name.en', 'N/A')}
               </Col>
-              <Col {...descriptionSpan}>
-                <span title={get(item, 'strings.description.en', 'N/A')}>
-                  {truncateString(
-                    get(item, 'strings.description.en', 'N/A'),
-                    50
-                  )}
-                </span>
+              <Col {...populationSpan}>
+                {formatNumber(get(item, 'numbers.population', 10000))}
               </Col>
               {/* eslint-enable react/jsx-props-no-spreading */}
             </ListItem>

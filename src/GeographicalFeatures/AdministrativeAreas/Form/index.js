@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
-import { Button, Input, Form, Row, Col } from 'antd';
+import { Button, Input, Form, Row, Col, InputNumber } from 'antd';
 import { httpActions } from '@codetanzania/ewea-api-client';
 
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
@@ -196,6 +196,58 @@ const AdministrativeAreaForm = ({
         {/* end:parent */}
       </Row>
       {/* end: level & parent */}
+
+      {/* start: population fields */}
+      <Row justify="space-between">
+        <Col xs={24} sm={24} md={11}>
+          {/* start:femalePopulation */}
+          <Form.Item
+            label="Male Population"
+            title="Male Gender Population"
+            name={['numbers', 'malePopulation']}
+          >
+            <InputNumber style={{ width: '100%' }} />
+          </Form.Item>
+          {/* end:malePopulation */}
+        </Col>
+        <Col xs={24} sm={24} md={11}>
+          {/* start:femalePopulation */}
+          <Form.Item
+            label="Female Population"
+            title="Female Gender Population"
+            name={['numbers', 'femalePopulation']}
+          >
+            <InputNumber style={{ width: '100%' }} />
+          </Form.Item>
+          {/* end:femalePopulation */}
+        </Col>
+      </Row>
+
+      <Row justify="space-between">
+        <Col xs={24} sm={24} md={11}>
+          {/* start:femalePopulation */}
+          <Form.Item
+            label="Elders Population"
+            title="Elders Population"
+            name={['numbers', 'eldersPopulation']}
+          >
+            <InputNumber style={{ width: '100%' }} />
+          </Form.Item>
+          {/* end:malePopulation */}
+        </Col>
+        <Col xs={24} sm={24} md={11}>
+          {/* start:femalePopulation */}
+          <Form.Item
+            label="Children Population"
+            title="Children Population"
+            name={['numbers', 'childrenPopulation']}
+          >
+            <InputNumber style={{ width: '100%' }} />
+          </Form.Item>
+          {/* end:femalePopulation */}
+        </Col>
+      </Row>
+      {/* end: population fields */}
 
       {/* start:description */}
       <Form.Item
