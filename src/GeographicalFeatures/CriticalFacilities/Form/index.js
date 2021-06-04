@@ -9,7 +9,12 @@ import { notifyError, notifySuccess } from '../../../util';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* http actions */
-const { getAgencies, getAdministrativeAreas, getFeatureTypes } = httpActions;
+const {
+  getAgencies,
+  getAdministrativeAreas,
+  getFeatureTypes,
+  getPartyOwnerships,
+} = httpActions;
 
 /* state actions */
 const { putFeature, postFeature } = reduxActions;
@@ -245,6 +250,26 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
         />
       </Form.Item>
       {/* end: custodians */}
+
+      {/* start: ownership */}
+      <Form.Item
+        label="Ownership"
+        name={['relations', 'ownership', '_id']}
+        rules={[
+          {
+            required: true,
+            message: 'Critical infrastructure Ownership is required',
+          },
+        ]}
+      >
+        <SearchableSelectInput
+          onSearch={getPartyOwnerships}
+          optionLabel={(ownership) => ownership.strings.name.en}
+          optionValue="_id"
+          initialValue={get(feature, 'relations.ownership', undefined)}
+        />
+      </Form.Item>
+      {/* end: ownership */}
 
       {/* start:description */}
       <Form.Item
