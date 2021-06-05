@@ -47,7 +47,6 @@
     "react-ga": "^3.3.0",
     "react-map-gl": "^6.1.15",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^4.0.3",
     "react-simple-maps": "^2.3.0",
     "react-to-print": "^2.12.4"
   },
