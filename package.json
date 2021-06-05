@@ -4,6 +4,7 @@
   "description": "An early warning, early action tool that facilitates the dissemination of warnings, communication and actions associated with the warnings.",
   "main": "index.js",
   "scripts": {
+    "prepare": "husky install",
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
