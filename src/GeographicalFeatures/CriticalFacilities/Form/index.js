@@ -259,7 +259,7 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
         <Col xs={24} sm={24} md={11}>
           <Form.Item
             label="Ownership"
-            name={['relations', 'ownership', '_id']}
+            name={['relations', 'ownership']}
             rules={[
               {
                 required: true,
