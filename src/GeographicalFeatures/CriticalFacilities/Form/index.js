@@ -9,7 +9,12 @@ import { notifyError, notifySuccess } from '../../../util';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* http actions */
-const { getAgencies, getAdministrativeAreas, getFeatureTypes } = httpActions;
+const {
+  getAgencies,
+  getAdministrativeAreas,
+  getFeatureTypes,
+  getPartyOwnerships,
+} = httpActions;
 
 /* state actions */
 const { putFeature, postFeature } = reduxActions;
@@ -228,23 +233,51 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
       )}
       {/* end: longitude & latitude */}
 
-      {/* start: custodians */}
-      <Form.Item
-        label="Custodians"
-        title="Responsible Agencies e.g Police Force"
-        name={['relations', 'custodians']}
-      >
-        <SearchableSelectInput
-          onSearch={(optns = {}) => {
-            return getAgencies(optns);
-          }}
-          optionLabel={(custodian) => get(custodian, 'name')}
-          optionValue="_id"
-          initialValue={get(feature, 'relations.custodians', [])}
-          mode="multiple"
-        />
-      </Form.Item>
-      {/* end: custodians */}
+      {/* start: custodians & ownership */}
+      <Row justify="space-between">
+        {/* start:custodians */}
+        <Col xs={24} sm={24} md={11}>
+          <Form.Item
+            label="Custodians"
+            title="Responsible Agencies e.g Police Force"
+            name={['relations', 'custodians']}
+          >
+            <SearchableSelectInput
+              onSearch={(optns = {}) => {
+                return getAgencies(optns);
+              }}
+              optionLabel={(custodian) => get(custodian, 'name')}
+              optionValue="_id"
+              initialValue={get(feature, 'relations.custodians', [])}
+              mode="multiple"
+            />
+          </Form.Item>
+        </Col>
+        {/* end:custodians */}
+
+        {/* start:ownership */}
+        <Col xs={24} sm={24} md={11}>
+          <Form.Item
+            label="Ownership"
+            name={['relations', 'ownership']}
+            rules={[
+              {
+                required: true,
+                message: 'Critical infrastructure Ownership is required',
+              },
+            ]}
+          >
+            <SearchableSelectInput
+              onSearch={getPartyOwnerships}
+              optionLabel={(ownership) => ownership.strings.name.en}
+              optionValue="_id"
+              initialValue={get(feature, 'relations.ownership', undefined)}
+            />
+          </Form.Item>
+        </Col>
+        {/* end:ownership */}
+      </Row>
+      {/* end: custodians & ownership */}
 
       {/* start:description */}
       <Form.Item
