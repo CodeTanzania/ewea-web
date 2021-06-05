@@ -111,6 +111,11 @@ Install all required dependencies
  npm install
 ```
 
+In case of `chokidar error` run
+```sh
+ npm install -f
+```
+
 ### Run it in development mode
 
 ```sh
