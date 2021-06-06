@@ -7,8 +7,13 @@ import get from 'lodash/get';
 import SearchableSelectInput from '../SearchableSelectInput';
 
 /* http actions */
-const { getAgencies, getAdministrativeAreas, getPartyRoles, getPartyGroups } =
-  httpActions;
+const {
+  getAgencies,
+  getAdministrativeAreas,
+  getPartyRoles,
+  getPartyGroups,
+  getPartyOwnerships,
+} = httpActions;
 /* constants */
 const { TextArea } = Input;
 const formItemLayout = {
@@ -74,6 +79,7 @@ const StakeholderForm = ({
         group: get(stakeholder, 'group._id'),
         area: get(stakeholder, 'area._id'),
         role: get(stakeholder, 'role._id'),
+        ownership: get(stakeholder, 'ownership._id'),
       }}
     >
       {/* stakeholder name, phone number and email section */}
@@ -138,15 +144,41 @@ const StakeholderForm = ({
       <Row type="flex" justify="space-between">
         <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
           {isAgency ? (
-            <Form.Item
-              name="abbreviation"
-              label="Abbreviation"
-              rules={[
-                { required: true, message: 'Agency Abbreviation is Required' },
-              ]}
-            >
-              <Input />
-            </Form.Item>
+            <Row justify="space-between">
+              <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
+                <Form.Item
+                  name="abbreviation"
+                  label="Abbreviation"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Agency Abbreviation is Required',
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+              <Col xxl={10} xl={10} lg={10} md={10} sm={24} xs={24}>
+                <Form.Item
+                  label="Ownership"
+                  name="ownership"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Agency Ownership is required',
+                    },
+                  ]}
+                >
+                  <SearchableSelectInput
+                    onSearch={getPartyOwnerships}
+                    optionLabel={(ownership) => ownership.strings.name.en}
+                    optionValue="_id"
+                    initialValue={get(stakeholder, 'ownership', undefined)}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
           ) : (
             <Form.Item name="party" label="Organization/Agency">
               <SearchableSelectInput
