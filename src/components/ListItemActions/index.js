@@ -10,7 +10,7 @@ import {
   CloseCircleOutlined,
   CheckCircleOutlined,
   CarOutlined,
-  WechatOutlined,
+  WhatsAppOutlined,
 } from '@ant-design/icons';
 
 import { Dropdown, Button, Menu } from 'antd';
@@ -44,7 +44,7 @@ export const getCommonIcon = (iconName) => {
   }
 
   if (iconName === 'whatsapp') {
-    return <WechatOutlined />;
+    return <WhatsAppOutlined />;
   }
 
   if (iconName === 'vehicle') {
