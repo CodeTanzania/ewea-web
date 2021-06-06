@@ -251,7 +251,7 @@ const StakeholderForm = ({
             </Col>
             <Col xxl={12} xl={12} lg={12} md={12} sm={24} xs={24}>
               {/* stakeholder fax */}
-              <Form.Item name="fax" label="Fax">
+              <Form.Item name="radio" label="Call Sign">
                 <Input />
               </Form.Item>
               {/* end stakeholder fax */}
