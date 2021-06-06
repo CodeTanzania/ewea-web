@@ -204,7 +204,7 @@ const AdministrativeAreaForm = ({
           <Form.Item
             label="Male Population"
             title="Male Gender Population"
-            name={['numbers', 'malePopulation']}
+            name={['numbers', 'population.male']}
           >
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
@@ -215,32 +215,7 @@ const AdministrativeAreaForm = ({
           <Form.Item
             label="Female Population"
             title="Female Gender Population"
-            name={['numbers', 'femalePopulation']}
-          >
-            <InputNumber style={{ width: '100%' }} />
-          </Form.Item>
-          {/* end:femalePopulation */}
-        </Col>
-      </Row>
-
-      <Row justify="space-between">
-        <Col xs={24} sm={24} md={11}>
-          {/* start:femalePopulation */}
-          <Form.Item
-            label="Elders Population"
-            title="Elders Population"
-            name={['numbers', 'eldersPopulation']}
-          >
-            <InputNumber style={{ width: '100%' }} />
-          </Form.Item>
-          {/* end:malePopulation */}
-        </Col>
-        <Col xs={24} sm={24} md={11}>
-          {/* start:femalePopulation */}
-          <Form.Item
-            label="Children Population"
-            title="Children Population"
-            name={['numbers', 'childrenPopulation']}
+            name={['numbers', 'population.female']}
           >
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
