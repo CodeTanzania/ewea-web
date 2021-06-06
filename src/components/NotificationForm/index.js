@@ -142,7 +142,7 @@ const NotificationForm = ({
         subject,
         body,
         recipients: map(recipients, (contact) => contact._id), // eslint-disable-line
-        channels: ['SMS', 'EMAIL'],
+        channels: ['EMAIL'],
       }}
       onFinish={onFinish}
     >
