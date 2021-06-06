@@ -5,6 +5,7 @@ import {
   MailOutlined,
   ReloadOutlined,
   ShareAltOutlined,
+  WhatsAppOutlined,
 } from '@ant-design/icons';
 
 import { Button, Col, Pagination, Row } from 'antd';
@@ -31,6 +32,7 @@ import './styles.css';
  * @param {Function} props.onPaginate on paginate action callback
  * @param {Function} props.onRefresh on refresh action callback
  * @param {Function} props.onShare on share action callback
+ * @param {Function} props.onWhatsAppShare on share on whatsApp action callback
  * @returns {object} React component
  * @version 0.1.0
  * @since 0.1.0
@@ -47,6 +49,7 @@ const Toolbar = ({
   onPaginate,
   onRefresh,
   onShare,
+  onWhatsAppShare,
 }) => (
   <div className="Toolbar">
     <Row>
@@ -111,6 +114,21 @@ const Toolbar = ({
                 className="actionButton"
                 size="large"
                 onClick={onShare}
+              />
+            </Col>
+          )}
+          {/* end bulk share action */}
+
+          {/* bulk share action */}
+          {selectedItemsCount > 0 && onWhatsAppShare && (
+            <Col xxl={2} xl={2} lg={3} md={4} sm={6} xs={6}>
+              <Button
+                type="circle"
+                icon={<WhatsAppOutlined />}
+                title="Share selected on WhatsApp"
+                className="actionButton"
+                size="large"
+                onClick={onWhatsAppShare}
               />
             </Col>
           )}
@@ -203,6 +221,7 @@ Toolbar.propTypes = {
   onPaginate: PropTypes.func.isRequired,
   onRefresh: PropTypes.func.isRequired,
   onShare: PropTypes.func,
+  onWhatsAppShare: PropTypes.func,
 };
 
 Toolbar.defaultProps = {
@@ -211,6 +230,7 @@ Toolbar.defaultProps = {
   onShare: null,
   onNotify: null,
   onArchive: null,
+  onWhatsAppShare: null,
 };
 
 export default Toolbar;

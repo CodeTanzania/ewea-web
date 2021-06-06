@@ -31,6 +31,7 @@ const { useBreakpoint } = Grid;
  * @param {Function} props.onPaginate list paginate callback
  * @param {Function} props.onRefresh list refresh callback
  * @param {Function} props.onShare list share callback
+ * @param {Function} props.onWhatsAppShare list whatsApp share callback
  * @param {Function} props.generateExportUrl list export url callback
  * @param {Function} props.renderListItem list item render callback
  * @returns {object} CustomList component
@@ -49,6 +50,7 @@ const CustomList = ({
   onPaginate,
   onRefresh,
   onShare,
+  onWhatsAppShare,
   generateExportUrl,
   renderListItem,
 }) => {
@@ -124,6 +126,19 @@ const CustomList = ({
    */
   const isSelected = (item) => map(selectedItems, '_id').includes(item._id); // eslint-disable-line
 
+  /**
+   * @name onWhatsAppShareFn
+   * @description Check if onWhatsApp share function is defined to avoid error and
+   * control visibility of share on whatsApp on the toolbar for the lists which
+   * haven't handle share on whatsApp yet
+   * @returns {null | Function} variable onWhatsAppShareFn will be null or function
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  const onWhatsAppShareFn = onWhatsAppShare
+    ? () => onWhatsAppShare(selectedItems)
+    : null;
+
   return (
     <div className="List">
       <Toolbar
@@ -136,6 +151,7 @@ const CustomList = ({
         onPaginate={(nextPage) => onPaginate(nextPage)}
         onRefresh={() => onRefresh()}
         onShare={() => onShare(selectedItems)}
+        onWhatsAppShare={onWhatsAppShareFn}
         exportUrl={
           generateExportUrl
             ? generateExportUrl({
@@ -186,6 +202,7 @@ CustomList.propTypes = {
   onPaginate: PropTypes.func.isRequired,
   onRefresh: PropTypes.func.isRequired,
   onShare: PropTypes.func.isRequired,
+  onWhatsAppShare: PropTypes.func,
   generateExportUrl: PropTypes.func,
   renderListItem: PropTypes.func.isRequired,
 };
@@ -193,6 +210,7 @@ CustomList.propTypes = {
 CustomList.defaultProps = {
   onFilter: null,
   onNotify: null,
+  onWhatsAppShare: null,
   generateExportUrl: null,
 };
 

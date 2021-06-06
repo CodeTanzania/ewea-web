@@ -355,6 +355,21 @@ export const useList = (resourceName, options) => {
 
   /**
    * @function
+   * @name handleOnShare
+   * @description handle on share item(s) event
+   * @param {object[]} items items to be shared
+   * @param {string[]} fields fields from items that are to be shared
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  const handleShareOnWhatsApp = (items, fields) => {
+    const message = shareDetailsFor(items, fields);
+    // eslint-disable-next-line
+    window.open(`https://wa.me/?text=${encodeURI(message)}`, '_blank');
+  };
+
+  /**
+   * @function
    * @name handleOnPaginate
    * @description Handle on paginate events
    * @param {number} nextPage Next page to paginate to
@@ -402,5 +417,6 @@ export const useList = (resourceName, options) => {
     handleOnShare,
     handleOnUpdateItem,
     handleOnView,
+    handleShareOnWhatsApp,
   };
 };

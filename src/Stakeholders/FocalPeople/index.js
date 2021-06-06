@@ -115,6 +115,7 @@ const FocalPeople = ({
     handleOnUpdateItem,
     handleOnShare,
     handleOnPaginate,
+    handleShareOnWhatsApp,
   } = useList('focalPeople');
 
   return (
@@ -149,6 +150,9 @@ const FocalPeople = ({
         onShare={(items) =>
           handleOnShare(items, FIELDS_TO_SHARE, SHARE_FOCAL_PERSON_SUBJECT)
         }
+        onWhatsAppShare={(items) => {
+          handleShareOnWhatsApp(items, FIELDS_TO_SHARE);
+        }}
         onRefresh={handleOnRefreshList}
         onPaginate={handleOnPaginate}
         generateExportUrl={getFocalPeopleExportUrl}
@@ -199,7 +203,7 @@ const FocalPeople = ({
               },
               {
                 name: 'Share on WhatsApp',
-                title: 'Share Contact on Whatsapp',
+                title: 'Share Contact on WhatsApp',
                 link: `https://wa.me/?text=${encodeURI(
                   shareDetailsFor(item, FIELDS_TO_SHARE)
                 )}`,

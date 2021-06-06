@@ -105,6 +105,7 @@ const Agencies = ({
     handleOnUpdateItem,
     handleOnShare,
     handleOnPaginate,
+    handleShareOnWhatsApp,
   } = useList('agencies');
 
   return (
@@ -137,6 +138,9 @@ const Agencies = ({
         onFilter={handleOnOpenFiltersModal}
         onNotify={handleOnOpenNotificationForm}
         onShare={(items) => handleOnShare(items, FIELDS_TO_SHARE)}
+        onWhatsAppShare={(items) =>
+          handleShareOnWhatsApp(items, FIELDS_TO_SHARE)
+        }
         onRefresh={handleOnRefreshList}
         onPaginate={handleOnPaginate}
         headerLayout={headerLayout}
