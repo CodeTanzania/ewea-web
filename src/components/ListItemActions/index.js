@@ -6,7 +6,7 @@ import {
   EditOutlined,
   EyeOutlined,
   MoreOutlined,
-  UserSwitchOutlined,
+  ShareAltOutlined,
   CloseCircleOutlined,
   CheckCircleOutlined,
   CarOutlined,
@@ -32,7 +32,7 @@ export const getCommonIcon = (iconName) => {
   }
 
   if (iconName === 'share') {
-    return <UserSwitchOutlined />;
+    return <ShareAltOutlined />;
   }
 
   if (iconName === 'archive') {
