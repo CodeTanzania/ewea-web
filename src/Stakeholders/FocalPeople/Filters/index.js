@@ -92,6 +92,32 @@ const FocalPeopleFilters = ({
       }}
     >
       {/* start contact group filters */}
+      <Form.Item label="By Role(s)" name="role">
+        <SearchableSelectInput
+          onSearch={getPartyRoles}
+          optionLabel={(role) => get(role, 'strings.name.en', 'N/A')}
+          optionValue="_id"
+          mode="multiple"
+          onCache={(roles) => onCache({ roles })}
+          initialValue={get(cached, 'roles', [])}
+        />
+      </Form.Item>
+      {/* end contact group filters */}
+
+      {/* start contact group filters */}
+      <Form.Item label="By Agencies" name="party">
+        <SearchableSelectInput
+          onSearch={getAgencies}
+          optionLabel="name"
+          optionValue="_id"
+          mode="multiple"
+          onCache={(agencies) => onCache({ agencies })}
+          initialValue={get(cached, 'agencies', [])}
+        />
+      </Form.Item>
+      {/* end contact group filters */}
+
+      {/* start contact group filters */}
       <Form.Item label="By Area(s)" name="area">
         <SearchableSelectInput
           onSearch={getAdministrativeAreas}
@@ -121,32 +147,6 @@ const FocalPeopleFilters = ({
           mode="multiple"
           onCache={(groups) => onCache({ groups })}
           initialValue={get(cached, 'groups', [])}
-        />
-      </Form.Item>
-      {/* end contact group filters */}
-
-      {/* start contact group filters */}
-      <Form.Item label="By Role(s)" name="role">
-        <SearchableSelectInput
-          onSearch={getPartyRoles}
-          optionLabel={(role) => get(role, 'strings.name.en', 'N/A')}
-          optionValue="_id"
-          mode="multiple"
-          onCache={(roles) => onCache({ roles })}
-          initialValue={get(cached, 'roles', [])}
-        />
-      </Form.Item>
-      {/* end contact group filters */}
-
-      {/* start contact group filters */}
-      <Form.Item label="By Agencies" name="party">
-        <SearchableSelectInput
-          onSearch={getAgencies}
-          optionLabel="name"
-          optionValue="_id"
-          mode="multiple"
-          onCache={(agencies) => onCache({ agencies })}
-          initialValue={get(cached, 'agencies', [])}
         />
       </Form.Item>
       {/* end contact group filters */}
