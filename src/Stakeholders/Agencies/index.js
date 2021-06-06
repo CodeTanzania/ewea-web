@@ -26,15 +26,17 @@ const {
 /* constants */
 const nameSpan = { xxl: 5, xl: 5, lg: 5, md: 7, sm: 14, xs: 12 };
 const abbreviationSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
-const areaSpan = { xxl: 4, xl: 4, lg: 4, md: 0, sm: 0, xs: 0 };
-const phoneSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 6, xs: 6 };
-const emailSpan = { xxl: 5, xl: 5, lg: 5, md: 6, sm: 0, xs: 0 };
+const areaSpan = { xxl: 3, xl: 3, lg: 3, md: 0, sm: 0, xs: 0 };
+const phoneSpan = { xxl: 3, xl: 3, lg: 3, md: 4, sm: 6, xs: 6 };
+const callSignSpan = { xxl: 3, xl: 3, lg: 3, md: 3, sm: 0, xs: 0 };
+const emailSpan = { xxl: 4, xl: 4, lg: 4, md: 4, sm: 0, xs: 0 };
 const headerLayout = [
   { ...nameSpan, header: 'Name' },
   { ...abbreviationSpan, header: 'Abbreviation' },
-  { ...areaSpan, header: 'Area' },
   { ...phoneSpan, header: 'Phone Number' },
+  { ...callSignSpan, header: 'Call Sign' },
   { ...emailSpan, header: 'Email' },
+  { ...areaSpan, header: 'Area' },
 ];
 const FIELDS_TO_SHARE = {
   name: {
@@ -196,9 +198,10 @@ const Agencies = ({
             {/* eslint-disable react/jsx-props-no-spreading */}
             <Col {...nameSpan}>{item.name}</Col>
             <Col {...abbreviationSpan}>{item.abbreviation}</Col>
-            <Col {...areaSpan}>{get(item, 'area.strings.name.en', 'N/A')}</Col>
             <Col {...phoneSpan}>{item.mobile}</Col>
+            <Col {...callSignSpan}>{get(item, 'radio', 'N/A')}</Col>
             <Col {...emailSpan}>{item.email}</Col>
+            <Col {...areaSpan}>{get(item, 'area.strings.name.en', 'N/A')}</Col>
             {/* eslint-enable react/jsx-props-no-spreading */}
           </ListItem>
         )}
