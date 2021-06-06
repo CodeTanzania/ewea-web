@@ -267,9 +267,6 @@ const NotificationForm = ({
             <Col span={6}>
               <Checkbox value="EMAIL">Email</Checkbox>
             </Col>
-            <Col span={6}>
-              <Checkbox value="PUSH">Push Notification</Checkbox>
-            </Col>
           </Row>
         </Checkbox.Group>
       </Form.Item>
