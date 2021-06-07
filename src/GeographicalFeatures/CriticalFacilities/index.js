@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Row, Col } from 'antd';
+import { Modal, Row, Col, Drawer } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
@@ -14,6 +14,8 @@ import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
+import CriticalFacilityDetailsViewHeader from './DetailsView/Header';
+import CriticalFacilityDetailsViewBody from './DetailsView/Body';
 
 /* http actions */
 const {
@@ -118,6 +120,7 @@ class FeatureList extends Component {
     super(props);
     this.state = {
       showFilters: false,
+      showDetails: false,
       isEditForm: false,
       showNotificationForm: false,
       notificationSubject: undefined,
@@ -167,12 +170,12 @@ class FeatureList extends Component {
    * @function handleListSearch
    * @name handleListSearch
    * @description Handle list search
-   * @param {object} event List search event
+   * @param {object} feature List search feature
    * @version 0.1.0
    * @since 0.1.0
    */
-  handleListSearch = (event) => {
-    searchFeatures(event.target.value);
+  handleListSearch = (feature) => {
+    searchFeatures(feature.target.value);
   };
 
   /**
@@ -242,6 +245,7 @@ class FeatureList extends Component {
    * @since 0.1.0
    */
   handleFormOpen = () => {
+    selectFeature(null);
     openFeatureForm();
   };
 
@@ -265,7 +269,10 @@ class FeatureList extends Component {
    * @since 0.1.0
    */
   handleAfterFormClose = () => {
-    selectFeature(null);
+    const { showDetails } = this.state;
+    if (!showDetails) {
+      selectFeature(null);
+    }
     this.setState({ isEditForm: false });
   };
 
@@ -378,6 +385,30 @@ class FeatureList extends Component {
   };
 
   /**
+   * @function
+   * @name handleView
+   * @description Handle on view item details action for list item
+   * @param {object} item item to be viewed
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  handleView = (item) => {
+    selectFeature(item);
+    this.setState({ showDetails: true });
+  };
+
+  /**
+   * @function
+   * @name closeDetails
+   * @description close feature details drawer
+   * @version 0.1.0
+   * @since 0.1.0
+   */
+  closeDetails = () => {
+    this.setState({ showDetails: false });
+  };
+
+  /**
    * @function render
    * @name render
    * @description Render list
@@ -401,6 +432,7 @@ class FeatureList extends Component {
     // states
     const {
       showFilters,
+      showDetails,
       cached,
       isEditForm,
       showNotificationForm,
@@ -481,6 +513,12 @@ class FeatureList extends Component {
                   </span>
                 }
                 actions={[
+                  {
+                    name: 'View Critical Infrastructure',
+                    title: 'View Critical Infrastructure Details',
+                    onClick: () => this.handleView(item),
+                    icon: 'view',
+                  },
                   {
                     name: 'Edit Critical Infrastructure',
                     title: 'Update critical infrastructure details',
@@ -594,6 +632,38 @@ class FeatureList extends Component {
           />
         </Modal>
         {/* end: form modal */}
+
+        {/* details drawer */}
+        <Drawer
+          title={
+            <CriticalFacilityDetailsViewHeader
+              number={get(feature, 'number', 'N/A')}
+              description={get(feature, 'description', 'N/A')}
+              type={get(feature, 'type.strings.name.en', 'N/A')}
+              stage={get(feature, 'stage', 'N/A')}
+              onBack={this.closeDetails}
+            />
+          }
+          placement="right"
+          width="100%"
+          onClose={this.closeDetails}
+          visible={showDetails}
+          drawerStyle={{ overflow: 'hidden' }}
+          headerStyle={{ padding: 0 }}
+          bodyStyle={{ overflow: 'hidden', height: '100%', padding: '15px' }}
+          destroyOnClose
+        >
+          <CriticalFacilityDetailsViewBody
+            feature={feature}
+            onShare={() => {
+              this.handleShare(feature);
+            }}
+            onEdit={() => {
+              this.handleEdit(feature);
+            }}
+          />
+        </Drawer>
+        {/* End details drawer */}
       </>
     );
   }
