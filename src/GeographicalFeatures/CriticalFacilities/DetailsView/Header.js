@@ -3,12 +3,13 @@ import { PageHeader } from 'antd';
 import PropTypes from 'prop-types';
 
 /**
- * @param root0
- * @param root0.name
- * @param root0.description
- * @param root0.onBack
  * @function
  * @name CriticalFacilityDetailsViewHeader
+ * @param {object} props props object
+ * @param {string} props.name
+ * @param {string} props.description
+ * @param {Function} props.onBack
+ * @function
  * @description header details of a critical facility
  * @returns {object} React component
  * @version 0.1.0

@@ -652,12 +652,9 @@ class FeatureList extends Component {
           destroyOnClose
         >
           <CriticalFacilityDetailsViewBody
-            feature={feature}
-            onShare={() => {
-              this.handleShare(feature);
-            }}
+            criticalFacility={feature}
             onEdit={() => {
-              this.handleEdit(feature);
+              this.handleItemEdit(feature);
             }}
           />
         </Drawer>
