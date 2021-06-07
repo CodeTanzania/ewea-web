@@ -11,7 +11,8 @@ import SearchableSelectInput from '../../../components/SearchableSelectInput';
 const { getAgencies, getFeatureTypes, getAdministrativeAreas } = httpActions;
 
 /* state actions */
-const { clearFeatureFilters, filterFeatures } = reduxActions;
+const { clearFeatureFilters, filterFeatures, getPartyOwnerships } =
+  reduxActions;
 
 /* ui */
 const labelCol = {
@@ -145,10 +146,31 @@ const FeatureFiltersForm = ({
           onCache={(custodians) =>
             onCache({ 'relations.custodians': custodians })
           }
-          initialValue={get(cached, 'relations.custodians', [])}
+          initisFilterialValue={get(cached, 'relations.custodians', [])}
         />
       </Form.Item>
       {/* end:feature custodians filter */}
+
+      {/* start:feature ownership filter */}
+      <Form.Item
+        label="By ownership"
+        title="Critical infrastructure Ownership e.g Government"
+        name={['relations.ownership']}
+      >
+        <SearchableSelectInput
+          onSearch={(optns = {}) => {
+            return getPartyOwnerships(optns);
+          }}
+          optionLabel={(ownership) => get(ownership, 'name')}
+          optionValue="_id"
+          mode="multiple"
+          onCache={(ownerships) =>
+            onCache({ 'relations.ownerships': ownerships })
+          }
+          initialValue={get(cached, 'relations.ownership', [])}
+        />
+      </Form.Item>
+      {/* end:feature ownership filter */}
 
       {/* start:form actions */}
       <Form.Item wrapperCol={{ span: 24 }} style={{ textAlign: 'right' }}>
