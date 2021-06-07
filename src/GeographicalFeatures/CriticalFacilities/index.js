@@ -637,10 +637,8 @@ class FeatureList extends Component {
         <Drawer
           title={
             <CriticalFacilityDetailsViewHeader
-              number={get(feature, 'number', 'N/A')}
-              description={get(feature, 'description', 'N/A')}
-              type={get(feature, 'type.strings.name.en', 'N/A')}
-              stage={get(feature, 'stage', 'N/A')}
+              name={get(feature, 'strings.name.en', 'N/A')}
+              description={get(feature, 'strings.description.en', 'N/A')}
               onBack={this.closeDetails}
             />
           }
