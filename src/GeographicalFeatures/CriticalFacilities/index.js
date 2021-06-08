@@ -399,12 +399,12 @@ class FeatureList extends Component {
 
   /**
    * @function
-   * @name closeDetails
+   * @name handleCloseDetails
    * @description close feature details drawer
    * @version 0.1.0
    * @since 0.1.0
    */
-  closeDetails = () => {
+  handleCloseDetails = () => {
     this.setState({ showDetails: false });
   };
 
@@ -639,12 +639,12 @@ class FeatureList extends Component {
             <CriticalFacilityDetailsViewHeader
               name={get(feature, 'strings.name.en', 'N/A')}
               description={get(feature, 'strings.description.en', 'N/A')}
-              onBack={this.closeDetails}
+              onBack={this.handleCloseDetails}
             />
           }
           placement="right"
           width="100%"
-          onClose={this.closeDetails}
+          onClose={this.handleCloseDetails}
           visible={showDetails}
           drawerStyle={{ overflow: 'hidden' }}
           headerStyle={{ padding: 0 }}
