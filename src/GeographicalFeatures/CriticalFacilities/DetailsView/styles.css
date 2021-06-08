@@ -1,0 +1,24 @@
+.CriticalFacilityBody {
+  height: 100%;
+  overflow: hidden;
+}
+
+.CriticalFacilityBodyContent {
+  padding-top: 20px;
+  height: 90%;
+  overflow: auto;
+}
+
+.CriticalFacilityToolbar {
+  height: 50px;
+  border-bottom: 1px solid #ededed;
+}
+
+.CriticalFacilityFeed {
+  padding: 0 2px;
+}
+
+.LoadMoreButton {
+  display: block;
+  margin: 0 auto 50px;
+}

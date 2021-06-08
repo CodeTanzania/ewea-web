@@ -2,12 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { reduxActions } from '@codetanzania/ewea-api-states';
-import { Button, Col, Row } from 'antd';
+import { Button, Col, Row, Typography } from 'antd';
 import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
 import { notifyError, notifySuccess } from '../../../util';
+import './styles.css';
+import MapPoint from '../../../Map/MapPoint';
 
 /* redux actions */
 const { getFeature } = reduxActions;
+const { Text } = Typography;
 
 /**
  * @function
@@ -61,6 +64,80 @@ const CriticalFacilityToolbar = ({ criticalFacility, onEdit }) => {
   );
 };
 
+CriticalFacilityToolbar.propTypes = {
+  criticalFacility: PropTypes.shape({
+    _id: PropTypes.string,
+  }).isRequired,
+  onEdit: PropTypes.func.isRequired,
+};
+
+/**
+ * @function
+ * @name CriticalFacilityMapView
+ *  @param {object} props props object
+ * @param props.criticalFacility
+ * @description visualization of a critical facility on map
+ * @returns {object} React component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const CriticalFacilityMapView = ({ criticalFacility }) => {
+  return criticalFacility?.geos?.point ? (
+    <MapPoint geometry={criticalFacility.geos.point} />
+  ) : (
+    `Sorry we can't show map, this critical facility doesn't have spatial data`
+  );
+};
+
+CriticalFacilityMapView.propTypes = {
+  criticalFacility: PropTypes.shape({
+    _id: PropTypes.string,
+    strings: PropTypes.shape({
+      name: PropTypes.shape({
+        en: PropTypes.string,
+      }),
+      description: PropTypes.shape({
+        en: PropTypes.string,
+      }),
+    }),
+    geos: PropTypes.shape({
+      point: PropTypes.shape({
+        geometry: PropTypes.shape({
+          type: PropTypes.string.isRequired,
+          coordinates: PropTypes.arrayOf(PropTypes.any).isRequired,
+        }),
+      }),
+    }),
+  }).isRequired,
+};
+
+/**
+ * @function
+ * @name CriticalFacilityDetails
+ * @param {object} props Props
+ * @param {string} props.name critical facility name
+ * @param {string} props.description critical facility description
+ * @description This is event critical facility details section which will be visible
+ * @returns {object} CriticalFacilityDetails Component
+ * @version 0.1.0
+ * @since 0.1.0
+ */
+const CriticalFacilityDetails = ({ name, description }) => (
+  <>
+    <p>
+      <Text strong>Name: </Text> {name}
+    </p>
+    <p>
+      <Text strong>Description:</Text> {description} <br />
+    </p>
+  </>
+);
+
+CriticalFacilityDetails.propTypes = {
+  name: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+};
+
 /**
  * @function
  * @name CriticalFacilityDetailsViewBody
@@ -79,6 +156,19 @@ const CriticalFacilityDetailsViewBody = ({ criticalFacility, onEdit }) => {
         criticalFacility={criticalFacility}
         onEdit={onEdit}
       />
+      <div className="CriticalFacilityBodyContent">
+        <Row>
+          <Col xs={24} sm={24} md={24} lg={16}>
+            <CriticalFacilityDetails
+              description={criticalFacility.strings.description.en}
+              name={criticalFacility.strings.name.en}
+            />
+          </Col>
+          <Col xs={24} sm={24} md={24} lg={8}>
+            <CriticalFacilityMapView criticalFacility={criticalFacility} />
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 };
@@ -88,13 +178,14 @@ export default CriticalFacilityDetailsViewBody;
 CriticalFacilityDetailsViewBody.propTypes = {
   criticalFacility: PropTypes.shape({
     _id: PropTypes.string,
-  }).isRequired,
-  onEdit: PropTypes.func.isRequired,
-};
-
-CriticalFacilityToolbar.propTypes = {
-  criticalFacility: PropTypes.shape({
-    _id: PropTypes.string,
+    strings: PropTypes.shape({
+      name: PropTypes.shape({
+        en: PropTypes.string,
+      }),
+      description: PropTypes.shape({
+        en: PropTypes.string,
+      }),
+    }),
   }).isRequired,
   onEdit: PropTypes.func.isRequired,
 };
