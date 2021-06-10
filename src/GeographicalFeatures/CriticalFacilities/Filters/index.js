@@ -8,11 +8,15 @@ import isFunction from 'lodash/isFunction';
 import SearchableSelectInput from '../../../components/SearchableSelectInput';
 
 /* http actions */
-const { getAgencies, getFeatureTypes, getAdministrativeAreas } = httpActions;
+const {
+  getAgencies,
+  getFeatureTypes,
+  getAdministrativeAreas,
+  getPartyOwnerships,
+} = httpActions;
 
 /* state actions */
-const { clearFeatureFilters, filterFeatures, getPartyOwnerships } =
-  reduxActions;
+const { clearFeatureFilters, filterFeatures } = reduxActions;
 
 /* ui */
 const labelCol = {
@@ -161,7 +165,7 @@ const FeatureFiltersForm = ({
           onSearch={(optns = {}) => {
             return getPartyOwnerships(optns);
           }}
-          optionLabel={(ownership) => get(ownership, 'name')}
+          optionLabel={(ownership) => get(ownership, 'strings.name.en')}
           optionValue="_id"
           mode="multiple"
           onCache={(ownerships) =>
