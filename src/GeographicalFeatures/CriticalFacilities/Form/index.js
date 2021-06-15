@@ -105,6 +105,7 @@ const FeatureForm = ({ feature, isEditForm, posting, onCancel }) => {
         relations: {
           ...get(feature, 'relations', {}),
           custodians: map(get(feature, 'relations.custodians', []), '_id'),
+          ownership: get(feature, 'relations.ownership._id'),
         },
       }}
       autoComplete="off"

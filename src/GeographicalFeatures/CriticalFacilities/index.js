@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { httpActions } from '@codetanzania/ewea-api-client';
 import { Connect, reduxActions } from '@codetanzania/ewea-api-states';
-import { Modal, Row, Col, Drawer } from 'antd';
+import { Modal, Row, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
@@ -14,8 +14,7 @@ import NotificationForm from '../../components/NotificationForm';
 import { notifyError, notifySuccess, truncateString } from '../../util';
 import ItemList from '../../components/List';
 import ListItem from '../../components/ListItem';
-import CriticalFacilityDetailsViewHeader from './DetailsView/Header';
-import CriticalFacilityDetailsViewBody from './DetailsView/Body';
+import CriticalFacilityDetailsView from './DetailsView';
 
 /* http actions */
 const {
@@ -633,32 +632,12 @@ class FeatureList extends Component {
         </Modal>
         {/* end: form modal */}
 
-        {/* details drawer */}
-        <Drawer
-          title={
-            <CriticalFacilityDetailsViewHeader
-              name={get(feature, 'strings.name.en', 'N/A')}
-              description={get(feature, 'strings.description.en', 'N/A')}
-              onBack={this.handleCloseDetails}
-            />
-          }
-          placement="right"
-          width="100%"
-          onClose={this.handleCloseDetails}
-          visible={showDetails}
-          drawerStyle={{ overflow: 'hidden' }}
-          headerStyle={{ padding: 0 }}
-          bodyStyle={{ overflow: 'hidden', height: '100%', padding: '15px' }}
-          destroyOnClose
-        >
-          <CriticalFacilityDetailsViewBody
-            criticalFacility={feature}
-            onEdit={() => {
-              this.handleItemEdit(feature);
-            }}
-          />
-        </Drawer>
-        {/* End details drawer */}
+        <CriticalFacilityDetailsView
+          handleCloseDetails={this.handleCloseDetails}
+          handleItemEdit={this.handleItemEdit}
+          showDetails={showDetails}
+          criticalFacility={feature}
+        />
       </>
     );
   }

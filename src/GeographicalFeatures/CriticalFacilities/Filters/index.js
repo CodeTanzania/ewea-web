@@ -162,16 +162,14 @@ const FeatureFiltersForm = ({
         name={['relations.ownership']}
       >
         <SearchableSelectInput
-          onSearch={(optns = {}) => {
-            return getPartyOwnerships(optns);
-          }}
+          onSearch={getPartyOwnerships}
           optionLabel={(ownership) => get(ownership, 'strings.name.en')}
           optionValue="_id"
           mode="multiple"
           onCache={(ownerships) =>
             onCache({ 'relations.ownerships': ownerships })
           }
-          initialValue={get(cached, 'relations.ownership', [])}
+          initialValue={get(cached, 'relations.ownerships', [])}
         />
       </Form.Item>
       {/* end:feature ownership filter */}

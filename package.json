@@ -36,6 +36,7 @@
     "echarts-for-react": "^3.0.1",
     "history": "^5.0.0",
     "inflection": "^1.13.1",
+    "leaflet": "^1.7.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
@@ -45,7 +46,7 @@
     "react-device-detect": "^1.17.0",
     "react-dom": "^17.0.2",
     "react-ga": "^3.3.0",
-    "react-map-gl": "^6.1.15",
+    "react-leaflet": "^3.2.0",
     "react-router-dom": "^5.2.0",
     "react-simple-maps": "^2.3.0",
     "react-to-print": "^2.12.4"
