@@ -6,7 +6,7 @@ import { Button, Col, Row, Typography } from 'antd';
 import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
 import { notifyError, notifySuccess } from '../../../util';
 import './styles.css';
-import MapPoint from '../../../Map/MapPoint';
+import BaseMap from '../../../components/BaseMap';
 
 /* redux actions */
 const { getFeature } = reduxActions;
@@ -83,9 +83,11 @@ CriticalFacilityToolbar.propTypes = {
  */
 const CriticalFacilityMapView = ({ criticalFacility }) => {
   return criticalFacility?.geos?.point ? (
-    <MapPoint geometry={criticalFacility.geos.point} />
+    <BaseMap />
   ) : (
-    `Sorry we can't show map, this critical facility doesn't have spatial data`
+    `Sorry we can't show map, this critical facility doesn't have spatial data ${JSON.stringify(
+      criticalFacility.geos.point
+    )}`
   );
 };
 
