@@ -118,25 +118,51 @@ CriticalFacilityMapView.propTypes = {
  * @name CriticalFacilityDetails
  * @param {object} props Props
  * @param {string} props.name critical facility name
+ * @param {string} props.code critical facility code
+ * @param {string} props.area critical facility area
+ * @param {string} props.abbreviation critical facility abbreviation
  * @param {string} props.description critical facility description
+ * @param {Array} props.custodians critical facility custodians
  * @description This is event critical facility details section which will be visible
  * @returns {object} CriticalFacilityDetails Component
  * @version 0.1.0
  * @since 0.1.0
  */
-const CriticalFacilityDetails = ({ name, description }) => (
+const CriticalFacilityDetails = ({
+  name,
+  description,
+  code,
+  abbreviation,
+  custodians,
+  area,
+}) => (
   <>
     <p>
-      <Text strong>Name: </Text> {name}
+      <Text strong>Code: </Text> {code}
+    </p>
+    <p>
+      <Text strong>Name: </Text> {`${name}(${abbreviation})`}
     </p>
     <p>
       <Text strong>Description:</Text> {description} <br />
+    </p>
+    <p>
+      <Text strong>Custodian(s): </Text>
+      {custodians.map((custodian) => custodian.name).join(',')}
+      <br />
+    </p>
+    <p>
+      <Text strong>Area:</Text> {area} <br />
     </p>
   </>
 );
 
 CriticalFacilityDetails.propTypes = {
   name: PropTypes.string.isRequired,
+  code: PropTypes.string.isRequired,
+  area: PropTypes.string.isRequired,
+  abbreviation: PropTypes.string.isRequired,
+  custodians: PropTypes.shape([]).isRequired,
   description: PropTypes.string.isRequired,
 };
 
@@ -164,6 +190,10 @@ const CriticalFacilityDetailsViewBody = ({ criticalFacility, onEdit }) => {
             <CriticalFacilityDetails
               description={criticalFacility.strings.description.en}
               name={criticalFacility.strings.name.en}
+              code={criticalFacility.strings.code}
+              abbreviation={criticalFacility.strings.abbreviation.en}
+              area={criticalFacility.relations.area.strings.name.en}
+              custodians={criticalFacility.relations.custodians}
             />
           </Col>
           <Col xs={24} sm={24} md={24} lg={8}>
@@ -175,11 +205,20 @@ const CriticalFacilityDetailsViewBody = ({ criticalFacility, onEdit }) => {
   );
 };
 
-export default CriticalFacilityDetailsViewBody;
 
 CriticalFacilityDetailsViewBody.propTypes = {
   criticalFacility: PropTypes.shape({
     _id: PropTypes.string,
+    relations: PropTypes.shape({
+      area: PropTypes.shape({
+        strings: PropTypes.shape({
+          name: PropTypes.shape({
+            en: PropTypes.string,
+          }),
+        }),
+      }),
+      custodians: PropTypes.shape([]),
+    }),
     strings: PropTypes.shape({
       name: PropTypes.shape({
         en: PropTypes.string,
@@ -187,7 +226,12 @@ CriticalFacilityDetailsViewBody.propTypes = {
       description: PropTypes.shape({
         en: PropTypes.string,
       }),
+      code: PropTypes.string,
+      abbreviation: PropTypes.shape({
+        en: PropTypes.string,
+      }),
     }),
   }).isRequired,
   onEdit: PropTypes.func.isRequired,
 };
+export default CriticalFacilityDetailsViewBody;
