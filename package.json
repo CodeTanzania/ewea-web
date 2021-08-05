@@ -29,7 +29,7 @@
     "@ant-design/icons": "^4.6.2",
     "@codetanzania/ewea-api-client": "^0.24.1",
     "@codetanzania/ewea-api-states": "^0.31.0",
-    "@lykmapipo/common": "^0.43.1",
+    "@lykmapipo/common": "^0.44.0",
     "antd": "^4.15.5",
     "axios": "^0.21.1",
     "echarts": "^5.1.1",
