@@ -31,7 +31,7 @@
     "@codetanzania/ewea-api-states": "^0.31.0",
     "@lykmapipo/common": "^0.43.1",
     "antd": "^4.15.5",
-    "axios": "^0.21.1",
+    "axios": "^0.27.0",
     "echarts": "^5.1.1",
     "echarts-for-react": "^3.0.1",
     "history": "^5.0.0",
