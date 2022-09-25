@@ -57,7 +57,7 @@
     "@commitlint/cli": "12.1.4",
     "@commitlint/config-conventional": "12.1.4",
     "@commitlint/travis-cli": "12.1.4",
-    "@craco/craco": "6.1.2",
+    "@craco/craco": "6.4.5",
     "babel-plugin-import": "1.13.3",
     "chokidar": "^3.5.1",
     "commitizen": "4.2.4",
